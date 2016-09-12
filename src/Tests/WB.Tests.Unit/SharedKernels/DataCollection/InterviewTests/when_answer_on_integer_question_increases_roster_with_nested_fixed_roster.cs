@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -29,28 +30,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterGroupId = Guid.Parse("21111111111111111111111111111111");
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId),
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-
-                                                        => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
-                                                        && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
-                                                        && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                                                        && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { rosterGroupId }
-
-                                                        && _.HasGroup(fixedRosterGroupId) == true
-                                                        && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2
-                                                        && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                                                        //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedGroup(fixedRosterGroupId) == new[] { rosterGroupId, fixedRosterGroupId }
-                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new FixedRosterTitle(1, "t1") }
-                                                        && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new[] { rosterGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
-
-                                                        && _.GetNestedRostersOfGroupById(rosterGroupId) == new[] { fixedRosterGroupId}
-                                                        && _.GetFixedRosterGroups(rosterGroupId) == new [] { fixedRosterGroupId }
-                                                        && _.GetRosterLevelForGroup(fixedRosterGroupId) == 2
-                                                        && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new FixedRosterTitle(0, title1), new FixedRosterTitle(1, title2) }
-                                                        );
+                Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
+                {
+                    Create.Entity.FixedRoster(rosterId: fixedRosterGroupId, fixedRosterTitles: new []
+                    {
+                        Create.Entity.FixedRosterTitle(0, title1),
+                        Create.Entity.FixedRosterTitle(1, title2),
+                    }),
+                }),
+            }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 

@@ -189,5 +189,8 @@ namespace WB.Core.GenericSubdomains.Portable
             Uri parsedUrl;
             return Uri.TryCreate(source, UriKind.Absolute, out parsedUrl) && (parsedUrl.Scheme == "http" || parsedUrl.Scheme == "https");
         }
+
+        public static string PrefixEachLine(this string lines, string prefix)
+            => prefix + lines.Replace(Environment.NewLine, Environment.NewLine + prefix);
     }
 }

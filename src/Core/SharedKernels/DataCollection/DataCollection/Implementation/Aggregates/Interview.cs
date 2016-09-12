@@ -2451,7 +2451,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
            IQuestionnaire questionnaire,
            Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2468,7 +2468,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckDateTimeQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
             Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2482,7 +2482,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2498,7 +2498,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2533,7 +2533,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.OptionValue).ToArray();
             var yesAnswersCount = answeredOptions.Count(answeredOption => answeredOption.Yes);
 
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, state);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(question.Id, questionnaire);
@@ -2557,7 +2557,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckTextQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
             Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2570,7 +2570,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, RosterVector rosterVector, int answer, IQuestionnaire questionnaire,
             Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2596,7 +2596,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckTextListInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
             IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2625,7 +2625,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckGpsCoordinatesInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
             IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2638,7 +2638,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void CheckQRBarcodeInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
          Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -4702,7 +4702,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 isHardDeleted: this.wasHardDeleted,
                 isReceivedByInterviewer: this.receivedByInterviewer);
 
-        protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire)
+        protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState = null)
         {
             var tree = new InterviewTree(this.EventSourceId);
 
@@ -4711,7 +4711,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var sectionId in sectionIds)
             {
                 var sectionIdentity = new Identity(sectionId, RosterVector.Empty);
-                var section = this.BuildInterviewTreeSection(questionnaire, sectionIdentity);
+                var section = this.BuildInterviewTreeSection(sectionIdentity, questionnaire, interviewState);
 
                 tree.Sections.Add(section);
             }
@@ -4719,38 +4719,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return tree;
         }
 
-        private InterviewTreeSection BuildInterviewTreeSection(IQuestionnaire questionnaire, Identity sectionIdentity)
+        private InterviewTreeSection BuildInterviewTreeSection(Identity sectionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            var children = this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire).ToList();
+            var children = this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState ?? this.interviewState).ToList();
 
             return new InterviewTreeSection(sectionIdentity, children);
         }
 
-        private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire)
+        private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            var children = this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire).ToList();
+            var children = this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, interviewState).ToList();
 
             return new InterviewTreeSubSection(groupIdentity, children);
         }
 
-        private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire)
+        private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            var children = this.BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire).ToList();
+            var children = this.BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire, interviewState).ToList();
 
             return new InterviewTreeRoster(rosterIdentity, children);
         }
 
-        private InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, IQuestionnaire questionnaire)
+        private InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             return new InterviewTreeQuestion(questionIdentity);
         }
 
-        private InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire)
+        private InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             return new InterviewTreeStaticText(staticTextIdentity);
         }
 
-        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire)
+        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             var childIds = questionnaire.GetChildEntityIds(groupIdentity.Id);
 
@@ -4761,28 +4761,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     Guid[] rostersStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(childId).ToArray();
 
                     IEnumerable<RosterVector> childRosterVectors = this.ExtendRosterVector(
-                        this.interviewState, groupIdentity.RosterVector, rostersStartingFromTop.Length, rostersStartingFromTop);
+                        interviewState, groupIdentity.RosterVector, rostersStartingFromTop.Length, rostersStartingFromTop);
 
                     foreach (var childRosterVector in childRosterVectors)
                     {
                         var childRosterIdentity = new Identity(childId, childRosterVector);
-                        yield return this.BuildInterviewTreeRoster(childRosterIdentity, questionnaire);
+                        yield return this.BuildInterviewTreeRoster(childRosterIdentity, questionnaire, interviewState);
                     }
                 }
                 else if (questionnaire.HasGroup(childId))
                 {
                     var childGroupIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeSubSection(childGroupIdentity, questionnaire);
+                    yield return this.BuildInterviewTreeSubSection(childGroupIdentity, questionnaire, interviewState);
                 }
-                else if (questionnaire.IsQuestion(childId))
+                else if (questionnaire.HasQuestion(childId))
                 {
                     var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeQuestion(childQuestionIdentity, questionnaire);
+                    yield return this.BuildInterviewTreeQuestion(childQuestionIdentity, questionnaire, interviewState);
                 }
                 else if (questionnaire.IsStaticText(childId))
                 {
                     var childStaticTextIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeStaticText(childStaticTextIdentity, questionnaire);
+                    yield return this.BuildInterviewTreeStaticText(childStaticTextIdentity, questionnaire, interviewState);
                 }
             }
         }

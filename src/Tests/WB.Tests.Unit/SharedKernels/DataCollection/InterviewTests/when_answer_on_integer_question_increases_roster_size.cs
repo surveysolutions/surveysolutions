@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -28,19 +29,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId),
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-
-                                                        => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
-                                                        && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
-                                                        && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                                                        && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                                                        && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new Guid[] { rosterGroupId }
-
-                                                        && _.HasGroup(rosterGroupId) == true
-                                                        && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                                                        //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(rosterGroupId) == new Guid[] { rosterGroupId }
-                                                        && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
+                Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId),
+            }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 

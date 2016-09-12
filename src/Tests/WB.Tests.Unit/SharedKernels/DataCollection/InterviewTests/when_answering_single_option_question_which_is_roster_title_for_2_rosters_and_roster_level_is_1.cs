@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
@@ -35,17 +37,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             selectedOptionTitle = "Title 2.1";
 
 
-            var questionnaire = Mock.Of<IQuestionnaire>
-            (_
-                => _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.SingleOption
-                && _.GetOptionForQuestionByOptionValue(questionId, selectedOptionValue) == new CategoricalOption() {Value = Convert.ToInt32(selectedOptionValue), Title = "test"}
-                && _.GetAnswerOptionTitle(questionId, selectedOptionValue) == selectedOptionTitle
-                && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
-                && _.DoesQuestionSpecifyRosterTitle(questionId) == true
-                && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }
-            );
-
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
+                {
+                    Create.Entity.SingleOptionQuestion(questionId: questionId, answers: new List<Answer> { Create.Entity.Answer(selectedOptionTitle, selectedOptionValue) }),
+                }),
+                Create.Entity.Roster(rosterId: rosterBId, rosterTitleQuestionId: questionId),
+            }));
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 

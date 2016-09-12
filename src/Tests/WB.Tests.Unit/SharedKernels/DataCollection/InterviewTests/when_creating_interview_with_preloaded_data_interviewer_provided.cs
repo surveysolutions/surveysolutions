@@ -21,7 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             interviewerId = Guid.Parse("11111111111111111111111111111111");
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var fixedRosterGroup = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
+            var fixedRosterGroup = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var sectionId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             prefilledQuestionAnswer = "answer";
             preloadedDataDto = new PreloadedDataDto(new [] { new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, object> { { prefilledQuestionId, prefilledQuestionAnswer } }), });
             answersTime = new DateTime(2013, 09, 01);
@@ -29,7 +30,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.Text
                 && _.HasQuestion(prefilledQuestionId) == true
-                && _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterGroup }
+                && _.GetAllSections() == new[] { sectionId }
+                && _.GetChildEntityIds(sectionId) == new[] { prefilledQuestionId }
+                && _.GetFixedRosterGroups(null) == new[] { fixedRosterGroup }
                 && _.GetFixedRosterTitles(fixedRosterGroup) == new FixedRosterTitle[0]);
 
             eventContext = new EventContext();

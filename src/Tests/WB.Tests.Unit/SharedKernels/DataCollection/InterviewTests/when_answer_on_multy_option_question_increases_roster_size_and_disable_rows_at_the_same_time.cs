@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
@@ -24,26 +25,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+
             numericQuestionInsideRoster = Guid.Parse("33333333333333333333333333333333");
             rosterGroupId = Guid.Parse("11111111111111111111111111111111");
-
             multyOptionRosterSizeId = Guid.Parse("22222222222222222222222222222222");
 
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.HasQuestion(multyOptionRosterSizeId) == true
-                && _.GetQuestionType(multyOptionRosterSizeId) == QuestionType.MultyOption
-                && _.GetRosterGroupsByRosterSizeQuestion(multyOptionRosterSizeId) == new Guid[] { rosterGroupId }
-                && _.GetMultiSelectAnswerOptionsAsValues(multyOptionRosterSizeId) == new decimal[] { 1, 2, 3 }
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.MultipleOptionsQuestion(questionId: multyOptionRosterSizeId, answers: new decimal[] { 1, 2, 3 }),
+                Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: multyOptionRosterSizeId, children: new IComposite[]
+                {
+                    Create.Entity.NumericIntegerQuestion(id: numericQuestionInsideRoster),
+                })
+            }));
 
-                && _.HasGroup(rosterGroupId) == true
-                && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId }
-
-                && _.GetQuestionType(numericQuestionInsideRoster) == QuestionType.Numeric
-                && _.IsQuestionInteger(numericQuestionInsideRoster) == true
-                && _.HasQuestion(numericQuestionInsideRoster)==true
-                && _.GetRostersFromTopToSpecifiedQuestion(numericQuestionInsideRoster) == new Guid[] { rosterGroupId });
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
