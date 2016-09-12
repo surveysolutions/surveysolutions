@@ -1,12 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
+﻿using System.Collections.Generic;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -18,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         public CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(List<IInterviewEntityViewModel> newGroupItems)
         {
-            var collection = new CompositeCollection<ICompositeEntity>();
+            var compositeCollection = new CompositeCollection<ICompositeEntity>();
 
             foreach (var interviewEntityViewModel in newGroupItems)
             {
@@ -26,48 +20,47 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 var rosterViewModel = interviewEntityViewModel as RosterViewModel;
                 if (compositeItem != null)
                 {
-                    collection.Add(compositeItem.QuestionState.Header);
+                    compositeCollection.Add(compositeItem.QuestionState.Header);
+
+                    var questionCompositeCollection = new CompositeCollection<ICompositeEntity>();
 
                     if (compositeItem.QuestionState.Enablement.Enabled)
-                        FillCollection(compositeItem, collection);
+                        FillCollection(compositeItem, questionCompositeCollection);
 
                     compositeItem.Answering.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(AnsweringViewModel.InProgress)) return;
-                        OnIsInProgressChanged(collection, compositeItem);
+                        OnIsInProgressChanged(questionCompositeCollection, compositeItem);
                     };
                     compositeItem.QuestionState.Validity.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(ValidityViewModel.IsInvalid)) return;
-                        OnIsValidChanged(collection, compositeItem);
+                        OnIsValidChanged(questionCompositeCollection, compositeItem);
                     };
                     compositeItem.QuestionState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                        OnEnablementChanged(collection, compositeItem);
+                        OnEnablementChanged(questionCompositeCollection, compositeItem);
                     };
                     
-                    collection.Add(new QuestionDivider());
+                    compositeCollection.AddCollection(questionCompositeCollection);
+                    compositeCollection.Add(new QuestionDivider());
                 }
                 else if (rosterViewModel != null)
                 {
-                    collection.AddCollection(rosterViewModel.RosterInstances);
+                    compositeCollection.AddCollection(rosterViewModel.RosterInstances);
                 }
                 else
                 {
-                    collection.Add(interviewEntityViewModel);
+                    compositeCollection.Add(interviewEntityViewModel);
                 }
             }
 
-            return collection;
+            return compositeCollection;
         }
 
-        private static void FillCollection(ICompositeQuestion compositeItem, CompositeCollection<ICompositeEntity> collection1)
+        private static void FillCollection(ICompositeQuestion compositeItem, CompositeCollection<ICompositeEntity> collection)
         {
-            var headerViewModelIndex = collection1.IndexOf(compositeItem.QuestionState.Header);
-
-            var collection = new List<object>();
-
             if (compositeItem.InstructionViewModel.HasInstructions)
                 collection.Add(compositeItem.InstructionViewModel);
 
@@ -75,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var compositeItemWithChildren = compositeItem as ICompositeQuestionWithChildren;
             if (compositeItemWithChildren != null)
-                collection.Add(compositeItemWithChildren.Children);
+                collection.AddCollection(compositeItemWithChildren.Children);
 
             if (compositeItem.QuestionState.Validity.IsInvalid)
                 collection.Add(compositeItem.QuestionState.Validity);
@@ -84,26 +77,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (compositeItem.Answering.InProgress)
                 collection.Add(compositeItem.Answering);
-
-            collection1.Insert(headerViewModelIndex + 1, collection);
-        }
-
-        private static void RemoveFromCollection(ICompositeQuestion compositeItem, CompositeCollection<ICompositeEntity> collection)
-        {
-            var viewModelsToRemove = new List<ICompositeEntity>
-            {
-                compositeItem.InstructionViewModel,
-                compositeItem,
-                compositeItem.QuestionState.Validity,
-                compositeItem.QuestionState.Comments,
-                compositeItem.Answering
-            };
-            
-            var compositeItemWithChildren = compositeItem as ICompositeQuestionWithChildren;
-            if (compositeItemWithChildren != null)
-                viewModelsToRemove.AddRange(compositeItemWithChildren.Children);
-
-            collection.Remove(viewModelsToRemove);
         }
 
         private static void OnIsInProgressChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
@@ -127,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 FillCollection(compositeItem, collection);
 
             if (!compositeItem.QuestionState.Enablement.Enabled && isViewModelInCollection)
-                RemoveFromCollection(compositeItem, collection);
+                collection.Clear();
         }
 
         private static void OnIsValidChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)

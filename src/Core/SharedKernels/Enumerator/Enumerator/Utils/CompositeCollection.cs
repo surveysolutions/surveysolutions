@@ -48,35 +48,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             return this.GetEnumerator();
         }
 
-        public void Insert(int index, T item) => this.Insert(index, new[] {item});
-
-        public void Insert(int index, IList items)
+        public void Insert(int index, T item)
         {
-            var insertedItems = new List<T>();
-            var insertedItemIndex = index;
-            foreach (var item in items)
-            {
-                var insertedCollection = item as IObservableCollection<T> ??
-                                         new CovariantObservableCollection<T>(((T) item).ToEnumerable());
+            var insertedCollection = new CovariantObservableCollection<T>(item.ToEnumerable());
 
-                insertedCollection.CollectionChanged += this.collectionChanged;
-                this.collections.Insert(insertedItemIndex++, insertedCollection);
-                this.Count += insertedCollection.Count();
-                insertedItems.AddRange(insertedCollection);
-            }
-            
+            insertedCollection.CollectionChanged += this.collectionChanged;
+            this.collections.Insert(index, insertedCollection);
+
+            this.Count += 1;
             this.propertyChanged("Count");
-            this.collectionChanged_Added(insertedItems, index);
-        }
-
-        public void InsertCollection(int index, IObservableCollection<T> collection)
-        {
-            collection.CollectionChanged += this.collectionChanged;
-            this.collections.Insert(index, collection);
-
-            this.Count += collection.Count();
-            this.propertyChanged("Count");
-            this.collectionChanged_Added(collection.ToList(), index);
+            this.collectionChanged_Added(new[] {item}, index);
         }
 
         public void RemoveAt(int index)
@@ -89,28 +70,19 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
         }
 
-        public void Remove(IList<T> items)
+        public void Remove(T item)
         {
-            if (!items.Any()) return;
+            var indexOfItem = this.IndexOf(item);
+            if (indexOfItem < 0) return;
 
-            int indexOfFirstRemovedItem = this.IndexOf(items[0]);
+            var collectionToRemove = this.collections.ElementAt(indexOfItem);
+            collectionToRemove.CollectionChanged -= this.collectionChanged;
+            this.collections.Remove(collectionToRemove);
+            this.Count -= 1;
 
-            foreach (var item in items)
-            {
-                var indexOfItem = this.IndexOf(item);
-                if (indexOfItem < 0) continue;
-
-                var collectionToRemove = this.collections.ElementAt(indexOfItem);
-                collectionToRemove.CollectionChanged -= this.collectionChanged;
-                this.collections.Remove(collectionToRemove);
-                this.Count -= 1;
-            }
-            
             this.propertyChanged("Count");
-            this.collectionChanged_Remove(items.ToList(), indexOfFirstRemovedItem);
+            this.collectionChanged_Remove(new[] {item}, indexOfItem);
         }
-
-        public void Remove(T item) => this.Remove(new[] {item});
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
