@@ -739,7 +739,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_with_59_items_and_this_questions_is_roster_size.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_with_199_items_and_this_questions_is_roster_size.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_creating_list_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\QuestionHeaderViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_substitution_title_changed.cs" />
