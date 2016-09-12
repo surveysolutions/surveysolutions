@@ -32,14 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.@checked == value) return;
                 this.@checked = value;
-                if (value)
-                {
-                    this.CheckedTimeStamp = DateTime.Now;
-                }
-                else
-                {
-                    this.CheckedTimeStamp = DateTime.MinValue;
-                }
+                this.CheckedTimeStamp = value ? DateTime.Now : DateTime.MinValue;
 
                 this.RaisePropertyChanged();
             }
