@@ -322,7 +322,7 @@
     <value>Download invalid interviews</value>
   </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
-    <value>Responsible supervisor will be assigned automatically</value>
+    <value>Responsible will be assigned automatically</value>
   </data>
   <data name="VerifyPanelData" xml:space="preserve">
     <value>Verify panel data</value>
