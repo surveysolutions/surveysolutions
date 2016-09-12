@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto">
+  <solid android:color="#ffffff" />
+  <stroke
+    android:width="@dimen/Interview_Question_Answer_Input_background_stroke_width"
+    android:color="@color/nonAnsweredBackground"/>
+  <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
+</shape>
