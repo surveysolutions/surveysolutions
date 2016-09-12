@@ -27,13 +27,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             var questions = this.InterviewTree.FindQuestions(questionId);
             var rosterVectors = questions.Select(question => question.Identity.RosterVector).ToList();
 
-            //if (!rosterVectors.Contains(rosterVector))
-            //    throw new InterviewException(
-            //        $"Roster information for question is incorrect. " +
-            //        $"No questions found for roster vector {rosterVector}. " +
-            //        $"Available roster vectors: {string.Join(", ", rosterVectors)}. " +
-            //        $"Question ID: {questionId.FormatGuid()}. " +
-            //        $"Interview ID: {this.InterviewTree.InterviewId}.");
+            if (!rosterVectors.Contains(rosterVector))
+                throw new InterviewException(
+                    $"Roster information for question is incorrect. " +
+                    $"No questions found for roster vector {rosterVector}. " +
+                    $"Available roster vectors: {string.Join(", ", rosterVectors)}. " +
+                    $"Question ID: {questionId.FormatGuid()}. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
     }
 }

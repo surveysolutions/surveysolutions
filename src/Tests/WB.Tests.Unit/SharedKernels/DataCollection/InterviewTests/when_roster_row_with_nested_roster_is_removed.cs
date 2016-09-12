@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -29,7 +30,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
             questionInParentRosterId = Guid.Parse("31111111111111111111111111111111");
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId),
+
+                Create.Entity.Roster(rosterId: parentRosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
+                {
+                    Create.Entity.Question(questionId: parentRosterGroupId),
+
+                    Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId),
+                }),
+            }));
+
+            var questionnaire1 = Mock.Of<IQuestionnaire>(_
 
                 => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
                     && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric

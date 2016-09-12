@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -29,32 +30,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
             multyOptionQuestionWhichIncreasesNestedRosterSizeId = Guid.Parse("31111111111111111111111111111111");
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId),
+                Create.Entity.MultipleOptionsQuestion(questionId: multyOptionQuestionWhichIncreasesNestedRosterSizeId, textAnswers: new[] { Create.Entity.Answer("t1", 5), }),
 
-                => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
-                    && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
-                    && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                    && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { parentRosterGroupId }
-
-                    && _.HasQuestion(multyOptionQuestionWhichIncreasesNestedRosterSizeId) == true
-                    && _.GetQuestionType(multyOptionQuestionWhichIncreasesNestedRosterSizeId) == QuestionType.MultyOption
-                    &&
-                    _.GetRosterGroupsByRosterSizeQuestion(multyOptionQuestionWhichIncreasesNestedRosterSizeId) ==
-                        new[] { nestedRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedQuestion(multyOptionQuestionWhichIncreasesNestedRosterSizeId) == new Guid[0]
-                    && _.GetRosterLevelForQuestion(multyOptionQuestionWhichIncreasesNestedRosterSizeId) == 0
-                    && _.GetAnswerOptionTitle(multyOptionQuestionWhichIncreasesNestedRosterSizeId, 5) == "t1"
-
-                    && _.HasGroup(nestedRosterGroupId) == true
-                    && _.GetRosterLevelForGroup(nestedRosterGroupId) == 2
-                    && _.GetRosterLevelForGroup(parentRosterGroupId) == 1
-                    //&& _.GetGroupAndUnderlyingGroupsWithNotEmptyCustomEnablementConditions(nestedRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedGroup(nestedRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedGroup(parentRosterGroupId) == new[] { parentRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
-
-                    && _.GetNestedRostersOfGroupById(parentRosterGroupId) == new[] { nestedRosterGroupId }
-                    && _.GetRosterSizeQuestion(nestedRosterGroupId) == multyOptionQuestionWhichIncreasesNestedRosterSizeId);
+                Create.Entity.Roster(rosterId: parentRosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
+                {
+                    Create.Entity.Roster(rosterId: nestedRosterGroupId, rosterSizeQuestionId: multyOptionQuestionWhichIncreasesNestedRosterSizeId),
+                }),
+            }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
