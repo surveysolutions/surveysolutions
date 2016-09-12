@@ -427,6 +427,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\TextQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\when_answering_and_answer_is_whitespace.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultiOptionQuestionAnswered_with_empty_array_received.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_linked_multi_question_on_second_level_referenced_on_third.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\InterviewEntityViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_group_title_has_substitution.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_validation_message_contains_substitution.cs" />

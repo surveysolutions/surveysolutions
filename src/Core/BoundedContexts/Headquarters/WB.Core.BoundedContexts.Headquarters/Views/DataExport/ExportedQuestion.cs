@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
@@ -64,14 +65,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 };
             }
 
-            if (header.ColumnNames.Length == 1)
-                return new string[] { this.AnswerToStringValue(question.Answer, header) };
+            switch (header.QuestionType)
+            {
+                case QuestionType.DateTime:
+                case QuestionType.Multimedia:
+                case QuestionType.Numeric:
+                case QuestionType.Text:
+                case QuestionType.QRBarcode:
+                    return new string[] { this.ConvertAnswerToStringValue(question.Answer, header) };
 
-            var listOfAnswers = this.TryCastToEnumerable(question.Answer);
-            if (listOfAnswers != null)
-                return this.BuildAnswerListForQuestionByHeader(listOfAnswers.ToArray(), header);
-
-            return new string[0];
+                case QuestionType.MultyOption:
+                case QuestionType.SingleOption:
+                case QuestionType.TextList:
+                    return this.BuildAnswerListForQuestionByHeader(question.Answer, header);
+                default:
+                    return new string[0];
+            }
+            
         }
 
         private static string[] BuildMissingValueAnswer(ExportedHeaderItem header)
@@ -112,7 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
             return listOfAnswers;
         }
 
-        private string AnswerToStringValue(object answer, ExportedHeaderItem header)
+        private string ConvertAnswerToStringValue(object answer, ExportedHeaderItem header)
         {
             if (answer == null)
                 return MissingStringQuestionValue;
@@ -127,7 +137,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 
                     if (shrinkedArrayOfAnswers.Length == 1)
                     {
-                        return this.ConvertAnswerToString(shrinkedArrayOfAnswers[0], header.QuestionSubType);
+                        var arrayOfAnswers = this.TryCastToEnumerable(shrinkedArrayOfAnswers[0])?.ToArray();
+
+                        return arrayOfAnswers != null
+                            ? string.Join(DefaultDelimiter, arrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionSubType)).ToArray())
+                            : this.ConvertAnswerToString(shrinkedArrayOfAnswers[0], header.QuestionSubType);
                     }
 
                     return string.Format("[{0}]", string.Join(DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionSubType)).ToArray()));
@@ -139,40 +153,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         }
 
 
-        private string[] BuildAnswerListForQuestionByHeader(object[] answers, ExportedHeaderItem header)
+        private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedHeaderItem header)
         {
+            if (header.ColumnNames.Length == 1)
+                return new string[] { ConvertAnswerToStringValue(answer, header)};
+
             var result = new string[header.ColumnNames.Length];
+
+            var ansresAsEnumerable = this.TryCastToEnumerable(answer);
+            var answers = ansresAsEnumerable?.ToArray() ?? new object[] { answer };
 
             if (this.QuestionType == QuestionType.MultyOption)
             {
-                if (!header.QuestionSubType.HasValue)
-                {
-                    FillMultioptionAnswers(answers, header, result);
-                }
-                else
-                {
-                    if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNo)
-                    {
-                        FillYesNoAnswers(answers, header, result, false);
-                    }
-                    else if(header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNoOrdered)
-                    {
-                        FillYesNoAnswers(answers, header, result, true);
-                    }
-                    else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Ordered)
-                    {
-                        FillMultioptionOrderedAnswers(answers, header, result);
+               if (!header.QuestionSubType.HasValue)
+                  {
+                        FillMultioptionAnswers(answers, header, result);
                     }
                     else
                     {
-                        this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
+                        if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNo)
+                        {
+                            FillYesNoAnswers(answers, header, result, false);
+                        }
+                        else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNoOrdered)
+                        {
+                            FillYesNoAnswers(answers, header, result, true);
+                        }
+                        else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Ordered)
+                        {
+                            FillMultioptionOrderedAnswers(answers, header, result);
+                        }
+                        else
+                        {
+                            this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
+                        }
                     }
-                }
             }
             else
             {
                 this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
             }
+            
 
             return result;
         }
@@ -217,7 +238,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         {
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : MissingStringQuestionValue;
+                result[i] = answers.Length > i ? this.ConvertAnswerToStringValue(answers[i], header) : MissingStringQuestionValue;
             }
         }
 
