@@ -23,16 +23,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public void Remove(string id)
         {
-            AsyncContext.Run(() => this.questionnaireDocumentViewRepository.RemoveAsync(id));
+            this.questionnaireDocumentViewRepository.Remove(id);
         }
 
         public void Store(QuestionnaireDocument view, string id)
         {
-            AsyncContext.Run(() => this.questionnaireDocumentViewRepository.StoreAsync(new QuestionnaireDocumentView()
-            {
+            this.questionnaireDocumentViewRepository.Store(new QuestionnaireDocumentView{
                 Document = view,
                 Id = id
-            }));
+            });
         }
     }
 }

@@ -1,13 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using SQLite.Net;
-using SQLite.Net.Async;
-using SQLite.Net.Interop;
+using SQLite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -16,92 +11,51 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity>
-        where TEntity : class, IPlainStorageEntity
+        where TEntity : class, IPlainStorageEntity, new()
     {
-        protected readonly SQLiteAsyncConnection asyncStorage;
-        protected readonly SQLiteConnectionWithLock connection;
+        protected readonly SQLiteConnection connection;
         private readonly ILogger logger;
 
-        public SqlitePlainStorage(ISQLitePlatform sqLitePlatform,
-            ILogger logger,
+        public SqlitePlainStorage(ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor,
-            IJsonAllTypesSerializer serializer,
             SqliteSettings settings)
         {
             var entityName = typeof(TEntity).Name;
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
-            this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
-                new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
-                    serializer.SerializeToByteArray,
-                    (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
-                    (type) => true),
-                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
-            {
-                //TraceListener = new MvxTraceListener($"{entityName}-SQL-Queries")
-            };
-            this.asyncStorage = new SQLiteAsyncConnection(() => this.connection);
+            this.connection = new SQLiteConnection(pathToDatabase, 
+                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
+            
             this.logger = logger;
             this.connection.CreateTable<TEntity>();
             this.connection.CreateIndex<TEntity>(entity => entity.Id);
         }
 
-        public SqlitePlainStorage(SQLiteConnectionWithLock storage, ILogger logger)
+        public SqlitePlainStorage(SQLiteConnection storage, ILogger logger)
         {
             this.connection = storage;
             this.logger = logger;
             this.connection.CreateTable<TEntity>();
-            this.asyncStorage = new SQLiteAsyncConnection(() => this.connection);
         }
 
         public virtual TEntity GetById(string id)
         {
-            TEntity entity = null;
-
-            using (this.connection.Lock())
-                this.connection.RunInTransaction(() => entity = this.connection.Find<TEntity>(x => x.Id == id));
-
-            return entity;
+            return this.connection.Find<TEntity>(id);
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(string id)
+        public void Remove(string id)
         {
-            TEntity entity = null;
-            await this.asyncStorage.RunInTransactionAsync(connection => entity = connection.Find<TEntity>(x => x.Id == id));
-            return entity;
-        }
-
-        public async Task RemoveAsync(string id)
-        {
-            TEntity entity = this.GetById(id);
-
-            await this.RemoveAsync(new[] { entity });
-        }
-
-        public virtual async Task RemoveAsync(IEnumerable<TEntity> entities)
-        {
-            try
-            {
-                await this.asyncStorage.RunInTransactionAsync(connection =>
-                {
-                    foreach (var entity in entities.Where(entity => entity != null))
-                        connection.Delete(entity);
-                });
-
-            }
-            catch (SQLiteException ex)
-            {
-                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
-                throw;
-            }
+            this.connection.RunInTransaction(() => this.connection.Delete<TEntity>(id));
         }
 
         public void Remove(IEnumerable<TEntity> entities)
         {
             try
             {
-                using (this.connection.Lock())
+                this.connection.RunInTransaction(() =>
+                {
                     foreach (var entity in entities.Where(entity => entity != null))
                         this.connection.Delete(entity);
+                });
             }
             catch (SQLiteException ex)
             {
@@ -110,20 +64,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public async Task StoreAsync(TEntity entity)
+        public void Store(TEntity entity)
         {
-            await this.StoreAsync(new[] { entity }).ConfigureAwait(false);
+            this.Store(new[] {entity});
         }
 
-        public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
+        public virtual void Store(IEnumerable<TEntity> entities)
         {
             try
             {
-                await this.asyncStorage.RunInTransactionAsync(connection =>
+                this.connection.RunInTransaction(() =>
                 {
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        var isEntityExists = connection.Table<TEntity>().Count(x => x.Id == entity.Id) > 0;
+                        var isEntityExists = connection.Get<TEntity>(entity.Id) != null;
 
                         if (isEntityExists)
                         {
@@ -134,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             connection.Insert(entity);
                         }
                     }
-                }).ConfigureAwait(false);
+                });
 
             }
             catch (SQLiteException ex)
@@ -147,12 +101,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
             => this.RunInTransaction(table => table.Where(predicate).ToReadOnlyCollection());
 
-        public async Task<IReadOnlyCollection<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> predicate)
-            => await this.RunInTransactionAsync(table => table.Where(predicate).ToReadOnlyCollection());
-
-        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
-            => await this.RunInTransactionAsync(table => table.Count(predicate));
-
         public int Count(Expression<Func<TEntity, bool>> predicate)
           => this.RunInTransaction(table => table.Count(predicate));
 
@@ -160,32 +108,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IReadOnlyCollection<TEntity> LoadAll() => this.RunInTransaction(table => table.ToReadOnlyCollection());
 
-        public async Task<IReadOnlyCollection<TEntity>> LoadAllAsync()
-            => await this.RunInTransactionAsync(table => table.ToReadOnlyCollection());
-
         private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);
-
-            using (this.connection.Lock())
-                this.connection.RunInTransaction(() => result = function.Invoke(this.connection.Table<TEntity>()));
-
-            return result;
-        }
-
-        private async Task<TResult> RunInTransactionAsync<TResult>(Func<TableQuery<TEntity>, TResult> function)
-        {
-            TResult result = default(TResult);
-            await this.asyncStorage.RunInTransactionAsync(connection => result = function.Invoke(connection.Table<TEntity>()));
+            this.connection.RunInTransaction(() => result = function.Invoke(this.connection.Table<TEntity>()));
             return result;
         }
 
         public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount)
             => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Take(takeCount).ToReadOnlyCollection());
         
-        public async Task RemoveAllAsync()
+        public void RemoveAll()
         {
-            await this.asyncStorage.DeleteAllAsync<TEntity>();
+            this.connection.DeleteAll<TEntity>();
         }
 
         public void Dispose()

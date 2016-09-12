@@ -86,8 +86,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     },
                     token: this.cancellationTokenSource.Token);
 
-                await this.interviewersPlainStorage.StoreAsync(this.userIdentityToRelink);
-                await this.principal.SignInAsync(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
+                this.interviewersPlainStorage.Store(this.userIdentityToRelink);
+                this.principal.SignIn(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
                 this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)

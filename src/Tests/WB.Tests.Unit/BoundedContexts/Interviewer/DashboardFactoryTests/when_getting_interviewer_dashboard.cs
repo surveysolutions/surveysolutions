@@ -23,11 +23,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
         {
             var questionnaireViewRepository = new SqliteInmemoryStorage<QuestionnaireView>();
             var questionnaireIdentity = new QuestionnaireIdentity(new Guid(), 1);
-            questionnaireViewRepository.StoreAsync(new QuestionnaireView
+            questionnaireViewRepository.Store(new QuestionnaireView
             {
                 Identity = questionnaireIdentity,
                 Id = questionnaireIdentity.ToString()
-            }).WaitAndUnwrapException();
+            });
 
             foreach (var emulatedStorageItem in emulatedStorageItems)
             {
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
             }
             
             var interviewsAsyncPlainStorage = new SqliteInmemoryStorage<InterviewView>();
-            interviewsAsyncPlainStorage.StoreAsync(emulatedStorageItems).WaitAndUnwrapException();
+            interviewsAsyncPlainStorage.Store(emulatedStorageItems);
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(
                     x => x.GetNew<InterviewDashboardItemViewModel>() == 

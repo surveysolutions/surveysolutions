@@ -7,8 +7,6 @@ using Ninject.Modules;
 using NLog;
 using NLog.Layouts;
 using NLog.Targets;
-using SQLite.Net.Interop;
-using SQLite.Net.Platform.XamarinAndroid;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -38,7 +36,7 @@ namespace WB.UI.Interviewer.Infrastructure
         {
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
 
- 			this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();
+            this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();
             this.Bind<IInterviewerInterviewAccessor>().To<InterviewerInterviewAccessor>();
             this.Bind<IInterviewEventStreamOptimizer>().To<InterviewEventStreamOptimizer>();
             
@@ -48,10 +46,8 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind<IInterviewerEventStorage, IEventStore>()
                 .To<SqliteMultiFilesEventStorage>()
-                .InSingletonScope()
-                .WithConstructorArgument("traceListener", new MvxTraceListener("EventStore-SQL-Queries"));
+                .InSingletonScope();
             
-            this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
             this.Bind<SqliteSettings>().ToConstant(
                 new SqliteSettings()
                 {

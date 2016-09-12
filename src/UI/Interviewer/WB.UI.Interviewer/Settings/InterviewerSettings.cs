@@ -107,9 +107,9 @@ namespace WB.UI.Interviewer.Settings
                    $"InterviewsList:{interviewIds}";
         }
 
-        public async Task SetEventChunkSize(int eventChunkSize)
+        public void SetEventChunkSize(int eventChunkSize)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.EventChunkSize = eventChunkSize;
             });
@@ -120,49 +120,49 @@ namespace WB.UI.Interviewer.Settings
             return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
         }
 
-        public async Task SetEndpointAsync(string endpoint)
+        public void SetEndpoint(string endpoint)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.Endpoint = endpoint;
             });
         }
 
-        public async Task SetHttpResponseTimeoutAsync(int timeout)
+        public void SetHttpResponseTimeout(int timeout)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.HttpResponseTimeoutInSec = timeout;
             });
         }
 
-        public async Task SetGpsResponseTimeoutAsync(int timeout)
+        public void SetGpsResponseTimeout(int timeout)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.GpsResponseTimeoutInSec = timeout;
             });
         }
 
-        public async Task SetGpsDesiredAccuracy(double value)
+        public void SetGpsDesiredAccuracy(double value)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.GpsDesiredAccuracy = value;
             });
         }
 
-        public async Task SetCommunicationBufferSize(int bufferSize)
+        public void SetCommunicationBufferSize(int bufferSize)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.CommunicationBufferSize = bufferSize;
             });
         }
 
-        public async Task SetVibrateOnErrorAsync(bool vibrateOnError)
+        public void SetVibrateOnError(bool vibrateOnError)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.VibrateOnError = vibrateOnError;
             });
@@ -172,11 +172,11 @@ namespace WB.UI.Interviewer.Settings
 
         public string RestoreFolder => restoreFolder;
 
-        private async Task SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
+        private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
             var settings = this.CurrentSettings;
             onChanging(settings);
-            await this.settingsStorage.StoreAsync(settings);
+            this.settingsStorage.Store(settings);
         }
 
         private string GetUserInformation()

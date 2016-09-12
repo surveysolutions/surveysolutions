@@ -65,27 +65,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.logger = logger;
         }
 
-        public async Task RemoveInterviewAsync(Guid interviewId)
+        public void RemoveInterview(Guid interviewId)
         {
             this.aggregateRootRepositoryWithCache.CleanCache();
             this.snapshotStoreWithCache.CleanCache();
 
             this.eventStore.RemoveEventSourceById(interviewId);
 
-            await this.interviewViewRepository.RemoveAsync(interviewId.FormatGuid());
+            this.interviewViewRepository.Remove(interviewId.FormatGuid());
 
-            await this.RemoveInterviewImagesAsync(interviewId);
+            this.RemoveInterviewImages(interviewId);
         }
 
-        private async Task RemoveInterviewImagesAsync(Guid interviewId)
+        private void RemoveInterviewImages(Guid interviewId)
         {
-            var imageViews = await this.interviewMultimediaViewRepository.WhereAsync(image => image.InterviewId == interviewId);
+            var imageViews = this.interviewMultimediaViewRepository.Where(image => image.InterviewId == interviewId);
 
             foreach (var interviewMultimediaView in imageViews)
             {
-                await this.interviewFileViewRepository.RemoveAsync(interviewMultimediaView.FileId);
+                this.interviewFileViewRepository.Remove(interviewMultimediaView.FileId);
             }
-            await this.interviewMultimediaViewRepository.RemoveAsync(imageViews);
+            this.interviewMultimediaViewRepository.Remove(imageViews);
         }
 
         public async Task<InterviewPackageApiView> GetInteviewEventsPackageOrNullAsync(Guid interviewId)

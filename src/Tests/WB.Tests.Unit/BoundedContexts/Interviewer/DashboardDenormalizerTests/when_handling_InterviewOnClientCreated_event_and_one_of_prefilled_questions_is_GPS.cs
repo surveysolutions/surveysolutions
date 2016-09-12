@@ -4,11 +4,9 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -42,9 +40,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
-                .Setup(storage => storage.StoreAsync(it.IsAny<InterviewView>()))
-                .Callback<InterviewView>((view) => dashboardItem = view)
-                .Returns(storeAsyncTask);
+                .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
+                .Callback<InterviewView>((view) => dashboardItem = view);
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 questionnaireStorage: questionnaireStorage);

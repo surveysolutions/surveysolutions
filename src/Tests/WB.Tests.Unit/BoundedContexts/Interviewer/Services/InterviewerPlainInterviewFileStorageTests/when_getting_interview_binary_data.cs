@@ -15,22 +15,22 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         Establish context = () =>
         {
             var imageViewStorage = new SqliteInmemoryStorage<InterviewMultimediaView>();
-            imageViewStorage.StoreAsync(
+            imageViewStorage.Store(
                 new InterviewMultimediaView
                 {
                     Id = Guid.NewGuid().FormatGuid(),
                     InterviewId = interviewId,
                     FileName = imageFileName,
                     FileId = imageFileId
-                }).WaitAndUnwrapException();
+                });
 
             var fileViewStorage = new SqliteInmemoryStorage<InterviewFileView>();
-            fileViewStorage.StoreAsync(
+            fileViewStorage.Store(
                 new InterviewFileView
                 {
                     Id = imageFileId,
                     File = imageFileBytes
-                }).WaitAndUnwrapException();
+                });
 
             interviewerPlainInterviewFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage,
