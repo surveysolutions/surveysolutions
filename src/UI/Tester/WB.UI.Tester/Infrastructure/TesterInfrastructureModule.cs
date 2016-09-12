@@ -1,7 +1,6 @@
 ﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
-using SQLite.Net;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -21,8 +20,6 @@ using WB.UI.Tester.Infrastructure.Internals.Rest;
 using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
-using SQLite.Net.Interop;
-using SQLite.Net.Platform.XamarinAndroid;
 using WB.Core.SharedKernels.Enumerator.Views;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using WB.Infrastructure.Shared.Enumerator.Internals;
@@ -45,8 +42,6 @@ namespace WB.UI.Tester.Infrastructure
 
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<InMemoryKeyValueStorage<QuestionnaireDocument>>().InSingletonScope();
 
-            this.Bind<ITraceListener>().To<MvxTraceListener>();
-            this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
             this.Bind<SqliteSettings>().ToConstant(
                 new SqliteSettings()
                 {

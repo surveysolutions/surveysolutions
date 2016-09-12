@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -188,16 +187,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             };
         }
 
-        public async Task RemoveOptionsForQuestionnaireAsync(QuestionnaireIdentity questionnaireId)
+        public void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var optionsToDelete = this.optionsStorage.Where(x => x.QuestionnaireId == questionnaireIdAsString).ToList();
-            await this.optionsStorage.RemoveAsync(optionsToDelete);
+            this.optionsStorage.Remove(optionsToDelete);
         }
-        
+
         public bool IsEmpty() => this.optionsStorage.FirstOrDefault() == null;
 
-        public async Task StoreOptionsForQuestionAsync(QuestionnaireIdentity questionnaireIdentity, Guid questionId, List<Answer> answers, List<TranslationDto> translations)
+        public void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireIdentity, Guid questionId, List<Answer> answers, List<TranslationDto> translations)
         {
             var questionIdAsString = questionId.FormatGuid();
             var questionnaireIdAsString = questionnaireIdentity.ToString();
@@ -231,7 +230,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 optionsToSave.Add(optionView);
 
                 var translatedOptions = translations.Where(x => x.QuestionnaireEntityId == questionId &&
-                                                                x.TranslationIndex == answer.AnswerValue && 
+                                                                x.TranslationIndex == answer.AnswerValue &&
                                                                 x.Type == TranslationType.OptionTitle)
                     .Select(y => new OptionView
                     {
@@ -250,13 +249,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 index++;
             }
 
-            await this.optionsStorage.StoreAsync(optionsToSave);
+            this.optionsStorage.Store(optionsToSave);
         }
 
-        public async Task StoreOptionsAsync(List<OptionView> options)
+        public void StoreOptions(List<OptionView> options)
         {
-            await this.optionsStorage.StoreAsync(options);
+            this.optionsStorage.Store(options);
         }
-        
+
     }
 }

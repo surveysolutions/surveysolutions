@@ -90,11 +90,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 if (await this.designerApiService.Authorize(login: LoginName, password: Password))
                 {
-                    await this.userStorage.RemoveAllAsync();
-                    await this.dashboardLastUpdateStorage.RemoveAllAsync();
-                    await this.questionnairesStorage.RemoveAllAsync();
+                    this.userStorage.RemoveAll();
+                    this.dashboardLastUpdateStorage.RemoveAll();
+                    this.questionnairesStorage.RemoveAll();
 
-                    await this.principal.SignInAsync(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
+                    this.principal.SignIn(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
                     this.viewModelNavigationService.NavigateTo<DashboardViewModel>();   
                 }
             }

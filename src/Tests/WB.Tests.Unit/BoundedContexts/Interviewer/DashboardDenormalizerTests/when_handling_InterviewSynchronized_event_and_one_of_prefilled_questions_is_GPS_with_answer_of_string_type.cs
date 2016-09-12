@@ -34,16 +34,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 Mock.Of<IQuestionnaireStorage>(storage
                     => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaireDocument);
 
-            var storeAsyncTask = new Task(() => { });
-            storeAsyncTask.Start();
-
             var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer =>
             writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
-                .Setup(storage => storage.StoreAsync(it.IsAny<InterviewView>()))
-                .Callback<InterviewView>((view) => dashboardItem = view)
-                .Returns(storeAsyncTask);
+                .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
+                .Callback<InterviewView>((view) => dashboardItem = view);
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 questionnaireStorage: questionnaireStorage);

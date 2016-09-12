@@ -1,5 +1,5 @@
 ﻿using Main.Core.Documents;
-using SQLite.Net.Attributes;
+using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views

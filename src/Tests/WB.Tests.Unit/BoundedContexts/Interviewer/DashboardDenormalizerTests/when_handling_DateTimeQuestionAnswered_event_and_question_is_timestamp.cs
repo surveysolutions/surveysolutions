@@ -27,8 +27,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             @event = Create.Event.DateTimeQuestionAnswered(interviewId, dateTimeQuestionIdentity, answer).ToPublishedEvent();
 
             interviewViewStorage = new SqliteInmemoryStorage<InterviewView>();
-            interviewViewStorage.StoreAsync(Create.Entity.InterviewView(interviewId: interviewId,
-                questionnaireId: questionnaireIdentity.ToString())).WaitAndUnwrapException();
+            interviewViewStorage.Store(Create.Entity.InterviewView(interviewId: interviewId,
+                questionnaireId: questionnaireIdentity.ToString()));
 
             var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,

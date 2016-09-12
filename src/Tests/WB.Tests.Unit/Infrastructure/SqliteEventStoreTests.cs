@@ -7,8 +7,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SQLite.Net;
-using SQLite.Net.Platform.Win32;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -27,9 +25,7 @@ namespace WB.Tests.Unit.Infrastructure
         [SetUp]
         public void Setup()
         {
-            sqliteEventStorage = new SqliteMultiFilesEventStorage(new SQLitePlatformWin32(),
-              Mock.Of<ILogger>(),
-              Mock.Of<ITraceListener>(),
+            sqliteEventStorage = new SqliteMultiFilesEventStorage(Mock.Of<ILogger>(),
               new SqliteSettings
               {
                   PathToDatabaseDirectory = "",

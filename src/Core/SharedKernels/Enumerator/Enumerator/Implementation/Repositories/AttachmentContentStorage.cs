@@ -17,21 +17,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             this.attachmentContentDataRepository = attachmentContentDataRepository;
         }
 
-        public async Task StoreAsync(AttachmentContent attachmentContent)
+        public void Store(AttachmentContent attachmentContent)
         {
-            await this.attachmentContentDataRepository.StoreAsync(new AttachmentContentData
+            this.attachmentContentDataRepository.Store(new AttachmentContentData
             {
                 Id = attachmentContent.Id,
                 Content = attachmentContent.Content
             });
-            await this.attachmentContentMetadataRepository.StoreAsync(new AttachmentContentMetadata
+            this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
             {
                 ContentType = attachmentContent.ContentType,
                 Id = attachmentContent.Id,
                 Size = attachmentContent.Size,
             });
         }
-        
+
         public AttachmentContentMetadata GetMetadata(string attachmentContentId)
         {
             var attachmentContent = this.attachmentContentMetadataRepository.GetById(attachmentContentId);

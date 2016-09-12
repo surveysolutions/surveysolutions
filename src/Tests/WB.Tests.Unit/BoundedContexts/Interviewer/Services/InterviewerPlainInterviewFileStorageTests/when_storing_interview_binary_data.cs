@@ -21,14 +21,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
                 imageViewStorage: imageViewStorage.Object);
         };
 
-        Because of = async () =>
-            await interviewerPlainInterviewFileStorage.StoreInterviewBinaryDataAsync(interviewId, imageFileName, imageFileBytes);
+        Because of = () =>
+            interviewerPlainInterviewFileStorage.StoreInterviewBinaryData(interviewId, imageFileName, imageFileBytes);
 
         It should_store_specified_interview_mulimedia_view = () =>
-            imageViewStorage.Verify(x=>x.StoreAsync(Moq.It.IsAny<InterviewMultimediaView>()), Times.Once);
+            imageViewStorage.Verify(x=>x.Store(Moq.It.IsAny<InterviewMultimediaView>()), Times.Once);
 
         It should_store_specified_interview_file_view = () =>
-            fileViewStorage.Verify(x=>x.StoreAsync(Moq.It.IsAny<InterviewFileView>()), Times.Once);
+            fileViewStorage.Verify(x=>x.Store(Moq.It.IsAny<InterviewFileView>()), Times.Once);
 
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string imageFileName = "image.png";

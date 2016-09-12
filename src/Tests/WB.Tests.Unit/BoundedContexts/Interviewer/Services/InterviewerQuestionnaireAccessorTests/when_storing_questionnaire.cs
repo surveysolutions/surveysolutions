@@ -30,19 +30,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
                 translationRepository: mockOfTranslationRepository.Object);
         };
 
-        Because of = () => interviewerQuestionnaireAccessor.StoreQuestionnaireAsync(questionnaireIdentity, questionnaireDocumentAsString, isCensusQuestionnaire, new List<TranslationDto>()).WaitAndUnwrapException();
+        Because of = () => interviewerQuestionnaireAccessor.StoreQuestionnaire(questionnaireIdentity, questionnaireDocumentAsString, isCensusQuestionnaire, new List<TranslationDto>());
 
         It should_store_questionnaire_document_view_to_plain_storage = () =>
             mockOfPlainQuestionnaireRepository.Verify(x => x.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, Moq.It.IsAny<QuestionnaireDocument>()), Times.Once);
 
         It should_store_questionnaire_view_to_plain_storage = () =>
-            mockOfQuestionnaireViewRepository.Verify(x => x.StoreAsync(Moq.It.IsAny<QuestionnaireView>()), Times.Once);
+            mockOfQuestionnaireViewRepository.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireView>()), Times.Once);
 
         It should_store_translations_to_storage = () =>
-            mockOfTranslationRepository.Verify(x => x.StoreAsync(Moq.It.IsAny<List<TranslationInstance>>()), Times.Once);
+            mockOfTranslationRepository.Verify(x => x.Store(Moq.It.IsAny<List<TranslationInstance>>()), Times.Once);
 
         It should_remove_options_to_storage = () =>
-            mockOfOptionsRepositoryRepository.Verify(x => x.RemoveOptionsForQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>()), Times.Once);
+            mockOfOptionsRepositoryRepository.Verify(x => x.RemoveOptionsForQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()), Times.Once);
 
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
         private static readonly Mock<IQuestionnaireStorage> mockOfPlainQuestionnaireRepository = new Mock<IQuestionnaireStorage>();

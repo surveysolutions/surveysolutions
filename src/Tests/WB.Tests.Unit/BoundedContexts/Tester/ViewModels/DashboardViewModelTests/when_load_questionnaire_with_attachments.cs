@@ -69,17 +69,17 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         It should_store_attachment_1_to_local_storage = () =>
-            mockOfAttachmentContentStorage.Verify(_ => _.StoreAsync(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "1")), Times.Once);
+            mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "1")), Times.Once);
 
         It should_store_attachment_2_to_local_storage = () =>
-            mockOfAttachmentContentStorage.Verify(_ => _.StoreAsync(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "2")), Times.Once);
+            mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "2")), Times.Once);
 
         It should_not_store_attachment_5_to_local_storage = () =>
-            mockOfAttachmentContentStorage.Verify(_ => _.StoreAsync(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "5")), Times.Never);
+            mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "5")), Times.Never);
 
         It should_be_questionnaire_stored_to_local_storage = () => 
             mockOfQuestionnaireImportService.Verify(
-                _ => _.ImportQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), downloadedQuestionnaire.Document, downloadedQuestionnaire.Assembly, new TranslationDto[0]), 
+                _ => _.ImportQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), downloadedQuestionnaire.Document, downloadedQuestionnaire.Assembly, new TranslationDto[0]), 
                 Times.Once);
 
         It should_be_executed_CreateInterviewOnClientCommand = () => 
