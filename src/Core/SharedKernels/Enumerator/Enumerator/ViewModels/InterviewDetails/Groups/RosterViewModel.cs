@@ -55,7 +55,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             var statefulInterview = this.interviewRepository.Get(interviewId);
 
             var viewModels = statefulInterview.GetRosterInstances(navigationState.CurrentGroup, entityId.Id)
-                                              .Select(this.GetGroupViewModel);
+                                              .Select(this.GetGroupViewModel)
+                                              .ToList();
             this.rosterInstances = new CovariantObservableCollection<ICompositeEntity>(viewModels);
         }
 

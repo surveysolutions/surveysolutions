@@ -160,11 +160,24 @@
 }
 @helper ShowNotificationToUserIfNeeded()
 {
-    if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string) || TempData.ContainsKey(Alerts.SUCCESS))
+    if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string) 
+        || TempData.ContainsKey(Alerts.SUCCESS)
+        || TempData.ContainsKey(Alerts.ERROR))
     {
         <div id="table-message">
             <p>
-                @(TempData.ContainsKey(Alerts.SUCCESS) ? Html.Raw(@TempData[Alerts.SUCCESS]) : Html.Raw(ViewData["UserNotification"]))
+                @if(TempData.ContainsKey(Alerts.SUCCESS))
+                {
+                    @(Html.Raw(@TempData[Alerts.SUCCESS]))
+                }
+                else if (TempData.ContainsKey(Alerts.ERROR))
+                {
+                    @(Html.Raw(@TempData[Alerts.ERROR]))
+                        }
+                else
+                {
+                    @(Html.Raw(ViewData["UserNotification"]))
+                                }
             </p>
             <a href="#" class="cross" title="Close" onclick=" $('#table-message').hide() "></a>
         </div>

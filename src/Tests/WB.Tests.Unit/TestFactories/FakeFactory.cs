@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
@@ -41,6 +42,14 @@ namespace WB.Tests.Unit.TestFactories
 
             return Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+        }
+
+        public IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(QuestionnaireDocument questionnaire)
+        {
+            var repository = new Mock<IQuestionnaireStorage>();
+            IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
+            repository.SetReturnsDefault(plainQuestionnaire);
+            return repository.Object;
         }
 
         public IRosterTitleSubstitutionService RosterTitleSubstitutionService()

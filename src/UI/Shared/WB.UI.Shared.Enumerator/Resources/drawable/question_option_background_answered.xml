@@ -17,7 +17,7 @@
       <solid android:color="@color/sections_list_background_color" />
       <stroke
         android:width="@dimen/Interview_Question_Answer_Input_background_stroke_width"
-        android:color="@color/interview_question_yesno_not_selected_text"/>
+        android:color="@color/editorAnsweredBorder"/>
       <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
     </shape>
   </item>
