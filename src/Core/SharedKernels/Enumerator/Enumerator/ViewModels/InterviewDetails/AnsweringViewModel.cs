@@ -103,13 +103,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void StartInProgressIndicator()
+        public void StartInProgressIndicator()
         {
             Interlocked.Increment(ref this.inProgressDepth);
             this.UpdateInProgressFlag();
         }
 
-        private void FinishInProgressIndicator()
+        public void FinishInProgressIndicator()
         {
             Interlocked.Decrement(ref this.inProgressDepth);
             this.UpdateInProgressFlag();
