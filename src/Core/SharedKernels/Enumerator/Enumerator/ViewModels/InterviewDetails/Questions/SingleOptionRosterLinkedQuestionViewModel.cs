@@ -117,6 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
             this.questionState.Init(interviewId, questionIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, questionIdentity);
 
             interview = this.interviewRepository.Get(interviewId);
 
