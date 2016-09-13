@@ -264,7 +264,7 @@
     <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
     <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
     <Compile Include="CustomControls\DynamicImageView.cs" />
-    <Compile Include="CustomControls\EnterTimeView.cs" />
+    <Compile Include="CustomControls\DatePickerDialogFragment.cs" />
     <Compile Include="CustomControls\FlowLayout.cs" />
     <Compile Include="CustomControls\HttpImageView.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
