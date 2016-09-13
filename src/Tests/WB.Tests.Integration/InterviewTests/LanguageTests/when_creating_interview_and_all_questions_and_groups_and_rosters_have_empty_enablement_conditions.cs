@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(children: new[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new[]
                 {
                     Create.Chapter(children: new IComposite[]
                     {

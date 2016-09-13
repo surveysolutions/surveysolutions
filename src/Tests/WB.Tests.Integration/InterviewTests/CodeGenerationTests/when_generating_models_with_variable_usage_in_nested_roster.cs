@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     Create.FixedRosterTitle(3, "Cleaner")
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Create.Chapter(children: new IComposite[]
                     {

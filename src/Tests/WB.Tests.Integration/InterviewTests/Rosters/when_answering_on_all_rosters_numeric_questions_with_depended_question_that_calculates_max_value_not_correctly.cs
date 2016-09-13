@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var rosterValidation = Guid.Parse("22222222222222222222222222222222");
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(id: rosterSizeQuestionId),
 
                     Create.Roster(
