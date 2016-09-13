@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Create.Option("1"), Create.Option("2"), Create.Option("3"), Create.Option("12")
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options),
                     Create.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]

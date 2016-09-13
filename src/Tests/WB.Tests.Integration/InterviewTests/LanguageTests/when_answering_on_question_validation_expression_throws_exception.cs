@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var question1Id = Guid.Parse("11111111111111111111111111111111");
                 var question2Id = Guid.Parse("22222222222222222222222222222222");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(question1Id, "q1"),
                     Create.NumericIntegerQuestion(question2Id, "q2", validationExpression: "1/q1 == 1")
                     );

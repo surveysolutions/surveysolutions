@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 Guid userId = Guid.NewGuid();
                 var questionnaireId = Guid.NewGuid();
 
-                var questionnaire = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(numericQuestionId, variable: "numeric"),
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", enablementCondition: "numeric > 10",
                         options: new List<Answer>

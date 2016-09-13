@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Create.FixedRosterTitle(2, "Microwave"),
                     Create.FixedRosterTitle(3, "Cleaner")
                 };
-                var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new[]
+                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new[]
                 {
                     Create.Chapter(children: new IComposite[]
                     {

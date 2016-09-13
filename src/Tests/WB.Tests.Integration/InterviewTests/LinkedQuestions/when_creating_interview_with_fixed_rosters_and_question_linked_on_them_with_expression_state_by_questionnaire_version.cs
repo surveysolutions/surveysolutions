@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             {
                 Setup.MockedServiceLocator();
                
-                var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
                 {
                     Create.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked", linkedFilter:"1==1"),
                     Create.Roster(id: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
