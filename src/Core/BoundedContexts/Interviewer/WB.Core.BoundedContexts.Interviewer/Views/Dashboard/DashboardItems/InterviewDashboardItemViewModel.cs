@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -56,9 +57,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
 
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
+
             this.InterviewId = interview.InterviewId;
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaireIdentity.Version);
             this.DateComment = this.GetInterviewDateCommentByStatus(interview);
             this.Comment = this.GetInterviewCommentByStatus(interview);
             this.PrefilledQuestions = this.GetTop3PrefilledQuestions();

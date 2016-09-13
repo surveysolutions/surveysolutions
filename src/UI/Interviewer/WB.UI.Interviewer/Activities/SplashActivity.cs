@@ -72,7 +72,7 @@ namespace WB.UI.Interviewer.Activities
 
                 foreach (var question in questionsWithLongOptionsList)
                 {
-                    optionsRepository.StoreOptionsForQuestion(questionnaireView.Identity, question.PublicKey, question.Answers, new List<TranslationDto>());
+                    optionsRepository.StoreOptionsForQuestion(questionnaireView.GetIdentity(), question.PublicKey, question.Answers, new List<TranslationDto>());
                 }
             }
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -11,6 +12,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
@@ -19,13 +21,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
 {
     internal class when_getting_interviewer_dashboard: InterviewerDashboardFactoryTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             var questionnaireViewRepository = new SqliteInmemoryStorage<QuestionnaireView>();
             var questionnaireIdentity = new QuestionnaireIdentity(new Guid(), 1);
             questionnaireViewRepository.Store(new QuestionnaireView
             {
-                Identity = questionnaireIdentity,
                 Id = questionnaireIdentity.ToString()
             });
 
@@ -39,17 +41,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(
                     x => x.GetNew<InterviewDashboardItemViewModel>() == 
-                    new InterviewDashboardItemViewModel(null, null, null, null, questionnaireViewRepository, null, null));
+                    new InterviewDashboardItemViewModel(null, null, null, null, questionnaireViewRepository, new InMemoryPlainStorage<PrefilledQuestionView>(), null));
             
             interviewerDashboardFactory = CreateInterviewerDashboardFactory(interviewViewRepository: interviewsAsyncPlainStorage,
                 questionnaireViewRepository: questionnaireViewRepository,
                 interviewViewModelFactory: interviewViewModelFactory);
-        };
+        }
 
-        Because of = () =>
+        [SetUp]
+        public void because_of() =>
             dashboardByInterviewer = interviewerDashboardFactory.GetInterviewerDashboardAsync(interviewerId);
 
-        It should_interviews_be_filered_by_specified_interviewer = () =>
+        [Test]
+        public void should_interviews_be_filered_by_specified_interviewer() =>
             dashboardByInterviewer.StartedInterviews
                 .Union(dashboardByInterviewer.CompletedInterviews)
                 .Union(dashboardByInterviewer.NewInterviews)
