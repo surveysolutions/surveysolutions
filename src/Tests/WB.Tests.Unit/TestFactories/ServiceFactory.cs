@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.TestFactories
             )
             => new InterviewerDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
-                prefilledQuestions ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
+                prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
 
