@@ -4,26 +4,28 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
+    [TestFixture]
     internal class when_handling_DateTimeQuestionAnswered_event_and_question_is_timestamp
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             interviewId = Guid.Parse("22222222222222222222222222222222");
 
             dateTimeQuestionIdentity = Create.Entity.Identity("11111111111111111111111111111111", RosterVector.Empty);
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("33333333333333333333333333333333"), 1);
 
-            @event = Create.Event.DateTimeQuestionAnswered(interviewId, dateTimeQuestionIdentity, answer).ToPublishedEvent();
+            @event = Create.Event.DateTimeQuestionAnswered(interviewId, dateTimeQuestionIdentity, answer).ToPublishedEvent(eventSourceId: interviewId);
 
             interviewViewStorage = new SqliteInmemoryStorage<InterviewView>();
             interviewViewStorage.Store(Create.Entity.InterviewView(interviewId: interviewId,
@@ -41,14 +43,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 questionnaireStorage: plainQuestionnaireRepository,
                 prefilledQuestions: prefilledQuestions);
-        };
+        }
 
-        Because of = () => denormalizer.Handle(@event);
+        [SetUp]
+        public void because_of() => denormalizer.Handle(@event);
 
-        It should_set_formatted_date_to_specified_answer_view = () =>
+        [Test]
+        public void should_set_formatted_date_to_specified_answer_view() =>
             prefilledQuestions.Where(x => x.QuestionId == dateTimeQuestionIdentity.Id)
                 .First()
-                .Answer.ShouldEqual(answer.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern));
+                .Answer.ShouldEqual(answer.ToLocalTime().ToString(CultureInfo.CurrentCulture.DateTimeFormat));
 
         static InterviewerDashboardEventHandler denormalizer;
         static IPublishedEvent<DateTimeQuestionAnswered> @event;
