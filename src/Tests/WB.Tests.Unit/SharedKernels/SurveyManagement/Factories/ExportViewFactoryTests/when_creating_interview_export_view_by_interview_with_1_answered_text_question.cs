@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -28,10 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 interviewData);
 
         It should_create_record_with_one_text_question = () =>
-            result.Levels[0].Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(1);
+            result.Levels[0].Records[0].GetPlainAnswers().First().Length.ShouldEqual(1);
 
         It should_create_record_with_one_text_question_which_answered_and_contains_all_symbols = () =>
-          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { text });
+          result.Levels[0].Records[0].GetPlainAnswers().First().ShouldEqual(new[] { text });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

@@ -9,6 +9,7 @@ using System.Globalization;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -320,7 +321,7 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
-        public InterviewDataExportRecord InterviewDataExportRecord(Guid interviewId, params ExportedQuestion[] questions)
+        public InterviewDataExportRecord InterviewDataExportRecord(Guid interviewId, params ExportQuestionService[] questions)
             => new InterviewDataExportRecord("test", new string[0], new string[0], new string[0])
             {
                 Answers = questions.Select(x => string.Join("\n", x)).ToArray(),
