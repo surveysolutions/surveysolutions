@@ -45,6 +45,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -85,9 +86,12 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewerDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            ILiteEventRegistry liteEventRegistry = null)
+            ILiteEventRegistry liteEventRegistry = null,
+            IPlainStorage<PrefilledQuestionView> prefilledQuestions = null
+            )
             => new InterviewerDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                prefilledQuestions ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
 
@@ -142,6 +146,7 @@ namespace WB.Tests.Unit.TestFactories
             IPlainStorage<InterviewFileView> interviewFileViewRepository = null)
             => new InterviewerInterviewAccessor(
                 questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
+                Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 interviewMultimediaViewRepository ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewRepository ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
