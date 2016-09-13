@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var topRosterId = Guid.Parse("44444444444444444444444444444444");
 
 
-                var questionnaire = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
                         Create.Option(value: "1", text: "parent option 1"),

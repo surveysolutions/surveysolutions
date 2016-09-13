@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var petToysRoster = Guid.Parse("99999999999999999999999999999999");
                 var toysAgeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(membersQuestionId, variable: "num"),
                     Create.Roster(familyRosterId, variable: "fam",
                         rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: membersQuestionId,
