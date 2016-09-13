@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 interviewData);
 
         It should_create_record__with_one_timestamp_question_which_contains_composite_answer = () =>
-          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { "1984-04-18T18:04:19"  });
+          result.Levels[0].Records[0].GetPlainAnswers().First().ShouldEqual(new[] { "1984-04-18T18:04:19"  });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;
