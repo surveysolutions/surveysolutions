@@ -89,7 +89,7 @@ namespace WB.UI.Interviewer.Settings
         public string GetDeviceTechnicalInformation()
         {
             var interviewIds = string.Join(","+ Environment.NewLine, this.interviewViewRepository.LoadAll().Select(i => i.InterviewId));
-            var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.LoadAll().Select(i => i.Identity));
+            var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.LoadAll().Select(i => i.Id));
 
             return $"Version:{this.GetApplicationVersionName()} {Environment.NewLine}" +
                    $"SyncProtocolVersion:{this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +

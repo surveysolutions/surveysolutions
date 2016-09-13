@@ -41,8 +41,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void Init(QuestionnaireView questionnaire)
         {
-            this.questionnaireIdentity = questionnaire.Identity;
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);
+            this.questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, this.questionnaireIdentity.Version);
 
             var interviewsByQuestionnareCount = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaire.Id);
 

@@ -52,7 +52,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static readonly QuestionnaireView questionnaireInfo = new QuestionnaireView
         {
             Id = questionnaireId.ToString(),
-            Identity = questionnaireId,
             Census = false
         };
         private static readonly InterviewApiView interviewInfo = new InterviewApiView
