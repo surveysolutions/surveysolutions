@@ -12,7 +12,6 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
     {
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
-        Guid InterviewerId { get; }
         InterviewStatus Status { get; }
 
         Guid Id { get; }
