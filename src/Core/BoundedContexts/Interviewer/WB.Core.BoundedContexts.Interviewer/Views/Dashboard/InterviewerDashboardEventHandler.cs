@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 if (featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
                 {
-                    prefilledQuestions.Add(this.GetAnswerOnPrefilledQuestion(featuredQuestion, questionnaire, item?.Answer, interviewView.Language, interviewId));
+                    prefilledQuestions.Add(this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewView.Language, interviewId));
                 }
                 else
                 {
@@ -183,13 +183,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             return null;
         }
 
-        private PrefilledQuestionView GetAnswerOnPrefilledQuestion(IQuestion prefilledQuestion, IQuestionnaire questionnaire, object answer, string language, Guid interviewId)
+        private PrefilledQuestionView GetAnswerOnPrefilledQuestion(Guid prefilledQuestion, IQuestionnaire questionnaire, object answer, string language, Guid interviewId)
         {
             Func<decimal, string> getCategoricalOptionText = null;
 
+            var questionType = questionnaire.GetQuestionType(prefilledQuestion);
+
             if (answer != null)
             {
-                switch (prefilledQuestion.QuestionType)
+                switch (questionType)
                 {
                     case QuestionType.DateTime:
                         DateTime dateTimeAnswer;
@@ -198,7 +200,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                         else
                             dateTimeAnswer = (DateTime) answer;
 
-                        var isTimestamp = (prefilledQuestion as DateTimeQuestion)?.IsTimestamp ?? false;
+                        var isTimestamp = questionnaire.IsTimestampQuestion(prefilledQuestion);
                         var localTime = dateTimeAnswer.ToLocalTime();
                         answer = isTimestamp 
                             ? localTime.ToString(CultureInfo.CurrentCulture)
@@ -219,10 +221,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                         getCategoricalOptionText = GetPrefilledCategoricalQuestionOptionText(prefilledQuestion, questionnaire);
                         break;
                     case QuestionType.Numeric:
-                        var numericQuestion = prefilledQuestion as INumericQuestion;
-
                         decimal answerTyped = answer is string ? decimal.Parse((string)answer, CultureInfo.InvariantCulture) : Convert.ToDecimal(answer);
-                        if (numericQuestion?.UseFormatting ?? false)
+                        if (questionnaire.ShouldUseFormatting(prefilledQuestion))
                         {
                             answer = answerTyped.FormatDecimal();
                         }
@@ -236,18 +236,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             return new PrefilledQuestionView
             {
-                Id = $"{interviewId:N}${prefilledQuestion.PublicKey:N}",
+                Id = $"{interviewId:N}${prefilledQuestion:N}",
                 InterviewId = interviewId,
-                QuestionId = prefilledQuestion.PublicKey,
-                QuestionText = prefilledQuestion.QuestionText,
+                QuestionId = prefilledQuestion,
+                QuestionText = questionnaire.GetQuestionTitle(prefilledQuestion),
                 Answer = answer == null ? null : AnswerUtils.AnswerToString(answer, getCategoricalOptionText)
             };
         }
 
-        private static Func<decimal, string> GetPrefilledCategoricalQuestionOptionText(IQuestion prefilledQuestion, IQuestionnaire questionnaire)
+        private static Func<decimal, string> GetPrefilledCategoricalQuestionOptionText(Guid questionId, IQuestionnaire questionnaire)
         {
             return (optionValue) =>
-                questionnaire.GetOptionsForQuestion(prefilledQuestion.PublicKey, null, string.Empty)
+                questionnaire.GetOptionsForQuestion(questionId, null, string.Empty)
                     .SingleOrDefault(x => x.Value == optionValue)?.Title;
         }
 
@@ -363,16 +363,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             else
             {
-                var interviewPrefilledQuestion = this.prefilledQuestions.Where(question => question.QuestionId == questionId && question.InterviewId == interviewId).FirstOrDefault();
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId), interviewView.Language);
+
+                var newPrefilledQuestionToStore = this.GetAnswerOnPrefilledQuestion(questionId, questionnaire, answer, interviewView.Language, interviewId);
+
+                var interviewPrefilledQuestion = this.prefilledQuestions.Where(question => question.QuestionId == questionId && question.InterviewId == interviewId).FirstOrDefault()
+                       ?? newPrefilledQuestionToStore;
                 if (interviewPrefilledQuestion != null)
                 {
-                    var questionnaireDocument = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
-                    var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId), interviewView.Language);
-                    var questionnairePrefilledQuestion = questionnaireDocument.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
-
-                    var answerOnPrefilledQuestion = this.GetAnswerOnPrefilledQuestion(questionnairePrefilledQuestion, questionnaire, answer, interviewView.Language, interviewId);
-                    interviewPrefilledQuestion.Answer = answerOnPrefilledQuestion.Answer;
+                    interviewPrefilledQuestion.Answer = newPrefilledQuestionToStore.Answer;
                 }
+
+                this.prefilledQuestions.Store(interviewPrefilledQuestion);
             }
 
             this.interviewViewRepository.Store(interviewView);
