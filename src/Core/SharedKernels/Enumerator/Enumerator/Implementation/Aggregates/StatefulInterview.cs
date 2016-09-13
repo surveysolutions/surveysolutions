@@ -642,8 +642,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public string QuestionnaireId => this.QuestionnaireIdentity.ToString();
-        public Guid InterviewerId => this.interviewerId;
-        public InterviewStatus Status => this.status;
+        public InterviewStatus Status => this.properties.Status;
         public Guid Id { get; set; }
         public string InterviewerCompleteComment { get; private set; }
         public string SupervisorRejectComment { get; private set; }

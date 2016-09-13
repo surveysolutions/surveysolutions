@@ -28,17 +28,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class Interview : AggregateRootMappedByConvention
     {
-        private static readonly decimal[] EmptyRosterVector = { };
+        protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
+
+        protected InterviewEntities.InterviewProperties BuildInterviewProperties() => this.properties;
 
         protected Guid questionnaireId;
-        protected Guid interviewerId;
 
         protected long questionnaireVersion;
-        private bool wasCompleted;
-        private bool wasHardDeleted;
-        private bool receivedByInterviewer;
-        protected InterviewStatus status;
         protected string language;
+
+        public override Guid EventSourceId
+        {
+            get { return base.EventSourceId; }
+
+            protected set
+            {
+                base.EventSourceId = value;
+                this.properties.Id = value.FormatGuid();
+            }
+        }
 
         private ILatestInterviewExpressionState expressionProcessorStatePrototype = null;
         protected ILatestInterviewExpressionState ExpressionProcessorStatePrototype
@@ -65,12 +73,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewReceivedByInterviewer @event)
         {
-            receivedByInterviewer = true;
+            this.properties.IsReceivedByInterviewer = true;
         }
 
         public virtual void Apply(InterviewReceivedBySupervisor @event)
         {
-            receivedByInterviewer = false;
+            this.properties.IsReceivedByInterviewer = false;
         }
 
         public virtual void Apply(InterviewCreated @event)
@@ -102,8 +110,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState = new InterviewStateDependentOnAnswers();
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
-            this.status = @event.InterviewData.Status;
-            this.wasCompleted = @event.InterviewData.WasCompleted;
+            this.properties.Status = @event.InterviewData.Status;
+            this.properties.IsCompleted = @event.InterviewData.WasCompleted;
             this.ExpressionProcessorStatePrototype =
                 this.expressionProcessorStatePrototypeProvider.GetExpressionState(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
 
@@ -264,7 +272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.questionnaireId = @event.QuestionnaireId;
             this.questionnaireVersion = @event.QuestionnaireVersion;
-            this.status = @event.Status;
+            this.properties.Status = @event.Status;
         }
 
         public virtual void Apply(TextQuestionAnswered @event)
@@ -583,7 +591,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewStatusChanged @event)
         {
-            this.status = @event.Status;
+            this.properties.Status = @event.Status;
         }
 
         public virtual void Apply(SupervisorAssigned @event)
@@ -592,15 +600,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewerAssigned @event)
         {
-            this.interviewerId = @event.InterviewerId;
-            this.receivedByInterviewer = false;
+            this.properties.InterviewerId = @event.InterviewerId;
+            this.properties.IsReceivedByInterviewer = false;
         }
 
         public virtual void Apply(InterviewDeleted @event) { }
 
         public virtual void Apply(InterviewHardDeleted @event)
         {
-            wasHardDeleted = true;
+            this.properties.IsHardDeleted = true;
         }
 
         public virtual void Apply(InterviewSentToHeadquarters @event) { }
@@ -609,7 +617,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewCompleted @event)
         {
-            this.wasCompleted = true;
+            this.properties.IsCompleted = true;
         }
 
         public virtual void Apply(InterviewRestarted @event) { }
@@ -622,7 +630,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewRejected @event)
         {
-            this.wasCompleted = false;
+            this.properties.IsCompleted = false;
         }
 
         public virtual void Apply(InterviewRejectedByHQ @event) { }
@@ -755,15 +763,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
 
             var interviewChangeStructures = new InterviewChangeStructures();
+            decimal[] emptyRosterVector = RosterVector.Empty;
             var newAnswers =
                 answersToFeaturedQuestions.ToDictionary(
-                    answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, EmptyRosterVector),
+                    answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, emptyRosterVector),
                     answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
 
-            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, EmptyRosterVector, interviewChangeStructures.State);
+            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, emptyRosterVector, interviewChangeStructures.State);
             foreach (var newAnswer in answersToFeaturedQuestions)
             {
-                string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
+                string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, emptyRosterVector);
                     
                 interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
@@ -1463,7 +1472,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RepeatLastInterviewStatus(RepeatLastInterviewStatus command)
         {
-            this.ApplyEvent(new InterviewStatusChanged(this.status, command.Comment));
+            this.ApplyEvent(new InterviewStatusChanged(this.properties.Status, command.Comment));
         }
 
         public void SwitchTranslation(SwitchTranslation command)
@@ -1610,7 +1619,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
-            if (!this.wasCompleted && this.status != InterviewStatus.InterviewerAssigned)
+            if (!this.properties.IsCompleted && this.properties.Status != InterviewStatus.InterviewerAssigned)
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
@@ -1632,7 +1641,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void HardDelete(Guid userId)
         {
-            if (this.wasHardDeleted)
+            if (this.properties.IsHardDeleted)
                 return;
 
             this.ApplyEvent(new InterviewHardDeleted(userId));
@@ -1645,7 +1654,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
 
-            if (status != InterviewStatus.Completed)
+            if (this.properties.Status != InterviewStatus.Completed)
             {
                 this.ApplyEvent(new InterviewDeleted(userId));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
@@ -1664,7 +1673,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void MarkInterviewAsSentToHeadquarters(Guid userId)
         {
-            if (!this.wasHardDeleted)
+            if (!this.properties.IsHardDeleted)
             {
                 this.ApplyEvent(new InterviewDeleted(userId));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
@@ -1771,7 +1780,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     RosterVector = answerDto.QuestionRosterVector
                 });
 
-            if (this.status == InterviewStatus.Deleted)
+            if (this.properties.Status == InterviewStatus.Deleted)
             {
                 this.ApplyEvent(new InterviewRestored(userId));
             }
@@ -1944,7 +1953,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
-                if (this.status == InterviewStatus.Deleted)
+                if (this.properties.Status == InterviewStatus.Deleted)
                     this.Restore(userId);
                 else
                     propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
@@ -1972,7 +1981,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var properties = this.BuildInterviewProperties();
             var propertiesInvariants = new InterviewPropertiesInvariants(properties);
 
-            if (this.status == InterviewStatus.Deleted)
+            if (this.properties.Status == InterviewStatus.Deleted)
                 this.Restore(userId);
             else
                 propertiesInvariants.ThrowIfStatusNotAllowedToBeChangedWithMetadata(interviewStatus);
@@ -3513,7 +3522,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
             DateTime answersTime, Dictionary<Identity, object> newAnswers, RosterVector rosterVector = null)
         {
-            var currentQuestionRosterVector = rosterVector ?? EmptyRosterVector;
+            var currentQuestionRosterVector = rosterVector ?? (decimal[]) RosterVector.Empty;
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer =
                 (currentState, question) => newAnswers.Any(x => question == x.Key)
                     ? newAnswers.SingleOrDefault(x => question == x.Key).Value
@@ -3604,7 +3613,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             decimal[] outerRosterVector = null)
         {
             if (outerRosterVector == null)
-                outerRosterVector = EmptyRosterVector;
+                outerRosterVector = RosterVector.Empty;
 
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer = (currentState, question) => null;
 
@@ -4306,7 +4315,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
             RosterVector rosterVector = null, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
         {
-            var currentRosterVector = rosterVector ?? EmptyRosterVector;
+            var currentRosterVector = rosterVector ?? (decimal[]) RosterVector.Empty;
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
             {
                 Guid questionId = answerToFeaturedQuestion.Key;
@@ -4692,15 +4701,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .Union(answeredOptions.Yes.Select(x => new AnsweredYesNoOption(x, true)))
                     .ToArray();
         }
-
-        protected InterviewEntities.InterviewProperties BuildInterviewProperties()
-            => new InterviewEntities.InterviewProperties(
-                id: this.EventSourceId,
-                interviewerId: this.interviewerId,
-                status: this.status,
-                isCompleted: this.wasCompleted,
-                isHardDeleted: this.wasHardDeleted,
-                isReceivedByInterviewer: this.receivedByInterviewer);
 
         protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState = null)
         {
