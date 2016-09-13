@@ -161,9 +161,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             interviewView.CanBeDeleted = canBeDeleted;
             interviewView.LastInterviewerOrSupervisorComment = comments;
             interviewView.LocationQuestionId = prefilledGpsQuestionId;
-            interviewView.LocationLatitude = gpsCoordinates.Latitude;
-            interviewView.LocationLongitude = gpsCoordinates.Longitude;
-            
+
+            if (gpsCoordinates != null)
+            {
+                interviewView.LocationLatitude = gpsCoordinates.Latitude;
+                interviewView.LocationLongitude = gpsCoordinates.Longitude;
+            }
+
             this.interviewViewRepository.Store(interviewView);
         }
 
