@@ -17,13 +17,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
 
         public RelinkDeviceViewModel(
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ISynchronizationService synchronizationService,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage)
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;

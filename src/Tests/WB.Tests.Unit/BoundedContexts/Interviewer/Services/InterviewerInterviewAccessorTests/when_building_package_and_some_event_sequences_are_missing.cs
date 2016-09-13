@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             };
 
             interviewAccessor = Create.Service.InterviewerInterviewAccessor(
-                interviewViewRepository: Stub<IAsyncPlainStorage<InterviewView>>.Returning(Create.Entity.InterviewView()),
+                interviewViewRepository: Stub<IPlainStorage<InterviewView>>.Returning(Create.Entity.InterviewView()),
                 eventStore: Stub<IInterviewerEventStorage>.Returning<IEnumerable<CommittedEvent>>(events));
         };
 

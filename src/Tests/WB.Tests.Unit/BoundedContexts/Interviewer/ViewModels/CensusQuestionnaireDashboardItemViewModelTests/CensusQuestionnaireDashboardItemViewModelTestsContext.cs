@@ -22,14 +22,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
             IInterviewerPrincipal principal = null,
             IViewModelNavigationService viewModelNavigationService = null,
             IMvxMessenger messenger = null,
-            IAsyncPlainStorage<InterviewView> interviewViewRepository = null)
+            IPlainStorage<InterviewView> interviewViewRepository = null)
         {
             return new CensusQuestionnaireDashboardItemViewModel(
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                 viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 messenger: messenger ?? Mock.Of<IMvxMessenger>(),
-                interviewViewRepository: interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>());
+                interviewViewRepository: interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
         }
     }
 }

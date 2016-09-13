@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
                 userInteractionService ?? Substitute.For<IUserInteractionService>(),
                 messenger ?? Substitute.For<IMvxMessenger>(),
                 Substitute.For<IExternalAppLauncher>(),
-                Substitute.For<IAsyncPlainStorage<QuestionnaireView>>(),
+                Substitute.For<IPlainStorage<QuestionnaireView>>(),
                 Substitute.For<IInterviewerInterviewAccessor>());
         }
     }

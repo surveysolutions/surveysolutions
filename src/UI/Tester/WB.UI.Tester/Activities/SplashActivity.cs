@@ -23,7 +23,7 @@ namespace WB.UI.Tester.Activities
         {
             ClearAttachmentStorage();
 
-            Mvx.Resolve<IAsyncPlainStorage<TranslationInstance>>().RemoveAll();
+            Mvx.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
 
             IPrincipal principal = Mvx.Resolve<IPrincipal>();
             IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
@@ -40,10 +40,10 @@ namespace WB.UI.Tester.Activities
 
         private void ClearAttachmentStorage()
         {
-            var attachmentContentMetadataStorage = Mvx.Resolve<IAsyncPlainStorage<AttachmentContentMetadata>>();
+            var attachmentContentMetadataStorage = Mvx.Resolve<IPlainStorage<AttachmentContentMetadata>>();
             attachmentContentMetadataStorage.RemoveAll();
 
-            var attachmentContentDataStorage = Mvx.Resolve<IAsyncPlainStorage<AttachmentContentData>>();
+            var attachmentContentDataStorage = Mvx.Resolve<IPlainStorage<AttachmentContentData>>();
             attachmentContentDataStorage.RemoveAll();
         }
     }

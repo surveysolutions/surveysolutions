@@ -73,14 +73,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
 
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
         private static readonly Mock<IQuestionnaireStorage> mockOfPlainQuestionnaireRepository = new Mock<IQuestionnaireStorage>();
-        private static readonly Mock<IAsyncPlainStorage<QuestionnaireView>> mockOfQuestionnaireViewRepository = new Mock<IAsyncPlainStorage<QuestionnaireView>>();
+        private static readonly Mock<IPlainStorage<QuestionnaireView>> mockOfQuestionnaireViewRepository = new Mock<IPlainStorage<QuestionnaireView>>();
         private const bool isCensusQuestionnaire = true;
         private const string questionnaireDocumentAsString = "questionnaire document";
         private static Guid questionId = Guid.Parse("22222222222222222222222222222222");
         private static InterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;
 
 
-        private static readonly Mock<IAsyncPlainStorage<TranslationInstance>> mockOfTranslationRepository = new Mock<IAsyncPlainStorage<TranslationInstance>>();
+        private static readonly Mock<IPlainStorage<TranslationInstance>> mockOfTranslationRepository = new Mock<IPlainStorage<TranslationInstance>>();
         private static readonly Mock<IOptionsRepository> mockOfOptionsRepositoryRepository = new Mock<IOptionsRepository>();
         
 

@@ -26,24 +26,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
 
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
         private readonly IOptionsRepository optionsRepository;
-        private readonly IAsyncPlainStorage<TranslationInstance> translationsStorage;
+        private readonly IPlainStorage<TranslationInstance> translationsStorage;
 
         public InterviewerQuestionnaireAccessor(
             IJsonAllTypesSerializer synchronizationSerializer,
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
+            IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IQuestionnaireStorage questionnaireStorage,
-            IAsyncPlainStorage<InterviewView> interviewViewRepository,
+            IPlainStorage<InterviewView> interviewViewRepository,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
             IInterviewerInterviewAccessor interviewFactory, 
-            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments, 
+            IPlainStorage<QuestionnaireDocumentView> questionnaireDocuments, 
             IOptionsRepository optionsRepository, 
-            IAsyncPlainStorage<TranslationInstance> translationsStorage)
+            IPlainStorage<TranslationInstance> translationsStorage)
         {
             this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;

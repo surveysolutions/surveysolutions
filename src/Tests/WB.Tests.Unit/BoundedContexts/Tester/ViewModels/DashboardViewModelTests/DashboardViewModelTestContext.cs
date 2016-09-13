@@ -38,16 +38,16 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IViewModelNavigationService viewModelNavigationService = null,
             IFriendlyErrorMessageService friendlyErrorMessageService = null,
             IUserInteractionService userInteractionService = null,
-            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
-            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
+            IPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
+            IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
             IAttachmentContentStorage attachmentContentStorage = null,
             IAsyncRunner asyncRunner = null,
-            IAsyncPlainStorage<TranslationInstance> translationsStorage = null)
+            IPlainStorage<TranslationInstance> translationsStorage = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
             mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
 
-            var localDashboardLastUpdateStorageMock = new Mock<IAsyncPlainStorage<DashboardLastUpdate>>();
+            var localDashboardLastUpdateStorageMock = new Mock<IPlainStorage<DashboardLastUpdate>>();
             localDashboardLastUpdateStorageMock
                 .Setup(x => x.Where(Moq.It.IsAny<Expression<Func<DashboardLastUpdate, bool>>>()))
                 .Returns(
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 logger: logger ?? Mock.Of<ILogger>(),
                 attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                 asyncRunner: asyncRunner ?? Create.Service.AsyncRunner(),
-                translationsStorage: translationsStorage ?? Mock.Of<IAsyncPlainStorage<TranslationInstance>>());
+                translationsStorage: translationsStorage ?? Mock.Of<IPlainStorage<TranslationInstance>>());
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

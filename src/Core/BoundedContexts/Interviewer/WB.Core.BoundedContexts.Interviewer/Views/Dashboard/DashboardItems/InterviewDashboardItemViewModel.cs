@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IUserInteractionService userInteractionService;
         private readonly IMvxMessenger messenger;
         private readonly IExternalAppLauncher externalAppLauncher;
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewerInterviewAccessor interviewerInterviewFactory;
 
         public string QuestionnaireName { get; private set; }
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IUserInteractionService userInteractionService,
             IMvxMessenger messenger,
             IExternalAppLauncher externalAppLauncher,
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
+            IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewerInterviewAccessor interviewFactory)
         {
             this.viewModelNavigationService = viewModelNavigationService;

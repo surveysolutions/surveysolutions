@@ -20,9 +20,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
-        private readonly IAsyncPlainStorage<TesterUserIdentity> userStorage;
-        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage;
-        private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
+        private readonly IPlainStorage<TesterUserIdentity> userStorage;
+        private readonly IPlainStorage<QuestionnaireListItem> questionnairesStorage;
+        private readonly IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
 
         public LoginViewModel(
             IPrincipal principal, 
@@ -30,9 +30,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService, 
             IFriendlyErrorMessageService friendlyErrorMessageService,
-            IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage, 
-            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
-            IAsyncPlainStorage<TesterUserIdentity> userStorage)
+            IPlainStorage<QuestionnaireListItem> questionnairesStorage, 
+            IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
+            IPlainStorage<TesterUserIdentity> userStorage)
             : base(principal, viewModelNavigationService)
         {
             this.designerApiService = designerApiService;

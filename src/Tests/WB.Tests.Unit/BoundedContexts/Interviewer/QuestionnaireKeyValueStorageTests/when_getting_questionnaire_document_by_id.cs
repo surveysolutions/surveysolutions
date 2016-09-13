@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.QuestionnaireKeyValueStorage
     {
         Establish context = () =>
         {
-            mockOfAsyncPlainStorage = new Mock<IAsyncPlainStorage<QuestionnaireDocumentView>>();
+            mockOfAsyncPlainStorage = new Mock<IPlainStorage<QuestionnaireDocumentView>>();
             mockOfAsyncPlainStorage.Setup(x => x.GetById(QuestionnaireId))
                 .Returns(new QuestionnaireDocumentView {Document = new QuestionnaireDocument()});
             questionnaireKeyValueStorage = Create.Service.QuestionnaireKeyValueStorage(mockOfAsyncPlainStorage.Object);
@@ -32,6 +32,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.QuestionnaireKeyValueStorage
         private static QuestionnaireDocument questionnaireDocument;
         private static QuestionnaireKeyValueStorage questionnaireKeyValueStorage;
         private static readonly string QuestionnaireId = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1).ToString();
-        private static Mock<IAsyncPlainStorage<QuestionnaireDocumentView>> mockOfAsyncPlainStorage;
+        private static Mock<IPlainStorage<QuestionnaireDocumentView>> mockOfAsyncPlainStorage;
     }
 }

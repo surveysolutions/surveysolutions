@@ -41,12 +41,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
         private IReadOnlyCollection<QuestionnaireListItem> localQuestionnaires = new List<QuestionnaireListItem>();
-        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
-        private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
+        private readonly IPlainStorage<QuestionnaireListItem> questionnaireListStorage;
+        private readonly IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IAsyncRunner asyncRunner;
-        private readonly IAsyncPlainStorage<TranslationInstance> translationsStorage;
+        private readonly IPlainStorage<TranslationInstance> translationsStorage;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -58,12 +58,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
-            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
-            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
+            IPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
+            IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             ILogger logger,
             IAttachmentContentStorage attachmentContentStorage,
             IAsyncRunner asyncRunner,
-            IAsyncPlainStorage<TranslationInstance> translationsStorage)
+            IPlainStorage<TranslationInstance> translationsStorage)
             : base(principal, viewModelNavigationService)
         {
             this.designerApiService = designerApiService;

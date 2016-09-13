@@ -24,10 +24,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerInterviewAccessor : IInterviewerInterviewAccessor
     {
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireRepository;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository;
-        private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireRepository;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository;
+        private readonly IPlainStorage<InterviewFileView> interviewFileViewRepository;
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
         private readonly IInterviewerEventStorage eventStore;
@@ -38,10 +38,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ILogger logger;
 
         public InterviewerInterviewAccessor(
-            IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
-            IAsyncPlainStorage<InterviewView> interviewViewRepository,
-            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository,
-            IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository,
+            IPlainStorage<QuestionnaireView> questionnaireRepository,
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository,
+            IPlainStorage<InterviewFileView> interviewFileViewRepository,
             ICommandService commandService,
             IInterviewerPrincipal principal,
             IInterviewerEventStorage eventStore,

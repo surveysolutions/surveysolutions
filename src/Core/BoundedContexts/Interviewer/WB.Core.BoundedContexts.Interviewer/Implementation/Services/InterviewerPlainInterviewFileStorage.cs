@@ -11,12 +11,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerPlainInterviewFileStorage : IPlainInterviewFileStorage
     {
-        private readonly IAsyncPlainStorage<InterviewMultimediaView> imageViewStorage;
-        private readonly IAsyncPlainStorage<InterviewFileView> fileViewStorage;
+        private readonly IPlainStorage<InterviewMultimediaView> imageViewStorage;
+        private readonly IPlainStorage<InterviewFileView> fileViewStorage;
 
         public InterviewerPlainInterviewFileStorage(
-            IAsyncPlainStorage<InterviewMultimediaView> imageViewStorage,
-            IAsyncPlainStorage<InterviewFileView> fileViewStorage)
+            IPlainStorage<InterviewMultimediaView> imageViewStorage,
+            IPlainStorage<InterviewFileView> fileViewStorage)
         {
             this.imageViewStorage = imageViewStorage;
             this.fileViewStorage = fileViewStorage;

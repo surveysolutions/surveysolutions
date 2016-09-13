@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class TranslationsStorage : ITranslationStorage
     {
-        private readonly IAsyncPlainStorage<TranslationInstance> translationsRepository;
+        private readonly IPlainStorage<TranslationInstance> translationsRepository;
 
-        public TranslationsStorage(IAsyncPlainStorage<TranslationInstance> translationsRepository)
+        public TranslationsStorage(IPlainStorage<TranslationInstance> translationsRepository)
         {
             this.translationsRepository = translationsRepository;
         }

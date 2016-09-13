@@ -8,8 +8,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class QuestionnaireKeyValueStorage : IPlainKeyValueStorage<QuestionnaireDocument>
     {
-        private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository;
-        public QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository)
+        private readonly IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository;
+        public QuestionnaireKeyValueStorage(IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository)
         {
             this.questionnaireDocumentViewRepository = questionnaireDocumentViewRepository;
         }

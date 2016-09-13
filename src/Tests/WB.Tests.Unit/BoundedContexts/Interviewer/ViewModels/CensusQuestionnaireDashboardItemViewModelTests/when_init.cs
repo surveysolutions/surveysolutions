@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
     {
         Establish context = () =>
         {
-            var interviewViewRepository = Mock.Of<IAsyncPlainStorage<InterviewView>>(
+            var interviewViewRepository = Mock.Of<IPlainStorage<InterviewView>>(
                 x => x.Count(Moq.It.IsAny<Expression<Func<InterviewView, bool>>>()) ==
                      interviewsByQuestionnaireCount);
 

@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 Mock.Of<IQuestionnaireStorage>(storage
                     => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaire);
 
-            var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer =>
+            var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer =>
             writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)

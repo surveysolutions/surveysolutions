@@ -7,11 +7,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class AttachmentContentStorage : IAttachmentContentStorage
     {
-        private readonly IAsyncPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
-        private readonly IAsyncPlainStorage<AttachmentContentData> attachmentContentDataRepository;
+        private readonly IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
+        private readonly IPlainStorage<AttachmentContentData> attachmentContentDataRepository;
 
-        public AttachmentContentStorage(IAsyncPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
-            IAsyncPlainStorage<AttachmentContentData> attachmentContentDataRepository)
+        public AttachmentContentStorage(IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
+            IPlainStorage<AttachmentContentData> attachmentContentDataRepository)
         {
             this.attachmentContentMetadataRepository = attachmentContentMetadataRepository;
             this.attachmentContentDataRepository = attachmentContentDataRepository;
