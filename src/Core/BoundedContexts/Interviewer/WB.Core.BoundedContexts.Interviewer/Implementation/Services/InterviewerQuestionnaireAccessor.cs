@@ -102,7 +102,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.questionnaireViewRepository.Store(new QuestionnaireView
             {
                 Id = questionnaireIdentity.ToString(),
-                Identity = questionnaireIdentity,
                 Census = census,
                 Title = serializedQuestionnaireDocument.Title
             });
@@ -156,14 +155,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()
         {
             return this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census)
-                    .Select(questionnaire => questionnaire.Identity)
+                    .Select(questionnaire => QuestionnaireIdentity.Parse(questionnaire.Id))
                     .ToList();
         }
 
         public List<QuestionnaireIdentity> GetAllQuestionnaireIdentities()
         {
             return this.questionnaireViewRepository.Where(x => true)
-                 .Select(questionnaire => questionnaire.Identity)
+                 .Select(questionnaire => QuestionnaireIdentity.Parse(questionnaire.Id))
                  .ToList();
         }
 
