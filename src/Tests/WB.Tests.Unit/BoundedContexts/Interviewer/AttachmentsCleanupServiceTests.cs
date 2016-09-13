@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
         [Test]
         public void when_no_questionnaires_use_attchament_it_should_be_removed()
         {
-            IAsyncPlainStorage<AttachmentContentMetadata> metadataStorage = new SqliteInmemoryStorage<AttachmentContentMetadata>();
-            IAsyncPlainStorage<AttachmentContentData> contentStorage = new SqliteInmemoryStorage<AttachmentContentData>();
+            IPlainStorage<AttachmentContentMetadata> metadataStorage = new SqliteInmemoryStorage<AttachmentContentMetadata>();
+            IPlainStorage<AttachmentContentData> contentStorage = new SqliteInmemoryStorage<AttachmentContentData>();
 
             var contentId = "meta";
             metadataStorage.Store(new AttachmentContentMetadata { Id = contentId, ContentType = "application/json", Size = 4 });
@@ -37,8 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
         [Test]
         public void when_questionnaire_uses_attachment_it_should_not_be_removed()
         {
-            IAsyncPlainStorage<AttachmentContentMetadata> metadataStorage = new SqliteInmemoryStorage<AttachmentContentMetadata>();
-            IAsyncPlainStorage<AttachmentContentData> contentStorage = new SqliteInmemoryStorage<AttachmentContentData>();
+            IPlainStorage<AttachmentContentMetadata> metadataStorage = new SqliteInmemoryStorage<AttachmentContentMetadata>();
+            IPlainStorage<AttachmentContentData> contentStorage = new SqliteInmemoryStorage<AttachmentContentData>();
             
             var contentId = "meta";
             metadataStorage.Store(new AttachmentContentMetadata { Id = contentId, ContentType = "application/json", Size = 4 });
@@ -60,8 +60,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             Assert.That(dbDataAfterRemoval, Is.Not.Null);
         }
 
-        AttachmentsCleanupService CreateAttachmentsCleanupService(IAsyncPlainStorage<AttachmentContentMetadata> metadataStorage = null, 
-            IAsyncPlainStorage<AttachmentContentData> contentStorage = null, 
+        AttachmentsCleanupService CreateAttachmentsCleanupService(IPlainStorage<AttachmentContentMetadata> metadataStorage = null, 
+            IPlainStorage<AttachmentContentData> contentStorage = null, 
             IInterviewerQuestionnaireAccessor questionnairesAccessor = null)
         {
             return new AttachmentsCleanupService(questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),

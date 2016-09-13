@@ -98,12 +98,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         const string interviewFile2 = "file 2";
 
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
-        private static readonly Mock<IAsyncPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IAsyncPlainStorage<InterviewView>>();
+        private static readonly Mock<IPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IPlainStorage<InterviewView>>();
         private static readonly Mock<IEventSourcedAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IEventSourcedAggregateRootRepositoryWithCache>();
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
         private static Mock<IInterviewerEventStorage> eventStore;
-        private static IAsyncPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
-        private static IAsyncPlainStorage<InterviewFileView> inMemoryFileViewRepository;
+        private static IPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
+        private static IPlainStorage<InterviewFileView> inMemoryFileViewRepository;
     }
 }

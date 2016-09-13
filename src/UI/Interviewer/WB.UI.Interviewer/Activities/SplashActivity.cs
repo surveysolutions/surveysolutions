@@ -43,7 +43,7 @@ namespace WB.UI.Interviewer.Activities
 
             if (!isMigrationNeeded)
             {
-                var optionsStorage = Mvx.Resolve<IAsyncPlainStorage<OptionView>>();
+                var optionsStorage = Mvx.Resolve<IPlainStorage<OptionView>>();
 #pragma warning disable 472
                 var isUpgradeNeeded = optionsStorage.Where(x => x.SortOrder == null).Any(); //version 5.10 upgrade
 #pragma warning restore 472
@@ -51,7 +51,7 @@ namespace WB.UI.Interviewer.Activities
                 if (isUpgradeNeeded)
                 {
                     isMigrationNeeded = true;
-                    var optionViewRemover = Mvx.Resolve<IAsyncPlainStorage<OptionView>>();
+                    var optionViewRemover = Mvx.Resolve<IPlainStorage<OptionView>>();
                     optionViewRemover.RemoveAll();
                 }
             }
@@ -59,8 +59,8 @@ namespace WB.UI.Interviewer.Activities
             if (!isMigrationNeeded)
                 return;
 
-            var questionnaireViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireView>>();
-            var questionnaireDocuments = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
+            var questionnaireViewRepository = Mvx.Resolve<IPlainStorage<QuestionnaireView>>();
+            var questionnaireDocuments = Mvx.Resolve<IPlainStorage<QuestionnaireDocumentView>>();
 
             var questionnaires = questionnaireViewRepository.LoadAll();
             foreach (var questionnaireView in questionnaires)

@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
            principalMock.Verify(x => x.SignIn("name", "new password", true), Times.Once);
 
         static SynchronizationProcess viewModel;
-        static Mock<IAsyncPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
+        static Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
         static Mock<IUserInteractionService> userInteractionServiceMock=new Mock<IUserInteractionService>();
         static Mock<IPrincipal> principalMock = new Mock<IPrincipal>();
         static Mock<ISynchronizationService>  synchronizationServiceMock =new Mock<ISynchronizationService>();

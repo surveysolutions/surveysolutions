@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class InMemoryAsyncPlainStorage<TEntity> : IAsyncPlainStorage<TEntity>
+    public class InMemoryPlainStorage<TEntity> : IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity
     {
         public readonly Dictionary<string, TEntity> inMemroyStorage = new Dictionary<string, TEntity>();

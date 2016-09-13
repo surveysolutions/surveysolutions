@@ -26,8 +26,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         private readonly ISynchronizationService synchronizationService;
         private bool shouldUpdatePasswordOfInterviewer;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
         private readonly IPrincipal principal;
@@ -35,24 +35,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly IAttachmentContentStorage attachmentContentStorage;
-        private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
-        private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage;
+        private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
+        private readonly IPlainStorage<InterviewFileView> interviewFileViewStorage;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
         
         private RestCredentials restCredentials;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService, 
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
-            IAsyncPlainStorage<InterviewView> interviewViewRepository,
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<InterviewView> interviewViewRepository,
             IPrincipal principal,
             ILogger logger, 
             IUserInteractionService userInteractionService, 
             IInterviewerQuestionnaireAccessor questionnairesAccessor, 
             IAttachmentContentStorage attachmentContentStorage, 
             IInterviewerInterviewAccessor interviewFactory, 
-            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
-            IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage,
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
+            IPlainStorage<InterviewFileView> interviewFileViewStorage,
             AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher)
         {

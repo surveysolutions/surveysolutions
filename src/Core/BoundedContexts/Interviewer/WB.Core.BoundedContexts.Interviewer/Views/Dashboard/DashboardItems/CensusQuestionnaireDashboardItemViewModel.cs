@@ -21,14 +21,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IInterviewerPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
         public CensusQuestionnaireDashboardItemViewModel(
             ICommandService commandService,
             IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMvxMessenger messenger,
-            IAsyncPlainStorage<InterviewView> interviewViewRepository)
+            IPlainStorage<InterviewView> interviewViewRepository)
         {
             this.commandService = commandService;
             this.principal = principal;

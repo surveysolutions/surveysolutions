@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
             @event = Create.Event.AnswersRemoved(Create.Entity.Identity("11111111111111111111111111111111", RosterVector.Empty)).ToPublishedEvent();
 
-            var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer =>
+            var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer =>
             writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)

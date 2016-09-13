@@ -33,8 +33,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string imageFileName = "image.png";
         private static readonly byte[] imageFileBytes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-        private static readonly Mock<IAsyncPlainStorage<InterviewMultimediaView>> imageViewStorage = new Mock<IAsyncPlainStorage<InterviewMultimediaView>>();
-        private static readonly Mock<IAsyncPlainStorage<InterviewFileView>> fileViewStorage = new Mock<IAsyncPlainStorage<InterviewFileView>>();
+        private static readonly Mock<IPlainStorage<InterviewMultimediaView>> imageViewStorage = new Mock<IPlainStorage<InterviewMultimediaView>>();
+        private static readonly Mock<IPlainStorage<InterviewFileView>> fileViewStorage = new Mock<IPlainStorage<InterviewFileView>>();
         private static InterviewerPlainInterviewFileStorage interviewerPlainInterviewFileStorage;
     }
 }
