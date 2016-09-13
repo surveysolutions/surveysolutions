@@ -1,10 +1,13 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -14,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     {
         Establish context = () =>
         {
-            questionDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
+            questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = CreateQuestionsAndGroupsCollectionView();
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
@@ -36,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.Title.ShouldEqual(GetGroup(rosterId).Title);
 
         It should_return_roster_with_EnablementCondition_equals_g3_enablementCondition = () =>
-            result.EnablementCondition.ShouldEqual(GetGroup(rosterId).EnablementCondition);
+            result.EnablementCondition.ShouldEqual(GetGroup(rosterId).ConditionExpression);
 
         It should_return_roster_with_RosterFixedTitles_equals_g3_RosterFixedTitles = () =>
             result.FixedRosterTitles.ShouldContainOnly(GetGroup(rosterId).FixedRosterTitles);
@@ -66,7 +69,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.NotLinkedMultiOptionQuestions.ElementAt(1).Id.ShouldContainOnly(q2Id.FormatGuid());
 
         It should_return_grouped_list_of_multi_questions_with_values_titles_contains_only_q2Id = () =>
-            result.NotLinkedMultiOptionQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q2Id).Title);
+            result.NotLinkedMultiOptionQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q2Id).QuestionText);
 
         It should_return_grouped_list_of_integer_titles_with_one_pair = () =>
             result.NumericIntegerTitles.Count.ShouldEqual(3);
@@ -93,31 +96,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.NumericIntegerQuestions.ElementAt(1).Id.ShouldContainOnly(numericQuestionId.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_titles_contains_only_q1_title = () =>
-            result.NumericIntegerQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(numericQuestionId).Title);
+            result.NumericIntegerQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(numericQuestionId).QuestionText);
 
         It should_return_integer_questions_in_group_with_key__Group_2__with_ids_contains_only_q1Id = () =>
             result.NumericIntegerQuestions.ElementAt(3).Id.ShouldContainOnly(q6Id.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__Group_2__with_titles_contains_only_q1_title = () =>
-            result.NumericIntegerQuestions.ElementAt(3).Title.ShouldContainOnly(GetQuestion(q6Id).Title);
+            result.NumericIntegerQuestions.ElementAt(3).Title.ShouldContainOnly(GetQuestion(q6Id).QuestionText);
 
         It should_return_grouped_list_of_integer_questions_with_one_pair = () =>
             result.TextListsQuestions.Count.ShouldEqual(0);
 
-        private static GroupAndRosterDetailsView GetGroup(Guid groupId)
+        private static IGroup GetGroup(Guid groupId)
         {
-            return questionnaireView.Groups.Single(x => x.Id == groupId);
+            return questionnaireView.Find<IGroup>(groupId);
         }
 
-        private static QuestionDetailsView GetQuestion(Guid questionId)
+        private static IQuestion GetQuestion(Guid questionId)
         {
-            return questionnaireView.Questions.Single(x => x.Id == questionId);
+            return questionnaireView.Find<IQuestion>(questionId);
         }
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditRosterView result;
-        private static QuestionsAndGroupsCollectionView questionnaireView;
-        private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
+        private static QuestionnaireDocument questionnaireView;
+        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid rosterId = fixedRoster;
         private static string textListGroupKey = "Group 1 / Roster 1.1 / Roster 1.1.1";

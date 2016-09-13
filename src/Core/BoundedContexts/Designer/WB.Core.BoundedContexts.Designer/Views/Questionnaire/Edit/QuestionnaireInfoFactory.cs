@@ -638,7 +638,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 parents.Add(parent);
                 parent = (IGroup)parent.GetParent();
             }
-            parents.Reverse();
+            //parents.Reverse();
 
             return parents.Select(x => new Breadcrumb
             {
@@ -680,7 +680,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 parents.Add(parent);
                 parent = (IGroup)parent.GetParent();
             }
-            parents.Reverse();
+            //parents.Reverse();
             return parents.Select(x => x.PublicKey).ToArray();
         }
     }
