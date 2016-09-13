@@ -353,6 +353,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 if (gpsCoordinates == null)
                 {
+                    interviewView.LocationQuestionId = null;
                     interviewView.LocationLongitude = interviewView.LocationLatitude = null;
                 }
                 else
