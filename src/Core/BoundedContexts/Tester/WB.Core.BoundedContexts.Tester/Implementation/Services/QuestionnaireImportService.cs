@@ -22,13 +22,13 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IOptionsRepository optionsRepository;
-        private readonly IAsyncPlainStorage<TranslationInstance> translationsStorage;
+        private readonly IPlainStorage<TranslationInstance> translationsStorage;
 
 
         public QuestionnaireImportService(IQuestionnaireStorage questionnaireRepository, 
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
             IOptionsRepository optionsRepository,
-            IAsyncPlainStorage<TranslationInstance> translationsStorage)
+            IPlainStorage<TranslationInstance> translationsStorage)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;

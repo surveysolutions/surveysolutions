@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity>
+    public class SqlitePlainStorage<TEntity> : IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity, new()
     {
         protected readonly SQLiteConnection connection;

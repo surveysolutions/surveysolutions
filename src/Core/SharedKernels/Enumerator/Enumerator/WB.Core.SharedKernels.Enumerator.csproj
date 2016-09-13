@@ -96,7 +96,7 @@
     <Compile Include="Implementation\Services\EntitiesListViewModelFactory.cs" />
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
-    <Compile Include="Implementation\Services\InMemoryAsyncPlainStorage.cs" />
+    <Compile Include="Implementation\Services\InMemoryPlainStorage.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\OptionsRepository.cs" />
     <Compile Include="Implementation\Services\QuestionOptionsRepository.cs" />
@@ -151,7 +151,7 @@
     <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
     <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
     <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
-    <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
+    <Compile Include="Services\Infrastructure\Storage\IPlainStorage.cs" />
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\IOptionsRepository.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />

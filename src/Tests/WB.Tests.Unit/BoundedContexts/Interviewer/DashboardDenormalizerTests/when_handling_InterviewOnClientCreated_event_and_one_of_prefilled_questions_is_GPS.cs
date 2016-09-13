@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var storeAsyncTask = new Task(() => { });
             storeAsyncTask.Start();
 
-            var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer =>
+            var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer =>
             writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)

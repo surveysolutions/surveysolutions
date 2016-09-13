@@ -7,13 +7,13 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
     internal class TesterPrincipal : IPrincipal
     {
-        private readonly IAsyncPlainStorage<TesterUserIdentity> usersStorage;
+        private readonly IPlainStorage<TesterUserIdentity> usersStorage;
         private TesterUserIdentity currentUserIdentity;
 
         public bool IsAuthenticated => this.currentUserIdentity != null;
         public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
 
-        public TesterPrincipal(IAsyncPlainStorage<TesterUserIdentity> usersStorage)
+        public TesterPrincipal(IPlainStorage<TesterUserIdentity> usersStorage)
         {
             this.usersStorage = usersStorage;
             this.currentUserIdentity = usersStorage.FirstOrDefault();

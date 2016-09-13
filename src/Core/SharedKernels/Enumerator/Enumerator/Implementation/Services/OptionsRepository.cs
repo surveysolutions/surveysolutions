@@ -15,9 +15,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class OptionsRepository : IOptionsRepository
     {
-        private readonly IAsyncPlainStorage<OptionView> optionsStorage;
+        private readonly IPlainStorage<OptionView> optionsStorage;
         
-        public OptionsRepository(IAsyncPlainStorage<OptionView> optionsStorage)
+        public OptionsRepository(IPlainStorage<OptionView> optionsStorage)
         {
             this.optionsStorage = optionsStorage;
         }

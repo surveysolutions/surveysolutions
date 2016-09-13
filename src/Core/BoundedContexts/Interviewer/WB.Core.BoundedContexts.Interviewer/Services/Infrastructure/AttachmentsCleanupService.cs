@@ -8,8 +8,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
     public class AttachmentsCleanupService
     {
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
-        private readonly IAsyncPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
-        private readonly IAsyncPlainStorage<AttachmentContentData> attachmentContentDataRepository;
+        private readonly IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
+        private readonly IPlainStorage<AttachmentContentData> attachmentContentDataRepository;
         private readonly ILogger logger;
 
         protected AttachmentsCleanupService()
@@ -17,8 +17,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
         }
 
         public AttachmentsCleanupService(IInterviewerQuestionnaireAccessor questionnairesAccessor, 
-            IAsyncPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
-            IAsyncPlainStorage<AttachmentContentData> attachmentContentDataRepository,
+            IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
+            IPlainStorage<AttachmentContentData> attachmentContentDataRepository,
             ILogger logger)
         {
             this.questionnairesAccessor = questionnairesAccessor;

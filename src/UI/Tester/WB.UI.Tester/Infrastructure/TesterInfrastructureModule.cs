@@ -47,10 +47,10 @@ namespace WB.UI.Tester.Infrastructure
                 {
                     PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
                 });
-            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
+            this.Bind(typeof(IPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
 
-            this.Unbind<IAsyncPlainStorage<OptionView>>();
-            this.Bind<IAsyncPlainStorage<OptionView>>().To<InMemoryAsyncPlainStorage<OptionView>>().InSingletonScope();
+            this.Unbind<IPlainStorage<OptionView>>();
+            this.Bind<IPlainStorage<OptionView>>().To<InMemoryPlainStorage<OptionView>>().InSingletonScope();
 
             this.Bind<ILoggerProvider>().To<ServiceLocatorLoggerProvider>();
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();

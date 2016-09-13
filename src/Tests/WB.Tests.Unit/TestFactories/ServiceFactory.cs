@@ -83,11 +83,11 @@ namespace WB.Tests.Unit.TestFactories
                 interviewReferencesStorage ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
 
         public InterviewerDashboardEventHandler DashboardDenormalizer(
-            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
             ILiteEventRegistry liteEventRegistry = null)
             => new InterviewerDashboardEventHandler(
-                interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
 
@@ -130,21 +130,21 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IQuestionnaireTranslator>());
 
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
-            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null,
             IInterviewerEventStorage eventStore = null,
             ICommandService commandService = null,
-            IAsyncPlainStorage<QuestionnaireView> questionnaireRepository = null,
+            IPlainStorage<QuestionnaireView> questionnaireRepository = null,
             IInterviewerPrincipal principal = null,
             IJsonAllTypesSerializer synchronizationSerializer = null,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
             ISnapshotStoreWithCache snapshotStoreWithCache = null,
-            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
-            IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository = null)
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
+            IPlainStorage<InterviewFileView> interviewFileViewRepository = null)
             => new InterviewerInterviewAccessor(
-                questionnaireRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(),
-                interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
-                interviewMultimediaViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewMultimediaView>>(),
-                interviewFileViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewFileView>>(),
+                questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                interviewMultimediaViewRepository ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
+                interviewFileViewRepository ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 eventStore ?? Mock.Of<IInterviewerEventStorage>(),
@@ -202,9 +202,9 @@ namespace WB.Tests.Unit.TestFactories
                 new QuestionDataParser(),
                 new UserViewFactory(new TestPlainStorage<UserDocument>()));
 
-        public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
+        public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
-                questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
+                questionnaireDocumentViewRepository ?? Mock.Of<IPlainStorage<QuestionnaireDocumentView>>());
 
         public QuestionnaireNameValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)

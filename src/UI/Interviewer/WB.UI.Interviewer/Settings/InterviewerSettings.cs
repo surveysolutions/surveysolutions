@@ -15,10 +15,10 @@ namespace WB.UI.Interviewer.Settings
 {
     internal class InterviewerSettings : IInterviewerSettings
     {
-        private readonly IAsyncPlainStorage<ApplicationSettingsView> settingsStorage;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IPlainStorage<ApplicationSettingsView> settingsStorage;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -27,12 +27,12 @@ namespace WB.UI.Interviewer.Settings
         private readonly string restoreFolder;
 
         public InterviewerSettings(
-            IAsyncPlainStorage<ApplicationSettingsView> settingsStorage, 
+            IPlainStorage<ApplicationSettingsView> settingsStorage, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider, 
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
-            IAsyncPlainStorage<InterviewView> interviewViewRepository, 
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository, 
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<InterviewView> interviewViewRepository, 
+            IPlainStorage<QuestionnaireView> questionnaireViewRepository, 
             IFileSystemAccessor fileSystemAccessor,
             string backupFolder, 
             string restoreFolder)

@@ -20,14 +20,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly ISynchronizationService synchronizationService;
 
         public LoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             ISynchronizationService synchronizationService,
             ILogger logger)
             : base(principal, viewModelNavigationService)

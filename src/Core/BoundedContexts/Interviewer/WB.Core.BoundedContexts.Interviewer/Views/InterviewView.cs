@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public DateTime? CompletedDateTime { get; set; }
         public DateTime? RejectedDateTime { get; set; }
 
+        
         public InterviewAnswerOnPrefilledQuestionView[] AnswersOnPrefilledQuestions { get; set; }
         public InterviewGpsLocationView GpsLocation { get; set; }
 
