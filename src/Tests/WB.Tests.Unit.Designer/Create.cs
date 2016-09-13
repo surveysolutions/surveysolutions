@@ -345,7 +345,8 @@ namespace WB.Tests.Unit.Designer
             string variable = null,
             string enablementCondition = null,
             bool hideIfDisabled = false,
-            IEnumerable<IComposite> children = null)
+            IEnumerable<IComposite> children = null,
+            Guid? rosterSizeQuestionId = null)
         {
             return new Group(title)
             {
@@ -354,6 +355,7 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 Children = children != null ? children.ToList() : new List<IComposite>(),
+                RosterSizeQuestionId = rosterSizeQuestionId,
             };
         }
 
@@ -472,7 +474,8 @@ namespace WB.Tests.Unit.Designer
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
-            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
+            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
+            string title = null)
         {
             return new NumericQuestion
             {
@@ -487,6 +490,7 @@ namespace WB.Tests.Unit.Designer
                 Featured = isPrefilled,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
+                QuestionText = title
             };
         }
 
@@ -784,7 +788,7 @@ namespace WB.Tests.Unit.Designer
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
             bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null, bool isPrefilled = false,
-            string linkedFilter = null)
+            string linkedFilter = null, string title = null)
         {
             return new SingleQuestion
             {
@@ -801,7 +805,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionScope = scope,
                 IsFilteredCombobox = isFilteredCombobox,
                 Featured = isPrefilled,
-                Properties = {OptionsFilterExpression = optionsFilter}
+                Properties = {OptionsFilterExpression = optionsFilter},
+                QuestionText = title,
             };
         }
 
@@ -829,7 +834,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false)
+            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false, string title = null)
         {
             return new TextListQuestion("Question TL")
             {
@@ -839,7 +844,8 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
                 QuestionType = QuestionType.TextList,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                QuestionText = title,
             };
         }
 
@@ -871,7 +877,8 @@ namespace WB.Tests.Unit.Designer
                 Featured = preFilled,
                 VariableLabel = label,
                 Instructions = instruction,
-                ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage)
+                ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage),
+                
             };
         }
 
@@ -1121,15 +1128,6 @@ namespace WB.Tests.Unit.Designer
                 ParentGroupsIds = parentGroupsIds ?? new Guid[0],
                 RosterScopeIds = rosterScopeIds ?? new Guid[0],
                 RosterSizeQuestionId = rosterSizeQuestionId
-            };
-        }
-
-        public static QuestionsAndGroupsCollectionView QuestionsAndGroupsCollectionView(GroupAndRosterDetailsView[] groups, QuestionDetailsView[] questions)
-        {
-            return new QuestionsAndGroupsCollectionView
-            {
-                Groups = groups.ToList(),
-                Questions = questions.ToList()
             };
         }
 
