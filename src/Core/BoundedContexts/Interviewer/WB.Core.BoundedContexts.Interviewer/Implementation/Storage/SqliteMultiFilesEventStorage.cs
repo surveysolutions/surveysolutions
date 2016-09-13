@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             => this.ToSqliteConnectionString(Path.Combine(this.settings.PathToInterviewsDirectory, $"{eventSourceId.FormatGuid()}.sqlite3"));
 
         private string ToSqliteConnectionString(string pathToDatabase)
-            => this.settings.InMemoryStorage ? $"file:{pathToDatabase}?mode=memory" : pathToDatabase;
+            => this.settings.InMemoryStorage ? $":memory:" : pathToDatabase;
 
         private SQLiteConnection GetOrCreateConnection(Guid eventSourceId)
         {
@@ -317,6 +317,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 .OrderBy(x => x.EventSequence)
                 .Skip(skip)
                 .Take(take)
+                .ToList()
                 .Select(x => ToCommitedEvent(x, serializer))
                 .ToList();
         }
@@ -335,7 +336,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             try
             {
                 connection.BeginTransaction();
-
                 this.ValidateStreamVersion(connection, eventStream);
 
                 List<EventView> storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer)).ToList();
@@ -375,7 +375,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 int currentStreamVersion;
                 var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
                 var sqLiteCommand = connection.CreateCommand(commandText, eventStream.SourceId);
-                currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
+                var scalarValue = sqLiteCommand.ExecuteScalar<string>();
+                currentStreamVersion = scalarValue == null ? 0 : Convert.ToInt32(scalarValue);
 
                 var expectedExistingSequence = eventStream.Min(x => x.EventSequence) - 1;
                 if (expectedExistingSequence != currentStreamVersion)
