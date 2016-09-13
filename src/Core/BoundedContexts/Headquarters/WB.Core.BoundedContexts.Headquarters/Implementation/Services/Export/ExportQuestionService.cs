@@ -3,51 +3,36 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 {
-    public class ExportedQuestion
+    public class ExportQuestionService : IExportQuestionService
     {
-        private static CultureInfo exportCulture = CultureInfo.InvariantCulture;
-        public const string ExportDateTimeFormat = "yyyy-MM-ddTHH:mm:ssK";
-        public const string ExportDateFormat = "yyyy-MM-dd";
-        private const string DefaultDelimiter = "|";
-        internal const string DisableQuestionValue = "";
-        internal const string MissingNumericQuestionValue = "-999999999";
-        internal const string MissingStringQuestionValue = "##N/A##";
-
-        public ExportedQuestion()
+        private static readonly CultureInfo exportCulture = CultureInfo.InvariantCulture;
+        
+        public string[] GetExportedQuestion(InterviewQuestion question, ExportedHeaderItem header)
         {
-        }
+            var answers = this.GetAnswers(question, header);
 
-        public ExportedQuestion(InterviewQuestion question, ExportedHeaderItem header)
-        {
-            this.QuestionType = header.QuestionType;
-            this.Answers = this.GetAnswers(question, header);
-
-            if (this.Answers.Length != header.ColumnNames.Length)
+            if (answers.Length != header.ColumnNames.Length)
                 throw new InvalidOperationException(
-                    string.Format("something wrong with export logic, answer's count is less then required by template. Was '{0}', expected '{1}'",
-                                  this.Answers.Length, 
-                                  header.ColumnNames.Length));
+                    $"Something wrong with export logic, answer's count is less then required by template. Was '{answers.Length}', expected '{header.ColumnNames.Length}'");
+
+            return answers;
         }
-
-        private QuestionType QuestionType { get; }
-
-        public virtual int Id { get; protected set; }
-        public virtual string[] Answers { get; set; }
-
+        
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {
             if (question == null)
                 return BuildMissingValueAnswer(header);
 
             if (question.IsDisabled())
-                return header.ColumnNames.Select(c => DisableQuestionValue).ToArray();
+                return header.ColumnNames.Select(c => ExportFormatSettings.DisableQuestionValue).ToArray();
 
             if (question.Answer == null)
                 return BuildMissingValueAnswer(header);
@@ -61,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                     gpsQuestion.Longitude.ToString(exportCulture),
                     gpsQuestion.Accuracy.ToString(exportCulture),
                     gpsQuestion.Altitude.ToString(exportCulture),
-                    gpsQuestion.Timestamp.DateTime.ToString(ExportDateTimeFormat, exportCulture)
+                    gpsQuestion.Timestamp.DateTime.ToString(ExportFormatSettings.ExportDateTimeFormat, exportCulture)
                 };
             }
 
@@ -87,14 +72,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         private static string[] BuildMissingValueAnswer(ExportedHeaderItem header)
         {
             if (header.QuestionType == QuestionType.GpsCoordinates)
-                return new[] { MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingStringQuestionValue };
+                return new[] {ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingNumericQuestionValue, ExportFormatSettings.MissingStringQuestionValue };
 
             string missingValue = (header.QuestionType == QuestionType.Numeric
                                   || header.QuestionType == QuestionType.SingleOption
                                   || header.QuestionType == QuestionType.MultyOption
                                   || header.QuestionType == QuestionType.YesNo)
-                    ? MissingNumericQuestionValue
-                    : MissingStringQuestionValue;
+                    ? ExportFormatSettings.MissingNumericQuestionValue
+                    : ExportFormatSettings.MissingStringQuestionValue;
             return header.ColumnNames.Select(c => missingValue).ToArray();
         }
 
@@ -125,7 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         private string ConvertAnswerToStringValue(object answer, ExportedHeaderItem header)
         {
             if (answer == null)
-                return MissingStringQuestionValue;
+                return ExportFormatSettings.MissingStringQuestionValue;
 
             var arrayOfObject = this.TryCastToEnumerable(answer)?.ToArray();
 
@@ -140,30 +125,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                         var arrayOfAnswers = this.TryCastToEnumerable(shrinkedArrayOfAnswers[0])?.ToArray();
 
                         return arrayOfAnswers != null
-                            ? string.Join(DefaultDelimiter, arrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionSubType)).ToArray())
-                            : this.ConvertAnswerToString(shrinkedArrayOfAnswers[0], header.QuestionSubType);
+                            ? string.Join(ExportFormatSettings.DefaultDelimiter, arrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionType, header.QuestionSubType)).ToArray())
+                            : this.ConvertAnswerToString(shrinkedArrayOfAnswers[0], header.QuestionType, header.QuestionSubType);
                     }
 
-                    return string.Format("[{0}]", string.Join(DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionSubType)).ToArray()));
+                    return string.Format("[{0}]", string.Join(ExportFormatSettings.DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => this.ConvertAnswerToString(x, header.QuestionType, header.QuestionSubType)).ToArray()));
                 }
-                return string.Join(DefaultDelimiter, arrayOfObject.Select(x => this.ConvertAnswerToString(x, header.QuestionSubType)).ToArray());
+                return string.Join(ExportFormatSettings.DefaultDelimiter, arrayOfObject.Select(x => this.ConvertAnswerToString(x, header.QuestionType, header.QuestionSubType)).ToArray());
             }
             
-            return this.ConvertAnswerToString(answer, header.QuestionSubType);
+            return this.ConvertAnswerToString(answer, header.QuestionType, header.QuestionSubType);
         }
-
 
         private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedHeaderItem header)
         {
             if (header.ColumnNames.Length == 1)
-                return new string[] { ConvertAnswerToStringValue(answer, header)};
+                return new string[] { this.ConvertAnswerToStringValue(answer, header)};
 
             var result = new string[header.ColumnNames.Length];
 
-            var ansresAsEnumerable = this.TryCastToEnumerable(answer);
-            var answers = ansresAsEnumerable?.ToArray() ?? new object[] { answer };
+            var answersAsEnumerable = this.TryCastToEnumerable(answer);
+            var answers = answersAsEnumerable?.ToArray() ?? new object[] { answer };
 
-            if (this.QuestionType == QuestionType.MultyOption)
+            if (header.QuestionType == QuestionType.MultyOption)
             {
                if (!header.QuestionSubType.HasValue)
                   {
@@ -206,7 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
             {
                 if (isMissingQuestion)
                 {
-                    result[i] = MissingNumericQuestionValue;
+                    result[i] = ExportFormatSettings.MissingNumericQuestionValue;
                 }
                 else
                 {
@@ -224,7 +208,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
             {
                 if (isMissingQuestion)
                 {
-                    result[i] = MissingNumericQuestionValue;
+                    result[i] = ExportFormatSettings.MissingNumericQuestionValue;
                 }
                 else
                 {
@@ -238,7 +222,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         {
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = answers.Length > i ? this.ConvertAnswerToStringValue(answers[i], header) : MissingStringQuestionValue;
+                result[i] = answers.Length > i ? this.ConvertAnswerToStringValue(answers[i], header) : ExportFormatSettings.MissingStringQuestionValue;
             }
         }
 
@@ -275,20 +259,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 }
                 else
                 {
-                    result[i] = MissingNumericQuestionValue;
+                    result[i] = ExportFormatSettings.MissingNumericQuestionValue;
                 }
             }
         }
 
-        private string ConvertAnswerToString(object obj, QuestionSubtype? questionSubType)
+        private string ConvertAnswerToString(object obj, QuestionType questionType, QuestionSubtype? questionSubType)
         {
             var formattable = obj as IFormattable;
             if (formattable != null)
             {
-                var isDateTimeQuestion = this.QuestionType == QuestionType.DateTime;
+                var isDateTimeQuestion = questionType == QuestionType.DateTime;
                 var isTimestampQuestion = isDateTimeQuestion && questionSubType.HasValue && questionSubType == QuestionSubtype.DateTime_Timestamp;
 
-                return formattable.ToString(isTimestampQuestion ? ExportDateTimeFormat : isDateTimeQuestion ? ExportDateFormat : null, exportCulture);
+                return formattable.ToString(isTimestampQuestion ? ExportFormatSettings.ExportDateTimeFormat : isDateTimeQuestion ? ExportFormatSettings.ExportDateFormat : null, exportCulture);
             }
             return  obj.ToString();
         }

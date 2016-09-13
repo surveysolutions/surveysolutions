@@ -209,9 +209,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ReferenceValues);
 
-                    foreach (var exportedQuestion in interviewDataExportRecord.GetQuestions())
+                    foreach (var answer in interviewDataExportRecord.GetPlainAnswers())
                     {
-                        parametersToConcatenate.AddRange(exportedQuestion.Answers.Select(itemValue => string.IsNullOrEmpty(itemValue) ? "" : itemValue));
+                        parametersToConcatenate.AddRange(answer.Select(itemValue => string.IsNullOrEmpty(itemValue) ? "" : itemValue));
                     }
 
                     parametersToConcatenate.AddRange(interviewDataExportRecord.SystemVariableValues);

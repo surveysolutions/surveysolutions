@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -32,9 +33,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public virtual string[] SystemVariableValues { set; get; }
         public virtual string[] Answers { get; set; }
 
-        public virtual IList<ExportedQuestion> GetQuestions() =>
-            this.Answers
-            .Select(x =>new ExportedQuestion{Answers = x.Split(ExportFileSettings.NotReadableAnswersSeparator)})
-            .ToList();
+        public virtual IEnumerable<string[]> GetPlainAnswers() 
+        {
+            foreach (var answer in Answers)
+            {
+                yield return answer.Split(ExportFileSettings.NotReadableAnswersSeparator);
+            }
+        }
     }
 }
