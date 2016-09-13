@@ -28,6 +28,7 @@ using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
 
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
+using InterviewProperties = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.InterviewProperties;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 {
@@ -298,8 +299,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
-            var properties = this.BuildInterviewProperties();
-            var propertiesInvariants = new InterviewPropertiesInvariants(properties);
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
@@ -733,10 +733,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
-            var properties = this.BuildInterviewProperties();
-            var propertiesInvariants = new InterviewPropertiesInvariants(properties);
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
+
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
             var answerDtos = synchronizedInterview
                 .Answers
