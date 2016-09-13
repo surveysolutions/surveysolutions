@@ -1,10 +1,13 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -14,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     {
         Establish context = () =>
         {
-            questionDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
+            questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = CreateQuestionsAndGroupsCollectionViewWithListQuestions();
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
@@ -42,28 +45,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.TextListsQuestions.ElementAt(1).Id.ShouldContainOnly(q1Id.FormatGuid());
 
         It should_return_list_questions_at_1_with_q1_title = () =>
-            result.TextListsQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q1Id).Title);
+            result.TextListsQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q1Id).QuestionText);
 
         It should_return_list_questions_at_3_with_id_equals_q2Id = () =>
             result.TextListsQuestions.ElementAt(3).Id.ShouldContainOnly(q2Id.FormatGuid());
 
         It should_return_list_questions_at_3_with_q2_title = () =>
-            result.TextListsQuestions.ElementAt(3).Title.ShouldContainOnly(GetQuestion(q2Id).Title);
+            result.TextListsQuestions.ElementAt(3).Title.ShouldContainOnly(GetQuestion(q2Id).QuestionText);
 
-        private static GroupAndRosterDetailsView GetGroup(Guid groupId)
+        private static IGroup GetGroup(Guid groupId)
         {
-            return questionnaireView.Groups.Single(x => x.Id == groupId);
+            return questionnaireView.Find<IGroup>(groupId);
         }
 
-        private static QuestionDetailsView GetQuestion(Guid questionId)
+        private static IQuestion GetQuestion(Guid questionId)
         {
-            return questionnaireView.Questions.Single(x => x.Id == questionId);
+            return questionnaireView.Find<IQuestion>(questionId);
         }
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditRosterView result;
-        private static QuestionsAndGroupsCollectionView questionnaireView;
-        private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
+        private static QuestionnaireDocument questionnaireView;
+        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid rosterId = fixedRoster;
     }

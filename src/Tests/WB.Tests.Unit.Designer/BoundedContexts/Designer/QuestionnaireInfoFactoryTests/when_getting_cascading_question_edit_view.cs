@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -14,7 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     {
         Establish context = () =>
         {
-            questionDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
+            questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaireView = CreateQuestionsAndGroupsCollectionViewWithCascadingQuestions();
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
@@ -43,8 +45,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditQuestionView result;
-        private static QuestionsAndGroupsCollectionView questionnaireView;
-        private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
+        private static QuestionnaireDocument questionnaireView;
+        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid questionId = q3Id;
     }

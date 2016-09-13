@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -14,469 +18,325 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     internal class QuestionnaireInfoFactoryTestContext
     {
         protected static QuestionnaireInfoFactory CreateQuestionnaireInfoFactory(
-            IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader = null,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionDetailsReader = null,
             IExpressionProcessor expressionProcessor = null)
         {
             return new QuestionnaireInfoFactory(
-                    questionDetailsReader ?? Mock.Of<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>(),
+                    questionDetailsReader ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
                     expressionProcessor ?? Mock.Of<IExpressionProcessor>());
         }
 
-        protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionViewWithBrokenLinks()
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithBrokenLinks()
         {
-            return new QuestionsAndGroupsCollectionView
+            return new QuestionnaireDocument
             {
-                Groups = new List<GroupAndRosterDetailsView>
+                Children = new List<IComposite>()
                 {
-                    new GroupAndRosterDetailsView
+                    new Group()
                     {
-                        Id = g1Id,
+                        PublicKey = g1Id,
                         Title = "Chapter 1",
-                        ParentGroupId = Guid.Empty,
-                        ParentGroupsIds = new Guid[0],
-                        RosterScopeIds = new Guid[0]
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = multiOptionRoster,
-                        Title = "Chapter 1 / Group 1",
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds = new[] { g1Id }
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = fixedRoster,
-                        Title = "Chapter 1/ Group 2",
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds =  new[] { g1Id }
-                    }
-                },
-                Questions = new List<QuestionDetailsView>
-                {
-                    new NumericDetailsView
-                    {
-                        Id = numericQuestionId,
-                        IsInteger = true,
-                        Title = "Integer 1",
-                        ParentGroupId = multiOptionRoster,
-                        VariableName = "q1",
-                        ParentGroupsIds = new [] { multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] {  },
-                        EnablementCondition = "q2 == \"aaaa\""
-                    },
-                    new TextDetailsView
-                    {
-                        Id = q2Id,
-                        ParentGroupId = fixedRoster,
-                        Title = "text title",
-                        ParentGroupsIds = new [] { fixedRoster, g1Id },
-                        RosterScopeIds = new Guid[] {  },
-                        ValidationConditions = new List<ValidationCondition> {new ValidationCondition { Expression = "q1 > 10" } }
-                    },
-                    new SingleOptionDetailsView
-                    {
-                        Id = q5Id,
-                        Title = "sINGLE 1",
-                        ParentGroupId = multiOptionRoster,
-                        VariableName = "qqqq",
-                        ParentGroupsIds = new [] { multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] {  },
-                    },
-                     new MultiOptionDetailsView
-                    {
-                        Id = q3Id,
-                        Options = new CategoricalOption[]
+                        Children = new List<IComposite>()
                         {
-                            new CategoricalOption {Title = "1", Value = 1},
-                            new CategoricalOption {Title = "2", Value = 2}
-                        },
-                        Title = "MultiOption",
-                        ParentGroupId = multiOptionRoster,
-                        ParentGroupsIds = new [] { multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] {  },
-                        EnablementCondition = "q2 == \"aaaa\""
-                    },
-                    new SingleOptionDetailsView()
-                    {
-                        Id = q4Id,
-                        ParentGroupId = fixedRoster,
-                        Title = "single title",
-                        ParentGroupsIds = new [] { fixedRoster, g1Id },
-                        RosterScopeIds = new Guid[] {  },
-                        CascadeFromQuestionId = q5Id
-                    },
-                },
-                StaticTexts = new List<StaticTextDetailsView>()
-            };
-        }
-
-      
-
-        protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionView()
-        {
-            return new QuestionsAndGroupsCollectionView
-            {
-                Groups = new List<GroupAndRosterDetailsView>
-                {
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = g1Id,
-                        Title = "Group 1",
-                        ParentGroupId = Guid.Empty,
-                        ParentGroupsIds = new Guid[0],
-                        RosterScopeIds = new Guid[0]
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = multiOptionRoster,
-                        Title = "Roster 1.1",
-                        IsRoster = true,
-                        RosterSizeSourceType = RosterSizeSourceType.Question,
-                        RosterSizeQuestionId = q2Id,
-                        RosterTitleQuestionId = null,
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] { q2Id }
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = fixedRoster,
-                        Title = "Roster 1.1.1",
-                        IsRoster = true,
-                        RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                        FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")},
-                        ParentGroupId = multiOptionRoster,
-                        ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] { fixedRoster, q2Id }
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = g4Id,
-                        Title = "Group 1.1.2",
-                        EnablementCondition = "[" + numericQuestionId +"] > 40",
-                        ParentGroupId = multiOptionRoster,
-                        ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] { q2Id }
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = g5Id,
-                        Title = "Group 2",
-                        ParentGroupId = Guid.Empty,
-                        ParentGroupsIds = new Guid[0]
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = numericRosterId,
-                        Title = "Roster 1.2",
-                        IsRoster = true,
-                        RosterSizeSourceType = RosterSizeSourceType.Question,
-                        RosterSizeQuestionId = numericQuestionId,
-                        RosterTitleQuestionId = q3Id,
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] { numericQuestionId }
-                    }
-                },
-                Questions = new List<QuestionDetailsView>
-                {
-                    new NumericDetailsView
-                    {
-                        Id = numericQuestionId,
-                        IsInteger = true,
-                        Title = "Integer 1",
-                        ParentGroupId = g1Id,
-                        VariableName = "q1",
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] {  }
-                    },
-                    new MultiOptionDetailsView
-                    {
-                        Id = q2Id,
-                        Options = new CategoricalOption[]
-                        {
-                            new CategoricalOption {Title = "1", Value = 1},
-                            new CategoricalOption {Title = "2", Value = 2}
-                        },
-                        Title = "MultiOption",
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] {  },
-                        EnablementCondition = "["+ numericQuestionId +"] > 25"
-                    },
-                    new TextDetailsView
-                    {
-                        Id = q3Id,
-                        ParentGroupId = numericRosterId,
-                        Title = "text title",
-                        ParentGroupsIds = new Guid[] { numericRosterId, g1Id },
-                        RosterScopeIds = new Guid[] { numericQuestionId }
-                    },
-                    new TextListDetailsView
-                    {
-                        Id = q4Id,
-                        Title = "text list title",
-                        ParentGroupId = fixedRoster,
-                        ParentGroupsIds = new Guid[] { fixedRoster, multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] { fixedRoster, q2Id }
-                    },
-                    new NumericDetailsView
-                    {
-                        Id = q7Id,
-                        Title = "numeric title",
-                        ParentGroupId = fixedRoster,
-                        ParentGroupsIds = new Guid[] { fixedRoster, multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] { fixedRoster, q2Id }
-                    },
-                    new NumericDetailsView
-                    {
-                        Id = q5Id,
-                        Title = "numeric title",
-                        IsInteger = false,
-                        ParentGroupId = g4Id,
-                        ParentGroupsIds = new Guid[] { g4Id, multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] { q2Id }
-                    },
-                    new NumericDetailsView
-                    {
-                        Id = q6Id,
-                        Title = "Integer 2",
-                        IsInteger = true,
-                        ParentGroupId = g5Id,
-                        ParentGroupsIds = new Guid[] { g5Id },
-                        RosterScopeIds = new Guid[] {  }
-                    },
-                    new MultimediaDetailsView
-                    {
-                        Id = q8Id,
-                        Title = "Photo",
-                        ParentGroupId = g5Id,
-                        ParentGroupsIds = new Guid[] { g5Id },
-                        RosterScopeIds = new Guid[] {  }
-                    }
-                },
-                StaticTexts = new List<StaticTextDetailsView>()
-                {
-                    new StaticTextDetailsView
-                    {
-                        Id = st1Id,
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds = new [] { g1Id },
-                        RosterScopeIds = new Guid[] { },
-                        Text = "static text 1"
-                    },
-                    new StaticTextDetailsView
-                    {
-                        Id = st2Id,
-                        ParentGroupId = g4Id,
-                        ParentGroupsIds = new Guid[] { g4Id, multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] { q2Id },
-                        Text = "static text 2"
+                            new Group()
+                            {
+                                PublicKey = multiOptionRoster,
+                                Title = "Chapter 1 / Group 1",
+                                Children = new List<IComposite>()
+                                {
+                                    new NumericQuestion()
+                                    {
+                                        PublicKey = numericQuestionId,
+                                        IsInteger = true,
+                                        QuestionText = "Integer 1",
+                                        StataExportCaption = "q1",
+                                        ConditionExpression = "q2 == \"aaaa\""
+                                    },
+                                    new SingleQuestion()
+                                    {
+                                        PublicKey = q5Id,
+                                        QuestionText = "sINGLE 1",
+                                        StataExportCaption = "qqqq",
+                                    },
+                                    new MultyOptionsQuestion()
+                                    {
+                                        PublicKey = q3Id,
+                                        Answers = new List<Answer>()
+                                        {
+                                            new Answer() {AnswerText = "1", AnswerCode = 1},
+                                            new Answer() {AnswerText = "2", AnswerCode = 2},
+                                        },
+                                        QuestionText = "MultiOption",
+                                        ConditionExpression = "q2 == \"aaaa\""
+                                    }
+                                }
+                            },
+                            new Group()
+                            {
+                                PublicKey = fixedRoster,
+                                Title = "Chapter 1 / Group 2",
+                                Children = new List<IComposite>()
+                                {
+                                    new TextQuestion()
+                                    {
+                                        PublicKey = q2Id,
+                                        QuestionText = "text title",
+                                        ValidationConditions = new List<ValidationCondition> {new ValidationCondition { Expression = "q1 > 10" } }
+                                    },
+                                    new SingleQuestion()
+                                    {
+                                        PublicKey = q4Id,
+                                        QuestionText = "single title",
+                                        CascadeFromQuestionId = q5Id
+                                    }
+                                }
+                            },
+                        }
                     }
                 }
             };
         }
 
-        protected static QuestionsAndGroupsCollectionView CreateRosterWithNoTrigger()
+      
+
+        protected static QuestionnaireDocument CreateQuestionsAndGroupsCollectionView()
         {
-            return new QuestionsAndGroupsCollectionView
+            return new QuestionnaireDocument()
             {
-                Groups = new List<GroupAndRosterDetailsView>
+                Children = new List<IComposite>()
                 {
-                    new GroupAndRosterDetailsView
+                    new Group()
                     {
-                        Id = g1Id,
+                        PublicKey = g1Id,
                         Title = "Group 1",
-                        ParentGroupId = Guid.Empty,
-                        ParentGroupsIds = new Guid[0],
-                        RosterScopeIds = new Guid[0]
+                        Children = new List<IComposite>()
+                        {
+                            new Group()
+                            {
+                                PublicKey = multiOptionRoster,
+                                Title = "Roster 1.1",
+                                IsRoster = true,
+                                RosterSizeSource = RosterSizeSourceType.Question,
+                                RosterSizeQuestionId = q2Id,
+                                RosterTitleQuestionId = null,
+                                Children = new List<IComposite>()
+                                {
+                                    new Group()
+                                    {
+                                        PublicKey = fixedRoster,
+                                        Title = "Roster 1.1.1",
+                                        IsRoster = true,
+                                        RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                                        FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")},
+                                        Children = new List<IComposite>()
+                                        {
+                                            new TextListQuestion()
+                                            {
+                                                PublicKey = q4Id,
+                                                QuestionText = "text list title",
+                                            },
+                                            new NumericQuestion()
+                                            {
+                                                PublicKey = q7Id,
+                                                QuestionText = "numeric title",
+                                            }
+                                        }
+                                    },
+                                    new Group()
+                                    {
+                                        PublicKey = g4Id,
+                                        Title = "Group 1.1.2",
+                                        ConditionExpression = "[" + numericQuestionId +"] > 40",
+                                        Children = new List<IComposite>()
+                                        {
+                                            new NumericQuestion()
+                                            {
+                                                PublicKey = q5Id,
+                                                QuestionText = "numeric title",
+                                                IsInteger = false,
+                                            },
+                                            Create.StaticText(st2Id, "static text 2"),
+                                        }
+                                    }
+                                }
+                            },
+                            new Group()
+                            {
+                                PublicKey = numericRosterId,
+                                Title = "Roster 1.2",
+                                IsRoster = true,
+                                RosterSizeSource = RosterSizeSourceType.Question,
+                                RosterSizeQuestionId = numericQuestionId,
+                                RosterTitleQuestionId = q3Id,
+                                Children = new List<IComposite>()
+                                {
+                                    new TextQuestion()
+                                    {
+                                        PublicKey = q3Id,
+                                        QuestionText = "text title",
+                                    },
+                                }
+                            },
+                            new NumericQuestion()
+                            {
+                                PublicKey = numericQuestionId,
+                                IsInteger = true,
+                                QuestionText = "Integer 1",
+                                StataExportCaption = "q1",
+                            },
+                            new MultyOptionsQuestion()
+                            {
+                                PublicKey = q2Id,
+                                Answers = new List<Answer>() 
+                                {
+                                    new Answer() {AnswerText = "1", AnswerCode = 1},
+                                    new Answer() {AnswerText = "2", AnswerCode = 2},
+                                },
+                                QuestionText = "MultiOption",
+                                ConditionExpression = "["+ numericQuestionId +"] > 25"
+                            },
+                            Create.StaticText(st1Id, "static text 1")
+                        }
                     },
-                    new GroupAndRosterDetailsView
+                    new Group()
                     {
-                        Id = multiOptionRoster,
-                        Title = "Roster 1.1",
-                        IsRoster = true,
-                        RosterSizeSourceType = RosterSizeSourceType.Question,
-                        RosterSizeQuestionId = q2Id,
-                        RosterTitleQuestionId = q3Id,
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] { q2Id }
+                        PublicKey = g5Id,
+                        Title = "Group 2",
+                        Children = new List<IComposite>()
+                        {
+                            new NumericQuestion()
+                            {
+                                PublicKey = q6Id,
+                                QuestionText = "Integer 2",
+                                IsInteger = true,
+                            },
+                            new MultimediaQuestion()
+                            {
+                                PublicKey = q8Id,
+                                QuestionText = "Photo",
+                            }
+                        }
                     }
-                },
-                Questions = new List<QuestionDetailsView>(),
-                StaticTexts = new List<StaticTextDetailsView>()
+                }
             };
         }
 
-        protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionViewWithCascadingQuestions()
+        protected static QuestionnaireDocument CreateRosterWithNoTrigger()
         {
-            return new QuestionsAndGroupsCollectionView
+            return new QuestionnaireDocument()
             {
-                Groups = new List<GroupAndRosterDetailsView>
+                Children = new List<IComposite>()
                 {
-                    new GroupAndRosterDetailsView
+                    new Group()
                     {
-                        Id = g1Id,
-                        Title = "Chapter",
-                        ParentGroupId = Guid.Empty,
-                        ParentGroupsIds = new Guid[0],
-                        RosterScopeIds = new Guid[0]
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = multiOptionRoster,
-                        Title = "Roster",
-                        IsRoster = true,
-                        RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-                        FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")},
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] { q2Id }
+                        PublicKey = g1Id,
+                        Title = "Group 1",
+                        Children = new List<IComposite>()
+                        {
+                            new Group()
+                            {
+                                PublicKey = multiOptionRoster,
+                                Title = "Roster 1.1",
+                                IsRoster = true,
+                                RosterSizeSource = RosterSizeSourceType.Question,
+                                RosterSizeQuestionId = q2Id,
+                                RosterTitleQuestionId = q3Id,
+                            }
+                        }
                     }
-                },
-                Questions = new List<QuestionDetailsView>
-                {
-                    new SingleOptionDetailsView
-                    {
-                        Id = q1Id,
-                        Title = "cascading_question",
-                        ParentGroupId = g1Id,
-                        VariableName = "list_question",
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] {  }
-                    },
-                    new SingleOptionDetailsView
-                    {
-                        Id = q2Id,
-                        Title = "cascading_question_2",
-                        ParentGroupId = g1Id,
-                        VariableName = "list_question",
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] {  },
-                        CascadeFromQuestionId = q1Id
-                    },
-                    new SingleOptionDetailsView
-                    {
-                        Id = q3Id,
-                        Title = "cascading_question_3",
-                        ParentGroupId = g1Id,
-                        VariableName = "list_question",
-                        ParentGroupsIds = new Guid[] {  g1Id },
-                        RosterScopeIds = new Guid[] { },
-                        CascadeFromQuestionId = q2Id
-                    },
-                    new NumericDetailsView
-                    {
-                        Id = q4Id,
-                        IsInteger = true,
-                        Title = "Integer 1",
-                        ParentGroupId = multiOptionRoster,
-                        VariableName = "int",
-                        ParentGroupsIds = new Guid[] { multiOptionRoster },
-                        RosterScopeIds = new Guid[] {  multiOptionRoster }
-                    },
-                    new SingleOptionDetailsView
-                    {
-                        Id = q5Id,
-                        Title = "linked",
-                        ParentGroupId = multiOptionRoster,
-                        VariableName = "linked_question",
-                        ParentGroupsIds = new Guid[] { multiOptionRoster },
-                        RosterScopeIds = new Guid[] { multiOptionRoster },
-                        LinkedToEntityId = q4Id
-                    },
-                },
-                StaticTexts = new List<StaticTextDetailsView>()
+                }
             };
         }
 
-        protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionViewWithListQuestions(bool shouldReplaceFixedRosterWithListOne = false)
+        protected static QuestionnaireDocument CreateQuestionsAndGroupsCollectionViewWithCascadingQuestions()
         {
-            var fixedNestedRoster = new GroupAndRosterDetailsView
+            return new QuestionnaireDocument()
             {
-                Id = fixedRoster,
+                Children = new List<IComposite>()
+                {
+                    new Group()
+                    {
+                        PublicKey = g1Id,
+                        Title = "Group 1",
+                        Children = new List<IComposite>()
+                        {
+                            new Group()
+                            {
+                                PublicKey = multiOptionRoster,
+                                Title = "Roster",
+                                IsRoster = true,
+                                RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                                FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")},
+                                Children = new List<IComposite>()
+                                {
+                                    Create.NumericIntegerQuestion(q4Id, "int",  title:"Integer 1"),
+                                    Create.SingleQuestion(q5Id, "linked_question", linkedToQuestionId:q4Id, title:"linked"),
+                                }
+                            },
+                            Create.SingleQuestion(q1Id, "list_question", title: "cascading_question"),
+                            Create.SingleQuestion(q2Id, "list_question", title: "cascading_question_2", cascadeFromQuestionId: q1Id),
+                            Create.SingleQuestion(q3Id, "list_question", title: "cascading_question_3", cascadeFromQuestionId: q2Id),
+                        }
+                    }
+                }
+            };
+        }
+
+        protected static QuestionnaireDocument CreateQuestionsAndGroupsCollectionViewWithListQuestions(bool shouldReplaceFixedRosterWithListOne = false)
+        {
+            var fixedNestedRoster = new Group
+            {
+                PublicKey = fixedRoster,
                 Title = "fixed_roster_inside_list_roster",
                 VariableName = "fixed_roster_inside_list_roster",
                 IsRoster = true,
-                RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+                RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3") },
-                ParentGroupId = multiOptionRoster,
-                ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
-                RosterScopeIds = new Guid[] { fixedRoster, q1Id }
+                Children = new List<IComposite>()
+                {
+                     Create.TextListQuestion(q3Id, variable:"list_question", title: "list_question_inside_fixed_roster", maxAnswerCount: 16),
+                }
             };
-            var listNestedRoster = new GroupAndRosterDetailsView
+            var listNestedRoster = new Group
             {
-                Id = fixedRoster,
+                PublicKey = fixedRoster,
                 Title = "list_roster_inside_list_roster",
                 VariableName = "fixed_roster_inside_list_roster",
                 IsRoster = true,
-                RosterSizeSourceType = RosterSizeSourceType.Question,
+                RosterSizeSource = RosterSizeSourceType.Question,
                 RosterSizeQuestionId = q2Id,
-                ParentGroupId = multiOptionRoster,
-                ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
-                RosterScopeIds = new Guid[] { q2Id, q1Id }
+                Children = new List<IComposite>()
+                {
+                     Create.TextListQuestion(q2Id, variable:"list_question", title: "list_question_inside_roster", maxAnswerCount: 16),
+                }
             };
-            return new QuestionsAndGroupsCollectionView
+            return new QuestionnaireDocument()
             {
-                Groups = new List<GroupAndRosterDetailsView>
+                Children = new List<IComposite>()
                 {
-                    new GroupAndRosterDetailsView
+                    new Group()
                     {
-                        Id = g1Id,
+                        PublicKey = g1Id,
                         Title = "Chapter",
-                        ParentGroupId = Guid.Empty,
-                        ParentGroupsIds = new Guid[0],
-                        RosterScopeIds = new Guid[0]
-                    },
-                    new GroupAndRosterDetailsView
-                    {
-                        Id = multiOptionRoster,
-                        Title = "list_roster",
-                        VariableName = "list_roster",
-                        IsRoster = true,
-                        RosterSizeSourceType = RosterSizeSourceType.Question,
-                        RosterSizeQuestionId = q1Id,
-                        ParentGroupId = g1Id,
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] { q1Id }
-                    },
-                    (shouldReplaceFixedRosterWithListOne? listNestedRoster : fixedNestedRoster)
-                },
-                Questions = new List<QuestionDetailsView>
-                {
-                    new TextListDetailsView
-                    {
-                        Id = q1Id,
-                        Title = "list_question",
-                        MaxAnswerCount = 16,
-                        ParentGroupId = g1Id,
-                        VariableName = "list_question",
-                        ParentGroupsIds = new Guid[] { g1Id },
-                        RosterScopeIds = new Guid[] {  }
-                    },
-                    new TextListDetailsView
-                    {
-                        Id = q2Id,
-                        Title = "list_question_inside_roster",
-                        MaxAnswerCount = 16,
-                        ParentGroupId = g1Id,
-                        VariableName = "list_question",
-                        ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] { q1Id }
-                    },
-                    new TextListDetailsView
-                    {
-                        Id = q3Id,
-                        Title = "list_question_inside_fixed_roster",
-                        MaxAnswerCount = 16,
-                        ParentGroupId = g1Id,
-                        VariableName = "list_question",
-                        ParentGroupsIds = new Guid[] { fixedRoster, multiOptionRoster, g1Id },
-                        RosterScopeIds = new Guid[] { fixedRoster, q1Id }
+                        Children = new List<IComposite>()
+                        {
+                            new Group()
+                            {
+                                PublicKey = multiOptionRoster,
+                                Title = "list_roster",
+                                VariableName = "list_roster",
+                                IsRoster = true,
+                                RosterSizeSource = RosterSizeSourceType.Question,
+                                RosterSizeQuestionId = q1Id,
+                                Children = new List<IComposite>()
+                                {
+                                    (shouldReplaceFixedRosterWithListOne? listNestedRoster : fixedNestedRoster)
+                                }
+                            },
+                            Create.TextQuestion(q1Id, variable:"list_question", text: "list_question"),
+                        }
                     }
-                },
-                StaticTexts = new List<StaticTextDetailsView>()
+                }
             };
         }
 
