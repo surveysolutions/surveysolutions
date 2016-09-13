@@ -4,12 +4,11 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
@@ -39,13 +38,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                         Create.Entity.DateTimeQuestion(questionId: dateTimeQuestionIdentity.Id, preFilled: true)
                     })));
 
-            denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, questionnaireStorage: plainQuestionnaireRepository);
+            prefilledQuestions = new InMemoryPlainStorage<PrefilledQuestionView>();
+            denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, 
+                questionnaireStorage: plainQuestionnaireRepository
+                );
         };
 
         Because of = () => denormalizer.Handle(@event);
 
         It should_set_formatted_date_to_specified_answer_view = () =>
-            interviewViewStorage.GetById(interviewId.FormatGuid())?.AnswersOnPrefilledQuestions?.FirstOrDefault(question => question.QuestionId == dateTimeQuestionIdentity.Id)?
+            prefilledQuestions.Where(x => x.QuestionId == dateTimeQuestionIdentity.Id)
+                .First()
                 .Answer.ShouldEqual(answer.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern));
 
         private static InterviewerDashboardEventHandler denormalizer;
@@ -54,5 +57,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         private static DateTime answer = new DateTime(2016, 06, 08, 12, 49, 0);
         private static Guid interviewId;
         private static Identity dateTimeQuestionIdentity;
+        private static InMemoryPlainStorage<PrefilledQuestionView> prefilledQuestions;
     }
 }

@@ -175,8 +175,9 @@
     <Compile Include="Services\SyncProgressDto.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\BandwidthTestViewModel.cs" />
+    <Compile Include="Views\Dashboard\PrefilledQuestionView.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
-    <Compile Include="Views\InterviewerDashboardEventHandler.cs" />
+    <Compile Include="Views\Dashboard\InterviewerDashboardEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
     <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
@@ -188,7 +189,7 @@
     <Compile Include="Views\EventView.cs" />
     <Compile Include="Views\InterviewFileView.cs" />
     <Compile Include="Views\InterviewMultimediaView.cs" />
-    <Compile Include="Views\InterviewView.cs" />
+    <Compile Include="Views\Dashboard\InterviewView.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardInformation.cs" />
     <Compile Include="Views\Dashboard\DashboardInterviewStatus.cs" />

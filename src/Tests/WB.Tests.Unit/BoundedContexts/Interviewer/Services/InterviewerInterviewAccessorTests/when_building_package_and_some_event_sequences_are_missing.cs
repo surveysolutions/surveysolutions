@@ -6,6 +6,7 @@ using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerInterviewAccessorTests
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => interviewAccessor.GetInteviewEventsPackageOrNullAsync(interviewId).WaitAndUnwrapException());
+            exception = Catch.Exception(() => interviewAccessor.GetInteviewEventsPackageOrNull(interviewId));
 
         It should_throw_exception = () =>
             exception.ShouldNotBeNull();
