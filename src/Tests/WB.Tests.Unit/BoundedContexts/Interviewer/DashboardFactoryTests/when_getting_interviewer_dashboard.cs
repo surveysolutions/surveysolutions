@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(
                     x => x.GetNew<InterviewDashboardItemViewModel>() == 
-                    new InterviewDashboardItemViewModel(null, null, null, null, questionnaireViewRepository, null));
+                    new InterviewDashboardItemViewModel(null, null, null, null, questionnaireViewRepository, null, null));
             
             interviewerDashboardFactory = CreateInterviewerDashboardFactory(interviewViewRepository: interviewsAsyncPlainStorage,
                 questionnaireViewRepository: questionnaireViewRepository,
@@ -76,8 +76,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 InterviewId = completedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.Completed,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -85,8 +83,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 InterviewId = rejectedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.RejectedBySupervisor,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -94,8 +90,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 InterviewId = newInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.InterviewerAssigned,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -103,8 +97,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 InterviewId = restartedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.Restarted,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -113,8 +105,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.InterviewerAssigned,
                 StartedDateTime = DateTime.Now,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
 
             new InterviewView
@@ -122,32 +112,24 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 Id = Guid.NewGuid().FormatGuid(),
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.Completed,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
                 Id = Guid.NewGuid().FormatGuid(),
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.RejectedBySupervisor,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
                 Id = Guid.NewGuid().FormatGuid(),
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.InterviewerAssigned,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
                 Id = Guid.NewGuid().FormatGuid(),
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.Restarted,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -155,8 +137,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.InterviewerAssigned,
                 StartedDateTime = DateTime.Now,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             }
         };
         static DashboardInformation dashboardByInterviewer;

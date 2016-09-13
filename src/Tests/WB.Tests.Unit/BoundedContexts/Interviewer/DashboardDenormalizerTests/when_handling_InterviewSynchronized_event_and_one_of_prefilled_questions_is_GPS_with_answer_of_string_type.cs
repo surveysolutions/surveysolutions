@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -49,13 +50,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             denormalizer.Handle(@event);
 
         It should_store_prefilled_GPS_question_ID_to_result_dashboard_item = () =>
-            dashboardItem.GpsLocation.PrefilledQuestionId.ShouldEqual(prefilledGpsQuestionId);
+            dashboardItem.LocationQuestionId.ShouldEqual(prefilledGpsQuestionId);
 
         It should_store_latitude_from_answer_to_prefilled_GPS_question_to_result_dashboard_item = () =>
-            dashboardItem.GpsLocation.Coordinates.Latitude.ShouldEqual(prefilledGpsQuestionLatitude);
+            dashboardItem.LocationLatitude.ShouldEqual(prefilledGpsQuestionLatitude);
 
         It should_store_longitude_from_answer_to_prefilled_GPS_question_to_result_dashboard_item = () =>
-            dashboardItem.GpsLocation.Coordinates.Longitude.ShouldEqual(prefilledGpsQuestionLongitude);
+            dashboardItem.LocationLongitude.ShouldEqual(prefilledGpsQuestionLongitude);
 
         private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<InterviewSynchronized> @event;

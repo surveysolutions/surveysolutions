@@ -8,6 +8,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerInterviewAccessor : IInterviewerInterviewAccessor
     {
         private readonly IPlainStorage<QuestionnaireView> questionnaireRepository;
+        private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository;
         private readonly IPlainStorage<InterviewFileView> interviewFileViewRepository;
@@ -39,6 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public InterviewerInterviewAccessor(
             IPlainStorage<QuestionnaireView> questionnaireRepository,
+            IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository,
             IPlainStorage<InterviewFileView> interviewFileViewRepository,
@@ -52,6 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ILogger logger)
         {
             this.questionnaireRepository = questionnaireRepository;
+            this.prefilledQuestions = prefilledQuestions;
             this.interviewViewRepository = interviewViewRepository;
             this.interviewMultimediaViewRepository = interviewMultimediaViewRepository;
             this.interviewFileViewRepository = interviewFileViewRepository;
@@ -88,11 +92,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewMultimediaViewRepository.Remove(imageViews);
         }
 
-        public async Task<InterviewPackageApiView> GetInteviewEventsPackageOrNullAsync(Guid interviewId)
+        public InterviewPackageApiView GetInteviewEventsPackageOrNull(Guid interviewId)
         {
-            InterviewView interview = await Task.FromResult(this.interviewViewRepository.GetById(interviewId.FormatGuid()));
+            InterviewView interview = this.interviewViewRepository.GetById(interviewId.FormatGuid());
 
-            return await Task.Run(() => this.BuildInterviewPackageOrNull(interview));
+            return this.BuildInterviewPackageOrNull(interview);
         }
 
         private InterviewPackageApiView BuildInterviewPackageOrNull(InterviewView interview)
@@ -116,7 +120,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 Valid = true,
                 CreatedOnClient = interview.Census,
                 TemplateVersion = questionnaireIdentity.Version,
-                FeaturedQuestionsMeta = interview.AnswersOnPrefilledQuestions.Select(ToFeaturedQuestionMeta).ToList()
+                FeaturedQuestionsMeta = this.prefilledQuestions.Where(x => x.InterviewId == interview.InterviewId).Select(ToFeaturedQuestionMeta).ToList()
             };
 
             return new InterviewPackageApiView
@@ -127,7 +131,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             };
         }
 
-        private FeaturedQuestionMeta ToFeaturedQuestionMeta(InterviewAnswerOnPrefilledQuestionView prefilledQuestion)
+        private FeaturedQuestionMeta ToFeaturedQuestionMeta(PrefilledQuestionView prefilledQuestion)
         {
             return new FeaturedQuestionMeta(prefilledQuestion.QuestionId, prefilledQuestion.QuestionText,
                 prefilledQuestion.Answer);

@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
@@ -474,10 +475,7 @@ namespace WB.Tests.Unit.TestFactories
                 Id = interviewId.FormatGuid(),
                 InterviewId = interviewId.Value,
                 QuestionnaireId = questionnaireId,
-                GpsLocation = new InterviewGpsLocationView
-                {
-                    PrefilledQuestionId = prefilledQuestionId
-                }
+                LocationQuestionId = prefilledQuestionId
             };
         }
 
