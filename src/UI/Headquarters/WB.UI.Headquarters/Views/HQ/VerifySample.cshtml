@@ -96,27 +96,30 @@
                         </legend>
                     </fieldset>
                     <div class="form-group" data-bind="visible: canImportInterviews">
-                        <fieldset>
-                            <label class="col-sm-2">@Common.Responsible</label>
-                            <div class="col-sm-9">
-                                @if (!Model.WasSupervsorProvided)
-                                {
-                                    <div class="input-group">
-                                        <input class="form-control" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
-                                        <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                                        <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
-                                            <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        <div class="form-group">
+                            <fieldset>
+                                <label class="col-sm-2">@Common.Responsible</label>
+                                <div class="col-sm-9">
+                                    @if (!Model.WasSupervsorProvided)
+                                    {
+                                        <div class="input-group">
+                                            <input class="form-control" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                            <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                                            <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
+                                                <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <h4 class="list-group-item-heading">@BatchUpload.ResponsibleSupervisorWillBeAssigned</h4>
-                                }
-                            </div>
-                        </fieldset>
+                                    }
+                                    else
+                                    {
+                                        <h4 class="list-group-item-heading">@BatchUpload.ResponsibleSupervisorWillBeAssigned</h4>
+                                    }
+                                </div>
+                            </fieldset>
+                        </div>
                         <div class="col-sm-offset-4 col-sm-8">
-                            <button class="btn btn-large btn-primary" type="submit" data-bind="click: importInterviews, @if (!Model.WasSupervsorProvided){<text>enable: IsSupervisorSelected</text>}">
+                            <button class="btn btn-large btn-primary" type="submit" data-bind="click: importInterviews, @if (!Model.WasSupervsorProvided)
+                                                                                                                        {<text>enable: IsSupervisorSelected</text>}">
                                 @Common.Create
                             </button>
                         </div>
