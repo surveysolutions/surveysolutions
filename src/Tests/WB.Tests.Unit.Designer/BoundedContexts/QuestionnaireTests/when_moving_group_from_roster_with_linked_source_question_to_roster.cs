@@ -32,28 +32,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 groupPublicKey: groupInsideRosterId,
                 questionType: QuestionType.Text
             ));
-            
-            eventContext = new EventContext();
         };
 
         Because of = () => questionnaire.MoveGroup(groupId: groupInsideRosterId, targetGroupId: roster2Id, responsibleId: responsibleId, targetIndex:0);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
-
-        It should_raise_QuestionnaireItemMoved_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInsideRosterId)
                 .PublicKey.ShouldEqual(groupInsideRosterId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_TargetGroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-                .GroupKey.ShouldEqual(roster2Id);
+        It should_contains_group_with_TargetGroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInsideRosterId)
+                .GetParent().PublicKey.ShouldEqual(roster2Id);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
@@ -63,6 +53,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid categoricalLinkedQuestionId = Guid.Parse("FFFCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid linkedSourceQuestionId = Guid.Parse("AAACCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static EventContext eventContext;
     }
 }

@@ -15,30 +15,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
 
             sourceQuestionnaire = Create.QuestionnaireDocument();
             sourceQuestionnaire.Attachments.Add(Create.Attachment(attachmentId: attachmentId, name: name, contentId: contentId));
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () => 
             questionnaire.CloneQuestionnaire("Title", false, responsibleId, clonedQuestionnaireId, sourceQuestionnaire);
 
-        It should_raise_QuestionnaireCloned_event_with_1_attachment = () =>
-            eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Attachments.Count.ShouldEqual(1);
+        It should_contains_questionnaire_with_1_attachment = () =>
+            questionnaire.QuestionnaireDocument.Attachments.Count.ShouldEqual(1);
 
-        It should_set_new_AttachmentId_in_raised_event = () =>
-            eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Attachments.First().AttachmentId.ShouldNotEqual(attachmentId);
+        It should_set_new_AttachmentId = () =>
+            questionnaire.QuestionnaireDocument.Attachments.First().AttachmentId.ShouldNotEqual(attachmentId);
 
-        It should_set_original_Name_in_raised_event = () =>
-            eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Attachments.First().Name.ShouldEqual(name);
+        It should_set_original_Name = () =>
+            questionnaire.QuestionnaireDocument.Attachments.First().Name.ShouldEqual(name);
 
-        It should_set_Content_Id_in_raised_event = () =>
-            eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Attachments.First().ContentId.ShouldEqual(contentId);
+        It should_set_Content_Id = () =>
+            questionnaire.QuestionnaireDocument.Attachments.First().ContentId.ShouldEqual(contentId);
 
         private static Questionnaire questionnaire;
         private static QuestionnaireDocument sourceQuestionnaire;
@@ -48,6 +41,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static readonly string name = "name";
         private static readonly string contentId = "content id";
-        private static EventContext eventContext;
     }
 }

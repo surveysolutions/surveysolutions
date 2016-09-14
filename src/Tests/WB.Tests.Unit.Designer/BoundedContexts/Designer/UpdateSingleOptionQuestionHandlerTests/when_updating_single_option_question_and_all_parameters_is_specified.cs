@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 responsibleId: responsibleId,
                 questionType: QuestionType.QRBarcode
                 ));
-            eventContext = new EventContext();
         };
 
         Because of = () =>
@@ -50,69 +49,63 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 },
                 linkedFilterExpression: null, properties: Create.QuestionProperties());
 
-        private Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionChanged_event = () =>
-            eventContext.ShouldContainEvent<QuestionChanged>();
+        It should_contains_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ShouldNotBeNull();
 
-        It should_raise_QuestionChanged_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_QuestionId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_QuestionChanged_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_variable_name_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .StataExportCaption.ShouldEqual(variableName);
 
-        It should_raise_QuestionChanged_event_with_title_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_title_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionText.ShouldEqual(title);
 
-        It should_raise_QuestionChanged_event_with_condition_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_condition_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_raise_QuestionChanged_event_with_instructions_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_instructions_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 
-        It should_raise_QuestionChanged_event_with_featured_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_featured_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Featured.ShouldEqual(isPreFilled);
 
-        It should_raise_QuestionChanged_event_with_scope_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_scope_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionScope.ShouldEqual(scope);
 
-        It should_raise_QuestionChanged_event_with_validationExpression_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_validationExpression_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
-        It should_raise_QuestionChanged_event_with_validationMessage_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_validationMessage_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
-        It should_raise_QuestionChanged_event_with_isFilteredCombobox_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_isFilteredCombobox_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .IsFilteredCombobox.ShouldEqual(isFilteredCombobox);
 
         It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .Answers.Length.ShouldEqual(options.Length);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .Answers.Count.ShouldEqual(options.Length);
 
         It should_raise_NewQuestionAdded_event_with_same_option_titles_as_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Answers.Select(x => x.AnswerText).ShouldContainOnly(options.Select(x => x.Title));
 
         It should_raise_NewQuestionAdded_event_with_same_option_values_as_specified = () =>
-           eventContext.GetSingleEvent<QuestionChanged>()
+           questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                .Answers.Select(x => x.AnswerValue).ShouldContainOnly(options.Select(x => x.Value));
 
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

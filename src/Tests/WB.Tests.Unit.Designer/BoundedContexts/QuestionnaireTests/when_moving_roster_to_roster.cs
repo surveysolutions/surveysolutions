@@ -25,35 +25,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = roster2Id, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster2Id));
-            
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () =>
                 questionnaire.MoveGroup(roster1Id, roster2Id, 0, responsibleId);
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-          eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+        private It should_raise_QuestionnaireItemMoved_event = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id).ShouldNotBeNull();
 
         It should_raise_QuestionnaireItemMoved_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+            questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id)
            .PublicKey.ShouldEqual(roster1Id);
 
         It should_raise_QuestionnaireItemMoved_event_with_roster2Id_specified = () =>
-          eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-            .GroupKey.ShouldEqual(roster2Id);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id)
+            .GetParent().PublicKey.ShouldEqual(roster2Id);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static Guid roster1Id = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid roster2Id = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static EventContext eventContext;
     }
 }

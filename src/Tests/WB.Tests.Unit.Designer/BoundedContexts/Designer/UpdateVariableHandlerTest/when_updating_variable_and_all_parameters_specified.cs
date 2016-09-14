@@ -17,8 +17,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.AddVariable(Create.Event.VariableAdded(entityId : entityId, parentId : chapterId ));
 
-            eventContext = new EventContext();
-
             command = Create.Command.UpdateVariable(
                 questionnaire.EventSourceId,
                 entityId: entityId,
@@ -32,30 +30,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
         Because of = () =>            
                 questionnaire.UpdateVariable(command);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_VariableUpdated_event = () =>
-            eventContext.ShouldContainEvent<VariableUpdated>();
+        It should_contains_variable = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId);
 
-        It should_raise_VariableUpdated_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<VariableUpdated>().EntityId.ShouldEqual(entityId);
+        It should_contains_variable_with_EntityId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).PublicKey.ShouldEqual(entityId);
 
-        It should_raise_VariableUpdated_event_with_name_specified = () =>
-            eventContext.GetSingleEvent<VariableUpdated>().VariableData.Name.ShouldEqual(variableName);
+        It should_contains_variable_with_name_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Name.ShouldEqual(variableName);
 
-        It should_raise_VariableUpdated_event_with_Type_specified = () =>
-            eventContext.GetSingleEvent<VariableUpdated>().VariableData.Type.ShouldEqual(variableType);
+        It should_contains_variable_with_Type_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Type.ShouldEqual(variableType);
 
-        It should_raise_VariableUpdated_event_with_Expression_specified = () =>
-            eventContext.GetSingleEvent<VariableUpdated>().VariableData.Expression.ShouldEqual(variableExpression);
+        It should_contains_variable_with_Expression_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Expression.ShouldEqual(variableExpression);
 
 
         private static UpdateVariable command;
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

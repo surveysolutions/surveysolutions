@@ -43,33 +43,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     FixedRosterTitles =  null,
                     RosterTitleQuestionId =rosterTitleQuestionId 
                 });
-
-            eventContext = new EventContext();
         };
 
         Because of = () => questionnaire.UpdateGroup(groupId: rosterId, responsibleId: responsibleId, title: "title",variableName:null, 
                     rosterSizeQuestionId: null, description: null, condition: null, hideIfDisabled: false, isRoster: false, 
                     rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_GroupUpdated_event = () =>
-           eventContext.ShouldContainEvent<GroupUpdated>();
+        It should_contains_group = () =>
+           questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).ShouldNotBeNull();
 
-        It should_raise_GroupUpdated_event_with_GroupPublicKey_equal_to_roster_id = () =>
-            eventContext.GetSingleEvent<GroupUpdated>().GroupPublicKey.ShouldEqual(rosterId);
+        It should_contains_group_with_GroupPublicKey_equal_to_roster_id = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).GetParent().PublicKey.ShouldEqual(rosterId);
 
-        It should_raise_GroupStoppedBeingARoster_event = () =>
-           eventContext.ShouldContainEvent<GroupStoppedBeingARoster>();
+        It should_contains_group_with_IsRoster_equal_to_false = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).IsRoster.ShouldBeFalse();
 
-        It should_raise_GroupStoppedBeingARoster_event_with_GroupId_equal_to_roster_id = () =>
-            eventContext.GetSingleEvent<GroupStoppedBeingARoster>().GroupId.ShouldEqual(rosterId);
-
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

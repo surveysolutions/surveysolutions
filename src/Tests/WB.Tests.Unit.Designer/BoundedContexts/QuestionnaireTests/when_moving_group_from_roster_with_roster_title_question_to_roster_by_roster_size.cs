@@ -42,28 +42,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 publicKey : rosterTitleQuestionId,
                 groupPublicKey : groupFromRosterId
             ));
-
-            eventContext = new EventContext();
         };
 
         Because of = () => questionnaire.MoveGroup(groupFromRosterId, targetGroupId, 0, responsibleId);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+        It should_contains_group = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromRosterId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromRosterId)
                 .PublicKey.ShouldEqual(groupFromRosterId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_ParentGroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-                .GroupKey.ShouldEqual(targetGroupId);
+        It should_contains_group_with_ParentGroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromRosterId)
+                .GetParent().PublicKey.ShouldEqual(targetGroupId);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
@@ -73,6 +66,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private static Guid rosterTitleQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static EventContext eventContext;
     }
 }
