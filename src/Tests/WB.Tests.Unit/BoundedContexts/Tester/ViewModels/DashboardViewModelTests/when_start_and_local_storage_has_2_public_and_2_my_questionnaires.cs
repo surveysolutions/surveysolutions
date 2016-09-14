@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         Establish context = () =>
         {
             var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
-            storageAccessor.StoreAsync(MyQuestionnaires.Union(PublicQuestionnaires)).WaitAndUnwrapException();
+            storageAccessor.Store(MyQuestionnaires.Union(PublicQuestionnaires));
 
             viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor);
         };

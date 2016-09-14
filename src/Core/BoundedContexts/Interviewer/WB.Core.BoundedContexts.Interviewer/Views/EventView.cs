@@ -1,5 +1,5 @@
 using System;
-using SQLite.Net.Attributes;
+using SQLite;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {

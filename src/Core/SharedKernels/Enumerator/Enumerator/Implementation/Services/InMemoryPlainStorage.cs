@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class InMemoryAsyncPlainStorage<TEntity> : IAsyncPlainStorage<TEntity>
+    public class InMemoryPlainStorage<TEntity> : IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity
     {
         public readonly Dictionary<string, TEntity> inMemroyStorage = new Dictionary<string, TEntity>();
@@ -38,30 +37,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.inMemroyStorage.Values.AsQueryable().Count(predicate);
         }
 
-        public async Task RemoveAllAsync() => await Task.Run(() => this.inMemroyStorage.Clear());
-
-        public async Task<TEntity> GetByIdAsync(string id) => await Task.Run(() => this.GetById(id));
-
-        public async Task StoreAsync(TEntity entity) => await Task.Run(() => this.inMemroyStorage[entity.Id] = entity);
-
-        public async Task<IReadOnlyCollection<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> predicate) => await Task.Run(() => this.Where(predicate));
+        public void RemoveAll()
+        {
+            this.inMemroyStorage.Clear();
+        }
 
         public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount)
         {
             return this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).OrderBy(orderPredicate).Take(takeCount).ToReadOnlyCollection();
-        }
-
-        public async Task<IReadOnlyCollection<TEntity>> LoadAllAsync() => await Task.Run(this.LoadAllAsync);
-
-        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate) => await Task.Run(() => this.CountAsync(predicate));
-
-        public async Task RemoveAsync(string id)
-        {
-            await Task.Run(() =>
-            {
-                if (this.inMemroyStorage.ContainsKey(id))
-                    this.inMemroyStorage.Remove(id);
-            });
         }
 
         public void Remove(IEnumerable<TEntity> entities)
@@ -73,19 +56,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public async Task RemoveAsync(IEnumerable<TEntity> entities)
+        public void Remove(string id)
         {
-            foreach (var entity in entities.Where(entity => entity != null))
-            {
-                await this.RemoveAsync(entity.Id);
-            }
+            if (this.inMemroyStorage.ContainsKey(id)) this.inMemroyStorage.Remove(id);
         }
 
-        public async Task StoreAsync(IEnumerable<TEntity> entities)
+        public void Store(TEntity entity)
+        {
+            this.inMemroyStorage[entity.Id] = entity;
+        }
+
+        public void Store(IEnumerable<TEntity> entities)
         {
             foreach (var entity in entities.Where(entity => entity != null))
             {
-                await this.StoreAsync(entity);
+                this.Store(entity);
             }
         }
 
