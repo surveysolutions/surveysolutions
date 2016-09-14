@@ -23,8 +23,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public DateTime? CompletedDateTime { get; set; }
         public DateTime? RejectedDateTime { get; set; }
 
-        public byte[] AnswersOnPrefilledQuestions { get; protected set; }
-        public byte[] GpsLocation { get; protected set; }
+        public byte[] AnswersOnPrefilledQuestions { get; set; }
+        public byte[] GpsLocation { get; set; }
 
         //public InterviewAnswerOnPrefilledQuestionView[] AnswersOnPrefilledQuestions { get; set; }
         //public InterviewGpsLocationView GpsLocation { get; set; }
