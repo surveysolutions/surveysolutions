@@ -39,30 +39,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 groupPublicKey: rosterId,
                 questionType: QuestionType.Text
             ));
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () =>
                 questionnaire.DeleteQuestion(rosterTitleQuestionId, responsibleId);
 
-        It should_raise_QuestionDeleted_event = () =>
-          eventContext.ShouldContainEvent<QuestionDeleted>();
-
-        It should_raise_QuestionDeleted_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<QuestionDeleted>()
-                .QuestionId.ShouldEqual(rosterTitleQuestionId);
+        It should_doesnt_contain_question = () =>
+          questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId).ShouldBeNull();
 
         private static string rosterTitle;
         private static Questionnaire questionnaire;
         private static Guid rosterSizeQuestionId;
         private static Guid rosterTitleQuestionId;
         private static Guid responsibleId;
-        private static EventContext eventContext;
     }
 }

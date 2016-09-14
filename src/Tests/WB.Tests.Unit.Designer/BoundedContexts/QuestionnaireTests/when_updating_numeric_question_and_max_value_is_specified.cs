@@ -20,8 +20,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.AddQuestion(Create.Event.NewQuestionAdded(publicKey: questionId, groupPublicKey: chapterId, questionType: QuestionType.Text));
-            
-            eventContext = new EventContext();
         };
 
         Because of = () =>
@@ -30,20 +28,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 responsibleId, true, null, validationConditions: new List<ValidationCondition>()
                 );
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_NumericQuestionChanged_event = () =>
-            eventContext.ShouldContainEvent<NumericQuestionChanged>();
+        It should_contains_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ShouldNotBeNull();
 
-        It should_raise_NumericQuestionChanged_event_with_PublicKey_equal_to_question_id = () =>
-            eventContext.GetSingleEvent<NumericQuestionChanged>()
+        It should_contains_question_with_PublicKey_equal_to_question_id = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId;
         private static Guid chapterId;

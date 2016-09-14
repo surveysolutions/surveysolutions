@@ -26,7 +26,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                 responsibleId: responsibleId,
                 questionType: QuestionType.QRBarcode
                 ));
-            eventContext = new EventContext();
         };
 
         Because of = () =>            
@@ -45,48 +44,40 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                     },
                     properties: Create.QuestionProperties());
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QRBarcodeQuestionAdded_event = () =>
-            eventContext.ShouldContainEvent<QRBarcodeQuestionUpdated>();
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-                .QuestionId.ShouldEqual(questionId);
+        It should_contains_question_with_QuestionId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-                .VariableName.ShouldEqual(variableName);
+        It should_contains_question_with_variable_name_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .VariableLabel.ShouldEqual(variableName);
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_title_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-                .Title.ShouldEqual(title);
+        It should_contains_question_with_title_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .QuestionText.ShouldEqual(title);
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_condition_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-                .EnablementCondition.ShouldEqual(condition);
+        It should_contains_question_with_condition_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .ConditionExpression.ShouldEqual(condition);
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_hideIfDisabled_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
+        It should_contains_question_with_hideIfDisabled_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_instructions_specified = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
+        It should_contains_question_with_instructions_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_validation_specified = () =>
-           eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
+        It should_contains_question_with_validation_specified = () =>
+           questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                .ValidationConditions.First().Expression.ShouldEqual(validation);
 
-        It should_raise_QRBarcodeQuestionAdded_event_with_validation_message_specified = () =>
-         eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-             .ValidationConditions.First().Message.ShouldEqual(validationMessage);
+        It should_contains_question_with_validation_message_specified = () =>
+           questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+               .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

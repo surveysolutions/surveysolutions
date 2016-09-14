@@ -49,22 +49,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 groupPublicKey : chapterId,
                 linkedToQuestionId : questionUsedAsLinkId
             ));
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of =
             () =>
                 questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, false, RosterSizeSourceType.Question, null, null);
 
-        It should_raise_GroupStoppedBeingARoster_event_with_groupToUpdateId_specified = () =>
-            eventContext.GetSingleEvent<GroupStoppedBeingARoster>().GroupId.ShouldEqual(groupToUpdateId);
+        private It should_contains_group_with_groupToUpdateId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).ShouldNotBeNull();
+
+        It should_contains_group_with_IsRoster_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).IsRoster.ShouldBeFalse();
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
@@ -73,6 +69,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private static Guid questionUsedAsLinkId = Guid.Parse("11111111111111111111111111111111");
         private static Guid groupToUpdateId = Guid.Parse("21111111111111111111111111111111");
         private static Guid linkedQuestionInChapterId = Guid.Parse("31111111111111111111111111111111");
-        private static EventContext eventContext;
     }
 }

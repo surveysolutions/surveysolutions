@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -14,26 +15,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteStaticTextHandle
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId ));
-
-            eventContext = new EventContext();
         };
 
         Because of = () =>            
                 questionnaire.DeleteStaticText(entityId: entityId, responsibleId: responsibleId);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_StaticTextDeleted_event = () =>
-            eventContext.ShouldContainEvent<StaticTextDeleted>();
+        It should_dont_contains_StaticText = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ShouldBeNull();
 
-        It should_raise_StaticTextDeleted_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<StaticTextDeleted>().EntityId.ShouldEqual(entityId);
         
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

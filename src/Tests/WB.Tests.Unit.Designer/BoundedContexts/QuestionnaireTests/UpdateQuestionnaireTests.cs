@@ -35,19 +35,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [Test]
         public void UpdateQuestionnaire_When_questionnaire_title_is_not_empty_Then_raised_QuestionnaireUpdated_event_contains_questionnaire_title()
         {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var nonEmptyTitle = "Title";
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+            // arrange
+            var nonEmptyTitle = "Title";
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
-                // act
-                questionnaire.UpdateQuestionnaire(Create.UpdateQuestionnaire(nonEmptyTitle, false, responsibleId));
+            // act
+            questionnaire.UpdateQuestionnaire(Create.UpdateQuestionnaire(nonEmptyTitle, false, responsibleId));
 
-                // assert
-                Assert.That(GetSingleEvent<QuestionnaireUpdated>(eventContext).Title, Is.EqualTo(nonEmptyTitle));
-            }
+            // assert
+            Assert.That(questionnaire.QuestionnaireDocument.Title, Is.EqualTo(nonEmptyTitle));
         }
 
         [Test]

@@ -28,36 +28,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     FixedRosterTitles =  null,
                     RosterTitleQuestionId =null 
                 });
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () =>
                 questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null, rosterSizeQuestionId: rosterSizeQuestionId,
                     description: null, condition: null, hideIfDisabled: false, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
                     rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-        It should_raise_GroupBecameARoster_event = () =>
-            eventContext.ShouldContainEvent<GroupBecameARoster>();
+        It should_contains_group = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_raise_GroupBecameARoster_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<GroupBecameARoster>()
-                .GroupId.ShouldEqual(groupId);
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .PublicKey.ShouldEqual(groupId);
 
-        It should_raise_RosterChanged_event = () =>
-            eventContext.ShouldContainEvent<RosterChanged>();
+        It should_contains_group_with_IsRoster_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .IsRoster.ShouldBeTrue();
 
-        It should_raise_RosterChanged_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
-                .GroupId.ShouldEqual(groupId);
-
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

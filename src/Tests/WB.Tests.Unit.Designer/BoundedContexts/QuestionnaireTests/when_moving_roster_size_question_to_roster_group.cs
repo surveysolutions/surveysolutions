@@ -35,32 +35,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             AddGroup(questionnaire: questionnaire, groupId: rosterGroupId, parentGroupId: targetRosterGroupId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () =>
             questionnaire.MoveQuestion(rosterSizeQuestionId, chapterId, targetIndex: 0, responsibleId: responsibleId);
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+        It should_contains_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId).ShouldNotBeNull();
 
-        It should_raise_QuestionnaireItemMoved_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+        It should_contains_question_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId)
            .PublicKey.ShouldEqual(rosterSizeQuestionId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_chapterId_specified = () =>
-          eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-            .GroupKey.ShouldEqual(chapterId);
+        It should_contains_question_with_chapterId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId)
+            .GetParent().PublicKey.ShouldEqual(chapterId);
 
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid rosterGroupId;

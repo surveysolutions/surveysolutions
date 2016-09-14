@@ -75,6 +75,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private HashSet<Guid> macroIds = new HashSet<Guid>();
         private HashSet<Guid> lookupTableIds = new HashSet<Guid>();
 
+        public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
+
         private bool wasExpressionsMigrationPerformed = false;
 
         public Guid EventSourceId => this.innerDocument.PublicKey;
