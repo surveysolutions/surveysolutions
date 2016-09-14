@@ -6,22 +6,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewProperties
     {
-        public InterviewProperties(Guid id, Guid interviewerId, InterviewStatus status,
-            bool isReceivedByInterviewer, bool isCompleted, bool isHardDeleted)
+        private Guid? interviewerId;
+
+        public string Id { get; set; }
+
+        public Guid? InterviewerId
         {
-            this.Id = id.FormatGuid();
-            this.InterviewerId = interviewerId != Guid.Empty ? interviewerId : null as Guid?;
-            this.Status = status;
-            this.IsReceivedByInterviewer = isReceivedByInterviewer;
-            this.IsCompleted = isCompleted;
-            this.IsHardDeleted = isHardDeleted;
+            get { return this.interviewerId; }
+            set { this.interviewerId = value.NullIfEmpty(); }
         }
 
-        public string Id { get; }
-        public Guid? InterviewerId { get; }
-        public InterviewStatus Status { get; }
-        public bool IsReceivedByInterviewer { get; }
-        public bool IsCompleted { get; }
-        public bool IsHardDeleted { get; }
+        public InterviewStatus Status { get; set; }
+        public bool IsReceivedByInterviewer { get; set; }
+        public bool IsCompleted { get; set; }
+        public bool IsHardDeleted { get; set; }
     }
 }

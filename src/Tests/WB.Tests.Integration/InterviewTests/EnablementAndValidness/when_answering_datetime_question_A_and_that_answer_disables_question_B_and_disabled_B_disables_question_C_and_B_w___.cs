@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var questionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.DateTimeQuestion(questionAId, "a"),
                     Create.DateTimeQuestion(questionBId, "b", enablementCondition: "a > new DateTime(2015, 2, 2)"),
                     Create.DateTimeQuestion(questionCId, "c", enablementCondition: "b > new DateTime(2015, 9, 9 )")

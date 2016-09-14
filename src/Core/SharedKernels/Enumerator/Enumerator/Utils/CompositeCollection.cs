@@ -5,10 +5,12 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     // took from https://bitbucket.org/rstarkov/wpfcrutches/src/5d153f4cbce92af5f154d724668ec0e946072119/CompositeCollection.cs?fileviewer=file-view-default
+
     public class CompositeCollection<T> : IObservableCollection<T>
     {
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
@@ -48,7 +50,14 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Insert(int index, T item)
         {
-            throw new NotSupportedException();
+            var insertedCollection = new CovariantObservableCollection<T>(item.ToEnumerable());
+
+            insertedCollection.CollectionChanged += this.collectionChanged;
+            this.collections.Insert(index, insertedCollection);
+
+            this.Count += 1;
+            this.propertyChanged("Count");
+            this.collectionChanged_Added(new[] {item}, index);
         }
 
         public void RemoveAt(int index)
@@ -61,9 +70,18 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
         }
 
-        public bool Remove(T item)
+        public void Remove(T item)
         {
-            throw new NotSupportedException();
+            var indexOfItem = this.IndexOf(item);
+            if (indexOfItem < 0) return;
+
+            var collectionToRemove = this.collections.ElementAt(indexOfItem);
+            collectionToRemove.CollectionChanged -= this.collectionChanged;
+            this.collections.Remove(collectionToRemove);
+            this.Count -= 1;
+
+            this.propertyChanged("Count");
+            this.collectionChanged_Remove(new[] {item}, indexOfItem);
         }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -109,14 +127,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, e.NewItems, newIndex);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, e.OldItems, oldIndex);
+                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, e.OldItems,
+                        oldIndex);
                     break;
                 case NotifyCollectionChangedAction.Move:
                     args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, e.NewItems, newIndex,
                         oldIndex);
                     break;
                 case NotifyCollectionChangedAction.Replace:
-                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems, e.OldItems, newIndex);
+                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems,
+                        e.OldItems, newIndex);
                     break;
                 default:
                     throw new Exception("bug");
@@ -126,7 +146,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         private void collectionChanged_Added(IList<T> items, int offset)
         {
-            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
+            this.CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
         }
 
         private void collectionChanged_Reset()
@@ -134,9 +155,21 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
+        private void collectionChanged_Remove(IList items, int oldItemIndex)
+        {
+            this.CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, items, oldItemIndex));
+        }
+
         private void propertyChanged(string name)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        public int IndexOf(T item)
+        {
+            var itemCollection = this.collections.Find(x => x.Contains(item));
+            return itemCollection != null ? this.collections.IndexOf(itemCollection) : -1;
+        } 
     }
 }

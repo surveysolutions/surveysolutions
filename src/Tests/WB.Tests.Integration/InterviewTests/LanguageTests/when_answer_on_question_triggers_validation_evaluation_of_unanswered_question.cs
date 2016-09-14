@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
                     Create.NumericIntegerQuestion(dependentOnAnsweredQuestionId, "q2", validationExpression: "q1 + q2 > 0")
                );

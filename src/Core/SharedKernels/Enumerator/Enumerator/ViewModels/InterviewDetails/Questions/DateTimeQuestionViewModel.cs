@@ -72,23 +72,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IMvxCommand AnswerCommand
-        {
-            get { return new MvxCommand<DateTime>(this.SendAnswerCommand); }
-        }
+        public IMvxAsyncCommand AnswerCommand => new MvxAsyncCommand<DateTime>(this.SendAnswerAsync);
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
-        private IMvxCommand answerRemoveCommand;
-
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get
-            {
-                return this.answerRemoveCommand ??
-                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
-            }
-        }
-
-        private async Task RemoveAnswer()
+        private async Task RemoveAnswerAsync()
         {
             try
             {
@@ -105,10 +92,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ProcessException(ex);
             }
 
-            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
+            this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
         }
 
-        private async void SendAnswerCommand(DateTime answerValue)
+        private async Task SendAnswerAsync(DateTime answerValue)
         {
             try
             {
@@ -153,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.QuestionId == this.questionIdentity.Id &&
               @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
-                this.Answer = String.Empty;
+                this.Answer = string.Empty;
             }
         }
     }

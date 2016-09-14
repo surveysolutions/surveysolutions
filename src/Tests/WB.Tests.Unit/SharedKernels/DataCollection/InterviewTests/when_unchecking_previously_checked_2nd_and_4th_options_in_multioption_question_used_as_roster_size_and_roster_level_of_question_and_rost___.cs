@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
@@ -25,26 +26,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionId = Guid.Parse("11111111111111111111111111111111");
             rosterId = Guid.Parse("44444444444444444444444444444444");
 
-            var availableOptions = new[]
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                (decimal) 14.7,
-                option2 = (decimal) 18.4,
-                option3 = 3,
-                option4 = -1,
-                (decimal) 256.128,
-            };
+                Create.Entity.MultipleOptionsQuestion(questionId: questionId, textAnswers: new []
+                {
+                    Create.Entity.Answer("option 1", 14.7m),
+                    Create.Entity.Answer("option 2", option2 = 18.4m),
+                    Create.Entity.Answer("option 3", option3 = 3),
+                    Create.Entity.Answer("option 4", option4 = -1),
+                    Create.Entity.Answer("option 5", 256.128m),
+                }),
 
-            var questionaire = Mock.Of<IQuestionnaire>
-            (_
-                => _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.MultyOption
-                && _.GetMultiSelectAnswerOptionsAsValues(questionId) == availableOptions
-                && _.GetRosterGroupsByRosterSizeQuestion(questionId) == new[] { rosterId }
-                && _.HasGroup(rosterId) == true
-                && _.IsRosterGroup(rosterId) == true
-            );
+                Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: questionId),
+            }));
 
-            IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+            IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.AnswerMultipleOptionsQuestion(userId, questionId, emptyRosterVector, DateTime.Now, new[] { option2, option3, option4 });

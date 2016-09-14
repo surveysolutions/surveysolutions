@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -10,6 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection
     /// and to reduce parameters count in calculation methods.
     /// Should not be made public or be used in any form in events or commands.
     /// </remarks>
+    [DebuggerDisplay("Identity {Id} {RosterVector}")]
     public class Identity
     {
         private int? hashCode = null;

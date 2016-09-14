@@ -296,21 +296,18 @@ namespace WB.Tests.Integration
             };
         }
 
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? id = null, params IComposite[] children)
+            => Create.QuestionnaireDocument(id: id, children: Create.Chapter(children: children));
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-        {
-            return new QuestionnaireDocument
+            => new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToList() ?? new List<IComposite>(),
             };
-        }
 
         public static Group Chapter(string title = "Chapter X", IEnumerable<IComposite> children = null)
-        {
-            return Create.Group(
-                title: title,
-                children: children);
-        }
+            => Create.Group(title: title, children: children);
 
         public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {

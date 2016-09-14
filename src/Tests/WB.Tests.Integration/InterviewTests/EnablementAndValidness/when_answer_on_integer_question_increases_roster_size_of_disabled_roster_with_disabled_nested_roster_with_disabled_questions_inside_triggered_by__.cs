@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 const string enablementCondition = "a > 2";
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(rosterSizeQuestionId, variable: "a"),
                     Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, enablementCondition: enablementCondition,
                         rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]

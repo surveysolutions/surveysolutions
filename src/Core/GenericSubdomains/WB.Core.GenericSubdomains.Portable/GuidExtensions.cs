@@ -22,6 +22,9 @@ namespace WB.Core.GenericSubdomains.Portable
             return FormatGuid(guid.Value);
         }
 
+        public static Guid? NullIfEmpty(this Guid value) => value == Guid.Empty ? null as Guid? : value;
+        public static Guid? NullIfEmpty(this Guid? value) => value == Guid.Empty ? null as Guid? : value;
+
         public static Guid ToGuid(this string value)
         {
             if (string.IsNullOrWhiteSpace(value)) 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -65,10 +66,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         };
 
         It should_linked_question_have_one_answer = () =>
-           GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(1);
+           GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().Length.ShouldEqual(1);
 
         It should_linked_question_have_first_answer_be_equal_to_0 = () =>
-           GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers[0].ShouldEqual("[0.1|0.4]");
+           GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().First().ShouldEqual("[0.1|0.4]");
 
         private static InterviewDataExportView result;
         private static Guid rosterId;

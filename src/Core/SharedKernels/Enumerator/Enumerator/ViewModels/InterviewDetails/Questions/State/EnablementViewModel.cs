@@ -4,6 +4,7 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -19,19 +20,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public event EventHandler EntityEnabled;
         public event EventHandler EntityDisabled;
 
         protected EnablementViewModel() { }
 
-        public EnablementViewModel(IStatefulInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry)
+        public EnablementViewModel(IStatefulInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry, 
+            IQuestionnaireStorage questionnaireRepository)
         {
             if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
             if (eventRegistry == null) throw new ArgumentNullException(nameof(eventRegistry));
+            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
 
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         private string interviewId;
@@ -45,9 +50,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             this.entityIdentity = entityIdentity;
 
+            var interview = this.interviewRepository.Get(this.interviewId);
+            this.HideIfDisabled = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language)
+                    .ShouldBeHiddenIfDisabled(entityIdentity.Id);
+
             this.UpdateSelfFromModel();
             this.eventRegistry.Subscribe(this, interviewId);
         }
+
+        public bool HideIfDisabled { get; private set; }
 
         private bool enabled;
         public bool Enabled

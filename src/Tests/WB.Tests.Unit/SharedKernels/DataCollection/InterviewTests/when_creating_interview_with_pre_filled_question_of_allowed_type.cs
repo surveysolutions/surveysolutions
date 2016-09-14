@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -29,9 +30,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             answersToFeaturedQuestions.Add(prefilledQuestionId, prefilledQuestionAnswer);
             answersTime = new DateTime(2013, 09, 01);
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                => _.GetQuestionType(prefilledQuestionId) == QuestionType.Text
-                && _.HasQuestion(prefilledQuestionId) == true);
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.TextQuestion(questionId: prefilledQuestionId),
+            }));
+
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             eventContext = new EventContext();
 

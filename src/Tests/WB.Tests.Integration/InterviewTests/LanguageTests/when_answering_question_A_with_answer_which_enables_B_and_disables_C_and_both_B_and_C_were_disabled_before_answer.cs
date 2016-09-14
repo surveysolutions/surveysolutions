@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionC = Guid.Parse("cccccccccccccccccccccccccccccccc");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocument(children: new[]
+                    Create.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Create.Chapter(children: new IComposite[]
                         {
