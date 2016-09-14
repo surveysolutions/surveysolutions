@@ -8,8 +8,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
     public class AttachmentsCleanupService
     {
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
-        private readonly IAsyncPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
-        private readonly IAsyncPlainStorage<AttachmentContentData> attachmentContentDataRepository;
+        private readonly IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
+        private readonly IPlainStorage<AttachmentContentData> attachmentContentDataRepository;
         private readonly ILogger logger;
 
         protected AttachmentsCleanupService()
@@ -17,8 +17,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
         }
 
         public AttachmentsCleanupService(IInterviewerQuestionnaireAccessor questionnairesAccessor, 
-            IAsyncPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
-            IAsyncPlainStorage<AttachmentContentData> attachmentContentDataRepository,
+            IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
+            IPlainStorage<AttachmentContentData> attachmentContentDataRepository,
             ILogger logger)
         {
             this.questionnairesAccessor = questionnairesAccessor;
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
             this.logger = logger;
         }
 
-        public virtual async Task RemovedOrphanedAttachments()
+        public virtual void RemovedOrphanedAttachments()
         {
             var contentMetadatas = this.attachmentContentMetadataRepository.LoadAll();
 
@@ -35,8 +35,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
             {
                 if (!this.questionnairesAccessor.IsAttachmentUsedAsync(attachmentContentMetadata.Id))
                 {
-                    await this.attachmentContentMetadataRepository.RemoveAsync(attachmentContentMetadata.Id);
-                    await this.attachmentContentDataRepository.RemoveAsync(attachmentContentMetadata.Id);
+                    this.attachmentContentMetadataRepository.Remove(attachmentContentMetadata.Id);
+                    this.attachmentContentDataRepository.Remove(attachmentContentMetadata.Id);
                     this.logger.Info($"Removed attachment with Id {attachmentContentMetadata.Id}");
                 }
             }

@@ -4,6 +4,7 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -25,8 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             @event = Create.Event.YesNoQuestionAnswered(questionId, new AnsweredYesNoOption[0]).ToPublishedEvent(interviewId);
 
             interviewViewStorage = new SqliteInmemoryStorage<InterviewView>();
-            interviewViewStorage.StoreAsync(Create.Entity.InterviewView(interviewId: interviewId,
-                questionnaireId: questionnaireIdentity.ToString())).WaitAndUnwrapException();
+            interviewViewStorage.Store(Create.Entity.InterviewView(interviewId: interviewId,
+                questionnaireId: questionnaireIdentity.ToString()));
 
             var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,

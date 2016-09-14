@@ -160,11 +160,5 @@ namespace WB.UI.Shared.Enumerator
                 typeof(EnumeratorSharedKernelModule).Assembly,
             };
         }
-
-        protected override void InitializeLastChance()
-        {
-            base.InitializeLastChance();
-            Mvx.RegisterType<IMvxBindingContext, MvxBindingContext>();
-        }
     }
 }

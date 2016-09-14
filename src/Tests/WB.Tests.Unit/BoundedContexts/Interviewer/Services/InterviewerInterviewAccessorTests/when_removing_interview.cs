@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.WriteSide;
@@ -30,10 +31,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             eventStore = new Mock<IInterviewerEventStorage>();
 
             inMemoryMultimediaViewRepository = new SqliteInmemoryStorage<InterviewMultimediaView>();
-            inMemoryMultimediaViewRepository.StoreAsync(interviewMultimediaViews).WaitAndUnwrapException();
+            inMemoryMultimediaViewRepository.Store(interviewMultimediaViews);
 
             inMemoryFileViewRepository = new SqliteInmemoryStorage<InterviewFileView>();
-            inMemoryFileViewRepository.StoreAsync(interviewFileViews);
+            inMemoryFileViewRepository.Store(interviewFileViews);
 
             interviewerInterviewAccessor = Create.Service.InterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
@@ -46,10 +47,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 interviewFileViewRepository: inMemoryFileViewRepository);
         };
 
-        Because of = () => interviewerInterviewAccessor.RemoveInterviewAsync(interviewId).WaitAndUnwrapException();
+        Because of = () => interviewerInterviewAccessor.RemoveInterview(interviewId);
 
         It should_remove_interview_view_from_plain_storage = () =>
-            interviewViewRepositoryMock.Verify(x => x.RemoveAsync(interviewStringId), Times.Once);
+            interviewViewRepositoryMock.Verify(x => x.Remove(interviewStringId), Times.Once);
 
         It should_clean_cache_of_aggregate_root_repository = () =>
             mockOfAggregateRootRepositoryWithCache.Verify(x => x.CleanCache(), Times.Once);
@@ -98,12 +99,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         const string interviewFile2 = "file 2";
 
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
-        private static readonly Mock<IAsyncPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IAsyncPlainStorage<InterviewView>>();
+        private static readonly Mock<IPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IPlainStorage<InterviewView>>();
         private static readonly Mock<IEventSourcedAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IEventSourcedAggregateRootRepositoryWithCache>();
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
         private static Mock<IInterviewerEventStorage> eventStore;
-        private static IAsyncPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
-        private static IAsyncPlainStorage<InterviewFileView> inMemoryFileViewRepository;
+        private static IPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
+        private static IPlainStorage<InterviewFileView> inMemoryFileViewRepository;
     }
 }

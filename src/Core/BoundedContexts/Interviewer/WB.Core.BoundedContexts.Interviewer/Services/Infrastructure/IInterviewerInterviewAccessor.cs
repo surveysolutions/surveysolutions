@@ -6,8 +6,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 {
     public interface IInterviewerInterviewAccessor
     {
-        Task RemoveInterviewAsync(Guid interviewId);
-        Task<InterviewPackageApiView> GetInteviewEventsPackageOrNullAsync(Guid interviewId);
+        void RemoveInterview(Guid interviewId);
+        InterviewPackageApiView GetInteviewEventsPackageOrNull(Guid interviewId);
         Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details);
     }
 }

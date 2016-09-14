@@ -21,14 +21,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IInterviewerPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
         public CensusQuestionnaireDashboardItemViewModel(
             ICommandService commandService,
             IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMvxMessenger messenger,
-            IAsyncPlainStorage<InterviewView> interviewViewRepository)
+            IPlainStorage<InterviewView> interviewViewRepository)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -41,8 +41,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void Init(QuestionnaireView questionnaire)
         {
-            this.questionnaireIdentity = questionnaire.Identity;
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);
+            this.questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, this.questionnaireIdentity.Version);
 
             var interviewsByQuestionnareCount = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaire.Id);
 

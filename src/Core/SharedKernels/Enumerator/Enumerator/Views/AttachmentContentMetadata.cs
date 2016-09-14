@@ -1,4 +1,4 @@
-﻿using SQLite.Net.Attributes;
+﻿using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
