@@ -2234,21 +2234,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private List<T> GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer, params RosterCalculationData[] datas)
         {
-            var result = new List<T>();
+            var result = new HashSet<T>(equalityComparer);
             foreach (var data in datas)
             {
                 var propertyValue = getProperty(data);
-                if (propertyValue != null)
-                    result.AddRange(propertyValue);
+
+                propertyValue?.ForEach(x => result.Add(x));
 
                 foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
                 {
-                    result.AddRange(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                        getProperty, equalityComparer, rosterInstantiatesFromNestedLevel));
+                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(getProperty, equalityComparer, rosterInstantiatesFromNestedLevel).ForEach(x => result.Add(x));
                 }
             }
 
-            return result.Distinct(equalityComparer).ToList();
+            return result.ToList();
         }
 
         private Dictionary<RosterIdentity, string> GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(
