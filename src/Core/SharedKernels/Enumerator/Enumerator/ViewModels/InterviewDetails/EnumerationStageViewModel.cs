@@ -47,12 +47,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IEnumeratorSettings settings;
         readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMessenger messenger;
-        private ICompositeCollectionInflationService compositeCollectionInflationService;
+        private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
-
-        private readonly object itemsListUpdateOnUILock = new object();
 
         private NavigationState navigationState;
 
