@@ -9,6 +9,8 @@ using Main.Core.Entities.SubEntities.Question;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -56,6 +58,8 @@ namespace WB.UI.Interviewer.Activities
                 }
             }
 
+            MigrateDashboardToOfficialSqliteRelease();
+
             if (!isMigrationNeeded)
                 return;
 
@@ -73,6 +77,50 @@ namespace WB.UI.Interviewer.Activities
                 foreach (var question in questionsWithLongOptionsList)
                 {
                     optionsRepository.StoreOptionsForQuestion(questionnaireView.GetIdentity(), question.PublicKey, question.Answers, new List<TranslationDto>());
+                }
+            }
+        }
+
+        private void MigrateDashboardToOfficialSqliteRelease()
+        {
+            var dashboardItems = Mvx.Resolve<IPlainStorage<InterviewView>>();
+            var prefilledQuestions = Mvx.Resolve<IPlainStorage<PrefilledQuestionView>>();
+            var serializer = Mvx.Resolve<IJsonAllTypesSerializer>();
+
+            var allInterviews = dashboardItems.Where(x => x.AnswersOnPrefilledQuestions != null || x.GpsLocation != null).ToList();
+            foreach (InterviewView interviewToMigrate in allInterviews)
+            {
+                if (interviewToMigrate.AnswersOnPrefilledQuestions != null)
+                {
+                    InterviewAnswerOnPrefilledQuestionView[] oldAnswers =
+                        serializer.Deserialize<InterviewAnswerOnPrefilledQuestionView[]>(
+                            interviewToMigrate.AnswersOnPrefilledQuestions);
+
+                    var newPrefilled = oldAnswers.Select(x => new PrefilledQuestionView
+                    {
+                        Answer = x.Answer,
+                        Id = $"{interviewToMigrate.InterviewId:N}${x.QuestionId:N}",
+                        InterviewId = interviewToMigrate.InterviewId,
+                        QuestionId = x.QuestionId,
+                        QuestionText = x.QuestionText
+                    });
+
+                    prefilledQuestions.Store(newPrefilled);
+                    interviewToMigrate.AnswersOnPrefilledQuestions = null;
+                    dashboardItems.Store(interviewToMigrate);
+                }
+
+                if (interviewToMigrate.GpsLocation != null)
+                {
+                    var interviewGpsLocationView = serializer.Deserialize<InterviewGpsLocationView>(interviewToMigrate.GpsLocation);
+                    if (interviewGpsLocationView != null)
+                    {
+                        interviewToMigrate.LocationQuestionId = interviewGpsLocationView.PrefilledQuestionId;
+                        interviewToMigrate.LocationLongitude = interviewGpsLocationView.Coordinates?.Longitude;
+                        interviewToMigrate.LocationLatitude = interviewGpsLocationView.Coordinates?.Latitude;
+
+                        dashboardItems.Store(interviewToMigrate);
+                    }
                 }
             }
         }

@@ -490,7 +490,6 @@
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_InterviewOnClientCreated_event_and_one_of_prefilled_questions_is_GPS.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_InterviewSynchronized_event_and_one_of_prefilled_questions_is_GPS_with_answer_of_GeoPosition_type.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_InterviewSynchronized_event_and_one_of_prefilled_questions_is_GPS_with_answer_of_string_type.cs" />
-    <Compile Include="BoundedContexts\Interviewer\QuestionnaireKeyValueStorageTests\when_getting_questionnaire_document_by_id.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\Diagnostics\CheckNewVersionViewModelTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\Diagnostics\SendTabletInformationViewModelTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\InterviewDashboardItemViewModelTestsContext.cs" />
