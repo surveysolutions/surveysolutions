@@ -10,8 +10,11 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 using System;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
+using NSubstitute;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -112,6 +115,38 @@ namespace WB.Tests.Unit.TestFactories
                 Create.Service.VariableToUIStringService(),
                 rosterTitleSubstitutionService ?? Create.Fake.RosterTitleSubstitutionService());
 
+        public TextQuestionViewModel TextQuestionViewModel(
+            ILiteEventRegistry eventRegistry = null,
+            IQuestionnaireStorage questionnaireStorage = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            QuestionStateViewModel<TextQuestionAnswered> questionState = null,
+            AnsweringViewModel answering = null)
+        {
+            var statefulInterviewRepository = interviewRepository ?? Stub<IStatefulInterviewRepository>.WithNotEmptyValues;
+            var questionnaireRepository = questionnaireStorage ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues;
+            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid()));
+            var liteEventRegistry = eventRegistry ?? Create.Service.LiteEventRegistry();
+
+            var questionStateViewModel = questionState ??
+                                         this.QuestionState<TextQuestionAnswered>(liteEventRegistry: eventRegistry,
+                                             interviewRepository: statefulInterviewRepository, questionnaireStorage: questionnaireRepository);
+
+            return new TextQuestionViewModel(
+                liteEventRegistry,
+                principal,
+                questionnaireRepository,
+                statefulInterviewRepository,
+                questionStateViewModel,
+                new QuestionInstructionViewModel(questionnaireRepository, statefulInterviewRepository),
+                answering ?? AnsweringViewModel());
+        }
+
+        public AnsweringViewModel AnsweringViewModel(ICommandService commandService = null,
+            IUserInterfaceStateService userInterfaceStateService = null)
+            => new AnsweringViewModel(
+                commandService ?? Stub<ICommandService>.WithNotEmptyValues,
+                userInterfaceStateService ?? Stub<IUserInterfaceStateService>.WithNotEmptyValues);
+
         public ValidityViewModel ValidityViewModel(
             ILiteEventRegistry eventRegistry = null,
             IStatefulInterviewRepository interviewRepository = null,
@@ -135,5 +170,53 @@ namespace WB.Tests.Unit.TestFactories
         {
             return Mock.Of<QuestionInstructionViewModel>();
         }
+
+        public QuestionStateViewModel<T> QuestionState<T>(
+            ILiteEventRegistry liteEventRegistry = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IQuestionnaireStorage questionnaireStorage = null) where T : QuestionAnswered
+        {
+            var questionnaireRepository = questionnaireStorage ?? Stub<IQuestionnaireStorage>.WithNotEmptyValues;
+            liteEventRegistry = liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues;
+            interviewRepository = interviewRepository ?? Stub<IStatefulInterviewRepository>.WithNotEmptyValues;
+
+            var headerViewModel = new QuestionHeaderViewModel(interviewRepository: interviewRepository,
+                questionnaireRepository: questionnaireRepository,
+                enablementViewModel: Create.ViewModel.EnablementViewModel(
+                    interviewRepository: interviewRepository,
+                    eventRegistry: liteEventRegistry,
+                    questionnaireRepository: questionnaireRepository),
+                dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(eventRegistry: liteEventRegistry,
+                    interviewRepository: interviewRepository));
+
+            var validityViewModel = new ValidityViewModel(
+                liteEventRegistry: liteEventRegistry,
+                interviewRepository: interviewRepository, 
+                questionnaireRepository: questionnaireRepository,
+                mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
+                errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
+
+            var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
+                                    commandService: Stub<ICommandService>.WithNotEmptyValues,
+                                    principal: Stub<IPrincipal>.WithNotEmptyValues);
+
+            var answersRemovedNotifier = new AnswersRemovedNotifier(liteEventRegistry);
+
+            return new QuestionStateViewModel<T>(
+                liteEventRegistry: liteEventRegistry,
+                interviewRepository: interviewRepository,
+                validityViewModel: validityViewModel,
+                questionHeaderViewModel: headerViewModel,
+                enablementViewModel: Create.ViewModel.EnablementViewModel(
+                    interviewRepository: interviewRepository,
+                    eventRegistry: liteEventRegistry,
+                    questionnaireRepository: questionnaireRepository),
+                commentsViewModel: commentsViewModel,
+                answersRemovedNotifier: answersRemovedNotifier);
+        }
+
+        private EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository,
+            ILiteEventRegistry eventRegistry, IQuestionnaireStorage questionnaireRepository)
+            => new EnablementViewModel(interviewRepository, eventRegistry, questionnaireRepository);
     }
 }
