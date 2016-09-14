@@ -69,25 +69,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
            GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].RecordId.ShouldEqual("0");
 
         It should_first_record_has_one_question = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetQuestions().Count().ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetPlainAnswers().Count().ShouldEqual(1);
 
         It should_first_record_has_question_with_oneanswer = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetPlainAnswers().First().Length.ShouldEqual(1);
 
         It should_first_record_has_question_with_answer_equal_to_some_answer = () =>
-         GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetQuestions()[0].Answers[0].ShouldEqual(someAnswer);
+         GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetPlainAnswers().First().First().ShouldEqual(someAnswer);
 
         It should_second_record_id_equals_1 = () =>
            GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].RecordId.ShouldEqual("1");
 
         It should_second_record_has_one_question = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetQuestions().Count().ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetPlainAnswers().Count().ShouldEqual(1);
 
         It should_second_record_has_question_with_one_answer = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetQuestions()[0].Answers.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetPlainAnswers().First().Length.ShouldEqual(1);
 
         It should_second_record_has_question_with_answer_equal_to_some_answer = () =>
-         GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetQuestions()[0].Answers[0].ShouldEqual(someAnswer);
+         GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetPlainAnswers().First().First().ShouldEqual(someAnswer);
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {

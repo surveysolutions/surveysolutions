@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -13,11 +14,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.NumericIntegerQuestion(numericTriggerQuestionId),
-                Create.Entity.Roster(roster1Id, rosterSizeQuestionId: numericTriggerQuestionId, children: new []
+                Create.Entity.Roster(roster1Id, rosterSizeQuestionId: numericTriggerQuestionId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new []
                 {
                     Create.Entity.NumericIntegerQuestion(linkedToQuestionId)
                 }),
-                Create.Entity.Roster(roster2Id, rosterSizeQuestionId: numericTriggerQuestionId, children: new[]
+                Create.Entity.Roster(roster2Id, rosterSizeQuestionId: numericTriggerQuestionId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new[]
                 {
                     Create.Entity.MultyOptionsQuestion(linkedQuestionId, linkedToQuestionId: linkedToQuestionId)
                 }));

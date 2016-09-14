@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             rosterId = Guid.Parse("21111111111111111111111111111111");
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
             questionWhichDisablesRosterSizeQuestion = Guid.NewGuid();
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
                     Create.NumericIntegerQuestion(id: questionWhichDisablesRosterSizeQuestion, variable: "num_disable"),

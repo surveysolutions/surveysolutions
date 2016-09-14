@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Create.Option(value: "12", text: "Option 12"),
                 };
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Create.NumericIntegerQuestion(q1Id, variable: "q1"),
                     Create.Roster(rosterId, variable:"r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]

@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             rosterSizeQuestionId = Guid.Parse("22222222222222222222222222222222");
             linkedQuestionId = Guid.Parse("33222222222222222222222222222222");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Create.ListQuestion(id: rosterSizeQuestionId, variable: "txt"),
                 Create.Roster(id: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),

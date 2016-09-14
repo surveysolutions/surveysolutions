@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var groupId = Guid.Parse("22222222222222222222222222222222");
                 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocument(questionnaireId,
+                    Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                         Create.NumericIntegerQuestion(questionId, "q1"),
                         Create.Group(groupId, "g1", enablementCondition: "1/q1 == 1")
                     ),

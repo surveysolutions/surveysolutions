@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         };
 
         Because of = () => 
-            parsingResult = questionDataParser.TryParse(expectedDateTimeAnswer.ToString(ExportedQuestion.ExportDateTimeFormat), questionVarName, question, out parcedValue);
+            parsingResult = questionDataParser.TryParse(expectedDateTimeAnswer.ToString(ExportFormatSettings.ExportDateTimeFormat), questionVarName, question, out parcedValue);
 
         It should_result_be_equal_to_epexted = () =>
             parcedValue.ShouldEqual(expectedDateTimeAnswer);

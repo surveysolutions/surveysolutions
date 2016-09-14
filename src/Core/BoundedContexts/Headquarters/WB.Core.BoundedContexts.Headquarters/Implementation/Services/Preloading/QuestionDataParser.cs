@@ -22,8 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         {
             parsedValue =null;
             answer = answer?
-                .Replace(ExportedQuestion.MissingStringQuestionValue, string.Empty)
-                .Replace(ExportedQuestion.MissingNumericQuestionValue, string.Empty);
+                .Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
+                .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty);
 
             if (string.IsNullOrEmpty(answer))
                 return ValueParsingResult.ValueIsNullOrEmpty;

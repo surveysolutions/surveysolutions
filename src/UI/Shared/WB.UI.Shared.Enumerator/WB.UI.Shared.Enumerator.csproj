@@ -280,7 +280,7 @@
     <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
     <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
     <Compile Include="CustomControls\DynamicImageView.cs" />
-    <Compile Include="CustomControls\EnterTimeView.cs" />
+    <Compile Include="CustomControls\DatePickerDialogFragment.cs" />
     <Compile Include="CustomControls\FlowLayout.cs" />
     <Compile Include="CustomControls\HttpImageView.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
@@ -1134,6 +1134,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\text_editor_border.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\user_interaction_input_editor.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
