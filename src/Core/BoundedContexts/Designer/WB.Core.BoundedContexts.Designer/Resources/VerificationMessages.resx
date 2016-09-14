@@ -543,4 +543,7 @@
   <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
     <value>Roster size multi-select question should have limit</value>
   </data>
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>Questionnaire contains rosters that cumulative size is not allowed.</value>
+  </data>
 </root>

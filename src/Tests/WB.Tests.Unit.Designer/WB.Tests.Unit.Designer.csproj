@@ -432,6 +432,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_self_in_substitution.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_condition_expression_and_without_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_that_reference_in_substitutions_variable_from_deeper_level.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_that_have_roster_level_4_and_rosters_have_the_same_roster_size_numeric_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_that_is_used_in_title_substitutions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_single_question_that_marked_as_prefilled.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_static_text_title_that_references_not_existing_substitutions.cs" />
