@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             {
                 var contentIds = await this.synchronizationService.GetAttachmentContentsAsync(questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: cancellationToken);
+                    token: cancellationToken).ConfigureAwait(false);
 
                 foreach (var contentId in contentIds)
                 {
@@ -314,12 +314,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: cancellationToken);
+                    token: cancellationToken).ConfigureAwait(false);
 
                 this.questionnairesAccessor.StoreQuestionnaire(questionnaireIdentity, questionnaireApiView.QuestionnaireDocument, 
                     questionnaireApiView.AllowCensus, translationDtos);
 
-                await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
+                await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity).ConfigureAwait(false);
             }
         }
 
