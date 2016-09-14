@@ -16,7 +16,9 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public bool Equals(Identity x, Identity y)
         {
-            return x.Id == y.Id && Enumerable.SequenceEqual<decimal>(x.RosterVector, y.RosterVector);
+            return x.Id == y.Id &&
+                x.RosterVector.Length == y.RosterVector.Length &&
+                Enumerable.SequenceEqual<decimal>(x.RosterVector, y.RosterVector);
         }
 
         public int GetHashCode(Identity obj)
