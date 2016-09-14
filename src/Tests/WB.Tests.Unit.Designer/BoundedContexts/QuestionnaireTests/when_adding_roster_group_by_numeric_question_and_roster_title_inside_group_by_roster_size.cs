@@ -43,38 +43,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 isInteger : true
             ));
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
-
-            eventContext = new EventContext();
         };
 
         Because of = () =>
             questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null, rosterSizeQuestionId: rosterSizeQuestionId,
                 description: null, condition: null, hideIfDisabled: false, parentGroupId: parentGroupId, isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
 
-        It should_raise_GroupBecameARoster_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<GroupBecameARoster>()
-                .GroupId.ShouldEqual(groupId);
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .PublicKey.ShouldEqual(groupId);
 
-        It should_raise_RosterChanged_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
-                .GroupId.ShouldEqual(groupId);
-
-        It should_raise_RosterChanged_event_with_RosterSizeQuestionId_equal_to_specified_question_id = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
+        It should_contains_group_with_RosterSizeQuestionId_equal_to_specified_question_id = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
 
-        It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_specified_question_id = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
+        It should_contains_group_with_RosterTitleQuestionId_equal_to_specified_question_id = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .RosterTitleQuestionId.ShouldEqual(rosterTitleQuestionId);
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;

@@ -44,19 +44,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             // arrange
             Guid responsibleId = Guid.NewGuid();
+            var groupId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             string notEmptyNewTitle = "Some new title";
 
-            using (var eventContext = new EventContext())
-            {
-                // act
-                questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: responsibleId, title: notEmptyNewTitle, variableName: null, rosterSizeQuestionId: null,
-                    description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            // act
+            questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId: responsibleId, title: notEmptyNewTitle, variableName: null, rosterSizeQuestionId: null,
+                description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-                // assert
-                Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
-            }
+            // assert
+            Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Title, Is.EqualTo(notEmptyNewTitle));
         }
 
         [Test]

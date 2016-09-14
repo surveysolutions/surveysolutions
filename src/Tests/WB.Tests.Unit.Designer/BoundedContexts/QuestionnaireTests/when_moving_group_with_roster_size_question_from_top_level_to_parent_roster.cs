@@ -39,23 +39,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     FixedRosterTitles =  null,
                     RosterTitleQuestionId =null 
                 });
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () => questionnaire.MoveGroup(groupToMoveId, parentRosterId, 0, responsibleId);
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+        It should_contains_group = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_parentRosterId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>().GroupKey.ShouldEqual(parentRosterId);
+        It should_contains_group_with_parentRosterId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId).GetParent().PublicKey.ShouldEqual(parentRosterId);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
@@ -64,6 +57,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private static Guid rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid groupToMoveId = Guid.Parse("21111111111111111111111111111111");
         private static Guid nestedRosterId = Guid.Parse("31111111111111111111111111111111");
-        private static EventContext eventContext;
     }
 }

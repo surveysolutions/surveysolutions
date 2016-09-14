@@ -40,8 +40,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                 groupPublicKey: rootGroupId,
                 questionType : QuestionType.SingleOption
             ));
-
-            eventContext = new EventContext();
         };
 
         Because of = () => questionnaire.UpdateSingleOptionQuestion(
@@ -66,16 +64,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties());
 
-        private Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionChanged_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>().Answers.Count().ShouldEqual(0);
+        It should_contains_question_with_empty_answers = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId).Answers.Count().ShouldEqual(0);
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid parentQuestionId;
         private static Guid rootGroupId;
