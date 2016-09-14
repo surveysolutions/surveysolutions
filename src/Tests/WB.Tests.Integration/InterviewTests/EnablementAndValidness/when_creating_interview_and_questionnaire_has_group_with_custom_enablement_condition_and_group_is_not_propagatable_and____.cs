@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionnaireId = Guid.Parse("77778888000000000000000000000000");
                 var groupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, Create.Group(groupId, enablementCondition:"1 > 2"));
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, Create.Group(groupId, enablementCondition:"1 > 2"));
 
                 using (var eventContext = new EventContext())
                 {

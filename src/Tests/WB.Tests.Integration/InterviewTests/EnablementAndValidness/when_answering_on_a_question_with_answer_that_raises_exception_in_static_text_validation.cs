@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var staticTextB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
-                    Create.QuestionnaireDocument(children: new[]
+                    Create.QuestionnaireDocumentWithOneChapter(children: new[]
                     {
                         Create.Chapter(children: new IComposite[]
                         {

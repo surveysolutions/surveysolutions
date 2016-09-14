@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             linkedOption3Text = "linked option 3";
 
             var triggerQuestionId= Guid.NewGuid();
-            var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Create.Roster(id: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,

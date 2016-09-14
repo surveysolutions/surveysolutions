@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -22,23 +23,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.TextListQuestion(questionId: textListQuestionId),
+                Create.Entity.Roster(rosterId: rosterAId, rosterSizeQuestionId: textListQuestionId),
+                Create.Entity.Roster(rosterId: rosterBId, rosterSizeQuestionId: textListQuestionId),
+            }));
 
-                => _.HasQuestion(textListQuestionId) == true
-                    && _.GetQuestionType(textListQuestionId) == QuestionType.TextList
-                    && _.GetMaxRosterRowCount() == Constants.MaxRosterRowCount
-                    && _.ShouldQuestionSpecifyRosterSize(textListQuestionId) == true
-                    && _.GetListSizeForListQuestion(textListQuestionId) == 10
-                    && _.GetRosterGroupsByRosterSizeQuestion(textListQuestionId) == new[] { rosterAId, rosterBId }
-
-                    && _.HasGroup(rosterAId) == true
-                    && _.HasGroup(rosterBId) == true
-                    && _.GetAllUnderlyingQuestions(rosterAId) == new Guid[0]
-                    && _.GetAllUnderlyingQuestions(rosterAId) == new Guid[0]
-                );
-
-
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 

@@ -428,6 +428,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\TextQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\when_answering_and_answer_is_whitespace.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultiOptionQuestionAnswered_with_empty_array_received.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_linked_multi_question_on_second_level_referenced_on_third.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\InterviewEntityViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_group_title_has_substitution.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_validation_message_contains_substitution.cs" />
@@ -642,11 +643,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\AttachmentViewModelTests\when_initializing_entity_without_attachment.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\AttachmentViewModelTests\when_initializing_entity_with_image_attachment.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_GroupsDisabled_event_with_2_groups_and_one_of_that_group_is_set_to_be_hidden_if_disabled_and_another_is_not.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_GroupsEnabled_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_QuestionsDisabled_event_with_2_questions_and_one_of_that_question_is_set_to_be_hidden_if_disabled_and_anothe___.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_StaticTextsDisabled_event.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_StaticTextsEnabled_event.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_QuestionsEnabled_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_initializing_active_group_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
@@ -744,7 +741,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_with_59_items_and_this_questions_is_roster_size.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_with_199_items_and_this_questions_is_roster_size.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_creating_list_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\QuestionHeaderViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_substitution_title_changed.cs" />

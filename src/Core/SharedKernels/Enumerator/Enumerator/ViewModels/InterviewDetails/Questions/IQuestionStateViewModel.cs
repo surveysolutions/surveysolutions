@@ -7,6 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         QuestionHeaderViewModel Header { get; }
         ValidityViewModel Validity { get; }
+        EnablementViewModel Enablement { get; }
         CommentsViewModel Comments { get; }
     }
 }

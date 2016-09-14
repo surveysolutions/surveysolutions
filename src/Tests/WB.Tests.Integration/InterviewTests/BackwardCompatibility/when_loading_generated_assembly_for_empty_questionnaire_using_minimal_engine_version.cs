@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.InterviewTests.BackwardCompatibility
         Because of = () => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
             Setup.MockedServiceLocator();
-            QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocument();
+            QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
             Assembly assembly = CompileAssemblyUsingQuestionnaireEngine(questionnaireDocument);
 
             var questionnaireTopLevelTypeInfo = assembly.GetTypes().Single(type => type.Name == "QuestionnaireTopLevel").GetTypeInfo();

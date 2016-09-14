@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
-            var isSupervisorRequired = !request.SupervisorId.HasValue;
+            var isSupervisorRequired = !request.WasResponsibleProvided && !request.SupervisorId.HasValue;
 
             var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
 
@@ -152,6 +152,8 @@ namespace WB.UI.Headquarters.Controllers
             public Guid? SupervisorId { get; set; }
 
             public PreloadedContentType PreloadingType { get; set; }
+
+            public bool WasResponsibleProvided { get; set; }
         }
 
         public class InterviewImportStatusApiView

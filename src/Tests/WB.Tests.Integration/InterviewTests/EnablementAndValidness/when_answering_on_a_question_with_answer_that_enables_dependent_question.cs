@@ -16,7 +16,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
             var dependentQuestionId = Guid.Parse("22222222222222222222222222222222");
 
-            var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocument(children: new IComposite[]
+            var interview = SetupInterview(questionnaireDocument: Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
                 Create.NumericIntegerQuestion(dependentQuestionId, enablementCondition: "q1 > 0"),

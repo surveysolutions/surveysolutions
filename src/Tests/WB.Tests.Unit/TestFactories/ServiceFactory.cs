@@ -35,6 +35,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -199,7 +200,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
             => new PreloadedDataService(
-                new ExportViewFactory(new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
+                new ExportViewFactory(new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor(), new ExportQuestionService())
                     .CreateQuestionnaireExportStructure(questionnaire, 1),
                 new QuestionnaireRosterStructureFactory()
                     .CreateQuestionnaireRosterStructure(questionnaire, 1),

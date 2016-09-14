@@ -20,14 +20,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
+            var sectionId = Guid.Parse("FFFFFFFF0000000000000000DDDDDDDD");
             rosterGroupId = Guid.Parse("11111111111111111111111111111111");
-
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
 
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
 
-                => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
+                => _.GetAllSections() == new[] { sectionId }
+                && _.GetChildEntityIds(sectionId) == new[] { questionWhichIncreasesRosterSizeId }
+
+                && _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
                 && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
                 && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
                 && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true

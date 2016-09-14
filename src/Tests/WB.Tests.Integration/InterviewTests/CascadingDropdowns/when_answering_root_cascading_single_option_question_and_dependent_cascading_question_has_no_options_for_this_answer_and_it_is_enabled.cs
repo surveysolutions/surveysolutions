@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 Setup.MockedServiceLocator();
 
-                var questionnaire = Create.QuestionnaireDocument(questionnaireId, new[]
+                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, new[]
                 {
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {

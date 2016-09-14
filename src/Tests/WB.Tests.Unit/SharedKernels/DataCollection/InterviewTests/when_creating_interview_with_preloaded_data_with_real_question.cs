@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -35,11 +36,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
             answersTime = new DateTime(2013, 09, 01);
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                => _.GetQuestionType(prefilledQuestionId) == QuestionType.Numeric
-                    && _.HasQuestion(prefilledQuestionId) == true
-                    && _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterGroup }
-                    && _.GetFixedRosterTitles(fixedRosterGroup) == new FixedRosterTitle[0]);
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericQuestion(questionId: prefilledQuestionId),
+                Create.Entity.FixedRoster(rosterId: fixedRosterGroup, fixedTitles: new string[]{}),
+            }));
+
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             eventContext = new EventContext();
 

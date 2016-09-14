@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -29,15 +30,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
             answersTime = new DateTime(2013, 09, 01);
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                => _.GetQuestionType(prefilledQuestionId) == QuestionType.Numeric
-                   && _.HasQuestion(prefilledQuestionId) == true
-                   && _.IsQuestionInteger(prefilledQuestionId) == true
-                   && _.GetRosterGroupsByRosterSizeQuestion(prefilledQuestionId) == new Guid[] { rosterGroupId }
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: prefilledQuestionId),
 
-                   && _.HasGroup(rosterGroupId) == true
-                   && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                   && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] {rosterGroupId});
+                Create.Entity.Roster(rosterGroupId, rosterSizeQuestionId: prefilledQuestionId),
+            }));
+
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             eventContext = new EventContext();
 

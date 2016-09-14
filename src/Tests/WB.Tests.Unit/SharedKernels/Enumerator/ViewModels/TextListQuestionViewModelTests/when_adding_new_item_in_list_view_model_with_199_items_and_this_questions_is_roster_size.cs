@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    internal class when_adding_new_item_in_list_view_model_with_59_items_and_this_questions_is_roster_size : TextListQuestionViewModelTestContext
+    internal class when_adding_new_item_in_list_view_model_with_199_items_and_this_questions_is_roster_size : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 => _.QuestionnaireId == questionnaireId
                    && _.GetTextListAnswer(questionIdentity) == textListAnswer);
 
-            for (int i = 1; i <= 59; i++)
+            for (int i = 1; i <= 199; i++)
             {
                 savedAnswers[i-1] = new Tuple<decimal, string>(i, $"Answer {i}");
             }
@@ -58,14 +58,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             textListAddNewItemViewModel.AddNewItemCommand.Execute();
         };
 
-        It should_create_list_with_60_answers = () =>
-            answerViewModels.Count.ShouldEqual(60);
+        It should_create_list_with_200_answers = () =>
+            answerViewModels.Count.ShouldEqual(200);
 
         It should_add_item_with_Title_equals_trimmed_newListItemTitle = () =>
             answerViewModels.Last().Title.ShouldEqual(newListItemTitle.Trim());
 
-        It should_add_new_item_with_Value_equals_60 = () =>
-            answerViewModels.Last().Value.ShouldEqual(60m);
+        It should_add_new_item_with_Value_equals_200 = () =>
+            answerViewModels.Last().Value.ShouldEqual(200m);
 
         It should_not_contain_add_new_item_view_model = () =>
             listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         private static readonly string questionnaireId = "Questionnaire Id";
         private static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
 
-        private static readonly Tuple<decimal, string>[] savedAnswers = new Tuple<decimal, string>[59];
+        private static readonly Tuple<decimal, string>[] savedAnswers = new Tuple<decimal, string>[199];
 
         private static readonly string newListItemTitle = "   Hello World!      ";
         private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();

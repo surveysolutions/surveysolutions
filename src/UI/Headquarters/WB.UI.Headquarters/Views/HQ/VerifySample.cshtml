@@ -16,7 +16,7 @@
             var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
 
             var $processUrl = '@Url.RouteUrl("Default", new {httproute = "", controller = "HQ", action = "VerifySample" , id=""})';
-            var model = new Supervisor.VM.ImportInterviews('@Model.Id', '@Model.QuestionnaireId', @Model.Version, '@Model.PreloadedContentType', $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl, $processUrl);
+            var model = new Supervisor.VM.ImportInterviews('@Model.Id', '@Model.QuestionnaireId', @Model.Version, '@Model.PreloadedContentType', '@Model.WasSupervsorProvided', $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl, $processUrl);
 
             model.load();
             ko.applyBindings(model);
@@ -96,9 +96,9 @@
                         </legend>
                     </fieldset>
                     <div class="form-group" data-bind="visible: canImportInterviews">
-                        <div class="form-group">
-                            <label class="control-label col-sm-4">@Common.Responsible</label>
-                            <div class="col-sm-8">
+                        <fieldset>
+                            <label class="col-sm-2">@Common.Responsible</label>
+                            <div class="col-sm-9">
                                 @if (!Model.WasSupervsorProvided)
                                 {
                                     <div class="input-group">
@@ -114,12 +114,13 @@
                                     <h4 class="list-group-item-heading">@BatchUpload.ResponsibleSupervisorWillBeAssigned</h4>
                                 }
                             </div>
-                        </div>
+                        </fieldset>
                         <div class="col-sm-offset-4 col-sm-8">
                             <button class="btn btn-large btn-primary" type="submit" data-bind="click: importInterviews, @if (!Model.WasSupervsorProvided){<text>enable: IsSupervisorSelected</text>}">
                                 @Common.Create
                             </button>
                         </div>
+                    </div>
                     </div>
                 </div>
                 <fieldset data-bind="visible: importCompleted">
@@ -151,6 +152,5 @@
                     </li>
                 </ul>
             </div>
-        </div>
     }
 </div>
