@@ -8,6 +8,7 @@ using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -84,16 +85,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             Mock.Get(synchronizationService).Verify(s => s.GetAttachmentContentAsync("5", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()), Times.Once());
 
         It should_store_attachment_content_for_id_1 = () =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "1")), Times.Once());
+            Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "1")), Times.Once());
 
         It should_store_attachment_content_for_id_2 = () =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "2")), Times.Never());
+            Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "2")), Times.Never());
 
         It should_store_attachment_content_for_id_3 = () =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "3")), Times.Never());
+            Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "3")), Times.Never());
 
         It should_store_attachment_content_for_id_5 = () =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "5")), Times.Once());
+            Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "5")), Times.Once());
 
 
         static SynchronizationProcess viewModel;

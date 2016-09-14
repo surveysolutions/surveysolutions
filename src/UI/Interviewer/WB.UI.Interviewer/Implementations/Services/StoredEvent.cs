@@ -1,6 +1,6 @@
 using System;
 using Newtonsoft.Json;
-using SQLite.Net.Attributes;
+using SQLite;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {

@@ -37,7 +37,7 @@ namespace WB.UI.Interviewer.Activities
                 double newValue;
                 if (double.TryParse(e.NewValue.ToString(), out newValue))
                 {
-                    await interviewerSettings.SetGpsDesiredAccuracy(newValue);
+                    interviewerSettings.SetGpsDesiredAccuracy(newValue);
                 }
 
                 this.UpdateSettings();
@@ -45,32 +45,32 @@ namespace WB.UI.Interviewer.Activities
 
             this.FindPreference(SettingsNames.Endpoint).PreferenceChange += async (sender, e) =>
             {
-                await interviewerSettings.SetEndpointAsync(e.NewValue.ToString());
+                interviewerSettings.SetEndpoint(e.NewValue.ToString());
                 this.UpdateSettings();
             };
             this.FindPreference(SettingsNames.EventChunkSize).PreferenceChange += async (sender, e) =>
             {
-                await interviewerSettings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.EventChunkSize));
+                interviewerSettings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.EventChunkSize));
                 this.UpdateSettings();
             };
             this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += async (sender, e) =>
             {
-                await interviewerSettings.SetHttpResponseTimeoutAsync(ParseIntegerSettingsValue(e.NewValue, (int)interviewerSettings.Timeout.TotalSeconds));
+                interviewerSettings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue, (int)interviewerSettings.Timeout.TotalSeconds));
                 this.UpdateSettings();
             };
             this.FindPreference(SettingsNames.BufferSize).PreferenceChange += async (sender, e) =>
             {
-                await interviewerSettings.SetCommunicationBufferSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.BufferSize));
+                interviewerSettings.SetCommunicationBufferSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.BufferSize));
                 this.UpdateSettings();
             };
             this.FindPreference(SettingsNames.GpsReceiveTimeoutSec).PreferenceChange += async (sender, e) =>
             {
-                await interviewerSettings.SetGpsResponseTimeoutAsync(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.GpsReceiveTimeoutSec));
+                interviewerSettings.SetGpsResponseTimeout(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.GpsReceiveTimeoutSec));
                 this.UpdateSettings();
             };
             this.FindPreference(SettingsNames.VibrateOnError).PreferenceChange += async (sender, e) =>
             {
-                await interviewerSettings.SetVibrateOnErrorAsync(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.VibrateOnError));
+                interviewerSettings.SetVibrateOnError(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.VibrateOnError));
                 this.UpdateSettings();
             };
             this.UpdateSettings();

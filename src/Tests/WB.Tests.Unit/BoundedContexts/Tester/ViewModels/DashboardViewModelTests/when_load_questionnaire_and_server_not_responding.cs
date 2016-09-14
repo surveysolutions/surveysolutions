@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             Times.Once);
 
         It should_not_be_questionnaire_stored_to_local_storage = () => mockOfQuestionnaireImportService.Verify(
-            _ => _.ImportQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>(), new TranslationDto[0]), 
+            _ => _.ImportQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>(), new TranslationDto[0]), 
             Times.Never);
 
         It should_be_executed_CreateInterviewOnClientCommand = () => mockOfCommandService.Verify(

@@ -1,4 +1,4 @@
-﻿using SQLite.Net.Attributes;
+﻿using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int HttpResponseTimeoutInSec { get; set; }
         public int GpsResponseTimeoutInSec { get; set; }
         public int CommunicationBufferSize { get; set; }
-        public double? GpsDesiredAccuracy { get; set; }        
+        public double? GpsDesiredAccuracy { get; set; }
         public int? EventChunkSize { get; set; }
         public bool? VibrateOnError { get; set; }
     }
