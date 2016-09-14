@@ -11,14 +11,14 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_roster_that_have_roster_level_more_than_4_and_rosters_have_the_same_roster_size_question : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_roster_that_have_roster_level_4_and_rosters_have_the_same_roster_size_numeric_question : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
             var rosterSizeQuestionId = Guid.Parse("20000000000000000000000000000000");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new TextListQuestion() {PublicKey = rosterSizeQuestionId, MaxAnswerCount = 5, StataExportCaption = "var", QuestionType = QuestionType.TextList,},
+                new NumericQuestion() {PublicKey = rosterSizeQuestionId, IsInteger = true, StataExportCaption = "var"},
                 new Group()
                 {
                     PublicKey = Guid.NewGuid(),
@@ -51,16 +51,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                             RosterSizeQuestionId = rosterSizeQuestionId,
                                             Children = new List<IComposite>()
                                             {
-                                                new Group()
-                                                {
-                                                    PublicKey = rosterGroupId,
-                                                    IsRoster = true,
-                                                    VariableName = "e",
-                                                    RosterSizeQuestionId = rosterSizeQuestionId,
-                                                    Children = new List<IComposite>()
-                                                    {
-                                                    }
-                                                }
                                             }
                                         }
                                     }
@@ -80,14 +70,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_first_error_with_code__WB0055 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0055");
-
-        It should_return_message_reference_with_type_Roster = () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
-
-        It should_return_message_reference_with_id_of_rosterGroupId = () =>
-            verificationMessages.Single().References.First().Id.ShouldEqual(rosterGroupId);
+        It should_return_first_error_with_code__WB0261 = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0261");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

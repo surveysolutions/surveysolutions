@@ -1340,5 +1340,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0260_GroupTitleIsTooLong", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire contains rosters that cumulative size is not allowed..
+        /// </summary>
+        internal static string WB0261_RosterStructureTooExplosive {
+            get {
+                return ResourceManager.GetString("WB0261_RosterStructureTooExplosive", resourceCulture);
+            }
+        }
     }
 }
