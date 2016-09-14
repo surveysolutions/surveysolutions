@@ -67,7 +67,7 @@ namespace WB.UI.Interviewer.Activities
             {
                 var questionnaire = questionnaireDocuments.GetById(questionnaireView.Id);
 
-                var questionsWithLongOptionsList = questionnaire.Document.Find<SingleQuestion>(
+                var questionsWithLongOptionsList = questionnaire.QuestionnaireDocument.Find<SingleQuestion>(
                     x => x.CascadeFromQuestionId.HasValue || (x.IsFilteredCombobox ?? false)).ToList();
 
                 foreach (var question in questionsWithLongOptionsList)

@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
             
             this.logger = logger;
+            this.connection.CreateTable<TEntity>();
         }
 
         public SqlitePlainStorage(SQLiteConnection storage, ILogger logger)

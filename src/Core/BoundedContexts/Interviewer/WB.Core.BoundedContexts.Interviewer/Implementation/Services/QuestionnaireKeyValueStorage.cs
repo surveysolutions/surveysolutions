@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
            var currentQuestionnaireDocument = this.questionnaireDocumentViewRepository.GetById(id);
 
-            return currentQuestionnaireDocument?.Document;
+            return currentQuestionnaireDocument?.QuestionnaireDocument;
         }
 
         public void Remove(string id)
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public void Store(QuestionnaireDocument view, string id)
         {
             this.questionnaireDocumentViewRepository.Store(new QuestionnaireDocumentView{
-                Document = view,
+                QuestionnaireDocument = view,
                 Id = id
             });
         }
