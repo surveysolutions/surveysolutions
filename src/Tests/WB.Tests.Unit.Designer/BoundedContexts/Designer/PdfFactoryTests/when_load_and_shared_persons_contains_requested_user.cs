@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -25,8 +26,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
             var modificationStatisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser {Date = DateTime.Now};
 
             var accountsDocumentReader = Mock.Of<IReadSideRepositoryReader<AccountDocument>>(x => x.GetById(userId.FormatGuid()) == accountDocument);
-            var questionnaireRepository = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
-            var sharedPersonsRepository = Mock.Of<IReadSideKeyValueStorage<QuestionnaireSharedPersons>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireSharedPersons);
+            var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
+            var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireSharedPersons);
             var questionnaireChangeHistoryStorage = new TestInMemoryWriter<QuestionnaireChangeRecord>();
             questionnaireChangeHistoryStorage.Store(
                 new QuestionnaireChangeRecord
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
         };
 
         Because of = () =>
-            view = factory.Load(questionnaireId, userId, userName);
+            view = factory.Load(questionnaireId.FormatGuid(), userId, userName);
 
         It should_shared_persons_be_empty = () =>
             view.SharedPersons.ShouldBeEmpty();

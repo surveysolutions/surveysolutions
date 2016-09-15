@@ -5,7 +5,9 @@ using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Extensions;
 using WB.UI.Shared.Web.Membership;
@@ -16,11 +18,11 @@ namespace WB.UI.Designer.Code.Implementation
     {
         private readonly IMembershipUserService userHelper;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
+        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
 
         public CommandInflater(IMembershipUserService userHelper,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons)
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersons)
         {
             this.userHelper = userHelper;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
@@ -65,7 +67,7 @@ namespace WB.UI.Designer.Code.Implementation
             if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return questionnaire;
 
-            var sharedPersons = this.sharedPersons.GetById(id);
+            var sharedPersons = this.sharedPersons.GetById(questionnaire.Id);
             if (sharedPersons == null || sharedPersons.SharedPersons.All(x => x.Id != this.userHelper.WebUser.UserId))
             {
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");

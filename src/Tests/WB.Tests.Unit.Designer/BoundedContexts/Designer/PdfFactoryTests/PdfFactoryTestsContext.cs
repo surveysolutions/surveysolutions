@@ -13,19 +13,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
     public class PdfFactoryTestsContext
     {
         public static PdfFactory CreateFactory(
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null,
             IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage = null,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage = null,
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage = null,
             PdfSettings pdfSettings = null)
         {
             return new PdfFactory(
-                questionnaireStorage: questionnaireStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(),
+                questionnaireStorage: questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
                 questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord>>(),
                 accountsDocumentReader: accountsDocumentReader ?? Mock.Of<IReadSideRepositoryReader<AccountDocument>>(),
                 questionnaireListViewItemStorage: questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
-                sharedPersonsStorage: sharedPersonsStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSharedPersons>>(),
+                sharedPersonsStorage: sharedPersonsStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
                 pdfSettings: pdfSettings ?? new PdfSettings(0, 0, 0, 0, 0, 0, 0));
         }
     }

@@ -1,5 +1,5 @@
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
@@ -10,15 +10,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 
     public class QuestionnaireSharedPersonsFactory : IQuestionnaireSharedPersonsFactory
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> _repository;
-        public QuestionnaireSharedPersonsFactory(IReadSideKeyValueStorage<QuestionnaireSharedPersons> repository)
+        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> _repository;
+        public QuestionnaireSharedPersonsFactory(IPlainKeyValueStorage<QuestionnaireSharedPersons> repository)
         {
             this._repository = repository;
         }
 
         public QuestionnaireSharedPersons Load(QuestionnaireSharedPersonsInputModel input)
         {
-            return _repository.GetById(input.QuestionnaireId);
+            return _repository.GetById(input.QuestionnaireId.FormatGuid());
         }
     }
 }
