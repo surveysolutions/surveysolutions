@@ -26,7 +26,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                 Create.Chapter(chapterId: chapterId, children: new List<IComposite>
                 {
                     Create.NumericIntegerQuestion(id: level1QuestionId, variable: stataExportCaption)
-                    
                 }));
 
             command = new PasteInto(
@@ -43,10 +42,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         Because of = () => 
             questionnaire.PasteInto(command);
 
-        It should_clone_MaxAnswerCount_value = () =>
+        It should_clone_group = () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).ShouldNotBeNull();
 
-        It should_raise_QuestionCloned_event_with_QuestionId_specified = () =>
+        It should_clone_group_with_QuestionId_specified = () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(targetId)
                 .PublicKey.ShouldEqual(targetId);
         
