@@ -2,28 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
     [DebuggerDisplay("{Title} | public: {IsPublic}, shared with {SharedPersons.Count} persons")]
-    public class QuestionnaireListViewItem : IView
+    public class QuestionnaireListViewItem
     {
-        public QuestionnaireListViewItem()
-        {
-            this.SharedPersons =new HashSet<Guid>();
-        }
-
-        public QuestionnaireListViewItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic) : this()
-        {
-            this.PublicId = id;
-            this.Title = title;
-            this.CreationDate = creationDate;
-            this.LastEntryDate = lastEntryDate;
-            this.CreatedBy = createdBy;
-            this.IsPublic = isPublic;
-        }
-
         public virtual DateTime CreationDate { get; set; }
 
         public virtual string QuestionnaireId { get; set; }
@@ -52,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual bool IsPublic { get; set; }
 
-        public virtual ISet<Guid> SharedPersons { get; set; }
+        public virtual ISet<Guid> SharedPersons { get; set; } = new HashSet<Guid>();
 
         public virtual string Owner { get; set; }
     }
