@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         bool IsAuthenticated { get; }
         IUserIdentity CurrentUserIdentity { get; }
-        Task<bool> SignInAsync(string userName, string password, bool staySignedIn);
+        bool SignIn(string userName, string password, bool staySignedIn);
         void SignOut();
     }
 }

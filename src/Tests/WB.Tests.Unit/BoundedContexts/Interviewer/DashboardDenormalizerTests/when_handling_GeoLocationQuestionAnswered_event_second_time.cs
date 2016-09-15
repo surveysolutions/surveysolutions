@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -24,23 +25,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
             dashboardItem = Create.Entity.InterviewView();
             dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
-            dashboardItem.GpsLocation = new InterviewGpsLocationView
-            {
-              PrefilledQuestionId  = gpsQuestionId
-            };
+            dashboardItem.LocationQuestionId = gpsQuestionId;
 
             @event = Create.Event.GeoLocationQuestionAnswered(Create.Entity.Identity("11111111111111111111111111111111", RosterVector.Empty), answerLatitude, answerLongitude).ToPublishedEvent();
 
-            var storeAsyncTask = new Task(()=> {});
-            storeAsyncTask.Start();
-
-            var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer => 
+            var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer => 
             writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
-                .Setup(storage => storage.StoreAsync(it.IsAny<InterviewView>()))
-                .Callback<InterviewView>((view) => dashboardItem = view)
-                .Returns(storeAsyncTask);
+                .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
+                .Callback<InterviewView>((view) => dashboardItem = view);
 
             var questionnaire = Mock.Of<IQuestionnaire>(q => q.IsPrefilled(gpsQuestionId) == true);
             var plainQuestionnaireRepository = Mock.Of<IQuestionnaireStorage>(r =>
@@ -55,10 +49,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             denormalizer.Handle(@event);
 
         It should_set_GPS_location_latitude_to_answered_value = () =>
-            dashboardItem.GpsLocation.Coordinates.Latitude.ShouldEqual(answerLatitude);
+            dashboardItem.LocationLatitude.ShouldEqual(answerLatitude);
 
         It should_set_GPS_location_longitude_to_answered_value = () =>
-            dashboardItem.GpsLocation.Coordinates.Longitude.ShouldEqual(answerLongitude);
+            dashboardItem.LocationLongitude.ShouldEqual(answerLongitude);
 
         private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<GeoLocationQuestionAnswered> @event;

@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerPrincipal : IInterviewerPrincipal
     {
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
 
         public bool IsAuthenticated => this.currentUserIdentity != null;
 
@@ -18,15 +18,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public IInterviewerUserIdentity CurrentUserIdentity => this.currentUserIdentity;
         IUserIdentity IPrincipal.CurrentUserIdentity => this.currentUserIdentity;
 
-        public InterviewerPrincipal(IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
+        public InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage)
         {
             this.interviewersPlainStorage = interviewersPlainStorage;
         }
 
-        public async Task<bool> SignInAsync(string userName, string password, bool staySignedIn)
+        public bool SignIn(string userName, string password, bool staySignedIn)
         {
-            var localInterviewers = await this.interviewersPlainStorage
-                .WhereAsync(interviewer => interviewer.Password == password); // db query
+            var localInterviewers = this.interviewersPlainStorage
+                .Where(interviewer => interviewer.Password == password); // db query
 
             var localInterviewer = localInterviewers // memory query
                 .FirstOrDefault(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase));

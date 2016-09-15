@@ -47,12 +47,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IEnumeratorSettings settings;
         readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMessenger messenger;
-        private ICompositeCollectionInflationService compositeCollectionInflationService;
+        private readonly ICompositeCollectionInflationService compositeCollectionInflationService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
-
-        private readonly object itemsListUpdateOnUILock = new object();
 
         private NavigationState navigationState;
 
@@ -135,8 +133,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    var childItem = this.Items.OfType<GroupViewModel>()
-                        .FirstOrDefault(x => x.Identity.Equals(scrollTo)) as ICompositeEntity;
+                    ICompositeEntity childItem = this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
+
+                    if (childItem == null)
+                        childItem = this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x. Identity.Equals(scrollTo));
+
+                    if (childItem == null)
+                        childItem = this.Items.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
                     anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
                 });

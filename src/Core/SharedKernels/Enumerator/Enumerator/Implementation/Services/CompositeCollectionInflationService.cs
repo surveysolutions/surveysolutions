@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     var questionCompositeCollection = new CompositeCollection<ICompositeEntity>();
 
                     if (compositeItem.QuestionState.Enablement.Enabled)
-                        FillCollection(compositeItem, questionCompositeCollection);
+                        AddCompositeItemsOfQuestionToCollection(compositeItem, questionCompositeCollection);
 
                     compositeItem.Answering.PropertyChanged += (sender, e) =>
                     {
@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return compositeCollection;
         }
 
-        private static void FillCollection(ICompositeQuestion compositeItem, CompositeCollection<ICompositeEntity> collection)
+        private static void AddCompositeItemsOfQuestionToCollection(ICompositeQuestion compositeItem, CompositeCollection<ICompositeEntity> collection)
         {
             if (compositeItem.InstructionViewModel.HasInstructions)
                 collection.Add(compositeItem.InstructionViewModel);
@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var isViewModelInCollection = collection.Contains(compositeItem);
 
             if (compositeItem.QuestionState.Enablement.Enabled && !isViewModelInCollection)
-                FillCollection(compositeItem, collection);
+                AddCompositeItemsOfQuestionToCollection(compositeItem, collection);
 
             if (!compositeItem.QuestionState.Enablement.Enabled && isViewModelInCollection)
                 collection.Clear();

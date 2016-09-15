@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -16,11 +17,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
-            var questionnaire = Mock.Of<IQuestionnaire>
-                (_
-                    => _.HasQuestion(questionId) == true &&
-                        _.GetQuestionType(questionId) == QuestionType.Numeric
-                );
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: questionId),
+            }));
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 

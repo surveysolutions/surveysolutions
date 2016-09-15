@@ -65,40 +65,40 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
            GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].RecordId.ShouldEqual("0");
 
         It should_first_record_has_one_question = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetQuestions().Count().ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetPlainAnswers().Count().ShouldEqual(1);
 
         It should_first_record_has_question_with_one_answer = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetPlainAnswers().First().Length.ShouldEqual(1);
 
         It should_first_record_has_question_with_answer_equal_to_some_answer = () =>
-         GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetQuestions()[0].Answers[0].ShouldEqual(someAnswer);
+         GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].GetPlainAnswers().First().First().ShouldEqual(someAnswer);
 
         It should_second_record_id_equals_1 = () =>
            GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].RecordId.ShouldEqual("1");
 
         It should_second_record_has_one_question = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetQuestions().Count().ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetPlainAnswers().Count().ShouldEqual(1);
 
         It should_second_record_has_question_with_one_answer = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetQuestions()[0].Answers.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetPlainAnswers().First().Length.ShouldEqual(1);
 
         It should_second_record_has_question_with_answer_equal_to_some_answer = () =>
-         GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetQuestions()[0].Answers[0].ShouldEqual(someAnswer);
+         GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].GetPlainAnswers().First().First().ShouldEqual(someAnswer);
 
         It should_have_one_question_on_top_level = () =>
-            GetLevel(result, new Guid[0]).Records[0].GetQuestions().Count().ShouldEqual(1);
+            GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().Count().ShouldEqual(1);
 
         It should_have_five_columns_for_question_on_top_level = () =>
-            GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(5);
+            GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().Length.ShouldEqual(5);
 
         It should_have_first_column_with_value_a1_for_question_on_top_level = () =>
-            GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers[0].ShouldEqual("a1");
+            GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().First().ShouldEqual("a1");
 
         It should_have_second_column_with_value_a1_for_question_on_top_level = () =>
-            GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers[1].ShouldEqual("a2");
+            GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().Second().ShouldEqual("a2");
 
         It should_have_all_other_coulmns_with_missing_values_for_question_on_top_level = () =>
-           GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers.Skip(2).Any(a => a != ExportedQuestion.MissingStringQuestionValue).ShouldBeFalse();
+           GetLevel(result, new Guid[0]).Records[0].GetPlainAnswers().First().Skip(2).Any(a => a != ExportFormatSettings.MissingStringQuestionValue).ShouldBeFalse();
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {

@@ -8,6 +8,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.FileSystem;
@@ -21,9 +23,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
     internal class ExportViewFactoryTestsContext
     {
         protected static ExportViewFactory CreateExportViewFactory(
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory = null)
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory = null,
+            IExportQuestionService exportQuestionService = null)
         {
-            return new ExportViewFactory(questionnaireRosterStructureFactory ?? new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
+            return new ExportViewFactory(
+                questionnaireRosterStructureFactory ?? new QuestionnaireRosterStructureFactory(),
+                Mock.Of<IFileSystemAccessor>(),
+                exportQuestionService ?? new ExportQuestionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

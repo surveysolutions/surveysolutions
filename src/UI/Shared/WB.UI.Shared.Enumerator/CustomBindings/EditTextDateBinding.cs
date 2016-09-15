@@ -33,7 +33,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
             var activity = topActivity.Activity;
 
-            var dialog = new DatePickerDialogFragment(this.Target.Context, parsedDate, this.OnDateSet);
+            var dialog = new DatePickerDialogFragment(parsedDate, this.OnDateSet);
             dialog.Show(activity.FragmentManager, "date");
         }
 

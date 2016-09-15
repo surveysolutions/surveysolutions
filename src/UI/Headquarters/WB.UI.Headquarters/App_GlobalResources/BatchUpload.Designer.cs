@@ -457,7 +457,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Responsible supervisor will be assigned automatically.
+        ///   Looks up a localized string similar to Responsible will be assigned automatically.
         /// </summary>
         internal static string ResponsibleSupervisorWillBeAssigned {
             get {

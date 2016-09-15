@@ -565,8 +565,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                         var row = levelData.Content[rowIndex];
                         var answer = row[columnIndex];
                         answer = answer?
-                            .Replace(ExportedQuestion.MissingStringQuestionValue, string.Empty)
-                            .Replace(ExportedQuestion.MissingNumericQuestionValue, string.Empty);
+                            .Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
+                            .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty);
                         if (string.IsNullOrEmpty(answer))
                             continue;
 

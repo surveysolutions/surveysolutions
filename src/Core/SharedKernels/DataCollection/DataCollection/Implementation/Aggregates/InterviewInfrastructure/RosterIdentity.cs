@@ -24,15 +24,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public bool Equals(RosterIdentity x, RosterIdentity y)
         {
-            return x.GroupId == y.GroupId && x.OuterRosterVector.SequenceEqual(y.OuterRosterVector) &&
-                x.RosterInstanceId == y.RosterInstanceId && ((!x.SortIndex.HasValue && !y.SortIndex.HasValue) || x.SortIndex == y.SortIndex);
+            if (object.ReferenceEquals(x, y))
+            {
+                return true;
+            }
+
+            return x.GroupId == y.GroupId &&
+                   x.RosterInstanceId == y.RosterInstanceId && 
+                   ((!x.SortIndex.HasValue && !y.SortIndex.HasValue) || x.SortIndex == y.SortIndex) &&
+                   x.OuterRosterVector.Length == y.OuterRosterVector.Length &&
+                   x.OuterRosterVector.SequenceEqual(y.OuterRosterVector);
         }
 
         public int GetHashCode(RosterIdentity obj)
         {
             int hashOfOuterRosterVector = obj.OuterRosterVector.Aggregate(0, (current, el) => current ^ el.GetHashCode());
-
-            return obj.GroupId.GetHashCode() ^ obj.RosterInstanceId.GetHashCode() ^ (obj.SortIndex ?? 0) ^ hashOfOuterRosterVector;
+            var hashcode =  obj.GroupId.GetHashCode() ^ obj.RosterInstanceId.GetHashCode() ^ (obj.SortIndex ?? 0) ^ hashOfOuterRosterVector;
+            return hashcode;
         }
     }
 }

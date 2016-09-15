@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -23,13 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             validatingQuestionId = Guid.Parse("11111111111111111111111111111111");
 
-
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.HasQuestion(validatingQuestionId) == true
-                    && _.GetQuestionType(validatingQuestionId) == QuestionType.MultyOption
-                    && _.GetMultiSelectAnswerOptionsAsValues(validatingQuestionId) == new decimal[] { 1, 2, 3, 4 }
-                    && _.GetMaxSelectedAnswerOptions(validatingQuestionId) == 3
-                );
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.MultipleOptionsQuestion(questionId: validatingQuestionId, maxAllowedAnswers: 3, answers: new decimal[] { 1, 2, 3, 4 }),
+            }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
