@@ -14,29 +14,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaireId, macroId, responsibleId));
 
             deleteMacro = Create.Command.DeleteMacro(questionnaireId, macroId, responsibleId);
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () => questionnaire.DeleteMacro(deleteMacro);
 
-        It should_raise_MacroDeleted_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<MacroDeleted>().MacroId.ShouldEqual(macroId);
+        It should_doesnt_contain_Macro_with_EntityId_specified = () =>
+            questionnaire.QuestionnaireDocument.Macros.ShouldNotContain(t => t.Key == macroId);
 
-        It should_raise_MacroDeleted_event_with_ResponsibleId_specified = () =>
-            eventContext.GetSingleEvent<MacroDeleted>().ResponsibleId.ShouldEqual(responsibleId);
 
         private static DeleteMacro deleteMacro;
         private static Questionnaire questionnaire;
         private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid macroId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static EventContext eventContext;
     }
 }

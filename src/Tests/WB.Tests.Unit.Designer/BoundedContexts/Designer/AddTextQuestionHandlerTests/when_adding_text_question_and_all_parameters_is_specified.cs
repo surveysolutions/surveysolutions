@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -39,8 +40,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 .PublicKey.ShouldEqual(questionId);
 
         It should_contains_NewQuestion_with_ParentGroupId_specified = () =>
-            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .GetParent().PublicKey.ShouldEqual(chapterId);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(chapterId)
+                .Children.ShouldContain(q => q.PublicKey == questionId);
 
         It should_contains_NewQuestion_with_title_specified = () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
