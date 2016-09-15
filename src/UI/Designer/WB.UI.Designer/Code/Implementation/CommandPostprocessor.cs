@@ -1,17 +1,17 @@
 using System;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -34,6 +34,7 @@ namespace WB.UI.Designer.Code.Implementation
         private readonly ITranslationsService translationsService;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
 
 
         public CommandPostprocessor(
@@ -46,7 +47,8 @@ namespace WB.UI.Designer.Code.Implementation
             ILookupTableService lookupTableService, 
             ITranslationsService translationsService,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
-            IReadSideRepositoryWriter<AccountDocument> accountStorage)
+            IReadSideRepositoryWriter<AccountDocument> accountStorage,
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage)
         {
             this.userHelper = userHelper;
             this.notifier = notifier;
@@ -58,6 +60,7 @@ namespace WB.UI.Designer.Code.Implementation
             this.translationsService = translationsService;
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
             this.accountStorage = accountStorage;
+            this.sharedPersonsStorage = sharedPersonsStorage;
         }
 
         public void ProcessCommandAfterExecution(ICommand command)
@@ -157,6 +160,18 @@ namespace WB.UI.Designer.Code.Implementation
 
         private void RemoveSharedPerson(QuestionnaireListViewItem questionnaireListViewItem, Guid personId, string personEmail)
         {
+            var questionnaireSharedPersons = this.sharedPersonsStorage.GetById(questionnaireListViewItem.QuestionnaireId);
+            if (questionnaireSharedPersons != null)
+            {
+                var sharedPerson = questionnaireSharedPersons.SharedPersons.FirstOrDefault(x => x.Id == personId);
+                if (sharedPerson != null)
+                {
+                    questionnaireSharedPersons.SharedPersons.Remove(sharedPerson);
+                }
+
+                this.sharedPersonsStorage.Store(questionnaireSharedPersons, questionnaireListViewItem.QuestionnaireId);
+            }
+
             if (questionnaireListViewItem.SharedPersons.Contains(personId))
                 questionnaireListViewItem.SharedPersons.Remove(personId);
 
@@ -165,6 +180,21 @@ namespace WB.UI.Designer.Code.Implementation
 
         private void AddSharedPerson(QuestionnaireListViewItem questionnaireListViewItem, Guid personId, string personEmail, ShareType shareType)
         {
+            var questionnaireSharedPersons = this.sharedPersonsStorage.GetById(questionnaireListViewItem.QuestionnaireId) ??
+                                                  new QuestionnaireSharedPersons(questionnaireListViewItem.PublicId);
+
+            if (questionnaireSharedPersons.SharedPersons.All(x => x.Id != personId))
+            {
+                questionnaireSharedPersons.SharedPersons.Add(new SharedPerson()
+                {
+                    Id = personId,
+                    Email = personEmail,
+                    ShareType = shareType
+                });
+            }
+
+            this.sharedPersonsStorage.Store(questionnaireSharedPersons, questionnaireListViewItem.QuestionnaireId);
+
             if (!questionnaireListViewItem.SharedPersons.Contains(personId))
                 questionnaireListViewItem.SharedPersons.Add(personId);
 

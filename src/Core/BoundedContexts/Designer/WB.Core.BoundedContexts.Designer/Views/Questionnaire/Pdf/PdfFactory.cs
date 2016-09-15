@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public interface IPdfFactory
     {
-        PdfQuestionnaireModel Load(Guid questionnaireId, Guid requestedByUserId, string requestedByUserName);
+        PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName);
         string LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
@@ -25,17 +25,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         private readonly IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly PdfSettings pdfSettings;
 
         public PdfFactory(
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage, 
-            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage, 
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage, 
             PdfSettings pdfSettings)
         {
             this.questionnaireStorage = questionnaireStorage;
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.pdfSettings = pdfSettings;
         }
 
-        public PdfQuestionnaireModel Load(Guid questionnaireId, Guid requestedByUserId, string requestedByUserName)
+        public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
             if (questionnaire == null || questionnaire.IsDeleted)
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             var sharedPersons = sharedPersonsStorage.GetById(questionnaireId)?.SharedPersons ?? new List<SharedPerson>();
 
             var modificationStatisticsByUsers = questionnaireChangeHistoryStorage.Query(_ => _
-                .Where(x => x.QuestionnaireId == questionnaireId.FormatGuid())
+                .Where(x => x.QuestionnaireId == questionnaireId)
                 .GroupBy(x => new { x.UserId, x.UserName })
                 .Select(grouping => new PdfQuestionnaireModel.ModificationStatisticsByUser
                 {

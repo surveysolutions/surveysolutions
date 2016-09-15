@@ -709,9 +709,6 @@
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsFactory.cs">
       <SubType>Code</SubType>
     </Compile>

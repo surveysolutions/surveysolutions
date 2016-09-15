@@ -82,7 +82,6 @@ namespace WB.Core.BoundedContexts.Designer
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
-            DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireSharedPersonsDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireChangeHistoryDenormalizer>(this.Kernel);
 
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
