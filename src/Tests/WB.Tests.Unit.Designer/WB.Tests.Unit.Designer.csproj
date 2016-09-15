@@ -640,13 +640,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_nested_group_level_11.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="Create.Event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewItemDenormalizerTestContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_NewQuestionnaireCreated_recived.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_QuestionnaireDeleted_recived.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_QuestionnaireUpdated_recived.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_questionnaire_changing_event_recived.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonFromQuestionnaireRemoved_recived.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonToQuestionnaireAdded_received.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="BoundedContexts\Designer\AccountDenormalizerTests\AccountDenormalizerTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\AccountDenormalizerTests\when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__.cs" />
@@ -817,7 +810,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\QuestionnaireInfoViewFactoryContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_non_empty_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\QuestionnaireListViewDenormalizerOldTests.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\AddGroupTests.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CascadigOptions\when_removing_single_option_question.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CascadigOptions\when_updating_question_setting_to_cascade_from_non_existing_question.cs" />

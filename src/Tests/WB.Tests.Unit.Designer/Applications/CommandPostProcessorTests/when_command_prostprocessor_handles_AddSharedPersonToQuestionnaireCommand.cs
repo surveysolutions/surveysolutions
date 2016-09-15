@@ -6,6 +6,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandPostProcessorTests
 
             var questionnaire = CreateQuestionnaireDocument(questionnaiteTitle, ownerId);
             
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
+            var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
                 => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             var accountRepository = new Mock<IAccountRepository>();

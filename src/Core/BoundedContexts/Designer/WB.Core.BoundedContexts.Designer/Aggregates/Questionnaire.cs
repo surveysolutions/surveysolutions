@@ -479,12 +479,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void CreateNewQuestionnaire(NewQuestionnaireCreated e)
         {
-            this.innerDocument.IsPublic = e.IsPublic;
-            this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(e.Title);
-            this.innerDocument.PublicKey = e.PublicKey;
-            this.innerDocument.CreationDate = e.CreationDate;
-            this.innerDocument.LastEntryDate = e.CreationDate;
-            this.innerDocument.CreatedBy = e.CreatedBy;
+            this.innerDocument = new QuestionnaireDocument
+            {
+                IsPublic = e.IsPublic,
+                Title = System.Web.HttpUtility.HtmlDecode(e.Title),
+                PublicKey = e.PublicKey,
+                CreationDate = e.CreationDate,
+                LastEntryDate = e.CreationDate,
+                CreatedBy = e.CreatedBy
+            };
         }
 
         internal void UpdateQuestion(QuestionChanged e)

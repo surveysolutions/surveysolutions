@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -1001,11 +1002,13 @@ namespace WB.Tests.Unit.Designer
             IMembershipUserService membershipUserService,
             IRecipientNotifier recipientNotifier,
             IAccountRepository accountRepository,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
+            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage,
             ILogger logger,
             IAttachmentService attachmentService = null,
             ILookupTableService lookupTableService = null,
-            ITranslationsService translationsService = null)
+            ITranslationsService translationsService = null,
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
+            IReadSideRepositoryWriter<AccountDocument> accountStorage = null)
         {
             return new CommandPostprocessor(
                membershipUserService,
@@ -1015,7 +1018,9 @@ namespace WB.Tests.Unit.Designer
                logger,
                attachmentService ?? Mock.Of<IAttachmentService>(),
                lookupTableService ?? Mock.Of<ILookupTableService>(),
-               translationsService ?? Mock.Of<ITranslationsService>());
+               translationsService ?? Mock.Of<ITranslationsService>(),
+               questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
+               accountStorage ?? Mock.Of<IReadSideRepositoryWriter<AccountDocument>>());
         }
 
         public static AttachmentService AttachmentService(

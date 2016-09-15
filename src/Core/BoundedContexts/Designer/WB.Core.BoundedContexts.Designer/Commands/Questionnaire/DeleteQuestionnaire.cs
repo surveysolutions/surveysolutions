@@ -1,16 +1,11 @@
 ﻿using System;
-using Ncqrs.Commanding;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    public class DeleteQuestionnaire : CommandBase
+    public class DeleteQuestionnaire : QuestionnaireCommand
     {
-        public DeleteQuestionnaire(Guid questionnaireId)
-        {
-            this.QuestionnaireId = questionnaireId;
-        }
-
-        public Guid QuestionnaireId { get; private set; }
+        public DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId) : base(questionnaireId, responsibleId) { }
     }
 }

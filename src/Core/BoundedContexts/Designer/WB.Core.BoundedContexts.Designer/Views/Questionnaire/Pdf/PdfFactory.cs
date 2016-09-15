@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -23,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     public class PdfFactory : IPdfFactory
     {
         private readonly IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> questionnaireListViewItemStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
@@ -32,8 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public PdfFactory(
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
-            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader, 
-            IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> questionnaireListViewItemStorage, 
+            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage, 
             IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage, 
             PdfSettings pdfSettings)
         {

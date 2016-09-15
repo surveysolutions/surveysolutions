@@ -98,7 +98,11 @@ namespace WB.UI.Designer.Controllers
                 {
                     var questionnaireId = Guid.NewGuid();
 
-                    this.commandService.Execute(new CloneQuestionnaire(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
+                    var command = new CloneQuestionnaire(questionnaireId, model.Title, this.UserHelper.WebUser.UserId,
+                        model.IsPublic, sourceModel.Source);
+
+                    this.commandService.Execute(command);
+                    this.commandPostprocessor.ProcessCommandAfterExecution(command);
 
                     return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId.FormatGuid() });
                 }
@@ -137,12 +141,15 @@ namespace WB.UI.Designer.Controllers
                 var questionnaireId = Guid.NewGuid();
                 try
                 {
-                    this.commandService.Execute(
-                        new CreateQuestionnaire(
-                            questionnaireId: questionnaireId,
-                            text: model.Title,
-                            createdBy: UserHelper.WebUser.UserId,
-                            isPublic: model.IsPublic));
+                    var command = new CreateQuestionnaire(
+                        questionnaireId: questionnaireId,
+                        text: model.Title,
+                        responsibleId: this.UserHelper.WebUser.UserId,
+                        isPublic: model.IsPublic);
+
+                    this.commandService.Execute(command);
+                    this.commandPostprocessor.ProcessCommandAfterExecution(command);
+
                     return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId.FormatGuid()});
                 }
                 catch (QuestionnaireException e)
@@ -167,7 +174,7 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
-                var command = new DeleteQuestionnaire(model.PublicKey);
+                var command = new DeleteQuestionnaire(model.PublicKey, UserHelper.WebUser.UserId);
 
                 this.commandService.Execute(command);
 
