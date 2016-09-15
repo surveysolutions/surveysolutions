@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Machine.Specifications;
-using Moq;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -20,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         Establish context = () =>
         {
             var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
-            storageAccessor.StoreAsync(Questionnaires).WaitAndUnwrapException();
+            storageAccessor.Store(Questionnaires);
 
             viewModel = CreateDashboardViewModel(
                 questionnaireListStorage: storageAccessor);

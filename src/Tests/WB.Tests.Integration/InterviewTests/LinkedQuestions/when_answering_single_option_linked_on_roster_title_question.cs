@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
             var triggerQuestionId = Guid.NewGuid();
             var titleQuestionId = Guid.NewGuid();
-            var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
                 Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: linkedToQuestionId,
                     variable: "link_single"),

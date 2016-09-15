@@ -203,7 +203,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// <summary>
         /// Gets first level child entities of a group
         /// </summary>
-        ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
+        IReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
 

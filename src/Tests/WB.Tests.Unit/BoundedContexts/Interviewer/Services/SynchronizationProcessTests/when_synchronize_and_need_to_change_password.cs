@@ -55,13 +55,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
         It should_store_updated_user_password_in_plain_storage = () =>
             interviewerStorageMock.Verify(
-                x => x.StoreAsync(Moq.It.Is<InterviewerIdentity>(i => i.Password == "new password")), Times.Once);
+                x => x.Store(Moq.It.Is<InterviewerIdentity>(i => i.Password == "new password")), Times.Once);
 
         It should_sign_in_user_with_new_credentials = () =>
-           principalMock.Verify(x => x.SignInAsync("name", "new password", true), Times.Once);
+           principalMock.Verify(x => x.SignIn("name", "new password", true), Times.Once);
 
         static SynchronizationProcess viewModel;
-        static Mock<IAsyncPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
+        static Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
         static Mock<IUserInteractionService> userInteractionServiceMock=new Mock<IUserInteractionService>();
         static Mock<IPrincipal> principalMock = new Mock<IPrincipal>();
         static Mock<ISynchronizationService>  synchronizationServiceMock =new Mock<ISynchronizationService>();

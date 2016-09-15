@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var rosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var nestedRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericRealQuestion(rosterSizeQuestionId, "a"),
                     Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(0) }, children: new IComposite[] {
                         Create.Roster(nestedRosterId, enablementCondition: "a > 0", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(0) })  

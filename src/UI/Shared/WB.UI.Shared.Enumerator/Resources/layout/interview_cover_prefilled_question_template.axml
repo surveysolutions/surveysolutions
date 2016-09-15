@@ -3,6 +3,6 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
               android:orientation ="vertical"
               style="@style/Interview_Cover_Prefilled_Question">
-    <TextView style="@style/Interview_Cover_Question_Title" local:MvxBind="Text Question;" />
+    <TextView style="@style/Interview_Cover_Question_Title" local:MvxBind="Text Question.PlainText;" />
     <TextView style="@style/Interview_Cover_Question_Answer" local:MvxBind="Text Answer;" />
 </LinearLayout>

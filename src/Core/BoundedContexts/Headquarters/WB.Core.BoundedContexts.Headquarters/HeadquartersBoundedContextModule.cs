@@ -68,6 +68,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
 using WB.Core.Synchronization.Implementation.ImportManager;
@@ -391,6 +392,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ICsvWriterService>().To<CsvWriterService>();
             this.Bind<ICsvWriter>().To<CsvWriter>();
             this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
+
+            this.Bind<IExportQuestionService>().To<ExportQuestionService>();
         }
     }
 }

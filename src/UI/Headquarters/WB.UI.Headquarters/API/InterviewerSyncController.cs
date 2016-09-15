@@ -97,9 +97,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth(new[] { UserRoles.Operator })]
-        public async Task<HttpResponseMessage> PostFile(PostFileRequest request)
+        public HttpResponseMessage PostFile(PostFileRequest request)
         {
-            await plainFileRepository.StoreInterviewBinaryDataAsync(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
+            plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 

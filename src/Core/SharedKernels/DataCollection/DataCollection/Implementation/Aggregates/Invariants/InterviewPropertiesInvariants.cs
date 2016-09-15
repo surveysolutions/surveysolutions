@@ -15,6 +15,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public InterviewEntities.InterviewProperties InterviewProperties { get; }
 
+        public void CheckCanAnswerBeChanged()
+        {
+            this.ThrowIfInterviewHardDeleted();
+            this.ThrowIfInterviewApprovedByHQ();
+            this.ThrowIfInterviewReceivedByInterviewer();
+        }
+
         public void ThrowIfOtherInterviewerIsResponsible(Guid userId)
         {
             if (this.InterviewProperties.InterviewerId.HasValue &&

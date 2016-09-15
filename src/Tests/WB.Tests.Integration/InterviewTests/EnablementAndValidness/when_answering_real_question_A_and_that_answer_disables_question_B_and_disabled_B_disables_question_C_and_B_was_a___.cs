@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericRealQuestion(questionAId, "a"),
                     Create.NumericRealQuestion(questionBId, "b", enablementCondition: "a < 0"),
                     Create.NumericRealQuestion(questionCId, "c", enablementCondition: "b < 0")

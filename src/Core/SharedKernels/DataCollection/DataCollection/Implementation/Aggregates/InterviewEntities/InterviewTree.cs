@@ -24,6 +24,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .OfType<InterviewTreeQuestion>()
                 .Where(node => node.Identity.Id == questionId)
                 .ToReadOnlyCollection();
+
+        public override string ToString()
+            => $"Tree ({this.InterviewId})" + Environment.NewLine
+            + string.Join(Environment.NewLine, this.Sections.Select(section => section.ToString().PrefixEachLine("  ")));
     }
 
     public interface IInterviewTreeNode
@@ -33,9 +37,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         IList<IInterviewTreeNode> Children { get; }
     }
 
-    public class InterviewTreeLeafNode : IInterviewTreeNode
+    public abstract class InterviewTreeLeafNode : IInterviewTreeNode
     {
-        public InterviewTreeLeafNode(Identity identity)
+        protected InterviewTreeLeafNode(Identity identity)
         {
             this.Identity = identity;
         }
@@ -48,17 +52,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeQuestion(Identity identity)
             : base(identity) {}
+
+        public override string ToString() => $"Question ({this.Identity})";
     }
 
     public class InterviewTreeStaticText : InterviewTreeLeafNode
     {
         public InterviewTreeStaticText(Identity identity)
             : base(identity) {}
+
+        public override string ToString() => $"Text ({this.Identity})";
     }
 
-    public class InterviewTreeGroup : IInterviewTreeNode
+    public abstract class InterviewTreeGroup : IInterviewTreeNode
     {
-        public InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children)
+        protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children)
         {
             this.Identity = identity;
             this.Children = children.ToList();
@@ -72,17 +80,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeSubSection(Identity identity, IEnumerable<IInterviewTreeNode> children)
             : base(identity, children) {}
+
+        public override string ToString()
+            => $"SubSection ({this.Identity})" + Environment.NewLine
+            + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
     }
 
     public class InterviewTreeSection : InterviewTreeGroup
     {
         public InterviewTreeSection(Identity identity, IEnumerable<IInterviewTreeNode> children)
             : base(identity, children) {}
+
+        public override string ToString()
+            => $"Section ({this.Identity})" + Environment.NewLine
+            + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
     }
 
     public class InterviewTreeRoster : InterviewTreeGroup
     {
         public InterviewTreeRoster(Identity identity, IEnumerable<IInterviewTreeNode> children)
             : base(identity, children) {}
+
+        public override string ToString()
+            => $"Roster ({this.Identity})" + Environment.NewLine
+            + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
     }
 }

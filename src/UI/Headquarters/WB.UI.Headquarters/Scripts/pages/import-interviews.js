@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ImportInterviews = function (interviewImportProcessId, questionnaireId, questionnaireVersion, preloadingType, importInterviewsStatusUrl, importInterviewsUrl, responsiblesUrl, processUrl) {
+﻿Supervisor.VM.ImportInterviews = function (interviewImportProcessId, questionnaireId, questionnaireVersion, preloadingType, wasResponsibleProvided, importInterviewsStatusUrl, importInterviewsUrl, responsiblesUrl, processUrl) {
     Supervisor.VM.ImportInterviews.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -14,7 +14,8 @@
         questionnaireTitle: ko.observable(''),
         hasErrors: ko.observable(false),
         interviewImportProcessId: ko.observable(),
-        preloadingType: ko.observable()
+        preloadingType: ko.observable(),
+        wasResponsibleProvided: ko.observable()
     };
     self.isResponsiblesLoading = ko.observable(false);
     self.responsibles = function (query, sync, pageSize) {
@@ -94,7 +95,8 @@
             questionnaireVersion: questionnaireVersion,
             supervisorId: _.isUndefined(self.selectedResponsible()) ? "" : self.selectedResponsible().UserId,
             interviewImportProcessId: interviewImportProcessId,
-            preloadingType: preloadingType
+            preloadingType: preloadingType,
+            wasResponsibleProvided: wasResponsibleProvided
         };
 
         self.SendRequestWithFiles(importInterviewsUrl, request, function (response) {

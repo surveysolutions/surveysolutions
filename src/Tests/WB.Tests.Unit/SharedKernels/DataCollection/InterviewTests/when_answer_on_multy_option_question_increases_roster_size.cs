@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -30,8 +31,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             multyOptionRosterSizeId = Guid.Parse("22222222222222222222222222222222");
 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.MultipleOptionsQuestion(questionId: multyOptionRosterSizeId, answers: new decimal[] { 1, 2, 3 }),
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
+                Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: multyOptionRosterSizeId),
+            }));
+
+            var questionnaire1 = Mock.Of<IQuestionnaire>(_
                 => _.HasQuestion(multyOptionRosterSizeId) == true
                 && _.GetQuestionType(multyOptionRosterSizeId) == QuestionType.MultyOption
                 && _.GetRosterGroupsByRosterSizeQuestion(multyOptionRosterSizeId) == new Guid[] { rosterGroupId }

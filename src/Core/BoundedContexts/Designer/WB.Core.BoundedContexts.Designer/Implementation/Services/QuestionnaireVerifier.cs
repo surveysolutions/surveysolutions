@@ -33,6 +33,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private const int DefaultVariableLengthLimit = 32;
         private const int DefaultRestrictedVariableLengthLimit = 20;
 
+        private const int MaxRosterPropagationLimit = 10000;
+        private const int MaxTotalRosterPropagationLimit = 50000;
+
         private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes =
             new QuestionType[]
             {
@@ -244,6 +247,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             TranslationVerifier(TranslationHasEmptyContent, "WB0257", VerificationMessages.WB0257_TranslationHasEmptyContent),
             TranslationVerifier(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHaveDuplicatedNames),
 
+            Verifier(QuestionnaireHasRostersPropagationsExededLimit, "WB0261", VerificationMessages.WB0261_RosterStructureTooExplosive),
+
             VerifyGpsPrefilledQuestions,
             ErrorsByCircularReferences,
             ErrorsByLinkedQuestions,
@@ -424,6 +429,62 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var isOversized = questionnaireByteCount > 5 * 1024 * 1024; // 5MB
             var questionnaireMegaByteCount = (decimal)questionnaireByteCount / 1024 / 1024;
             return new Tuple<bool, decimal>(isOversized, questionnaireMegaByteCount);
+        }
+
+        private static bool QuestionnaireHasRostersPropagationsExededLimit(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var rosters = questionnaire.Find<IGroup>(q => q.IsRoster).ToList();
+            Dictionary<Guid, long> rosterPropagationCounts = new Dictionary<Guid, long>();
+            foreach (var roster in rosters)
+            {
+                CalculateRosterInstancesCountAndUpdateCache(roster, rosterPropagationCounts, questionnaire);
+            }
+
+            return rosterPropagationCounts.Values.Sum(x => x) > MaxTotalRosterPropagationLimit;
+        }
+
+        private static long CalculateRosterInstancesCountAndUpdateCache(IGroup roster, Dictionary<Guid, long> rosterPropagationCounts, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            long rosterCount;
+            if (rosterPropagationCounts.TryGetValue(roster.PublicKey, out rosterCount))
+                return rosterCount;
+
+            long parentCountMultiplier = 1;
+            IComposite questionnaireItem = roster.GetParent();
+            while (questionnaireItem != null)
+            {
+                if (IsGroup(questionnaireItem) && IsRosterGroup((IGroup) questionnaireItem))
+                {
+                    parentCountMultiplier = CalculateRosterInstancesCountAndUpdateCache((IGroup) questionnaireItem, rosterPropagationCounts, questionnaire);
+                    break;
+                }
+
+                questionnaireItem = questionnaireItem.GetParent();
+            }
+
+            long rosterMaxPropagationCount = parentCountMultiplier * GetRosterMaxPropagationCount(roster, questionnaire);
+            rosterPropagationCounts.Add(roster.PublicKey, rosterMaxPropagationCount);
+
+            return rosterMaxPropagationCount;
+        }
+
+        private static int GetRosterMaxPropagationCount(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (IsFixedRoster(roster))
+            {
+                return roster.FixedRosterTitles.Length;
+            }
+
+            if (IsRosterByQuestion(roster))
+            {
+                var question = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
+                var questionMaxAnswersCount = (question as MultyOptionsQuestion)?.MaxAllowedAnswers
+                    ?? (question as TextListQuestion)?.MaxAnswerCount
+                    ?? Constants.MaxRosterRowCount;
+
+                return questionMaxAnswersCount;
+            }
+            return 0;
         }
 
         private GenerationResult GetCompilationResult(QuestionnaireDocument questionnaire)
@@ -920,23 +981,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool IsLongRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (IsFixedRoster(roster) && roster.FixedRosterTitles.Length > Constants.MaxRosterRowCount)
-            {
-                return true;
-            }
-
-            if (IsRosterByQuestion(roster))
-            {
-                var question = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
-                var questionMaxAnswersCount = (question as MultyOptionsQuestion)?.MaxAllowedAnswers 
-                    ?? (question as TextListQuestion)?.MaxAnswerCount 
-                    ?? Constants.MaxRosterRowCount;
-
-                if (questionMaxAnswersCount > Constants.MaxRosterRowCount)
-                    return true;
-            }
-
-            return false;
+            return GetRosterMaxPropagationCount(roster, questionnaire) > Constants.MaxRosterRowCount;
         }
 
         private static bool IsLongRosterNested(IGroup group, MultiLanguageQuestionnaireDocument questionnaire, 

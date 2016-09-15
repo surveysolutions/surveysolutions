@@ -1,5 +1,4 @@
-using System;
-using SQLite.Net.Attributes;
+using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
@@ -17,6 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public decimal Value { get; set; }
 
+        [Indexed]
         public string Title { get; set; }
 
         public decimal? ParentValue { get; set; }

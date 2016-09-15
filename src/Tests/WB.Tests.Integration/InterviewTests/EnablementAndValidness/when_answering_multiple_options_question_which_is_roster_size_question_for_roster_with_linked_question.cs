@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var multiOptionQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                 var txtSourceOfLinkId = Guid.NewGuid();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.Roster(variable: "fix", fixedTitles: new[] {"a", "b"},
                         children: new[] {Create.TextQuestion(variable: "txt", id: txtSourceOfLinkId)}),
                     Create.MultyOptionsQuestion(multiOptionQuestionId, variable: "q1",

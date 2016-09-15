@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -28,29 +29,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var propagatedGroupId = Guid.Parse("00000000000000003333333333333333");
             propagatedQuestionId = Guid.Parse("22222222222222222222222222222222");
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: propagatingQuestionId),
 
-                => _.HasQuestion(propagatingQuestionId) == true
-                && _.GetMaxRosterRowCount() == Constants.MaxRosterRowCount
-                && _.GetQuestionType(propagatingQuestionId) == QuestionType.AutoPropagate
-                && _.IsQuestionInteger(propagatingQuestionId) == true
-                && _.ShouldQuestionSpecifyRosterSize(propagatingQuestionId) == true
-                && _.GetRosterGroupsByRosterSizeQuestion(propagatingQuestionId) == new[] { propagatedGroupId }
+                Create.Entity.Roster(rosterId: propagatedGroupId, rosterSizeQuestionId: propagatingQuestionId, children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(questionId: propagatedQuestionId),
+                }),
+            }));
 
-                && _.HasGroup(propagatedGroupId) == true
-                && _.GetAllUnderlyingQuestions(propagatedGroupId) == new[] { propagatedQuestionId }
-
-                && _.HasQuestion(propagatedQuestionId) == true
-                && _.GetQuestionType(propagatedQuestionId) == QuestionType.Text
-                && _.GetRosterLevelForEntity(propagatedQuestionId) == 1
-                && _.GetRosterLevelForEntity(propagatedQuestionId) == 1
-                && _.GetRostersFromTopToSpecifiedQuestion(propagatedQuestionId) == new[] { propagatedGroupId }
-                && _.GetRostersFromTopToSpecifiedEntity(propagatedQuestionId) == new[] { propagatedGroupId }
-                && _.GetRostersFromTopToSpecifiedGroup(propagatedGroupId) == new[] { propagatedGroupId });
-            
-
-
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
