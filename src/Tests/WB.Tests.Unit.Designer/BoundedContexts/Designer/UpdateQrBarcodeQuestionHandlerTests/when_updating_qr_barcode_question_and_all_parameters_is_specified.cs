@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
 
         It should_contains_question_with_variable_name_specified = () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .VariableLabel.ShouldEqual(variableName);
+                .StataExportCaption.ShouldEqual(variableName);
 
         It should_contains_question_with_title_specified = () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
