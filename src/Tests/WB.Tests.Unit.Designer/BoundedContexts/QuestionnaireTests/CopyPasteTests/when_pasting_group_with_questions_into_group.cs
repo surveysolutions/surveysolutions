@@ -4,6 +4,8 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -37,8 +39,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                 }
                 ));
 
-            eventContext = new EventContext();
-
             command = new PasteInto(
                 questionnaireId: questionnaireId,
                 entityId: targetId,
@@ -53,46 +53,44 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         Because of = () => 
             questionnaire.PasteInto(command);
 
-        It should_clone_group =
-            () => eventContext.ShouldContainEvent<GroupCloned>();
+        It should_clone_group = () => 
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).ShouldNotBeNull();
 
         It should_raise_GroupCloned_event_with_correct_hideIfDisabled_flag_for_group = () =>
-            eventContext.GetEvents<GroupCloned>().Single(e => e.SourceGroupId == chapterId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).HideIfDisabled.ShouldEqual(true);
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_numeric_question = () =>
-            eventContext.GetEvents<NumericQuestionCloned>().Single(e => e.SourceQuestionId == numericQuestionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<INumericQuestion>().Single().HideIfDisabled.ShouldEqual(true);
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_textList_question = () =>
-            eventContext.GetEvents<TextListQuestionCloned>().Single(e => e.SourceQuestionId == textListQuestionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<ITextListQuestion>().Single().HideIfDisabled.ShouldEqual(true);
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_multimedia_question = () =>
         {
-            var multimediaCloneEvent = eventContext.GetEvents<QuestionCloned>().Single(e => e.SourceQuestionId == multimediaQuestionId);
+            var multimediaCloneEvent = questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IMultimediaQuestion>().Single();
             multimediaCloneEvent.HideIfDisabled.ShouldEqual(true);
-
-            eventContext.GetEvents<MultimediaQuestionUpdated>().Single(e => e.QuestionId == multimediaCloneEvent.PublicKey).HideIfDisabled.ShouldEqual(true);
         };
 
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_qrBarcode_question = () =>
-            eventContext.GetEvents<QRBarcodeQuestionCloned>().Single(e => e.SourceQuestionId == qrBarcodeQuestionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IQRBarcodeQuestion>().Single().HideIfDisabled.ShouldEqual(true);
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_text_question = () =>
-            eventContext.GetEvents<QuestionCloned>().Single(e => e.SourceQuestionId == textQuestionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<TextQuestion>().Single().HideIfDisabled.ShouldEqual(true);
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_dateTime_question = () =>
-            eventContext.GetEvents<QuestionCloned>().Single(e => e.SourceQuestionId == dateTimeQuestionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<DateTimeQuestion>().Single().HideIfDisabled.ShouldEqual(true);
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_gps_question = () =>
-            eventContext.GetEvents<QuestionCloned>().Single(e => e.SourceQuestionId == gpsQuestionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<GpsCoordinateQuestion>().Single().HideIfDisabled.ShouldEqual(true);
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_singleOption_question = () =>
-            eventContext.GetEvents<QuestionCloned>().Single(e => e.SourceQuestionId == singleOptionQuestionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<SingleQuestion>().Single().HideIfDisabled.ShouldEqual(true);
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_multipleOptions_question = () =>
-            eventContext.GetEvents<QuestionCloned>().Single(e => e.SourceQuestionId == multipleOptionsQuestionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IMultyOptionsQuestion>().Single().HideIfDisabled.ShouldEqual(true);
 
         It should_raise_StaticTextCloned_event_with_correct_hideIfDisabled_flag_for_static_Text = () =>
-            eventContext.GetEvents<StaticTextCloned>().Single(e => e.SourceEntityId == staticTextId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IStaticText>().Single().HideIfDisabled.ShouldEqual(true);
 
         static Questionnaire questionnaire;
         static Guid groupToPasteInId;
@@ -111,7 +109,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         static Guid multipleOptionsQuestionId = Guid.NewGuid();
         static Guid staticTextId = Guid.NewGuid();
 
-        static EventContext eventContext;
         static Guid responsibleId;
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 

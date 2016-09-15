@@ -20,15 +20,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
 
         It should_contains_group = () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInGroupId).ShouldNotBeNull();
 
         It should_contains_group_with_GroupId_specified = () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInGroupId)
                 .PublicKey.ShouldEqual(groupInGroupId);
 
         It should_contains_group_with_ParentGroupId_specified = () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .GetParent().PublicKey.ShouldBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInGroupId)
+                .GetParent().PublicKey.ShouldEqual(questionnaire.QuestionnaireDocument.PublicKey);
 
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
