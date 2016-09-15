@@ -1,7 +1,9 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -11,11 +13,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
     {
         Establish context = () =>
         {
-            var repositoryMock = new Mock<IReadSideKeyValueStorage<QuestionnaireInfoView>>();
+            var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
 
             repositoryMock
                 .Setup(x => x.GetById(questionnaireId))
-                .Returns(CreateQuestionnaireInfoView(questionnaireId, questionnaireTitle));
+                .Returns(CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
 
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object);
         };
