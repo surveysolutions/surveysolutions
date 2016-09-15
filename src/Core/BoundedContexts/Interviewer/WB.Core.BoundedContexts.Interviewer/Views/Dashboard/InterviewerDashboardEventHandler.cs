@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                         {
                             answer = Convert.ToDecimal(answer, CultureInfo.InvariantCulture);
                         }
-                        getCategoricalOptionText = GetPrefilledCategoricalQuestionOptionText(prefilledQuestion, questionnaire);
+                        getCategoricalOptionText = (option) => questionnaire.GetOptionForQuestionByOptionValue(prefilledQuestion, option).Title;
                         break;
                     case QuestionType.Numeric:
                         decimal answerTyped = answer is string ? decimal.Parse((string)answer, CultureInfo.InvariantCulture) : Convert.ToDecimal(answer);
@@ -246,13 +246,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 QuestionText = questionnaire.GetQuestionTitle(prefilledQuestion),
                 Answer = answer == null ? null : AnswerUtils.AnswerToString(answer, getCategoricalOptionText)
             };
-        }
-
-        private static Func<decimal, string> GetPrefilledCategoricalQuestionOptionText(Guid questionId, IQuestionnaire questionnaire)
-        {
-            return (optionValue) =>
-                questionnaire.GetOptionsForQuestion(questionId, null, string.Empty)
-                    .SingleOrDefault(x => x.Value == optionValue)?.Title;
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
