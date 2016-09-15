@@ -27,17 +27,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public NewChapterView Load(string questionnaireId, string chapterId)
         {
             var document = this.questionnaireStorage.GetById(questionnaireId);
+            var chapterPublicKey = Guid.Parse(chapterId);
+            var isExistsChapter = document.Children.Any(c => c.PublicKey == chapterPublicKey);
+            if (!isExistsChapter)
+                return null;
 
             return new NewChapterView
             {
-                Chapter = ConvertToChapterView(document, chapterId),
+                Chapter = ConvertToChapterView(document, chapterPublicKey),
                 VariableNames = this.CollectVariableNames(document)
             };
         }
 
-        private IQuestionnaireItem ConvertToChapterView(QuestionnaireDocument document, string chapterId)
+        private IQuestionnaireItem ConvertToChapterView(QuestionnaireDocument document, Guid chapterPublicKey)
         {
-            var chapterPublicKey = Guid.Parse(chapterId);
             var chapter = (IGroup)document.Children.Single(c => c.PublicKey == chapterPublicKey);
 
             IQuestionnaireItem root = null;
