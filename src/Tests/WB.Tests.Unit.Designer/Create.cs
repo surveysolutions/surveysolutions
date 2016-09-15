@@ -635,13 +635,14 @@ namespace WB.Tests.Unit.Designer
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null)
         {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
+                Title = title,
             };
         }
 

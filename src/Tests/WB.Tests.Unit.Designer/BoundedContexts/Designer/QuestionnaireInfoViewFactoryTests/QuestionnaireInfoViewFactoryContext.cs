@@ -1,4 +1,5 @@
-﻿using Main.Core.Documents;
+﻿using System;
+using Main.Core.Documents;
 using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -13,21 +14,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 {
     internal class QuestionnaireInfoViewFactoryContext
     {
-        protected static QuestionnaireInfoView CreateQuestionnaireInfoView(string questionnaireId, string questionnaireTitle)
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId, string questionnaireTitle)
         {
-            return new QuestionnaireInfoView() {QuestionnaireId = questionnaireId, Title = questionnaireTitle};
+            return Create.QuestionnaireDocument(Guid.Parse(questionnaireId), title : questionnaireTitle);
         }
 
         protected static QuestionnaireInfoViewFactory CreateQuestionnaireInfoViewFactory(
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentReader = null,
-            IReadSideKeyValueStorage<QuestionnaireInfoView> repository = null,
+            IPlainKeyValueStorage<QuestionnaireDocument> repository = null,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedWith = null,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader = null)
         {
             return
-                new QuestionnaireInfoViewFactory(repository ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireInfoView>>(),
-                                                sharedWith ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
-                                                documentReader ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
+                new QuestionnaireInfoViewFactory(sharedWith ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
+                                                repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
                                                 accountsDocumentReader ?? Mock.Of<IReadSideRepositoryReader<AccountDocument>>(),
                                                 Mock.Of<IAttachmentService>(), Mock.Of<IMembershipUserService>(x=>x.WebUser == Substitute.For<IMembershipWebUser>()));
         }

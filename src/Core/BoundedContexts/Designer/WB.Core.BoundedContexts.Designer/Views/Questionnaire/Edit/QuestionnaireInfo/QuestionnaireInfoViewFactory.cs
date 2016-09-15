@@ -15,21 +15,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 {
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
         private readonly IAttachmentService attachmentService;
         private readonly IMembershipUserService membershipUserService;
 
-        public QuestionnaireInfoViewFactory(IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage,
+        public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
             IAttachmentService attachmentService,
             IMembershipUserService membershipUserService)
         {
-            this.questionnaireStorage = questionnaireStorage;
             this.sharedPersonsStorage = sharedPersonsStorage;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.accountsDocumentReader = accountsDocumentReader;

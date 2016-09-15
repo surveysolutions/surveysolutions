@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
     {
         Establish context = () =>
         {
-            var questionnaireInfoViewRepository = Mock.Of<IReadSideKeyValueStorage<QuestionnaireInfoView>>(
-                x => x.GetById(questionnaireId) == CreateQuestionnaireInfoView(questionnaireId, questionnaireTitle));
+            var questionnaireInfoViewRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
+                x => x.GetById(questionnaireId) == CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
 
             var questionnaireSharedPersons = new QuestionnaireSharedPersons(Guid.Parse(questionnaireId));
             questionnaireSharedPersons.SharedPersons.Add(new SharedPerson
@@ -29,17 +29,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(
                 x => x.GetById(Moq.It.IsAny<string>()) == questionnaireSharedPersons);
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithSharedPersons(Guid.Parse(questionnaireId), userId);
-
-            var questionnaireDocumentRepository = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(
-                x => x.GetById(questionnaireId) == questionnaireDocument);
-
             var accountDocument = new AccountDocument { Email = userEmail };
             var accountDocumentRepository = Mock.Of<IReadSideRepositoryReader<AccountDocument>>(
                 x => x.GetById(userId.FormatGuid()) == accountDocument);
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
-                sharedWith: sharedPersonsRepository, documentReader: questionnaireDocumentRepository, accountsDocumentReader: accountDocumentRepository);
+                sharedWith: sharedPersonsRepository, accountsDocumentReader: accountDocumentRepository);
         };
 
         Because of = () => view = factory.Load(questionnaireId, userId);
