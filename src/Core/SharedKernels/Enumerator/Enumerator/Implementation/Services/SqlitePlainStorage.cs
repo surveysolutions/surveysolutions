@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using MvvmCross.Platform;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -76,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        var isEntityExists = connection.Table<TEntity>().FirstOrDefault(x => x.Id == entity.Id) != null;
+                        var isEntityExists = connection.Table<TEntity>().Count(x => x.Id == entity.Id) > 0;
 
                         if (isEntityExists)
                         {
