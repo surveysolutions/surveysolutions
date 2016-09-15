@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -155,7 +153,7 @@ namespace WB.UI.Designer.Controllers
             var pdfDocument = this.GetSourceUrlsForPdf(id);
             var pdfOutput = new PdfOutput { OutputFilePath = generationProgress.FilePath };
 
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 try
                 {
