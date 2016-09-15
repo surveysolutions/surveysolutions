@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Shared.Web.Membership;
 
@@ -15,14 +16,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
         private readonly IAttachmentService attachmentService;
         private readonly IMembershipUserService membershipUserService;
 
         public QuestionnaireInfoViewFactory(IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage,
-            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
             IAttachmentService attachmentService,

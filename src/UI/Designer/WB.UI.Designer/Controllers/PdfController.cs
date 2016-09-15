@@ -205,7 +205,7 @@ namespace WB.UI.Designer.Controllers
 
         private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
-            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id, requestedByUserId, requestedByUserName);
+            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName);
             if (questionnaire == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

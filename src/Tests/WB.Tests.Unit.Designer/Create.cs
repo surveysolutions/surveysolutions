@@ -1008,7 +1008,8 @@ namespace WB.Tests.Unit.Designer
             ILookupTableService lookupTableService = null,
             ITranslationsService translationsService = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
-            IReadSideRepositoryWriter<AccountDocument> accountStorage = null)
+            IReadSideRepositoryWriter<AccountDocument> accountStorage = null,
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> questionnaireSharedPersonsStorage = null)
         {
             return new CommandPostprocessor(
                membershipUserService,
@@ -1020,7 +1021,8 @@ namespace WB.Tests.Unit.Designer
                lookupTableService ?? Mock.Of<ILookupTableService>(),
                translationsService ?? Mock.Of<ITranslationsService>(),
                questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
-               accountStorage ?? Mock.Of<IReadSideRepositoryWriter<AccountDocument>>());
+               accountStorage ?? Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(),
+               questionnaireSharedPersonsStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>());
         }
 
         public static AttachmentService AttachmentService(

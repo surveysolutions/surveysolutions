@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 Email = userEmail,
                 IsOwner = false
             });
-            var sharedPersonsRepository = Mock.Of<IReadSideKeyValueStorage<QuestionnaireSharedPersons>>(
+            var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(
                 x => x.GetById(Moq.It.IsAny<string>()) == questionnaireSharedPersons);
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithSharedPersons(Guid.Parse(questionnaireId), userId);
