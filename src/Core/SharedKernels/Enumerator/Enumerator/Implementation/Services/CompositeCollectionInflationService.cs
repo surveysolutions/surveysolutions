@@ -27,11 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     if (compositeItem.QuestionState.Enablement.Enabled)
                         AddCompositeItemsOfQuestionToCollection(compositeItem, questionCompositeCollection);
 
-                    compositeItem.Answering.PropertyChanged += (sender, e) =>
-                    {
-                        if (e.PropertyName != nameof(AnsweringViewModel.InProgress)) return;
-                        OnIsInProgressChanged(questionCompositeCollection, compositeItem);
-                    };
                     compositeItem.QuestionState.Validity.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(ValidityViewModel.IsInvalid)) return;
@@ -44,6 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     };
                     
                     compositeCollection.AddCollection(questionCompositeCollection);
+
+                    compositeCollection.Add(compositeItem.Answering);
                     compositeCollection.Add(new QuestionDivider());
                 }
                 else if (rosterViewModel != null)
@@ -77,19 +74,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (compositeItem.Answering.InProgress)
                 collection.Add(compositeItem.Answering);
-        }
-
-        private static void OnIsInProgressChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
-        {
-            if (!compositeItem.QuestionState.Enablement.Enabled) return;
-
-            var isViewModelInCollection = collection.Contains(compositeItem.Answering);
-
-            if (compositeItem.Answering.InProgress && !isViewModelInCollection)
-                collection.Insert(collection.IndexOf(compositeItem.QuestionState.Comments) + 1, compositeItem.Answering);
-
-            if (!compositeItem.Answering.InProgress && isViewModelInCollection)
-                collection.Remove(compositeItem.Answering);
         }
 
         private static void OnEnablementChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
