@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -48,12 +49,12 @@ namespace WB.Tests.Unit.Designer.Applications.CommandPostProcessorTests
 
         It should_call_NotifyTargetPersonAboutShareChange = () =>
            recipientNotifier.Verify(
-               x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.StopShare, receiverEmail, receiverName, questoinnaireId, questionnaiteTitle, ShareType.Edit, actionUserEmail),
+               x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.StopShare, receiverEmail, receiverName, questoinnaireId.FormatGuid(), questionnaiteTitle, ShareType.Edit, actionUserEmail),
                Times.Once);
 
         It should_call_NotifyOwnerAboutShareChange = () =>
            recipientNotifier.Verify(
-               x => x.NotifyOwnerAboutShareChange(ShareChangeType.StopShare, ownerEmail, null, questoinnaireId, questionnaiteTitle, ShareType.Edit, actionUserEmail, receiverEmail),
+               x => x.NotifyOwnerAboutShareChange(ShareChangeType.StopShare, ownerEmail, null, questoinnaireId.FormatGuid(), questionnaiteTitle, ShareType.Edit, actionUserEmail, receiverEmail),
                Times.Once);
 
         private static CommandPostprocessor commandPostprocessor;        
