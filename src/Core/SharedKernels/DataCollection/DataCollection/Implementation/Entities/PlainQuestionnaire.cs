@@ -737,7 +737,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfChildQuestions[groupId];
         }
 
-        public ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId)
+        public IReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId)
         {
             if (!this.cacheOfChildEntities.ContainsKey(groupId))
             {

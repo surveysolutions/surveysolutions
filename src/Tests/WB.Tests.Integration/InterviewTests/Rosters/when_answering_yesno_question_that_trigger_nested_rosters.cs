@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var roster2Id = Guid.Parse("22222222222222222222222222222222");
                 var roster3Id = Guid.Parse("33333333333333333333333333333333");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.Group(sectionId, "Section", children: new IComposite[]
                     {
                         Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true,

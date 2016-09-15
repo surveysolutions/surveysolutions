@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -22,7 +23,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IUserInteractionService userInteractionService;
         private readonly IMvxMessenger messenger;
         private readonly IExternalAppLauncher externalAppLauncher;
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
         private readonly IInterviewerInterviewAccessor interviewerInterviewFactory;
 
         public string QuestionnaireName { get; private set; }
@@ -38,7 +40,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IUserInteractionService userInteractionService,
             IMvxMessenger messenger,
             IExternalAppLauncher externalAppLauncher,
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
+            IPlainStorage<QuestionnaireView> questionnaireViewRepository,
+            IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IInterviewerInterviewAccessor interviewFactory)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -46,6 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.messenger = messenger;
             this.externalAppLauncher = externalAppLauncher;
             this.questionnaireViewRepository = questionnaireViewRepository;
+            this.prefilledQuestions = prefilledQuestions;
             this.interviewerInterviewFactory = interviewFactory;
         }
 
@@ -53,15 +57,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
 
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
+
             this.InterviewId = interview.InterviewId;
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaireIdentity.Version);
             this.DateComment = this.GetInterviewDateCommentByStatus(interview);
             this.Comment = this.GetInterviewCommentByStatus(interview);
-            this.PrefilledQuestions = this.GetTop3PrefilledQuestions(interview.AnswersOnPrefilledQuestions);
-            this.GpsLocation = interview.GpsLocation.Coordinates;
+            this.PrefilledQuestions = this.GetTop3PrefilledQuestions();
+            this.GpsLocation = this.GetInterviewLocation(interview);
             this.IsSupportedRemove = interview.CanBeDeleted;
             this.HasComment = !string.IsNullOrEmpty(this.Comment);
+        }
+
+        private InterviewGpsCoordinatesView GetInterviewLocation(InterviewView interview)
+        {
+            if (interview.LocationQuestionId.HasValue)
+            {
+                return new InterviewGpsCoordinatesView
+                {
+                    Latitude = interview.LocationLatitude ?? 0,
+                    Longitude = interview.LocationLongitude ?? 0
+                };
+            }
+
+            return null;
         }
 
         private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
@@ -140,9 +160,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private List<PrefilledQuestion> GetTop3PrefilledQuestions(IEnumerable<InterviewAnswerOnPrefilledQuestionView> answersOnPrefilledQuestions)
+        private List<PrefilledQuestion> GetTop3PrefilledQuestions()
         {
-            return answersOnPrefilledQuestions.Select(fi => new PrefilledQuestion
+            return this.prefilledQuestions.Where(_ => _.InterviewId == this.InterviewId).Select(fi => new PrefilledQuestion
             {
                 Answer = fi.Answer,
                 Question = fi.QuestionText
@@ -170,7 +190,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 this.isInterviewReadyToLoad = true;
                 return;
             }
-            await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
+            this.interviewerInterviewFactory.RemoveInterview(this.InterviewId);
             RaiseRemovedDashboardItem();
         }
 

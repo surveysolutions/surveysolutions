@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -18,7 +19,6 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -27,8 +27,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         private readonly ISynchronizationService synchronizationService;
         private bool shouldUpdatePasswordOfInterviewer;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
         private readonly IPrincipal principal;
@@ -36,24 +36,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly IAttachmentContentStorage attachmentContentStorage;
-        private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
-        private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage;
+        private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
+        private readonly IPlainStorage<InterviewFileView> interviewFileViewStorage;
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
         
         private RestCredentials restCredentials;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService, 
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
-            IAsyncPlainStorage<InterviewView> interviewViewRepository,
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<InterviewView> interviewViewRepository,
             IPrincipal principal,
             ILogger logger, 
             IUserInteractionService userInteractionService, 
             IInterviewerQuestionnaireAccessor questionnairesAccessor, 
             IAttachmentContentStorage attachmentContentStorage, 
             IInterviewerInterviewAccessor interviewFactory, 
-            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
-            IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage,
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
+            IPlainStorage<InterviewFileView> interviewFileViewStorage,
             AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher)
         {
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
                     this.shouldUpdatePasswordOfInterviewer = false;
-                    await this.UpdatePasswordOfInterviewerAsync(restCredentials.Password);
+                    this.UpdatePasswordOfInterviewer(restCredentials.Password);
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     Title = InterviewerUIResources.Synchronization_Download_AttachmentsCleanup
                 });
-                await this.cleanupService.RemovedOrphanedAttachments().ConfigureAwait(false);
+                this.cleanupService.RemovedOrphanedAttachments();
             }
         }
 
@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             {
                 var contentIds = await this.synchronizationService.GetAttachmentContentsAsync(questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: cancellationToken);
+                    token: cancellationToken).ConfigureAwait(false);
 
                 foreach (var contentId in contentIds)
                 {
@@ -303,7 +303,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                             token: cancellationToken);
 
-                        await this.attachmentContentStorage.StoreAsync(attachmentContent);
+                        this.attachmentContentStorage.Store(attachmentContent);
                     }
                 }
 
@@ -314,12 +314,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: cancellationToken);
+                    token: cancellationToken).ConfigureAwait(false);
 
-                await this.questionnairesAccessor.StoreQuestionnaireAsync(questionnaireIdentity, questionnaireApiView.QuestionnaireDocument, 
+                this.questionnairesAccessor.StoreQuestionnaire(questionnaireIdentity, questionnaireApiView.QuestionnaireDocument, 
                     questionnaireApiView.AllowCensus, translationDtos);
 
-                await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
+                await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity).ConfigureAwait(false);
             }
         }
 
@@ -340,12 +340,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             var remoteInterviewsToCreate = remoteInterviews.Where(interview => !localInterviewIds.Contains(interview.Id)).ToList();
 
-            await this.RemoveInterviewsAsync(localInterviewIdsToRemove, statistics, progress);
+            this.RemoveInterviews(localInterviewIdsToRemove, statistics, progress);
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
         }
 
-        private async Task RemoveInterviewsAsync(List<Guid> interviewIds, SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress)
+        private void RemoveInterviews(List<Guid> interviewIds, SychronizationStatistics statistics, IProgress<SyncProgressInfo> progress)
         {
             statistics.TotalDeletedInterviewsCount = interviewIds.Count;
 
@@ -360,7 +360,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         InterviewerUIResources.Synchronization_Interviews)
                 });
 
-                await this.interviewFactory.RemoveInterviewAsync(interviewId);
+                this.interviewFactory.RemoveInterview(interviewId);
 
                 statistics.DeletedInterviewsCount++;
             }
@@ -427,7 +427,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 try
                 {
-                    var interviewPackage = await this.interviewFactory.GetInteviewEventsPackageOrNullAsync(completedInterview.InterviewId);
+                    var interviewPackage = this.interviewFactory.GetInteviewEventsPackageOrNull(completedInterview.InterviewId);
 
                     progress.Report(new SyncProgressInfo
                     {
@@ -453,7 +453,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         this.logger.Warn($"Interview event stream is missing. No package was sent to server. Interview ID: {completedInterview.InterviewId}");
                     }
 
-                    await this.interviewFactory.RemoveInterviewAsync(completedInterview.InterviewId);
+                    this.interviewFactory.RemoveInterview(completedInterview.InterviewId);
 
                     statistics.SuccessfullyUploadedInterviewsCount++;
                 }
@@ -472,25 +472,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             foreach (var imageView in imageViews)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var fileView = await this.interviewFileViewStorage.GetByIdAsync(imageView.FileId);
+                var fileView = this.interviewFileViewStorage.GetById(imageView.FileId);
                 await this.synchronizationService.UploadInterviewImageAsync(
                     interviewId: imageView.InterviewId,
                     fileName: imageView.FileName,
                     fileData: fileView.File,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: cancellationToken);
-                await this.interviewMultimediaViewStorage.RemoveAsync(imageView.Id);
-                await this.interviewFileViewStorage.RemoveAsync(fileView.Id);
+                this.interviewMultimediaViewStorage.Remove(imageView.Id);
+                this.interviewFileViewStorage.Remove(fileView.Id);
             }
         }
 
-        private async Task UpdatePasswordOfInterviewerAsync(string password)
+        private void UpdatePasswordOfInterviewer(string password)
         {
             var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
             localInterviewer.Password = password;
 
-            await this.interviewersPlainStorage.StoreAsync(localInterviewer);
-            await this.principal.SignInAsync(localInterviewer.Name, localInterviewer.Password, true);
+            this.interviewersPlainStorage.Store(localInterviewer);
+            this.principal.SignIn(localInterviewer.Name, localInterviewer.Password, true);
         }
     }
 }

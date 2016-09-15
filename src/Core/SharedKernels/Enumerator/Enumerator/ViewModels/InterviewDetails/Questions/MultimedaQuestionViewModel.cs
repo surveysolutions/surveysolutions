@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (pictureStream != null)
                 {
-                    await this.StorePictureFileAsync(pictureStream, pictureFileName);
+                    this.StorePictureFile(pictureStream, pictureFileName);
 
                     var command = new AnswerPictureQuestionCommand(
                         this.interviewId,
@@ -157,13 +157,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async Task StorePictureFileAsync(Stream pictureStream, string pictureFileName)
+        private void StorePictureFile(Stream pictureStream, string pictureFileName)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 pictureStream.CopyTo(ms);
                 byte[] pictureBytes = ms.ToArray();
-                await this.plainInterviewFileStorage.StoreInterviewBinaryDataAsync(this.interviewId, pictureFileName, pictureBytes);
+                this.plainInterviewFileStorage.StoreInterviewBinaryData(this.interviewId, pictureFileName, pictureBytes);
             }
         }
 

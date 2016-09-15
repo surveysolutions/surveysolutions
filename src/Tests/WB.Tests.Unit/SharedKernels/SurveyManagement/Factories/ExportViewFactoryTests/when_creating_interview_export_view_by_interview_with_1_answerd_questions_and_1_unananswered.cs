@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -33,16 +31,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             result.Levels[0].Records.Length.ShouldEqual(1);
 
         It should__first_record_have_1_answers = () =>
-            result.Levels[0].Records[0].GetQuestions().Count().ShouldEqual(2);
+            result.Levels[0].Records[0].GetPlainAnswers().Count().ShouldEqual(2);
 
         It should_first_parent_ids_be_empty = () =>
            result.Levels[0].Records[0].ParentRecordIds.ShouldBeEmpty();
 
         It should_answered_question_be_not_empty = () =>
-           result.Levels[0].Records[0].GetQuestions()[0].Answers.Length.ShouldNotEqual(0);
-
-        It should_unanswered_question_be_empty = () =>
-          result.Levels[0].Records[0].GetQuestions()[0].Answers.Length.ShouldNotEqual(0);
+           result.Levels[0].Records[0].GetPlainAnswers().First().Length.ShouldNotEqual(0);
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

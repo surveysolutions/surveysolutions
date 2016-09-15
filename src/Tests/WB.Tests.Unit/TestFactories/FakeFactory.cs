@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Moq;
+using MvvmCross.Platform.Core;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -72,6 +73,17 @@ namespace WB.Tests.Unit.TestFactories
             var result = Substitute.For<IStatefulInterviewRepository>();
             result.Get(null).ReturnsForAnyArgs(interview);
             return result;
+        }
+
+        public IMvxMainThreadDispatcher MvxMainThreadDispatcher() => new FakeMvxMainThreadDispatcher();
+
+        private class FakeMvxMainThreadDispatcher : IMvxMainThreadDispatcher
+        {
+            public bool RequestMainThreadAction(Action action)
+            {
+                action.Invoke();
+                return true;
+            }
         }
     }
 }

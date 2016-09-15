@@ -1,9 +1,9 @@
 using System;
-using SQLite.Net.Attributes;
+using SQLite;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class InterviewView : IPlainStorageEntity
     {
@@ -23,8 +23,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public DateTime? CompletedDateTime { get; set; }
         public DateTime? RejectedDateTime { get; set; }
 
-        public InterviewAnswerOnPrefilledQuestionView[] AnswersOnPrefilledQuestions { get; set; }
-        public InterviewGpsLocationView GpsLocation { get; set; }
+        public byte[] AnswersOnPrefilledQuestions { get; set; }
+        public byte[] GpsLocation { get; set; }
+
+        //public InterviewAnswerOnPrefilledQuestionView[] AnswersOnPrefilledQuestions { get; set; }
+        //public InterviewGpsLocationView GpsLocation { get; set; }
+
+        public Guid? LocationQuestionId { get; set; }
+
+        public double? LocationLatitude { get; set; }
+        public double? LocationLongitude { get; set; }
 
         public string Language { get; set; }
     }

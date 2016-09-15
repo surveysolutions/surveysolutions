@@ -9,6 +9,7 @@ using System.Globalization;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -16,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
@@ -193,12 +195,13 @@ namespace WB.Tests.Unit.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X")
+        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null)
             => Create.Entity.Roster(
                 rosterId: rosterId,
                 children: children,
                 title: title,
                 variable: variable,
+                fixedRosterTitles: fixedRosterTitles,
                 fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public FixedRosterTitle FixedRosterTitle(decimal value, string title)
@@ -319,7 +322,7 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
-        public InterviewDataExportRecord InterviewDataExportRecord(Guid interviewId, params ExportedQuestion[] questions)
+        public InterviewDataExportRecord InterviewDataExportRecord(Guid interviewId, params ExportQuestionService[] questions)
             => new InterviewDataExportRecord("test", new string[0], new string[0], new string[0])
             {
                 Answers = questions.Select(x => string.Join("\n", x)).ToArray(),
@@ -474,10 +477,7 @@ namespace WB.Tests.Unit.TestFactories
                 Id = interviewId.FormatGuid(),
                 InterviewId = interviewId.Value,
                 QuestionnaireId = questionnaireId,
-                GpsLocation = new InterviewGpsLocationView
-                {
-                    PrefilledQuestionId = prefilledQuestionId
-                }
+                LocationQuestionId = prefilledQuestionId
             };
         }
 
@@ -523,7 +523,8 @@ namespace WB.Tests.Unit.TestFactories
 
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null,
-            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, params decimal[] answers)
+            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null,
+            params decimal[] answers)
             => new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -536,7 +537,7 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
-                Answers = answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList(),
+                Answers = textAnswers?.ToList() ?? answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList(),
                 Properties = new QuestionProperties(false, false)
                 {
                     OptionsFilterExpression = optionsFilterExpression
@@ -777,7 +778,7 @@ namespace WB.Tests.Unit.TestFactories
             string enablementCondition = null,
             string[] fixedTitles = null,
             IEnumerable<IComposite> children = null,
-            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+            RosterSizeSourceType? rosterSizeSourceType = null,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null)
@@ -790,9 +791,9 @@ namespace WB.Tests.Unit.TestFactories
                 children: children);
 
             group.IsRoster = true;
-            group.RosterSizeSource = rosterSizeSourceType;
+            group.RosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
 
-            if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
+            if (group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
             {
                 if (fixedRosterTitles == null)
                 {
@@ -829,9 +830,10 @@ namespace WB.Tests.Unit.TestFactories
             string linkedFilterExpression = null,
             Guid? linkedToRosterId = null,
             bool? isFilteredCombobox = null,
-            string optionsFilterExpression = null)
+            string optionsFilterExpression = null,
+            List<Answer> answers = null)
         {
-            var answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
+            answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
             {
                 for (int i = 0; i < parentCodes.Length; i++)

@@ -7,31 +7,31 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class AttachmentContentStorage : IAttachmentContentStorage
     {
-        private readonly IAsyncPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
-        private readonly IAsyncPlainStorage<AttachmentContentData> attachmentContentDataRepository;
+        private readonly IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
+        private readonly IPlainStorage<AttachmentContentData> attachmentContentDataRepository;
 
-        public AttachmentContentStorage(IAsyncPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
-            IAsyncPlainStorage<AttachmentContentData> attachmentContentDataRepository)
+        public AttachmentContentStorage(IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
+            IPlainStorage<AttachmentContentData> attachmentContentDataRepository)
         {
             this.attachmentContentMetadataRepository = attachmentContentMetadataRepository;
             this.attachmentContentDataRepository = attachmentContentDataRepository;
         }
 
-        public async Task StoreAsync(AttachmentContent attachmentContent)
+        public void Store(AttachmentContent attachmentContent)
         {
-            await this.attachmentContentDataRepository.StoreAsync(new AttachmentContentData
+            this.attachmentContentDataRepository.Store(new AttachmentContentData
             {
                 Id = attachmentContent.Id,
                 Content = attachmentContent.Content
             });
-            await this.attachmentContentMetadataRepository.StoreAsync(new AttachmentContentMetadata
+            this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
             {
                 ContentType = attachmentContent.ContentType,
                 Id = attachmentContent.Id,
                 Size = attachmentContent.Size,
             });
         }
-        
+
         public AttachmentContentMetadata GetMetadata(string attachmentContentId)
         {
             var attachmentContent = this.attachmentContentMetadataRepository.GetById(attachmentContentId);

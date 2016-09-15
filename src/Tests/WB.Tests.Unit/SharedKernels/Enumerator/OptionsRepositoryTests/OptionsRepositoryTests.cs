@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
     public class OptionsRepositoryTests
     {
         [Test]
-        public async Task should_keep_options_order_after_saving_options()
+        public void should_keep_options_order_after_saving_options()
         {
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var answerCodes = Enumerable.Range(0, 300).Reverse().Select(Convert.ToDecimal).ToArray();
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
-            await storage.StoreOptionsForQuestionAsync(questionnaireIdentity, questionId, question.Answers, new List<TranslationDto>());
+            storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, new List<TranslationDto>());
 
             var filteredQuestionOptions = storage.GetFilteredQuestionOptions(questionnaireIdentity, questionId, null, null, null);
 
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
         }
 
         [Test]
-        public async Task should_return_options_respecting_translation()
+        public void should_return_options_respecting_translation()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             SingleQuestion question = Create.Entity.SingleQuestion(
                 id: questionId,
                 variable: "cat",
-                options: options ,
+                options: options,
                 isFilteredCombobox: true);
 
             var translationId = Guid.Parse("1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -74,8 +74,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             };
 
             var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
-            
-            await storage.StoreOptionsForQuestionAsync(questionnaireIdentity, questionId, question.Answers, translations);
+
+            storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
 
             var filteredQuestionOptions = storage.GetFilteredQuestionOptions(questionnaireIdentity, questionId, null, null, translationId);
 
@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
         }
 
         [Test]
-        public async Task should_return_options_respecting_translation_with_no_extra()
+        public void should_return_options_respecting_translation_with_no_extra()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
@@ -129,7 +129,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
 
             var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
 
-            await storage.StoreOptionsForQuestionAsync(questionnaireIdentity, questionId, question.Answers, translations);
+            storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
 
             var filteredQuestionOptions = storage.GetFilteredQuestionOptions(questionnaireIdentity, questionId, null, null, translationId);
 
@@ -141,7 +141,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
         }
 
         [Test]
-        public async Task should_return_requested_option_by_title()
+        public void should_return_requested_option_by_title()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
@@ -175,7 +175,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             };
 
             var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
-            await storage.StoreOptionsForQuestionAsync(questionnaireIdentity, questionId, question.Answers, translations);
+            storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
             var filteredQuestionOption = storage.GetQuestionOption(questionnaireIdentity, questionId, 1.ToString(), translationId);
 
             Assert.That(filteredQuestionOption, Is.Not.Null);
@@ -183,7 +183,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
         }
 
         [Test]
-        public async Task should_return_requested_option_by_value()
+        public void should_return_requested_option_by_value()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
@@ -217,7 +217,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             };
 
             var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
-            await storage.StoreOptionsForQuestionAsync(questionnaireIdentity, questionId, question.Answers, translations);
+            storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
             var filteredQuestionOption = storage.GetQuestionOptionByValue(questionnaireIdentity, questionId, 1, translationId);
 
             Assert.That(filteredQuestionOption, Is.Not.Null);

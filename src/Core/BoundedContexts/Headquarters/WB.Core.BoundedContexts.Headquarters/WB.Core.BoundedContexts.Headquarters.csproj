@@ -364,6 +364,7 @@
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\DeleteSupervisor\IDeleteSupervisorService.cs" />
+    <Compile Include="Services\Export\IExportQuestionService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />
@@ -431,7 +432,8 @@
     <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
     <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
-    <Compile Include="Views\DataExport\ExportedQuestion.cs" />
+    <Compile Include="Implementation\Services\Export\ExportQuestionService.cs" />
+    <Compile Include="Views\DataExport\ExportFormatSettings.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
     <Compile Include="Views\DataExport\InterviewComment.cs" />
     <Compile Include="Views\DataExport\InterviewCommentaries.cs" />
@@ -441,7 +443,6 @@
     <Compile Include="Views\DataExport\InterviewExportedAction.cs" />
     <Compile Include="Views\DataExport\InterviewExportedActionUtils.cs" />
     <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
-    <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
     <Compile Include="Views\DataExport\QuestionSubType.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />

@@ -20,6 +20,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public DynamicTextViewModel Title { get; }
         public EnablementViewModel Enablement { get; }
 
+        public Identity Identity => this.questionIdentity;
+
+        private Identity questionIdentity;
         public QuestionHeaderViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -37,6 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
+
+            this.questionIdentity = questionIdentity;
 
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);

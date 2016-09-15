@@ -20,9 +20,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
-        private readonly IAsyncPlainStorage<TesterUserIdentity> userStorage;
-        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage;
-        private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
+        private readonly IPlainStorage<TesterUserIdentity> userStorage;
+        private readonly IPlainStorage<QuestionnaireListItem> questionnairesStorage;
+        private readonly IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
 
         public LoginViewModel(
             IPrincipal principal, 
@@ -30,9 +30,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService, 
             IFriendlyErrorMessageService friendlyErrorMessageService,
-            IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage, 
-            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
-            IAsyncPlainStorage<TesterUserIdentity> userStorage)
+            IPlainStorage<QuestionnaireListItem> questionnairesStorage, 
+            IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
+            IPlainStorage<TesterUserIdentity> userStorage)
             : base(principal, viewModelNavigationService)
         {
             this.designerApiService = designerApiService;
@@ -90,11 +90,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 if (await this.designerApiService.Authorize(login: LoginName, password: Password))
                 {
-                    await this.userStorage.RemoveAllAsync();
-                    await this.dashboardLastUpdateStorage.RemoveAllAsync();
-                    await this.questionnairesStorage.RemoveAllAsync();
+                    this.userStorage.RemoveAll();
+                    this.dashboardLastUpdateStorage.RemoveAll();
+                    this.questionnairesStorage.RemoveAll();
 
-                    await this.principal.SignInAsync(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
+                    this.principal.SignIn(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
                     this.viewModelNavigationService.NavigateTo<DashboardViewModel>();   
                 }
             }

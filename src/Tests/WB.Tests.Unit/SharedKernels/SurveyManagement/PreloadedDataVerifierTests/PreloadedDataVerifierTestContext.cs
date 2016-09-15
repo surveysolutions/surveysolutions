@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -34,7 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         {
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null
-                : new ExportViewFactory(new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>()).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
+                : new ExportViewFactory(new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>(), new ExportQuestionService()).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
+
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));

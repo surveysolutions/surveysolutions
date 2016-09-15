@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var rosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 var multiOptionQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.MultyOptionsQuestion(multiOptionQuestionId, variable:"q1",
                         options: new List<Answer>{ Create.Option(value: "1", text: "Hello"), Create.Option(value: "2", text: "World") }),
                     Create.Roster(rosterId, 

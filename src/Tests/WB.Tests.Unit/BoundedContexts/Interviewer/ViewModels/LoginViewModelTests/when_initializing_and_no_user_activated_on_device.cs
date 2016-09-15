@@ -32,6 +32,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
         static LoginViewModel viewModel;
         static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
+        static Mock<IPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IPlainStorage<InterviewerIdentity>>();
     }
 }

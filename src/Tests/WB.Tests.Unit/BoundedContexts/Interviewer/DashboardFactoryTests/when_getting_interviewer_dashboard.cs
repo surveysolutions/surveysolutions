@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -11,6 +12,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
@@ -19,15 +21,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
 {
     internal class when_getting_interviewer_dashboard: InterviewerDashboardFactoryTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             var questionnaireViewRepository = new SqliteInmemoryStorage<QuestionnaireView>();
             var questionnaireIdentity = new QuestionnaireIdentity(new Guid(), 1);
-            questionnaireViewRepository.StoreAsync(new QuestionnaireView
+            questionnaireViewRepository.Store(new QuestionnaireView
             {
-                Identity = questionnaireIdentity,
                 Id = questionnaireIdentity.ToString()
-            }).WaitAndUnwrapException();
+            });
 
             foreach (var emulatedStorageItem in emulatedStorageItems)
             {
@@ -35,21 +37,23 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
             }
             
             var interviewsAsyncPlainStorage = new SqliteInmemoryStorage<InterviewView>();
-            interviewsAsyncPlainStorage.StoreAsync(emulatedStorageItems).WaitAndUnwrapException();
+            interviewsAsyncPlainStorage.Store(emulatedStorageItems);
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(
                     x => x.GetNew<InterviewDashboardItemViewModel>() == 
-                    new InterviewDashboardItemViewModel(null, null, null, null, questionnaireViewRepository, null));
+                    new InterviewDashboardItemViewModel(null, null, null, null, questionnaireViewRepository, new InMemoryPlainStorage<PrefilledQuestionView>(), null));
             
             interviewerDashboardFactory = CreateInterviewerDashboardFactory(interviewViewRepository: interviewsAsyncPlainStorage,
                 questionnaireViewRepository: questionnaireViewRepository,
                 interviewViewModelFactory: interviewViewModelFactory);
-        };
+        }
 
-        Because of = () =>
+        [SetUp]
+        public void because_of() =>
             dashboardByInterviewer = interviewerDashboardFactory.GetInterviewerDashboardAsync(interviewerId);
 
-        It should_interviews_be_filered_by_specified_interviewer = () =>
+        [Test]
+        public void should_interviews_be_filered_by_specified_interviewer() =>
             dashboardByInterviewer.StartedInterviews
                 .Union(dashboardByInterviewer.CompletedInterviews)
                 .Union(dashboardByInterviewer.NewInterviews)
@@ -76,8 +80,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 InterviewId = completedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.Completed,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -85,8 +87,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 InterviewId = rejectedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.RejectedBySupervisor,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -94,8 +94,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 InterviewId = newInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.InterviewerAssigned,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -103,8 +101,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 InterviewId = restartedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.Restarted,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -113,8 +109,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.InterviewerAssigned,
                 StartedDateTime = DateTime.Now,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
 
             new InterviewView
@@ -122,32 +116,24 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 Id = Guid.NewGuid().FormatGuid(),
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.Completed,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
                 Id = Guid.NewGuid().FormatGuid(),
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.RejectedBySupervisor,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
                 Id = Guid.NewGuid().FormatGuid(),
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.InterviewerAssigned,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
                 Id = Guid.NewGuid().FormatGuid(),
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.Restarted,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             },
             new InterviewView
             {
@@ -155,8 +141,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 ResponsibleId = Guid.NewGuid(),
                 Status = InterviewStatus.InterviewerAssigned,
                 StartedDateTime = DateTime.Now,
-                AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
-                GpsLocation = new InterviewGpsLocationView()
             }
         };
         static DashboardInformation dashboardByInterviewer;

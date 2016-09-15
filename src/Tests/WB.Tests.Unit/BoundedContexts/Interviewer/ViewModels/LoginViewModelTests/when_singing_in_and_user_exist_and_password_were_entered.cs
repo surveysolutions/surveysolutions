@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             var interviewer = CreateInterviewerIdentity(userName, userPasswordHash);
 
             var principal = new Mock<IPrincipal>();
-            principal.Setup(x => x.SignInAsync(userName, userPasswordHash, true)).Returns(Task.FromResult(true));
+            principal.Setup(x => x.SignIn(userName, userPasswordHash, true)).Returns(true);
 
             InterviewersPlainStorageMock
                .Setup(x => x.FirstOrDefault())
@@ -49,6 +49,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         private static readonly string userPassword = "password";
         private static readonly string userPasswordHash = "passwordHash";
         static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorageMock = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
+        static Mock<IPlainStorage<InterviewerIdentity>> InterviewersPlainStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
     }
 }

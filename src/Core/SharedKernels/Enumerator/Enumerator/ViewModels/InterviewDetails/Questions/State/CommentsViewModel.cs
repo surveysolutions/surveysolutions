@@ -19,6 +19,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class CommentsViewModel : MvxNotifyPropertyChanged,
         ICompositeEntity
     {
+        public event EventHandler<EventArgs> CommentsInputShown; 
+
         public class CommentViewModel
         {
             public string Comment { get; set; }
@@ -148,7 +150,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void ShowCommentInEditor()
         {
+            this.OnCommentsInputShown();
             this.IsCommentInEditMode = true;
+        }
+
+        protected virtual void OnCommentsInputShown()
+        {
+            this.CommentsInputShown?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Ncqrs.Eventing.Sourcing
         [NonSerialized]
         private Guid _eventSourceId;
         
-        public Guid EventSourceId
+        public virtual Guid EventSourceId
         {
             get { return _eventSourceId; }
             protected set { _eventSourceId = value; }

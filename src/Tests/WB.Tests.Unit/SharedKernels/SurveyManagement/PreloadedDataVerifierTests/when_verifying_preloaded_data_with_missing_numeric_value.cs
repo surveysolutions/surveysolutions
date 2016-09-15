@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 });
             questionnaire.Title = "questionnaire";
             preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1"},
-                new string[][] { new string[] { "1", ExportedQuestion.MissingNumericQuestionValue } },
+                new string[][] { new string[] { "1", ExportFormatSettings.MissingNumericQuestionValue } },
                 "questionnaire.csv");
 
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();

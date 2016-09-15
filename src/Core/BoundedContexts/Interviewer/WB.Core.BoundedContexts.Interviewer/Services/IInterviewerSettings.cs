@@ -11,13 +11,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         string GetApplicationVersionName();
         string GetDeviceTechnicalInformation();
         int GetApplicationVersionCode();
-        Task SetEndpointAsync(string endpoint);
-        Task SetHttpResponseTimeoutAsync(int timeout);
-        Task SetGpsResponseTimeoutAsync(int timeout);
-        Task SetCommunicationBufferSize(int bufferSize);
-        Task SetGpsDesiredAccuracy(double value);
-        Task SetEventChunkSize(int eventChunkSize);
-        Task SetVibrateOnErrorAsync(bool vibrate);
+        void SetEndpoint(string endpoint);
+        void SetHttpResponseTimeout(int timeout);
+        void SetGpsResponseTimeout(int timeout);
+        void SetCommunicationBufferSize(int bufferSize);
+        void SetGpsDesiredAccuracy(double value);
+        void SetEventChunkSize(int eventChunkSize);
+        void SetVibrateOnError(bool vibrate);
 
         string BackupFolder { get; }
         string RestoreFolder { get; }

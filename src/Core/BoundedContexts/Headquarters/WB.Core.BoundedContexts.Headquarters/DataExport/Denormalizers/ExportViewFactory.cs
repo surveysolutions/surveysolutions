@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -28,12 +29,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IExportQuestionService exportQuestionService;
 
         public ExportViewFactory(
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, IFileSystemAccessor fileSystemAccessor)
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, 
+            IFileSystemAccessor fileSystemAccessor,
+            IExportQuestionService exportQuestionService)
         {
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.exportQuestionService = exportQuestionService;
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, long version)
@@ -113,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     };
                 }
 
-                string[][] questionsForExport = this.GetQuestionsForExport(dataByLevel, headerStructureForLevel);
+                string[][] questionsForExport = this.GetExportValues(dataByLevel, headerStructureForLevel);
 
                 dataRecords.Add(new InterviewDataExportRecord(recordId,
                     referenceValues,
@@ -182,18 +187,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return string.Empty;
         }
 
-        private string[][] GetQuestionsForExport(InterviewLevel interviewLevel,
-            HeaderStructureForLevel headerStructureForLevel)
+        private string[][] GetExportValues(InterviewLevel interviewLevel, HeaderStructureForLevel headerStructureForLevel)
         {
-            var result = new List<ExportedQuestion>();
+            var result = new List<string[]>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
                 var question = interviewLevel.QuestionsSearchCache.ContainsKey(headerItem.PublicKey) ? interviewLevel.QuestionsSearchCache[headerItem.PublicKey] : null;
-                ExportedQuestion exportedQuestion = new ExportedQuestion(question, headerItem);
-                
+                var exportedQuestion = exportQuestionService.GetExportedQuestion(question, headerItem);
                 result.Add(exportedQuestion);
             }
-            return result.Select(x => x.Answers).ToArray();
+            return result.ToArray();
         }
 
         private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, ValueVector<Guid> levelVector)

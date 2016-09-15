@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             IViewModelNavigationService viewModelNavigationService = null,
             IPrincipal principal = null,
             IPasswordHasher passwordHasher = null,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             ISynchronizationService synchronizationService = null,
             ILogger logger = null)
         {
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                interviewersPlainStorage ?? Mock.Of<IAsyncPlainStorage<InterviewerIdentity>>(),
+                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 logger ?? Mock.Of<ILogger>());
         }

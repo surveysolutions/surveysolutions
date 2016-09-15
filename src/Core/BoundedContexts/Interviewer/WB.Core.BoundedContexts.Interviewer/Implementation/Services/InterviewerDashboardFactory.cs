@@ -14,12 +14,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerDashboardFactory : IInterviewerDashboardFactory
     {
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
-        public InterviewerDashboardFactory(IAsyncPlainStorage<InterviewView> interviewViewRepository,
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
+        public InterviewerDashboardFactory(IPlainStorage<InterviewView> interviewViewRepository,
+            IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory interviewViewModelFactory)
         {
             this.interviewViewRepository = interviewViewRepository;

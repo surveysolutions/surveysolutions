@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var id = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(id, children: new[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id, children: new[]
                 {
                     Create.Chapter(children: new IComposite[]
                     {
