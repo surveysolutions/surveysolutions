@@ -282,10 +282,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
                     questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: cancellationToken);
+                    token: cancellationToken).ConfigureAwait(false);
 
-                await this.questionnairesAccessor.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, questionnaireAssembly);
-                await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
+                await this.questionnairesAccessor.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, questionnaireAssembly).ConfigureAwait(false);
+                await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity).ConfigureAwait(false);
             }
 
             if (!this.questionnairesAccessor.IsQuestionnaireExists(questionnaireIdentity))
@@ -301,7 +301,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     {
                         var attachmentContent = await this.synchronizationService.GetAttachmentContentAsync(contentId: contentId,
                             onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                            token: cancellationToken);
+                            token: cancellationToken).ConfigureAwait(false); 
 
                         this.attachmentContentStorage.Store(attachmentContent);
                     }
