@@ -83,7 +83,6 @@ namespace WB.Core.BoundedContexts.Designer
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireSharedPersonsDenormalizer>(this.Kernel);
-            DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireListViewItemDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireChangeHistoryDenormalizer>(this.Kernel);
 
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
@@ -114,9 +113,9 @@ namespace WB.Core.BoundedContexts.Designer
 
             CommandRegistry
                 .Setup<Questionnaire>()
-                .InitializesWith<CloneQuestionnaire>(command => command.PublicKey, (command, aggregate) => aggregate.CloneQuestionnaire(command.Title, command.IsPublic, command.CreatedBy, command.PublicKey, command.Source))
-                .InitializesWith<CreateQuestionnaire>(command => command.PublicKey, (command, aggregate) => aggregate.CreateQuestionnaire(command.PublicKey, command.Title, command.CreatedBy, command.IsPublic))
-                .InitializesWith<ImportQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportQuestionnaire(command.CreatedBy, command.Source))
+                .InitializesWith<CloneQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneQuestionnaire(command.Title, command.IsPublic, command.ResponsibleId, command.QuestionnaireId, command.Source))
+                .InitializesWith<CreateQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CreateQuestionnaire(command.QuestionnaireId, command.Title, command.ResponsibleId, command.IsPublic))
+                .InitializesWith<ImportQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportQuestionnaire(command.ResponsibleId, command.Source))
                 .Handles<DeleteQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteQuestionnaire())
                 // Macro
                 .Handles<AddMacro>(command => command.QuestionnaireId, aggregate => aggregate.AddMacro)
