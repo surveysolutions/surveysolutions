@@ -60,21 +60,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [Test]
         public void NewAddGroup_When_parent_group_is_not_roster_Then_raised_NewAddGroup_event_contains_regular_group_id_as_parent()
         {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneNotRosterGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);
+            // arrange
+            var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            Guid responsibleId = Guid.NewGuid();
+            var groupId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneNotRosterGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);
 
-                // act
-                questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null,
-                    description: null, condition: null, hideIfDisabled: false, parentGroupId: parentRegularGroupId, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            // act
+            questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null,
+                description: null, condition: null, hideIfDisabled: false, parentGroupId: parentRegularGroupId, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-                // assert
-                Assert.That(GetLastEvent<NewGroupAdded>(eventContext).ParentGroupPublicKey, Is.EqualTo(parentRegularGroupId));
-            }
+            // assert
+            Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).GetParent().PublicKey, Is.EqualTo(parentRegularGroupId));
         }
 
         public void NewAddGroup_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown()

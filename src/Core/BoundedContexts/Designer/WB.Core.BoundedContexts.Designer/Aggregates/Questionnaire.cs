@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -2696,7 +2697,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     replacementIdDictionary: replacementIdDictionary,
                     events: events);
 
-                //events.ForEach(this.ApplyEvent);
+                events.ForEach(pasteEvent =>
+                {
+                    var method = typeof(Questionnaire).GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) 
+                        .Single(m =>
+                        {
+                            var parameters = m.GetParameters();
+                            return parameters.Length == 1 && parameters[0].ParameterType == pasteEvent.GetType();
+                        });
+
+                    method.Invoke(this, new object[] { pasteEvent });
+                });
 
                 return;
             }

@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
            questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).ShouldNotBeNull();
 
         It should_contains_group_with_GroupPublicKey_equal_to_roster_id = () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).GetParent().PublicKey.ShouldEqual(rosterId);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).PublicKey.ShouldEqual(rosterId);
 
         It should_contains_group_with_IsRoster_equal_to_false = () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).IsRoster.ShouldBeFalse();

@@ -52,18 +52,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [Test]
         public void ctor_When_title_specified_Then_raised_NewQuestionnaireCreated_event_with_same_title()
         {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var title = "title, the";
+            // arrange
+            var title = "title, the";
 
-                // act
-                Questionnaire questionnaire = Create.Questionnaire();
-                questionnaire.CreateQuestionnaire(Guid.NewGuid(), title, null, false);
+            // act
+            Questionnaire questionnaire = Create.Questionnaire();
+            questionnaire.CreateQuestionnaire(Guid.NewGuid(), title, null, false);
 
-                // assert
-                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));
-            }
+            // assert
+            Assert.That(questionnaire.QuestionnaireDocument.Title, Is.EqualTo(title));
         }
     }
 }
