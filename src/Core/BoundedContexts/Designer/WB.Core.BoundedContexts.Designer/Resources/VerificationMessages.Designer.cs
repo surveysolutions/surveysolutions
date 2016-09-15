@@ -1349,5 +1349,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0261_RosterStructureTooExplosive", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster has reached size limit. Reduce roster size or decrease nesting..
+        /// </summary>
+        internal static string WB0262_RosterHasTooBigPropagation {
+            get {
+                return ResourceManager.GetString("WB0262_RosterHasTooBigPropagation", resourceCulture);
+            }
+        }
     }
 }
