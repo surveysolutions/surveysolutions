@@ -4,9 +4,11 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code;
@@ -37,11 +39,16 @@ namespace WB.Tests.Unit.Designer.Applications.CommandPostProcessorTests
 
             accountRepository.Setup(x => x.GetUserNameByEmail(receiverEmail)).Returns(receiverName);
 
-            command = new RemoveSharedPersonFromQuestionnaire(questoinnaireId, actionUserId, receiverEmail, responsibleId);
+            var questionnaireListViewItemStorage = new InMemoryPlainStorageAccessor<QuestionnaireListViewItem>();
+            questionnaireListViewItemStorage.Store(new QuestionnaireListViewItem { QuestionnaireId = questoinnaireId }, questoinnaireId);
+
+            command = new RemoveSharedPersonFromQuestionnaire(Guid.Parse(questoinnaireId), actionUserId, receiverEmail, responsibleId);
 
             var logger = new Mock<ILogger>();
 
-            commandPostprocessor = Create.CommandPostprocessor(membershipUserService, recipientNotifier.Object, accountRepository.Object, documentStorage, logger.Object);
+            commandPostprocessor = Create.CommandPostprocessor(membershipUserService, recipientNotifier.Object,
+                accountRepository.Object, documentStorage, logger.Object,
+                questionnaireListViewItemStorage: questionnaireListViewItemStorage);
         };
 
         Because of = () =>
@@ -49,19 +56,19 @@ namespace WB.Tests.Unit.Designer.Applications.CommandPostProcessorTests
 
         It should_call_NotifyTargetPersonAboutShareChange = () =>
            recipientNotifier.Verify(
-               x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.StopShare, receiverEmail, receiverName, questoinnaireId.FormatGuid(), questionnaiteTitle, ShareType.Edit, actionUserEmail),
+               x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.StopShare, receiverEmail, receiverName, questoinnaireId, questionnaiteTitle, ShareType.Edit, actionUserEmail),
                Times.Once);
 
         It should_call_NotifyOwnerAboutShareChange = () =>
            recipientNotifier.Verify(
-               x => x.NotifyOwnerAboutShareChange(ShareChangeType.StopShare, ownerEmail, null, questoinnaireId.FormatGuid(), questionnaiteTitle, ShareType.Edit, actionUserEmail, receiverEmail),
+               x => x.NotifyOwnerAboutShareChange(ShareChangeType.StopShare, ownerEmail, null, questoinnaireId, questionnaiteTitle, ShareType.Edit, actionUserEmail, receiverEmail),
                Times.Once);
 
         private static CommandPostprocessor commandPostprocessor;        
         
         private static Guid responsibleId = Guid.Parse("23333333333333333333333333333333");
 
-        private static Guid questoinnaireId = Guid.Parse("13333333333333333333333333333333");
+        private static string questoinnaireId = "13333333333333333333333333333333";
         private static string questionnaiteTitle = "questionnaire title";
 
         private static string receiverEmail = "test@example.com";
