@@ -64,7 +64,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool Enabled
         {
             get { return this.enabled; }
-            private set { this.enabled = value; this.RaisePropertyChanged(); }
+            private set
+            {
+                this.RaiseAndSetIfChanged(ref this.enabled, value);
+            }
         }
 
         private void UpdateSelfFromModel()
