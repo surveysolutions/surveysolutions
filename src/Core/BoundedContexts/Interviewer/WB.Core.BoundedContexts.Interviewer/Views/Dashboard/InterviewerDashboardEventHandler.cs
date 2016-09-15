@@ -322,27 +322,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.interviewViewRepository.Store(interviewView);
         }
 
-        private readonly Dictionary<Guid, QuestionnaireIdentity> mapInterviewIdToQuestionnaireIdentity = new Dictionary<Guid, QuestionnaireIdentity>();
-
         private void AnswerOnPrefilledQuestion(Guid interviewId, Guid questionId, object answer)
         {
-            QuestionnaireIdentity questionnaireIdentity;
-            if (this.mapInterviewIdToQuestionnaireIdentity.TryGetValue(interviewId, out questionnaireIdentity))
-            {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, language: null);
-                if (!questionnaire.IsPrefilled(questionId))
-                    return;
-            }
-
             var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
             if (interviewView == null) return;
 
-            if (questionnaireIdentity == null)
-            {
-                questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
-                this.mapInterviewIdToQuestionnaireIdentity.Add(interviewId, questionnaireIdentity);
-            }
-            
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
+
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
+            if (!questionnaire.IsPrefilled(questionId))
+                return;
 
             if (questionId == interviewView.LocationQuestionId)
             {
@@ -361,8 +350,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             else
             {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId), interviewView.Language);
-
                 var newPrefilledQuestionToStore = this.GetAnswerOnPrefilledQuestion(questionId, questionnaire, answer, interviewView.Language, interviewId);
 
                 var interviewPrefilledQuestion = this.prefilledQuestions.Where(question => question.QuestionId == questionId && question.InterviewId == interviewId).FirstOrDefault()

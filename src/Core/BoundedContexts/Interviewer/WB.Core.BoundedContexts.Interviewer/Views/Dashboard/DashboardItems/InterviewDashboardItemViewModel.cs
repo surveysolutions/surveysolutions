@@ -162,7 +162,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private List<PrefilledQuestion> GetTop3PrefilledQuestions()
         {
-            return this.prefilledQuestions.Where(_ => true).Select(fi => new PrefilledQuestion
+            return this.prefilledQuestions.Where(_ => _.InterviewId == this.InterviewId).Select(fi => new PrefilledQuestion
             {
                 Answer = fi.Answer,
                 Question = fi.QuestionText
