@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public decimal Value { get; set; }
 
+        [Indexed]
         public string Title { get; set; }
 
         public decimal? ParentValue { get; set; }
