@@ -99,10 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private IMvxCommand showCommentEditorCommand;
-        public IMvxCommand ShowCommentEditorCommand
-        {
-            get { return this.showCommentEditorCommand ?? (this.showCommentEditorCommand = new MvxCommand(this.ShowCommentsCommand)); }
-        }
+        public IMvxCommand ShowCommentEditorCommand => this.showCommentEditorCommand ?? (this.showCommentEditorCommand = new MvxCommand(this.ShowCommentsCommand));
 
         private void ShowCommentsCommand()
         {
