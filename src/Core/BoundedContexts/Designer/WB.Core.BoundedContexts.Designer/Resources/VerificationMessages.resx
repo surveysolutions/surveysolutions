@@ -546,4 +546,7 @@
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
     <value>Questionnaire contains rosters that cumulative size is not allowed.</value>
   </data>
+  <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+    <value>Roster has reached size limit. Reduce roster size or decrease nesting.</value>
+  </data>
 </root>
