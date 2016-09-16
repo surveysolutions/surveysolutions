@@ -265,8 +265,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3") },
                 Children = new List<IComposite>()
-                {
-                     Create.TextListQuestion(q3Id, variable:"list_question", title: "list_question_inside_fixed_roster", maxAnswerCount: 16),
+                { 
+                     //Create.TextListQuestion(q3Id, variable:"list_question", title: "list_question_inside_fixed_roster", maxAnswerCount: 16),
                 }
             };
             var listNestedRoster = new Group

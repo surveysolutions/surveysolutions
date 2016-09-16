@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         };
 
         private static readonly Type[] QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new[]
-        {typeof (TextDetailsView), typeof (NumericDetailsView), typeof (DateTimeDetailsView)};
+        {typeof (TextQuestion), typeof (NumericQuestion), typeof (DateTimeQuestion)};
 
         private static readonly SelectOption[] VariableTypeOptions =
         {
@@ -689,7 +689,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             List<IGroup> parents = new List<IGroup>();
             var parent = (IGroup)entity.GetParent();
-            while (parent != null)
+            while (parent != null && !(parent is QuestionnaireDocument))
             {
                 parents.Add(parent);
                 parent = (IGroup)parent.GetParent();
