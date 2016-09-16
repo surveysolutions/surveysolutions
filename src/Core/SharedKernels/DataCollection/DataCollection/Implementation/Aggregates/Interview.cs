@@ -2168,7 +2168,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRostersEvents(params RosterCalculationData[] rosterDatas)
         {
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+            var rosterInstancesToAdd = this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToAdd, new RosterIdentityComparer(), rosterDatas);
 
             if (rosterInstancesToAdd.Any())
@@ -2180,7 +2180,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesAdded(instances));
             }
 
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+            var rosterInstancesToRemove = this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterDatas);
 
             if (rosterInstancesToRemove.Any())
@@ -2196,7 +2196,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (changedRosterRowTitleDtoFromRosterData.Any())
                 this.ApplyEvent(new RosterInstancesTitleChanged(CreateChangedRosterRowTitleDtoFromRosterData(rosterDatas)));
 
-            this.ApplyAnswersRemovanceEvents(this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+            this.ApplyAnswersRemovanceEvents(this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.AnswersToRemoveByDecreasedRosterSize, new IdentityComparer(), rosterDatas));
         }
 
@@ -2232,9 +2232,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return result.ToArray();
         }
 
-        private List<T> GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer, params RosterCalculationData[] datas)
+        private List<T> GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters<T>(Func<RosterCalculationData, IEnumerable<T>> getProperty, IEqualityComparer<T> equalityComparer, params RosterCalculationData[] datas)
         {
-            var result = new HashSet<T>(equalityComparer);
+            var result = new OrderedAdditiveSet<T>(equalityComparer);
             foreach (var data in datas)
             {
                 var propertyValue = getProperty(data);
@@ -2243,7 +2243,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
                 {
-                    this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(getProperty, equalityComparer, rosterInstantiatesFromNestedLevel).ForEach(x => result.Add(x));
+                    this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(getProperty, equalityComparer, rosterInstantiatesFromNestedLevel).ForEach(x => result.Add(x));
                 }
             }
 
@@ -2655,7 +2655,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
 
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+            var rosterInstancesToRemove = this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
             foreach (var rosterIdentityToAdd in rosterInstancesToAdd)
@@ -2891,7 +2891,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
 
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+            var rosterInstancesToRemove = this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
             foreach (var rosterInstanceToAdd in rosterInstancesToAdd)
@@ -2947,7 +2947,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
 
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+            var rosterInstancesToRemove = this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
             foreach (var rosterInstanceToAdd in rosterInstancesToAdd)
@@ -3011,7 +3011,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             expressionProcessorState.UpdateTextListAnswer(questionId, rosterVector, answers);
             var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+            var rosterInstancesToRemove = this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
             foreach (var rosterInstanceToAdd in rosterInstancesToAdd)
@@ -3133,7 +3133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
             expressionProcessorState.DisableQuestions(answersToRemoveByCascading);
 
-            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+            var rosterInstancesToRemove = this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
@@ -4458,8 +4458,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            var rosterInstancesToAdd = GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(x => x.RosterInstancesToAdd, new RosterIdentityComparer(), rosterDatas.ToArray());
-            var rosterInstancesToRemove = GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(x => x.RosterInstancesToRemove, new RosterIdentityComparer(), rosterDatas.ToArray());
+            var rosterInstancesToAdd = GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(x => x.RosterInstancesToAdd, new RosterIdentityComparer(), rosterDatas.ToArray());
+            var rosterInstancesToRemove = GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(x => x.RosterInstancesToRemove, new RosterIdentityComparer(), rosterDatas.ToArray());
 
             rosterInstancesToAdd.ForEach(r => expressionProcessorState.AddRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId, r.SortIndex));
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
