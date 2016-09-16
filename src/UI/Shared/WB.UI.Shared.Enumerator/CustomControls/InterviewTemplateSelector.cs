@@ -50,7 +50,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (SingleOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
             {typeof (QuestionHeaderViewModel), Resource.Layout.interview_question__header},
             {typeof (ValidityViewModel), Resource.Layout.interview_question_validation},
-            {typeof (CommentsViewModel), Resource.Layout.interview_question_comments},
+            {typeof (CommentsViewModel), Resource.Layout.interview_question__comments},
             {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
             {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
             {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
