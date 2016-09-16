@@ -3,17 +3,18 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
     internal class QuestionnaireChangeHistoryFactory : IQuestionnaireChangeHistoryFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
 
         public QuestionnaireChangeHistoryFactory(
-            IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
+            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage)
         {
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;

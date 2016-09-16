@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -35,6 +36,7 @@ namespace WB.UI.Designer.Code.Implementation
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
+        private readonly IQuestionnaireHistory questionnaireHistory;
 
 
         public CommandPostprocessor(
@@ -48,7 +50,8 @@ namespace WB.UI.Designer.Code.Implementation
             ITranslationsService translationsService,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
             IReadSideRepositoryWriter<AccountDocument> accountStorage,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage)
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
+            IQuestionnaireHistory questionnaireHistory)
         {
             this.userHelper = userHelper;
             this.notifier = notifier;
@@ -61,6 +64,7 @@ namespace WB.UI.Designer.Code.Implementation
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
             this.accountStorage = accountStorage;
             this.sharedPersonsStorage = sharedPersonsStorage;
+            this.questionnaireHistory = questionnaireHistory;
         }
 
         public void ProcessCommandAfterExecution(ICommand command)
@@ -80,6 +84,8 @@ namespace WB.UI.Designer.Code.Implementation
                     TypeSwitch.Case<DeleteAttachment>(x => this.attachmentService.Delete(x.AttachmentId)),
                     TypeSwitch.Case<DeleteLookupTable>(x => this.lookupTableService.DeleteLookupTableContent(x.QuestionnaireId, x.LookupTableId)),
                     TypeSwitch.Case<DeleteTranslation>(x => this.translationsService.Delete(x.QuestionnaireId, x.TranslationId)));
+
+                this.questionnaireHistory.Write(questionnaireCommand);
             }
             catch (Exception exc)
             {
