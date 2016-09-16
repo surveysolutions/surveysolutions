@@ -439,7 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             if (entityAsGroup != null)
             {
-                entityType = QuestionnaireItemType.Group;
+                entityType = entityAsGroup.IsRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Group;
                 entityTitle = entityAsGroup.Title ?? entityAsGroup.VariableName;
             }
 
@@ -560,7 +560,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var questionnaireChangeItem = new QuestionnaireChangeRecord()
             {
-                QuestionnaireChangeRecordId = sQuestionnaireId,
+                QuestionnaireChangeRecordId = Guid.NewGuid().FormatGuid(),
                 QuestionnaireId = questionnaireId.FormatGuid(),
                 UserId = responsibleId,
                 UserName = this.GetUserName(responsibleId),

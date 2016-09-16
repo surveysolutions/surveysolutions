@@ -1014,7 +1014,8 @@ namespace WB.Tests.Unit.Designer
             ITranslationsService translationsService = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
             IReadSideRepositoryWriter<AccountDocument> accountStorage = null,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> questionnaireSharedPersonsStorage = null)
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> questionnaireSharedPersonsStorage = null,
+            IQuestionnaireHistory questionnaireHistory = null)
         {
             return new CommandPostprocessor(
                membershipUserService,
@@ -1027,7 +1028,8 @@ namespace WB.Tests.Unit.Designer
                translationsService ?? Mock.Of<ITranslationsService>(),
                questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
                accountStorage ?? Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(),
-               questionnaireSharedPersonsStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>());
+               questionnaireSharedPersonsStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
+               questionnaireHistory ?? Mock.Of<IQuestionnaireHistory>());
         }
 
         public static AttachmentService AttachmentService(
