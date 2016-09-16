@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MvvmCross.Platform.Core;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -10,6 +11,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class CompositeCollectionInflationService : ICompositeCollectionInflationService
     {
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+
+        public CompositeCollectionInflationService(IMvxMainThreadDispatcher mainThreadDispatcher)
+        {
+            this.mainThreadDispatcher = mainThreadDispatcher;
+        }
+
         public CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(List<IInterviewEntityViewModel> newGroupItems)
         {
             var compositeCollection = new CompositeCollection<ICompositeEntity>();
@@ -76,28 +84,35 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 collection.Add(compositeItem.Answering);
         }
 
-        private static void OnEnablementChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
+        private void OnEnablementChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
         {
-            var isViewModelInCollection = collection.Contains(compositeItem);
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                var isViewModelInCollection = collection.Contains(compositeItem);
 
-            if (compositeItem.QuestionState.Enablement.Enabled && !isViewModelInCollection)
-                AddCompositeItemsOfQuestionToCollection(compositeItem, collection);
+                if (compositeItem.QuestionState.Enablement.Enabled && !isViewModelInCollection)
+                    AddCompositeItemsOfQuestionToCollection(compositeItem, collection);
 
-            if (!compositeItem.QuestionState.Enablement.Enabled && isViewModelInCollection)
-                collection.Clear();
+                if (!compositeItem.QuestionState.Enablement.Enabled && isViewModelInCollection)
+                    collection.Clear();
+            });
         }
 
-        private static void OnIsValidChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
+        private void OnIsValidChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
         {
-            if (!compositeItem.QuestionState.Enablement.Enabled) return;
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                if (!compositeItem.QuestionState.Enablement.Enabled) return;
 
-            var isViewModelInCollection = collection.Contains(compositeItem.QuestionState.Validity);
+                var isViewModelInCollection = collection.Contains(compositeItem.QuestionState.Validity);
 
-            if (compositeItem.QuestionState.Validity.IsInvalid && !isViewModelInCollection)
-                collection.Insert(collection.IndexOf(compositeItem.QuestionState.Comments), compositeItem.QuestionState.Validity);
+                if (compositeItem.QuestionState.Validity.IsInvalid && !isViewModelInCollection)
+                    collection.Insert(collection.IndexOf(compositeItem.QuestionState.Comments),
+                        compositeItem.QuestionState.Validity);
 
-            if (!compositeItem.QuestionState.Validity.IsInvalid && isViewModelInCollection)
-                collection.Remove(compositeItem.QuestionState.Validity);
+                if (!compositeItem.QuestionState.Validity.IsInvalid && isViewModelInCollection)
+                    collection.Remove(compositeItem.QuestionState.Validity);
+            });
         }
     }
 }

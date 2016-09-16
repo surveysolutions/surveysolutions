@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 eventRegistry: eventRegistry.Object, 
                 interviewRepository: interviewRepositoryMock.Object,
                 interviewViewModelFactory: interviewViewModelFactory,
-                compositeCollectionInflationService: new CompositeCollectionInflationService());
+                compositeCollectionInflationService: new CompositeCollectionInflationService(Stub.MvxMainThreadDispatcher()));
         };
 
         Because of = () => enumerationStage.Init(interviewId, navigationState.Object, groupId, null);
