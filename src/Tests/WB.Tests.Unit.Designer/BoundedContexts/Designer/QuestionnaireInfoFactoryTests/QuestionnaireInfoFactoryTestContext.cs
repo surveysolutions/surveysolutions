@@ -44,31 +44,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 Title = "Chapter 1 / Group 1",
                                 Children = new List<IComposite>()
                                 {
-                                    new NumericQuestion()
-                                    {
-                                        PublicKey = numericQuestionId,
-                                        IsInteger = true,
-                                        QuestionText = "Integer 1",
-                                        StataExportCaption = "q1",
-                                        ConditionExpression = "q2 == \"aaaa\""
-                                    },
-                                    new SingleQuestion()
-                                    {
-                                        PublicKey = q5Id,
-                                        QuestionText = "sINGLE 1",
-                                        StataExportCaption = "qqqq",
-                                    },
-                                    new MultyOptionsQuestion()
-                                    {
-                                        PublicKey = q3Id,
-                                        Answers = new List<Answer>()
+                                    Create.NumericIntegerQuestion(numericQuestionId, "q1", "q2 == \"aaaa\"", title:  "Integer 1"),
+                                    Create.SingleQuestion(q5Id, "qqqq", title:  "sINGLE 1"),
+                                    Create.MultyOptionsQuestion(q3Id, enablementCondition: "q2 == \"aaaa\"", title:  "MultiOption",
+                                        options: new List<Answer>()
                                         {
                                             new Answer() {AnswerText = "1", AnswerCode = 1},
                                             new Answer() {AnswerText = "2", AnswerCode = 2},
-                                        },
-                                        QuestionText = "MultiOption",
-                                        ConditionExpression = "q2 == \"aaaa\""
-                                    }
+                                        }
+                                    ),
                                 }
                             },
                             new Group()
@@ -77,18 +61,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 Title = "Chapter 1 / Group 2",
                                 Children = new List<IComposite>()
                                 {
-                                    new TextQuestion()
-                                    {
-                                        PublicKey = q2Id,
-                                        QuestionText = "text title",
-                                        ValidationConditions = new List<ValidationCondition> {new ValidationCondition { Expression = "q1 > 10" } }
-                                    },
-                                    new SingleQuestion()
-                                    {
-                                        PublicKey = q4Id,
-                                        QuestionText = "single title",
-                                        CascadeFromQuestionId = q5Id
-                                    }
+                                    Create.TextQuestion(q2Id, text: "text title", validationConditions: new List<ValidationCondition> {new ValidationCondition { Expression = "q1 > 10" } }),
+                                    Create.SingleQuestion(q4Id, cascadeFromQuestionId: q5Id, title: "single title"),
                                 }
                             },
                         }
@@ -279,7 +253,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 RosterSizeQuestionId = q2Id,
                 Children = new List<IComposite>()
                 {
-                     Create.TextListQuestion(q3Id, variable:"list_question", title: "list_question_inside_fixed_roster", maxAnswerCount: 16),
+                     //Create.TextListQuestion(q3Id, variable:"list_question", title: "list_question_inside_fixed_roster", maxAnswerCount: 16),
                 }
             };
             return new QuestionnaireDocument()
