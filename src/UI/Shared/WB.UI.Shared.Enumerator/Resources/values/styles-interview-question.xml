@@ -355,13 +355,13 @@
   </style>
 
   <style name="Interview_Question_Errors">
-    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
     <item name="android:layout_marginBottom">@dimen/zero</item>
   </style>
 
   <style name="Interview_Question_Errors_Title" parent="FullWidthWrappingLayout">
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:letterSpacing">0.1</item>
     <item name="android:textAllCaps">true</item>

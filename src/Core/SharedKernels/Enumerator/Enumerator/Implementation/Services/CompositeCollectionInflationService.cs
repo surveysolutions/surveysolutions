@@ -35,17 +35,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     if (compositeItem.QuestionState.Enablement.Enabled)
                         AddCompositeItemsOfQuestionToCollection(compositeItem, questionCompositeCollection);
 
-                    compositeItem.QuestionState.Validity.PropertyChanged += (sender, e) =>
-                    {
-                        if (e.PropertyName != nameof(ValidityViewModel.IsInvalid)) return;
-                        OnIsValidChanged(questionCompositeCollection, compositeItem);
-                    };
+                    //compositeItem.QuestionState.Validity.PropertyChanged += (sender, e) =>
+                    //{
+                    //    if (e.PropertyName != nameof(ValidityViewModel.IsInvalid)) return;
+                    //    OnIsValidChanged(questionCompositeCollection, compositeItem);
+                    //};
                     compositeItem.QuestionState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
                         OnEnablementChanged(questionCompositeCollection, compositeItem);
                     };
-                    
+
                     compositeCollection.AddCollection(questionCompositeCollection);
 
                     compositeCollection.Add(compositeItem.Answering);
@@ -75,13 +75,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (compositeItemWithChildren != null)
                 collection.AddCollection(compositeItemWithChildren.Children);
 
-            if (compositeItem.QuestionState.Validity.IsInvalid)
-                collection.Add(compositeItem.QuestionState.Validity);
+            collection.Add(compositeItem.QuestionState.Validity);
 
             collection.Add(compositeItem.QuestionState.Comments);
-
-            if (compositeItem.Answering.InProgress)
-                collection.Add(compositeItem.Answering);
         }
 
         private void OnEnablementChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
@@ -98,21 +94,25 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
-        private void OnIsValidChanged(CompositeCollection<ICompositeEntity> collection, ICompositeQuestion compositeItem)
-        {
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                if (!compositeItem.QuestionState.Enablement.Enabled) return;
+        //private void OnIsValidChanged(CompositeCollection<ICompositeEntity> questionItemsCollection, ICompositeQuestion question)
+        //{
+        //    this.mainThreadDispatcher.RequestMainThreadAction(() =>
+        //    {
+        //        if (!question.QuestionState.Enablement.Enabled) return;
 
-                var isViewModelInCollection = collection.Contains(compositeItem.QuestionState.Validity);
+        //        var isViewModelInCollection = questionItemsCollection.Contains(question.QuestionState.Validity);
 
-                if (compositeItem.QuestionState.Validity.IsInvalid && !isViewModelInCollection)
-                    collection.Insert(collection.IndexOf(compositeItem.QuestionState.Comments),
-                        compositeItem.QuestionState.Validity);
+        //        if (question.QuestionState.Validity.IsInvalid && !isViewModelInCollection)
+        //        {
+        //            var indexOf = questionItemsCollection.IndexOf(question.QuestionState.Comments);
+        //            questionItemsCollection.Insert(indexOf, question.QuestionState.Validity);
+        //        }
 
-                if (!compositeItem.QuestionState.Validity.IsInvalid && isViewModelInCollection)
-                    collection.Remove(compositeItem.QuestionState.Validity);
-            });
-        }
+        //        if (!question.QuestionState.Validity.IsInvalid && isViewModelInCollection)
+        //        {
+        //            questionItemsCollection.Remove(question.QuestionState.Validity);
+        //        }
+        //    });
+        //}
     }
 }
