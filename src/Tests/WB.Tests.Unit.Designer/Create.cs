@@ -458,7 +458,7 @@ namespace WB.Tests.Unit.Designer
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
             string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null,
-            int? maxAllowedAnswers = null)
+            int? maxAllowedAnswers = null, string title = null)
         {
             return new MultyOptionsQuestion
             {

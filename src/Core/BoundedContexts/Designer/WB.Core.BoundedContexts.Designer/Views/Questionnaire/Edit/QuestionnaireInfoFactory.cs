@@ -343,7 +343,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             var variablesToBeDeleted = questionnaire.Find<IQuestion>()
                 .Where(x => this.GetParentGroupsIds(x).Contains(id))
-                .Select(x => x.VariableLabel)
+                .Select(x => x.StataExportCaption)
                 .ToList();
 
             var allReferencedQuestionsByExpressions = questionnaire.Find<IQuestion>()
