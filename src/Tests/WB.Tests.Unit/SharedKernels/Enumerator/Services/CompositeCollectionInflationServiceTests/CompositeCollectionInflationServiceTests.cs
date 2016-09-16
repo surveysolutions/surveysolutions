@@ -116,7 +116,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             invalidQuestionViewModel.QuestionState.Validity.Handle(questionInvalidEvent);
     
             Assert.That(inflatedViewModels, Contains.Item(invalidQuestionViewModel.QuestionState.Validity));
-            Assert.That(inflatedViewModels, !Contains.Item(validQuestionViewModel.QuestionState.Validity));
+            Assert.That(inflatedViewModels, Contains.Item(validQuestionViewModel.QuestionState.Validity));
         }
 
         [Test]
