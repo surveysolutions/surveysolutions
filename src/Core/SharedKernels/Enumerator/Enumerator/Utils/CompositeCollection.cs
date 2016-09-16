@@ -45,33 +45,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             return this.GetEnumerator();
         }
 
-        public void Insert(int index, T item)
-        {
-            var insertedCollection = new CovariantObservableCollection<T>(item.ToEnumerable());
-
-            insertedCollection.CollectionChanged += this.collectionChanged;
-            this.collections.Insert(index, insertedCollection);
-
-            this.Count += 1;
-            this.collectionChanged_Added(new[] {item}, index);
-        }
-
         public void Add(T item)
         {
             this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
-        }
-
-        public void Remove(T item)
-        {
-            var indexOfItem = this.IndexOf(item);
-            if (indexOfItem < 0) return;
-
-            var collectionToRemove = this.collections.ElementAt(indexOfItem);
-            collectionToRemove.CollectionChanged -= this.collectionChanged;
-            this.collections.Remove(collectionToRemove);
-            this.Count -= 1;
-
-            this.collectionChanged_Remove(new[] {item}, indexOfItem);
         }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -156,11 +132,5 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        public int IndexOf(T item)
-        {
-            var itemCollection = this.collections.Find(x => x.Contains(item));
-            return itemCollection != null ? this.collections.IndexOf(itemCollection) : -1;
-        } 
     }
 }
