@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using System.IO;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace WB.UI.Designer.Pdf
 {
@@ -16,12 +16,7 @@ namespace WB.UI.Designer.Pdf
             WkHtmlToPdfPath = Path.Combine(OSUtil.GetProgramFilesx86Path(), @"wkhtmltopdf\wkhtmltopdf.exe"),
             Timeout = 60000
         });
-
-        public static void ConvertHtmlToPdf(PdfDocument document, PdfOutput output)
-        {
-            ConvertHtmlToPdf(document, null, output);
-        }
-
+       
         public static void ConvertHtmlToPdf(PdfDocument document, PdfConvertEnvironment environment, PdfOutput woutput)
         {
             if (environment == null)
@@ -83,88 +78,45 @@ namespace WB.UI.Designer.Pdf
             {
                 using (Process process = new Process())
                 {
-                    process.StartInfo.CreateNoWindow = !environment.Debug;
+                    process.StartInfo.CreateNoWindow = true;
                     process.StartInfo.FileName = environment.WkHtmlToPdfPath;
                     process.StartInfo.Arguments = paramsBuilder.ToString();
                     process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardError = !environment.Debug;
-                    process.StartInfo.RedirectStandardOutput = !environment.Debug;
+                    process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.RedirectStandardOutput = true;
 
-                    var output = new StringBuilder();
-                    var error = new StringBuilder();
+                    process.Start();
 
-                    using (var outputWaitHandle = new AutoResetEvent(false)) // solution taken from http://stackoverflow.com/questions/139593/processstartinfo-hanging-on-waitforexit-why because previously it was locked
-                    using (var errorWaitHandle = new AutoResetEvent(false))
+                    using (Task<bool> processWaiter = Task.Factory.StartNew(() => process.WaitForExit(environment.Timeout)))
+                    using (Task<string> outputReader = Task.Factory.StartNew((Func<object, string>)ReadStream, process.StandardOutput))
+                    using (Task<string> errorReader = Task.Factory.StartNew((Func<object, string>)ReadStream, process.StandardError))
                     {
-                        process.OutputDataReceived += (sender, e) =>
-                        {
-                            if (e.Data == null)
-                            {
-                                outputWaitHandle.Set();
-                            }
-                            else
-                            {
-                                output.AppendLine(e.Data);
-                            }
-                        };
+                        bool waitResult = processWaiter.Result;
 
-                        process.ErrorDataReceived += (sender, e) =>
+                        if (!waitResult)
                         {
-                            if (e.Data == null)
-                            {
-                                errorWaitHandle.Set();
-                            }
-                            else
-                            {
-                                error.AppendLine(e.Data);
-                            }
-                        };
-
-                        process.Start();
-
-                        if (process.StartInfo.RedirectStandardError)
-                        {
-                            process.BeginOutputReadLine();
-                        }
-                        if (process.StartInfo.RedirectStandardOutput)
-                        {
-                            process.BeginErrorReadLine();
+                            process.Kill();
                         }
 
-                        if (process.WaitForExit(environment.Timeout) && outputWaitHandle.WaitOne(environment.Timeout) && errorWaitHandle.WaitOne(environment.Timeout))
-                        {
-                            if (!File.Exists(outputPdfFilePath))
-                            {
-                                if (process.ExitCode != 0)
-                                {
-                                    throw new PdfConvertException(String.Format("Html to PDF conversion of '{0}' failed. Exit code {1}. Wkhtmltopdf output: \r\n{2}", document.Url, process.ExitCode, error));
-                                }
-                                throw new PdfConvertException(String.Format("Html to PDF conversion of '{0}' failed. Reason: Output file '{1}' not found.", document.Url, outputPdfFilePath));
-                            }
+                        Task.WaitAll(outputReader, errorReader);
 
-
-                            if (woutput.OutputStream != null)
-                            {
-                                using (Stream fs = new FileStream(outputPdfFilePath, FileMode.Open))
-                                {
-                                    byte[] buffer = new byte[32 * 1024];
-                                    int read;
-
-                                    while ((read = fs.Read(buffer, 0, buffer.Length)) > 0)
-                                    {
-                                        woutput.OutputStream.Write(buffer, 0, read);
-                                    }
-                                }
-
-                                if (woutput.OutputCallback != null)
-                                {
-                                    woutput.OutputCallback(document, File.ReadAllBytes(outputPdfFilePath));
-                                }
-                            }
-                        }
-                        else
+                        if (!waitResult)
                         {
                             throw new PdfConvertTimeoutException();
+                        }
+
+                        var standardOutput = outputReader.Result;
+                        var standardError = errorReader.Result;
+
+                        if (!File.Exists(outputPdfFilePath))
+                        {
+                            if (process.ExitCode != 0)
+                            {
+                                throw new PdfConvertException(
+                                    $"Html to PDF conversion of '{document.Url}' failed. Exit code {process.ExitCode}. Wkhtmltopdf output: \r\n{standardOutput} \r\n Wkhtmltopdf errors: \r\n{standardError}");
+                            }
+                            throw new PdfConvertException(
+                                $"Html to PDF conversion of '{document.Url}' failed. Reason: Output file '{outputPdfFilePath}' not found.");
                         }
                     }
                 }
@@ -174,6 +126,13 @@ namespace WB.UI.Designer.Pdf
                 if (delete && File.Exists(outputPdfFilePath))
                     File.Delete(outputPdfFilePath);
             }
+        }
+
+        private static string ReadStream(object streamReader)
+        {
+            string result = ((StreamReader)streamReader).ReadToEnd();
+
+            return result;
         }
     }
 }
