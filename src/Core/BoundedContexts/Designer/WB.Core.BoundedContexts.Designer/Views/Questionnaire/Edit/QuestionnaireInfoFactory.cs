@@ -171,7 +171,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditRosterView GetRosterEditView(string questionnaireId, Guid rosterId)
         {
             var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
-            var roster = questionnaire?.Find<IGroup>(rosterId);
+            if (questionnaire == null)
+                return null;
+            questionnaire.ConnectChildrenWithParent();
+
+            var roster = questionnaire.Find<IGroup>(rosterId);
             if (roster == null)
                 return null;
 
@@ -237,7 +241,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId)
         {
             var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
-            var question = questionnaire?.Find<IQuestion>(questionId);
+            if (questionnaire == null)
+                return null;
+            questionnaire.ConnectChildrenWithParent();
+
+            var question = questionnaire.Find<IQuestion>(questionId);
             if (question == null)
                 return null;
 
@@ -266,6 +274,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             var result = new NewEditStaticTextView()
             {
+                Id = staticText.PublicKey,
                 Text = staticText.Text,
                 AttachmentName = staticText.AttachmentName,
                 EnablementCondition = staticText.ConditionExpression,
@@ -284,7 +293,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire == null)
                 return null;
 
-            var roster = this.GetRoster(questionnaire, rosterId);
+            questionnaire.ConnectChildrenWithParent();
+
+            var roster = this.GetRoster(questionnaire, rosterId); 
 
             Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter;
 
@@ -325,6 +336,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
             if (questionnaireDocument == null)
                 return null;
+
+            questionnaireDocument.ConnectChildrenWithParent();
 
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(questionnaireDocument);
 
@@ -531,9 +544,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             if (rosterSizeQuestion.HasValue && this.IsQuestionIsNumeric(document, rosterSizeQuestion.Value))
             {
-                Guid? rosterSizeQuestionId = rosterSizeQuestion.Value;
-                Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter1 = q => q.Where(x => GetRosterScopeIds(x).SequenceEqual(GetRosterScopeIds(roster)) && x.QuestionType != QuestionType.Multimedia).ToList();
-                return this.PrepareGroupedQuestionsListForDropdown(document, questionFilter1);
+                questionFilter = q => q.Where(x => GetRosterScopeIds(x).SequenceEqual(GetRosterScopeIds(roster)) && x.QuestionType != QuestionType.Multimedia).ToList();
             }
             else
             {
@@ -545,12 +556,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private bool IsQuestionIsNumeric(QuestionnaireDocument document, Guid questionId)
         {
-            return document.Find<IQuestion>(questionId).QuestionType == QuestionType.Numeric;
+            return document.Find<IQuestion>(questionId)?.QuestionType == QuestionType.Numeric;
         }
 
         private IGroup GetRoster(QuestionnaireDocument document, Guid rosterId)
         {
-            return document.Find<IGroup>(rosterId);
+            var roster = document.Find<IGroup>(rosterId);
+            if (roster?.IsRoster ?? false)
+                return roster;
+            return null;
         }
 
         private List<DropdownQuestionView> GetNumericIntegerQuestionBriefs(QuestionnaireDocument document, Guid[] rosterScopeIds)
@@ -633,12 +647,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             List<IGroup> parents = new List<IGroup>();
             var parent = (IGroup)entity.GetParent();
-            while (parent != null)
+            while (parent != null && parent != document)
             {
                 parents.Add(parent);
                 parent = (IGroup)parent.GetParent();
             }
-            //parents.Reverse();
+            parents.Reverse();
 
             return parents.Select(x => new Breadcrumb
             {
@@ -656,17 +670,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         private Guid[] GetRosterScopeIds(IComposite entity)
         {
             var rosterScopes = new List<Guid>();
-            var group = (IGroup)entity.GetParent();
-            while (group != null)
+            while (entity != null)
             {
-                if (group.IsRoster)
+                IGroup group = entity as IGroup;
+                if (group?.IsRoster ?? false)
                 {
                     rosterScopes.Add(@group.RosterSizeSource == RosterSizeSourceType.FixedTitles
                         ? @group.PublicKey
                         : @group.RosterSizeQuestionId.Value);
                 }
 
-                group = (IGroup)group.GetParent();
+                entity = (IGroup)entity.GetParent();
             }
             return rosterScopes.ToArray();
         }
