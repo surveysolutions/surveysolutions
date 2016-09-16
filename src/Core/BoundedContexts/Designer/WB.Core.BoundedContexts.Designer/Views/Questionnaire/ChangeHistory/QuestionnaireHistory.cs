@@ -4,7 +4,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -15,17 +14,11 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-#pragma warning disable 1030
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
@@ -89,7 +82,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 TypeSwitch.Case<AddDefaultTypeQuestion>(this.Handle),
                 TypeSwitch.Case<DeleteQuestion>(this.Handle),
                 TypeSwitch.Case<MoveQuestion>(this.Handle),
-                TypeSwitch.Case<AbstractUpdateQuestionCommand>(this.Handle));
+                TypeSwitch.Case<UpdateMultimediaQuestion>(this.Handle),
+                TypeSwitch.Case<UpdateDateTimeQuestion>(this.Handle),
+                TypeSwitch.Case<UpdateNumericQuestion>(this.Handle),
+                TypeSwitch.Case<UpdateQRBarcodeQuestion>(this.Handle),
+                TypeSwitch.Case<UpdateGpsCoordinatesQuestion>(this.Handle),
+                TypeSwitch.Case<UpdateTextListQuestion>(this.Handle),
+                TypeSwitch.Case<UpdateTextQuestion>(this.Handle),
+                TypeSwitch.Case<UpdateMultiOptionQuestion>(this.Handle),
+                TypeSwitch.Case<UpdateSingleOptionQuestion>(this.Handle));
         }
 
         #region Questionnaire
@@ -698,8 +699,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
                 (s, id, title) => { s.VariableState[id] = title; });
         }
-
-
+        
         private QuestionnaireChangeReference CreateQuestionnaireChangeReference(QuestionnaireItemType referenceType, Guid id, string title)
             => new QuestionnaireChangeReference()
             {
