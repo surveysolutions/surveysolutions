@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
             var accountsDocumentReader = Mock.Of<IReadSideRepositoryReader<AccountDocument>>(x => x.GetById(userId.FormatGuid()) == accountDocument);
             var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
             var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireSharedPersons);
-            var questionnaireChangeHistoryStorage = new TestInMemoryWriter<QuestionnaireChangeRecord>();
+            var questionnaireChangeHistoryStorage = new InMemoryPlainStorageAccessor<QuestionnaireChangeRecord>();
             questionnaireChangeHistoryStorage.Store(
                 new QuestionnaireChangeRecord
                 {
