@@ -602,14 +602,15 @@
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />
     <Compile Include="Views\Account\CQRSRoleRepository.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireChangeHistoryFactory.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireActionType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecord.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecordReference.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryFactory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeRecord.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeReference.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTracker.cs" />
     <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">

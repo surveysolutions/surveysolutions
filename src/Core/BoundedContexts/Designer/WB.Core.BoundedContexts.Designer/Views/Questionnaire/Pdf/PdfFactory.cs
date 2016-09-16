@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
     public class PdfFactory : IPdfFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public PdfFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
+            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage, 
