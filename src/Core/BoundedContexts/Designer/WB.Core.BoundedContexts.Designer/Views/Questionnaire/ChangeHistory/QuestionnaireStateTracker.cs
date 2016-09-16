@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
-    public class QuestionnaireStateTracker : IView
+    public class QuestionnaireStateTracker
     {
         public QuestionnaireStateTracker()
         {

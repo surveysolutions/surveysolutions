@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                 })
             });
 
-            questionnaireChangeRecordStorage=new TestInMemoryWriter<QuestionnaireChangeRecord>();
+            questionnaireChangeRecordStorage=new InMemoryPlainStorageAccessor<QuestionnaireChangeRecord>();
 
             questionnaireChangeRecordStorage.Store(
                 Create.QuestionnaireChangeRecord(questionnaireId: questionnaireId.FormatGuid(),
@@ -65,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
            result.ChangeHistory[1].ActionType.ShouldEqual(QuestionnaireActionType.Update);
 
         private static QuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
-        private static TestInMemoryWriter<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
+        private static InMemoryPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static QuestionnaireChangeHistory result;

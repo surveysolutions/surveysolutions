@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
     {
         public static PdfFactory CreateFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null,
-            IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage = null,
+            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage = null,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage = null,
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
         {
             return new PdfFactory(
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
-                questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord>>(),
+                questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
                 accountsDocumentReader: accountsDocumentReader ?? Mock.Of<IReadSideRepositoryReader<AccountDocument>>(),
                 questionnaireListViewItemStorage: questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
                 sharedPersonsStorage: sharedPersonsStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
