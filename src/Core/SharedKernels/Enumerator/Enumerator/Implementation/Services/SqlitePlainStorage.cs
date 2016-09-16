@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using MvvmCross.Platform;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -15,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public class SqlitePlainStorage<TEntity> : IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity, new()
     {
-        protected readonly SQLiteConnection connection;
+        protected readonly SQLiteConnectionWithLock connection;
         private readonly ILogger logger;
 
         public SqlitePlainStorage(ILogger logger,
@@ -24,14 +22,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var entityName = typeof(TEntity).Name;
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
-            this.connection = new SQLiteConnection(pathToDatabase, 
+            this.connection = new SQLiteConnectionWithLock(pathToDatabase, 
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
             
             this.logger = logger;
             this.connection.CreateTable<TEntity>();
         }
 
-        public SqlitePlainStorage(SQLiteConnection storage, ILogger logger)
+        public SqlitePlainStorage(SQLiteConnectionWithLock storage, ILogger logger)
         {
             this.connection = storage;
             this.logger = logger;
@@ -40,23 +38,32 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual TEntity GetById(string id)
         {
-            return this.connection.Find<TEntity>(id);
+            TEntity entity = null;
+
+            using (this.connection.Lock())
+                this.connection.RunInTransaction(() => entity = this.connection.Find<TEntity>(x => x.Id == id));
+
+            return entity;
         }
 
         public void Remove(string id)
         {
-            this.connection.RunInTransaction(() => this.connection.Delete<TEntity>(id));
+            using (this.connection.Lock())
+                this.connection.RunInTransaction(() => this.connection.Delete<TEntity>(id));
         }
 
         public void Remove(IEnumerable<TEntity> entities)
         {
             try
             {
-                this.connection.RunInTransaction(() =>
+                using (this.connection.Lock())
                 {
-                    foreach (var entity in entities.Where(entity => entity != null))
-                        this.connection.Delete(entity);
-                });
+                    this.connection.RunInTransaction(() =>
+                    {
+                        foreach (var entity in entities.Where(entity => entity != null))
+                            this.connection.Delete(entity);
+                    });
+                }
             }
             catch (SQLiteException ex)
             {
@@ -74,22 +81,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             try
             {
-                this.connection.RunInTransaction(() =>
+                using (this.connection.Lock())
                 {
-                    foreach (var entity in entities.Where(entity => entity != null))
+                    this.connection.RunInTransaction(() =>
                     {
-                        var isEntityExists = connection.Table<TEntity>().Count(x => x.Id == entity.Id) > 0;
-
-                        if (isEntityExists)
+                        foreach (var entity in entities.Where(entity => entity != null))
                         {
-                            connection.Update(entity);
+                            connection.InsertOrReplace(entity);
                         }
-                        else
-                        {
-                            connection.Insert(entity);
-                        }
-                    }
-                });
+                    });
+                }
 
             }
             catch (SQLiteException ex)
@@ -112,7 +113,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);
-            this.connection.RunInTransaction(() => result = function.Invoke(this.connection.Table<TEntity>()));
+            using (this.connection.Lock())
+                this.connection.RunInTransaction(() => result = function.Invoke(this.connection.Table<TEntity>()));
+
             return result;
         }
 
