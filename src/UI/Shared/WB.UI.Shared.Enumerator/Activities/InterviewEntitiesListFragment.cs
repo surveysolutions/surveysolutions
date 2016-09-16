@@ -41,7 +41,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            this.ViewModel.Items.OfType<CommentsViewModel>()
+            this.ViewModel?.Items.OfType<CommentsViewModel>()
                 .ForEach(x => x.CommentsInputShown += this.OnCommentsBlockShown());
 
             if (ViewModel?.ScrollToIndex != null)
