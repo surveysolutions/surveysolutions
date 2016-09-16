@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.SourceOfLinkedEntities.Count(x => x.Title == "Roster: Roster 1.1.1" && !x.IsSectionPlaceHolder).ShouldEqual(1);
 
         It should_return_roster_title_reference_for_third_roster = () =>
-          result.SourceOfLinkedEntities.Count(x => x.Title == "Roster: Roster 1.2" && !x.IsSectionPlaceHolder).ShouldEqual(1);
+            result.SourceOfLinkedEntities.Count(x => x.Title == "Roster: Roster 1.2" && !x.IsSectionPlaceHolder).ShouldEqual(1);
 
         private static IQuestion GetQuestion(Guid questionId)
         {

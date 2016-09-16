@@ -130,16 +130,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                         FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")},
                                         Children = new List<IComposite>()
                                         {
-                                            new TextListQuestion()
-                                            {
-                                                PublicKey = q4Id,
-                                                QuestionText = "text list title",
-                                            },
-                                            new NumericQuestion()
-                                            {
-                                                PublicKey = q7Id,
-                                                QuestionText = "numeric title",
-                                            }
+                                            Create.TextListQuestion(q4Id, title: "text list title"),
+                                            Create.NumericRealQuestion(q7Id, title: "numeric title"),
                                         }
                                     },
                                     new Group()
@@ -149,12 +141,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                         ConditionExpression = "[" + numericQuestionId +"] > 40",
                                         Children = new List<IComposite>()
                                         {
-                                            new NumericQuestion()
-                                            {
-                                                PublicKey = q5Id,
-                                                QuestionText = "numeric title",
-                                                IsInteger = false,
-                                            },
+                                            Create.NumericRealQuestion(q5Id, title: "numeric title"),
                                             Create.StaticText(st2Id, "static text 2"),
                                         }
                                     }
@@ -170,31 +157,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 RosterTitleQuestionId = q3Id,
                                 Children = new List<IComposite>()
                                 {
-                                    new TextQuestion()
-                                    {
-                                        PublicKey = q3Id,
-                                        QuestionText = "text title",
-                                    },
+                                    Create.TextQuestion(q3Id, text: "text title"),
                                 }
                             },
-                            new NumericQuestion()
-                            {
-                                PublicKey = numericQuestionId,
-                                IsInteger = true,
-                                QuestionText = "Integer 1",
-                                StataExportCaption = "q1",
-                            },
-                            new MultyOptionsQuestion()
-                            {
-                                PublicKey = q2Id,
-                                Answers = new List<Answer>() 
+                            Create.NumericIntegerQuestion(numericQuestionId, "q1", title: "Integer 1"),
+                            Create.MultipleOptionsQuestion(q2Id, "["+ numericQuestionId +"] > 25", title: "MultiOption",
+                                answersList: new List<Answer>() 
                                 {
                                     new Answer() {AnswerText = "1", AnswerCode = 1},
                                     new Answer() {AnswerText = "2", AnswerCode = 2},
-                                },
-                                QuestionText = "MultiOption",
-                                ConditionExpression = "["+ numericQuestionId +"] > 25"
-                            },
+                                }),
                             Create.StaticText(st1Id, "static text 1")
                         }
                     },
@@ -307,7 +279,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 RosterSizeQuestionId = q2Id,
                 Children = new List<IComposite>()
                 {
-                     Create.TextListQuestion(q2Id, variable:"list_question", title: "list_question_inside_roster", maxAnswerCount: 16),
+                     Create.TextListQuestion(q3Id, variable:"list_question", title: "list_question_inside_fixed_roster", maxAnswerCount: 16),
                 }
             };
             return new QuestionnaireDocument()
@@ -330,10 +302,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 RosterSizeQuestionId = q1Id,
                                 Children = new List<IComposite>()
                                 {
-                                    (shouldReplaceFixedRosterWithListOne? listNestedRoster : fixedNestedRoster)
+                                    (shouldReplaceFixedRosterWithListOne? listNestedRoster : fixedNestedRoster),
+
+                                    Create.TextListQuestion(q2Id, variable:"list_question", title: "list_question_inside_roster", maxAnswerCount: 16),
                                 }
                             },
-                            Create.TextQuestion(q1Id, variable:"list_question", text: "list_question"),
+                            Create.TextListQuestion(q1Id, variable:"list_question", title: "list_question"),
                         }
                     }
                 }
