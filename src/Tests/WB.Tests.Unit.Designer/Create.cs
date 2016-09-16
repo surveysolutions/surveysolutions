@@ -435,6 +435,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
+            string title = null,
             params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
@@ -449,7 +450,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
-                Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
+                Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                QuestionText = title,
             };
         }
 
@@ -495,7 +497,8 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null)
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null,
+            string title = null)
         {
             return new NumericQuestion
             {
@@ -505,7 +508,8 @@ namespace WB.Tests.Unit.Designer
                 IsInteger = false,
                 ConditionExpression = enablementCondition,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                QuestionText = title
             };
         }
 

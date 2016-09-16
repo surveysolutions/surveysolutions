@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
@@ -19,11 +20,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         Establish context = () =>
         {
             questionnaireView = Create.QuestionnaireDocument(Guid.NewGuid(),
-                Create.Group(roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, children: new List<IComposite>()
+                Create.Roster(roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new List<IComposite>()
                 {
                     Create.TextQuestion(rosterTitleQuestionId),
                 }),
-                Create.Group(roster2Id, rosterSizeQuestionId: rosterSizeQuestionId),
+                Create.Roster(roster2Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question),
                 Create.NumericIntegerQuestion(rosterSizeQuestionId)
             ); 
 
