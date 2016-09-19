@@ -37,9 +37,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 }),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
             var questionFactory = Mock.Of<IQuestionnaireEntityFactory>();
 
             Mock.Get(questionFactory)

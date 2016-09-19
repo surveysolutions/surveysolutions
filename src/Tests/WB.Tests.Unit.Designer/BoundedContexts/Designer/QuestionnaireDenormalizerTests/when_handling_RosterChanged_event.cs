@@ -35,9 +35,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             @event = CreateRosterChangedEvent(groupId: groupId, rosterSizeQuestionId: rosterSizeQuestionId,
                 rosterSizeSource: rosterSizeSource, rosterFixedTitles: rosterFixedTitles, rosterTitleQuestionId: rosterTitleQuestionId);
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer
-                => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
-
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument);
         };
 
