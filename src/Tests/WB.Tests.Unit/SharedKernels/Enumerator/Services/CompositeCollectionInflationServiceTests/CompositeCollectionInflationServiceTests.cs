@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using MvvmCross.Core.Platform;
 using MvvmCross.Platform;
-using MvvmCross.Platform.Core;
 using MvvmCross.Test.Core;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -67,7 +65,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             Assert.That(inflatedViewModels, Contains.Item(disabledQuestionViewModel.QuestionState.Header));
             Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.QuestionState.Validity));
             Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.InstructionViewModel));
-            Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.Answering));
             Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.QuestionState.Comments));
             Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel));
 
@@ -119,7 +116,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             invalidQuestionViewModel.QuestionState.Validity.Handle(questionInvalidEvent);
     
             Assert.That(inflatedViewModels, Contains.Item(invalidQuestionViewModel.QuestionState.Validity));
-            Assert.That(inflatedViewModels, !Contains.Item(validQuestionViewModel.QuestionState.Validity));
+            Assert.That(inflatedViewModels, Contains.Item(validQuestionViewModel.QuestionState.Validity));
         }
 
         [Test]
@@ -163,12 +160,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             questionWithProgressQuestionViewModel.Answering.StartInProgressIndicator();
             
             Assert.That(inflatedViewModels, Contains.Item(questionWithProgressQuestionViewModel.Answering));
-            Assert.That(inflatedViewModels, !Contains.Item(questionWithoutProgressViewModel.Answering));
         }
 
-
-
         private static CompositeCollectionInflationService CreateCompositeCollectionInflationService()
-            => new CompositeCollectionInflationService();
+            => new CompositeCollectionInflationService(Stub.MvxMainThreadDispatcher());
     }
 }
