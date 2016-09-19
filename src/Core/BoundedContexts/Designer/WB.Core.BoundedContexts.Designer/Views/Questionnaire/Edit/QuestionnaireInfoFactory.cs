@@ -142,8 +142,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
             var group = questionnaire?.Find<IGroup>(groupId);
             if (@group == null)
-
                 return null;
+
             var result = new NewEditGroupView
             {
                 Group = ReplaceGuidsInValidationAndConditionRules(new GroupDetailsView
@@ -393,23 +393,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 Type = question.QuestionType,
                 VariableLabel = question.VariableLabel,
                 Id = question.PublicKey,
+                ParentGroupId = question.GetParent().PublicKey,
                 Instructions = question.Instructions,
                 EnablementCondition = question.ConditionExpression,
-                IsPreFilled = question.Capital || question.Featured,
+                IsPreFilled = question.Featured,
                 IsTimestamp = question.IsTimestamp,
                 IsFilteredCombobox = question.IsFilteredCombobox,
                 QuestionScope = question.QuestionScope,
                 HideIfDisabled = question.HideIfDisabled,
                 CascadeFromQuestionId = question.CascadeFromQuestionId?.FormatGuid(),
                 LinkedFilterExpression = question.LinkedFilterExpression,
-                HideInstructions = question.Properties.HideInstructions,
-                UseFormatting = question.Properties.UseFormatting,
-                OptionsFilterExpression = question.Properties.OptionsFilterExpression,
+                HideInstructions = question.Properties?.HideInstructions ?? false,
+                UseFormatting = question.Properties?.UseFormatting ?? false,
+                OptionsFilterExpression = question.Properties?.OptionsFilterExpression,
                 VariableName = question.StataExportCaption,
                 LinkedToEntityId = (question.LinkedToQuestionId ?? question.LinkedToRosterId)?.FormatGuid(),
                 QuestionTypeOptions = question.Answers.Select(a => new SelectOption() { Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
             };
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
+
+            questionView.RosterScopeIds = new Guid[0];
+            questionView.ParentGroupsIds = new Guid[0];
+
 
             switch (question.QuestionType)
             {
@@ -418,6 +423,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.YesNoView = multyOptionsQuestion.YesNoView;
                     questionView.AreAnswersOrdered = multyOptionsQuestion.AreAnswersOrdered;
                     questionView.MaxAllowedAnswers = multyOptionsQuestion.MaxAllowedAnswers;
+                    questionView.LinkedToEntityId = multyOptionsQuestion.LinkedToQuestionId?.FormatGuid() ?? multyOptionsQuestion.LinkedToRosterId?.FormatGuid();
+                    questionView.LinkedFilterExpression = multyOptionsQuestion.LinkedFilterExpression;
+                    questionView.Options = CreateCategoricalOptions(multyOptionsQuestion.Answers);
+                    questionView.OptionsFilterExpression = multyOptionsQuestion.Properties.OptionsFilterExpression;
                     return questionView;
                 case QuestionType.TextList:
                     var textListQuestion = (ITextListQuestion) question;
@@ -429,15 +438,43 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.IsInteger = numericQuestion.IsInteger;
                     questionView.UseFormatting = numericQuestion.UseFormatting;
                     return questionView;
+                case QuestionType.SingleOption:
+                    var singleoptionQuestion = (SingleQuestion)question;
+                    questionView.LinkedToEntityId = singleoptionQuestion.LinkedToQuestionId?.FormatGuid() ??
+                                            singleoptionQuestion.LinkedToRosterId?.FormatGuid();
+                    questionView.LinkedFilterExpression = singleoptionQuestion.LinkedFilterExpression;
+                    questionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
+                    questionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId?.FormatGuid();
+                    questionView.Options = CreateCategoricalOptions(singleoptionQuestion.Answers);
+                    questionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
+                    return questionView;
+                case QuestionType.Text:
+                    var textQuestion = (TextQuestion)question;
+                    questionView.Mask = textQuestion.Mask;
+                    return questionView;
+                case QuestionType.DateTime:
+                    var dateTimeQuestion = (DateTimeQuestion)question;
+                    questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
+                    return questionView;
                 case QuestionType.QRBarcode:
                 case QuestionType.Multimedia:
-                case QuestionType.SingleOption:
-                case QuestionType.Text:
-                case QuestionType.DateTime:
                 case QuestionType.GpsCoordinates:
                     return questionView;
             }
             return null;
+        }
+
+        private static CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
+        {
+            if (answers == null)
+                return null;
+
+            return EventConverter.GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
+            {
+                Title = x.AnswerText,
+                Value = decimal.Parse(x.AnswerValue),
+                ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
+            }).ToArray();
         }
 
         private List<DropdownQuestionView> GetSourcesOfSingleQuestionBriefs(QuestionnaireDocument document, Guid questionId)
