@@ -75,5 +75,5 @@
               local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-        local:MvxBind="ShowProgress BackupRestore.IsBackupInProgress" />
+        local:MvxBind="ShowProgress BackupRestore.IsBackupInProgress; Visible BackupRestore.IsBackupInProgress" />
 </LinearLayout>
