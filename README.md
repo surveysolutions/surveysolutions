@@ -1,3 +1,6 @@
+5.13 
+- When updating Designer should be executed 'move-some-designer-rs-tables-to-plain.sql' from the same folder as README.md. Should be executed on plain database. Before execution should be changed connection string to read side database in line:
+select dblink_connect('views','host=127.0.0.1 port=5432 dbname=Design-Views user=postgres password=Qwerty1234');
 5.11
 - Changed Designer endpoint for Headquartes. Should be updated DesignerAddress app settings parameter in all hearduarters build stripts. 
   New urls should be:
