@@ -641,10 +641,8 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\NumericDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QrBarcodeDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsViewMapper.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\SingleOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\StaticTextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
