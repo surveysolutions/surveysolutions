@@ -1050,11 +1050,12 @@ namespace WB.Tests.Unit.TestFactories
         public YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
             => new YesNoAnswers(allOptionCodes, yesNoAnswersOnly);
 
-        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null)
+        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null, bool ordered = false)
             => Create.Entity.MultipleOptionsQuestion(
                 isYesNo: true,
                 questionId: questionId,
-                answers: answers ?? new decimal[] { });
+                answers: answers ?? new decimal[] { },
+                areAnswersOrdered: ordered);
 
         public TranslationInstance TranslationInstance(string value = null,
             Guid? translationId = null, 
