@@ -12,13 +12,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
     {
         protected static QuestionnaireChangeHistoryFactory CreateQuestionnaireChangeHistoryFactory(
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage = null)
         {
             return
                 new QuestionnaireChangeHistoryFactory(
                     questionnaireChangeHistoryStorage ??
                     Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
-                    questionnaireDocumentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
+                    questionnaireDocumentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
         }
     }
 }

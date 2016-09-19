@@ -17,11 +17,11 @@ namespace WB.UI.Designer.Code.Implementation
     public class CommandInflater : ICommandInflater
     {
         private readonly IMembershipUserService userHelper;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
 
         public CommandInflater(IMembershipUserService userHelper,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersons)
         {
             this.userHelper = userHelper;
@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         private QuestionnaireDocument GetQuestionnaire(Guid id)
         {
-            var questionnaire = this.questionnaireDocumentReader.GetById(id);
+            var questionnaire = this.questionnaireDocumentReader.GetById(id.FormatGuid());
 
             if (questionnaire == null)
             {

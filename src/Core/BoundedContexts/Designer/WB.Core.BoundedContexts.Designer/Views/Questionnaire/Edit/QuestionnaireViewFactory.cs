@@ -18,11 +18,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
 
         public QuestionnaireViewFactory(
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null || questionnaire.IsDeleted)
                 return false;
 
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             try
             {
-                var doc = this.questionnaireStorage.GetById(input.QuestionnaireId);
+                var doc = this.questionnaireStorage.GetById(input.QuestionnaireId.FormatGuid());
                 if (doc == null || doc.IsDeleted)
                 {
                     return null;
