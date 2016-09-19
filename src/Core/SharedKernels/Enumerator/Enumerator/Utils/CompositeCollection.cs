@@ -125,8 +125,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void NotifyItemChanged(T item)
         {
-            var index = this.SkipWhile(x => !x.Equals(item)).Count() - 1;
-            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
+            var localIndex = this.Select((collectionItem, index) => new {x = collectionItem, index}).FirstOrDefault(x => x.x.Equals(item))?.index ?? -1;
+            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, localIndex));
         }
 
         private void OnPropertyChanged(string name)
