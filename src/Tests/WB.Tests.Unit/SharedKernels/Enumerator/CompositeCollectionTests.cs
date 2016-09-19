@@ -44,7 +44,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             Assert.That(collectionChangedArgs, Is.Not.Null);
             Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Replace));
             Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(1));
-            Assert.That(collectionChangedArgs.NewStartingIndex, Is.EqualTo(1));
         }
     }
 }
