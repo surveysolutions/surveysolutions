@@ -1174,7 +1174,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
-            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1198,7 +1198,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
-            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1419,7 +1419,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
             ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -2355,7 +2355,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
-            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
             if (!linkedQuestionSelectedOptions.Any())
                 return;
@@ -2382,7 +2382,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
-            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
             var linkedQuestionIdentity = new Identity(questionId, rosterVector);
 
@@ -2430,7 +2430,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             if (applyStrongChecks)
             {
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
                 this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
             }
         }
@@ -2446,7 +2446,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
             if (applyStrongChecks)
             {
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
@@ -2464,7 +2464,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(this.interviewState, answeredQuestion, rosterVector, selectedValue, questionnaire);
             if (applyStrongChecks)
             {
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
@@ -2497,7 +2497,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (applyStrongChecks)
             {
                 this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
@@ -2525,7 +2525,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(question.Id, yesAnswersCount, questionnaire);
-            treeInvariants.ThrowIfQuestionIsDisabled(question);
+            treeInvariants.RequireQuestionIsEnabled(question);
         }
 
         private void CheckTextQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
@@ -2539,7 +2539,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
             if (applyStrongChecks)
             {
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
@@ -2565,7 +2565,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
@@ -2590,7 +2590,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
                 this.ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
                 this.ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
                 var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
@@ -2609,7 +2609,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
             if (applyStrongChecks)
             {
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
@@ -2624,7 +2624,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             if (applyStrongChecks)
             {
-                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
