@@ -8,6 +8,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using It = Machine.Specifications.It;
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 Create.SingleQuestion(id: questionId, variable: "question", isFilteredCombobox: true, options: new List<Answer> {Create.Option("1", "Combobox Option")})
             });
 
-            var questionnaires = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);

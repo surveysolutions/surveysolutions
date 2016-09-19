@@ -13,12 +13,12 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
     {
         protected static CommandInflater CreateCommandInflater(
             IMembershipUserService userHelper = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> storage = null,
+            IPlainKeyValueStorage<QuestionnaireDocument> storage = null,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersons = null)
         {
             return new CommandInflater(
                 userHelper ?? Mock.Of<IMembershipUserService>(),
-                storage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(),
+                storage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
                 sharedPersons ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>());
         }
 

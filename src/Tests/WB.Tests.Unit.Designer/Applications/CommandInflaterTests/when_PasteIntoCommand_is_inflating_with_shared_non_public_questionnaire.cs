@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 
             questionnaire.SharedPersons.Add(actionUserId);
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
+            var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
                     => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             var shared = new QuestionnaireSharedPersons(questoinnaireId);

@@ -85,7 +85,7 @@ namespace WB.UI.Designer.Code.Implementation
                     TypeSwitch.Case<DeleteLookupTable>(x => this.lookupTableService.DeleteLookupTableContent(x.QuestionnaireId, x.LookupTableId)),
                     TypeSwitch.Case<DeleteTranslation>(x => this.translationsService.Delete(x.QuestionnaireId, x.TranslationId)));
 
-                this.questionnaireHistory.Write(questionnaireCommand);
+                //this.questionnaireHistory.Write(questionnaireCommand);
             }
             catch (Exception exc)
             {

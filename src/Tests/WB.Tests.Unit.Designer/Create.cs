@@ -394,11 +394,11 @@ namespace WB.Tests.Unit.Designer
 
         public static LookupTableService LookupTableService(
             IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage = null)
         {
             return new LookupTableService(
                 lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
+                documentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)
@@ -1101,10 +1101,10 @@ namespace WB.Tests.Unit.Designer
 
         public static TranslationsService TranslationsService(
             IPlainStorageAccessor<TranslationInstance> traslationsStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
             => new TranslationsService(
                 traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
-                questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
+                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
 
         public static QuestionDetailsView NumericDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
         {

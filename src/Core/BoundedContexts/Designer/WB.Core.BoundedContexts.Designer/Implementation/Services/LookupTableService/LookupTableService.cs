@@ -19,15 +19,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
     internal class LookupTableService : ILookupTableService
     {
         private readonly IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> documentStorage;
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
         private const int MAX_ROWS_COUNT = 5000;
         private const int MAX_COLS_COUNT = 11;
 
-        public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, 
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
+        public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage,
+            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage)
         {
             this.lookupTableContentStorage = lookupTableContentStorage;
             this.documentStorage = documentStorage;
@@ -53,8 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public void DeleteLookupTableContent(Guid questionnaireId, Guid lookupTableId)
         {
-            var questionnaire = this.documentStorage.GetById(questionnaireId);
-
+            var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null)
                 return;
 
@@ -72,8 +71,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public LookupTableContent GetLookupTableContent(Guid questionnaireId, Guid lookupTableId)
         {
-            var questionnaire = this.documentStorage.GetById(questionnaireId);
-
+            var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null)
                 throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
 
@@ -93,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public LookupTableContentFile GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId)
         {
-            var questionnaire = this.documentStorage.GetById(questionnaireId);
+            var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
 
             if (questionnaire == null)
                 throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
@@ -103,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId)
         {
-            var questionnaire = this.documentStorage.GetById(questionnaireId);
+            var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
 
             if (questionnaire == null)
                 throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
