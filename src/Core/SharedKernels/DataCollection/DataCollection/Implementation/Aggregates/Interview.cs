@@ -884,11 +884,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// <remarks>
         /// If roster vector should be extended, result will be a set of vectors depending on roster count of corresponding groups.
         /// </remarks>
-        protected IEnumerable<RosterVector> ExtendRosterVector(IReadOnlyInterviewStateDependentOnAnswers state, RosterVector rosterVector, int length, Guid[] rosterGroupsStartingFromTop)
+        protected static IEnumerable<RosterVector> ExtendRosterVector(IReadOnlyInterviewStateDependentOnAnswers state, RosterVector rosterVector, int length, Guid[] rosterGroupsStartingFromTop)
         {
             if (length < rosterVector.Length)
                 throw new ArgumentException(string.Format(
-                    "Cannot extend vector with length {0} to smaller length {1}. InterviewId: {2}", rosterVector.Length, length, EventSourceId));
+                    "Cannot extend vector with length {0} to smaller length {1}.", rosterVector.Length, length));
 
             if (length == rosterVector.Length)
             {
@@ -1174,7 +1174,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
 
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1198,7 +1198,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1419,7 +1419,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
 
             ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -2355,7 +2355,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
 
             if (!linkedQuestionSelectedOptions.Any())
                 return;
@@ -2382,7 +2382,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
 
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+            treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
 
             var linkedQuestionIdentity = new Identity(questionId, rosterVector);
 
@@ -2430,8 +2430,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             if (applyStrongChecks)
             {
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
-                ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+                this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
             }
         }
 
@@ -2445,7 +2445,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
             if (applyStrongChecks)
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            {
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            }
         }
 
         private void CheckSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal selectedValue,
@@ -2461,7 +2463,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
             ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(this.interviewState, answeredQuestion, rosterVector, selectedValue, questionnaire);
             if (applyStrongChecks)
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            {
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            }
         }
 
         private void CheckMultipleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedValues,
@@ -2493,7 +2497,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (applyStrongChecks)
             {
                 this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
-                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
             }
         }
 
@@ -2521,7 +2525,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(question.Id, yesAnswersCount, questionnaire);
-            this.ThrowIfQuestionOrParentGroupIsDisabled(state, question, questionnaire);
+            treeInvariants.ThrowIfQuestionIsDisabled(question);
         }
 
         private void CheckTextQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
@@ -2534,7 +2538,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
             if (applyStrongChecks)
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            {
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            }
         }
 
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, RosterVector rosterVector, int answer, IQuestionnaire questionnaire,
@@ -2559,7 +2565,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
             }
         }
 
@@ -2584,7 +2590,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                this.ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
                 this.ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
                 this.ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
                 var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
@@ -2602,7 +2608,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
             if (applyStrongChecks)
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            {
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            }
         }
 
         private void CheckQRBarcodeInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
@@ -2615,7 +2623,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             if (applyStrongChecks)
-                ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
+            {
+                treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
+            }
         }
 
         #endregion
@@ -3902,7 +3912,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var nestedRosterId in nestedRosterIds)
             {
                 Guid[] rosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(nestedRosterId).ToArray();
-                IEnumerable<RosterVector> outerVectorsForExtend = this.ExtendRosterVector(state, nearestToOuterRosterVector, rosterGroupsStartingFromTop.Length, rosterGroupsStartingFromTop);
+                IEnumerable<RosterVector> outerVectorsForExtend = ExtendRosterVector(state, nearestToOuterRosterVector, rosterGroupsStartingFromTop.Length, rosterGroupsStartingFromTop);
 
                 foreach (RosterVector outerVectorForExtend in outerVectorsForExtend)
                 {
@@ -4108,33 +4118,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format(
                     "For question {0} number of answers is greater than the maximum number of selected answers. InterviewId: {1}",
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
-        }
-
-        private void ThrowIfQuestionOrParentGroupIsDisabled(IReadOnlyInterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire)
-        {
-            if (state.IsQuestionDisabled(question))
-                throw new InterviewException(string.Format(
-                    "Question {1} is disabled by it's following enablement condition:{0}{2}{0}InterviewId: {3}",
-                    Environment.NewLine,
-                    FormatQuestionForException(question, questionnaire),
-                    questionnaire.GetCustomEnablementConditionForQuestion(question.Id),
-                    this.EventSourceId));
-
-            IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
-            IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(parentGroupIds,
-                question.RosterVector, questionnaire);
-
-            foreach (Identity parentGroup in parentGroups)
-            {
-                if (state.IsGroupDisabled(parentGroup))
-                    throw new InterviewException(string.Format(
-                        "Question {1} is disabled because parent group {2} is disabled by it's following enablement condition:{0}{3}{0}InterviewId: {4}",
-                        Environment.NewLine,
-                        FormatQuestionForException(question, questionnaire),
-                        FormatGroupForException(parentGroup, questionnaire),
-                        questionnaire.GetCustomEnablementConditionForGroup(parentGroup.Id),
-                        this.EventSourceId));
-            }
         }
 
         private void ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(IQuestionnaire questionnaire, Guid questionId, decimal answer)
@@ -4682,36 +4665,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewTreeSection BuildInterviewTreeSection(Identity sectionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            var children = this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState ?? this.interviewState).ToList();
+            interviewState = interviewState ?? this.interviewState;
 
-            return new InterviewTreeSection(sectionIdentity, children);
+            var children = BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState).ToList();
+            var isDisabled = interviewState.IsGroupDisabled(sectionIdentity);
+
+            return new InterviewTreeSection(sectionIdentity, children, isDisabled: isDisabled);
         }
 
-        private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private static InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            var children = this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, interviewState).ToList();
+            var children = BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, interviewState).ToList();
+            var isDisabled = interviewState.IsGroupDisabled(groupIdentity);
 
-            return new InterviewTreeSubSection(groupIdentity, children);
+            return new InterviewTreeSubSection(groupIdentity, children, isDisabled: isDisabled);
         }
 
-        private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private static InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            var children = this.BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire, interviewState).ToList();
+            var children = BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire, interviewState).ToList();
+            var isDisabled = interviewState.IsGroupDisabled(rosterIdentity);
 
-            return new InterviewTreeRoster(rosterIdentity, children);
+            return new InterviewTreeRoster(rosterIdentity, children, isDisabled: isDisabled);
         }
 
-        private InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private static InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            return new InterviewTreeQuestion(questionIdentity);
+            var isDisabled = interviewState.IsQuestionDisabled(questionIdentity);
+            string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
+            string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
+
+            return new InterviewTreeQuestion(questionIdentity, isDisabled: isDisabled, title: title, variableName: variableName);
         }
 
-        private InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             return new InterviewTreeStaticText(staticTextIdentity);
         }
 
-        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private static IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             var childIds = questionnaire.GetChildEntityIds(groupIdentity.Id);
 
@@ -4721,29 +4713,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     Guid[] rostersStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(childId).ToArray();
 
-                    IEnumerable<RosterVector> childRosterVectors = this.ExtendRosterVector(
+                    IEnumerable<RosterVector> childRosterVectors = ExtendRosterVector(
                         interviewState, groupIdentity.RosterVector, rostersStartingFromTop.Length, rostersStartingFromTop);
 
                     foreach (var childRosterVector in childRosterVectors)
                     {
                         var childRosterIdentity = new Identity(childId, childRosterVector);
-                        yield return this.BuildInterviewTreeRoster(childRosterIdentity, questionnaire, interviewState);
+                        yield return BuildInterviewTreeRoster(childRosterIdentity, questionnaire, interviewState);
                     }
                 }
                 else if (questionnaire.HasGroup(childId))
                 {
                     var childGroupIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeSubSection(childGroupIdentity, questionnaire, interviewState);
+                    yield return BuildInterviewTreeSubSection(childGroupIdentity, questionnaire, interviewState);
                 }
                 else if (questionnaire.HasQuestion(childId))
                 {
                     var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeQuestion(childQuestionIdentity, questionnaire, interviewState);
+                    yield return BuildInterviewTreeQuestion(childQuestionIdentity, questionnaire, interviewState);
                 }
                 else if (questionnaire.IsStaticText(childId))
                 {
                     var childStaticTextIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeStaticText(childStaticTextIdentity, questionnaire, interviewState);
+                    yield return BuildInterviewTreeStaticText(childStaticTextIdentity, questionnaire, interviewState);
                 }
             }
         }
