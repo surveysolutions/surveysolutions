@@ -613,9 +613,6 @@
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTracker.cs" />
-    <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterItemType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoView.cs" />

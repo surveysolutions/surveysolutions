@@ -7,9 +7,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -68,11 +68,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     questionnaireView = document;
                 });
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, questionnaireEntityFactory: questionFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument, questionnaireEntityFactory: questionFactory.Object);
         };
 
         Because of = () =>
-            denormalizer.Handle(@event);
+            denormalizer.UpdateMultimediaQuestion(@event.Payload);
 
         It should_call_question_factory_ones = () =>
            questionFactory.Verify(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()), Times.Once);
@@ -142,7 +142,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static QuestionData questionData;
         private static Mock<IQuestionnaireEntityFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static IPublishedEvent<MultimediaQuestionUpdated> @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

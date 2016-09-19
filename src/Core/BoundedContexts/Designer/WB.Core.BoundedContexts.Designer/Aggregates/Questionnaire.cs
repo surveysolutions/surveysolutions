@@ -15,9 +15,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs;
-using Ncqrs.Domain;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using NHibernate.Util;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -31,7 +28,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
@@ -43,7 +39,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    internal class Questionnaire : /*AggregateRootMappedByConvention, ISnapshotable<QuestionnaireState>,*/ IPlainAggregateRoot
+    internal class Questionnaire : IPlainAggregateRoot
     {
         private const int MaxCountOfDecimalPlaces = 15;
         private const int MaxChapterItemsCount = 400;
@@ -71,12 +67,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region State
 
-        protected internal QuestionnaireDocument innerDocument = new QuestionnaireDocument();
+        private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
-        private HashSet<Guid> macroIds = new HashSet<Guid>();
-        private HashSet<Guid> lookupTableIds = new HashSet<Guid>();
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
+
+        internal void Initialize(QuestionnaireDocument document)
+        {
+            this.innerDocument = document;
+        }
 
         private bool wasExpressionsMigrationPerformed = false;
 
@@ -84,7 +83,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void AddMacro(MacroAdded e)
         {
-            this.macroIds.Add(e.MacroId);
             this.innerDocument.Macros[e.MacroId] = new Macro();
         }
 
@@ -101,13 +99,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void DeleteMacro(MacroDeleted e)
         {
-            this.macroIds.Remove(e.MacroId);
             innerDocument.Macros.Remove(e.MacroId);
         }
 
         internal void AddLookupTable(LookupTableAdded e)
         {
-            this.lookupTableIds.Add(e.LookupTableId);
             innerDocument.LookupTables[e.LookupTableId] = new LookupTable()
             {
                 TableName = e.LookupTableName,
@@ -126,7 +122,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void DeleteLookupTable(LookupTableDeleted e)
         {
-            this.lookupTableIds.Remove(e.LookupTableId);
             innerDocument.LookupTables.Remove(e.LookupTableId);
         }
 
@@ -175,30 +170,30 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.readOnlyUsers.Remove(e.PersonId);
         }
 
-        private void UpdateQuestionnaire(QuestionnaireUpdated e)
+        internal void UpdateQuestionnaire(QuestionnaireUpdated e)
         {
             this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(e.Title);
             this.innerDocument.IsPublic = e.IsPublic;
         }
 
-        private void DeleteQuestionnaire(QuestionnaireDeleted e)
+        internal void DeleteQuestionnaire(QuestionnaireDeleted e)
         {
             this.innerDocument.IsDeleted = true;
         }
 
-        private void MigrateExpressionsToCSharp(ExpressionsMigratedToCSharp e)
+        internal void MigrateExpressionsToCSharp(ExpressionsMigratedToCSharp e)
         {
             this.wasExpressionsMigrationPerformed = true;
             this.innerDocument.UsesCSharp = true;
 
         }
 
-        private void DeleteGroup(GroupDeleted e)
+        internal void DeleteGroup(GroupDeleted e)
         {
             this.innerDocument.RemoveGroup(e.GroupPublicKey);
         }
 
-        private void UpdateGroup(GroupUpdated e)
+        internal void UpdateGroup(GroupUpdated e)
         {
             this.innerDocument.UpdateGroup(e.GroupPublicKey, 
                 e.GroupText,
@@ -252,14 +247,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void CloneQuestionnaire(QuestionnaireCloned e)
         {
             this.innerDocument = e.QuestionnaireDocument;
-            if (e.QuestionnaireDocument.Macros != null)
-            {
-                this.macroIds = e.QuestionnaireDocument.Macros.Select(x => x.Key).ToHashSet();
-            }
-            if (e.QuestionnaireDocument.LookupTables != null)
-            {
-                this.lookupTableIds = e.QuestionnaireDocument.LookupTables.Select(x => x.Key).ToHashSet();
-            }
         }
 
         private void CloneGroup(GroupCloned e)
@@ -291,7 +278,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        private void RemoveRosterFlagFromGroup(GroupStoppedBeingARoster e)
+        internal void RemoveRosterFlagFromGroup(GroupStoppedBeingARoster e)
         {
             this.innerDocument.UpdateGroup(e.GroupId, group =>
             {
@@ -617,14 +604,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
-        private void DeleteQuestion(QuestionDeleted e)
+        internal void DeleteQuestion(QuestionDeleted e)
         {
             this.innerDocument.RemoveEntity(e.QuestionId);
 
             this.innerDocument.RemoveHeadPropertiesFromRosters(e.QuestionId);
         }
 
-        private void MoveQuestionnaireItem(QuestionnaireItemMoved e)
+        internal void MoveQuestionnaireItem(QuestionnaireItemMoved e)
         {
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
 
@@ -825,28 +812,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument.RemoveEntity(e.EntityId);
         }
-
-       /* public QuestionnaireState CreateSnapshot()
-        {
-            return new QuestionnaireState
-            {
-                QuestionnaireDocument = this.innerDocument,
-                Version = this.Version,
-                WasExpressionsMigrationPerformed = wasExpressionsMigrationPerformed,
-                ReadOnlyUsers = this.readOnlyUsers,
-                MacroIds = this.macroIds,
-                LookupTableIds = this.lookupTableIds
-            };
-        }
-
-        public void RestoreFromSnapshot(QuestionnaireState snapshot)
-        {
-            this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
-            this.wasExpressionsMigrationPerformed = snapshot.WasExpressionsMigrationPerformed;
-            this.readOnlyUsers = snapshot.ReadOnlyUsers;
-            this.macroIds = snapshot.MacroIds;
-            this.lookupTableIds = snapshot.LookupTableIds;
-        }*/
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
         {
@@ -1083,7 +1048,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.LookupTableId, command.LookupTableName, DefaultVariableLengthLimit);
 
-            if (this.lookupTableIds.Contains(command.LookupTableId))
+            if (this.innerDocument.LookupTables.ContainsKey(command.LookupTableId))
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableAlreadyExist, ExceptionMessages.LookupTableAlreadyExist);
             }
@@ -1096,7 +1061,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.LookupTableId, command.LookupTableName, DefaultVariableLengthLimit);
 
-            if (!this.lookupTableIds.Contains(command.LookupTableId))
+            if (!this.innerDocument.LookupTables.ContainsKey(command.LookupTableId))
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
             }
@@ -1107,7 +1072,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            if (!this.lookupTableIds.Contains(command.LookupTableId))
+            if (!this.innerDocument.LookupTables.ContainsKey(command.LookupTableId))
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
             }
@@ -3433,7 +3398,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfMacroAlreadyExist(Guid macroId)
         {
-            if (this.macroIds.Contains(macroId))
+            if (this.innerDocument.Macros.ContainsKey(macroId))
             {
                 throw new QuestionnaireException(DomainExceptionType.MacroAlreadyExist, ExceptionMessages.MacroAlreadyExist);
             }
@@ -3449,7 +3414,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfMacroIsAbsent(Guid macroId)
         {
-            if (!this.macroIds.Contains(macroId))
+            if (!this.innerDocument.Macros.ContainsKey(macroId))
             {
                 throw new QuestionnaireException(DomainExceptionType.MacroIsAbsent, ExceptionMessages.MacroIsAbsent);
             }

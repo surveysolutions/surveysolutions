@@ -8,9 +8,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -76,11 +76,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     questionnaireView = document;
                 });
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, questionnaireEntityFactory: questionFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument, questionnaireEntityFactory: questionFactory.Object);
         };
 
         Because of = () =>
-            denormalizer.Handle(@event);
+            denormalizer.CloneQRBarcodeQuestion(@event.Payload);
 
         It should_pass_PublicKey_equals_questionId_to_question_factory = () =>
             questionData.PublicKey.ShouldEqual(questionId);
@@ -153,7 +153,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static QuestionData questionData;
         private static Mock<IQuestionnaireEntityFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static IPublishedEvent<QRBarcodeQuestionCloned> @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid sourceQuestionId = Guid.Parse("22222222222222222222222222222222");
