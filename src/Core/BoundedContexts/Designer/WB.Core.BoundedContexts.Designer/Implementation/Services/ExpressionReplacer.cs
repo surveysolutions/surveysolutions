@@ -18,11 +18,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 this.variableMap = new QuestionnaireStataMapView(questionnaireDocument);
         }
 
-        public ExpressionReplacer(QuestionsAndGroupsCollectionView questionnaireView)
-        {
-            this.variableMap = new QuestionnaireStataMapView(questionnaireView);
-        }
-
         /// <summary>
         /// Replaces all occurences of stata captions in expression with public keys (guids) 
         /// </summary>
