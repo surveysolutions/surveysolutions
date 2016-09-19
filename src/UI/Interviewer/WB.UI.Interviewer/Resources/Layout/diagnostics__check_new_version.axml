@@ -30,5 +30,5 @@
      local:MvxBind="Text CheckNewVersion.CheckNewVersionResult" />
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-       local:MvxBind="ShowProgress CheckNewVersion.IsVersionCheckInProgress" />
+       local:MvxBind="ShowProgress CheckNewVersion.IsVersionCheckInProgress; Visible CheckNewVersion.IsVersionCheckInProgress" />
 </LinearLayout>

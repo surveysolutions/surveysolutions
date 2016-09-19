@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             this.Count = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
-            this.OnPropertyChanged("Count");
+            this.OnPropertyChanged(nameof(this.Count));
 
             if (this.CollectionChanged == null)
                 return;
@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             this.CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
-            this.OnPropertyChanged("Count");
+            this.OnPropertyChanged(nameof(this.Count));
         }
 
         public void NotifyItemChanged(T item)
