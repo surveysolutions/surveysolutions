@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
       
 
-        protected static QuestionnaireDocument CreateQuestionsAndGroupsCollectionView()
+        protected static QuestionnaireDocument CreateQuestionnaireDocument()
         {
             return new QuestionnaireDocument()
             {
@@ -194,7 +194,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             };
         }
 
-        protected static QuestionnaireDocument CreateQuestionsAndGroupsCollectionViewWithCascadingQuestions()
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithCascadingQuestions()
         {
             return new QuestionnaireDocument()
             {
@@ -228,7 +228,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             };
         }
 
-        protected static QuestionnaireDocument CreateQuestionsAndGroupsCollectionViewWithListQuestions(bool shouldReplaceFixedRosterWithListOne = false)
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithListQuestions(bool shouldReplaceFixedRosterWithListOne = false)
         {
             var fixedNestedRoster = new Group
             {

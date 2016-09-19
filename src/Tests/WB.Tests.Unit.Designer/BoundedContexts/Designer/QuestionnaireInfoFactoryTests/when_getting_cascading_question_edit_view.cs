@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         Establish context = () =>
         {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaireView = CreateQuestionsAndGroupsCollectionViewWithCascadingQuestions();
+            questionnaireView = CreateQuestionnaireDocumentWithCascadingQuestions();
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaireView);
