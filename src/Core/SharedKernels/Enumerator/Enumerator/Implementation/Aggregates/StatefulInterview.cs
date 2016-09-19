@@ -1241,8 +1241,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
                 var invalidEntitiesInSection = this
                     .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, sectionInstance.RosterVector, questionnaire)
-                    .Concat(this
-                        .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allStaticTextInGroup, sectionInstance.RosterVector, questionnaire))
+                    .Concat(this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allStaticTextInGroup, sectionInstance.RosterVector, questionnaire))
+                    .Where(this.IsEnabled)
                     .Where(entity => !this.IsValid(entity));
 
                 foreach (var identity in invalidEntitiesInSection)

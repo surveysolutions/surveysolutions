@@ -227,8 +227,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 disposableItem.Dispose();
             }
-
-            this.Items.Clear();
         }
     }
 }

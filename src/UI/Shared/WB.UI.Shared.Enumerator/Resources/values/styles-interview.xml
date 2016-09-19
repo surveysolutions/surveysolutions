@@ -16,10 +16,11 @@
   </style>
 
   <style name="Interview_Entity_Title" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    
     <item name="android:textStyle">bold</item>
     <item name="android:textColor">@color/question_title_text</item>
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
   </style>
