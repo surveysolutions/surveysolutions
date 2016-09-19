@@ -7,6 +7,7 @@ using Android.Views.InputMethods;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V4;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -41,8 +42,8 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnViewCreated(view, savedInstanceState);
 
-            this.ViewModel.Items.OfType<CommentsViewModel>()
-                .ForEach(x => x.CommentsInputShown += this.OnCommentsBlockShown());
+            this.ViewModel?.Items.OfType<CommentsViewModel>()
+                .ForEach(x => x.CommentsInputShown += this.OnCommentsBlockShown);
 
             if (ViewModel?.ScrollToIndex != null)
             {
@@ -51,22 +52,18 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        private EventHandler<EventArgs> OnCommentsBlockShown()
+        private void OnCommentsBlockShown(object sender, EventArgs args)
         {
-            return (sender, args) =>
+            var compositeEntities = this.ViewModel.Items.ToList();
+            var itemIndex = compositeEntities.IndexOf(sender as ICompositeEntity);
+
+            var isAtTheEndOfAList = itemIndex - compositeEntities.Count < 2;
+            if (isAtTheEndOfAList || itemIndex < this.layoutManager.FindFirstVisibleItemPosition() || itemIndex > this.layoutManager.FindLastVisibleItemPosition())
             {
-                var firstVisibleItemPosition = this.layoutManager.FindFirstVisibleItemPosition();
-                var lastVisibleItemPosition = this.layoutManager.FindLastVisibleItemPosition();
-
-                var itemIndex = this.ViewModel.Items.ToList().IndexOf(sender as ICompositeEntity);
-
-                if (itemIndex < firstVisibleItemPosition || itemIndex > lastVisibleItemPosition)
-                {
-                    this.layoutManager?.ScrollToPositionWithOffset(itemIndex, 200);
-                    InputMethodManager imm = (InputMethodManager) this.Activity.GetSystemService(Android.Content.Context.InputMethodService);
-                    imm.ToggleSoftInput(ShowFlags.Implicit, HideSoftInputFlags.None);
-                }
-            };
+                InputMethodManager imm = (InputMethodManager) this.Activity.GetSystemService(Android.Content.Context.InputMethodService);
+                imm.ToggleSoftInput(ShowFlags.Implicit, HideSoftInputFlags.None);
+                this.layoutManager?.ScrollToPositionWithOffset(itemIndex, 200);
+            }
         }
     }
 }

@@ -34,10 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             private set
             {
-                if (value == this.inProgress) return;
-
-                this.inProgress = value;
-                this.RaisePropertyChanged();
+                this.RaiseAndSetIfChanged(ref this.inProgress, value);
             }
         }
 
