@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireId = @event.InterviewData.QuestionnaireId;
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.properties.Status = @event.InterviewData.Status;
-            this.properties.IsCompleted = @event.InterviewData.WasCompleted;
+            this.properties.WasCompleted = @event.InterviewData.WasCompleted;
             this.ExpressionProcessorStatePrototype =
                 this.expressionProcessorStatePrototypeProvider.GetExpressionState(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
 
@@ -614,7 +614,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewCompleted @event)
         {
-            this.properties.IsCompleted = true;
+            this.properties.WasCompleted = true;
         }
 
         public virtual void Apply(InterviewRestarted @event) { }
@@ -627,7 +627,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewRejected @event)
         {
-            this.properties.IsCompleted = false;
+            this.properties.WasCompleted = false;
         }
 
         public virtual void Apply(InterviewRejectedByHQ @event) { }
@@ -1126,7 +1126,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerTextQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
@@ -1143,7 +1143,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerNumericRealQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal answer)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1161,7 +1161,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1171,7 +1171,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
@@ -1186,7 +1186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerPictureQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string pictureFileName)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1196,7 +1196,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
             treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
 
@@ -1210,7 +1210,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         internal void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
@@ -1232,7 +1232,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedValues)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1255,7 +1255,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerYesNoQuestion(AnswerYesNoQuestion command)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
             this.CheckYesNoQuestionInvariants(command.Question, command.AnsweredOptions, questionnaire, this.interviewState);
@@ -1277,7 +1277,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[][] selectedRosterVectors)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1297,7 +1297,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1314,7 +1314,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1333,7 +1333,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerTextListQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1356,7 +1356,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1385,7 +1385,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedRosterVector)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1408,7 +1408,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTime removeTime)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1418,7 +1418,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
 
             ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
@@ -1532,7 +1532,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
@@ -1540,14 +1540,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
 
         public void SetFlagToAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
@@ -1555,14 +1555,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
         }
 
         public void RemoveFlagFromAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
         {
-            new InterviewPropertiesInvariants(this.properties).CheckCanAnswerBeChanged();
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
@@ -1570,7 +1570,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }
@@ -1595,7 +1595,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
-            if (!this.properties.IsCompleted && this.properties.Status != InterviewStatus.InterviewerAssigned)
+            if (!this.properties.WasCompleted && this.properties.Status != InterviewStatus.InterviewerAssigned)
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
@@ -2353,7 +2353,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
 
@@ -2379,7 +2379,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             treeInvariants.ThrowIfQuestionIsDisabled(answeredQuestion);
@@ -2425,7 +2425,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
             ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
             if (applyStrongChecks)
@@ -2442,7 +2442,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
             if (applyStrongChecks)
             {
@@ -2458,7 +2458,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
             ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(this.interviewState, answeredQuestion, rosterVector, selectedValue, questionnaire);
@@ -2476,7 +2476,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
 
@@ -2511,7 +2511,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(question.Id, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(question.Id, question.RosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(question.Id, question.RosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(question.Id, questionnaire, QuestionType.MultyOption);
             this.ThrowIfSomeValuesAreNotFromAvailableOptions(question.Id, selectedValues, questionnaire);
 
@@ -2535,7 +2535,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
             if (applyStrongChecks)
             {
@@ -2550,7 +2550,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
 
@@ -2576,7 +2576,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
@@ -2605,7 +2605,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
             if (applyStrongChecks)
             {
@@ -2620,7 +2620,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
-            treeInvariants.ThrowIfRosterVectorIsIncorrect(questionId, rosterVector);
+            treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             if (applyStrongChecks)
             {
