@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
-        public void ThrowIfQuestionIsDisabled(Identity questionIdentity)
+        public void RequireQuestionIsEnabled(Identity questionIdentity)
         {
             var question = this.InterviewTree.GetQuestion(questionIdentity);
 
