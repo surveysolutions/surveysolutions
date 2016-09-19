@@ -10,6 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     public class CompositeCollection<T> : IObservableCollection<T>
     {
+        private const string IndexerName = "Item[]";
+
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
@@ -21,8 +23,13 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged-= this.collectionChanged);
             this.collections.Clear();
             this.Count = 0;
-            this.propertyChanged("Count");
-            this.collectionChanged_Reset();
+            this.OnPropertyChanged(nameof(Count));
+            this.OnPropertyChanged(IndexerName);
+            this.collectionChanged(this, 
+                new NotifyCollectionChangedEventArgs(
+                    NotifyCollectionChangedAction.Remove, 
+                    this.ToList(),
+                    0));
         }
 
         public bool Contains(T item)
@@ -67,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             this.Count = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
-            this.propertyChanged("Count");
+            this.OnPropertyChanged("Count");
 
             if (this.CollectionChanged == null)
                 return;
@@ -113,22 +120,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             this.CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
-            this.propertyChanged("Count");
+            this.OnPropertyChanged("Count");
         }
 
-        private void collectionChanged_Reset()
+        public void NotifyItemChanged(T item)
         {
-            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            var index = this.SkipWhile(x => !x.Equals(item)).Count() - 1;
+            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
         }
 
-        private void collectionChanged_Remove(IList items, int oldItemIndex)
-        {
-            this.CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, items, oldItemIndex));
-            this.propertyChanged("Count");
-        }
-
-        private void propertyChanged(string name)
+        private void OnPropertyChanged(string name)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
