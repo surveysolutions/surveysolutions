@@ -16,14 +16,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IList<InterviewTreeSection> Sections { get; } = new List<InterviewTreeSection>();
 
+        public InterviewTreeQuestion GetQuestion(Identity questionIdentity)
+            => this
+                .GetNodes<InterviewTreeQuestion>()
+                .Single(node => node.Identity == questionIdentity);
+
         public IReadOnlyCollection<InterviewTreeQuestion> FindQuestions(Guid questionId)
             => this
-                .Sections
-                .Cast<IInterviewTreeNode>()
-                .TreeToEnumerable(node => node.Children)
-                .OfType<InterviewTreeQuestion>()
+                .GetNodes<InterviewTreeQuestion>()
                 .Where(node => node.Identity.Id == questionId)
                 .ToReadOnlyCollection();
+
+        private IEnumerable<TNode> GetNodes<TNode>() => this.GetNodes().OfType<TNode>();
+
+        private IEnumerable<IInterviewTreeNode> GetNodes()
+            => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(node => node.Children);
 
         public override string ToString()
             => $"Tree ({this.InterviewId})" + Environment.NewLine
@@ -33,53 +40,90 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public interface IInterviewTreeNode
     {
         Identity Identity { get; }
+        IInterviewTreeNode Parent { get; }
+        IReadOnlyCollection<IInterviewTreeNode> Children { get; }
 
-        IList<IInterviewTreeNode> Children { get; }
+        bool IsDisabled();
     }
 
-    public abstract class InterviewTreeLeafNode : IInterviewTreeNode
+    public interface IInternalInterviewTreeNode
     {
-        protected InterviewTreeLeafNode(Identity identity)
+        void SetParent(IInterviewTreeNode parent);
+    }
+
+    public abstract class InterviewTreeLeafNode : IInterviewTreeNode, IInternalInterviewTreeNode
+    {
+        private readonly bool isDisabled;
+
+        protected InterviewTreeLeafNode(Identity identity, bool isDisabled)
         {
             this.Identity = identity;
+            this.isDisabled = isDisabled;
         }
 
         public Identity Identity { get; }
-        IList<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
+        public IInterviewTreeNode Parent { get; private set; }
+        IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
+
+        void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
+
+        public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
+    }
+
+    public abstract class InterviewTreeGroup : IInterviewTreeNode, IInternalInterviewTreeNode
+    {
+        private readonly bool isDisabled;
+
+        protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
+        {
+            this.Identity = identity;
+            this.Children = children.ToList();
+            this.isDisabled = isDisabled;
+
+            foreach (var child in this.Children)
+            {
+                ((IInternalInterviewTreeNode)child).SetParent(this);
+            }
+        }
+
+        public Identity Identity { get; }
+        public IInterviewTreeNode Parent { get; private set; }
+        public IReadOnlyCollection<IInterviewTreeNode> Children { get; }
+
+        void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
+
+        public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
     }
 
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
-        public InterviewTreeQuestion(Identity identity)
-            : base(identity) {}
+        public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName)
+            : base(identity, isDisabled)
+        {
+            this.Title = title;
+            this.VariableName = variableName;
+        }
 
-        public override string ToString() => $"Question ({this.Identity})";
+        public string Title { get; }
+        public string VariableName { get; }
+
+        public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
+
+        public override string ToString() => $"Question ({this.Identity}) '{this.Title}'";
     }
 
     public class InterviewTreeStaticText : InterviewTreeLeafNode
     {
         public InterviewTreeStaticText(Identity identity)
-            : base(identity) {}
+            : base(identity, false) {}
 
         public override string ToString() => $"Text ({this.Identity})";
     }
 
-    public abstract class InterviewTreeGroup : IInterviewTreeNode
-    {
-        protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children)
-        {
-            this.Identity = identity;
-            this.Children = children.ToList();
-        }
-
-        public Identity Identity { get; }
-        public IList<IInterviewTreeNode> Children { get; }
-    }
-
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
-        public InterviewTreeSubSection(Identity identity, IEnumerable<IInterviewTreeNode> children)
-            : base(identity, children) {}
+        public InterviewTreeSubSection(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
+            : base(identity, children, isDisabled) {}
 
         public override string ToString()
             => $"SubSection ({this.Identity})" + Environment.NewLine
@@ -88,8 +132,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeSection : InterviewTreeGroup
     {
-        public InterviewTreeSection(Identity identity, IEnumerable<IInterviewTreeNode> children)
-            : base(identity, children) {}
+        public InterviewTreeSection(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
+            : base(identity, children, isDisabled) {}
 
         public override string ToString()
             => $"Section ({this.Identity})" + Environment.NewLine
@@ -98,8 +142,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeRoster : InterviewTreeGroup
     {
-        public InterviewTreeRoster(Identity identity, IEnumerable<IInterviewTreeNode> children)
-            : base(identity, children) {}
+        public InterviewTreeRoster(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
+            : base(identity, children, isDisabled) {}
 
         public override string ToString()
             => $"Roster ({this.Identity})" + Environment.NewLine
