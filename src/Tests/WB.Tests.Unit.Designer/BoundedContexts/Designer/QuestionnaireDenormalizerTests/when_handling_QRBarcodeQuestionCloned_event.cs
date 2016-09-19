@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 ValidationMessage = validationMessage
             });
 
-            var questionnaireDocument = CreateQuestionnaireDocument(new[]
+            questionnaireView = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentGroupId,
                     children: new IComposite[]
@@ -63,20 +63,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     })
             });
 
-            var documentStorage = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
-            
-            documentStorage
-                .Setup(writer => writer.GetById(Moq.It.IsAny<string>()))
-                .Returns(questionnaireDocument);
-            
-            documentStorage
-                .Setup(writer => writer.Store(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>()))
-                .Callback((QuestionnaireDocument document, string id) =>
-                {
-                    questionnaireView = document;
-                });
-
-            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument, questionnaireEntityFactory: questionFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionFactory.Object);
         };
 
         Because of = () =>

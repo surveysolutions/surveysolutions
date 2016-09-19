@@ -18,25 +18,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         {
             questionnaireEntityFactory = Setup.QuestionnaireEntityFactoryWithStaticText(entityId, text, null);
 
-            var questionnaireDocument = CreateQuestionnaireDocument(new[]
+            questionnaireView = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentId)
             });
 
-            var documentStorage = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
-
-            documentStorage
-                .Setup(writer => writer.GetById(Moq.It.IsAny<string>()))
-                .Returns(questionnaireDocument);
-
-            documentStorage
-                .Setup(writer => writer.Store(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>()))
-                .Callback((QuestionnaireDocument document, string id) =>
-                {
-                    questionnaireView = document;
-                });
-
-            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument, questionnaireEntityFactory: questionnaireEntityFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionnaireEntityFactory.Object);
         };
 
         Because of = () =>
