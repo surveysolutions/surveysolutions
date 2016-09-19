@@ -335,9 +335,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.AddOrUpdateGroupState(command.QuestionnaireId, command.GroupId, groupTitle);
 
             var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-            if (questionnaire == null)
-                return;
-
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
                 questionnaire.GroupsState.ContainsKey(command.GroupId)
                     ? QuestionnaireItemType.Group
@@ -595,8 +592,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             Action<QuestionnaireStateTracker, Guid, string> setAction)
         {
             var questionnaireStateTacker = this.questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
-            if (questionnaireStateTacker == null)
-                return;
 
             setAction(questionnaireStateTacker, itemId, itemTitle);
 
