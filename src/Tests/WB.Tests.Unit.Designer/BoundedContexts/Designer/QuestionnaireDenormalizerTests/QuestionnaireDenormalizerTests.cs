@@ -79,15 +79,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return questionnaireAr;
         }
 
-        private static Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
-        {
-            var storageStub = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
-
-            storageStub.Setup(d => d.GetById(document.PublicKey.FormatGuid())).Returns(document);
-
-            return storageStub;
-        }
-
         private static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionnaireId)
         {
             var innerDocument = new QuestionnaireDocument

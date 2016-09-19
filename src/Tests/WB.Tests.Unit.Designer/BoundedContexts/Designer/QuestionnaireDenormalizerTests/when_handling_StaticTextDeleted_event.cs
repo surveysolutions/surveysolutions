@@ -28,9 +28,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 }),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 

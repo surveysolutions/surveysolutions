@@ -29,9 +29,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 secondGroup = CreateGroup(groupId: groupId, title: initialGroupTitle),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 
