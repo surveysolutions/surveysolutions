@@ -388,6 +388,7 @@
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_200_characters.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
+    <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\Enumerator\SqliteStorageTests.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\CompositeCollectionInflationServiceTests\CompositeCollectionInflationServiceTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_roster_trigger_is_multioption_question.cs" />
