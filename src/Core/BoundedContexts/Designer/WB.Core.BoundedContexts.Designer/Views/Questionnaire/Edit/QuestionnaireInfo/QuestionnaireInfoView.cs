@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
-    public class QuestionnaireInfoView : IReadSideRepositoryEntity
+    public class QuestionnaireInfoView
     {
         public QuestionnaireInfoView()
         {
