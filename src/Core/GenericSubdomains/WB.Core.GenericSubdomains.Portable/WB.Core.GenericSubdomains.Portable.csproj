@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ActionUtils.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
+    <Compile Include="CustomCollections\OrderedAdditiveSet.cs" />
     <Compile Include="DecimalExtensions.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />

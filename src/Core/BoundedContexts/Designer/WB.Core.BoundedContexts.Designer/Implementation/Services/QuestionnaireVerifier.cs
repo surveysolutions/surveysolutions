@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private const int DefaultRestrictedVariableLengthLimit = 20;
 
         private const int MaxRosterPropagationLimit = 10000;
-        private const int MaxTotalRosterPropagationLimit = 50000;
+        private const int MaxTotalRosterPropagationLimit = 80000;
 
         private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes =
             new QuestionType[]
@@ -248,6 +248,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             TranslationVerifier(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHaveDuplicatedNames),
 
             Verifier(QuestionnaireHasRostersPropagationsExededLimit, "WB0261", VerificationMessages.WB0261_RosterStructureTooExplosive),
+            Verifier<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByCircularReferences,
@@ -258,6 +259,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             ErrorsByLookupTablesWithDuplicateVariableName,
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
         };
+
+        private bool RosterHasPropagationExededLimit(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!IsRosterGroup(roster))
+                return false;
+
+            Dictionary<Guid, long> rosterPropagationCounts = new Dictionary<Guid, long>();
+            
+            return CalculateRosterInstancesCountAndUpdateCache(roster, rosterPropagationCounts, questionnaire) > MaxRosterPropagationLimit;
+            
+        }
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireDocument questionnaire)
         {

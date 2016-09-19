@@ -100,6 +100,7 @@
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\OptionsRepository.cs" />
     <Compile Include="Implementation\Services\QuestionOptionsRepository.cs" />
+    <Compile Include="Implementation\Services\SQLiteConnectionWithLock.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Properties\UIResources.es1.Designer.cs">

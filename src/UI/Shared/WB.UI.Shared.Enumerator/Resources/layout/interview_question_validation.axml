@@ -4,14 +4,16 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    style="@style/Interview_Question_Errors">
+    style="@style/Interview_Question_Errors"
+    local:MvxBind="Visible IsInvalid">
   <TextView
       style="@style/Interview_Question_Errors_Title"
-      local:MvxBind="Text Error.Caption" />
+      local:MvxBind="Text Error.Caption;
+      Visible IsInvalid" />
   <MvxLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        local:MvxBind="ItemsSource Error.ValidationErrors"
+        local:MvxBind="ItemsSource Error.ValidationErrors;Visible IsInvalid"
         local:MvxItemTemplate="@layout/interview_question__errors_item"/>
 </LinearLayout>

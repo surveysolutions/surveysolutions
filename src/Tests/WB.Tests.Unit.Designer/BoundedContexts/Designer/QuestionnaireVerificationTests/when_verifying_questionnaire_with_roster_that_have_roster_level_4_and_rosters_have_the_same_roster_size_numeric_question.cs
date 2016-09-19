@@ -42,18 +42,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                     VariableName = "c",
                                     RosterSizeQuestionId = rosterSizeQuestionId,
                                     Children = new List<IComposite>()
-                                    {
-                                        new Group()
-                                        {
-                                            PublicKey = Guid.NewGuid(),
-                                            IsRoster = true,
-                                            VariableName = "d",
-                                            RosterSizeQuestionId = rosterSizeQuestionId,
-                                            Children = new List<IComposite>()
-                                            {
-                                            }
-                                        }
-                                    }
                                 }
                             }
                         }
@@ -68,10 +56,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
         It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(2);
 
         It should_return_first_error_with_code__WB0261 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0261");
+            verificationMessages.First().Code.ShouldEqual("WB0261");
+
+        It should_return_first_error_with_code__WB0262 = () =>
+            verificationMessages.Second().Code.ShouldEqual("WB0262");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

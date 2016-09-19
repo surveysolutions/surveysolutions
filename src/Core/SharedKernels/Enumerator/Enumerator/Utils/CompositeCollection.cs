@@ -5,19 +5,16 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
-    // took from https://bitbucket.org/rstarkov/wpfcrutches/src/5d153f4cbce92af5f154d724668ec0e946072119/CompositeCollection.cs?fileviewer=file-view-default
-
     public class CompositeCollection<T> : IObservableCollection<T>
     {
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
 
-        public int Count { get; private set; }
+        public int Count { get ; private set; }
 
         public void Clear()
         {
@@ -48,40 +45,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             return this.GetEnumerator();
         }
 
-        public void Insert(int index, T item)
-        {
-            var insertedCollection = new CovariantObservableCollection<T>(item.ToEnumerable());
-
-            insertedCollection.CollectionChanged += this.collectionChanged;
-            this.collections.Insert(index, insertedCollection);
-
-            this.Count += 1;
-            this.propertyChanged("Count");
-            this.collectionChanged_Added(new[] {item}, index);
-        }
-
-        public void RemoveAt(int index)
-        {
-            throw new NotSupportedException();
-        }
-
         public void Add(T item)
         {
             this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
-        }
-
-        public void Remove(T item)
-        {
-            var indexOfItem = this.IndexOf(item);
-            if (indexOfItem < 0) return;
-
-            var collectionToRemove = this.collections.ElementAt(indexOfItem);
-            collectionToRemove.CollectionChanged -= this.collectionChanged;
-            this.collections.Remove(collectionToRemove);
-            this.Count -= 1;
-
-            this.propertyChanged("Count");
-            this.collectionChanged_Remove(new[] {item}, indexOfItem);
         }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -95,7 +61,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             var offset = this.Count;
             var addedCollectionCount = collection.Count();
             this.Count += addedCollectionCount;
-            this.propertyChanged("Count");
             this.collectionChanged_Added(collection.ToList(), offset);
         }
 
@@ -148,6 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             this.CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
+            this.propertyChanged("Count");
         }
 
         private void collectionChanged_Reset()
@@ -159,17 +125,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             this.CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, items, oldItemIndex));
+            this.propertyChanged("Count");
         }
 
         private void propertyChanged(string name)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
-        public int IndexOf(T item)
-        {
-            var itemCollection = this.collections.Find(x => x.Contains(item));
-            return itemCollection != null ? this.collections.IndexOf(itemCollection) : -1;
-        } 
     }
 }

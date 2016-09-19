@@ -7,6 +7,7 @@ using SQLite;
 using SQLitePCL;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.UI.Interviewer.Services
 {
@@ -69,7 +70,7 @@ namespace WB.UI.Interviewer.Services
             foreach (var dbPathToBackup in Directory.GetFiles(this.privateStorage, "*.sqlite3", SearchOption.AllDirectories))
             {
                 string destDBPath;
-                using (var connection = new SQLiteConnection(dbPathToBackup, openFlags: SQLiteOpenFlags.ReadOnly | SQLiteOpenFlags.FullMutex))
+                using (var connection = new SQLiteConnectionWithLock(dbPathToBackup, openFlags: SQLiteOpenFlags.ReadOnly | SQLiteOpenFlags.FullMutex))
                 {
                     destDBPath = $"{connection.DatabasePath}.{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss-fff}";
 
@@ -86,7 +87,7 @@ namespace WB.UI.Interviewer.Services
             }
         }
 
-        private void CreateDatabaseBackup(SQLiteConnection connection, string destDBPath)
+        private void CreateDatabaseBackup(SQLiteConnectionWithLock connection, string destDBPath)
         {
             sqlite3 destDB;
             SQLite3.Result r = (SQLite3.Result) 
@@ -97,44 +98,47 @@ namespace WB.UI.Interviewer.Services
                 throw SQLiteException.New(r, $"Could not open backup database file: {destDBPath} (raw sqlite result: {r})");
             }
 
-            /* Open the backup object used to accomplish the transfer */
-            var bHandle = raw.sqlite3_backup_init(destDB, "main", connection.Handle, "main");
-
-            if (bHandle == null)
+            using (connection.Lock())
             {
-                // Close the database connection 
-                raw.sqlite3_close_v2(destDB);
+                /* Open the backup object used to accomplish the transfer */
+                var bHandle = raw.sqlite3_backup_init(destDB, "main", connection.Handle, "main");
 
-                throw SQLiteException.New(r, $"Could not initiate backup process: {destDBPath}");
-            }
-
-            /* Each iteration of this loop copies 5 database pages from database
-            ** pDb to the backup database. If the return value of backup_step()
-            ** indicates that there are still further pages to copy, sleep for
-            ** 250 ms before repeating. */
-            do
-            {
-                r = (SQLite3.Result) raw.sqlite3_backup_step(bHandle, 5);
-
-                if (r == SQLite3.Result.OK || r == SQLite3.Result.Busy || r == SQLite3.Result.Locked)
+                if (bHandle == null)
                 {
-                    Thread.Sleep(250);
+                    // Close the database connection 
+                    raw.sqlite3_close_v2(destDB);
+
+                    throw SQLiteException.New(r, $"Could not initiate backup process: {destDBPath}");
                 }
-            } while (r == SQLite3.Result.OK || r == SQLite3.Result.Busy || r == SQLite3.Result.Locked);
 
-            /* Release resources allocated by backup_init(). */
-            r = (SQLite3.Result) raw.sqlite3_backup_finish(bHandle);
+                /* Each iteration of this loop copies 5 database pages from database
+                ** pDb to the backup database. If the return value of backup_step()
+                ** indicates that there are still further pages to copy, sleep for
+                ** 250 ms before repeating. */
+                do
+                {
+                    r = (SQLite3.Result) raw.sqlite3_backup_step(bHandle, 5);
 
-            if (r != SQLite3.Result.OK)
-            {
+                    if (r == SQLite3.Result.OK || r == SQLite3.Result.Busy || r == SQLite3.Result.Locked)
+                    {
+                        Thread.Sleep(250);
+                    }
+                } while (r == SQLite3.Result.OK || r == SQLite3.Result.Busy || r == SQLite3.Result.Locked);
+
+                /* Release resources allocated by backup_init(). */
+                r = (SQLite3.Result) raw.sqlite3_backup_finish(bHandle);
+
+                if (r != SQLite3.Result.OK)
+                {
+                    // Close the database connection 
+                    raw.sqlite3_close_v2(destDB);
+
+                    throw SQLiteException.New(r, $"Could not finish backup process: {destDBPath} (sqlite result: {r})");
+                }
+
                 // Close the database connection 
                 raw.sqlite3_close_v2(destDB);
-
-                throw SQLiteException.New(r, $"Could not finish backup process: {destDBPath} (sqlite result: {r})");
             }
-
-            // Close the database connection 
-            raw.sqlite3_close_v2(destDB);
         }
 
         private static byte[] GetNullTerminatedUtf8(string s)
