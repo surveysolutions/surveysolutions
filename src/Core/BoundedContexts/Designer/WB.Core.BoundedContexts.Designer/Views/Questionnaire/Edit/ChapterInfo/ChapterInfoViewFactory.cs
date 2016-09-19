@@ -108,6 +108,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 HasCondition = string.IsNullOrWhiteSpace(group.ConditionExpression),
                 Variable = group.VariableName,
                 Items = new List<IQuestionnaireItem>(),
+                GroupsCount = 0,
+                RostersCount = 0,
+                QuestionsCount = 0
             };
         }
 
@@ -117,10 +120,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             {
                 ItemId = question.PublicKey.FormatGuid(),
                 Title = question.QuestionText,
-                Variable = question.VariableLabel,
+                Variable = question.StataExportCaption,
                 HasCondition = string.IsNullOrWhiteSpace(question.ConditionExpression),
                 HasValidation = question.ValidationConditions.Count > 0,
                 Type = question.QuestionType,
+                LinkedToQuestionId = question.LinkedToQuestionId?.FormatGuid(),
+                LinkedToRosterId = question.LinkedToRosterId?.FormatGuid(),
+                LinkedFilterExpression = question.LinkedFilterExpression,
             };
         }
 
