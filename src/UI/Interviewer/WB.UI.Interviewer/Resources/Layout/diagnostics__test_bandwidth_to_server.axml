@@ -44,5 +44,5 @@
   </LinearLayout>
 
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-       local:MvxBind="ShowProgress BandwidthTest.IsInProgress" />
+       local:MvxBind="ShowProgress BandwidthTest.IsInProgress; Visible BandwidthTest.IsInProgress" />
 </LinearLayout>

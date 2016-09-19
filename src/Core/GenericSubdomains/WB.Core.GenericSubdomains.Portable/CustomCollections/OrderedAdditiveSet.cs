@@ -16,9 +16,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public bool Add(T item)
         {
-            if (this.checker.Contains(item)) return false;
+            if (!this.checker.Add(item)) return false;
             this.values.Add(item);
-            this.checker.Add(item);
             return true;
         }
 

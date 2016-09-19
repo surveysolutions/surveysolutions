@@ -133,13 +133,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    ICompositeEntity childItem = this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
-
-                    if (childItem == null)
-                        childItem = this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x. Identity.Equals(scrollTo));
-
-                    if (childItem == null)
-                        childItem = this.Items.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
+                    ICompositeEntity childItem = (this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo)) ??
+                                                  (ICompositeEntity) this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x. Identity.Equals(scrollTo))) ??
+                                                 this.Items.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
                     anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
                 });
