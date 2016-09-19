@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -15,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public InterviewTree InterviewTree { get; }
 
-        public void ThrowIfRosterVectorIsIncorrect(Guid questionId, RosterVector rosterVector)
+        public void RequireRosterVectorQuestionInstanceExists(Guid questionId, RosterVector rosterVector)
         {
             if (rosterVector == null)
                 throw new InterviewException(
@@ -34,6 +35,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Available roster vectors: {string.Join(", ", rosterVectors)}. " +
                     $"Question ID: {questionId.FormatGuid()}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
+        }
+
+        public void ThrowIfQuestionIsDisabled(Identity questionIdentity)
+        {
+            var question = this.InterviewTree.GetQuestion(questionIdentity);
+
+            if (question.IsDisabled())
+                throw new InterviewException(
+                    $"Question {question.FormatForException()} (or it's parent) is disabled and question's answer cannot be changed. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}");
         }
     }
 }

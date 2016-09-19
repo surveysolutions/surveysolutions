@@ -379,6 +379,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_need_download_attachments.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\DashboardViewModelTests\DashboardViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\DashboardViewModelTests\when_start_async_and_no_user_logged_in.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\when_building_dashboard_item_for_interview_with_prefilled_questions.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoadingViewModelTests\LoadingViewModelNUnitTests.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_with_attachments.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
@@ -388,6 +389,7 @@
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_200_characters.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
+    <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\Enumerator\SqliteStorageTests.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\CompositeCollectionInflationServiceTests\CompositeCollectionInflationServiceTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_roster_trigger_is_multioption_question.cs" />

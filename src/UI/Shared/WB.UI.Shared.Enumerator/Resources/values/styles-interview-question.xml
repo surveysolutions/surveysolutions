@@ -4,17 +4,23 @@
     <item name="android:background">@drawable/question_background</item>
   </style>
 
-  <style name="Interview_DisabledQuestionWithDivider" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_DisabledQuestionWithDivider">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    
     <item name="android:background">@drawable/question_background_disabled</item>
   </style>
 
-  <style name="Interview_DisabledQuestion_Header" parent="Interview_Entity">
-  </style>
-
   <style name="Interview_DisabledQuestion_Title" parent="Interview_Entity_Title" >
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    
     <item name="android:textColor">@color/disabledTextColor</item>
+
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_top</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
 
   <style name="Interview_Question" parent="Interview_Entity" />
@@ -35,7 +41,7 @@
     <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_top</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_top</item>
   </style>
 
   <style name="Interview_Question_Instruction" parent="Interview_Question_Header">
