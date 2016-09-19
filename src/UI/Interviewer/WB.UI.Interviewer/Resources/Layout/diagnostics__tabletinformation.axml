@@ -43,5 +43,5 @@
      local:MvxBind="Text TabletInformation.PackageSendingAttemptResponceText" />
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-       local:MvxBind="ShowProgress TabletInformation.IsInProgress" />
+       local:MvxBind="ShowProgress TabletInformation.IsInProgress; Visible TabletInformation.IsInProgress" />
 </LinearLayout>
