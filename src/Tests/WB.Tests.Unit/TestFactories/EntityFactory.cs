@@ -469,7 +469,7 @@ namespace WB.Tests.Unit.TestFactories
                 disabledVariables ?? new HashSet<InterviewItemId>(),
                 wasCompleted ?? false);
 
-        public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null)
+        public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null, InterviewStatus? status = null)
         {
             interviewId = interviewId ?? Guid.NewGuid();
             return new InterviewView
@@ -477,7 +477,8 @@ namespace WB.Tests.Unit.TestFactories
                 Id = interviewId.FormatGuid(),
                 InterviewId = interviewId.Value,
                 QuestionnaireId = questionnaireId,
-                LocationQuestionId = prefilledQuestionId
+                LocationQuestionId = prefilledQuestionId,
+                Status = status ?? default(InterviewStatus)
             };
         }
 
@@ -1120,6 +1121,28 @@ namespace WB.Tests.Unit.TestFactories
                 Latitude = latitude,
                 Longitude = longitude
             };
+        }
+
+        public PrefilledQuestionView PrefilledQuestionView(Guid? interviewId = null, 
+            string answer = null, 
+            Guid? questionId = null,
+            string questionText = null)
+        {
+            var prefilledQuestionView = new PrefilledQuestionView
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                Answer = answer,
+                QuestionId = questionId ?? Guid.NewGuid(),
+                QuestionText = questionText
+            };
+            prefilledQuestionView.Id = $"{prefilledQuestionView.InterviewId:N}${prefilledQuestionView.QuestionId}";
+            return prefilledQuestionView;
+        }
+
+        public QuestionnaireView QuestionnaireView(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return new QuestionnaireView { Id = questionnaireIdentity.ToString()};
+            
         }
     }
 }
