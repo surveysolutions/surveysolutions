@@ -9,19 +9,21 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
+using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
-    [Subject(typeof(QuestionnaireDenormalizer))]
+    [Subject(typeof(Questionnaire))]
     internal class QuestionnaireDenormalizerTestsContext
     {
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
@@ -31,15 +33,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 => publishedEvent.Payload == @event);
         }
 
-        protected static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null,
-            IQuestionnaireEntityFactory questionnaireEntityFactory = null,
-            ILogger logger = null)
+        public static Questionnaire CreateQuestionnaireDenormalizer(QuestionnaireDocument questionnaire,
+            IExpressionProcessor expressionProcessor = null,
+            IQuestionnaireEntityFactory questionnaireEntityFactory = null)
         {
-            return new QuestionnaireDenormalizer(
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(),
-                questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>(),
-                logger ?? Mock.Of<ILogger>());
+            var questAr = new Questionnaire(
+                questionnaireEntityFactory ?? new QuestionnaireEntityFactory(),
+                Mock.Of<ILogger>(),
+                Mock.Of<IClock>(),
+                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
+                Create.SubstitutionService(),
+                Create.KeywordsProvider(),
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IAttachmentService>(),
+                Mock.Of<ITranslationsService>());
+            questAr.Initialize(questionnaire);
+            return questAr;
         }
 
         protected static T GetEntityById<T>(QuestionnaireDocument document, Guid entityId)
