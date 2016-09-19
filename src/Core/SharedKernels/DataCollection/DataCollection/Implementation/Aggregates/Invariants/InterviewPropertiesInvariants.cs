@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public InterviewEntities.InterviewProperties InterviewProperties { get; }
 
-        public void CheckCanAnswerBeChanged()
+        public void RequireAnswerCanBeChanged()
         {
             this.ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewApprovedByHQ();
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void ThrowIfInterviewWasCompleted()
         {
-            if (this.InterviewProperties.IsCompleted)
+            if (this.InterviewProperties.WasCompleted)
                 throw new InterviewException(
                     $"Interview was completed by interviewer and cannot be deleted. InterviewId: {this.InterviewProperties.Id}");
         }

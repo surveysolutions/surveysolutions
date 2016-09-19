@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public InterviewTree InterviewTree { get; }
 
-        public void ThrowIfRosterVectorIsIncorrect(Guid questionId, RosterVector rosterVector)
+        public void RequireRosterVectorQuestionInstanceExists(Guid questionId, RosterVector rosterVector)
         {
             if (rosterVector == null)
                 throw new InterviewException(
