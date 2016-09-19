@@ -19,7 +19,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
@@ -81,7 +80,6 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
-            DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
             this.Bind<IQuestionnaireHistory>().To<QuestionnaireHistory>();
 
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();

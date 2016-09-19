@@ -6,8 +6,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
@@ -48,12 +48,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     questionnaireView = document;
                 });
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, questionnaireEntityFactory: questionnaireEntityFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument, questionnaireEntityFactory: questionnaireEntityFactory.Object);
         };
 
         Because of = () =>
-            denormalizer.Handle(CreateStaticTextClonedEvent(targetEntityId: targetEntityId,
-                sourceEntityId: sourceEntityId, parentId: parentId, targetIndex: targetIndex, text: text));
+            denormalizer.CloneStaticText(CreateStaticTextClonedEvent(targetEntityId: targetEntityId,
+                sourceEntityId: sourceEntityId, parentId: parentId, targetIndex: targetIndex, text: text).Payload);
 
         It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
            questionnaireEntityFactory.Verify(x => x.CreateStaticText(targetEntityId, text, it.IsAny<string>(), null, false, Moq.It.IsAny<IList<ValidationCondition>>()), Times.Once);
@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         private static Mock<IQuestionnaireEntityFactory> questionnaireEntityFactory;
         private static QuestionnaireDocument questionnaireView;
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static Guid targetEntityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid sourceEntityId = Guid.Parse("22222222222222222222222222222222");
         private static Guid parentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

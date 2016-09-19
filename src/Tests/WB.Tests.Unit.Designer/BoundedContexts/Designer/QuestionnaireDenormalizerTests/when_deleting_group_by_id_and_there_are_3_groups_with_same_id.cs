@@ -5,8 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -27,14 +26,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 thirdGroup = CreateGroup(groupId: groupId, title: "Group 3"),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 
         Because of = () =>
-            denormalizer.Handle(groupDeletedEvent);
+            denormalizer.DeleteGroup(groupDeletedEvent.Payload);
 
         It should_be_only_2_groups_left = () =>
             questionnaire.Children.Count.ShouldEqual(2);
@@ -43,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaire.Children.ShouldContainOnly(secondGroup, thirdGroup);
 
         private static QuestionnaireDocument questionnaire;
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static IPublishedEvent<GroupDeleted> groupDeletedEvent;
         private static Group secondGroup;
         private static Group thirdGroup;

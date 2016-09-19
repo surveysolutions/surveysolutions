@@ -24,13 +24,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         {
             var userDocument = this.questionnaireStorage.GetById(aggregateId.FormatGuid());
             var questionnaire = this.serviceLocator.GetInstance<Questionnaire>();
-            questionnaire.innerDocument = userDocument;
+            questionnaire.Initialize(userDocument);
             return questionnaire;
         }
 
         public void Save(Questionnaire aggregateRoot)
         {
-            var userDocument = aggregateRoot.innerDocument;
+            var userDocument = aggregateRoot.QuestionnaireDocument;
             this.questionnaireStorage.Store(userDocument, userDocument.PublicKey.FormatGuid());
         }
     }

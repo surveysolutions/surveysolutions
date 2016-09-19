@@ -5,8 +5,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
@@ -38,11 +38,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer
                 => writer.GetById(it.IsAny<string>()) == questionnaireDocument);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument);
         };
 
         Because of = () =>
-            denormalizer.Handle(@event);
+            denormalizer.ChangeRoster(@event.Payload);
 
         It should_set_group_RosterSizeQuestionId_property_to_specified_value = () =>
             questionnaireDocument.GetGroup(groupId)
@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 .RosterTitleQuestionId.ShouldEqual(rosterTitleQuestionId);
 
 
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static IPublishedEvent<RosterChanged> @event;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid groupId;

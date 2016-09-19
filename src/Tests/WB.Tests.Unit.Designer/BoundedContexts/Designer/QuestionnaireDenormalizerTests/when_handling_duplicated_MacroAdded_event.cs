@@ -3,9 +3,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -18,13 +17,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
             questionnaire = Create.QuestionnaireDocument(questionnaireId);
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage => storage.GetById(Moq.It.IsAny<string>()) == questionnaire);
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
-            denormalizer.Handle(evnt);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
+            denormalizer.AddMacro(evnt.Payload);
         };
 
-        Because of = () => denormalizer.Handle(evnt);
+        Because of = () => denormalizer.AddMacro(evnt.Payload);
 
         It should_not_add_extra_macro = () =>
             questionnaire.Macros.Count.ShouldEqual(1);
@@ -43,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
         private static IPublishedEvent<MacroAdded> evnt;
     }
