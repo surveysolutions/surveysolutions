@@ -34,6 +34,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<GeoLocationQuestionAnswered>,
                                          ILitePublishedEventHandler<QRBarcodeQuestionAnswered>,
                                          ILitePublishedEventHandler<YesNoQuestionAnswered>,
+                                         ILitePublishedEventHandler<TextListQuestionAnswered>,
+                                         ILitePublishedEventHandler<PictureQuestionAnswered>,
 
                                          ILitePublishedEventHandler<AnswersRemoved>,
 
@@ -411,6 +413,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answers, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<PictureQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PictureFileName, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)
