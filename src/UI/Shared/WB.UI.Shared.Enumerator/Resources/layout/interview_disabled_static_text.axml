@@ -3,4 +3,5 @@
   style="@style/Interview_DisabledQuestionWithDivider">
   <TextView style="@style/Interview_DisabledQuestion_Title"
             local:MvxBind="Html Text.PlainText;" />
+  <View style="@style/Interview_Entity_Divider" />
 </LinearLayout>
