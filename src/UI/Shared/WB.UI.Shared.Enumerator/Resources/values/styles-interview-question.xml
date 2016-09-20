@@ -7,7 +7,7 @@
   <style name="Interview_DisabledQuestionWithDivider">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    
+    <item name="android:orientation">vertical</item>
     <item name="android:background">@drawable/question_background_disabled</item>
   </style>
 
