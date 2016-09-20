@@ -97,11 +97,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
-        public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName)
+        private readonly IReadOnlyCollection<RosterVector> linkedOptions;
+
+        public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
+            IEnumerable<RosterVector> linkedOptions)
             : base(identity, isDisabled)
         {
             this.Title = title;
             this.VariableName = variableName;
+            this.linkedOptions = linkedOptions?.ToReadOnlyCollection();
         }
 
         public string Title { get; }
@@ -110,6 +114,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString() => $"Question ({this.Identity}) '{this.Title}'";
+
+        public IReadOnlyCollection<RosterVector> GetLinkedOptions()
+            => this.linkedOptions ?? Enumerable.Empty<RosterVector>().ToReadOnlyCollection();
     }
 
     public class InterviewTreeStaticText : InterviewTreeLeafNode

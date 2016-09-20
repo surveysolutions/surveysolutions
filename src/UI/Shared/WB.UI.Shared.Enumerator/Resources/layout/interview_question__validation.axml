@@ -15,5 +15,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         local:MvxBind="ItemsSource Error.ValidationErrors;Visible IsInvalid"
-        local:MvxItemTemplate="@layout/interview_question__errors_item"/>
+        local:MvxItemTemplate="@layout/interview_question__validation_item"/>
 </LinearLayout>

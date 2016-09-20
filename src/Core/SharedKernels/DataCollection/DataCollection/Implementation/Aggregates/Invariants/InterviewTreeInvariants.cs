@@ -37,14 +37,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
-        public void ThrowIfQuestionIsDisabled(Identity questionIdentity)
+        public void RequireQuestionIsEnabled(Identity questionIdentity)
         {
             var question = this.InterviewTree.GetQuestion(questionIdentity);
 
             if (question.IsDisabled())
                 throw new InterviewException(
-                    $"Question {question.FormatForException()} (or it's parent) is disabled and question's answer cannot be changed. " +
-                    $"Interview ID: {this.InterviewTree.InterviewId}");
+                    $"Question {question.FormatForException()} (or it's parent) is disabled " +
+                    $"and question's answer cannot be changed. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+        }
+
+        public void RequireLinkedOptionIsAvailable(Identity linkedQuestionIdentity, RosterVector option)
+        {
+            var question = this.InterviewTree.GetQuestion(linkedQuestionIdentity);
+
+            var options = question.GetLinkedOptions();
+
+            if (!options.Contains(option))
+                throw new InterviewException(
+                    $"Answer on linked categorical question {question.FormatForException()} cannot be saved. " +
+                    $"Specified option {option} is absent. " +
+                    $"Available options: {string.Join(", ", options)}. " +
+                    $"InterviewId: {this.InterviewTree.InterviewId}.");
         }
     }
 }

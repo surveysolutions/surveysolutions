@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SQLite;
@@ -32,25 +31,27 @@ namespace WB.UI.Interviewer.Services
 
         public async Task<string> BackupAsync()
         {
-            return await this.BackupAsync(this.privateStorage);
+            return await this.BackupAsync(this.privateStorage).ConfigureAwait(false);
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            var isBackupFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(backupToFolderPath);
+            var isBackupFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(backupToFolderPath).ConfigureAwait(false);
             if (!isBackupFolderExists)
-                await this.fileSystemAccessor.CreateDirectoryAsync(backupToFolderPath);
+                await this.fileSystemAccessor.CreateDirectoryAsync(backupToFolderPath).ConfigureAwait(false);
 
-            var isLogFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(this.logDirectoryPath);
+            var isLogFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(this.logDirectoryPath).ConfigureAwait(false);
             if (isLogFolderExists)
-                await this.fileSystemAccessor.CopyDirectoryAsync(this.logDirectoryPath, this.privateStorage);
+                await this.fileSystemAccessor.CopyDirectoryAsync(this.logDirectoryPath, this.privateStorage)
+                                             .ConfigureAwait(false);
 
             this.BackupSqliteDbs();
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
 
-            await this.archiver.ZipDirectoryToFileAsync(this.privateStorage, backupFilePath, fileFilter: @"\.log$;\.dll$;\.sqlite3.back$;");
+            await this.archiver.ZipDirectoryToFileAsync(this.privateStorage, backupFilePath, fileFilter: @"\.log$;\.dll$;\.sqlite3.back$;")
+                               .ConfigureAwait(false);
 
             this.Cleanup();
 
@@ -70,7 +71,7 @@ namespace WB.UI.Interviewer.Services
             foreach (var dbPathToBackup in Directory.GetFiles(this.privateStorage, "*.sqlite3", SearchOption.AllDirectories))
             {
                 string destDBPath;
-                using (var connection = new SQLiteConnectionWithLock(dbPathToBackup, openFlags: SQLiteOpenFlags.ReadOnly | SQLiteOpenFlags.FullMutex))
+                using (var connection = new SQLiteConnectionWithLock(dbPathToBackup, openFlags: SQLiteOpenFlags.ReadOnly))
                 {
                     destDBPath = $"{connection.DatabasePath}.{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss-fff}";
 
@@ -90,63 +91,56 @@ namespace WB.UI.Interviewer.Services
         private void CreateDatabaseBackup(SQLiteConnectionWithLock connection, string destDBPath)
         {
             sqlite3 destDB;
-            SQLite3.Result r = (SQLite3.Result) 
-                raw.sqlite3_open_v2(destDBPath, out destDB, (int)(SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite), null);
-            
-            if (r != SQLite3.Result.OK)
+            SQLite3.Result destKbResult = (SQLite3.Result)
+                raw.sqlite3_open_v2(destDBPath, out destDB, (int) (SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite),
+                    null);
+
+            if (destKbResult != SQLite3.Result.OK)
             {
-                throw SQLiteException.New(r, $"Could not open backup database file: {destDBPath} (raw sqlite result: {r})");
+                throw SQLiteException.New(destKbResult,
+                    $"Could not open backup database file: {destDBPath} (raw sqlite result: {destKbResult})");
             }
+            /* Open the backup object used to accomplish the transfer */
+            var bHandle = raw.sqlite3_backup_init(destDB, "main", connection.Handle, "main");
 
-            using (connection.Lock())
+            if (bHandle == null)
             {
-                /* Open the backup object used to accomplish the transfer */
-                var bHandle = raw.sqlite3_backup_init(destDB, "main", connection.Handle, "main");
-
-                if (bHandle == null)
-                {
-                    // Close the database connection 
-                    raw.sqlite3_close_v2(destDB);
-
-                    throw SQLiteException.New(r, $"Could not initiate backup process: {destDBPath}");
-                }
-
-                /* Each iteration of this loop copies 5 database pages from database
-                ** pDb to the backup database. If the return value of backup_step()
-                ** indicates that there are still further pages to copy, sleep for
-                ** 250 ms before repeating. */
-                do
-                {
-                    r = (SQLite3.Result) raw.sqlite3_backup_step(bHandle, 5);
-
-                    if (r == SQLite3.Result.OK || r == SQLite3.Result.Busy || r == SQLite3.Result.Locked)
-                    {
-                        Thread.Sleep(250);
-                    }
-                } while (r == SQLite3.Result.OK || r == SQLite3.Result.Busy || r == SQLite3.Result.Locked);
-
-                /* Release resources allocated by backup_init(). */
-                r = (SQLite3.Result) raw.sqlite3_backup_finish(bHandle);
-
-                if (r != SQLite3.Result.OK)
-                {
-                    // Close the database connection 
-                    raw.sqlite3_close_v2(destDB);
-
-                    throw SQLiteException.New(r, $"Could not finish backup process: {destDBPath} (sqlite result: {r})");
-                }
-
                 // Close the database connection 
                 raw.sqlite3_close_v2(destDB);
-            }
-        }
 
-        private static byte[] GetNullTerminatedUtf8(string s)
-        {
-            var utf8Length = Encoding.UTF8.GetByteCount(s);
-            var bytes = new byte[utf8Length + 1];
-            Encoding.UTF8.GetBytes(s, 0, s.Length, bytes, 0);
-            return bytes;
+                throw SQLiteException.New(destKbResult, $"Could not initiate backup process: {destDBPath}");
+            }
+
+            /* Each iteration of this loop copies 5 database pages from database
+            ** pDb to the backup database. If the return value of backup_step()
+            ** indicates that there are still further pages to copy, sleep for
+            ** 250 ms before repeating. */
+            do
+            {
+                destKbResult = (SQLite3.Result) raw.sqlite3_backup_step(bHandle, 30);
+
+                if (destKbResult == SQLite3.Result.OK || destKbResult == SQLite3.Result.Busy ||
+                    destKbResult == SQLite3.Result.Locked)
+                {
+                    Thread.Sleep(250);
+                }
+            } while (destKbResult == SQLite3.Result.OK || destKbResult == SQLite3.Result.Busy ||
+                     destKbResult == SQLite3.Result.Locked);
+
+            /* Release resources allocated by backup_init(). */
+            destKbResult = (SQLite3.Result) raw.sqlite3_backup_finish(bHandle);
+
+            if (destKbResult != SQLite3.Result.OK)
+            {
+                // Close the database connection 
+                raw.sqlite3_close_v2(destDB);
+
+                throw SQLiteException.New(destKbResult,
+                    $"Could not finish backup process: {destDBPath} (sqlite result: {destKbResult})");
+            }
+
+            // Close the database connection 
+            raw.sqlite3_close_v2(destDB);
         }
 
         public async Task RestoreAsync(string backupFilePath)
