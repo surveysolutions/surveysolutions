@@ -47,7 +47,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -81,7 +80,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.SharedKernels.DataCollection.Factories;
+
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -143,7 +142,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<Questionnaire>().ToSelf();
             this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
             this.Bind<IQuestionnaireExportStructureStorage>().To<QuestionnaireExportStructureStorage>().InSingletonScope();
-            this.Bind<IQuestionnaireRosterStructureStorage>().To<QuestionnaireRosterStructureStorage>().InSingletonScope();
             this.Bind<IQuestionOptionsRepository>().To<QuestionnaireQuestionOptionsRepository>();
 
             CommandRegistry
@@ -248,7 +246,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
             this.Bind<ISupervisorsViewFactory>().To<SupervisorsViewFactory>();
             this.Bind<IInterviewInformationFactory>().To<InterviewerInterviewsFactory>();
-            this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
             this.Bind<IDdiMetadataFactory>().To<DdiMetadataFactory>();
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();

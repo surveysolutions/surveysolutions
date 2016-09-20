@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRosterStructureFactoryTests
+namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRosterStructureTests
 {
-    internal class when_creating_roster_structure_factory_for_questionnarie_which_has_fixed_roster_group : QuestionnaireRosterStructureFactoryTestContext
+    internal class when_getting_roster_scope_descriptios_for_questionnaire_which_has_fixed_roster_group : QuestionnaireRosterStructureTestContext
     {
         Establish context = () =>
         {
@@ -22,28 +25,29 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
                     RosterSizeSource = RosterSizeSourceType.FixedTitles
                 }
             );
-            questionnaireRosterStructureFactory = CreateQuestionnaireRosterStructureFactory();
+            questionnaireStorage = CreateQuestionnaireStorageMock(questionnarie).Object;
         };
 
         Because of = () =>
-            questionnaireRosterStructure = questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnarie, 1);
+            rosterScopes = questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(questionnaireId, 1), null).GetRosterScopes();
 
         It should_contain_1_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Count().ShouldEqual(1);
+            rosterScopes.Count.ShouldEqual(1);
 
         It should_specify_fixed_roster_id_as_id_of_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Key.SequenceEqual(new[] { fixedRosterGroupId });
+            rosterScopes.Single().Key.SequenceEqual(new[] { fixedRosterGroupId });
 
         It should_be_null_roster_title_question_for_fixed_roster_in_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Value
+            rosterScopes.Single().Value
                 .RosterIdToRosterTitleQuestionIdMap[fixedRosterGroupId].ShouldBeNull();
 
         It should_be_fixed_scope_type_for_fixed_roster_in_roster_scope = () =>
-            questionnaireRosterStructure.RosterScopes.Single().Value.ScopeType.ShouldEqual(RosterScopeType.Fixed);
+            rosterScopes.Single().Value.Type.ShouldEqual(RosterScopeType.Fixed);
 
+        private static Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA");
         private static QuestionnaireDocument questionnarie;
-        private static QuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
-        private static QuestionnaireRosterStructure questionnaireRosterStructure;
+        private static IQuestionnaireStorage questionnaireStorage;
+        private static Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes;
         private static Guid fixedRosterGroupId;
     }
 }

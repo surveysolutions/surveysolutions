@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth(new[] { UserRoles.Operator })]
-        public HttpResponseMessage PostPackage(PostPackageRequest request)
+        public (PostPackageRequest request)
         {
             this.incomingSyncPackagesQueue.StoreOrProcessPackage(item: request.SynchronizationPackage);
 

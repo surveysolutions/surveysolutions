@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests
 {
@@ -25,26 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireDocument document)
         {
             document.ConnectChildrenWithParent();
+            var questionnaire = new PlainQuestionnaire(document, 1, null);
             return new InterviewSynchronizationDtoFactory(
                 Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
-                Mock.Of<IQuestionnaireRosterStructureStorage>(
-                    _ =>
-                        _.GetQuestionnaireRosterStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
-                        new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)), 
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
-                Mock.Of<IQuestionnaireStorage>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document));
-        }
-
-        protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireRosterStructure questionnaireRosterStructure)
-        {
-            return new InterviewSynchronizationDtoFactory(
-                Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
-                Mock.Of<IQuestionnaireRosterStructureStorage>(
-                    _ =>
-                        _.GetQuestionnaireRosterStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
-                        questionnaireRosterStructure),
-                Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
-                Mock.Of<IQuestionnaireStorage>());
+                Mock.Of<IQuestionnaireStorage>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document && 
+                                                  _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire)
+                );
         }
 
         internal static InterviewData CreateInterviewData(Guid? interviewId=null)

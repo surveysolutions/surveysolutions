@@ -30,6 +30,7 @@ namespace Main.Core.Entities.SubEntities
 
         public List<Answer> Answers { get; set; }
 
+        [Obsolete("long time ago")]
         public bool Capital { get; set; }
 
         public List<IComposite> Children
