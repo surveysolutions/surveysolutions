@@ -2362,15 +2362,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var linkedQuestionIdentity = new Identity(questionId, rosterVector);
 
-            ThrowIfOptionListIfMissingForLinkedQuestion(questionnaire, linkedQuestionIdentity);
-            
             foreach (var selectedRosterVector in linkedQuestionSelectedOptions)
             {
-                ThrowIfOptionIsAbsentForTheLinkedQuestion(selectedRosterVector, questionnaire, linkedQuestionIdentity);
+                treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionIdentity, selectedRosterVector);
             }
 
-            ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, linkedQuestionSelectedOptions.Length,
-                questionnaire);
+            ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, linkedQuestionSelectedOptions.Length, questionnaire);
         }
 
         private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire, Identity answeredQuestion)
@@ -2386,35 +2383,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var linkedQuestionIdentity = new Identity(questionId, rosterVector);
 
-            ThrowIfOptionListIfMissingForLinkedQuestion(questionnaire, linkedQuestionIdentity);
-
-            ThrowIfOptionIsAbsentForTheLinkedQuestion(linkedQuestionSelectedOption, questionnaire, linkedQuestionIdentity);
-        }
-
-        private void ThrowIfOptionIsAbsentForTheLinkedQuestion(decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire,
-            Identity linkedQuestionIdentity)
-        {
-            var linkedQuestionAvaliableOptions = this.interviewState.LinkedQuestionOptions[linkedQuestionIdentity];
-
-            if (!linkedQuestionAvaliableOptions.Contains(new RosterVector(linkedQuestionSelectedOption)))
-                throw new InterviewException(string.Format(
-                    "Answer on linked question {0} is incorrect. Option [{1}] is absent, available options [{2}]" +
-                    "InterviewId: {3}",
-                    FormatQuestionForException(linkedQuestionIdentity.Id, questionnaire),
-                    string.Join(",", linkedQuestionSelectedOption),
-                    string.Join(" and ", linkedQuestionAvaliableOptions.Select(o => string.Join(",", o))),
-                    this.EventSourceId));
-        }
-
-        private void ThrowIfOptionListIfMissingForLinkedQuestion(IQuestionnaire questionnaire, Identity linkedQuestionIdentity)
-        {
-            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestionIdentity))
-            {
-                throw new InterviewException(string.Format(
-                    "Answer on linked question {0} is incorrect. Avaliable options are missing. " +
-                    "InterviewId: {1}",
-                    FormatQuestionForException(linkedQuestionIdentity.Id, questionnaire), this.EventSourceId));
-            }
+            treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionIdentity, linkedQuestionSelectedOption);
         }
 
         private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal answer,
@@ -4683,7 +4652,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             interviewState = interviewState ?? this.interviewState;
 
             var children = BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState).ToList();
-            var isDisabled = interviewState.IsGroupDisabled(sectionIdentity);
+            bool isDisabled = interviewState.IsGroupDisabled(sectionIdentity);
 
             return new InterviewTreeSection(sectionIdentity, children, isDisabled: isDisabled);
         }
@@ -4691,7 +4660,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             var children = BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, interviewState).ToList();
-            var isDisabled = interviewState.IsGroupDisabled(groupIdentity);
+            bool isDisabled = interviewState.IsGroupDisabled(groupIdentity);
 
             return new InterviewTreeSubSection(groupIdentity, children, isDisabled: isDisabled);
         }
@@ -4699,18 +4668,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             var children = BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire, interviewState).ToList();
-            var isDisabled = interviewState.IsGroupDisabled(rosterIdentity);
+            bool isDisabled = interviewState.IsGroupDisabled(rosterIdentity);
 
             return new InterviewTreeRoster(rosterIdentity, children, isDisabled: isDisabled);
         }
 
         private static InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            var isDisabled = interviewState.IsQuestionDisabled(questionIdentity);
+            bool isDisabled = interviewState.IsQuestionDisabled(questionIdentity);
             string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
+            IReadOnlyCollection<RosterVector> linkedOptions = interviewState.GetOptionsForLinkedQuestion(questionIdentity);
 
-            return new InterviewTreeQuestion(questionIdentity, isDisabled: isDisabled, title: title, variableName: variableName);
+            return new InterviewTreeQuestion(
+                questionIdentity,
+                isDisabled: isDisabled,
+                title: title,
+                variableName: variableName,
+                linkedOptions: linkedOptions);
         }
 
         private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
