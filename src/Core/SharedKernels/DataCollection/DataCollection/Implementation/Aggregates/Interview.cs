@@ -4051,7 +4051,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             bool typeIsNotExpected = !expectedQuestionTypes.Contains(questionType);
             if (typeIsNotExpected)
-                throw new InterviewException(string.Format(
+                throw new AnswerNotAcceptedException(string.Format(
                     "Question {0} has type {1}. But one of the following types was expected: {2}. InterviewId: {3}",
                     FormatQuestionForException(questionId, questionnaire), questionType,
                     string.Join(", ", expectedQuestionTypes.Select(type => type.ToString())),
@@ -4062,7 +4062,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var isNotSupportReal = questionnaire.IsQuestionInteger(questionId);
             if (isNotSupportReal)
-                throw new InterviewException(string.Format(
+                throw new AnswerNotAcceptedException(string.Format(
                     "Question {0} doesn't support answer of type real. InterviewId: {1}",
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
@@ -4071,7 +4071,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var isNotSupportInteger = !questionnaire.IsQuestionInteger(questionId);
             if (isNotSupportInteger)
-                throw new InterviewException(string.Format(
+                throw new AnswerNotAcceptedException(string.Format(
                     "Question {0} doesn't support answer of type integer. InterviewId: {1}",
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
@@ -4081,7 +4081,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var availableValues = questionnaire.GetOptionForQuestionByOptionValue(questionId, value);
             
             if (availableValues == null)
-                throw new InterviewException(string.Format(
+                throw new AnswerNotAcceptedException(string.Format(
                     "For question {0} was provided selected value {1} as answer. InterviewId: {2}",
                     FormatQuestionForException(questionId, questionnaire), value, EventSourceId));
         }
@@ -4105,7 +4105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answerNotExistsInParent = Convert.ToInt32(Convert.ToDecimal(parentAnswer, CultureInfo.InvariantCulture)) != childParentValue;
             if (answerNotExistsInParent)
-                throw new InterviewException(string.Format(
+                throw new AnswerNotAcceptedException(string.Format(
                     "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}. InterviewId: {4}",
                     FormatQuestionForException(questionId, questionnaire), value, childParentValue, parentAnswer, EventSourceId));
         }
@@ -4116,7 +4116,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
             if (someValueIsNotOneOfAvailable)
-                throw new InterviewException(string.Format(
+                throw new AnswerNotAcceptedException(string.Format(
                     "For question {0} were provided selected values {1} as answer. But only following values are allowed: {2}. InterviewId: {3}",
                     FormatQuestionForException(questionId, questionnaire), JoinDecimalsWithComma(values),
                     JoinDecimalsWithComma(availableValues),
@@ -4128,7 +4128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             int? maxSelectedOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
 
             if (maxSelectedOptions.HasValue && maxSelectedOptions > 0 && answersCount > maxSelectedOptions)
-                throw new InterviewException(string.Format(
+                throw new AnswerNotAcceptedException(string.Format(
                     "For question {0} number of answers is greater than the maximum number of selected answers. InterviewId: {1}",
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
@@ -4141,7 +4141,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var roundedAnswer = Math.Round(answer, countOfDecimalPlacesAllowed.Value);
             if (roundedAnswer != answer)
-                throw new InterviewException(
+                throw new AnswerNotAcceptedException(
                     string.Format(
                         "Answer '{0}' for question {1}  is incorrect because has more decimal places than allowed by questionnaire. Allowed amount of decimal places is {2}. InterviewId: {3}", 
                         answer,
@@ -4154,18 +4154,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire)
         {
             if (answer < 0)
-                throw new InterviewException(string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is negative. InterviewId: {2}",
-                    answer, FormatQuestionForException(questionId, questionnaire), EventSourceId));
+                throw new AnswerNotAcceptedException(
+                    $"Answer '{answer}' for question {FormatQuestionForException(questionId, questionnaire)} is incorrect because question is used as size of roster and specified answer is negative. InterviewId: {this.EventSourceId}");
         }
 
         private void ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(Guid questionId, int answer,
            IQuestionnaire questionnaire, int maxRosterRowCount)
         {
             if (answer > maxRosterRowCount)
-                throw new InterviewException(string.Format(
+            {
+                var message = string.Format(
                     "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater than {3}. InterviewId: {2}",
-                    answer, FormatQuestionForException(questionId, questionnaire), this.EventSourceId, maxRosterRowCount));
+                    answer, FormatQuestionForException(questionId, questionnaire), this.EventSourceId, maxRosterRowCount);
+                throw new AnswerNotAcceptedException(message);
+            }
         }
 
         #endregion

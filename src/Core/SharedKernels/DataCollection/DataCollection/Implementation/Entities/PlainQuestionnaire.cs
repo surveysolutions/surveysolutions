@@ -914,13 +914,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!rosters.Any())
                 return false;
 
+            int childItemsCount = 0;
+
             foreach (var roster in rosters)
             {
                 if (GetRosterLevelForEntity(roster) > 1)
                     return false;
                 if (GetAllUnderlyingChildRosters(roster).Any())
                     return false;
+
+                childItemsCount += GetGroupOrThrow(roster).Children.TreeToEnumerable(x => x.Children).Count();
+
+                if (childItemsCount > Constants.MaxAmountOfItemsInLongRoster)
+                    return false;
             }
+
             return true;
         }
 

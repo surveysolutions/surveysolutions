@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                  answerTime: DateTime.Now, rosterVector: new decimal[0], answer: answer));
 
         It should_raise_InterviewException = () =>
-           exception.ShouldBeOfExactType<InterviewException>();
+           exception.ShouldBeOfExactType<AnswerNotAcceptedException>();
 
         It should_throw_exception_with_message_containting__type_QRBarcode_expected__ = () =>
              new [] { "type", QuestionType.QRBarcode.ToString().ToLower(), "expected" }.ShouldEachConformTo(

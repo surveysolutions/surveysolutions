@@ -117,6 +117,7 @@
     <Compile Include="Events\User\UserUnarchived.cs" />
     <Compile Include="Events\User\UserUnlocked.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
+    <Compile Include="Exceptions\AnswerNotAcceptedException.cs" />
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
