@@ -446,6 +446,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.LinkedMultipleOptionsAnswers.Values.Where(answer => questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
         }
 
+        public IReadOnlyCollection<RosterVector> GetOptionsForLinkedQuestion(Identity linkedQuestionIdentity)
+            => this.LinkedQuestionOptions.GetOrNull(linkedQuestionIdentity);
+
         public void ChangeVariables(ChangedVariable[] changedVariables)
         {
             changedVariables.ForEach(variable => this.VariableValues[variable.Identity] = variable.NewValue);
