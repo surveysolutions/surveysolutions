@@ -86,7 +86,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
         public async Task<bool> IsDirectoryExistsAsync(string pathToDirectory)
         {
-            var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(pathToDirectory);
+            var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(pathToDirectory).ConfigureAwait(false);
             return parentFolder != null;
         }
 
