@@ -556,8 +556,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             params QuestionnaireChangeReference[] references)
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
-            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.Query(
-                x => x.Where(y => y.QuestionnaireId == sQuestionnaireId).Max(y => y.Sequence));
+
+            var isExists = this.questionnaireChangeItemStorage.Query(x => x.Any(y => y.QuestionnaireId == sQuestionnaireId));
+            var maxSequenceByQuestionnaire = isExists
+                ? this.questionnaireChangeItemStorage.Query(x => x.Where(y => y.QuestionnaireId == sQuestionnaireId).Max(y => y.Sequence))
+                : 0;
 
             var questionnaireChangeItem = new QuestionnaireChangeRecord()
             {
