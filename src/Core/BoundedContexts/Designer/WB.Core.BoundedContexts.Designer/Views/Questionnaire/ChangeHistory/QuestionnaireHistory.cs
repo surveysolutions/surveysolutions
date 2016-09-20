@@ -557,10 +557,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
-            var isExists = this.questionnaireChangeItemStorage.Query(x => x.Any(y => y.QuestionnaireId == sQuestionnaireId));
-            var maxSequenceByQuestionnaire = isExists
-                ? this.questionnaireChangeItemStorage.Query(x => x.Where(y => y.QuestionnaireId == sQuestionnaireId).Max(y => y.Sequence))
-                : 0;
+            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.Query(x => x.
+                    Where(y => y.QuestionnaireId == sQuestionnaireId).
+                    Select(y => (int?)y.Sequence).
+                    Max());
 
             var questionnaireChangeItem = new QuestionnaireChangeRecord()
             {
@@ -569,7 +569,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 UserId = responsibleId,
                 UserName = this.GetUserName(responsibleId),
                 Timestamp = DateTime.UtcNow,
-                Sequence = maxSequenceByQuestionnaire + 1,
+                Sequence = maxSequenceByQuestionnaire + 1 ?? 0,
                 ActionType = actionType,
                 TargetItemId = targetId,
                 TargetItemTitle = targetTitle,
