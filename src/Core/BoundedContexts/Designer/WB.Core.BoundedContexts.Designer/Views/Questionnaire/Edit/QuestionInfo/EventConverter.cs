@@ -215,7 +215,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 e.ValidationConditions,
                 null,
-                false);
+                e.IsTimestamp);
             return data;
         }
 

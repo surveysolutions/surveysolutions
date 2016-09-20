@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Shared.Web.Membership;
@@ -24,14 +25,14 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 
             questionnaire.SharedPersons.Add(actionUserId);
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
+            var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
                     => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             var shared = new QuestionnaireSharedPersons(questoinnaireId);
             shared.SharedPersons.Add(new SharedPerson() {Id = actionUserId});
 
             var sharedPersons =
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireSharedPersons>>(
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(
                     s => s.GetById(it.IsAny<string>()) == shared);
 
             command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, actionUserId);

@@ -18,26 +18,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             AssemblyContext.SetupServiceLocator();
         }
 
-        [Test]
-        public void CreateNewSnapshot_When_ArgumentIsNotNull_Then_TemplateImportedEventIsRised()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Guid responsibleId = Guid.NewGuid();
-                Guid sharedPersonWith = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-                questionnaire.Apply(new SharedPersonToQuestionnaireAdded() { PersonId = sharedPersonWith });
-                var newState = new QuestionnaireDocument();
-                // act
-                questionnaire.ImportQuestionnaire(responsibleId,newState);
-
-                // assert
-                Assert.That(GetSingleEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
-                Assert.That(questionnaire.CreateSnapshot().QuestionnaireDocument.SharedPersons.Contains(sharedPersonWith), Is.True);
-            }
-        }
-
 
         [Test]
         public void Execute_When_SourceIsNotQuestionnaireDocument_Then_ArgumentException_should_be_thrown()

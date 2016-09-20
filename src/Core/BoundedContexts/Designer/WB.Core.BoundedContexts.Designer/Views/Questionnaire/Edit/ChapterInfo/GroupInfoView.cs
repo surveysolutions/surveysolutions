@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
-    public class GroupInfoView : IQuestionnaireItem, INameable, IReadSideRepositoryEntity
+    public class GroupInfoView : IQuestionnaireItem, INameable
     {
         public GroupInfoView()
         {

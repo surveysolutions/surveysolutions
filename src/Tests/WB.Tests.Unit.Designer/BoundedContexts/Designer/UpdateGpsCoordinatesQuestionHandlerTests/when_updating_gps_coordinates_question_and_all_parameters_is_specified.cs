@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
         private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(
                 Create.Event.NewQuestionAdded(
                     publicKey: questionId,
                     groupPublicKey: chapterId,
@@ -26,7 +26,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                     responsibleId: responsibleId,
                     questionType: QuestionType.QRBarcode
             ));
-            eventContext = new EventContext();
         };
 
         private Because of = () =>
@@ -43,48 +42,40 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                 responsibleId: responsibleId,
                 validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties());
 
-        private Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-         It should_raise_QuestionChanged_event = () =>
-            eventContext.ShouldContainEvent<QuestionChanged>();
 
-        It should_raise_QuestionChanged_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_QuestionId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_QuestionChanged_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_variable_name_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .StataExportCaption.ShouldEqual(variableName);
 
-        It should_raise_QuestionChanged_event_with_variable_label_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_variable_label_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .VariableLabel.ShouldEqual(variableLabel);
 
-        It should_raise_QuestionChanged_event_with_title_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_title_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionText.ShouldEqual(title);
 
-        It should_raise_QuestionChanged_event_with_condition_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_condition_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_hideIfDisabled_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_raise_QuestionChanged_event_with_instructions_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_instructions_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 
-        It should_raise_QuestionChanged_event_with_scope_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question_with_scope_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .QuestionScope.ShouldEqual(scope);
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

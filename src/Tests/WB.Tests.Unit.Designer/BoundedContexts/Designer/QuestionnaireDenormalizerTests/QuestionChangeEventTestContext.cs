@@ -3,7 +3,6 @@ using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -13,16 +12,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 {
     internal class QuestionChangeEventTestContext
     {
-        internal static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(IQuestionnaireEntityFactory questionnaireEntityFactoryMock, Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> storageStub)
-        {
-            var denormalizer = new QuestionnaireDenormalizer(
-                storageStub.Object, 
-                questionnaireEntityFactoryMock, 
-                Mock.Of<ILogger>());
-
-            return denormalizer;
-        }
-
         internal static Mock<IReadSideRepositoryWriter<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
         {
             var storageStub = new Mock<IReadSideRepositoryWriter<QuestionnaireDocument>>();
@@ -41,24 +30,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             };
             return innerDocument;
         }
-
-        /*internal static QuestionChanged CreateQuestionChangedEvent(Guid questionId, QuestionType type = QuestionType.Text, int maxValue = 0)
-        {
-            return new QuestionChanged
-            (
-                questionText : "What is your name",
-                questionType : type,
-                publicKey : questionId,
-                featured : true,
-                answerOrder : Order.AsIs,
-                conditionExpression : string.Empty,
-                answers : null,
-                instructions : "Answer this question, please",
-                stataExportCaption : "name",
-                validationExpression : "[this]!=''",
-                validationMessage : "Empty names is invalid answer"
-            );
-        }*/
 
         internal static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
             where T: IEvent

@@ -14,11 +14,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             var rosterFixedTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") };
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parentRosterId));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     FixedRosterTitles = rosterFixedTitles,
@@ -26,9 +26,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 });
 
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupToUpdateId, ParentGroupPublicKey = parentRosterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, groupToUpdateId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: groupToUpdateId)
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupToUpdateId, ParentGroupPublicKey = parentRosterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupToUpdateId));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: groupToUpdateId)
             {
                 RosterSizeQuestionId = null,
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
@@ -37,34 +37,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             });
 
 
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey : questionUsedAsLinkId,
                 groupPublicKey : groupToUpdateId,
                 isInteger : true
             ));
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey : linkedQuestionInChapterId,
                 questionType : QuestionType.SingleOption,
                 groupPublicKey : chapterId,
                 linkedToQuestionId : questionUsedAsLinkId
             ));
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of =
             () =>
                 questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, false, RosterSizeSourceType.Question, null, null);
 
-        It should_raise_GroupStoppedBeingARoster_event_with_groupToUpdateId_specified = () =>
-            eventContext.GetSingleEvent<GroupStoppedBeingARoster>().GroupId.ShouldEqual(groupToUpdateId);
+        private It should_contains_group_with_groupToUpdateId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).ShouldNotBeNull();
+
+        It should_contains_group_with_IsRoster_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).IsRoster.ShouldBeFalse();
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
@@ -73,6 +69,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private static Guid questionUsedAsLinkId = Guid.Parse("11111111111111111111111111111111");
         private static Guid groupToUpdateId = Guid.Parse("21111111111111111111111111111111");
         private static Guid linkedQuestionInChapterId = Guid.Parse("31111111111111111111111111111111");
-        private static EventContext eventContext;
     }
 }

@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded {PublicKey = chapterId});
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded {PublicKey = chapterId});
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: questionId,
                 groupPublicKey: chapterId,
                 questionText: "title",
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 questionType: QuestionType.QRBarcode
                 ));
 
-            questionnaire.Apply(Create.Event.VariableAdded(
+            questionnaire.AddVariable(Create.Event.VariableAdded(
                 entityId: Guid.NewGuid(),
                 responsibleId:responsibleId,
                 parentId: chapterId,

@@ -1,25 +1,20 @@
 ﻿using System;
-using Ncqrs.Commanding;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    public class CreateQuestionnaire : CommandBase
+    public class CreateQuestionnaire : QuestionnaireCommand
     {
-        public CreateQuestionnaire(Guid questionnaireId, string text, Guid? createdBy = null, bool isPublic = false)
-            : base(questionnaireId)
+        public CreateQuestionnaire(Guid questionnaireId, string text, Guid responsibleId, bool isPublic = false)
+            : base(questionnaireId, responsibleId)
         {
-            this.PublicKey = questionnaireId;
             this.Title = CommandUtils.SanitizeHtml(text);
-            this.CreatedBy = createdBy;
+            this.ResponsibleId = responsibleId;
             this.IsPublic = isPublic;
         }
 
-        public Guid PublicKey { get; private set; }
-
         public string Title { get; private set; }
-
-        public Guid? CreatedBy { get; private set; }
 
         public bool IsPublic { get; private set; }
     }

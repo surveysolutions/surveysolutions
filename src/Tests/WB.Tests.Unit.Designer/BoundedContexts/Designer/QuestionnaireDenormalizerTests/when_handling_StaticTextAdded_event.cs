@@ -4,8 +4,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
@@ -18,30 +18,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         {
             questionnaireEntityFactory = Setup.QuestionnaireEntityFactoryWithStaticText(entityId, text, null);
 
-            var questionnaireDocument = CreateQuestionnaireDocument(new[]
+            questionnaireView = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentId)
             });
 
-            var documentStorage = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
-
-            documentStorage
-                .Setup(writer => writer.GetById(Moq.It.IsAny<string>()))
-                .Returns(questionnaireDocument);
-
-            documentStorage
-                .Setup(writer => writer.Store(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>()))
-                .Callback((QuestionnaireDocument document, string id) =>
-                {
-                    questionnaireView = document;
-                });
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object,
-                questionnaireEntityFactory: questionnaireEntityFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionnaireEntityFactory.Object);
         };
 
         Because of = () =>
-            denormalizer.Handle(CreateStaticTextAddedEvent(entityId: entityId, parentId: parentId, text: text));
+            denormalizer.AddStaticText(CreateStaticTextAddedEvent(entityId: entityId, parentId: parentId, text: text).Payload);
 
         It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
             questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text, null, null, false, Moq.It.IsAny<IList<ValidationCondition>>()), Times.Once);
@@ -68,7 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         private static Mock<IQuestionnaireEntityFactory> questionnaireEntityFactory;
         private static QuestionnaireDocument questionnaireView;
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string text = "some text";

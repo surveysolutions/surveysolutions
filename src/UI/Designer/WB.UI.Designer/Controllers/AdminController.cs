@@ -83,6 +83,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
+        private readonly ICommandPostprocessor commandPostprocessor;
 
         public AdminController(
             IMembershipUserService userHelper,
@@ -95,7 +96,8 @@ namespace WB.UI.Designer.Controllers
             IAccountListViewFactory accountListViewFactory, 
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
-            ITranslationsService translationsService)
+            ITranslationsService translationsService,
+            ICommandPostprocessor commandPostprocessor)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -108,6 +110,7 @@ namespace WB.UI.Designer.Controllers
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
+            this.commandPostprocessor = commandPostprocessor;
         }
 
         [HttpGet]
@@ -129,8 +132,11 @@ namespace WB.UI.Designer.Controllers
                         this.zipUtils.DecompressGZip<QuestionnaireDocumentWithLookUpTables>(CreateStreamCopy(uploadFile.InputStream));
                     if (document != null)
                     {
-                        this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId,
-                            document.QuestionnaireDocument));
+                        var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId,
+                            document.QuestionnaireDocument);
+
+                        this.commandService.Execute(command);
+                        this.commandPostprocessor.ProcessCommandAfterExecution(command);
                         foreach (var lookupTable in document.LookupTables)
                         {
                             this.lookupTableService.SaveLookupTableContent(document.QuestionnaireDocument.PublicKey,
@@ -145,7 +151,9 @@ namespace WB.UI.Designer.Controllers
                     var document = this.zipUtils.DecompressGZip<QuestionnaireDocument>(CreateStreamCopy(uploadFile.InputStream));
                     if (document != null)
                     {
-                        this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, document));
+                        var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, document);
+                        this.commandService.Execute(command);
+                        this.commandPostprocessor.ProcessCommandAfterExecution(command);
                         return this.RedirectToAction("Index", "Questionnaire");
                     }
                 }
@@ -269,7 +277,9 @@ namespace WB.UI.Designer.Controllers
                     var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
                     questionnaireDocument.PublicKey = questionnaireId;
 
-                    this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument));
+                    var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument);
+                    this.commandService.Execute(command);
+                    this.commandPostprocessor.ProcessCommandAfterExecution(command);
 
                     this.Success($"[{zipEntry.Name}]", append: true);
                     this.Success($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.", append: true);

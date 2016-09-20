@@ -7,6 +7,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -16,13 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
     {
         Establish context = () =>
         {
-            var repositoryMock = new Mock<IReadSideKeyValueStorage<QuestionnaireInfoView>>();
-
-            repositoryMock
-                .Setup(x => x.GetById(questionnaireId))
-                .Returns(CreateQuestionnaireInfoView(questionnaireId, questionnaireTitle));
-
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 new NumericQuestion
                 {
                     QuestionType = QuestionType.Numeric
@@ -31,14 +26,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 {
                     IsRoster = true
                 });
-
+            questionnaire.Title = questionnaireTitle;
             questionnaire.CreatedBy = userId;
 
-            var questionnaireDocument = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(questionnaireId) == questionnaire);
+            var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            repositoryMock
+                .Setup(x => x.GetById(questionnaireId))
+                .Returns(questionnaire);
+
             var userRepositoryMock =
                 Mock.Of<IReadSideRepositoryReader<AccountDocument>>(
                     x => x.GetById(userId.FormatGuid()) == new AccountDocument() { Email = ownerEmail });
-            factory = CreateQuestionnaireInfoViewFactory(documentReader: questionnaireDocument, repository: repositoryMock.Object,
+            factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object,
                 accountsDocumentReader: userRepositoryMock);
         };
 
@@ -54,7 +53,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         It should_contain_id_of_first_element_in_list_of_shared_persons_equal_to_owner_id = () => view.SharedPersons[0].Id.ShouldEqual(userId);
 
-        It should_contain_isOowner_of_first_element_in_list_of_shared_persons_be_true = () => view.SharedPersons[0].IsOwner.ShouldEqual(true);
+        It should_contain_isOwner_of_first_element_in_list_of_shared_persons_be_true = () => view.SharedPersons[0].IsOwner.ShouldEqual(true);
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;

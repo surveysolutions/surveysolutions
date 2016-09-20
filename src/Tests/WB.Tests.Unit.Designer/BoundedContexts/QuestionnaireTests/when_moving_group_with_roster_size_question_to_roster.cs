@@ -13,16 +13,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
          Establish context = () =>
          {
              questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-             questionnaire.Apply(Create.Event.NumericQuestionAdded(
+             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
+             questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                  publicKey: rosterSizeQuestionId,
                   groupPublicKey: groupId,
                   isInteger: true
              ));
-             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-             questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: rosterId)
+             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId)
              {
                  RosterSizeQuestionId = rosterSizeQuestionId,
                  RosterSizeSource = RosterSizeSourceType.Question,

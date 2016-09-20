@@ -18,14 +18,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey : rosterSizeQuestionId,
                 groupPublicKey : chapterId,
                 isInteger : true,
                 stataExportCaption : "roster_size_question"
             ));
-            questionnaire.Apply(
+            questionnaire.AddQuestion(
                 Create.Event.NewQuestionAdded(
                     publicKey: questionId,
                     groupPublicKey: chapterId,
@@ -36,9 +36,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                     responsibleId: responsibleId,
                     questionType: QuestionType.QRBarcode
             ));
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     FixedRosterTitles =  null,
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                 });
 
 
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey: questionFromRosterId,
                 groupPublicKey: rosterId,
                 isInteger: true,

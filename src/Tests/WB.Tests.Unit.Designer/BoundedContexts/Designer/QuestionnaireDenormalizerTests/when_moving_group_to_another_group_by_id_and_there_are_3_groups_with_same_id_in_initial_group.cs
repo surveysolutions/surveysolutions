@@ -5,7 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -33,14 +33,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 anotherGroup = CreateGroup(groupId: anotherGroupId),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 
         Because of = () =>
-            denormalizer.Handle(groupMovedEvent);
+            denormalizer.MoveQuestionnaireItem(groupMovedEvent.Payload);
 
         It should_move_first_group_to_another_group = () =>
             anotherGroup.Children.ShouldContainOnly(firstGroup);
@@ -53,7 +50,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Group firstGroup;
         private static Group secondGroup;
         private static Group thirdGroup;
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static IPublishedEvent<QuestionnaireItemMoved> groupMovedEvent;
     }
 }
