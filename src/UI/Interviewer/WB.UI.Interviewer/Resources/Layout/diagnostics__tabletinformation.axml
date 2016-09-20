@@ -43,5 +43,6 @@
      local:MvxBind="Text TabletInformation.PackageSendingAttemptResponceText" />
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-       local:MvxBind="ShowProgress TabletInformation.IsInProgress; Visible TabletInformation.IsInProgress" />
+               android:indeterminateOnly="true" 
+               local:MvxBind="Visible TabletInformation.IsInProgress" />
 </LinearLayout>
