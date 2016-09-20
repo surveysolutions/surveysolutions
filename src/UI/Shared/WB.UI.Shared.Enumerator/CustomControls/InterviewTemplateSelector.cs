@@ -70,32 +70,21 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return Resource.Layout.interview_question_option_rounded_corner;
                 }
             }
+            
+            var enablementModel = this.GetEnablementViewModel(source);
 
-            var disabledViewModelTypes = new[]
+            if (enablementModel != null && !enablementModel.Enabled)
             {
-                typeof(QuestionHeaderViewModel),
-                typeof(GroupViewModel),
-                typeof(StaticTextViewModel)
-            };
+                if (typeOfViewModel == typeof(QuestionHeaderViewModel))
+                    return Resource.Layout.interview_disabled_question;
 
-            if (disabledViewModelTypes.Contains(source.GetType()))
-            {
-                var enablementModel = this.GetEnablementViewModel(source) ?? (EnablementViewModel)((dynamic)source).Enablement;
+                if (typeOfViewModel == typeof(GroupViewModel))
+                    return Resource.Layout.interview_disabled_group;
 
-                if (enablementModel != null && !enablementModel.Enabled)
-                {
-                    if (enablementModel.HideIfDisabled) return UnknownViewType;
-
-                    if (typeOfViewModel == typeof(QuestionHeaderViewModel))
-                        return Resource.Layout.interview_disabled_question;
-
-                    if (typeOfViewModel == typeof(GroupViewModel))
-                        return Resource.Layout.interview_disabled_group;
-
-                    if (typeOfViewModel == typeof(StaticTextViewModel))
-                        return Resource.Layout.interview_disabled_static_text;
-                }
+                if (typeOfViewModel == typeof(StaticTextViewModel))
+                    return Resource.Layout.interview_disabled_static_text;
             }
+
 
             return EntityTemplates.ContainsKey(typeOfViewModel)
                 ? EntityTemplates[typeOfViewModel]
