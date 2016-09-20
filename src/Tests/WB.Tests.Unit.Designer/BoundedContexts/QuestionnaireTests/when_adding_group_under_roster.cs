@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -12,67 +13,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parentRosterId));
         };
 
         Because of = () => questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: title, variableName: null, rosterSizeQuestionId: null, description: description,
                     condition: condition, hideIfDisabled: hideIfDisabled, parentGroupId: parentRosterId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, index: index);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
+        It should_create_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_raise_NewGroupAdded_event = () =>
-            eventContext.ShouldContainEvent<NewGroupAdded>();
-
-        It should_raise_NewGroupAdded_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .PublicKey.ShouldEqual(groupId);
-
-        It should_raise_NewGroupAdded_event_with_ParentGroupId_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .ParentGroupPublicKey.ShouldEqual(parentRosterId);
-
-        It should_raise_NewGroupAdded_event_with_ConditionExpression_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
+        It should_create_group_ConditionExpression_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .ConditionExpression.ShouldEqual(condition);
 
-        It should_raise_NewGroupAdded_event_with_HideIfDisabled_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
+        It should_create_group_with_HideIfDisabled_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_raise_NewGroupAdded_event_with_Title_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .GroupText.ShouldEqual(title);
+        It should_create_group_with_Title_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .Title.ShouldEqual(title);
 
-        It should_raise_NewGroupAdded_event_with_Description_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
+        It should_create_group_with_Description_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .Description.ShouldEqual(description);
-
-        It should_raise_NewGroupAdded_event_with_ResponsibleId_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .ResponsibleId.ShouldEqual(responsibleId);
-
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
-
-        It should_raise_QuestionnaireItemMoved_event_with_GroupKey_specified = () =>
-           eventContext.GetSingleEvent<QuestionnaireItemMoved>().GroupKey.ShouldEqual(parentRosterId);
-
-        It should_raise_QuestionnaireItemMoved_event_with_PublicKey_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>().PublicKey.ShouldEqual(groupId);
-
-        It should_raise_QuestionnaireItemMoved_event_with_TargetIndex_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>().TargetIndex.ShouldEqual(index);
-
-        It should_raise_QuestionnaireItemMoved_event_with_ResponsibleId_specified = () =>
-           eventContext.GetSingleEvent<QuestionnaireItemMoved>().ResponsibleId.ShouldEqual(responsibleId);
 
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -83,7 +49,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private static bool hideIfDisabled = true;
         private static string title = "title";
         private static string description = "description";
-        private static EventContext eventContext;
         private static int index = 5;
     }
 }

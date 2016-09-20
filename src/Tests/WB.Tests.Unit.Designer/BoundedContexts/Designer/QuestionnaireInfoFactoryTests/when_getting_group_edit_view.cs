@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -13,8 +16,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     {
         Establish context = () =>
         {
-            questionDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
-            questionnaireView = CreateQuestionsAndGroupsCollectionView();
+            questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaireView = CreateQuestionnaireDocument();
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaireView);
@@ -36,15 +39,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         It should_replace_guids_in_enablement_conditions = () => result.Group.EnablementCondition.ShouldEqual("[q1] > 40");
 
-        private static GroupAndRosterDetailsView GetGroup(Guid groupId)
+        private static IGroup GetGroup(Guid groupId)
         {
-            return questionnaireView.Groups.Single(x => x.Id == groupId);
+            return questionnaireView.Find<IGroup>(groupId);
         }
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditGroupView result;
-        private static QuestionsAndGroupsCollectionView questionnaireView;
-        private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
+        private static QuestionnaireDocument questionnaireView;
+        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid groupId = g4Id;
     }

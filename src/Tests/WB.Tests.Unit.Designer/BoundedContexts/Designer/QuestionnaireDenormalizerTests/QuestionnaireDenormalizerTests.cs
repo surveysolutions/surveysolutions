@@ -4,10 +4,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
+using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -38,14 +41,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 .AddChapter(Guid.NewGuid())
                 .AddQuestion(questionId);
 
-            var storageStub = CreateQuestionnaireDenormalizerStorageStub(innerDocument);
-
-            var denormalizer = CreateQuestionnaireDenormalizer(storageStub);
+            var denormalizer = CreateQuestionnaireDenormalizer(innerDocument);
 
             QuestionChanged evnt = CreateQuestionChangedEvent(questionId);
 
             // Act
-            denormalizer.Handle(CreatePublishedEvent(questionnaireId, evnt));
+            denormalizer.UpdateQuestion(CreatePublishedEvent(questionnaireId, evnt).Payload);
 
             // Assert
             #warning: updated question is a new entity, that's why we should search for it by it's id
@@ -61,24 +62,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             Assert.That(evnt.ValidationConditions, Is.EqualTo(question.ValidationConditions));
         }
 
-        private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> storageStub)
+        public static Questionnaire CreateQuestionnaireDenormalizer(QuestionnaireDocument document,
+            IExpressionProcessor expressionProcessor = null)
         {
-            #warning: we shouldn't use CompleteQuestionFactory here?
-            var denormalizer = new QuestionnaireDenormalizer(
-                storageStub.Object, 
-                new QuestionnaireEntityFactory(), 
-                Mock.Of<ILogger>());
-
-            return denormalizer;
-        }
-
-        private static Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> CreateQuestionnaireDenormalizerStorageStub(QuestionnaireDocument document)
-        {
-            var storageStub = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
-
-            storageStub.Setup(d => d.GetById(document.PublicKey.FormatGuid())).Returns(document);
-
-            return storageStub;
+            var questionnaireAr = new Questionnaire(
+                new QuestionnaireEntityFactory(),
+                Mock.Of<ILogger>(),
+                Mock.Of<IClock>(),
+                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
+                Create.SubstitutionService(),
+                Create.KeywordsProvider(),
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IAttachmentService>(),
+                Mock.Of<ITranslationsService>());
+            questionnaireAr.Initialize(document);
+            return questionnaireAr;
         }
 
         private static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionnaireId)

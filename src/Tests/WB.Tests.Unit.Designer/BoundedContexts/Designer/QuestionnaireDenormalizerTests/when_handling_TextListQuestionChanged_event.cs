@@ -5,9 +5,9 @@ using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -29,8 +29,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 })
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer => writer.GetById(Moq.It.IsAny<string>()) == questionnaireDocument);
-
             var questionFactory = new Mock<IQuestionnaireEntityFactory>();
 
             var updatedQuestion = CreateTextListQuestion(questionId: questionId);
@@ -39,11 +37,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 .Callback<QuestionData>(d => questionData = d)
                 .Returns(() => updatedQuestion);
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionnaireEntityFactory: questionFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument, questionnaireEntityFactory: questionFactory.Object);
         };
 
         Because of = () =>
-            denormalizer.Handle(@event);
+            denormalizer.UpdateTextListQuestion(@event.Payload);
 
         It should_set_null_as_default_value_for__ValidationExpression__field = () =>
             questionData.ValidationExpression.ShouldBeNull();
@@ -61,7 +59,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionData.QuestionType.ShouldEqual(QuestionType.TextList);
 
         private static QuestionData questionData;
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static IPublishedEvent<TextListQuestionChanged> @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }

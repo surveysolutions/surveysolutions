@@ -3,9 +3,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -22,20 +21,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
             @event = CreateGroupBecameARosterEvent(groupId: groupId);
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer
-                => writer.GetById(Moq.It.IsAny<string>()) == questionnaireDocument);
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument);
         };
 
         Because of = () =>
-            denormalizer.Handle(@event);
+            denormalizer.MarkGroupAsRoster(@event.Payload);
 
         It should_set_group_IsRoster_property_to_true = () =>
             questionnaireDocument.GetGroup(groupId)
                 .IsRoster.ShouldEqual(true);
 
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static IPublishedEvent<GroupBecameARoster> @event;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid groupId;

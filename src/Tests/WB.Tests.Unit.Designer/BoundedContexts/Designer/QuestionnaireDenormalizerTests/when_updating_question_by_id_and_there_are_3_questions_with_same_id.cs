@@ -6,8 +6,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -37,20 +37,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 }),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
             var questionFactory = Mock.Of<IQuestionnaireEntityFactory>();
 
             Mock.Get(questionFactory)
                 .Setup(factory => factory.CreateQuestion(it.IsAny<QuestionData>()))
                 .Returns((QuestionData question) => new QuestionnaireEntityFactory().CreateQuestion(question));
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionnaireEntityFactory: questionFactory);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire, questionnaireEntityFactory: questionFactory);
         };
 
         Because of = () =>
-            denormalizer.Handle(questionUpdatedEvent);
+            denormalizer.UpdateQuestion(questionUpdatedEvent.Payload);
 
         It should_update_first_question = () =>
             ((IQuestion)mainGroup.Children[0]).QuestionText.ShouldEqual(updatedQuestionTitle);
@@ -61,7 +58,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         It should_not_update_third_question = () =>
             ((IQuestion)mainGroup.Children[2]).QuestionText.ShouldEqual(initialQuestionTitle);
 
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static IPublishedEvent<QuestionChanged> questionUpdatedEvent;
         private static string initialQuestionTitle;
         private static string updatedQuestionTitle;

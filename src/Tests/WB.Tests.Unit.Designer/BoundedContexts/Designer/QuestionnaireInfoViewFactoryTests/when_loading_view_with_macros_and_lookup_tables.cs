@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
@@ -16,21 +17,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
     {
         Establish context = () =>
         {
-            var repositoryMock = new Mock<IReadSideKeyValueStorage<QuestionnaireInfoView>>();
-
-            repositoryMock
-                .Setup(x => x.GetById(questionnaireId))
-                .Returns(CreateQuestionnaireInfoView(questionnaireId, questionnaireTitle));
-
-
-            var questionnaireDocument = Create.QuestionnaireDocument();
+            var questionnaireDocument = CreateQuestionnaireDocument(questionnaireId, questionnaireTitle);
             questionnaireDocument.Macros = macros;
             questionnaireDocument.LookupTables = lookupTables;
 
-            var questionnaireDocumentReaderMock = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(
-                  x => x.GetById(questionnaireId) == questionnaireDocument);
+            var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            repositoryMock
+                .Setup(x => x.GetById(questionnaireId))
+                .Returns(questionnaireDocument);
 
-            factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object, documentReader: questionnaireDocumentReaderMock);
+            factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object);
         };
 
         Because of = () =>

@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     }).ToArray();
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
             (
                 publicKey : parentQuestionId,
                 answers : new Answer[] { new Answer{ AnswerText = "option1", AnswerValue = "1"}, new Answer{AnswerText = "option2", AnswerValue = "2"}},
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 cascadeFromQuestionId : null
             ));
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
             (
                 publicKey : cascadeQuestionId,
                 answers : oldAnswers,
@@ -53,8 +53,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 isFilteredCombobox : false,
                 cascadeFromQuestionId : parentQuestionId
             ));
-            
-            eventContext = new EventContext();
         };
 
         Because of = () =>
@@ -75,20 +73,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 cascadeFromQuestionId: null, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties());
 
-        private Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionChanged_event = () =>
-            eventContext.ShouldContainEvent<QuestionChanged>();
 
-        It should_raise_QuestionChanged_event_with_answer_option_that_was_presiously_saved = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(cascadeQuestionId);
+
+        It should_contains_question_with_answer_option_that_was_presiously_saved = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(cascadeQuestionId)
                 .Answers.Count().ShouldEqual(oldAnswers.Count());
 
-        private static EventContext eventContext;
+
         private static Questionnaire questionnaire;
         private static Guid cascadeQuestionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentQuestionId = Guid.Parse("22222222222222222222222222222222");

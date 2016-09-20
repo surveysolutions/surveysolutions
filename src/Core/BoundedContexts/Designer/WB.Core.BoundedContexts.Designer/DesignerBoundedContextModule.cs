@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
@@ -18,7 +19,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
@@ -36,6 +36,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer
@@ -59,6 +60,8 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
+            this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
+
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
             this.Bind<IQuestionnaireChangeHistoryFactory>().To<QuestionnaireChangeHistoryFactory>();
             this.Bind<IQuestionnaireViewFactory>().To<QuestionnaireViewFactory>();
@@ -77,14 +80,8 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
-            DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
-            DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireSharedPersonsDenormalizer>(this.Kernel);
-            DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireListViewItemDenormalizer>(this.Kernel);
-            DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireChangeHistoryDenormalizer>(this.Kernel);
+            this.Bind<IQuestionnaireHistory>().To<QuestionnaireHistory>();
 
-            this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
-            this.Bind<IEventHandler>().To<ChaptersInfoViewDenormalizer>().InSingletonScope();
-            this.Bind<IEventHandler>().To<QuestionsAndGroupsCollectionDenormalizer>().InSingletonScope();
             this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
@@ -110,9 +107,9 @@ namespace WB.Core.BoundedContexts.Designer
 
             CommandRegistry
                 .Setup<Questionnaire>()
-                .InitializesWith<CloneQuestionnaire>(command => command.PublicKey, (command, aggregate) => aggregate.CloneQuestionnaire(command.Title, command.IsPublic, command.CreatedBy, command.PublicKey, command.Source))
-                .InitializesWith<CreateQuestionnaire>(command => command.PublicKey, (command, aggregate) => aggregate.CreateQuestionnaire(command.PublicKey, command.Title, command.CreatedBy, command.IsPublic))
-                .InitializesWith<ImportQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportQuestionnaire(command.CreatedBy, command.Source))
+                .InitializesWith<CloneQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneQuestionnaire(command.Title, command.IsPublic, command.ResponsibleId, command.QuestionnaireId, command.Source))
+                .InitializesWith<CreateQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CreateQuestionnaire(command.QuestionnaireId, command.Title, command.ResponsibleId, command.IsPublic))
+                .InitializesWith<ImportQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportQuestionnaire(command.ResponsibleId, command.Source))
                 .Handles<DeleteQuestionnaire>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteQuestionnaire())
                 // Macro
                 .Handles<AddMacro>(command => command.QuestionnaireId, aggregate => aggregate.AddMacro)

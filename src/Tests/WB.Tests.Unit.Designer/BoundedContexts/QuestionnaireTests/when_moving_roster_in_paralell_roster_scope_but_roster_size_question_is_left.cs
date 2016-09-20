@@ -15,20 +15,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var rosterSizeQuestionId = Guid.Parse("31111111111111111111111111111111");
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = anotherRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, anotherRosterId));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parallelRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, parallelRosterId));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parallelRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parallelRosterId));
 
-            questionnaire.Apply(Create.Event.NumericQuestionAdded (publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey :parallelRosterId ));
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded (publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey :parallelRosterId ));
 
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parallelRosterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, groupId));
-            questionnaire.Apply(new RosterChanged(responsibleId, groupId){
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parallelRosterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId, groupId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     FixedRosterTitles =  null,

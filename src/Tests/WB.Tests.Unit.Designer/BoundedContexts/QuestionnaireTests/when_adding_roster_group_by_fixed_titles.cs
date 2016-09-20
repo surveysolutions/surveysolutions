@@ -21,17 +21,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterFixedTitles = new[] { new FixedRosterTitleItem("1", rosterFixedTitle1), new FixedRosterTitleItem("2", rosterFixedTitle2) };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: Guid.NewGuid(),
                 groupPublicKey: chapterId,
                 questionType: QuestionType.Text
             ));
             
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
         };
 
         Because of = () =>
@@ -39,47 +37,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 rosterSizeQuestionId: null, description: null, condition: null, hideIfDisabled: false, parentGroupId: parentGroupId,
                 isRoster: true, rosterSizeSource: rosterSizeSourceType, rosterFixedTitles: rosterFixedTitles, rosterTitleQuestionId: null);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_GroupBecameARoster_event = () =>
-            eventContext.ShouldContainEvent<GroupBecameARoster>();
+        It should_contains_group = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_raise_GroupBecameARoster_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<GroupBecameARoster>()
-                .GroupId.ShouldEqual(groupId);
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .PublicKey.ShouldEqual(groupId);
 
-        It should_raise_RosterChanged_event = () =>
-            eventContext.ShouldContainEvent<RosterChanged>();
-
-        It should_raise_RosterChanged_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
-                .GroupId.ShouldEqual(groupId);
-
-        It should_raise_RosterChanged_event_with_RosterSizeSourceType_equal_to_specified_rosterSizeSourceType = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
+        It should_contains_group_with_RosterSizeSourceType_equal_to_specified_rosterSizeSourceType = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .RosterSizeSource.ShouldEqual(rosterSizeSourceType);
 
-        It should_raise_RosterChanged_event_with_RosterSizeQuestionId_equal_to_null = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterSizeQuestionId.ShouldBeNull();
+        It should_contains_group_with_RosterSizeQuestionId_equal_to_null = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).RosterSizeQuestionId.ShouldBeNull();
 
-        It should_raise_RosterChanged_event_with_not_nullable_RosterFixedTitles = () =>
-            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.ShouldNotBeNull();
+        It should_contains_group_with_not_nullable_RosterFixedTitles = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).FixedRosterTitles.ShouldNotBeNull();
 
-        It should_raise_RosterChanged_event_with_not_empty_RosterFixedTitles = () =>
-            eventContext.GetSingleEvent<RosterChanged>().FixedRosterTitles.Length.ShouldNotEqual(0);
+        It should_contains_group_with_not_empty_RosterFixedTitles = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).FixedRosterTitles.Length.ShouldNotEqual(0);
 
-        It should_raise_RosterChanged_event_with_RosterFixedTitles_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
+        It should_contains_group_with_RosterFixedTitles_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .FixedRosterTitles.Select(x => x.Title).ShouldContainOnly(new[] { rosterFixedTitle1, rosterFixedTitle2 });
 
-        It should_raise_RosterChanged_event_with_RosterTitleQuestionId_equal_to_null = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
+        It should_contains_group_with_RosterTitleQuestionId_equal_to_null = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).RosterTitleQuestionId.ShouldBeNull();
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;

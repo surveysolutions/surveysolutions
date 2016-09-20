@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Mappings
 {
+    [PlainStorage]
     public class QuestionnaireListViewItemMap : ClassMapping<QuestionnaireListViewItem>
     {
         public QuestionnaireListViewItemMap()
