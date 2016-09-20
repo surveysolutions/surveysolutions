@@ -2,13 +2,14 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-               xmlns:local="http://schemas.android.com/apk/res-auto"
+  xmlns:local="http://schemas.android.com/apk/res-auto"
   android:layout_height="wrap_content"
   android:layout_width="match_parent"
-  local:MvxBind="Visible InProgress"
+  android:orientation="vertical"
   >
   <ProgressBar
                style="@style/Interview_Question_Progress_Indicator"
                android:indeterminate="true"
                local:MvxBind="Visible InProgress" />
+  <View style="@style/Interview_Entity_Divider" />
 </LinearLayout>
