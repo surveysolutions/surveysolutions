@@ -56,7 +56,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     };
 
                     compositeQuestionParts.Values.ForEach(x => allVisibleGroupItems.AddCollection(x));
-                    allVisibleGroupItems.Add(new QuestionDivider());
                 }
                 else if (rosterViewModel != null)
                 {
