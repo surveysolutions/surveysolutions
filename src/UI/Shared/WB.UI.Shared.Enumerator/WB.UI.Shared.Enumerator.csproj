@@ -828,11 +828,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_question__errors.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_question__instructions.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -1009,7 +1004,7 @@
     <AndroidResource Include="Resources\layout\interview_question_yesno_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question__errors_item.axml">
+    <AndroidResource Include="Resources\layout\interview_question__validation_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview__attachment.axml" />
@@ -1036,7 +1031,7 @@
     <AndroidResource Include="Resources\layout\interview_question__header.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_validation.axml">
+    <AndroidResource Include="Resources\layout\interview_question__validation.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__comments.axml">
