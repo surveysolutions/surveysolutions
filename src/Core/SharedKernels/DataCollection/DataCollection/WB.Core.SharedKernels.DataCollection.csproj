@@ -209,7 +209,6 @@
     <Compile Include="Events\Interview\TextListQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
-    <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerChange.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerComment.cs">
@@ -286,7 +285,6 @@
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
-    <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Providers\ICategoricalOptionsProvider.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
@@ -328,7 +326,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireItemInputModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
     <Compile Include="Views\Questionnaire\RosterScopeDescription.cs" />
     <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />

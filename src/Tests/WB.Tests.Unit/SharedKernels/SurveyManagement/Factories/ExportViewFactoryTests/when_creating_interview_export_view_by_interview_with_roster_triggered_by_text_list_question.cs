@@ -11,6 +11,8 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using It = Machine.Specifications.It;
@@ -28,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             rosterSizeQuestionId = Guid.Parse("10000000000000000000000000000000");
 
-            questionnarie = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new TextListQuestion()
                 {
                     PublicKey = rosterSizeQuestionId,
@@ -51,11 +53,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     }
                 });
 
-            exportViewFactory = CreateExportViewFactory();
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaire, 1, null));
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
         };
 
         Because of = () =>
-             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
+             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
                 CreateInterviewDataWith2PropagatedLevels());
 
         It should_records_count_equals_4 = () =>
@@ -131,7 +136,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static Guid rosterSizeQuestionId;
         private static Guid questionInsideRosterGroupId;
         private static int levelCount;
-        private static QuestionnaireDocument questionnarie;
+        private static QuestionnaireDocument questionnaire;
         private static string someAnswer = "some answer";
         private static int maxAnswerCount = 5;
         private static ExportViewFactory exportViewFactory;

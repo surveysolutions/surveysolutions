@@ -16,7 +16,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -54,6 +53,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
@@ -200,10 +200,12 @@ namespace WB.Tests.Unit.TestFactories
 
         public PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
             => new PreloadedDataService(
-                new ExportViewFactory(new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor(), new ExportQuestionService())
-                    .CreateQuestionnaireExportStructure(questionnaire, 1),
-                new QuestionnaireRosterStructureFactory()
-                    .CreateQuestionnaireRosterStructure(questionnaire, 1),
+                new ExportViewFactory(new FileSystemIOAccessor(), 
+                                      new ExportQuestionService(), 
+                                      Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
+                                                                          _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaire, 1, null)))
+                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
+                new PlainQuestionnaire(questionnaire, 1, null).GetRosterScopes(), 
                 questionnaire,
                 new QuestionDataParser(),
                 new UserViewFactory(new TestPlainStorage<UserDocument>()));

@@ -13,8 +13,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -25,17 +26,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         {
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null
-                : new ExportViewFactory(
-                    new QuestionnaireRosterStructureFactory(), 
-                    Mock.Of<IFileSystemAccessor>(_ => _.MakeStataCompatibleFileName(questionnaireDocument.Title) == questionnaireDocument.Title),
-                    new ExportQuestionService()).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
+                : new ExportViewFactory(Mock.Of<IFileSystemAccessor>(_ => _.MakeStataCompatibleFileName(questionnaireDocument.Title) == questionnaireDocument.Title),
+                                        new ExportQuestionService(),
+                                        Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) && 
+                                                                            _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument))
+                      .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));
 
-            var questionnaireRosterStructure = (questionnaireDocument == null
+            var questionnaireRosterScopes = (questionnaireDocument == null
                 ? null
-                : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
+                : new PlainQuestionnaire(questionnaireDocument, 1, null).GetRosterScopes());
 
             var userViewFactory = new Mock<IUserViewFactory>();
-            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument,
+            return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterScopes, questionnaireDocument,
                 new QuestionDataParser(), userViewFactory.Object);
         }
 

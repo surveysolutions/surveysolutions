@@ -18,9 +18,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             viewState = CreateViewWithSequenceOfInterviewData();
             viewState.Levels.Add("0", new InterviewLevel(new ValueVector<Guid>{ rosterScopeId }, null, new decimal[0]));
 
-            var questionnaireRosterStructure = CreateQuestionnaireRosterStructure(rosterScopeId, rosterGroupId);
+            var questionnaireRosterScopes = CreateQuestionnaireRosterScopes(rosterScopeId, rosterGroupId);
 
-            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure);
+            interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterScopes);
         };
         
         Because of = () =>

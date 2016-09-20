@@ -34,7 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
       	private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IQuestionnaireRosterStructureStorage questionnaireRosterStructureStorage;
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
 
@@ -42,13 +41,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
             IQuestionnaireStorage questionnaireStorage,
-            IQuestionnaireRosterStructureStorage questionnaireRosterStructureStorage, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.userViewFactory = userViewFactory;
             this.questionnaireStorage = questionnaireStorage;
-            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
@@ -145,8 +142,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireId, version));
-            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetQuestionnaireRosterStructure(
-                    new QuestionnaireIdentity(questionnaireId, version));
+
+            var questionnaireRosterStructure = this.questionnaireStorage.GetQuestionnaire(
+                    new QuestionnaireIdentity(questionnaireId, version), null)?.GetRosterScopes();
 
             if (questionnaireExportStructure == null || questionnaireRosterStructure == null || questionnaire == null)
             {
