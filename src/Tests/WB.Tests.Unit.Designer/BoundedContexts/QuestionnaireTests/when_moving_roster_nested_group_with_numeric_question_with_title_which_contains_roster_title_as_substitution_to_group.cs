@@ -18,12 +18,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             nestedRosterId = Guid.Parse("31111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(Guid.NewGuid(), rosterId));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(Guid.NewGuid(), rosterId));
 
-            questionnaire.Apply(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = rosterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = rosterId });
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey : questionId,
                 groupPublicKey : nestedRosterId,
                 questionText : questionTitle,

@@ -9,7 +9,7 @@ namespace WB.UI.Designer.Models
 
         public string Email { get; set; }
 
-        public Guid QuestionnaireId { get; set; }
+        public string QuestionnaireId { get; set; }
         public string QuestionnaireDisplayTitle { get; set; }
         public string ShareTypeName { get; set; }
         public string UserCallName { get; set; }

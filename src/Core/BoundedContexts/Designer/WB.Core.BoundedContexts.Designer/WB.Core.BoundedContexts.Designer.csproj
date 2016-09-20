@@ -232,6 +232,7 @@
     <Compile Include="Events\Questionnaire\VariableCloned.cs" />
     <Compile Include="Events\Questionnaire\VariableDeleted.cs" />
     <Compile Include="Events\Questionnaire\VariableUpdated.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
@@ -601,26 +602,23 @@
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />
     <Compile Include="Views\Account\CQRSRoleRepository.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireChangeHistoryFactory.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireActionType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecord.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecordReference.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryFactory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeRecord.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeReference.cs" />
+    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTracker.cs" />
-    <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterItemType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IQuestionnaireItem.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\StaticTextInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\FixedRosterTitleItem.cs" />
     <Compile Include="Views\Questionnaire\Edit\GroupDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IChapterInfoViewFactory.cs" />
@@ -643,10 +641,8 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\NumericDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QrBarcodeDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsViewMapper.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\SingleOptionDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\StaticTextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
@@ -667,7 +663,6 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityNode.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\VariableView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemLink.cs" />
     <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
@@ -690,7 +685,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItemDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItemSearchable.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -707,9 +701,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsFactory.cs">

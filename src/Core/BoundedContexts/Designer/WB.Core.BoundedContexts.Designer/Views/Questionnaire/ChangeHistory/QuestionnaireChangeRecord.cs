@@ -4,12 +4,8 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
-    public class QuestionnaireChangeRecord : IView
+    public class QuestionnaireChangeRecord
     {
-        public QuestionnaireChangeRecord()
-        {
-            this.References = new HashSet<QuestionnaireChangeReference>();
-        }
         public virtual string QuestionnaireChangeRecordId { get; set; }
         public virtual string QuestionnaireId { get; set; }
         public virtual Guid UserId { get; set; }
@@ -20,6 +16,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public virtual QuestionnaireItemType TargetItemType { get; set; }
         public virtual Guid TargetItemId { get; set; }
         public virtual string TargetItemTitle { get; set; }
-        public virtual ISet<QuestionnaireChangeReference> References { get; set; }
+        public virtual ISet<QuestionnaireChangeReference> References { get; set; } = new HashSet<QuestionnaireChangeReference>();
     }
 }

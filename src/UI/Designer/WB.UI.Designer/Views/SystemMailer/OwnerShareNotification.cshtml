@@ -4,4 +4,4 @@
 @model WB.UI.Designer.Models.SharingNotificationModel
 
 @Html.Raw(string.Format(NotificationResources.OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__, @Model.UserCallName, @Model.ActionPersonCallName, @Model.SharedWithPersonEmail, @Model.ShareTypeName))
-@Html.ActionLink(Model.QuestionnaireDisplayTitle, "Details", "Questionnaire", HttpContext.Current.Request.Url.Scheme, null, null, new { id = Model.QuestionnaireId.FormatGuid() }, null)
+@Html.ActionLink(Model.QuestionnaireDisplayTitle, "Details", "Questionnaire", HttpContext.Current.Request.Url.Scheme, null, null, new { id = Model.QuestionnaireId }, null)

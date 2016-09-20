@@ -21,19 +21,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [Test]
         public void DeleteQuestion_When_question_id_specified_Then_raised_QuestionDeleted_event_with_same_question_id()
         {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Guid questionId = Guid.NewGuid();
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneQuestion(questionId: questionId, responsibleId: responsibleId);
+            // arrange
+            Guid questionId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneQuestion(questionId: questionId, responsibleId: responsibleId);
 
-                // act
-                questionnaire.DeleteQuestion(questionId, responsibleId);
+            // act
+            questionnaire.DeleteQuestion(questionId, responsibleId);
 
-                // assert
-                Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).QuestionId, Is.EqualTo(questionId));
-            }
+            // assert
+            Assert.That(questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId), Is.Null);
         }
 
         [Test]

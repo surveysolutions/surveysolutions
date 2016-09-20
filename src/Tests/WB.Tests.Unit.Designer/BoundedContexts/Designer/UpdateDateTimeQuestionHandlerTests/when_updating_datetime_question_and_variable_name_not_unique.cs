@@ -17,13 +17,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey : Guid.NewGuid(),
                 groupPublicKey : chapterId,
                 stataExportCaption : notUniqueVariableName
             ));
-            questionnaire.Apply(
+            questionnaire.AddQuestion(
                 Create.Event.NewQuestionAdded(
                     publicKey: questionId,
                     groupPublicKey: chapterId,

@@ -15,10 +15,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = parentGroupId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = parentGroupId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
             (
                 publicKey : linkedToQuestionId,
                 groupPublicKey : rosterId,
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                 questionText : "text question",
                 stataExportCaption : "source_of_linked_question"
             ));
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: questionId,
                 groupPublicKey: parentGroupId,
                 questionText: "old title",
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                 responsibleId: responsibleId,
                 questionType: QuestionType.QRBarcode
                 ));
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
         };
 
         Because of = () =>

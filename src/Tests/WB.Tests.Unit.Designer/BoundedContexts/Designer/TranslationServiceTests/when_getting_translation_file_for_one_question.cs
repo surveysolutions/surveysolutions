@@ -8,6 +8,7 @@ using Moq;
 using SpreadsheetGear;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -77,7 +78,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                 translationsStorage.Store(translationInstance, translationInstance);
             }
 
-            var questionnaires = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(questionnaire);
 
             service = Create.TranslationsService(translationsStorage, questionnaires.Object);

@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -345,7 +346,8 @@ namespace WB.Tests.Unit.Designer
             string variable = null,
             string enablementCondition = null,
             bool hideIfDisabled = false,
-            IEnumerable<IComposite> children = null)
+            IEnumerable<IComposite> children = null,
+            Guid? rosterSizeQuestionId = null)
         {
             return new Group(title)
             {
@@ -354,6 +356,7 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 Children = children != null ? children.ToList() : new List<IComposite>(),
+                RosterSizeQuestionId = rosterSizeQuestionId,
             };
         }
 
@@ -391,11 +394,11 @@ namespace WB.Tests.Unit.Designer
 
         public static LookupTableService LookupTableService(
             IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage = null)
         {
             return new LookupTableService(
                 lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
+                documentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)
@@ -432,6 +435,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
+            string title = null,
             params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
@@ -446,14 +450,15 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
-                Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
+                Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                QuestionText = title,
             };
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
             string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null,
-            int? maxAllowedAnswers = null)
+            int? maxAllowedAnswers = null, string title = null)
         {
             return new MultyOptionsQuestion
             {
@@ -472,7 +477,8 @@ namespace WB.Tests.Unit.Designer
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
-            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
+            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
+            string title = null)
         {
             return new NumericQuestion
             {
@@ -487,10 +493,12 @@ namespace WB.Tests.Unit.Designer
                 Featured = isPrefilled,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
+                QuestionText = title
             };
         }
 
-        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null)
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null,
+            string title = null)
         {
             return new NumericQuestion
             {
@@ -500,7 +508,8 @@ namespace WB.Tests.Unit.Designer
                 IsInteger = false,
                 ConditionExpression = enablementCondition,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                QuestionText = title
             };
         }
 
@@ -630,13 +639,14 @@ namespace WB.Tests.Unit.Designer
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null)
         {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
+                Title = title,
             };
         }
 
@@ -784,7 +794,7 @@ namespace WB.Tests.Unit.Designer
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
             bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null, bool isPrefilled = false,
-            string linkedFilter = null)
+            string linkedFilter = null, string title = null)
         {
             return new SingleQuestion
             {
@@ -801,7 +811,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionScope = scope,
                 IsFilteredCombobox = isFilteredCombobox,
                 Featured = isPrefilled,
-                Properties = {OptionsFilterExpression = optionsFilter}
+                Properties = {OptionsFilterExpression = optionsFilter},
+                QuestionText = title,
             };
         }
 
@@ -829,7 +840,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false)
+            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false, string title = null)
         {
             return new TextListQuestion("Question TL")
             {
@@ -839,7 +850,8 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
                 QuestionType = QuestionType.TextList,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                QuestionText = title,
             };
         }
 
@@ -871,7 +883,8 @@ namespace WB.Tests.Unit.Designer
                 Featured = preFilled,
                 VariableLabel = label,
                 Instructions = instruction,
-                ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage)
+                ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage),
+                
             };
         }
 
@@ -994,11 +1007,15 @@ namespace WB.Tests.Unit.Designer
             IMembershipUserService membershipUserService,
             IRecipientNotifier recipientNotifier,
             IAccountRepository accountRepository,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
+            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage,
             ILogger logger,
             IAttachmentService attachmentService = null,
             ILookupTableService lookupTableService = null,
-            ITranslationsService translationsService = null)
+            ITranslationsService translationsService = null,
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
+            IReadSideRepositoryWriter<AccountDocument> accountStorage = null,
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> questionnaireSharedPersonsStorage = null,
+            IQuestionnaireHistory questionnaireHistory = null)
         {
             return new CommandPostprocessor(
                membershipUserService,
@@ -1008,7 +1025,11 @@ namespace WB.Tests.Unit.Designer
                logger,
                attachmentService ?? Mock.Of<IAttachmentService>(),
                lookupTableService ?? Mock.Of<ILookupTableService>(),
-               translationsService ?? Mock.Of<ITranslationsService>());
+               translationsService ?? Mock.Of<ITranslationsService>(),
+               questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
+               accountStorage ?? Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(),
+               questionnaireSharedPersonsStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
+               questionnaireHistory ?? Mock.Of<IQuestionnaireHistory>());
         }
 
         public static AttachmentService AttachmentService(
@@ -1080,10 +1101,10 @@ namespace WB.Tests.Unit.Designer
 
         public static TranslationsService TranslationsService(
             IPlainStorageAccessor<TranslationInstance> traslationsStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
             => new TranslationsService(
                 traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
-                questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
+                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
 
         public static QuestionDetailsView NumericDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
         {
@@ -1121,15 +1142,6 @@ namespace WB.Tests.Unit.Designer
                 ParentGroupsIds = parentGroupsIds ?? new Guid[0],
                 RosterScopeIds = rosterScopeIds ?? new Guid[0],
                 RosterSizeQuestionId = rosterSizeQuestionId
-            };
-        }
-
-        public static QuestionsAndGroupsCollectionView QuestionsAndGroupsCollectionView(GroupAndRosterDetailsView[] groups, QuestionDetailsView[] questions)
-        {
-            return new QuestionsAndGroupsCollectionView
-            {
-                Groups = groups.ToList(),
-                Questions = questions.ToList()
             };
         }
 
