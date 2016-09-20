@@ -7,6 +7,7 @@
         QuestionnaireIsMissing,
         InterviewHardDeleted,
         OtherUserIsResponsible,
-        StatusIsNotOneOfExpected
+        StatusIsNotOneOfExpected,
+        AnswerNotAccepted
     }
 }
