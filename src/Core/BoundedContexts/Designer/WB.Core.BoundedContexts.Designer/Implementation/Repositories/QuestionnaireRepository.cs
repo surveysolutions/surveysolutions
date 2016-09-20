@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         {
             var userDocument = this.questionnaireStorage.GetById(aggregateId.FormatGuid());
             var questionnaire = this.serviceLocator.GetInstance<Questionnaire>();
-            questionnaire.Initialize(userDocument);
+            questionnaire.Initialize(aggregateId, userDocument);
             return questionnaire;
         }
 

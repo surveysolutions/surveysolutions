@@ -72,9 +72,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
 
-        internal void Initialize(QuestionnaireDocument document)
+        internal void Initialize(Guid aggregateId, QuestionnaireDocument document)
         {
-            this.innerDocument = document;
+            this.innerDocument = document ?? new QuestionnaireDocument() { PublicKey = aggregateId };
         }
 
         private bool wasExpressionsMigrationPerformed = false;
