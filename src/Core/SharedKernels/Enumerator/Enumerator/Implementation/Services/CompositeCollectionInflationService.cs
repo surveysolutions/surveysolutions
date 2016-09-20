@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MvvmCross.Platform.Core;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -28,22 +29,33 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 var rosterViewModel = interviewEntityViewModel as RosterViewModel;
                 if (compositeItem != null)
                 {
-                    allVisibleGroupItems.Add(compositeItem.QuestionState.Header);
+                    var compositeQuestionParts = new Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>>();
 
-                    var questionCompositeCollection = new CompositeCollection<ICompositeEntity>();
+                    compositeQuestionParts.Add(CompositeItemType.Title,  new CompositeCollection<ICompositeEntity>());
+
+                    if (compositeItem.InstructionViewModel.HasInstructions)
+                        compositeQuestionParts.Add(CompositeItemType.Instruction, new CompositeCollection<ICompositeEntity>());
+
+                    compositeQuestionParts.Add(CompositeItemType.Self, new CompositeCollection<ICompositeEntity>());
+
+                    var compositeItemWithChildren = compositeItem as ICompositeQuestionWithChildren;
+                    if (compositeItemWithChildren != null)
+                        compositeQuestionParts.Add(CompositeItemType.Childrens, new CompositeCollection<ICompositeEntity>());
+
+                    compositeQuestionParts.Add(CompositeItemType.Validity, new CompositeCollection<ICompositeEntity>());
+                    compositeQuestionParts.Add(CompositeItemType.Comments, new CompositeCollection<ICompositeEntity>());
+                    compositeQuestionParts.Add(CompositeItemType.AnsweringProgress, new CompositeCollection<ICompositeEntity>());
 
                     if (compositeItem.QuestionState.Enablement.Enabled)
-                        AddCompositeItemsOfQuestionToCollection(compositeItem, questionCompositeCollection);
+                        OnEnablementChanged(compositeQuestionParts, compositeItem);
 
                     compositeItem.QuestionState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                        OnEnablementChanged(allVisibleGroupItems, questionCompositeCollection, compositeItem);
+                        OnEnablementChanged(compositeQuestionParts, compositeItem);
                     };
 
-                    allVisibleGroupItems.AddCollection(questionCompositeCollection);
-
-                    allVisibleGroupItems.Add(compositeItem.Answering);
+                    compositeQuestionParts.Values.ForEach(x => allVisibleGroupItems.AddCollection(x));
                     allVisibleGroupItems.Add(new QuestionDivider());
                 }
                 else if (rosterViewModel != null)
@@ -59,39 +71,55 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return allVisibleGroupItems;
         }
 
-        private static void AddCompositeItemsOfQuestionToCollection(ICompositeQuestion compositeItem, CompositeCollection<ICompositeEntity> collection)
-        {
-            if (compositeItem.InstructionViewModel.HasInstructions)
-                collection.Add(compositeItem.InstructionViewModel);
-
-            collection.Add(compositeItem);
-
-            var compositeItemWithChildren = compositeItem as ICompositeQuestionWithChildren;
-            if (compositeItemWithChildren != null)
-                collection.AddCollection(compositeItemWithChildren.Children);
-
-            collection.Add(compositeItem.QuestionState.Validity);
-
-            collection.Add(compositeItem.QuestionState.Comments);
-        }
-
-        private void OnEnablementChanged(CompositeCollection<ICompositeEntity> allVisibleGroupItems, 
-            CompositeCollection<ICompositeEntity> questionItemsCollection,
-            ICompositeQuestion compositeItem)
+        private void OnEnablementChanged(Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>> itemCompositeCollections, ICompositeQuestion compositeQuestion)
         {
             this.mainThreadDispatcher.RequestMainThreadAction(() =>
             {
-                var isViewModelInCollection = questionItemsCollection.Contains(compositeItem);
-
-                if (compositeItem.QuestionState.Enablement.Enabled && !isViewModelInCollection)
-                    AddCompositeItemsOfQuestionToCollection(compositeItem, questionItemsCollection);
-
-                if (!compositeItem.QuestionState.Enablement.Enabled && isViewModelInCollection)
+                if (!compositeQuestion.QuestionState.Enablement.Enabled)
                 {
-                    questionItemsCollection.Clear();
-                    allVisibleGroupItems.NotifyItemChanged(compositeItem.QuestionState.Header);
+                    foreach (var itemCompositeCollection in itemCompositeCollections)
+                    {
+                        if (itemCompositeCollection.Key == CompositeItemType.Title &&
+                            !compositeQuestion.QuestionState.Enablement.HideIfDisabled) continue;
+
+                        itemCompositeCollection.Value.Clear();
+                    }
                 }
+                else
+                {
+                    itemCompositeCollections[CompositeItemType.Title].Add(compositeQuestion.QuestionState.Header);
+
+                    if (itemCompositeCollections.ContainsKey(CompositeItemType.Instruction))
+                    {
+                        itemCompositeCollections[CompositeItemType.Instruction].Add(compositeQuestion.InstructionViewModel);
+                    }
+                        
+                    itemCompositeCollections[CompositeItemType.Self].Add(compositeQuestion);
+
+                    if (itemCompositeCollections.ContainsKey(CompositeItemType.Childrens))
+                    {
+                        var compositeItemWithChildren = compositeQuestion as ICompositeQuestionWithChildren;
+                        if (compositeItemWithChildren != null)
+                            itemCompositeCollections[CompositeItemType.Childrens].AddCollection(compositeItemWithChildren.Children);
+                    }
+                        
+                    itemCompositeCollections[CompositeItemType.Validity].Add(compositeQuestion.QuestionState.Validity);
+                    itemCompositeCollections[CompositeItemType.Comments].Add(compositeQuestion.QuestionState.Comments);
+                    itemCompositeCollections[CompositeItemType.AnsweringProgress].Add(compositeQuestion.Answering);
+                }
+
             });
+        }
+
+        private enum CompositeItemType
+        {
+            Self = 1,
+            Childrens,
+            Validity,
+            Comments,
+            Instruction,
+            AnsweringProgress,
+            Title
         }
     }
 }
