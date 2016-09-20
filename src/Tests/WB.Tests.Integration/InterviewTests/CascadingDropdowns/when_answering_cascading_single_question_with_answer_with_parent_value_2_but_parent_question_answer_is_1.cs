@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             });
 
         It should_throw_InterviewException = () =>
-            results.ExceptionType.ShouldEqual(typeof(InterviewException));
+            results.ExceptionType.ShouldEqual(typeof(AnswerNotAcceptedException));
 
         It should_throw_exception_with_message_containting__answer____parent_value____incorrect__ = () =>
             new[] { "answer", "parent value", "do not correspond" }.ShouldEachConformTo(
