@@ -2841,7 +2841,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IEnumerable<decimal> rosterInstanceIds = selectedValues.ToList();
 
-            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = new Dictionary<decimal, int?>();
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes;
             if (!questionnaire.ShouldQuestionRecordAnswersOrder(questionId))
             {
                 rosterInstanceIdsWithSortIndexes = selectedValues.ToDictionary(
@@ -2850,11 +2850,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
-                for (int i = 0; i < selectedValues.Length; i++)
-                {
-                    var selectedValue = selectedValues[i];
-                    rosterInstanceIdsWithSortIndexes[selectedValue] = i;
-                }
+                int? orderPosition = 0;
+                rosterInstanceIdsWithSortIndexes = rosterInstanceIds.ToDictionary(
+                    selectedValue => selectedValue,
+                    selectedValue => orderPosition++);
             }
 
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
