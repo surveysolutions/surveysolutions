@@ -4,13 +4,14 @@ using System.Linq;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -19,10 +20,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class InterviewEventHandlerFunctionalTestContext
     {
-        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(QuestionnaireRosterStructure rosterStructure = null, UserDocument user = null)
+        protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null, UserDocument user = null)
         {
-            var questionnaireRosterStructureMockStorage = new Mock<IQuestionnaireRosterStructureStorage>();
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaireRosterStructure(It.IsAny<QuestionnaireIdentity>())).Returns(rosterStructure);
+
+            var scopes = rosterScopes ?? new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
+            var questionnaireMock = new Mock<IQuestionnaire>();
+            questionnaireMock.Setup(x => x.GetRosterScopes()).Returns(scopes);
+
+            var questionnaireRosterStructureMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>())).Returns(questionnaireMock.Object);
 
             var userDocumentMockStorage = new Mock<IPlainStorageAccessor<UserDocument>>();
             userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);
@@ -33,38 +39,38 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 questionnaireRosterStructureMockStorage.Object);
         }
 
-        protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
+        protected static Dictionary<ValueVector<Guid>, RosterScopeDescription> CreateQuestionnaireRosterScopes(Guid scopeId,
             Dictionary<Guid, Guid?> rosterGroupsWithTitleQuestionPairs)
         {
-            var rosterStructure = new QuestionnaireRosterStructure();
+            var rosterScopes = new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
             var scopeVector = new ValueVector<Guid>(new[] { scopeId });
             var rosterDescription = new RosterScopeDescription(scopeVector, string.Empty, RosterScopeType.Fixed,
                 rosterGroupsWithTitleQuestionPairs.ToDictionary(roster => roster.Key,
                     roster => roster.Value.HasValue ? new RosterTitleQuestionDescription(roster.Value.Value) : null));
 
-            rosterStructure.RosterScopes.Add(scopeVector, rosterDescription);
-            return rosterStructure;
+            rosterScopes.Add(scopeVector, rosterDescription);
+            return rosterScopes;
         }
 
-        protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
+        protected static Dictionary<ValueVector<Guid>, RosterScopeDescription> CreateQuestionnaireRosterScopes(Guid scopeId,
            Dictionary<Guid, RosterTitleQuestionDescription> rosterGroupsWithTitleQuestionPairs)
         {
-            var rosterStructure = new QuestionnaireRosterStructure();
+            var rosterScopes = new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
             var scopeVector = new ValueVector<Guid>(new [] { scopeId });
             var rosterDescription = new RosterScopeDescription(scopeVector, string.Empty, RosterScopeType.Fixed, rosterGroupsWithTitleQuestionPairs);
 
-            rosterStructure.RosterScopes.Add(scopeVector, rosterDescription);
-            return rosterStructure;
+            rosterScopes.Add(scopeVector, rosterDescription);
+            return rosterScopes;
         }
 
-        protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId, params Guid[] groupIdsFromScope)
+        protected static Dictionary<ValueVector<Guid>, RosterScopeDescription> CreateQuestionnaireRosterScopes(Guid scopeId, params Guid[] groupIdsFromScope)
         {
-            var rosterStructure = new QuestionnaireRosterStructure();
+            var rosterScopes = new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
             var scopeVector = new ValueVector<Guid>(new[] { scopeId });
             var rosterGroupsWithTitleQuestionPairs = groupIdsFromScope.ToDictionary<Guid, Guid, RosterTitleQuestionDescription>(groupId => groupId, groupId => null);
             var rosterDescription = new RosterScopeDescription(scopeVector, string.Empty, RosterScopeType.Fixed, rosterGroupsWithTitleQuestionPairs);
-            rosterStructure.RosterScopes.Add(scopeVector, rosterDescription);
-            return rosterStructure;
+            rosterScopes.Add(scopeVector, rosterDescription);
+            return rosterScopes;
         }
 
         protected static InterviewData CreateViewWithSequenceOfInterviewData()

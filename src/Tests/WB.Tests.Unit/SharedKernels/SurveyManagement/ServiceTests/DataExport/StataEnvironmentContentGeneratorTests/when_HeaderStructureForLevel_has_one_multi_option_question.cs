@@ -6,10 +6,8 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
@@ -22,15 +20,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     Create.Entity.MultyOptionsQuestion(id: Guid.NewGuid(), variable: questionsVariableName,
                         options: new[] { Create.Entity.Option("1", "one"), Create.Entity.Option("3", "three") });
             multiOptionQuestion.QuestionText = questionsTitle;
-            var questionnaire = Create.Entity.QuestionnaireDocument(children: new[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
             {
                 multiOptionQuestion
             });
-            questionnaire.Title = dataFileName;
+            questionnaireDocument.Title = dataFileName;
 
+            var questionnaire = new PlainQuestionnaire(questionnaireDocument, 1, null);
             var fileSystemAccessor = CreateFileSystemAccessor((c) => stataGeneratedContent = c);
-             questionnaireExportStructure = new ExportViewFactory(new QuestionnaireRosterStructureFactory(), fileSystemAccessor, new ExportQuestionService())
-                .CreateQuestionnaireExportStructure(questionnaire, 1);
+             questionnaireExportStructure = new ExportViewFactory(fileSystemAccessor, new ExportQuestionService(),
+                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire &&
+                                                        _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument))
+                .CreateQuestionnaireExportStructure(new QuestionnaireIdentity());
 
             stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(fileSystemAccessor);
         };

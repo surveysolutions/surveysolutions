@@ -5,10 +5,14 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -21,11 +25,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireDocument =
                 Create.Entity.QuestionnaireDocument(children: Create.Entity.GpsCoordinateQuestion(questionId: gpsQuestionId, variable:"gps", label:"gps label"));
 
-            exportViewFactory = CreateExportViewFactory();
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaireDocument, 1, null));
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
         };
 
         Because of = () =>
-            gpsExportedHeaderItem = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1).HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId];
+            gpsExportedHeaderItem = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1).HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId];
 
         It should_create_header_with_5_columns_wich_corresponds_to_gps_properties = () =>
             gpsExportedHeaderItem.ColumnNames.ShouldEqual(new[] { "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude" , "gps__Timestamp"});

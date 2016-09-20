@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
@@ -21,21 +20,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 {
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
-        private readonly IQuestionnaireRosterStructureStorage questionnaireRosterStructureStorage;
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         public InterviewSynchronizationDtoFactory(
             IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
-            IQuestionnaireRosterStructureStorage questionnaireRosterStructureStorage, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
             IQuestionnaireStorage questionnaireStorage)
         {
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
             
             this.interviewsRepository = interviewsRepository;
-            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.questionnaireStorage = questionnaireStorage;
         }
@@ -68,10 +64,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
-            var questionnariePropagationStructure =
-                this.questionnaireRosterStructureStorage.GetQuestionnaireRosterStructure(
-                    new QuestionnaireIdentity(interview.QuestionnaireId,interview.QuestionnaireVersion));
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(
+                    new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion), null);
 
+            var rosterScopes = questionnaire.GetRosterScopes();
+            
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)
             {
@@ -125,8 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     }
                 }
 
-                this.FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,
-                    propagatedGroupInstanceCounts);
+                this.FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(rosterScopes, interviewLevel, propagatedGroupInstanceCounts);
             }
 
             if (!interviewerAssignedDateTime.HasValue)
@@ -228,7 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         }
 
         private void FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(
-            QuestionnaireRosterStructure questionnarieRosterStructure, InterviewLevel interviewLevel,
+            Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes, InterviewLevel interviewLevel,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> propagatedGroupInstanceCounts)
         {
             if (interviewLevel.RosterVector.Length == 0)
@@ -238,7 +234,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             foreach (var scopeId in interviewLevel.ScopeVectors)
             {
-                foreach (var groupId in questionnarieRosterStructure.RosterScopes[scopeId.Key].RosterIdToRosterTitleQuestionIdMap.Keys)
+                foreach (var groupId in rosterScopes[scopeId.Key].RosterIdToRosterTitleQuestionIdMap.Keys)
                 {
                     var groupKey = new InterviewItemId(groupId, outerVector);
 

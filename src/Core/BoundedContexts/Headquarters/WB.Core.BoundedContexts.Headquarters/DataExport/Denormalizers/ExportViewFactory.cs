@@ -19,7 +19,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
-using WB.Core.SharedKernels.DataCollection.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
@@ -27,40 +28,46 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
     {
         private const string GeneratedTitleExportFormat = "{0}__{1}";
         
-        private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExportQuestionService exportQuestionService;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public ExportViewFactory(
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, 
             IFileSystemAccessor fileSystemAccessor,
-            IExportQuestionService exportQuestionService)
+            IExportQuestionService exportQuestionService,
+            IQuestionnaireStorage questionnaireStorage)
         {
-            this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportQuestionService = exportQuestionService;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
-        public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, long version)
+        public QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid id, long version)
+        {
+            return CreateQuestionnaireExportStructure(new QuestionnaireIdentity(id, version));
+        }
+
+        public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireIdentity id)
         {
             var result = new QuestionnaireExportStructure();
-            result.QuestionnaireId = questionnaire.PublicKey;
-            result.Version = version;
 
+            result.QuestionnaireId = id.QuestionnaireId;
+            result.Version = id.Version;
+
+            var rosterScopes = this.questionnaireStorage.GetQuestionnaire(id, null).GetRosterScopes();
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(id);
             questionnaire.ConnectChildrenWithParent();
 
             var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
-            var questionnaireLevelStructure = this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaire,
-                version);
 
             result.HeaderToLevelMap.Add(new ValueVector<Guid>(),
-                this.BuildHeaderByTemplate(questionnaire, new ValueVector<Guid>(), questionnaireLevelStructure,
-                    maxValuesForRosterSizeQuestions));
+                this.BuildHeaderByTemplate(questionnaire, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
 
-            foreach (var rosterScopeDescription in questionnaireLevelStructure.RosterScopes)
+            foreach (var rosterScopeDescription in rosterScopes)
             {
                 result.HeaderToLevelMap.Add(rosterScopeDescription.Key,
-                    this.BuildHeaderByTemplate(questionnaire, rosterScopeDescription.Key, questionnaireLevelStructure, maxValuesForRosterSizeQuestions));
+                    this.BuildHeaderByTemplate(questionnaire, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
             }
 
             return result;
@@ -371,10 +378,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         }
 
         private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, ValueVector<Guid> levelVector,
-            QuestionnaireRosterStructure questionnaireLevelStructure,
-            Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
+            Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes, Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            var rootGroups = this.GetRootGroupsForLevel(questionnaire, questionnaireLevelStructure, levelVector);
+            var rootGroups = this.GetRootGroupsForLevel(questionnaire, rosterScopes, levelVector);
 
             if (!rootGroups.Any())
                 throw new InvalidOperationException("level is absent in template");
@@ -385,18 +391,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, questionnaire,
                 maxValuesForRosterSizeQuestions, levelVector);
 
-            if (questionnaireLevelStructure.RosterScopes.ContainsKey(levelVector) &&
-                questionnaireLevelStructure.RosterScopes[levelVector].ScopeType == RosterScopeType.TextList)
+            if (rosterScopes.ContainsKey(levelVector) &&
+                rosterScopes[levelVector].Type == RosterScopeType.TextList)
             {
                 structures.IsTextListScope = true;
-                structures.ReferencedNames = new string[] { questionnaireLevelStructure.RosterScopes[levelVector].ScopeTriggerName };
+                structures.ReferencedNames = new string[] { rosterScopes[levelVector].SizeQuestionTitle };
             }
 
             return structures;
         }
 
         private IEnumerable<IGroup> GetRootGroupsForLevel(QuestionnaireDocument questionnaire,
-            QuestionnaireRosterStructure questionnaireLevelStructure, ValueVector<Guid> levelVector)
+            Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes, ValueVector<Guid> levelVector)
         {
             if (!levelVector.Any())
             {
@@ -404,7 +410,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 yield break;
             }
 
-            var rootGroupsForLevel = this.GetRootGroupsByLevelIdOrThrow(questionnaireLevelStructure, levelVector);
+            var rootGroupsForLevel = this.GetRootGroupsByLevelIdOrThrow(rosterScopes, levelVector);
 
             foreach (var rootGroup in rootGroupsForLevel)
             {
@@ -412,13 +418,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             }
         }
 
-        private HashSet<Guid> GetRootGroupsByLevelIdOrThrow(QuestionnaireRosterStructure questionnaireLevelStructure,
+        private HashSet<Guid> GetRootGroupsByLevelIdOrThrow(Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes,
             ValueVector<Guid> levelVector)
         {
-            if (!questionnaireLevelStructure.RosterScopes.ContainsKey(levelVector))
+            if (!rosterScopes.ContainsKey(levelVector))
                 throw new InvalidOperationException("level is absent in template");
 
-            return new HashSet<Guid>(questionnaireLevelStructure.RosterScopes[levelVector].RosterIdToRosterTitleQuestionIdMap.Keys);
+            return new HashSet<Guid>(rosterScopes[levelVector].RosterIdToRosterTitleQuestionIdMap.Keys);
         }
 
         private void FillHeaderWithQuestionsInsideGroup(HeaderStructureForLevel headerStructureForLevel, IGroup @group,
