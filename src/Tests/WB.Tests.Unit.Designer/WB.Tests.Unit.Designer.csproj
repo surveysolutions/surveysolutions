@@ -411,6 +411,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_question_statictext_and_group_conditionally_enabled_by_future_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_question_with_very_short_title.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_text_email_question_without_validation.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_with_one_empty_section.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_attachments_and_total_size_greater_50MB.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_attachment_with_size_more_than_5Mb.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_question_with_option_filter_expression_about_10000_chars.cs" />

@@ -213,9 +213,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool TooManyQuestionsInGroup(IGroup group)
             => group.Children.OfType<IQuestion>().Count() > 200;
 
-        private static bool EmptyGroup(IGroup group)
+        private static bool EmptyGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => !group.IsRoster
-            && !group.Children.Any();
+            && !group.Children.Any() 
+            && questionnaire.Find<IGroup>().Count() > 1;
 
         private static bool FixedRosterContains3OrLessItems(IGroup group)
             => IsFixedRoster(group)
