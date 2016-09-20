@@ -75,6 +75,47 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         }
 
         [Test]
+        public void when_getting_inflated_composite_collection_with_disabled_question_and_hideifdisabled_is_true()
+        {
+            var disabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.TextQuestion(disabledQuestionIdentity.Id, hideIfDisabled: true)
+            }));
+
+            var questionnaireId = Guid.NewGuid();
+            string interviewId = "interview id";
+            var liteEventRegistry = Create.Service.LiteEventRegistry();
+            var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire, questionnaireId: questionnaireId);
+            var statefullInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
+            var questionnaireRepositoryWithOneQuestionnaire = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
+
+            var disabledQuestionViewModel = Create.ViewModel.TextQuestionViewModel(interviewRepository: statefullInterviewRepository,
+                eventRegistry: liteEventRegistry, questionnaireStorage: questionnaireRepositoryWithOneQuestionnaire);
+            disabledQuestionViewModel.Init(interviewId, disabledQuestionIdentity, Create.Other.NavigationState());
+
+            var listOfViewModels = new List<IInterviewEntityViewModel>
+            {
+                disabledQuestionViewModel
+            };
+
+            var compositeCollectionInflationService = CreateCompositeCollectionInflationService();
+
+            var inflatedViewModels = compositeCollectionInflationService.GetInflatedCompositeCollection(listOfViewModels);
+
+            var questionDisabledEvent = Create.Event.QuestionsDisabled(new[] { disabledQuestionIdentity });
+            statefulInterview.Apply(questionDisabledEvent);
+            disabledQuestionViewModel.QuestionState.Enablement.Handle(questionDisabledEvent);
+
+            Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.QuestionState.Header));
+            Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.QuestionState.Validity));
+            Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.InstructionViewModel));
+            Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.QuestionState.Comments));
+            Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel));
+            Assert.That(inflatedViewModels, !Contains.Item(disabledQuestionViewModel.Answering));
+        }
+
+        [Test]
         public void when_getting_inflated_composite_collection_with_1_valid_question_and_1_invalid()
         {
             var invalidQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
@@ -158,7 +199,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             var inflatedViewModels = compositeCollectionInflationService.GetInflatedCompositeCollection(listOfViewModels);
 
             questionWithProgressQuestionViewModel.Answering.StartInProgressIndicator();
-            
+
+            Assert.That(inflatedViewModels, Contains.Item(questionWithoutProgressViewModel.Answering));
             Assert.That(inflatedViewModels, Contains.Item(questionWithProgressQuestionViewModel.Answering));
         }
 
