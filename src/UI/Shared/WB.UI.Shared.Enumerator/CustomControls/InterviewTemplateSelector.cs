@@ -70,19 +70,29 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return Resource.Layout.interview_question_option_rounded_corner;
                 }
             }
-            
-            var enablementModel = this.GetEnablementViewModel(source);
 
-            if (enablementModel != null && !enablementModel.Enabled)
+            var disabledViewModelTypes = new[]
             {
-                if (typeOfViewModel == typeof(QuestionHeaderViewModel))
-                    return Resource.Layout.interview_disabled_question;
+                typeof(QuestionHeaderViewModel),
+                typeof(GroupViewModel),
+                typeof(StaticTextViewModel)
+            };
 
-                if (typeOfViewModel == typeof(GroupViewModel))
-                    return Resource.Layout.interview_disabled_group;
+            if (disabledViewModelTypes.Contains(source.GetType()))
+            {
+                var enablementModel = this.GetEnablementViewModel(source) ?? (EnablementViewModel)((dynamic)source).Enablement;
 
-                if (typeOfViewModel == typeof(StaticTextViewModel))
-                    return Resource.Layout.interview_disabled_static_text;
+                if (enablementModel != null && !enablementModel.Enabled)
+                {
+                    if (typeOfViewModel == typeof(QuestionHeaderViewModel))
+                        return Resource.Layout.interview_disabled_question;
+
+                    if (typeOfViewModel == typeof(GroupViewModel))
+                        return Resource.Layout.interview_disabled_group;
+
+                    if (typeOfViewModel == typeof(StaticTextViewModel))
+                        return Resource.Layout.interview_disabled_static_text;
+                }
             }
 
 
