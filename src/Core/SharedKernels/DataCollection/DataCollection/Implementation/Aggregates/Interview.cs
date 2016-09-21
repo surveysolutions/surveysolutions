@@ -1022,7 +1022,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new Identity(synchronizationIdentity.Id, synchronizationIdentity.InterviewItemRosterVector);
         }
 
-        private Identity GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
+        private static Identity GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
             RosterVector rosterVector, IQuestionnaire questionnare)
         {
             int vectorRosterLevel = rosterVector.Length;
@@ -1030,8 +1030,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionRosterLevel > vectorRosterLevel)
                 throw new InterviewException(string.Format(
-                    "Question {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel, EventSourceId));
+                    "Question {0} expected to have roster level not deeper than {1} but it is {2}.",
+                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
 
             decimal[] questionRosterVector = rosterVector.Shrink(questionRosterLevel);
 
@@ -2430,7 +2430,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
-            ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(this.interviewState, answeredQuestion, rosterVector, selectedValue, questionnaire);
+            treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(answeredQuestion, selectedValue, questionnaire);
             if (applyStrongChecks)
             {
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
@@ -4054,30 +4054,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnaire), value, EventSourceId));
         }
 
-        private void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(IReadOnlyInterviewStateDependentOnAnswers interviewState, Identity answeredQuestion, RosterVector rosterVector, decimal value, IQuestionnaire questionnaire)
-        {
-            var questionId = answeredQuestion.Id;
-            Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
-
-            if (!cascadingId.HasValue) return;
-
-            decimal childParentValue = questionnaire.GetCascadingParentValue(questionId, value);
-
-            var questionIdentity = GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingId.Value, rosterVector, questionnaire);
-
-            if (!interviewState.WasQuestionAnswered(questionIdentity))
-                return;
-
-            object answer = interviewState.GetAnswerSupportedInExpressions(questionIdentity);
-            string parentAnswer = AnswerUtils.AnswerToString(answer);
-
-            var answerNotExistsInParent = Convert.ToInt32(Convert.ToDecimal(parentAnswer, CultureInfo.InvariantCulture)) != childParentValue;
-            if (answerNotExistsInParent)
-                throw new AnswerNotAcceptedException(string.Format(
-                    "For question {0} was provided selected value {1} as answer with parent value {2}, but this do not correspond to the parent answer selected value {3}. InterviewId: {4}",
-                    FormatQuestionForException(questionId, questionnaire), value, childParentValue, parentAnswer, EventSourceId));
-        }
-
         private void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(questionId);
@@ -4631,8 +4607,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState = null)
         {
-            var tree = new InterviewTree(this.EventSourceId);
+            var sections = this.BuildInterviewTreeSections(questionnaire, interviewState).ToList();
 
+            return new InterviewTree(this.EventSourceId, sections);
+        }
+
+        private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        {
             var sectionIds = questionnaire.GetAllSections();
 
             foreach (var sectionId in sectionIds)
@@ -4640,10 +4621,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var sectionIdentity = new Identity(sectionId, RosterVector.Empty);
                 var section = this.BuildInterviewTreeSection(sectionIdentity, questionnaire, interviewState);
 
-                tree.Sections.Add(section);
+                yield return section;
             }
-
-            return tree;
         }
 
         private InterviewTreeSection BuildInterviewTreeSection(Identity sectionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
@@ -4677,14 +4656,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isDisabled = interviewState.IsQuestionDisabled(questionIdentity);
             string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
+            object answer = interviewState.GetAnswerSupportedInExpressions(questionIdentity);
             IReadOnlyCollection<RosterVector> linkedOptions = interviewState.GetOptionsForLinkedQuestion(questionIdentity);
+
+            Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
+            var cascadingParentQuestionIdentity = cascadingParentQuestionId.HasValue
+                ? GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingParentQuestionId.Value, questionIdentity.RosterVector, questionnaire)
+                : null;
 
             return new InterviewTreeQuestion(
                 questionIdentity,
                 isDisabled: isDisabled,
                 title: title,
                 variableName: variableName,
-                linkedOptions: linkedOptions);
+                answer: answer,
+                linkedOptions: linkedOptions,
+                cascadingParentQuestionIdentity: cascadingParentQuestionIdentity);
         }
 
         private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
@@ -59,7 +60,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Answer on linked categorical question {question.FormatForException()} cannot be saved. " +
                     $"Specified option {option} is absent. " +
                     $"Available options: {string.Join(", ", options)}. " +
-                    $"InterviewId: {this.InterviewTree.InterviewId}.");
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+        }
+
+        public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer,
+            IQuestionnaire questionnaire) // TODO: KP-7836 get rid of questionnaire here and use options repository an injected service
+        {
+            var cascadingQuestion = this.InterviewTree.GetQuestion(cascadingQuestionIdentity);
+
+            if (!cascadingQuestion.IsCascading())
+                return;
+
+            int answerParentValue = questionnaire.GetCascadingParentValue(cascadingQuestionIdentity.Id, answer);
+
+            var parentQuestion = cascadingQuestion.GetCascadingParentQuestion();
+
+            if (!parentQuestion.IsAnswered())
+                return;
+
+            int actualParentValue = parentQuestion.GetIntegerAnswer();
+
+            if (answerParentValue != actualParentValue)
+                throw new AnswerNotAcceptedException(
+                    $"For question {cascadingQuestion.FormatForException()} was provided " + 
+                    $"selected value {answer} as answer with parent value {answerParentValue}, " +
+                    $"but this do not correspond to the parent answer selected value {actualParentValue}. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
     }
 }
