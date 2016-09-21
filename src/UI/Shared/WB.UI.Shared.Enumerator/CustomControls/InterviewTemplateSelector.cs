@@ -84,6 +84,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
                 if (enablementModel != null && !enablementModel.Enabled)
                 {
+                    if (enablementModel.HideIfDisabled) return UnknownViewType;
+
                     if (typeOfViewModel == typeof(QuestionHeaderViewModel))
                         return Resource.Layout.interview_disabled_question;
 
