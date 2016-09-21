@@ -51,6 +51,7 @@
     <Compile Include="CommandBus\CommandServiceException.cs" />
     <Compile Include="CommandBus\ICommand.cs" />
     <Compile Include="CommandBus\ICommandService.cs" />
+    <Compile Include="CommandBus\ICommandPostProcessor.cs" />
     <Compile Include="CommandBus\ICommandValidator.cs" />
     <Compile Include="CommandBus\Implementation\AggregateKind.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
