@@ -445,7 +445,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue) => this.GetAnswerOption(questionId, answerOptionValue).Title;
 
-        public decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
+        public int GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
         {
             var answerOption = this.GetAnswerOption(questionId, answerOptionValue);
             if (!answerOption.ParentValue.HasValue)
