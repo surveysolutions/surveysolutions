@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
     public class CompositeCollectionTests
     {
         [Test]
-        public void when_clearing_child_collection_should_raise_items_removed_event()
+        public void when_clearing_child_collection_should_raise_items_reset_event()
         {
             CompositeCollection<string> items = new CompositeCollection<string>();
 
@@ -23,8 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             childCollection.Clear();
 
             Assert.That(collectionChangedArgs, Is.Not.Null);
-            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
-            Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(1));
+            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
         }
 
         [Test]
