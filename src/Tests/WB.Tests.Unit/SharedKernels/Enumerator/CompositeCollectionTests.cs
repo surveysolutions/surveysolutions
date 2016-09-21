@@ -45,5 +45,25 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(1));
             Assert.That(collectionChangedArgs.NewStartingIndex, Is.EqualTo(1));
         }
+
+        [Test]
+        public void when_adding_child_collection_should_raise_collection_changed_with_new_item_in_args()
+        {
+            CompositeCollection<string> items = new CompositeCollection<string>();
+            items.Add("zero");
+            var childCollection = new CompositeCollection<string> { "one", "two" };
+            items.AddCollection(childCollection);
+            items.Add("four");
+
+            NotifyCollectionChangedEventArgs collectionChangedArgs = null;
+            items.CollectionChanged += (sender, args) => collectionChangedArgs = args;
+
+            // act
+            childCollection.AddCollection(new CovariantObservableCollection<string> { "three"} );
+
+            // assert
+            Assert.That(collectionChangedArgs.NewItems[0], Is.InstanceOf(typeof(string)));
+            Assert.That(collectionChangedArgs.NewStartingIndex, Is.EqualTo(3));
+        }
     }
 }

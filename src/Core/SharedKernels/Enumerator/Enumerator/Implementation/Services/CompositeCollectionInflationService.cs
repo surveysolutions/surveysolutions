@@ -26,20 +26,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             foreach (var interviewEntityViewModel in newGroupItems)
             {
-                var compositeItem = interviewEntityViewModel as ICompositeQuestion;
+                var compositeQuestion = interviewEntityViewModel as ICompositeQuestion;
                 var rosterViewModel = interviewEntityViewModel as RosterViewModel;
-                if (compositeItem != null)
+                if (compositeQuestion != null)
                 {
                     var compositeQuestionParts = new Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>>();
 
                     compositeQuestionParts.Add(CompositeItemType.Title,  new CompositeCollection<ICompositeEntity>());
 
-                    if (compositeItem.InstructionViewModel.HasInstructions)
+                    if (compositeQuestion.InstructionViewModel.HasInstructions)
                         compositeQuestionParts.Add(CompositeItemType.Instruction, new CompositeCollection<ICompositeEntity>());
 
                     compositeQuestionParts.Add(CompositeItemType.Self, new CompositeCollection<ICompositeEntity>());
 
-                    var compositeItemWithChildren = compositeItem as ICompositeQuestionWithChildren;
+                    var compositeItemWithChildren = compositeQuestion as ICompositeQuestionWithChildren;
                     if (compositeItemWithChildren != null)
                         compositeQuestionParts.Add(CompositeItemType.Childrens, new CompositeCollection<ICompositeEntity>());
 
@@ -51,12 +51,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         .OrderBy(x => x.Type)
                         .ForEach(x => allVisibleGroupItems.AddCollection(x.CompositeCollection));
 
-                    this.OnEnablementChanged(compositeQuestionParts, compositeItem, allVisibleGroupItems);
+                    this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
 
-                    compositeItem.QuestionState.Enablement.PropertyChanged += (sender, e) =>
+                    compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                        OnEnablementChanged(compositeQuestionParts, compositeItem, allVisibleGroupItems);
+                        OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
                     };
 
                 }
@@ -75,7 +75,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         private void OnEnablementChanged(
             Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>> itemCompositeCollections,
-            ICompositeQuestion compositeQuestion, CompositeCollection<ICompositeEntity> allVisibleGroupItems)
+            ICompositeQuestion compositeQuestion, 
+            CompositeCollection<ICompositeEntity> allVisibleGroupItems)
         {
             this.mainThreadDispatcher.RequestMainThreadAction(() =>
             {
