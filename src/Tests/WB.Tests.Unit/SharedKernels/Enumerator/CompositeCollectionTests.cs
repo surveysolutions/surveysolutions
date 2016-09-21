@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             childCollection.AddCollection(new CovariantObservableCollection<string> { "three"} );
 
             // assert
-            Assert.That(collectionChangedArgs.NewItems[0], Is.InstanceOf(typeof(string)));
+            Assert.That(collectionChangedArgs.NewItems[0], Is.EqualTo("three"));
             Assert.That(collectionChangedArgs.NewStartingIndex, Is.EqualTo(3));
         }
     }
