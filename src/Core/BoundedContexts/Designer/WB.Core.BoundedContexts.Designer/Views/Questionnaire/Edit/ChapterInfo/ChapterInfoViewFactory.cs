@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 ItemId = question.PublicKey.FormatGuid(),
                 Title = question.QuestionText,
                 Variable = question.StataExportCaption,
-                HasCondition = string.IsNullOrWhiteSpace(question.ConditionExpression),
+                HasCondition = !string.IsNullOrWhiteSpace(question.ConditionExpression),
                 HasValidation = question.ValidationConditions.Count > 0,
                 Type = question.QuestionType,
                 LinkedToQuestionId = question.LinkedToQuestionId?.FormatGuid(),
