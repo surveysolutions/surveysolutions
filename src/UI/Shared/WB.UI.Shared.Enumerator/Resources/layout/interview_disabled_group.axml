@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:local="http://schemas.android.com/apk/res-auto"
-             style="@style/Interview_DisabledQuestionWithDivider">
-  <LinearLayout style="@style/Interview_Group">
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
-      <Button style="@style/Interview_Group_Button" 
-              local:MvxBind="TextFormatted SpannableGroupTitle(IsRoster, GroupTitle.PlainText, RosterInstanceTitle); Enabled Enablement.Enabled;"/>
-    </LinearLayout>
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+  <LinearLayout style="@style/Interview_Group"
+                android:background="@drawable/question_background_answered">
+    <Button style="@style/Interview_Group_Button"
+            local:MvxBind="TextFormatted SpannableGroupTitle(IsRoster, GroupTitle.PlainText, RosterInstanceTitle); Enabled Enablement.Enabled;"/>
   </LinearLayout>
+
+  <LinearLayout android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/question_background_disabled">
+  </LinearLayout>
+
   <View style="@style/Interview_Question_Divider" android:layout_gravity="bottom"/>
 </FrameLayout>
