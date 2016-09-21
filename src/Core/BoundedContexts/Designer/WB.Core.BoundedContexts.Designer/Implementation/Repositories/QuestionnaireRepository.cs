@@ -22,16 +22,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
         public Questionnaire Get(Guid aggregateId)
         {
-            var userDocument = this.questionnaireStorage.GetById(aggregateId.FormatGuid());
+            var questionnaireDocument = this.questionnaireStorage.GetById(aggregateId.FormatGuid());
             var questionnaire = this.serviceLocator.GetInstance<Questionnaire>();
-            questionnaire.Initialize(aggregateId, userDocument);
+            questionnaire.Initialize(aggregateId, questionnaireDocument);
             return questionnaire;
         }
 
         public void Save(Questionnaire aggregateRoot)
         {
-            var userDocument = aggregateRoot.QuestionnaireDocument;
-            this.questionnaireStorage.Store(userDocument, userDocument.PublicKey.FormatGuid());
+            var questionnaireDocument = aggregateRoot.QuestionnaireDocument;
+            this.questionnaireStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey.FormatGuid());
         }
     }
 }
