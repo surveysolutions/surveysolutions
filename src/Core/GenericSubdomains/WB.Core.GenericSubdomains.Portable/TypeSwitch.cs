@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
@@ -16,7 +18,9 @@ namespace WB.Core.GenericSubdomains.Portable
             var type = source.GetType();
             foreach (var entry in cases)
             {
-                if (entry.IsDefault || type == entry.Target)
+                if (entry.IsDefault 
+                    || type == entry.Target 
+                    || (entry.Target.GetTypeInfo().IsInterface && entry.Target.GetTypeInfo().IsAssignableFrom(type.GetTypeInfo())))
                 {
                     entry.Action(source);
                     break;

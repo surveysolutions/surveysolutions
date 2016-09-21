@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -34,7 +33,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.Aggregates;
-using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
+
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -248,18 +247,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument = e.QuestionnaireDocument;
         }
 
-        private void CloneGroup(GroupCloned e)
-        {
-            var group = new Group();
-            group.Title = System.Web.HttpUtility.HtmlDecode(e.GroupText);
-            group.VariableName = e.VariableName;
-            group.PublicKey = e.PublicKey;
-            group.Description = e.Description;
-            group.ConditionExpression = e.ConditionExpression;
-            group.HideIfDisabled = e.HideIfDisabled;
-
-            this.innerDocument.Insert(e.TargetIndex, group, e.ParentGroupPublicKey);
-        }
 
         internal void MarkGroupAsRoster(GroupBecameARoster e)
         {
@@ -328,140 +315,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
-        }
-
-
-        internal void CloneQuestion(QuestionCloned e)
-        {
-            IQuestion question =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        e.QuestionType,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.VariableLabel,
-                        e.ConditionExpression,
-                        e.HideIfDisabled,
-                        e.AnswerOrder,
-                        e.Featured,
-                        e.Capital,
-                        e.Instructions,
-                        e.Properties,
-                        e.Mask,
-                        e.Answers,
-                        e.LinkedToQuestionId,
-                        e.LinkedToRosterId,
-                        e.IsInteger,
-                        e.CountOfDecimalPlaces,
-                        e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers,
-                        e.MaxAnswerCount,
-                        e.IsFilteredCombobox,
-                        e.CascadeFromQuestionId,
-                        e.YesNoView,
-                        e.ValidationConditions,
-                        e.LinkedFilterExpression,
-                        e.IsTimestamp));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
-
-            if (e.Capital)
-                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
-        }
-
-        private void CloneNumericQuestion(NumericQuestionCloned e)
-        {
-            IQuestion question =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        QuestionType.Numeric,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.VariableLabel,
-                        e.ConditionExpression,
-                        e.HideIfDisabled,
-                        Order.AZ,
-                        e.Featured,
-                        e.Capital,
-                        e.Instructions,
-                        e.Properties,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.IsInteger,
-                        e.CountOfDecimalPlaces,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.ValidationConditions,
-                        null,
-                        false));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
-
-            if (e.Capital)
-                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
-        }
-
-
-        internal void CloneTextListQuestion(TextListQuestionCloned e)
-        {
-            IQuestion question =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        QuestionType.TextList,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.VariableLabel,
-                        e.ConditionExpression,
-                        e.HideIfDisabled,
-                        Order.AZ,
-                        false,
-                        false,
-                        e.Instructions,
-                        e.Properties,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.MaxAnswerCount,
-                        null,
-                        null,
-                        null,
-                        e.ValidationConditions,
-                        null,
-                        false));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Insert(e.TargetIndex, question, e.GroupId);
         }
 
         private void CreateNewQuestionnaire(NewQuestionnaireCreated e)
@@ -703,48 +556,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
-        internal void CloneQRBarcodeQuestion(QRBarcodeQuestionCloned e)
-        {
-            IQuestion question =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.QuestionId,
-                        QuestionType.QRBarcode,
-                        e.QuestionScope,
-                        e.Title,
-                        e.VariableName,
-                        e.VariableLabel,
-                        e.EnablementCondition,
-                        e.HideIfDisabled,
-                        Order.AZ,
-                        false,
-                        false,
-                        e.Instructions,
-                        e.Properties,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.ValidationConditions,
-                        null,
-                        false));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Insert(e.TargetIndex, question, e.ParentGroupId);
-        }
-
         internal void AddStaticText(StaticTextAdded e)
         {
             var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
@@ -770,18 +581,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
         }
 
-        internal void CloneStaticText(StaticTextCloned e)
-        {
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
-                text: e.Text, 
-                attachmentName: e.AttachmentName,
-                enablementCondition: e.EnablementCondition,
-                hideIfDisabled: e.HideIfDisabled,
-                validationConditions: e.ValidationConditions);
-
-            this.innerDocument.Insert(e.TargetIndex, staticText, e.ParentId);
-        }
-
         internal void DeleteStaticText(StaticTextDeleted e)
         {
             this.innerDocument.RemoveEntity(e.EntityId);   
@@ -799,12 +598,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var newVariable = this.questionnaireEntityFactory.CreateVariable(e);
             this.innerDocument.ReplaceEntity(oldVariable, newVariable);
 
-        }
-
-        internal void CloneVariable(VariableCloned e)
-        {
-            var variable = this.questionnaireEntityFactory.CreateVariable(e);
-            this.innerDocument.Insert(e.TargetIndex, variable, e.ParentId);
         }
 
         internal void DeleteVariable(VariableDeleted e)
@@ -1173,298 +966,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return replacementIdDictionary.ContainsKey(id.Value) ? replacementIdDictionary[id.Value] : id;
         }
 
-        private void FillGroup(Guid? parentGroupId, 
-            Guid responsibleId,
-            IGroup sourceGroup,
-            Guid sourceQuestionnaireId,
-            int targetIndex,
-            bool preserveVariableName,
-            Dictionary<Guid, Guid> replacementIdDictionary,
-            List<IEvent> events)
-        {
-           var groupId = replacementIdDictionary.ContainsKey(sourceGroup.PublicKey) ? replacementIdDictionary[sourceGroup.PublicKey] : Guid.NewGuid();
-
-           events.AddRange(this.CreateCloneGroupWithoutChildrenEvents(
-                groupId: groupId, 
-                responsibleId: responsibleId, 
-                parentGroupId: parentGroupId,
-                sourceGroupId: sourceGroup.PublicKey, 
-                title: sourceGroup.Title, 
-                targetIndex: targetIndex,
-                description: sourceGroup.Description, 
-                condition: sourceGroup.ConditionExpression,
-                hideIfDisabled: sourceGroup.HideIfDisabled,
-                isRoster: sourceGroup.IsRoster, 
-                rosterSizeSource: sourceGroup.RosterSizeSource,
-                rosterSizeQuestionId: GetIdOrReturnSameId(replacementIdDictionary, sourceGroup.RosterSizeQuestionId),
-                rosterTitleQuestionId: GetIdOrReturnSameId(replacementIdDictionary, sourceGroup.RosterTitleQuestionId),
-                rosterFixedTitles: sourceGroup.FixedRosterTitles,
-                variableName: preserveVariableName ? sourceGroup.VariableName : null,
-                sourceQuestionnaireId : sourceQuestionnaireId));
-
-            foreach (var questionnaireItem in sourceGroup.Children)
-            {
-                var itemId = replacementIdDictionary.ContainsKey(questionnaireItem.PublicKey) ? replacementIdDictionary[questionnaireItem.PublicKey] : Guid.NewGuid(); 
-                var sourceItemId = questionnaireItem.PublicKey;
-                var itemTargetIndex = sourceGroup.Children.IndexOf(questionnaireItem);
-
-                var @group = questionnaireItem as IGroup;
-                if (@group != null)
-                {
-                    this.FillGroup( 
-                        parentGroupId: groupId, 
-                        responsibleId: responsibleId,
-                        sourceGroup: @group,
-                        sourceQuestionnaireId: sourceQuestionnaireId,
-                        targetIndex: itemTargetIndex,
-                        preserveVariableName : preserveVariableName,
-                        replacementIdDictionary: replacementIdDictionary,
-                        events: events);
-                    continue;
-                }
-
-                var question = questionnaireItem as IQuestion;
-                if (question != null)
-                {
-                    var variableName = preserveVariableName ? question.StataExportCaption: string.Empty;
-                    var variableLabel = question.VariableLabel;
-                    var title = question.QuestionText;
-                    var enablementCondition = question.ConditionExpression;
-                    var hideIfDisabled = question.HideIfDisabled;
-                    var instructions = question.Instructions;
-
-                    var numericQuestion = question as INumericQuestion;
-                    if (numericQuestion != null)
-                    {
-                        events.AddRange(this.CreateNumericQuestionCloneEvents(questionId: itemId, 
-                            targetIndex: itemTargetIndex,
-                            variableName: variableName, 
-                            variableLabel: variableLabel, 
-                            parentGroupId: groupId,
-                            title: title,
-                            isPreFilled: numericQuestion.Featured,
-                            scope: numericQuestion.QuestionScope, 
-                            enablementCondition: enablementCondition,
-                            hideIfDisabled: hideIfDisabled,
-                            validationExpression: null,
-                            validationMessage: null, 
-                            instructions: instructions,
-                            properties: question.Properties,
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId:sourceQuestionnaireId,
-                            responsibleId: responsibleId,
-                            isInteger: numericQuestion.IsInteger,
-                            useFormatting: numericQuestion.UseFormatting,
-                            countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces,
-                            validationConditions: numericQuestion.ValidationConditions));
-                        continue;
-                    }
-
-                    var textListQuestion = question as ITextListQuestion;
-                    if (textListQuestion != null)
-                    {
-                        events.AddRange(this.CreateTextListQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
-                            title: title,
-                            enablementCondition: enablementCondition, 
-                            hideIfDisabled: hideIfDisabled,
-                            instructions: instructions,
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId,
-                            responsibleId: responsibleId,
-                            scope : textListQuestion.QuestionScope,
-                            maxAnswerCount: textListQuestion.MaxAnswerCount,
-                            validationConditions: textListQuestion.ValidationConditions));
-                        continue;
-                    }
-
-                    var qrBarcodeQuestion = question as IQRBarcodeQuestion;
-                    if (qrBarcodeQuestion != null)
-                    {
-                        events.AddRange(this.CreateQrBarcodeQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
-                            title: title,
-                            enablementCondition: enablementCondition, 
-                            hideIfDisabled: hideIfDisabled,
-                            instructions: instructions,
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId,
-                            scope: qrBarcodeQuestion.QuestionScope,
-                            responsibleId: responsibleId,
-                            validationConditions: qrBarcodeQuestion.ValidationConditions));
-                        continue;
-                    }
-
-                    var textQuestion = question as TextQuestion;
-                    if (textQuestion != null)
-                    {
-                        events.AddRange(this.CreateTextQuestionClonedEvents(questionId: itemId, 
-                            targetIndex: itemTargetIndex,
-                            variableName: variableName, 
-                            variableLabel: variableLabel,
-                            parentGroupId: groupId,
-                            title: title,
-                            enablementCondition: enablementCondition, 
-                            hideIfDisabled: hideIfDisabled,
-                            responsibleId: responsibleId,
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId, 
-                            instructions: instructions, 
-                            sourceProperties: textQuestion.Properties,
-                            mask: textQuestion.Mask,
-                            isPreFilled: textQuestion.Featured,
-                            scope: textQuestion.QuestionScope,
-                            validationConditions: textQuestion.ValidationConditions));
-                        continue;
-                    }
-
-                    var geoLocationQuestion = question as GpsCoordinateQuestion;
-                    if (geoLocationQuestion != null)
-                    {
-                        events.AddRange(this.CreateGeoLocationQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, variableLabel: variableLabel, title: title,
-                            enablementCondition: enablementCondition, 
-                            hideIfDisabled: hideIfDisabled,
-                            instructions: instructions,
-                            properties: geoLocationQuestion.Properties,
-                            parentGroupId: groupId, 
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId,
-                            responsibleId: responsibleId,
-                            scope: geoLocationQuestion.QuestionScope,
-                            featured: geoLocationQuestion.Featured,
-                            capital: geoLocationQuestion.Capital,
-                            validationConditions: geoLocationQuestion.ValidationConditions));
-                        continue;
-                    }
-
-                    var dateTitmeQuestion = question as DateTimeQuestion;
-                    if (dateTitmeQuestion != null)
-                    {
-                        events.AddRange(this.CreateDateTimeQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, variableLabel: variableLabel, title: title,
-                            hideIfDisabled: hideIfDisabled,
-                            enablementCondition: enablementCondition, 
-                            instructions: instructions,
-                            properties: dateTitmeQuestion.Properties,
-                            parentGroupId: groupId, 
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId,
-                            responsibleId: responsibleId, 
-                            scope: dateTitmeQuestion.QuestionScope,
-                            isPreFilled: dateTitmeQuestion.Featured,
-                            validationConditions: dateTitmeQuestion.ValidationConditions,
-                            isTimestamp: dateTitmeQuestion.IsTimestamp));
-                        continue;
-                    }
-
-                    var categoricalMultiQuestion = question as MultyOptionsQuestion;
-                    if (categoricalMultiQuestion != null)
-                    {
-                        events.AddRange(this.CreateCategoricalMultiAnswersQuestionClonedEvents(questionId: itemId,
-                            targetIndex: itemTargetIndex, variableName: variableName, 
-                            variableLabel: variableLabel,
-                            title: title,
-                            hideIfDisabled: hideIfDisabled,
-                            enablementCondition: enablementCondition, 
-                            parentGroupId: groupId,
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId,
-                            instructions: instructions, 
-                            properties: categoricalMultiQuestion.Properties,
-                            responsibleId: responsibleId,
-                            scope: categoricalMultiQuestion.QuestionScope,
-                            linkedToQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToQuestionId),
-                            linkedToRosterId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToRosterId),
-                            areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
-                            yesNoView: categoricalMultiQuestion.YesNoView,
-                            maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
-                            options:
-                                categoricalMultiQuestion.Answers.Select(
-                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
-                                    .ToArray(),
-                            validationConditions: categoricalMultiQuestion.ValidationConditions, linkedFilterExpression: categoricalMultiQuestion.LinkedFilterExpression));
-                        continue;
-                    }
-
-                    var categoricalSingleQuestion = question as SingleQuestion;
-                    if (categoricalSingleQuestion != null)
-                    {
-                        events.AddRange(this.CreateCategoricalSingleAnswerQuestionEvents(questionId: itemId,
-                            targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel,
-                            title: title, 
-                            hideIfDisabled: hideIfDisabled,
-                            enablementCondition: enablementCondition, 
-                            parentGroupId: groupId,
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId,
-                            instructions: instructions, 
-                            properties: categoricalSingleQuestion.Properties,
-                            responsibleId: responsibleId,
-                            scope: categoricalSingleQuestion.QuestionScope,
-                            validationExpression: categoricalSingleQuestion.ValidationExpression,
-                            validationMessage: categoricalSingleQuestion.ValidationMessage,
-                            linkedToQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.LinkedToQuestionId),
-                            linkedToRosterId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.LinkedToRosterId),
-                            isPreFilled: categoricalSingleQuestion.Featured,
-                            isFilteredCombobox: categoricalSingleQuestion.IsFilteredCombobox,
-                            cascadeFromQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.CascadeFromQuestionId),
-                            options:
-                                categoricalSingleQuestion.Answers.Select(
-                                    answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText, answer.ParentValue))
-                                    .ToArray(),
-                            validationConditions: categoricalSingleQuestion.ValidationConditions, linkedFilterExpression: categoricalSingleQuestion.LinkedFilterExpression));
-                        continue;
-                    }
-
-                    var multimediaQuestion = question as IMultimediaQuestion;
-                    if (multimediaQuestion != null)
-                    {
-                        events.AddRange(this.CreateMultimediaQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
-                            title: title,
-                            hideIfDisabled: hideIfDisabled,
-                            enablementCondition: enablementCondition,
-                            instructions: instructions,
-                            properties: multimediaQuestion.Properties,
-                            sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId, 
-                            scope : multimediaQuestion.QuestionScope,
-                            responsibleId: responsibleId,
-                            validationConditions: multimediaQuestion.ValidationConditions));
-                        continue;
-                    }
-                }
-
-                var staticText = questionnaireItem as IStaticText;
-                if (staticText != null)
-                {
-                    events.AddRange(this.CreateStaticTextClonedEvents(itemId, groupId, staticText.Text,
-                        staticText.AttachmentName,
-                        staticText.ConditionExpression, 
-                        staticText.HideIfDisabled, 
-                        sourceItemId, 
-                        sourceQuestionnaireId,
-                        itemTargetIndex, 
-                        responsibleId,
-                        staticText.ValidationConditions));
-                    continue;
-                }
-
-                var variable = questionnaireItem as IVariable;
-                if (variable != null)
-                {
-                    events.AddRange(this.CreateVariableClonedEvents(
-                        itemId, 
-                        groupId, 
-                        sourceItemId, 
-                        sourceQuestionnaireId,
-                        itemTargetIndex, 
-                        responsibleId, variable.Type, variable.Name, variable.Expression));
-                    continue;
-                }
-            }
-        }
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
@@ -1630,67 +1131,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #endregion
-
-        private static QuestionCloned GetQuestionClonedEvent(IQuestion question, 
-            Guid targetId, 
-            Guid sourceQuestionnaireId, 
-            Guid parentGroupId,
-            int targetIndex,
-            bool preserveVariableName, 
-            Guid responsibleId)
-        {
-            var asTextQuestion = question as TextQuestion;
-            var asMultioptions = question as IMultyOptionsQuestion;
-            var asNumeric = question as NumericQuestion;
-            var asListQuestion = question as TextListQuestion;
-            var asDateTimeQuestion = question as DateTimeQuestion;
-
-            var questionCloned = new QuestionCloned(
-                publicKey: targetId,
-                groupPublicKey: parentGroupId,
-                questionText: question.QuestionText,
-                questionType: question.QuestionType,
-                variableLabel: question.VariableLabel,
-                stataExportCaption: preserveVariableName ? question.StataExportCaption : null,
-                featured: question.Featured,
-                capital: question.Capital,
-
-                questionScope: question.QuestionScope,
-                conditionExpression: question.ConditionExpression,
-                hideIfDisabled: question.HideIfDisabled,
-                validationExpression: null,
-                validationMessage: null,
-                instructions: question.Instructions,
-                properties: question.Properties,
-
-                answers: question.Answers.ToArray(),
-                sourceQuestionId: question.PublicKey,
-                sourceQuestionnaireId: sourceQuestionnaireId,
-                targetIndex: targetIndex,
-                responsibleId: responsibleId,
-                linkedToQuestionId: question.LinkedToQuestionId,
-                linkedToRosterId: question.LinkedToRosterId,
-
-                areAnswersOrdered: asMultioptions?.AreAnswersOrdered,
-                yesNoView: asMultioptions?.YesNoView,
-
-                mask: asTextQuestion?.Mask,
-
-                cascadeFromQuestionId: question.CascadeFromQuestionId,
-                isFilteredCombobox: question.IsFilteredCombobox,
-
-                isInteger: asNumeric?.IsInteger,
-                countOfDecimalPlaces: asNumeric?.CountOfDecimalPlaces,
-                maxAnswerCount: asListQuestion?.MaxAnswerCount,
-                maxAllowedAnswers: asMultioptions?.MaxAllowedAnswers,
-                answerOrder : null,
-                validationConditions: question.ValidationConditions,
-                linkedFilterExpression: question.LinkedFilterExpression,
-
-                isTimestamp: asDateTimeQuestion?.IsTimestamp ?? false);
-
-            return questionCloned;
-        }
 
         public void AddDefaultTypeQuestionAdnMoveIfNeeded(AddDefaultTypeQuestion command)
         {
@@ -2538,8 +1978,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.CheckDepthInvariants(targetToPasteIn, entityToInsert);
 
-            this.GeneratePasteEvents(pasteAfter.EntityId, pasteAfter.ResponsibleId, 
-                pasteAfter.SourceDocument, entityToInsert, targetToPasteIn, targetIndex);
+            this.CopyElementInTree(pasteAfter.EntityId, entityToInsert, targetToPasteIn, targetIndex);
         }
 
         public void PasteInto(PasteInto pasteInto)
@@ -2559,7 +1998,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.CheckDepthInvariants(targetToPasteIn, entityToInsert);
 
-            this.GeneratePasteEvents(pasteInto.EntityId, pasteInto.ResponsibleId, pasteInto.SourceDocument, entityToInsert, targetToPasteIn, targetIndex);
+            this.CopyElementInTree(pasteInto.EntityId, entityToInsert, targetToPasteIn, targetIndex);
         }
 
         private void CheckDepthInvariants(IComposite targetToPasteIn, IComposite entityToInsert)
@@ -2598,8 +2037,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void GeneratePasteEvents(Guid pasteItemId, Guid responsibleId,
-            QuestionnaireDocument sourceDocument, IComposite entityToInsert, IComposite targetToPasteIn, int targetIndex)
+        internal void CopyElementInTree(Guid pasteItemId, IComposite entityToInsert, IComposite targetToPasteIn, int targetIndex)
         {
             var entityToInsertAsQuestion = entityToInsert as IQuestion;
             if (entityToInsertAsQuestion != null)
@@ -2607,11 +2045,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Question cannot be pasted here."));
 
-                var questionCloned = GetQuestionClonedEvent(entityToInsertAsQuestion, pasteItemId, sourceDocument.PublicKey,
-                    targetToPasteIn.PublicKey,
-                    targetIndex, true, responsibleId);
+                var question = (AbstractQuestion)entityToInsertAsQuestion.Clone();
+                question.PublicKey = pasteItemId;
+                this.innerDocument.Insert(targetIndex, question, targetToPasteIn.PublicKey);
 
-                this.CloneQuestion(questionCloned);
+                if (entityToInsertAsQuestion.Capital)
+                    this.innerDocument.MoveHeadQuestionPropertiesToRoster(pasteItemId, targetToPasteIn.PublicKey);
 
                 return;
             }
@@ -2622,19 +2061,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Static Text cannot be pasted here."));
 
-                this.CloneStaticText(new StaticTextCloned(
-                    entityId : pasteItemId,
-                    parentId : targetToPasteIn.PublicKey,
-                    sourceEntityId : entityToInsert.PublicKey,
-                    sourceQuestionnaireId : sourceDocument.PublicKey,
-                    targetIndex : targetIndex,
-                    text : entityToInsertAsStaticText.Text,
-                    attachmentName : entityToInsertAsStaticText.AttachmentName,
-                    responsibleId : responsibleId,
-                    enablementCondition: entityToInsertAsStaticText.ConditionExpression,
-                    hideIfDisabled: entityToInsertAsStaticText.HideIfDisabled,
-                    validationConditions: entityToInsertAsStaticText.ValidationConditions));
-
+                var staticText = (StaticText)entityToInsertAsStaticText.Clone();
+                staticText.PublicKey = pasteItemId;
+                this.innerDocument.Insert(targetIndex, staticText, targetToPasteIn.PublicKey);
                 return;
             }
 
@@ -2649,30 +2078,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Dictionary<Guid, Guid> replacementIdDictionary = (entityToInsert).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
                 replacementIdDictionary[entityToInsert.PublicKey] = pasteItemId;
 
-                var events = new List<IEvent>();
-
-                this.FillGroup(
-                    parentGroupId: targetToPasteIn == null ? (Guid?) null : targetToPasteIn.PublicKey,
-                    responsibleId: responsibleId,
-                    sourceGroup: entityToInsertAsGroup,
-                    sourceQuestionnaireId: sourceDocument.PublicKey,
-                    targetIndex: targetIndex,
-                    preserveVariableName: true,
-                    replacementIdDictionary: replacementIdDictionary,
-                    events: events);
-
-                events.ForEach(pasteEvent =>
+                var clonedGroup = entityToInsertAsGroup.Clone();
+                clonedGroup.TreeToEnumerable(x => x.Children).ForEach(c =>
                 {
-                    var method = typeof(Questionnaire).GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) 
-                        .Single(m =>
+                    TypeSwitch.Do(c,
+                        TypeSwitch.Case<Group>(g =>
                         {
-                            var parameters = m.GetParameters();
-                            return parameters.Length == 1 && parameters[0].ParameterType == pasteEvent.GetType();
-                        });
-
-                    method.Invoke(this, new object[] { pasteEvent });
+                            g.PublicKey = replacementIdDictionary[g.PublicKey];
+                            g.RosterSizeQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterSizeQuestionId);
+                            g.RosterTitleQuestionId = GetIdOrReturnSameId(replacementIdDictionary, g.RosterTitleQuestionId);
+                        }),
+                        TypeSwitch.Case<IQuestion>(q =>
+                        {
+                            ((AbstractQuestion)q).PublicKey = replacementIdDictionary[q.PublicKey];
+                            q.CascadeFromQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.CascadeFromQuestionId);
+                            q.LinkedToQuestionId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToQuestionId);
+                            q.LinkedToRosterId = GetIdOrReturnSameId(replacementIdDictionary, q.LinkedToRosterId);
+                        }),
+                        TypeSwitch.Case<Variable>(v => v.PublicKey = replacementIdDictionary[v.PublicKey]),
+                        TypeSwitch.Case<StaticText>(st => st.PublicKey = replacementIdDictionary[st.PublicKey])
+                    );
                 });
-
+                this.innerDocument.Insert(targetIndex, clonedGroup, targetToPasteIn.PublicKey);
                 return;
             }
 
@@ -2682,16 +2109,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Variable cannot be pasted here."));
 
-                this.CloneVariable(new VariableCloned(
-                    entityId: pasteItemId,
-                    parentId: targetToPasteIn.PublicKey,
-                    sourceEntityId: entityToInsert.PublicKey,
-                    sourceQuestionnaireId: sourceDocument.PublicKey,
-                    targetIndex: targetIndex,
-                    responsibleId: responsibleId,
-                    variableData: new VariableData(entityToInsertAsVariable.Type,
-                                                   entityToInsertAsVariable.Name,
-                                                   entityToInsertAsVariable.Expression)));
+                var variable = (Variable)entityToInsertAsVariable.Clone();
+                variable.PublicKey = pasteItemId;
+                this.innerDocument.Insert(targetIndex, variable, targetToPasteIn.PublicKey);
 
                 return;
             }
@@ -3908,11 +3328,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void PrepareGeneralProperties(ref string title, ref string variableName)
         {
-            if (variableName != null)
-                variableName = variableName.Trim();
-
-            if (title != null)
-                title = title.Trim();
+            variableName = variableName?.Trim();
+            title = title?.Trim();
         }
 
         private void ValidateSubstitutionReferences(Guid entityId, IGroup parentGroup, string[] substitutionReferences,
@@ -4422,459 +3839,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             return maxDepth;
-        }
-
-        #endregion
-
-        #region Create clone events
-
-        private IEnumerable<IEvent> CreateTextQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel,
-            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties sourceProperties,
-            string mask, Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId,
-            IList<ValidationCondition> validationConditions)
-        {
-            yield return new QuestionCloned(
-                publicKey: questionId,
-                groupPublicKey: parentGroupId,
-                questionText: title,
-                questionType: QuestionType.Text,
-                stataExportCaption: variableName,
-                variableLabel: variableLabel,
-                questionScope: scope,
-                conditionExpression: enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression: null,
-                validationMessage: null,
-                instructions: instructions,
-                properties: sourceProperties,
-                sourceQuestionId: sourceQuestionId,
-                sourceQuestionnaireId: sourceQuestionnaireId,
-                targetIndex: targetIndex,
-                responsibleId: responsibleId,
-                featured: isPreFilled,
-                capital: false,
-                answerOrder: null,
-                answers: null,
-                linkedToQuestionId: null,
-                linkedToRosterId:null,
-                isInteger: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                maxAllowedAnswers: null,
-                mask: mask,
-                isFilteredCombobox: null,
-                cascadeFromQuestionId: null,
-                maxAnswerCount: null,
-                countOfDecimalPlaces: null,
-                validationConditions: validationConditions,
-                linkedFilterExpression: null,
-                isTimestamp: false
-            );
-        }
-
-        private IEnumerable<IEvent> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties properties, Guid parentGroupId, Guid sourceQuestionId,
-            Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, bool featured, bool capital,
-            IList<ValidationCondition> validationConditions)
-        {
-            yield return new QuestionCloned(
-                publicKey: questionId,
-                groupPublicKey: parentGroupId,
-                questionText: title,
-                questionType: QuestionType.GpsCoordinates,
-                stataExportCaption: variableName,
-                variableLabel: variableLabel,
-                questionScope: scope,
-                conditionExpression: enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression : null,
-                validationMessage : null,
-                instructions : instructions,
-                properties: properties,
-                sourceQuestionId : sourceQuestionId,
-                sourceQuestionnaireId : sourceQuestionnaireId,
-                targetIndex : targetIndex,
-                responsibleId : responsibleId,
-                featured:featured,
-                capital: capital,
-                answerOrder: null,
-                answers: null,
-                linkedToQuestionId : null,
-                linkedToRosterId: null,
-                isInteger: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                maxAllowedAnswers : null,
-                mask : null,
-                isFilteredCombobox : null,
-                cascadeFromQuestionId : null,
-                maxAnswerCount : null,
-                countOfDecimalPlaces: null,
-                validationConditions: validationConditions,
-                linkedFilterExpression: null,
-                isTimestamp: false
-            );
-        }
-
-        private IEnumerable<IEvent> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties properties,
-            Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId,
-            IList<ValidationCondition> validationConditions, bool isTimestamp)
-        {
-            yield return new QuestionCloned(
-                publicKey : questionId,
-                groupPublicKey : parentGroupId,
-                questionText : title,
-                questionType : QuestionType.DateTime,
-                stataExportCaption : variableName,
-                variableLabel : variableLabel,
-                featured : isPreFilled,
-                questionScope : scope,
-                conditionExpression : enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression : null,
-                validationMessage : null,
-                instructions : instructions,
-                properties: properties,
-                sourceQuestionId : sourceQuestionId,
-                sourceQuestionnaireId : sourceQuestionnaireId,
-                targetIndex : targetIndex,
-                responsibleId : responsibleId,
-                capital: false,
-                answerOrder: null,
-                answers: null,
-                linkedToQuestionId: null,
-                linkedToRosterId: null,
-                isInteger: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                maxAllowedAnswers: null,
-                mask: null,
-                isFilteredCombobox: null,
-                cascadeFromQuestionId: null,
-                maxAnswerCount: null,
-                countOfDecimalPlaces: null,
-                validationConditions: validationConditions,
-                linkedFilterExpression: null,
-                isTimestamp: isTimestamp);
-        }
-
-        private IEnumerable<IEvent> CreateCategoricalMultiAnswersQuestionClonedEvents(
-            Guid questionId, 
-            string title, 
-            string variableName, 
-            string variableLabel, 
-            QuestionScope scope, 
-            string enablementCondition, 
-            bool hideIfDisabled,
-            string instructions,
-            QuestionProperties properties,
-            Guid parentGroupId, 
-            Guid sourceQuestionId, 
-            Guid sourceQuestionnaireId,
-            int targetIndex, 
-            Guid responsibleId, 
-            Option[] options, 
-            Guid? linkedToQuestionId,
-            Guid? linkedToRosterId,
-            bool areAnswersOrdered, 
-            int? maxAllowedAnswers,
-            bool yesNoView,
-            IList<ValidationCondition> validationConditions,
-            string linkedFilterExpression)
-        {
-            yield return new QuestionCloned(
-            
-                publicKey : questionId,
-                groupPublicKey : parentGroupId,
-                questionText : title,
-                questionType : QuestionType.MultyOption,
-                stataExportCaption : variableName,
-                variableLabel : variableLabel,
-                questionScope : scope,
-                conditionExpression : enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression : null,
-                validationMessage : null,
-                instructions : instructions,
-                properties: properties,
-                answers : ConvertOptionsToAnswers(options),
-                sourceQuestionId : sourceQuestionId,
-                sourceQuestionnaireId : sourceQuestionnaireId,
-                targetIndex : targetIndex,
-                responsibleId : responsibleId,
-                linkedToQuestionId : linkedToQuestionId,
-                linkedToRosterId: linkedToRosterId,
-                areAnswersOrdered : areAnswersOrdered,
-                maxAllowedAnswers : maxAllowedAnswers,
-                yesNoView : yesNoView,
-                featured: false,
-                capital: false,
-                answerOrder: null,
-                isInteger: null,
-                mask: null,
-                isFilteredCombobox: null,
-                cascadeFromQuestionId: null,
-                maxAnswerCount: null,
-                countOfDecimalPlaces: null,
-                validationConditions: validationConditions,
-                linkedFilterExpression: linkedFilterExpression,
-                isTimestamp: false);
-        }
-
-        private IEnumerable<IEvent> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions,
-            QuestionProperties properties,
-            Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, Option[] options, 
-            Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
-            IList<ValidationCondition> validationConditions, string linkedFilterExpression)
-        {
-            yield return new QuestionCloned(
-                publicKey : questionId,
-                groupPublicKey : parentGroupId,
-                questionText : title,
-                questionType : QuestionType.SingleOption,
-                stataExportCaption : variableName,
-                variableLabel : variableLabel,
-                featured : isPreFilled,
-                questionScope : scope,
-                conditionExpression : enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression : null,
-                validationMessage : null,
-                instructions : instructions,
-                properties: properties,
-                answers : ConvertOptionsToAnswers(options),
-                sourceQuestionId : sourceQuestionId,
-                sourceQuestionnaireId : sourceQuestionnaireId,
-                targetIndex : targetIndex,
-                responsibleId : responsibleId,
-                linkedToQuestionId : linkedToQuestionId,
-                linkedToRosterId: linkedToRosterId,
-                isFilteredCombobox : isFilteredCombobox,
-                cascadeFromQuestionId : cascadeFromQuestionId,
-                capital: false,
-                answerOrder: null,
-                isInteger: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                maxAllowedAnswers: null,
-                mask: null,
-                maxAnswerCount: null,
-                countOfDecimalPlaces: null,
-                validationConditions: validationConditions,
-                linkedFilterExpression: linkedFilterExpression,
-                isTimestamp: false);
-        }
-
-        private IEnumerable<IEvent> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
-            string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions,
-            QuestionProperties properties, Guid sourceQuestionId, 
-            Guid sourceQuestionnaireId,
-            int targetIndex, Guid responsibleId, bool isInteger, bool useFormatting, int? countOfDecimalPlaces,
-            IList<ValidationCondition> validationConditions)
-        {
-            yield return new NumericQuestionCloned
-            (
-                publicKey : questionId,
-                groupPublicKey : parentGroupId,
-                questionText : title,
-                stataExportCaption : variableName,
-                variableLabel : variableLabel,
-                featured : isPreFilled,
-                capital : false,
-                questionScope : scope,
-                conditionExpression : enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression : null,
-                validationMessage : null,
-                instructions : instructions,
-                properties: properties,
-                sourceQuestionId : sourceQuestionId,
-                sourceQuestionnaireId : sourceQuestionnaireId,
-                targetIndex : targetIndex,
-                responsibleId : responsibleId,
-                isInteger : isInteger,
-                countOfDecimalPlaces : countOfDecimalPlaces,
-                validationConditions: validationConditions
-            );
-        }
-
-        private IEnumerable<IEvent> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, 
-            string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, 
-            Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, int? maxAnswerCount,
-            IList<ValidationCondition> validationConditions)
-        {
-            yield return new TextListQuestionCloned
-            {
-                PublicKey = questionId,
-                GroupId = parentGroupId,
-                QuestionText = title,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                ConditionExpression = enablementCondition,
-                HideIfDisabled = hideIfDisabled,
-                ValidationExpression = null,
-                ValidationMessage = null,
-                Instructions = instructions,
-                SourceQuestionId = sourceQuestionId,
-                SourceQuestionnaireId = sourceQuestionnaireId,
-                TargetIndex = targetIndex,
-                ResponsibleId = responsibleId,
-                MaxAnswerCount = maxAnswerCount,
-                QuestionScope = scope,
-                ValidationConditions = validationConditions
-            };
-        }
-
-        private IEnumerable<IEvent> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
-            string enablementCondition, bool hideIfDisabled, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId,
-            int targetIndex, QuestionScope scope, Guid responsibleId, IList<ValidationCondition> validationConditions)
-        {
-            yield return new QRBarcodeQuestionCloned
-            {
-                QuestionId = questionId,
-                ParentGroupId = parentGroupId,
-                Title = title,
-                VariableName = variableName,
-                VariableLabel = variableLabel,
-                EnablementCondition = enablementCondition,
-                HideIfDisabled = hideIfDisabled,
-                ValidationExpression = null,
-                ValidationMessage = null,
-                Instructions = instructions,
-                SourceQuestionId = sourceQuestionId,
-                SourceQuestionnaireId = sourceQuestionnaireId,
-                TargetIndex = targetIndex,
-                QuestionScope = scope,
-                ResponsibleId = responsibleId,
-                ValidationConditions = validationConditions
-            };
-        }
-
-        private IEnumerable<IEvent> CreateMultimediaQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
-            string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties properties,
-            Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope,
-            IList<ValidationCondition> validationConditions)
-        {
-            yield return
-                new QuestionCloned(
-                    publicKey : questionId,
-                    groupPublicKey : parentGroupId,
-                    questionText : title,
-                    questionType : QuestionType.Multimedia,
-                    stataExportCaption : variableName,
-                    variableLabel : variableLabel,
-                    featured : false,
-                    capital : false,
-                    questionScope : scope,
-                    conditionExpression : enablementCondition,
-                    hideIfDisabled: hideIfDisabled,
-                    instructions : instructions,
-                    properties: properties,
-                    sourceQuestionId : sourceQuestionId,
-                    sourceQuestionnaireId : sourceQuestionnaireId,
-                    targetIndex : targetIndex,
-                    responsibleId : responsibleId,
-                    validationExpression: null,
-                    validationMessage: null,
-                    answerOrder: null,
-                    answers: null,
-                    linkedToQuestionId: null,
-                    linkedToRosterId: null,
-                    isInteger: null,
-                    areAnswersOrdered: null,
-                    yesNoView: null,
-                    maxAllowedAnswers: null,
-                    mask: null,
-                    isFilteredCombobox: null,
-                    cascadeFromQuestionId: null,
-                    maxAnswerCount: null,
-                    countOfDecimalPlaces: null,
-                    validationConditions: validationConditions,
-                    linkedFilterExpression: null,
-                    isTimestamp: false);
-            yield return
-                new MultimediaQuestionUpdated
-                {
-                    QuestionId = questionId,
-                    Title = title,
-                    VariableName = variableName,
-                    VariableLabel = variableLabel,
-                    EnablementCondition = enablementCondition,
-                    HideIfDisabled = hideIfDisabled,
-                    Instructions = instructions,
-                    ResponsibleId = responsibleId,
-                    QuestionScope = scope
-                };
-        }
-
-        public IEnumerable<IEvent> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, 
-            Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId, Guid? sourceQuestionnaireId)
-        {
-            yield return
-                new GroupCloned
-                {
-                    PublicKey = groupId,
-                    GroupText = title,
-                    VariableName = variableName,
-                    ParentGroupPublicKey = parentGroupId,
-                    Description = description,
-                    ConditionExpression = condition,
-                    HideIfDisabled = hideIfDisabled,
-                    SourceGroupId = sourceGroupId,
-                    TargetIndex = targetIndex,
-                    ResponsibleId = responsibleId,
-                    SourceQuestionnaireId = sourceQuestionnaireId
-                };
-
-            if (isRoster)
-            {
-                yield return new GroupBecameARoster(responsibleId, groupId);
-                yield return new RosterChanged(responsibleId, groupId)
-                {
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = rosterSizeSource,
-                    FixedRosterTitles = rosterFixedTitles,
-                    RosterTitleQuestionId = rosterTitleQuestionId
-                };
-            }
-            else
-            {
-                yield return new GroupStoppedBeingARoster(responsibleId, groupId);
-            }
-        }
-
-        private IEnumerable<IEvent> CreateStaticTextClonedEvents(Guid itemId, Guid parentGroupId, string text, string attachmentName, 
-            string enablementCondition, bool hideIfDisabled, Guid sourceItemId, Guid sourceQuestionnaireId,
-            int targetIndex, Guid responsibleId, IList<ValidationCondition> validationConditions)
-        {
-            yield return new StaticTextCloned(
-                entityId : itemId,
-                parentId : parentGroupId,
-                sourceEntityId : sourceItemId,
-                sourceQuestionnaireId : sourceQuestionnaireId,
-                targetIndex : targetIndex,
-                text : text,
-                attachmentName : attachmentName,
-                responsibleId : responsibleId,
-                enablementCondition : enablementCondition,
-                validationConditions : validationConditions,
-                hideIfDisabled: hideIfDisabled
-            );
-        }
-
-        private IEnumerable<IEvent> CreateVariableClonedEvents(Guid itemId, Guid parentGroupId, Guid sourceItemId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, VariableType type, string name, string expression)
-        {
-            yield return new VariableCloned(
-                entityId: itemId,
-                parentId: parentGroupId,
-                sourceEntityId: sourceItemId,
-                sourceQuestionnaireId: sourceQuestionnaireId,
-                targetIndex: targetIndex,
-                responsibleId: responsibleId,
-                variableData: new VariableData(type, name, expression));
         }
 
         #endregion

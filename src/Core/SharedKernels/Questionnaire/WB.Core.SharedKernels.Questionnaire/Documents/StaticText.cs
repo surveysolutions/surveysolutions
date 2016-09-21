@@ -65,7 +65,7 @@ namespace Main.Core.Entities.SubEntities
             return staticText;
         }
 
-        public Guid PublicKey { get; private set; }
+        public Guid PublicKey { get; set; }
 
         public string Text { get; set; }
 
