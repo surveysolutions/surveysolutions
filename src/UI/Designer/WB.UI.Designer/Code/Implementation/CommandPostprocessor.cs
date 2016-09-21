@@ -77,8 +77,8 @@ namespace WB.UI.Designer.Code.Implementation
                 this.UpdateListViewItem(questionnaireCommand);
 
                 TypeSwitch.Do(command,
-                    TypeSwitch.Case<ImportQuestionnaire>(cmd => this.CreateListViewItem(cmd.QuestionnaireId, cmd.Source.Title, cmd.Source, true)),
-                    TypeSwitch.Case<CloneQuestionnaire>(cmd => this.CreateListViewItem(cmd.QuestionnaireId, cmd.Title, cmd.Source, false)),
+                    TypeSwitch.Case<ImportQuestionnaire>(cmd => this.CreateListViewItem(cmd.Source, true, cmd.QuestionnaireId)),
+                    TypeSwitch.Case<CloneQuestionnaire>(cmd => this.CreateListViewItem(cmd.Source, false, cmd.QuestionnaireId, cmd.Title, cmd.ResponsibleId, cmd.IsPublic, DateTime.UtcNow)),
                     TypeSwitch.Case<CreateQuestionnaire>(this.CreateListViewItem),
                     TypeSwitch.Case<DeleteQuestionnaire>(x => this.DeleteAccompanyingDataOnQuestionnaireRemove(x.QuestionnaireId)),
                     TypeSwitch.Case<DeleteAttachment>(x => this.attachmentService.Delete(x.AttachmentId)),
@@ -93,16 +93,18 @@ namespace WB.UI.Designer.Code.Implementation
             }
         }
 
-        private void CreateListViewItem(Guid questionnaireId, string questionnaireTitle, QuestionnaireDocument document, bool shouldPreserveSharedPersons)
+        private void CreateListViewItem(QuestionnaireDocument document, bool shouldPreserveSharedPersons,
+            Guid? questionnaireId = null, string questionnaireTitle = null, Guid? createdBy = null,
+            bool? isPublic = null, DateTime? creationDate = null)
         {
             var questionnaireListViewItem = new QuestionnaireListViewItem
             {
-                PublicId = questionnaireId,
-                Title = questionnaireTitle,
-                CreationDate = document.CreationDate,
+                PublicId = questionnaireId ?? document.PublicKey,
+                Title = questionnaireTitle ?? document.Title,
+                CreationDate = creationDate ?? document.CreationDate,
                 LastEntryDate = DateTime.UtcNow,
-                CreatedBy = document.CreatedBy,
-                IsPublic = document.IsPublic
+                CreatedBy = createdBy ?? document.CreatedBy,
+                IsPublic = isPublic ?? document.IsPublic
             };
 
             if (document.CreatedBy.HasValue)
@@ -126,7 +128,8 @@ namespace WB.UI.Designer.Code.Implementation
                 }
             }
 
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireListViewItem.QuestionnaireId);
+            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem,
+                questionnaireListViewItem.QuestionnaireId);
         }
 
         private void CreateListViewItem(CreateQuestionnaire command)
