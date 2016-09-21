@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             }
             else
             {
-                var questionnaire = questionnaireStateTackerStorage.GetById(command.Source.Id);
+                var questionnaire = questionnaireStateTackerStorage.GetById(command.Source.PublicKey.FormatGuid());
 
                 var linkToQuestionnaire = this.CreateQuestionnaireChangeReference(QuestionnaireItemType.Questionnaire,
                     command.Source.PublicKey, questionnaire.GroupsState[command.Source.PublicKey]);
