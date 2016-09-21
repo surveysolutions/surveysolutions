@@ -77,8 +77,8 @@ namespace WB.UI.Designer.Code.Implementation
                 this.UpdateListViewItem(questionnaireCommand);
 
                 TypeSwitch.Do(command,
-                    TypeSwitch.Case<ImportQuestionnaire>(cmd => this.CreateListViewItem(cmd.Source, true)),
-                    TypeSwitch.Case<CloneQuestionnaire>(cmd => this.CreateListViewItem(cmd.Source, false)),
+                    TypeSwitch.Case<ImportQuestionnaire>(cmd => this.CreateListViewItem(cmd.QuestionnaireId, cmd.Source.Title, cmd.Source, true)),
+                    TypeSwitch.Case<CloneQuestionnaire>(cmd => this.CreateListViewItem(cmd.QuestionnaireId, cmd.Title, cmd.Source, false)),
                     TypeSwitch.Case<CreateQuestionnaire>(this.CreateListViewItem),
                     TypeSwitch.Case<DeleteQuestionnaire>(x => this.DeleteAccompanyingDataOnQuestionnaireRemove(x.QuestionnaireId)),
                     TypeSwitch.Case<DeleteAttachment>(x => this.attachmentService.Delete(x.AttachmentId)),
@@ -93,12 +93,12 @@ namespace WB.UI.Designer.Code.Implementation
             }
         }
 
-        private void CreateListViewItem(QuestionnaireDocument document, bool shouldPreserveSharedPersons)
+        private void CreateListViewItem(Guid questionnaireId, string questionnaireTitle, QuestionnaireDocument document, bool shouldPreserveSharedPersons)
         {
             var questionnaireListViewItem = new QuestionnaireListViewItem
             {
-                PublicId = document.PublicKey,
-                Title = document.Title,
+                PublicId = questionnaireId,
+                Title = questionnaireTitle,
                 CreationDate = document.CreationDate,
                 LastEntryDate = DateTime.UtcNow,
                 CreatedBy = document.CreatedBy,
