@@ -107,6 +107,7 @@
     <Compile Include="Events\Interview\UnapprovedByHeadquarters.cs" />
     <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Interview\YesNoQuestionAnswered.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserArchived.cs" />
