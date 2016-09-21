@@ -10,8 +10,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     public class CompositeCollection<T> : IObservableCollection<T>
     {
-        private const string IndexerName = "Item[]";
-
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
@@ -20,16 +18,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Clear()
         {
-            this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged-= this.collectionChanged);
+            this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged -= this.collectionChanged);
             this.collections.Clear();
             this.Count = 0;
             this.OnPropertyChanged(nameof(Count));
-            this.OnPropertyChanged(IndexerName);
-            this.collectionChanged(this, 
-                new NotifyCollectionChangedEventArgs(
-                    NotifyCollectionChangedAction.Remove, 
-                    this.ToList(),
-                    0));
+            this.collectionChanged_Reset();
         }
 
         public bool Contains(T item)
@@ -121,6 +114,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
             this.OnPropertyChanged(nameof(this.Count));
+        }
+
+        private void collectionChanged_Reset()
+        {
+            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public void NotifyItemChanged(T item)
