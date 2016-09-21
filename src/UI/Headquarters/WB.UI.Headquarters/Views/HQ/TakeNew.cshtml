@@ -75,16 +75,16 @@
         </div>
     </script>
     <script type="text/html" id="SingleOptionFiltered">
-        <div class="form-group" data-bind="validationElement: value">
+        <div class="form-group" data-bind="validationElement: selectedOption">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return item.label()}, shouldFitToParent: false, showLoadMore: false}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return item.label()}, shouldFitToParent: false, showLoadMore: false, autoSelect: false}, valueupdate:'afterkeydown'" type="text" />
                     <div class="input-group-btn" data-bind="click: function(){ selectedOption(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
                 </div>
-                <span class="help-block" data-bind="validationMessage: value"></span>
+                <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
         </div>
     </script>
@@ -213,7 +213,7 @@
             <label class="col-sm-2 control-label">@Common.Responsible</label>
             <div class="col-md-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.UserName}, autoSelect: false}, valueupdate:'afterkeydown'" type="text" />
                     <span data-bind="spinner: isSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ responsible(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
