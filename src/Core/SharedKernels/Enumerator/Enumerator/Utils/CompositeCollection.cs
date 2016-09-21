@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         private void collectionChanged_Added(IList<T> items, int offset)
         {
             this.CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, (IList)items, offset));
             this.OnPropertyChanged(nameof(this.Count));
         }
 
