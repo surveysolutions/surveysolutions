@@ -1,14 +1,25 @@
-﻿CREATE EXTENSION dblink;
+﻿DO language plpgsql $$
+DECLARE rscount integer DEFAULT 0;
+DECLARE pscount integer DEFAULT 0;
+BEGIN
+RAISE NOTICE 'migration started';
+RAISE NOTICE 'intalling DBLINK';
+DROP EXTENSION IF EXISTS dblink;
+CREATE EXTENSION dblink;
+RAISE NOTICE 'DBLINK intalled';
 
---DROP TABLE public.sharedpersons;
---DROP TABLE public.questionnairelistviewitems;
---DROP TABLE public.questionnairestatetrackers;
---DROP TABLE public.questionnairechangereferences;
---DROP TABLE public.questionnairechangerecords;
---DROP TABLE public.questionnairedocuments;
---DROP TABLE public.questionnairesharedpersons;
+RAISE NOTICE 'dropping tables';
+DROP TABLE IF EXISTS public.sharedpersons, 
+		     public.questionnairelistviewitems, 
+		     public.questionnairestatetrackers, 
+		     public.questionnairechangereferences, 
+		     public.questionnairechangerecords, 
+		     public.questionnairedocuments, 
+		     public.questionnairesharedpersons;
+	   
+RAISE NOTICE 'tables dropped';
 
-
+RAISE NOTICE 'creating tables';
 CREATE TABLE public.questionnairelistviewitems
 (
   id character varying(255) NOT NULL,
@@ -152,28 +163,70 @@ WITH (
 ALTER TABLE public.questionnairedocuments
   OWNER TO postgres;
 
-select dblink_connect('views','host=127.0.0.1 port=5432 dbname=Design-Views user=postgres password=P@$$w0rd');
+ RAISE NOTICE 'tables created';
 
+RAISE NOTICE 'connecting to read side database';
+PERFORM  dblink_connect('views','host=127.0.0.1 port=5432 dbname=Design-Views user=postgres password=P@$$w0rd');
+RAISE NOTICE 'connected';
+
+RAISE NOTICE 'moving questionnairelistviewitems';
 insert into public.questionnairelistviewitems select (rec).* from dblink('views','select t1 from
   questionnairelistviewitems t1') t2 (rec questionnairelistviewitems);
-  
+
+rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from questionnairelistviewitems t1') t2 (rec questionnairelistviewitems)) as foo);
+pscount := (select count(*) from public.questionnairelistviewitems);
+RAISE NOTICE 'questionnairelistviewitems moved. Read side count:%, Plain Storage count: %', rscount, pscount;
+
+  RAISE NOTICE 'moving questionnairesharedpersons';
  insert into public.questionnairesharedpersons select (rec).* from dblink('views','select t1 from
   questionnairesharedpersons t1') t2 (rec questionnairesharedpersons);
 
+rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from questionnairesharedpersons t1') t2 (rec questionnairesharedpersons)) as foo);
+pscount := (select count(*) from public.questionnairesharedpersons);
+RAISE NOTICE 'questionnairesharedpersons moved. Read side count:%, Plain Storage count: %', rscount, pscount;
+
+RAISE NOTICE 'moving questionnairedocuments';
 insert into public.questionnairedocuments select (rec).* from dblink('views','select t1 from
   questionnairedocuments t1') t2 (rec questionnairedocuments);
 
+rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from questionnairedocuments t1') t2 (rec questionnairedocuments)) as foo);
+pscount := (select count(*) from public.questionnairedocuments);
+RAISE NOTICE 'questionnairedocuments moved. Read side count:%, Plain Storage count: %', rscount, pscount;
+
+RAISE NOTICE 'moving questionnairestatetrackers';
  insert into public.questionnairestatetrackers select (rec).* from dblink('views','select t1 from
   questionnairestatetrackers t1') t2 (rec questionnairestatetrackers);
 
+rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from questionnairestatetrackers t1') t2 (rec questionnairestatetrackers)) as foo);
+pscount := (select count(*) from public.questionnairestatetrackers);
+RAISE NOTICE 'questionnairestatetrackers moved. Read side count:%, Plain Storage count: %', rscount, pscount;
+
+RAISE NOTICE 'moving questionnairechangerecords';
   insert into public.questionnairechangerecords select (rec).* from dblink('views','select t1 from
   questionnairechangerecords t1') t2 (rec questionnairechangerecords);
-  
+
+rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from questionnairechangerecords t1') t2 (rec questionnairechangerecords)) as foo);
+pscount := (select count(*) from public.questionnairechangerecords);
+RAISE NOTICE 'questionnairechangerecords moved. Read side count:%, Plain Storage count: %', rscount, pscount;
+
+  RAISE NOTICE 'moving questionnairechangereferences';
   insert into public.questionnairechangereferences select (rec).* from dblink('views','select t1 from
   questionnairechangereferences t1') t2 (rec questionnairechangereferences);
-  
+
+  rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from questionnairechangereferences t1') t2 (rec questionnairechangereferences)) as foo);
+pscount := (select count(*) from public.questionnairechangereferences);
+RAISE NOTICE 'questionnairechangereferences moved. Read side count:%, Plain Storage count: %', rscount, pscount;
+
+  RAISE NOTICE 'moving sharedpersons';
   insert into public.sharedpersons select (rec).* from dblink('views','select t1 from
   sharedpersons t1') t2 (rec sharedpersons);
-
-select dblink_disconnect('views');
   
+  rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from sharedpersons t1') t2 (rec sharedpersons)) as foo);
+pscount := (select count(*) from public.sharedpersons);
+RAISE NOTICE 'sharedpersons moved. Read side count:%, Plain Storage count: %', rscount, pscount;
+
+PERFORM dblink_disconnect('views');
+RAISE NOTICE 'migration finished';
+END
+$$;
+--select dblink_disconnect('views');
