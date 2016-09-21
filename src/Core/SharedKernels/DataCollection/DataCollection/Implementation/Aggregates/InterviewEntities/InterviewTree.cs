@@ -7,14 +7,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTree
     {
-        public InterviewTree(Guid interviewId)
+        public InterviewTree(Guid interviewId, IEnumerable<InterviewTreeSection> sections)
         {
             this.InterviewId = interviewId.FormatGuid();
+            this.Sections = sections.ToList();
+
+            foreach (var section in this.Sections)
+            {
+                ((IInternalInterviewTreeNode)section).SetTree(this);
+            }
         }
 
         public string InterviewId { get; }
-
-        public IList<InterviewTreeSection> Sections { get; } = new List<InterviewTreeSection>();
+        public IReadOnlyCollection<InterviewTreeSection> Sections { get; }
 
         public InterviewTreeQuestion GetQuestion(Identity questionIdentity)
             => this
@@ -48,6 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public interface IInternalInterviewTreeNode
     {
+        void SetTree(InterviewTree tree);
         void SetParent(IInterviewTreeNode parent);
     }
 
@@ -62,9 +68,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public Identity Identity { get; }
+        public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
         IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
+        void IInternalInterviewTreeNode.SetTree(InterviewTree tree) => this.Tree = tree;
         void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
@@ -87,8 +95,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public Identity Identity { get; }
+        public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
         public IReadOnlyCollection<IInterviewTreeNode> Children { get; }
+
+        void IInternalInterviewTreeNode.SetTree(InterviewTree tree)
+        {
+            this.Tree = tree;
+
+            foreach (var child in this.Children)
+            {
+                ((IInternalInterviewTreeNode)child).SetTree(tree);
+            }
+        }
 
         void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
 
@@ -98,13 +117,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
         private readonly IReadOnlyCollection<RosterVector> linkedOptions;
+        private readonly Identity cascadingParentQuestionIdentity;
+        private readonly object answer;
 
         public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
-            IEnumerable<RosterVector> linkedOptions)
+            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, object answer)
             : base(identity, isDisabled)
         {
             this.Title = title;
             this.VariableName = variableName;
+            this.cascadingParentQuestionIdentity = cascadingParentQuestionIdentity;
+            this.answer = answer;
             this.linkedOptions = linkedOptions?.ToReadOnlyCollection();
         }
 
@@ -117,6 +140,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyCollection<RosterVector> GetLinkedOptions()
             => this.linkedOptions ?? Enumerable.Empty<RosterVector>().ToReadOnlyCollection();
+
+        public bool IsCascading() => this.cascadingParentQuestionIdentity != null;
+
+        public InterviewTreeQuestion GetCascadingParentQuestion() => this.Tree.GetQuestion(this.cascadingParentQuestionIdentity);
+
+        public bool IsAnswered() => this.answer != null;
+
+        public int GetIntegerAnswer() => Convert.ToInt32(this.answer); // TODO: make an intermediate type for answers in future
     }
 
     public class InterviewTreeStaticText : InterviewTreeLeafNode
