@@ -34,6 +34,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -126,6 +127,9 @@ namespace WB.Tests.Unit.TestFactories
                 UserRole = userRole
             };
         }
+
+        public CompositeCollection<T> CompositeCollection<T>()
+            => new CompositeCollection<T>();
 
         public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null)
             => new DataExportProcessDetails(

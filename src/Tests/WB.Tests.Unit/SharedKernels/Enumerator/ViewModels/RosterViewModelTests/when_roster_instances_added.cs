@@ -50,12 +50,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
             viewModel.Init("interviewId", Create.Entity.Identity(rosterId), Create.Other.NavigationState());
-            var addedRosterRosterVector = Create.Entity.RosterVector(2);
-            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, addedRosterRosterVector));
+            var parentRosterVectorOfAddedRoster = Empty.RosterVector;
+            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, parentRosterVectorOfAddedRoster, rosterInstanceId: 2, sortIndex: 1));
 
             Assert.That(viewModel.RosterInstances.Count, Is.EqualTo(3));
             var groupViewModel = viewModel.RosterInstances.ElementAt(1) as GroupViewModel;
-            Assert.That(groupViewModel.Identity, Is.EqualTo(Create.Entity.Identity(rosterId, addedRosterRosterVector)));
+            Assert.That(groupViewModel.Identity, Is.EqualTo(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2))));
         }
     }
 }

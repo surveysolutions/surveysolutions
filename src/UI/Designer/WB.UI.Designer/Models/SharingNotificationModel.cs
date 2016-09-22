@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Designer.Views;
 using WB.UI.Designer.Code.Implementation;
 
 namespace WB.UI.Designer.Models

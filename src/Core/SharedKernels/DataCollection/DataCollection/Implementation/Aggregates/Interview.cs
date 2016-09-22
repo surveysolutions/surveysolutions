@@ -2906,23 +2906,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
             List<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(question.Id).ToList();
-
             IEnumerable<decimal> rosterInstanceIds = answer.Where(answeredOption => answeredOption.Yes).Select(answeredOption => answeredOption.OptionValue).ToList();
 
-            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes = new Dictionary<decimal, int?>();
+            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes;
             if (!questionnaire.ShouldQuestionRecordAnswersOrder(question.Id))
             {
+                Dictionary<decimal, int?> indexedSelectedOptionsMap = availableValues
+                    .Where(x => rosterInstanceIds.Any(optionValue => optionValue == x))
+                    .Select((x, i) => new { OptionValue = x, Index = i })
+                    .ToDictionary(x => x.OptionValue, x => (int?)x.Index);
+
                 rosterInstanceIdsWithSortIndexes = rosterInstanceIds.ToDictionary(
                     selectedValue => selectedValue,
-                    selectedValue => (int?)availableValues.IndexOf(selectedValue));
+                    selectedValue => indexedSelectedOptionsMap[selectedValue]);
             }
             else
             {
-                for (int i = 0; i < rosterInstanceIds.Count(); i++)
-                {
-                    var selectedValue = rosterInstanceIds.ElementAt(i);
-                    rosterInstanceIdsWithSortIndexes[selectedValue] = i;
-                }
+                int? orderPosition = 0;
+                rosterInstanceIdsWithSortIndexes = rosterInstanceIds.ToDictionary(
+                    selectedValue => selectedValue,
+                    selectedValue => orderPosition++);
             }
 
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(question.Id).ToList();

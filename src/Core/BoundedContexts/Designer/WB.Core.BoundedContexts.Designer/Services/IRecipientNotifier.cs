@@ -1,8 +1,7 @@
-﻿using System;
 using Main.Core.Entities.SubEntities;
-using WB.UI.Designer.Code.Implementation;
+using WB.Core.BoundedContexts.Designer.Views;
 
-namespace WB.UI.Designer.Code
+namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IRecipientNotifier
     {
