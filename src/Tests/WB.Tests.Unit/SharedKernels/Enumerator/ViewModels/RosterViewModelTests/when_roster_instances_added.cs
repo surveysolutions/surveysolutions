@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             Assert.That(viewModel.RosterInstances.Count, Is.EqualTo(3));
             var groupViewModel = viewModel.RosterInstances.ElementAt(1) as GroupViewModel;
-            Assert.That(groupViewModel.Identity, Is.EqualTo(Create.Entity.Identity(rosterId, parentRosterVectorOfAddedRoster)));
+            Assert.That(groupViewModel.Identity, Is.EqualTo(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2))));
         }
     }
 }
