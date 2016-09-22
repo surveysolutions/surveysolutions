@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.AddQuestion(questionAddedEvent.Payload);
+            denormalizer.AddQuestion(questionAddedEvent);
 
         It should_be_2_questions_in_total = () =>
             singleGroup.Children.Count.ShouldEqual(2);
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             singleGroup.Children.ShouldContain(question => ((AbstractQuestion)question).QuestionText == addedQuestionTitle);
 
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<NewQuestionAdded> questionAddedEvent;
+        private static NewQuestionAdded questionAddedEvent;
         private static Group singleGroup;
         private static AbstractQuestion existingQuestion;
         private static string addedQuestionTitle;

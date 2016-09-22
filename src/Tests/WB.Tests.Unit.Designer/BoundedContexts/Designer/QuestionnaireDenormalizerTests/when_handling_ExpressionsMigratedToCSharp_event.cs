@@ -16,19 +16,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         {
             questionnaireDocument = CreateQuestionnaireDocument();
 
-            @event = Create.ToPublishedEvent(Create.Event.ExpressionsMigratedToCSharpEvent());
+            @event = Create.Event.ExpressionsMigratedToCSharpEvent();
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument);
         };
 
         Because of = () =>
-            denormalizer.MigrateExpressionsToCSharp(@event.Payload);
+            denormalizer.MigrateExpressionsToCSharp(@event);
 
         It should_set_document_csharp_marker_to_true = () =>
             questionnaireDocument.UsesCSharp.ShouldEqual(true);
 
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<ExpressionsMigratedToCSharp> @event;
+        private static ExpressionsMigratedToCSharp @event;
         private static QuestionnaireDocument questionnaireDocument;
     }
 }

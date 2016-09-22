@@ -152,55 +152,55 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             };
         }
         
-        protected static IPublishedEvent<GroupDeleted> CreateGroupDeletedEvent(Guid groupId)
+        protected static GroupDeleted CreateGroupDeletedEvent(Guid groupId)
         {
-            return ToPublishedEvent(new GroupDeleted
+            return new GroupDeleted
             {
                 GroupPublicKey = groupId,
-            });
+            };
         }
 
-        protected static IPublishedEvent<QuestionDeleted> CreateQuestionDeletedEvent(Guid questionId)
+        protected static QuestionDeleted CreateQuestionDeletedEvent(Guid questionId)
         {
-            return ToPublishedEvent(new QuestionDeleted
+            return new QuestionDeleted
             {
                 QuestionId = questionId,
-            });
+            };
         }
 
-        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId,
+        protected static NewGroupAdded CreateNewGroupAddedEvent(Guid groupId,
             string title = "New Group X")
         {
-            return ToPublishedEvent(new NewGroupAdded
+            return new NewGroupAdded
             {
                 PublicKey = groupId,
                 GroupText = title,
-            });
+            };
         }
 
-        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId,
+        protected static GroupCloned CreateGroupClonedEvent(Guid groupId,
             string title = "New Cloned Group X")
         {
-            return ToPublishedEvent(new GroupCloned
+            return new GroupCloned
             {
                 PublicKey = groupId,
                 GroupText = title,
-            });
+            };
         }
 
-        protected static IPublishedEvent<GroupUpdated> CreateGroupUpdatedEvent(Guid groupId,
+        protected static GroupUpdated CreateGroupUpdatedEvent(Guid groupId,
             string title = "Updated Group Title X")
         {
-            return ToPublishedEvent(new GroupUpdated
+            return new GroupUpdated
             {
                 GroupPublicKey = groupId,
                 GroupText = title,
-            });
+            };
         }
 
-        protected static IPublishedEvent<NewQuestionAdded> CreateNewQuestionAddedEvent(Guid questionId, Guid? groupId = null, string title = "New Question X")
+        protected static NewQuestionAdded CreateNewQuestionAddedEvent(Guid questionId, Guid? groupId = null, string title = "New Question X")
         {
-            return ToPublishedEvent(Create.Event.NewQuestionAdded
+            return (Create.Event.NewQuestionAdded
             (
                 publicKey : questionId,
                 groupPublicKey : groupId,
@@ -209,9 +209,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             ));
         }
 
-        protected static IPublishedEvent<QuestionChanged> CreateQuestionChangedEvent(Guid questionId, Guid targetGroupId, string title, QuestionType questionType = QuestionType.Numeric)
+        protected static QuestionChanged CreateQuestionChangedEvent(Guid questionId, Guid targetGroupId, string title, QuestionType questionType = QuestionType.Numeric)
         {
-            return ToPublishedEvent(Create.Event.QuestionChanged
+            return (Create.Event.QuestionChanged
             (
                 publicKey : questionId,
                 questionType : questionType,
@@ -219,30 +219,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             ));
         }
 
-        protected static IPublishedEvent<QuestionnaireItemMoved> CreateQuestionnaireItemMovedEvent(Guid itemId, Guid? targetGroupId)
+        protected static QuestionnaireItemMoved CreateQuestionnaireItemMovedEvent(Guid itemId, Guid? targetGroupId)
         {
-            return ToPublishedEvent(new QuestionnaireItemMoved
+            return (new QuestionnaireItemMoved
             {
                 PublicKey = itemId,
                 GroupKey = targetGroupId,
             });
         }
 
-        protected static IPublishedEvent<GroupBecameARoster> CreateGroupBecameARosterEvent(Guid groupId)
+        protected static GroupBecameARoster CreateGroupBecameARosterEvent(Guid groupId)
         {
-            return ToPublishedEvent(new GroupBecameARoster(Guid.NewGuid(), groupId));
+            return (new GroupBecameARoster(Guid.NewGuid(), groupId));
         }
 
-        protected static IPublishedEvent<GroupStoppedBeingARoster> CreateGroupStoppedBeingARosterEvent(Guid groupId)
+        protected static GroupStoppedBeingARoster CreateGroupStoppedBeingARosterEvent(Guid groupId)
         {
-            return ToPublishedEvent(new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
+            return (new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
         }
 
-        protected static IPublishedEvent<RosterChanged> CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, 
+        protected static RosterChanged CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, 
             RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             return
-                ToPublishedEvent(new RosterChanged(Guid.NewGuid(), groupId)
+                (new RosterChanged(Guid.NewGuid(), groupId)
                 {
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = rosterSizeSource,
@@ -251,35 +251,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 });
         }
 
-        protected static IPublishedEvent<TextListQuestionCloned> CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
+        protected static TextListQuestionCloned CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
         {
-            return ToPublishedEvent(new TextListQuestionCloned
+            return (new TextListQuestionCloned
             {
                 PublicKey = questionId,
                 SourceQuestionId = sourceQuestionId
             });
         }
 
-        protected static IPublishedEvent<TextListQuestionChanged> CreateTextListQuestionChangedEvent(Guid questionId)
+        protected static TextListQuestionChanged CreateTextListQuestionChangedEvent(Guid questionId)
         {
-            return ToPublishedEvent(new TextListQuestionChanged
+            return (new TextListQuestionChanged
             {
                 PublicKey = questionId
             });
         }
-        protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
+        protected static NumericQuestionChanged CreateNumericQuestionChangedEvent(
             Guid questionId)
         {
-            return ToPublishedEvent(Create.Event.NumericQuestionChanged
+            return (Create.Event.NumericQuestionChanged
             (
                 publicKey : questionId
             ));
         }
 
-        protected static IPublishedEvent<NumericQuestionCloned> CreateNumericQuestionClonedEvent(
+        protected static NumericQuestionCloned CreateNumericQuestionClonedEvent(
             Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null)
         {
-            return ToPublishedEvent(Create.Event.NumericQuestionCloned
+            return (Create.Event.NumericQuestionCloned
             (
                 publicKey : questionId,
                 sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
@@ -287,10 +287,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             ));
         }
 
-        protected static IPublishedEvent<QuestionCloned> CreateQuestionClonedEvent(
+        protected static QuestionCloned CreateQuestionClonedEvent(
             Guid questionId, QuestionType questionType = QuestionType.Numeric, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxValue = null)
         {
-            return ToPublishedEvent(Create.Event.QuestionCloned(
+            return (Create.Event.QuestionCloned(
                 publicKey : questionId,
                 questionType : questionType,
                 sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
@@ -298,26 +298,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             ));
         }
 
-        protected static IPublishedEvent<TemplateImported> CreateTemplateImportedEvent(QuestionnaireDocument questionnaireDocument = null)
-        {
-            return ToPublishedEvent(new TemplateImported
-            {
-                Source = questionnaireDocument ?? new QuestionnaireDocument()
-            });
-        }
-
-        protected static IPublishedEvent<QuestionnaireCloned> CreateQuestionnaireClonedEvent(QuestionnaireDocument questionnaireDocument = null)
-        {
-            return ToPublishedEvent(new QuestionnaireCloned
-            {
-                QuestionnaireDocument = questionnaireDocument ?? new QuestionnaireDocument()
-            });
-        }
-
-        protected static IPublishedEvent<TextListQuestionCloned> TextListQuestionClonedEvent(
+        protected static TextListQuestionCloned TextListQuestionClonedEvent(
             Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxAnswerCount = null)
         {
-            return ToPublishedEvent(new TextListQuestionCloned
+            return (new TextListQuestionCloned
             {
                 PublicKey = questionId,
                 SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
@@ -326,37 +310,36 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             });
         }
 
-        protected static IPublishedEvent<TextListQuestionChanged> CreateTextListQuestionChangedEvent(
+        protected static TextListQuestionChanged CreateTextListQuestionChangedEvent(
             Guid questionId, int? maxAnswerCount = null)
         {
-            return ToPublishedEvent(new TextListQuestionChanged
+            return (new TextListQuestionChanged
             {
                 PublicKey = questionId,
                 MaxAnswerCount = maxAnswerCount
-
             });
         }
 
-        protected static IPublishedEvent<StaticTextAdded> CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
+        protected static StaticTextAdded CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
         {
-            return ToPublishedEvent(
+            return (
                 Create.Event.StaticTextAdded(entityId : entityId,
                     parentId : parentId,
                     text : text));
         }
 
-        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null, string attachmentName = null)
+        protected static StaticTextUpdated CreateStaticTextUpdatedEvent(Guid entityId, string text = null, string attachmentName = null)
         {
-            return ToPublishedEvent(Create.Event.StaticTextUpdated(
+            return (Create.Event.StaticTextUpdated(
                 entityId : entityId,
                 text : text,
                 attachmentName : attachmentName));
         }
 
-        protected static IPublishedEvent<StaticTextCloned> CreateStaticTextClonedEvent(Guid targetEntityId,
+        protected static StaticTextCloned CreateStaticTextClonedEvent(Guid targetEntityId,
             Guid sourceEntityId, Guid parentId, string text = null, int targetIndex = 0)
         {
-            return ToPublishedEvent(Create.Event.StaticTextCloned(
+            return (Create.Event.StaticTextCloned(
                 publicKey: targetEntityId,
                 sourceEntityId : sourceEntityId,
                 parentId : parentId,
@@ -364,9 +347,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 targetIndex : targetIndex));
         }
 
-        protected static IPublishedEvent<StaticTextDeleted> CreateStaticTextDeletedEvent(Guid entityId)
+        protected static StaticTextDeleted CreateStaticTextDeletedEvent(Guid entityId)
         {
-            return ToPublishedEvent(new StaticTextDeleted()
+            return (new StaticTextDeleted()
             {
                 EntityId = entityId
             });
