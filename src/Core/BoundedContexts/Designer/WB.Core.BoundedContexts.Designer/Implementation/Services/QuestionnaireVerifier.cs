@@ -249,6 +249,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             Verifier(QuestionnaireHasRostersPropagationsExededLimit, "WB0261", VerificationMessages.WB0261_RosterStructureTooExplosive),
             Verifier<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
+            Verifier<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByCircularReferences,
@@ -1919,7 +1920,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
         }
-        
+
+        private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var parentComposite = group.GetParent();
+            if (parentComposite.PublicKey != questionnaire.PublicKey) return false;
+
+            if (parentComposite.Children.IndexOf(group) != 0) return false;
+
+            return !string.IsNullOrEmpty(group.ConditionExpression);
+        }
+
+
         private static bool NoQuestionsExist(MultiLanguageQuestionnaireDocument questionnaire)
         {
             return !questionnaire.Find<IQuestion>(_ => true).Any();
