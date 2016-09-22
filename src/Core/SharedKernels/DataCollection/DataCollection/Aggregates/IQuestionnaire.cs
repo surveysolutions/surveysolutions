@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -235,7 +234,5 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IReadOnlyCollection<string> GetTranslationLanguages();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
-
-        Dictionary<ValueVector<Guid>, RosterScopeDescription>  GetRosterScopes();
     }
 }
