@@ -1018,17 +1018,11 @@ namespace WB.Tests.Unit.Designer
             IQuestionnaireHistory questionnaireHistory = null)
         {
             return new CommandPostprocessor(
-               membershipUserService,
-               recipientNotifier,
-               accountRepository,
                documentStorage,
                logger,
                attachmentService ?? Mock.Of<IAttachmentService>(),
                lookupTableService ?? Mock.Of<ILookupTableService>(),
                translationsService ?? Mock.Of<ITranslationsService>(),
-               questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
-               accountStorage ?? Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(),
-               questionnaireSharedPersonsStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
                questionnaireHistory ?? Mock.Of<IQuestionnaireHistory>());
         }
 
@@ -1152,5 +1146,10 @@ namespace WB.Tests.Unit.Designer
 
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false)
             => new UpdateQuestionnaire(Guid.NewGuid(), title, isPublic, responsibleId, isResponsibleAdmin);
+
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(bool isPublic = false)
+        {
+            return new QuestionnaireListViewItem() { IsPublic = isPublic };
+        }
     }
 }

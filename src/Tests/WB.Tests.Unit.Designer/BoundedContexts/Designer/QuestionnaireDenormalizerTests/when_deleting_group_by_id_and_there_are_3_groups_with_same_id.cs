@@ -6,6 +6,7 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.DeleteGroup(groupDeletedEvent.Payload);
+            denormalizer.DeleteGroup(groupDeletedEvent);
 
         It should_be_only_2_groups_left = () =>
             questionnaire.Children.Count.ShouldEqual(2);
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         private static QuestionnaireDocument questionnaire;
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<GroupDeleted> groupDeletedEvent;
+        private static GroupDeleted groupDeletedEvent;
         private static Group secondGroup;
         private static Group thirdGroup;
     }

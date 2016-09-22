@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace Main.Core.Events.Questionnaire
 {

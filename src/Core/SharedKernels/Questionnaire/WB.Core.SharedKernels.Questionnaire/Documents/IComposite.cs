@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace Main.Core.Entities.Composite

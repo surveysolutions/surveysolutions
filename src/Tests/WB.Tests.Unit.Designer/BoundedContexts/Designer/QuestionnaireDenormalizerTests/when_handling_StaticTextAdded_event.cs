@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.AddStaticText(CreateStaticTextAddedEvent(entityId: entityId, parentId: parentId, text: text).Payload);
+            denormalizer.AddStaticText(CreateStaticTextAddedEvent(entityId: entityId, parentId: parentId, text: text));
 
         It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
             questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text, null, null, false, Moq.It.IsAny<IList<ValidationCondition>>()), Times.Once);

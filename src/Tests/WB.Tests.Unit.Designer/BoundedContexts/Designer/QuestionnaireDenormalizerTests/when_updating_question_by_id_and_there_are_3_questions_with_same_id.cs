@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.UpdateQuestion(questionUpdatedEvent.Payload);
+            denormalizer.UpdateQuestion(questionUpdatedEvent);
 
         It should_update_first_question = () =>
             ((IQuestion)mainGroup.Children[0]).QuestionText.ShouldEqual(updatedQuestionTitle);
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             ((IQuestion)mainGroup.Children[2]).QuestionText.ShouldEqual(initialQuestionTitle);
 
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<QuestionChanged> questionUpdatedEvent;
+        private static QuestionChanged questionUpdatedEvent;
         private static string initialQuestionTitle;
         private static string updatedQuestionTitle;
         private static Group mainGroup;

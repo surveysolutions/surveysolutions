@@ -8,9 +8,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
     public class CompositeCollectionTests
     {
         [Test]
-        public void when_clearing_child_collection_should_raise_items_reset_event()
+        public void when_clearing_child_collection_should_raise_items_removed_with_offset_and_items()
         {
-            CompositeCollection<string> items = new CompositeCollection<string>();
+            var items = Create.Entity.CompositeCollection<string>();
 
             items.Add("zero");
             var childCollection = new CompositeCollection<string> {"one", "two"};
@@ -23,13 +23,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             childCollection.Clear();
 
             Assert.That(collectionChangedArgs, Is.Not.Null);
-            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Reset));
+            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+            Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(1));
+            Assert.That(collectionChangedArgs.OldItems, Is.EquivalentTo(new[] { "one", "two" }));
         }
 
         [Test]
         public void when_notifing_item_changed()
         {
-            CompositeCollection<string> items = new CompositeCollection<string>();
+            var items = Create.Entity.CompositeCollection<string>();
 
             items.Add("zero");
             items.AddCollection(new CompositeCollection<string> { "one", "two" });
@@ -49,7 +51,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
         [Test]
         public void when_adding_child_collection_should_raise_collection_changed_with_new_item_in_args()
         {
-            CompositeCollection<string> items = new CompositeCollection<string>();
+            var items = Create.Entity.CompositeCollection<string>();
+
             items.Add("zero");
             var childCollection = new CompositeCollection<string> { "one", "two" };
             items.AddCollection(childCollection);
@@ -59,10 +62,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             items.CollectionChanged += (sender, args) => collectionChangedArgs = args;
 
             // act
-            childCollection.AddCollection(new CovariantObservableCollection<string> { "three"} );
+            childCollection.AddCollection(new CovariantObservableCollection<string> { "three" });
 
             // assert
-            Assert.That(collectionChangedArgs.NewItems[0], Is.EqualTo("three"));
+            Assert.That(collectionChangedArgs.NewItems, Is.EquivalentTo(new[] { "three" }));
             Assert.That(collectionChangedArgs.NewStartingIndex, Is.EqualTo(3));
         }
     }

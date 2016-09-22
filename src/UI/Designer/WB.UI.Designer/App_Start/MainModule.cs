@@ -7,7 +7,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
-using IRecipientNotifier = WB.UI.Designer.Code.IRecipientNotifier;
+using IRecipientNotifier = WB.Core.BoundedContexts.Designer.Services.IRecipientNotifier;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
