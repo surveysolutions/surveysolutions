@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit.Infrastructure
 
             sqliteEventStorage.Store(new UncommittedEventStream(null,
                 new List<UncommittedEvent> { Create.Other.UncommittedEvent(
-                    eventSourceId, Create.Event.StaticTextUpdated()) }));
+                    eventSourceId, Create.Event.QuestionsEnabled()) }));
 
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0);
             Assert.That(committedEvents.Count(), Is.EqualTo(1));
@@ -57,7 +58,7 @@ namespace WB.Tests.Unit.Infrastructure
             for (int i = 1; i <= 301; i++)
             {
                 uncommittedEvents.Add(Create.Other.UncommittedEvent(eventSourceId,
-                    Create.Event.StaticTextUpdated(text: "text " + i),
+                    Create.Event.TextQuestionAnswered(answer: "text 301"),
                     sequence: i));
             }
 
@@ -67,9 +68,9 @@ namespace WB.Tests.Unit.Infrastructure
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0).ToList();
             Assert.That(committedEvents.Count, Is.EqualTo(301));
             
-            var payload = committedEvents.Last().Payload as StaticTextUpdated;
+            var payload = committedEvents.Last().Payload as TextQuestionAnswered;
             Assert.That(payload, Is.Not.Null, "Should keep event type after save/read");
-            Assert.That(payload.Text, Is.EqualTo("text 301"));
+            Assert.That(payload.Answer, Is.EqualTo("text 301"));
             
         }
 
@@ -84,7 +85,7 @@ namespace WB.Tests.Unit.Infrastructure
             for (int i = 1; i <= 1000; i++)
             {
                 var uncommittedEvent = Create.Other.UncommittedEvent(eventSourceId, sequence: i,
-                    payload: Create.Event.StaticTextUpdated(text: $"text {i}"));
+                    payload: Create.Event.TextQuestionAnswered(answer: $"text {i}"));
 
                 if (101 <= i && i <= 900)
                 {
@@ -105,9 +106,9 @@ namespace WB.Tests.Unit.Infrastructure
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0).ToList();
             Assert.That(committedEvents.Count, Is.EqualTo(200));
 
-            var payload = committedEvents.Last().Payload as StaticTextUpdated;
+            var payload = committedEvents.Last().Payload as TextQuestionAnswered;
             Assert.That(payload, Is.Not.Null, "Should keep event type after save/read");
-            Assert.That(payload.Text, Is.EqualTo("text 1000"));
+            Assert.That(payload.Answer, Is.EqualTo("text 1000"));
         }
 
         [TestCase(1)]
@@ -118,12 +119,12 @@ namespace WB.Tests.Unit.Infrastructure
 
             sqliteEventStorage.Store(new UncommittedEventStream(null,
                 new List<UncommittedEvent> { Create.Other.UncommittedEvent(
-                    eventSourceId, Create.Event.StaticTextUpdated(), sequence: 1) }));
+                    eventSourceId, Create.Event.TextQuestionAnswered(), sequence: 1) }));
 
 
             var duplicateSequeceStream = new UncommittedEventStream(null,
                 new List<UncommittedEvent> { Create.Other.UncommittedEvent(
-                    eventSourceId, Create.Event.StaticTextUpdated(), sequence: nextVersion) });
+                    eventSourceId, Create.Event.TextQuestionAnswered(), sequence: nextVersion) });
 
             var exception = Assert.Throws<InvalidOperationException>(() => sqliteEventStorage.Store(duplicateSequeceStream));
             Assert.That(exception.Message, Does.Contain("Expected event stream with version"));
@@ -137,7 +138,7 @@ namespace WB.Tests.Unit.Infrastructure
             sqliteEventStorage.Store(new UncommittedEventStream(null,
                 new List<UncommittedEvent> { Create.Other.UncommittedEvent(
                     eventSourceId, 
-                    Create.Event.StaticTextUpdated(), 
+                    Create.Event.TextQuestionAnswered(), 
                     sequence: 1,
                     initialVersion:0) }));
 
@@ -146,7 +147,7 @@ namespace WB.Tests.Unit.Infrastructure
                 new List<UncommittedEvent> {
                     Create.Other.UncommittedEvent(
                         eventSourceId, 
-                        Create.Event.StaticTextUpdated(), 
+                        Create.Event.TextQuestionAnswered(), 
                         sequence: 1,
                         initialVersion: 0)
                 });
@@ -165,7 +166,7 @@ namespace WB.Tests.Unit.Infrastructure
             for (int i = 1; i <= 20; i++)
             {
                 uncommittedEvents.Add(Create.Other.UncommittedEvent(eventSourceId,
-                    Create.Event.StaticTextUpdated(text: "text " + i),
+                    Create.Event.TextQuestionAnswered(answer: "text " + i),
                     sequence: i));
             }
 
@@ -175,7 +176,7 @@ namespace WB.Tests.Unit.Infrastructure
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 16);
 
             Assert.That(committedEvents.Count(), Is.EqualTo(5));
-            Assert.That((committedEvents.First().Payload as StaticTextUpdated).Text, Is.EqualTo("text 16"));
+            Assert.That((committedEvents.First().Payload as TextQuestionAnswered).Answer, Is.EqualTo("text 16"));
         }
 
         [Test]
@@ -185,7 +186,7 @@ namespace WB.Tests.Unit.Infrastructure
 
             sqliteEventStorage.Store(new UncommittedEventStream(null,
                 new List<UncommittedEvent> { Create.Other.UncommittedEvent(
-                    eventSourceId, Create.Event.StaticTextUpdated()) }));
+                    eventSourceId, Create.Event.TextQuestionAnswered()) }));
 
             this.sqliteEventStorage.RemoveEventSourceById(eventSourceId);
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0);

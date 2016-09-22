@@ -499,7 +499,6 @@
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireCloned.cs" />
     <Compile Include="Events\Questionnaire\RosterChanged.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonToQuestionnaireAdded.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonFromQuestionnaireRemoved.cs" />
@@ -517,7 +516,6 @@
     <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />

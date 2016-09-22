@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             QuestionChanged evnt = CreateQuestionChangedEvent(questionId);
 
             // Act
-            denormalizer.UpdateQuestion(CreatePublishedEvent(questionnaireId, evnt).Payload);
+            denormalizer.UpdateQuestion(evnt);
 
             // Assert
             #warning: updated question is a new entity, that's why we should search for it by it's id

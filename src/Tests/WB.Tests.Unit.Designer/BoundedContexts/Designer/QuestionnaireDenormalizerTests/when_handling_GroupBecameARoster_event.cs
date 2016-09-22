@@ -25,14 +25,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.MarkGroupAsRoster(@event.Payload);
+            denormalizer.MarkGroupAsRoster(@event);
 
         It should_set_group_IsRoster_property_to_true = () =>
             questionnaireDocument.GetGroup(groupId)
                 .IsRoster.ShouldEqual(true);
 
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<GroupBecameARoster> @event;
+        private static GroupBecameARoster @event;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid groupId;
     }
