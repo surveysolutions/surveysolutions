@@ -19,10 +19,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaire = Create.QuestionnaireDocument(questionnaireId);
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
-            denormalizer.DeleteMacro(evnt.Payload);
+            denormalizer.DeleteMacro(evnt);
         };
 
-        Because of = () => denormalizer.DeleteMacro(evnt.Payload);
+        Because of = () => denormalizer.DeleteMacro(evnt);
 
         It should_delete_macro = () =>
             questionnaire.Macros.Count.ShouldEqual(0);
@@ -31,6 +31,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
-        private static IPublishedEvent<MacroDeleted> evnt;
+        private static MacroDeleted evnt;
     }
 }

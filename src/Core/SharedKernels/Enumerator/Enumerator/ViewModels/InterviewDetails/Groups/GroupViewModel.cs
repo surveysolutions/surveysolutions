@@ -87,7 +87,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
 
             this.IsRoster = questionnaire.IsRosterGroup(entityIdentity.Id);
-            this.SortIndex = statefulInterview.GetRosterSortIndex(entityIdentity);
 
             this.navigationState = navigationState;
             this.groupIdentity = entityIdentity;

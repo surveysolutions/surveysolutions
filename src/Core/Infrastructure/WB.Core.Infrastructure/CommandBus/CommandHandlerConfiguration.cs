@@ -9,6 +9,7 @@ namespace WB.Core.Infrastructure.CommandBus
         where TCommand : ICommand
     {
         private readonly List<Type> validators = new List<Type>();
+        private readonly List<Type> postProcessors = new List<Type>();
 
         public CommandHandlerConfiguration<TAggregate, TCommand> ValidatedBy<TValidator>() 
             where TValidator : ICommandValidator<TAggregate, TCommand>
@@ -17,9 +18,15 @@ namespace WB.Core.Infrastructure.CommandBus
             return this;
         }
 
-        public List<Type> GetValidators()
+        public CommandHandlerConfiguration<TAggregate, TCommand> PostProcessBy<TPostProcessor>()
+            where TPostProcessor : ICommandPostProcessor<TAggregate, TCommand>
         {
-            return validators;
+            this.postProcessors.Add(typeof(TPostProcessor));
+            return this;
         }
+
+        public List<Type> GetValidators() => this.validators;
+
+        public List<Type> GetPostProcessors() => this.postProcessors;
     }
 }

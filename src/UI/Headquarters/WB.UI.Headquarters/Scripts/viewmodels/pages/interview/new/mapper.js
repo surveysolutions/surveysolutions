@@ -32,8 +32,11 @@
                             validation:[
                             {
                                 validator: function (value, params) {
-                                    
-                                    return true;
+                                    var opt = _.find(item.options(), function(option) {
+                                        return option.label() === value.label();
+                                    });
+
+                                    return !_.isUndefined(opt);
                                 },
                                 message: "Choose one of suggested values"
                             }]

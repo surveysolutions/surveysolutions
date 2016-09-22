@@ -322,6 +322,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return null;
             VariableView result = new VariableView()
             {
+                Id = variable.PublicKey,
                 ItemId = variable.PublicKey.FormatGuid(),
                 VariableData = new VariableData(variable.Type, variable.Name, variable.Expression),
             };

@@ -30,14 +30,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     title: title,
                     variableName: variableName));
 
-            @event = ToPublishedEvent(new MultimediaQuestionUpdated()
+            @event = new MultimediaQuestionUpdated()
             {
                 QuestionId = questionId,
                 EnablementCondition = condition,
                 Instructions = instructions,
                 Title = title,
                 VariableName = variableName
-            });
+            };
 
             questionnaireView = CreateQuestionnaireDocument(new[]
             {
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.UpdateMultimediaQuestion(@event.Payload);
+            denormalizer.UpdateMultimediaQuestion(@event);
 
         It should_call_question_factory_ones = () =>
            questionFactory.Verify(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()), Times.Once);
@@ -130,7 +130,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Mock<IQuestionnaireEntityFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<MultimediaQuestionUpdated> @event;
+        private static MultimediaQuestionUpdated @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string variableName = "qr_barcode_question";

@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.UpdateTextListQuestion(@event.Payload);
+            denormalizer.UpdateTextListQuestion(@event);
 
         It should_set_null_as_default_value_for__ValidationExpression__field = () =>
             questionData.ValidationExpression.ShouldBeNull();
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         private static QuestionData questionData;
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<TextListQuestionChanged> @event;
+        private static TextListQuestionChanged @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }
 }
