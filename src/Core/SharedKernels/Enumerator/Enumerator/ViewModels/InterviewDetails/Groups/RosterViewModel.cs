@@ -62,16 +62,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public void Handle(RosterInstancesAdded @event)
         {
-            var viewModels = @event.Instances.Where(x => x.GroupId == this.Identity.Id)
-                .Select(x => this.GetGroupViewModel(x.GetIdentity()))
+            var viewModelsWithIndex = @event.Instances.Where(x => x.GroupId == this.Identity.Id)
+                .Select(x => new { SortIndex = x.SortIndex ?? int.MaxValue, ViewModel = this.GetGroupViewModel(x.GetIdentity())})
                 .ToList();
 
-            foreach (var groupViewModel in viewModels)
+            foreach (var groupViewModelWithIndex in viewModelsWithIndex)
             {
                 this.mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    int index = Array.FindLastIndex(this.rosterInstances.Cast<GroupViewModel>().ToArray(), t => t.SortIndex < groupViewModel.SortIndex) + 1;
-                    this.rosterInstances.Insert(index, groupViewModel);
+                    int inBoundsIndex = Math.Max(0, Math.Min(groupViewModelWithIndex.SortIndex, this.rosterInstances.Count));
+                    this.rosterInstances.Insert(inBoundsIndex, groupViewModelWithIndex.ViewModel);
                 });
             }
         }
