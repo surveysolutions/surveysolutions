@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Infrastructure
               },
               Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
               Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
-              Mock.Of<IEventTypeResolver>(x => x.ResolveType("StaticTextUpdated") == typeof(StaticTextUpdated)));
+              Mock.Of<IEventTypeResolver>(x => x.ResolveType("TextQuestionAnswered") == typeof(TextQuestionAnswered)));
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Infrastructure
 
             sqliteEventStorage.Store(new UncommittedEventStream(null,
                 new List<UncommittedEvent> { Create.Other.UncommittedEvent(
-                    eventSourceId, Create.Event.QuestionsEnabled()) }));
+                    eventSourceId, Create.Event.TextQuestionAnswered()) }));
 
             var committedEvents = sqliteEventStorage.Read(eventSourceId, 0);
             Assert.That(committedEvents.Count(), Is.EqualTo(1));
