@@ -391,6 +391,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
 
             this.Bind<IExportQuestionService>().To<ExportQuestionService>();
+
+            this.Bind<IRostrerStructureService>().To<RostrerStructureService>();
+            
         }
     }
 }

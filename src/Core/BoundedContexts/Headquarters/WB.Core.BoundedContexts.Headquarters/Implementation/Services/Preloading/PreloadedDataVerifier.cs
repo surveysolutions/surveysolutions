@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -36,17 +37,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
+        private readonly IRostrerStructureService rosterStructureService;
 
         public PreloadedDataVerifier(
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
             IUserViewFactory userViewFactory, 
             IQuestionnaireStorage questionnaireStorage,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
+            IRostrerStructureService rosterStructureService)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.userViewFactory = userViewFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.rosterStructureService = rosterStructureService;
         }
 
         public VerificationStatus VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
@@ -143,8 +147,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireId, version));
 
-            var questionnaireRosterStructure = this.questionnaireStorage.GetQuestionnaire(
-                    new QuestionnaireIdentity(questionnaireId, version), null)?.GetRosterScopes();
+            var questionnaireRosterStructure = this.rosterStructureService.GetRosterScopes(questionnaire);
 
             if (questionnaireExportStructure == null || questionnaireRosterStructure == null || questionnaire == null)
             {
