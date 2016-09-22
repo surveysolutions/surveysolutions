@@ -10,6 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     public class CompositeCollection<T> : IObservableCollection<T>
     {
+        private const string IndexerName = "Item[]";
+
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
@@ -18,11 +20,13 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Clear()
         {
-            this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged -= this.collectionChanged);
+            var removedItems = this.ToList();
+
+            this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged-= this.HandleChildCollectionChanged);
             this.collections.Clear();
             this.Count = 0;
-            this.OnPropertyChanged(nameof(Count));
-            this.collectionChanged_Reset();
+
+            this.NotifyItemsRemoved(removedItems, offset: 0);
         }
 
         public bool Contains(T item)
@@ -57,14 +61,15 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         public void AddCollection(IObservableCollection<T> collection)
         {
             this.collections.Add(collection);
-            collection.CollectionChanged += this.collectionChanged;
+            collection.CollectionChanged += this.HandleChildCollectionChanged;
             var offset = this.Count;
             var addedCollectionCount = collection.Count();
             this.Count += addedCollectionCount;
-            this.collectionChanged_Added(collection.ToList(), offset);
+
+            this.NotifyItemsAdded(collection.ToList(), offset);
         }
 
-        private void collectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             this.Count = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
             this.OnPropertyChanged(nameof(this.Count));
@@ -106,19 +111,25 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 default:
                     throw new Exception("bug");
             }
+
             this.CollectionChanged(this, args);
         }
 
-        private void collectionChanged_Added(IList<T> items, int offset)
+        private void NotifyItemsAdded(IList items, int offset)
         {
             this.CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, (IList)items, offset));
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, offset));
+
             this.OnPropertyChanged(nameof(this.Count));
         }
 
-        private void collectionChanged_Reset()
+        private void NotifyItemsRemoved(IList removedItems, int offset)
         {
-            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems, offset));
+
+            this.OnPropertyChanged(IndexerName);
+            this.OnPropertyChanged(nameof(this.Count));
         }
 
         public void NotifyItemChanged(T item)
