@@ -215,8 +215,6 @@
     <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="Events\Questionnaire\Attachments\AttachmentDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Attachments\AttachmentUpdated.cs" />
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Events\Questionnaire\LookupTables\LookupTableAdded.cs" />
     <Compile Include="Events\Questionnaire\LookupTables\LookupTableDeleted.cs" />
@@ -226,8 +224,6 @@
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireVariableEvent.cs" />
-    <Compile Include="Events\Questionnaire\Translation\TranslationDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Translation\TranslationUpdated.cs" />
     <Compile Include="Events\Questionnaire\VariableAdded.cs" />
     <Compile Include="Events\Questionnaire\VariableCloned.cs" />
     <Compile Include="Events\Questionnaire\VariableDeleted.cs" />

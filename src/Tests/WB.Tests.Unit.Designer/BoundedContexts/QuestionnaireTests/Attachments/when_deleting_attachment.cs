@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
 {

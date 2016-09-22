@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
