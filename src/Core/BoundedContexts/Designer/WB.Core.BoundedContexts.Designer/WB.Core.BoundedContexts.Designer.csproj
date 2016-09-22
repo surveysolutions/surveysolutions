@@ -372,6 +372,7 @@
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\MultiLanguageQuestionnaireDocument.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\ListViewPostProcessor.cs" />
     <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
@@ -576,6 +577,7 @@
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
+    <Compile Include="Services\IRecipientNotifier.cs" />
     <Compile Include="Translations\InvalidExcelFileException.cs" />
     <Compile Include="Translations\ITranslationsService.cs" />
     <Compile Include="Translations\TranslationFile.cs" />
@@ -712,6 +714,7 @@
     <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\ShareChangeType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
