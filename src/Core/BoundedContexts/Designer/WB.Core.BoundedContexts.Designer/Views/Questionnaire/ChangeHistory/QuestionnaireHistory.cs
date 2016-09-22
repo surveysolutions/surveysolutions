@@ -413,7 +413,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             QuestionnaireItemType entityType = (QuestionnaireItemType) (-1);
             string entityTitle = "";
 
-            var sourceEntity = sourceQuestionnaire.Find<IComposite>(entity => entity.PublicKey == sourceEntityId);
+            var sourceEntity = sourceQuestionnaire.Find<IComposite>(sourceEntityId);
 
             var entityAsStaticText = sourceEntity as IStaticText;
             var entityAsVariable = sourceEntity as IVariable;
