@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.MoveQuestionnaireItem(questionMovedEvent.Payload);
+            denormalizer.MoveQuestionnaireItem(questionMovedEvent);
 
         It should_move_first_question_to_another_group = () =>
             anotherGroup.Children.ShouldContainOnly(firstQuestion);
@@ -53,6 +53,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static AbstractQuestion thirdQuestion;
         private static AbstractQuestion forthQuestion;
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<QuestionnaireItemMoved> questionMovedEvent;
+        private static QuestionnaireItemMoved questionMovedEvent;
     }
 }

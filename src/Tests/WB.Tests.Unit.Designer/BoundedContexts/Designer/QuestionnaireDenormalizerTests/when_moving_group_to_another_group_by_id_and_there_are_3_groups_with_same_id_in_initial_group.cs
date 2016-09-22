@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.MoveQuestionnaireItem(groupMovedEvent.Payload);
+            denormalizer.MoveQuestionnaireItem(groupMovedEvent);
 
         It should_move_first_group_to_another_group = () =>
             anotherGroup.Children.ShouldContainOnly(firstGroup);
@@ -51,6 +51,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Group secondGroup;
         private static Group thirdGroup;
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<QuestionnaireItemMoved> groupMovedEvent;
+        private static QuestionnaireItemMoved groupMovedEvent;
     }
 }

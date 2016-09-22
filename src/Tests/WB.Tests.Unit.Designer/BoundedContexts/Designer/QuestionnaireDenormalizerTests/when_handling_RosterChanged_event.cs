@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.ChangeRoster(@event.Payload);
+            denormalizer.ChangeRoster(@event);
 
         It should_set_group_RosterSizeQuestionId_property_to_specified_value = () =>
             questionnaireDocument.GetGroup(groupId)
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
 
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<RosterChanged> @event;
+        private static RosterChanged @event;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid groupId;
         private static Guid rosterSizeQuestionId;

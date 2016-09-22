@@ -17,10 +17,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaire = Create.QuestionnaireDocument(questionnaireId);
             
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
-            denormalizer.AddMacro(Create.Event.MacroAdded(questionnaireId, entityId).Payload);
+            denormalizer.AddMacro(Create.Event.MacroAdded(questionnaireId, entityId));
         };
 
-        Because of = () => denormalizer.UpdateLookupTable(evnt.Payload);
+        Because of = () => denormalizer.UpdateLookupTable(evnt);
 
         It should_not_add_extra_lookup_table = () =>
             questionnaire.LookupTables.Count.ShouldEqual(1);
@@ -37,6 +37,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static readonly string fileName = "macros fileName";
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
-        private static IPublishedEvent<LookupTableUpdated> evnt;
+        private static LookupTableUpdated evnt;
     }
 }

@@ -40,13 +40,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.UpdateTextListQuestion(@event.Payload);
+            denormalizer.UpdateTextListQuestion(@event);
 
         It should_set_question_to_question_provided_by_question_factory_for_specified_max_value = () =>
             questionnaireDocument.GetQuestion<IQuestion>(questionId).ShouldEqual(updatedQuestionWithMaxValue);
 
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<TextListQuestionChanged> @event;
+        private static TextListQuestionChanged @event;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid questionId;
         private static IQuestion updatedQuestionWithMaxValue;

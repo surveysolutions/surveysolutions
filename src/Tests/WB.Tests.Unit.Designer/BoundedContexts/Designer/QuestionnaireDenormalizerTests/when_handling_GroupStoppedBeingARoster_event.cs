@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.RemoveRosterFlagFromGroup(@event.Payload);
+            denormalizer.RemoveRosterFlagFromGroup(@event);
 
         It should_set_group_IsRoster_property_to_false = () =>
             questionnaireDocument.GetGroup(groupId)
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 .FixedRosterTitles.Length.ShouldEqual(0);
 
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<GroupStoppedBeingARoster> @event;
+        private static GroupStoppedBeingARoster @event;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid groupId;
     }
