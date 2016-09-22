@@ -398,6 +398,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_section_with_too_long_title_in_translation.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_question_with_too_long_title_in_translation.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Translations\when_verifying_question_with_empty_and_too_long_validation_messages_in_translation.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_first_chapter_with_enabling_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_10_text_questions_and_5_numeric_questions_with_no_validation_conditions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_negative_integer_title_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_non_integer_title_value.cs" />
