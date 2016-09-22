@@ -15,7 +15,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
     {
         private static readonly ConcurrentDictionary<Type, bool> hasEnablementViewModel = new ConcurrentDictionary<Type, bool>();
         private const int UnknownViewType = -1;
-        private const int HiddenView = -2;
 
         private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
         {
@@ -55,7 +54,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
             {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
             {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
-            {typeof (QuestionDivider), Resource.Layout.interview_question__divider},
         };
 
         public int GetItemViewType(object forItemObject)
@@ -85,7 +83,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
                 if (enablementModel != null && !enablementModel.Enabled)
                 {
-                    if (enablementModel.HideIfDisabled) return HiddenView;
+                    if (enablementModel.HideIfDisabled) return UnknownViewType;
 
                     if (typeOfViewModel == typeof(QuestionHeaderViewModel))
                         return Resource.Layout.interview_disabled_question;

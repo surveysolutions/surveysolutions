@@ -174,7 +174,6 @@
     <Compile Include="ViewModels\InterviewDetails\ICompositeEntity.cs" />
     <Compile Include="ViewModels\InterviewDetails\IDynamicTextViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\OptionTopBorderViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\QuestionDivider.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestion.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestionWithChildren.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\IQuestionStateViewModel.cs" />
