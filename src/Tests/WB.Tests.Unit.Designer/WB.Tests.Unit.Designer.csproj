@@ -374,6 +374,8 @@
     <Compile Include="BoundedContexts\Designer\PdfFactoryTests\when_load_and_shared_persons_contains_requested_user.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_questions_eligible_for_numeric_roster_title_and_requested_size_question_is_saved_size_question_for_requested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_questions_eligible_for_numeric_roster_title_and_requested_size_question_is_unsaved.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_variable_edit_view_and_questionnaire_is_absent.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_variable_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_no_shared_persons.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_shared_persons_contains_viewer.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewPostProcessorTests.cs" />
