@@ -24,13 +24,11 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.Aggregates;
 
@@ -70,9 +68,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
 
-        internal void Initialize(Guid aggregateId, QuestionnaireDocument document)
+        internal void Initialize(Guid aggregateId, QuestionnaireDocument document, IEnumerable<Guid> readOnlyPersons)
         {
             this.innerDocument = document ?? new QuestionnaireDocument() { PublicKey = aggregateId };
+            this.readOnlyUsers = readOnlyPersons.ToHashSet();
         }
 
         private bool wasExpressionsMigrationPerformed = false;
@@ -123,38 +122,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             innerDocument.LookupTables.Remove(e.LookupTableId);
         }
 
-        internal void UpdateAttachment(AttachmentUpdated e)
-        {
-            innerDocument.Attachments.RemoveAll(x => x.AttachmentId == e.AttachmentId);
-            innerDocument.Attachments.Add(new Attachment
-            {
-                AttachmentId = e.AttachmentId,
-                Name = e.AttachmentName,
-                ContentId = e.AttachmentContentId
-            });
-        }
-
-        internal void DeleteAttachment(AttachmentDeleted e)
-        {
-            innerDocument.Attachments.RemoveAll(x => x.AttachmentId == e.AttachmentId);
-        }
-
-        internal void UpdateTranslation(TranslationUpdated e)
-        {
-            var translation = new Translation
-            {
-                Id = e.TranslationId,
-                Name = e.Name,
-            };
-            innerDocument.Translations.RemoveAll(x => x.Id == e.TranslationId);
-            innerDocument.Translations.Add(translation);
-        }
-
-        internal void DeleteTranslation(TranslationDeleted e)
-        {
-            innerDocument.Translations.RemoveAll(x => x.Id == e.TranslationId);
-        }
-
         internal void AddSharedPersonToQuestionnaire(SharedPersonToQuestionnaireAdded e)
         {
             this.innerDocument.SharedPersons.Add(e.PersonId);
@@ -166,17 +133,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument.SharedPersons.Remove(e.PersonId);
             this.readOnlyUsers.Remove(e.PersonId);
-        }
-
-        internal void UpdateQuestionnaire(QuestionnaireUpdated e)
-        {
-            this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(e.Title);
-            this.innerDocument.IsPublic = e.IsPublic;
-        }
-
-        internal void DeleteQuestionnaire(QuestionnaireDeleted e)
-        {
-            this.innerDocument.IsDeleted = true;
         }
 
         internal void MigrateExpressionsToCSharp(ExpressionsMigratedToCSharp e)
@@ -241,12 +197,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument = upgradedDocument;
         }
-
-        private void CloneQuestionnaire(QuestionnaireCloned e)
-        {
-            this.innerDocument = e.QuestionnaireDocument;
-        }
-
 
         internal void MarkGroupAsRoster(GroupBecameARoster e)
         {
@@ -315,19 +265,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
-        }
-
-        private void CreateNewQuestionnaire(NewQuestionnaireCreated e)
-        {
-            this.innerDocument = new QuestionnaireDocument
-            {
-                IsPublic = e.IsPublic,
-                Title = System.Web.HttpUtility.HtmlDecode(e.Title),
-                PublicKey = e.PublicKey,
-                CreationDate = e.CreationDate,
-                LastEntryDate = e.CreationDate,
-                CreatedBy = e.CreatedBy
-            };
         }
 
         internal void UpdateQuestion(QuestionChanged e)
@@ -597,17 +534,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var oldVariable = this.innerDocument.Find<IVariable>(e.EntityId);
             var newVariable = this.questionnaireEntityFactory.CreateVariable(e);
             this.innerDocument.ReplaceEntity(oldVariable, newVariable);
-
         }
 
         internal void DeleteVariable(VariableDeleted e)
         {
             this.innerDocument.RemoveEntity(e.EntityId);
-        }
-
-        private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
-        {
-            return isAutopropagating ? legacyMaxValue : actualMaxValue;
         }
 
         #endregion
@@ -654,15 +585,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
 
-            this.CreateNewQuestionnaire(
-                new NewQuestionnaireCreated
-                {
-                    IsPublic = isPublic,
-                    PublicKey = publicKey,
-                    Title = title,
-                    CreationDate = this.clock.UtcNow(),
-                    CreatedBy = createdBy
-                });
+            this.innerDocument = new QuestionnaireDocument
+            {
+                IsPublic = isPublic,
+                Title = System.Web.HttpUtility.HtmlDecode(title),
+                PublicKey = publicKey,
+                CreationDate = this.clock.UtcNow(),
+                LastEntryDate = this.clock.UtcNow(),
+                CreatedBy = createdBy
+            };
 
             this.AddGroup(
                 new NewGroupAdded
@@ -719,12 +650,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 translation.Id = newTranslationId;
             }
 
-            this.CloneQuestionnaire(new QuestionnaireCloned
-            {
-                QuestionnaireDocument = clonedDocument,
-                ClonedFromQuestionnaireId = document.PublicKey,
-                ClonedFromQuestionnaireVersion = document.LastEventSequence
-            });
+            this.innerDocument = clonedDocument;
 
             if (source.UsesCSharp)
             {
@@ -752,17 +678,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(command.Title);
 
-            this.UpdateQuestionnaire(new QuestionnaireUpdated()
-            {
-                Title = command.Title,
-                IsPublic = command.IsPublic,
-                ResponsibleId = command.ResponsibleId
-            });
+            this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(command.Title);
+            this.innerDocument.IsPublic = command.IsPublic;
         }
 
         public void DeleteQuestionnaire()
         {
-            this.DeleteQuestionnaire(new QuestionnaireDeleted());
+            this.innerDocument.IsDeleted = true;
         }
 
         #endregion
@@ -798,17 +720,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddOrUpdateAttachment(AddOrUpdateAttachment command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.UpdateAttachment(new AttachmentUpdated(
-                attachmentId: command.AttachmentId, 
-                attachmentName: command.AttachmentName, 
-                responsibleId: command.ResponsibleId,
-                attachmentContentId: command.AttachmentContentId));
+
+            innerDocument.Attachments.RemoveAll(x => x.AttachmentId == command.AttachmentId);
+            innerDocument.Attachments.Add(new Attachment
+            {
+                AttachmentId = command.AttachmentId,
+                Name = command.AttachmentName,
+                ContentId = command.AttachmentContentId
+            });
         }
 
         public void DeleteAttachment(DeleteAttachment command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.DeleteAttachment(new AttachmentDeleted(command.AttachmentId, command.ResponsibleId));
+            this.innerDocument.Attachments.RemoveAll(x => x.AttachmentId == command.AttachmentId);
         }
 
         #endregion
@@ -818,16 +743,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void AddOrUpdateTranslation(AddOrUpdateTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.UpdateTranslation(new TranslationUpdated(
-                translationId: command.TranslationId,
-                name: command.Name,
-                responsibleId: command.ResponsibleId));
+
+            var translation = new Translation
+            {
+                Id = command.TranslationId,
+                Name = command.Name,
+            };
+            innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
+            innerDocument.Translations.Add(translation);
         }
 
         public void DeleteTranslation(DeleteTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.DeleteTranslation(new TranslationDeleted(command.TranslationId, command.ResponsibleId));
+            this.innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
         }
 
         #endregion

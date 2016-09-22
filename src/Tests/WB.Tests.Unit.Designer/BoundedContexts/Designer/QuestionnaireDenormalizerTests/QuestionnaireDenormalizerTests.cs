@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -75,7 +77,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>());
-            questionnaireAr.Initialize(document.PublicKey, document);
+            questionnaireAr.Initialize(document.PublicKey, document, Enumerable.Empty<Guid>());
             return questionnaireAr;
         }
 
