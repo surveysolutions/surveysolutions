@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Events.Questionnaire

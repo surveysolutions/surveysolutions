@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Events.Questionnaire
-{
-    using System;
+﻿using System;
 
+namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
+{
     public class ImageUploaded
     {
         public string Description { get; set; }

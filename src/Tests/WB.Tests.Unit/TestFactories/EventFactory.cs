@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+
 
 namespace WB.Tests.Unit.TestFactories
 {
@@ -204,18 +204,6 @@ namespace WB.Tests.Unit.TestFactories
 
         public StaticTextsEnabled StaticTextsEnabled(params Identity[] staticTexts)
             => new StaticTextsEnabled(staticTexts);
-
-        public StaticTextUpdated StaticTextUpdated(Guid? parentId = null, string text = null, string attachment = null,
-            Guid? responsibleId = null, Guid? publicKey = null, string enablementCondition = null,
-            bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
-            => new StaticTextUpdated(
-                publicKey.GetValueOrDefault(Guid.NewGuid()),
-                responsibleId ?? Guid.NewGuid(),
-                text,
-                attachment,
-                hideIfDisabled,
-                enablementCondition,
-                validationConditions);
 
         public SubstitutionTitlesChanged SubstitutionTitlesChanged(Identity[] questions = null, Identity[] staticTexts = null, Identity[] groups = null)
             => new SubstitutionTitlesChanged(
