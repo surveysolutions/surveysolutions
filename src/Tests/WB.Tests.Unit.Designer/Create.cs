@@ -1146,5 +1146,10 @@ namespace WB.Tests.Unit.Designer
 
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false)
             => new UpdateQuestionnaire(Guid.NewGuid(), title, isPublic, responsibleId, isResponsibleAdmin);
+
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(bool isPublic = false)
+        {
+            return new QuestionnaireListViewItem() { IsPublic = isPublic };
+        }
     }
 }
