@@ -38,7 +38,6 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
-        private readonly ICommandPostprocessor commandPostprocessor;
         private readonly ILogger logger;
 
         public QuestionnaireController(
@@ -49,8 +48,7 @@ namespace WB.UI.Designer.Controllers
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
-            ILookupTableService lookupTableService, 
-            ICommandPostprocessor commandPostprocessor)
+            ILookupTableService lookupTableService)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -60,7 +58,6 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
             this.lookupTableService = lookupTableService;
-            this.commandPostprocessor = commandPostprocessor;
         }
 
         public ActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
@@ -102,7 +99,6 @@ namespace WB.UI.Designer.Controllers
                         model.IsPublic, sourceModel.Source);
 
                     this.commandService.Execute(command);
-                    this.commandPostprocessor.ProcessCommandAfterExecution(command);
 
                     return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId.FormatGuid() });
                 }
@@ -148,7 +144,6 @@ namespace WB.UI.Designer.Controllers
                         isPublic: model.IsPublic);
 
                     this.commandService.Execute(command);
-                    this.commandPostprocessor.ProcessCommandAfterExecution(command);
 
                     return this.RedirectToAction("Details", "Questionnaire", new {id = questionnaireId.FormatGuid()});
                 }
@@ -177,8 +172,6 @@ namespace WB.UI.Designer.Controllers
                 var command = new DeleteQuestionnaire(model.PublicKey, UserHelper.WebUser.UserId);
 
                 this.commandService.Execute(command);
-
-                this.commandPostprocessor.ProcessCommandAfterExecution(command);
 
                 this.Success($"Questionnaire \"{model.Title}\" successfully deleted");
             }

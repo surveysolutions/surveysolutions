@@ -46,7 +46,6 @@ namespace WB.UI.Designer.Api
         private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
         private readonly ICommandInflater commandInflater;
-        private readonly ICommandPostprocessor commandPostprocessor;
        
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
@@ -57,7 +56,6 @@ namespace WB.UI.Designer.Api
             ICommandDeserializer commandDeserializer, 
             ILogger logger, 
             ICommandInflater commandPreprocessor,
-            ICommandPostprocessor commandPostprocessor, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationsService)
@@ -66,7 +64,6 @@ namespace WB.UI.Designer.Api
             this.commandInflater = commandPreprocessor;
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
-            this.commandPostprocessor = commandPostprocessor;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
@@ -245,8 +242,6 @@ namespace WB.UI.Designer.Api
                 this.commandInflater.PrepareDeserializedCommandForExecution(concreteCommand);
 
                 this.commandService.Execute(concreteCommand);
-
-                this.commandPostprocessor.ProcessCommandAfterExecution(concreteCommand);
             }
             catch (CommandInflaitingException exc)
             {

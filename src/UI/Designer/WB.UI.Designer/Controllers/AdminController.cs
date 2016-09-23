@@ -83,7 +83,6 @@ namespace WB.UI.Designer.Controllers
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
-        private readonly ICommandPostprocessor commandPostprocessor;
 
         public AdminController(
             IMembershipUserService userHelper,
@@ -96,8 +95,7 @@ namespace WB.UI.Designer.Controllers
             IAccountListViewFactory accountListViewFactory, 
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
-            ITranslationsService translationsService,
-            ICommandPostprocessor commandPostprocessor)
+            ITranslationsService translationsService)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -110,7 +108,6 @@ namespace WB.UI.Designer.Controllers
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
-            this.commandPostprocessor = commandPostprocessor;
         }
 
         [HttpGet]
@@ -136,7 +133,6 @@ namespace WB.UI.Designer.Controllers
                             document.QuestionnaireDocument);
 
                         this.commandService.Execute(command);
-                        this.commandPostprocessor.ProcessCommandAfterExecution(command);
                         foreach (var lookupTable in document.LookupTables)
                         {
                             this.lookupTableService.SaveLookupTableContent(document.QuestionnaireDocument.PublicKey,
@@ -153,7 +149,6 @@ namespace WB.UI.Designer.Controllers
                     {
                         var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, document);
                         this.commandService.Execute(command);
-                        this.commandPostprocessor.ProcessCommandAfterExecution(command);
                         return this.RedirectToAction("Index", "Questionnaire");
                     }
                 }
@@ -279,7 +274,6 @@ namespace WB.UI.Designer.Controllers
 
                     var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument);
                     this.commandService.Execute(command);
-                    this.commandPostprocessor.ProcessCommandAfterExecution(command);
 
                     this.Success($"[{zipEntry.Name}]", append: true);
                     this.Success($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.", append: true);
