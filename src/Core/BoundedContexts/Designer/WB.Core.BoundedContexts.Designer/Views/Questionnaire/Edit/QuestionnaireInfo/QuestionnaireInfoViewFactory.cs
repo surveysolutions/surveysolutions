@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             
             var attachments = this.attachmentService.GetAttachmentsByQuestionnaire(questionnaireDocument.PublicKey);
-            attachments.ForEach(x => x.LastUpdateDate = x.LastUpdateDate.ToLocalTime());
+            attachments?.ForEach(x => x.LastUpdateDate = x.LastUpdateDate.ToLocalTime());
 
             questionnaireInfoView.Attachments = questionnaireDocument.Attachments
                 .Select(attachmentIdentity => new AttachmentView
