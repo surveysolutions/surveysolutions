@@ -287,8 +287,6 @@
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
     <Compile Include="DesignerSettingsProvider.cs" />
-    <Compile Include="Code\ICommandPostprocessor.cs" />
-    <Compile Include="Code\Implementation\CommandPostprocessor.cs" />
     <Compile Include="Code\Implementation\MailNotifier.cs" />
     <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
