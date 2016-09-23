@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
             questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId ));
 
             command = Create.Command.UpdateStaticText(
-                questionnaire.PublicKey,
+                questionnaire.Id,
                 entityId: entityId,
                 text: text,
                 attachmentName: "",
