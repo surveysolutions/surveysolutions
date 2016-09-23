@@ -1358,5 +1358,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0262_RosterHasTooBigPropagation", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First chapter can not have enabling condition..
+        /// </summary>
+        internal static string WB0263_FirstChapterHasEnablingCondition {
+            get {
+                return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
+            }
+        }
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace Main.Core.Events.Questionnaire
-{
-    using System;
-    using Ncqrs.Eventing.Storage;
+﻿using System;
 
+namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
+{
     public class GroupCloned : FullGroupDataEvent
     {
         public Guid PublicKey { get; set; }

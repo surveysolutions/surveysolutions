@@ -1,4 +1,4 @@
-namespace WB.UI.Designer.Code.Implementation
+namespace WB.Core.BoundedContexts.Designer.Views
 {
     public enum ShareChangeType
     {

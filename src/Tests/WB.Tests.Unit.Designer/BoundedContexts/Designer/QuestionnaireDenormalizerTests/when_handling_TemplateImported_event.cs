@@ -23,20 +23,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
 
             @event = Create.Event.TemplateImportedEvent(questionnaireId: questionnaireDocument.PublicKey.FormatGuid());
-            @event.Payload.Source.SharedPersons.Add(Guid.NewGuid());
+            @event.Source.SharedPersons.Add(Guid.NewGuid());
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument);
         };
 
         Because of = () =>
-            denormalizer.ImportTemplate(@event.Payload);
+            denormalizer.ImportTemplate(@event);
 
         It should_list_of_shared_persons_contains_persons_from_replaced_questionnaire_only = () =>
            documentStorage.GetById(questionnaireDocument.PublicKey).SharedPersons.ShouldContainOnly(shredPersonWithBefore);
 
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaireDocument;
-        private static IPublishedEvent<designer::Main.Core.Events.Questionnaire.TemplateImported> @event;
+        private static designer::Main.Core.Events.Questionnaire.TemplateImported @event;
         private static Guid shredPersonWithBefore = Guid.Parse("11111111111111111111111111111111");
         private static InMemoryReadSideRepositoryAccessor<QuestionnaireDocument> documentStorage;
     }
