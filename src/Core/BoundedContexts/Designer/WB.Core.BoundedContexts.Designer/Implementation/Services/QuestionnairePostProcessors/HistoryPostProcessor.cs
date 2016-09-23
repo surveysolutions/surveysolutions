@@ -113,10 +113,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             UpdateFullQuestionnaireState(command.Source, command.QuestionnaireId, creatorId);
 
-            var questionnaire = questionnaireStateTackerStorage.GetById(command.Source.PublicKey.FormatGuid());
-
             var linkToQuestionnaire = this.CreateQuestionnaireChangeReference(QuestionnaireItemType.Questionnaire,
-                command.Source.PublicKey, questionnaire.GroupsState[command.Source.PublicKey]);
+                command.Source.PublicKey, command.Source.Title);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, creatorId, QuestionnaireActionType.Clone,
                 QuestionnaireItemType.Questionnaire,
