@@ -53,36 +53,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             var question = this.InterviewTree.GetQuestion(linkedQuestionIdentity);
 
-            var options = question.GetLinkedOptions();
+            if (!question.IsLinked)
+                return;
 
-            if (!options.Contains(option))
+            if (!question.AsLinked.Options.Contains(option))
                 throw new InterviewException(
                     $"Answer on linked categorical question {question.FormatForException()} cannot be saved. " +
                     $"Specified option {option} is absent. " +
-                    $"Available options: {string.Join(", ", options)}. " +
+                    $"Available options: {string.Join(", ", question.AsLinked.Options)}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
         public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer,
             IQuestionnaire questionnaire) // TODO: KP-7836 get rid of questionnaire here and use options repository an injected service
         {
-            var cascadingQuestion = this.InterviewTree.GetQuestion(cascadingQuestionIdentity);
+            var question = this.InterviewTree.GetQuestion(cascadingQuestionIdentity);
 
-            if (!cascadingQuestion.IsCascading())
+            if (!question.IsCascading)
                 return;
 
             int answerParentValue = questionnaire.GetCascadingParentValue(cascadingQuestionIdentity.Id, answer);
 
-            var parentQuestion = cascadingQuestion.GetCascadingParentQuestion();
+            var parentQuestion = question.AsCascading.GetCascadingParentQuestion();
 
-            if (!parentQuestion.IsAnswered())
+            if (!parentQuestion.IsAnswered)
                 return;
 
-            int actualParentValue = parentQuestion.GetIntegerAnswer();
+            int actualParentValue = parentQuestion.GetAnswer();
 
             if (answerParentValue != actualParentValue)
                 throw new AnswerNotAcceptedException(
-                    $"For question {cascadingQuestion.FormatForException()} was provided " + 
+                    $"For question {question.FormatForException()} was provided " + 
                     $"selected value {answer} as answer with parent value {answerParentValue}, " +
                     $"but this do not correspond to the parent answer selected value {actualParentValue}. " +
                     $"Interview ID: {this.InterviewTree.InterviewId}.");

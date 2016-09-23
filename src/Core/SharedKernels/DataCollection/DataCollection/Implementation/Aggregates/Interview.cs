@@ -4656,6 +4656,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
+            QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
             bool isDisabled = interviewState.IsQuestionDisabled(questionIdentity);
             string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
@@ -4669,6 +4670,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return new InterviewTreeQuestion(
                 questionIdentity,
+                questionType: questionType,
                 isDisabled: isDisabled,
                 title: title,
                 variableName: variableName,
