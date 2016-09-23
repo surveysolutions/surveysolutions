@@ -67,7 +67,7 @@
                 }
 
                 if (!_.isUndefined(attachmentDto.meta) && !_.isNull(attachmentDto.meta)) {
-                    attachment.meta.lastUpdated = moment(attachmentDto.meta.lastUpdated);
+                    attachment.meta.lastUpdated = moment(attachmentDto.meta.lastUpdateDate);
                     attachment.meta.fileName = attachmentDto.meta.fileName;
                 }
             };
