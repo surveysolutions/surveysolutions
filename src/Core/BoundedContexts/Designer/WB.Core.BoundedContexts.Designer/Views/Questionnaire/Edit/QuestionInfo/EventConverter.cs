@@ -1,9 +1,7 @@
 using System;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
