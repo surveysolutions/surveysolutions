@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                 Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
                 Mock.Of<IQuestionnaireStorage>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document && 
                                                   _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire),
-                new RostrerStructureService());
+                new RosterStructureService());
         }
 
         internal static InterviewData CreateInterviewData(Guid? interviewId=null)

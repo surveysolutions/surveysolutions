@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaire, 1, null));
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
             
-            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object, rostrerStructureService: new RostrerStructureService());
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object, rostrerStructureService: new RosterStructureService());
         };
 
         private Because of = () =>

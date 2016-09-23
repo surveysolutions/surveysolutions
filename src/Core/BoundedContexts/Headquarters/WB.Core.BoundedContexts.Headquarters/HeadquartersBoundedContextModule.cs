@@ -392,7 +392,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IExportQuestionService>().To<ExportQuestionService>();
 
-            this.Bind<IRostrerStructureService>().To<RostrerStructureService>();
+            this.Bind<IRostrerStructureService>().To<RosterStructureService>();
             
         }
     }
