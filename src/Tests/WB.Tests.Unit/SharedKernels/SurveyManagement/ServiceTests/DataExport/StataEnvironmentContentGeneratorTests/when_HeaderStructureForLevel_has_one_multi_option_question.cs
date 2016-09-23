@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -28,10 +29,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 
             var questionnaire = new PlainQuestionnaire(questionnaireDocument, 1, null);
             var fileSystemAccessor = CreateFileSystemAccessor((c) => stataGeneratedContent = c);
-             questionnaireExportStructure = new ExportViewFactory(fileSystemAccessor, new ExportQuestionService(),
-                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire &&
-                                                        _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument))
-                .CreateQuestionnaireExportStructure(new QuestionnaireIdentity());
+             questionnaireExportStructure = new ExportViewFactory(fileSystemAccessor, 
+                    new ExportQuestionService(),
+                    Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire &&
+                                                        _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
+                    new RostrerStructureService())
+                 .CreateQuestionnaireExportStructure(new QuestionnaireIdentity());
 
             stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(fileSystemAccessor);
         };
