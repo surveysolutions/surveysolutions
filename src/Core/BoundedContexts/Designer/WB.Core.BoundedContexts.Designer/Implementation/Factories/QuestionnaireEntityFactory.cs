@@ -4,7 +4,7 @@ using System.Linq;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 
@@ -87,10 +87,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             return question;
         }
 
-        public IVariable CreateVariable(QuestionnaireVariableEvent variableEvent)
+        public IVariable CreateVariable(QuestionnaireVariable questionnaireVariable)
         {
-            var variable = new Variable(variableEvent.EntityId, variableEvent.VariableData);
-            return variable;
+            var newVariable = new Variable(questionnaireVariable.EntityId, questionnaireVariable.VariableData);
+            return newVariable;
         }
 
         private AbstractQuestion CreateQuestion(QuestionType questionType, Guid publicKey)
