@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -117,37 +118,85 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
         private readonly IReadOnlyCollection<RosterVector> linkedOptions;
-        private readonly Identity cascadingParentQuestionIdentity;
-        private readonly object answer;
 
         public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
-            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, object answer)
+            QuestionType questionType, object answer,
+            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity)
             : base(identity, isDisabled)
         {
             this.Title = title;
             this.VariableName = variableName;
-            this.cascadingParentQuestionIdentity = cascadingParentQuestionIdentity;
-            this.answer = answer;
-            this.linkedOptions = linkedOptions?.ToReadOnlyCollection();
+
+            if (questionType == QuestionType.SingleOption)
+                this.AsSingleOption = new InterviewTreeSingleOptionQuestion(answer);
+
+            if (linkedOptions != null)
+                this.AsLinked = new InterviewTreeLinkedQuestion(linkedOptions);
+
+            if (cascadingParentQuestionIdentity != null)
+                this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionIdentity);
         }
 
         public string Title { get; }
         public string VariableName { get; }
 
+        public InterviewTreeSingleOptionQuestion AsSingleOption { get; }
+        public bool IsSingleOption => this.AsSingleOption != null;
+
+        public InterviewTreeLinkedQuestion AsLinked { get; }
+        public bool IsLinked => this.AsLinked != null;
+
+        public InterviewTreeCascadingQuestion AsCascading { get; }
+        public bool IsCascading => this.AsCascading != null;
+
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString() => $"Question ({this.Identity}) '{this.Title}'";
+    }
 
-        public IReadOnlyCollection<RosterVector> GetLinkedOptions()
-            => this.linkedOptions ?? Enumerable.Empty<RosterVector>().ToReadOnlyCollection();
+    public class InterviewTreeLinkedQuestion
+    {
+        public InterviewTreeLinkedQuestion(IEnumerable<RosterVector> linkedOptions)
+        {
+            if (linkedOptions == null) throw new ArgumentNullException(nameof(linkedOptions));
 
-        public bool IsCascading() => this.cascadingParentQuestionIdentity != null;
+            this.Options = linkedOptions.ToReadOnlyCollection();
+        }
 
-        public InterviewTreeQuestion GetCascadingParentQuestion() => this.Tree.GetQuestion(this.cascadingParentQuestionIdentity);
+        public IReadOnlyCollection<RosterVector> Options { get; }
+    }
 
-        public bool IsAnswered() => this.answer != null;
+    public class InterviewTreeSingleOptionQuestion
+    {
+        private readonly object answer;
 
-        public int GetIntegerAnswer() => Convert.ToInt32(this.answer); // TODO: make an intermediate type for answers in future
+        public InterviewTreeSingleOptionQuestion(object answer)
+        {
+            this.answer = answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+
+        public int GetAnswer() => Convert.ToInt32(this.answer);
+    }
+
+    public class InterviewTreeCascadingQuestion
+    {
+        private readonly InterviewTreeQuestion question;
+        private readonly Identity cascadingParentQuestionIdentity;
+
+        public InterviewTreeCascadingQuestion(InterviewTreeQuestion question, Identity cascadingParentQuestionIdentity)
+        {
+            if (cascadingParentQuestionIdentity == null) throw new ArgumentNullException(nameof(cascadingParentQuestionIdentity));
+
+            this.question = question;
+            this.cascadingParentQuestionIdentity = cascadingParentQuestionIdentity;
+        }
+
+        private InterviewTree Tree => this.question.Tree;
+
+        public InterviewTreeSingleOptionQuestion GetCascadingParentQuestion()
+            => this.Tree.GetQuestion(this.cascadingParentQuestionIdentity).AsSingleOption;
     }
 
     public class InterviewTreeStaticText : InterviewTreeLeafNode
