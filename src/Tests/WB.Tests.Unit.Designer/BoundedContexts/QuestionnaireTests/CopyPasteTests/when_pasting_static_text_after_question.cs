@@ -6,7 +6,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTests
 {

@@ -1,12 +1,11 @@
 ﻿extern alias designer;
 using System;
 using Main.Core.Documents;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
+using TemplateImported = WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.TemplateImported;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {

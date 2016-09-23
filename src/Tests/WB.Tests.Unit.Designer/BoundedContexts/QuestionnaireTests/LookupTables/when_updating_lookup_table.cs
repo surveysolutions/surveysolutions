@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 {

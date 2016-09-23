@@ -5,7 +5,6 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;

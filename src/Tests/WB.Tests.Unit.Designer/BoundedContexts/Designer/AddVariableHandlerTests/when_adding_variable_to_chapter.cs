@@ -1,9 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -19,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
 
         Because of = () =>
                 questionnaire.AddVariableAndMoveIfNeeded(
-                    new AddVariable(questionnaire.EventSourceId, entityId, new VariableData(variableType, variableName, variableExpression), responsibleId, chapterId, index));
+                    new AddVariable(questionnaire.PublicKey, entityId, new VariableData(variableType, variableName, variableExpression), responsibleId, chapterId, index));
 
 
         It should_contains_Variable_with_EntityId_specified = () =>

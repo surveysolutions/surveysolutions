@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaireDocument;
-        private static designer::Main.Core.Events.Questionnaire.TemplateImported @event;
+        private static TemplateImported @event;
         private static Guid shredPersonWithBefore = Guid.Parse("11111111111111111111111111111111");
         private static InMemoryReadSideRepositoryAccessor<QuestionnaireDocument> documentStorage;
     }
