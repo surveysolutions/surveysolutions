@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;

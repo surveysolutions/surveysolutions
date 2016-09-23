@@ -1,9 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -18,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
             questionnaire.AddVariable(Create.Event.VariableAdded(entityId : entityId, parentId : chapterId ));
 
             command = Create.Command.UpdateVariable(
-                questionnaire.EventSourceId,
+                questionnaire.PublicKey,
                 entityId: entityId,
                 type: variableType,
                 name: variableName,

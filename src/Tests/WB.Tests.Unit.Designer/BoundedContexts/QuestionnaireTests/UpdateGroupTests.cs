@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
