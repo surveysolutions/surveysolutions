@@ -18,7 +18,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
             {
                 base.groupIdentity = entityIdentity;
-                this.SortIndex = (int) entityIdentity.RosterVector.LastOrDefault();
             }
 
             public override void Dispose()
