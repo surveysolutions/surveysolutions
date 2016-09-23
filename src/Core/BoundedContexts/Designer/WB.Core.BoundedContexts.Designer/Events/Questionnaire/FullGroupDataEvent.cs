@@ -1,7 +1,6 @@
-using System;
-using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire;
 
-namespace Main.Core.Events.Questionnaire
+namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class FullGroupDataEvent : QuestionnaireActiveEvent
     {

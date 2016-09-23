@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.DeleteQuestion(questionDeletedEvent.Payload);
+            denormalizer.DeleteQuestion(questionDeletedEvent);
 
         It should_be_only_3_questions_left = () =>
             singleGroup.Children.Count.ShouldEqual(3);
@@ -47,6 +47,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static AbstractQuestion thirdQuestion;
         private static AbstractQuestion forthQuestion;
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<QuestionDeleted> questionDeletedEvent;
+        private static QuestionDeleted questionDeletedEvent;
     }
 }

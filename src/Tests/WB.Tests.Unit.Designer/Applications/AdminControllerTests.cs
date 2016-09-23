@@ -146,8 +146,7 @@ namespace WB.Tests.Unit.Designer.Applications
                 Mock.Of<IAccountListViewFactory>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>(),
-                Mock.Of<ICommandPostprocessor>());
+                Mock.Of<ITranslationsService>());
         }
 
         protected Mock<ICommandService> CommandServiceMock;

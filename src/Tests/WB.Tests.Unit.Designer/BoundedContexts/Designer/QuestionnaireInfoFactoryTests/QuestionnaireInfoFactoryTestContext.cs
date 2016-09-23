@@ -141,7 +141,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                     new Answer() {AnswerText = "1", AnswerCode = 1},
                                     new Answer() {AnswerText = "2", AnswerCode = 2},
                                 }),
-                            Create.StaticText(st1Id, "static text 1")
+                            Create.StaticText(st1Id, "static text 1"),
+                            Create.Variable(var1Id, VariableType.String, "var1")
                         }
                     },
                     new Group()
@@ -308,6 +309,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         protected static Guid st2Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
+        protected static Guid var1Id = Guid.Parse("11DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
     }
 }

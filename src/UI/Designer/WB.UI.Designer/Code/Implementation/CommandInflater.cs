@@ -67,7 +67,7 @@ namespace WB.UI.Designer.Code.Implementation
             if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return questionnaire;
 
-            var sharedPersons = this.sharedPersons.GetById(questionnaire.Id);
+            var sharedPersons = this.sharedPersons.GetById(id.FormatGuid());
             if (sharedPersons == null || sharedPersons.SharedPersons.All(x => x.Id != this.userHelper.WebUser.UserId))
             {
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");

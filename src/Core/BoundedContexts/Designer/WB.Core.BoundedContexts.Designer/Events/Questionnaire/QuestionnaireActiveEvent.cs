@@ -3,7 +3,7 @@ using WB.Core.Infrastructure.EventBus;
 
 namespace Main.Core.Events.Questionnaire
 {
-    public abstract class QuestionnaireActiveEvent : IEvent
+    public abstract class QuestionnaireActiveEvent
     {
         public Guid ResponsibleId { get; set; }
 

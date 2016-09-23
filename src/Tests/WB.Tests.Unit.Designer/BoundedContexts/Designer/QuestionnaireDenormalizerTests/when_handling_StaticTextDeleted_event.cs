@@ -32,13 +32,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.DeleteStaticText(evnt.Payload);
+            denormalizer.DeleteStaticText(evnt);
 
         It should_chapter_be_empty = () =>
             chapter.Children.ShouldBeEmpty();
         
         private static Group chapter;
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<StaticTextDeleted> evnt;
+        private static StaticTextDeleted evnt;
     }
 }

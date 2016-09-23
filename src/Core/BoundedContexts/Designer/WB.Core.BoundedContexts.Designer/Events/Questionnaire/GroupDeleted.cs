@@ -1,8 +1,8 @@
-﻿namespace Main.Core.Events.Questionnaire
-{
-    using System;
+﻿using System;
+using Main.Core.Events.Questionnaire;
 
-    using Ncqrs.Eventing.Storage;
+namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
+{
     public class GroupDeleted : QuestionnaireActiveEvent
     {
         /// <remarks>Needed for successfull deserialization from DB</remarks>>

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -20,13 +21,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
 
         public QuestionnaireViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage)
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
+            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.sharedPersonsStorage = sharedPersonsStorage;
+            this.listItemStorage = listItemStorage;
         }
 
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
@@ -45,7 +49,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return true;
 
             var sharedPersons = sharedPersonsStorage.GetById(questionnaireId.FormatGuid())?.SharedPersons ?? new List<SharedPerson>();
-            return sharedPersons.Any(x => x.Id == userId);
+            if (sharedPersons.Any(x => x.Id == userId))
+                return true;
+
+            var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+            if (questionnaireListItem.IsPublic)
+                return true;
+
+            return false;
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)
