@@ -2,7 +2,6 @@ using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -21,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
             questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId ));
 
             command = Create.Command.UpdateStaticText(
-                questionnaire.EventSourceId,
+                questionnaire.PublicKey,
                 entityId: entityId,
                 text: text,
                 attachmentName: "",

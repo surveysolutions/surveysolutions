@@ -7,19 +7,19 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
+using Group = Main.Core.Entities.SubEntities.Group;
+using TemplateImported = WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.TemplateImported;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {

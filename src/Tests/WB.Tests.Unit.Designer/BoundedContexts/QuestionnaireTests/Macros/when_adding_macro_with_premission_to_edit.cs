@@ -3,7 +3,6 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
 {

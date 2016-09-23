@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
