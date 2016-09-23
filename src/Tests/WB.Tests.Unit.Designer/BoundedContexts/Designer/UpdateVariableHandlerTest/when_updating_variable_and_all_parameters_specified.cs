@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
             questionnaire.AddVariable(Create.Event.VariableAdded(entityId : entityId, parentId : chapterId ));
 
             command = Create.Command.UpdateVariable(
-                questionnaire.PublicKey,
+                questionnaire.Id,
                 entityId: entityId,
                 type: variableType,
                 name: variableName,

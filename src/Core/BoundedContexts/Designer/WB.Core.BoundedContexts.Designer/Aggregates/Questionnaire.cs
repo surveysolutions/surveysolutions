@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private bool wasExpressionsMigrationPerformed = false;
 
-        public Guid PublicKey => this.innerDocument.PublicKey;
+        public Guid Id => this.innerDocument.PublicKey;
 
         internal void AddMacro(MacroAdded e)
         {
@@ -616,7 +616,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "only QuestionnaireDocuments are supported for now");
 
             var clonedDocument = (QuestionnaireDocument)document.Clone();
-            clonedDocument.PublicKey = this.PublicKey;
+            clonedDocument.PublicKey = this.Id;
             clonedDocument.CreatedBy = createdBy;
             clonedDocument.CreationDate = this.clock.UtcNow();
             clonedDocument.Title = title;
@@ -632,7 +632,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if (!this.lookupTableService.IsLookupTableEmpty(document.PublicKey, lookupTable.Key, lookupTableName))
                 {
-                    lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key, lookupTableName, this.PublicKey, lookupTable.Key);
+                    lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key, lookupTableName, this.Id, lookupTable.Key);
                 }
             }
 
@@ -1932,7 +1932,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void CheckDepthInvariants(IComposite targetToPasteIn, IComposite entityToInsert)
         {
-            if (targetToPasteIn.PublicKey != this.PublicKey)
+            if (targetToPasteIn.PublicKey != this.Id)
             {
                 var targetChapter = this.innerDocument.GetChapterOfItemById(targetToPasteIn.PublicKey);
 
@@ -1971,7 +1971,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var entityToInsertAsQuestion = entityToInsert as IQuestion;
             if (entityToInsertAsQuestion != null)
             {
-                if (targetToPasteIn.PublicKey == this.PublicKey)
+                if (targetToPasteIn.PublicKey == this.Id)
                     throw new QuestionnaireException(string.Format("Question cannot be pasted here."));
 
                 var question = (AbstractQuestion)entityToInsertAsQuestion.Clone();
@@ -1987,7 +1987,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var entityToInsertAsStaticText = entityToInsert as IStaticText;
             if (entityToInsertAsStaticText != null)
             {
-                if (targetToPasteIn.PublicKey == this.PublicKey)
+                if (targetToPasteIn.PublicKey == this.Id)
                     throw new QuestionnaireException(string.Format("Static Text cannot be pasted here."));
 
                 var staticText = (StaticText)entityToInsertAsStaticText.Clone();
@@ -2000,7 +2000,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (entityToInsertAsGroup != null)
             {
                 //roster as chapter is forbidden
-                if (entityToInsertAsGroup.IsRoster && (targetToPasteIn.PublicKey == this.PublicKey))
+                if (entityToInsertAsGroup.IsRoster && (targetToPasteIn.PublicKey == this.Id))
                     throw new QuestionnaireException(string.Format("Roster cannot be pasted here."));
 
                 //roster, group, chapter
@@ -2035,7 +2035,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var entityToInsertAsVariable = entityToInsert as IVariable;
             if (entityToInsertAsVariable != null)
             {
-                if (targetToPasteIn.PublicKey == this.PublicKey)
+                if (targetToPasteIn.PublicKey == this.Id)
                     throw new QuestionnaireException(string.Format("Variable cannot be pasted here."));
 
                 var variable = (Variable)entityToInsertAsVariable.Clone();
