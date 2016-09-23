@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -22,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
@@ -43,12 +45,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 : new ExportViewFactory(Mock.Of<IFileSystemAccessor>(), 
                                         new ExportQuestionService(),
                                         Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) && 
-                                                                            x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument))
+                                                                            x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
+                                        new RostrerStructureService())
                                        .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));
 
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
-                : questionnaire.GetRosterScopes());
+                : new RostrerStructureService().GetRosterScopes(questionnaireDocument));
 
             var preloadedService = new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure,
                 questionnaireDocument, new QuestionDataParser(), Mock.Of<IUserViewFactory>());
@@ -62,7 +65,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     userViewFactory ?? Mock.Of<IUserViewFactory>(),
                     Mock.Of<IQuestionnaireStorage>( _ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire && 
                                                          _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument),
-                    Mock.Of<IQuestionnaireExportStructureStorage>(_ => _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure));
+                    Mock.Of<IQuestionnaireExportStructureStorage>(_ => _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
+                    Mock.Of<IRostrerStructureService>(_ => _.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireRosterStructure));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)

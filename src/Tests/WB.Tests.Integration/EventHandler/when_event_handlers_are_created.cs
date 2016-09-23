@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.Su
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
@@ -108,7 +109,7 @@ namespace WB.Tests.Integration.EventHandler
        {
             typeof (ILogger), typeof (IQuestionnaireEntityFactory), typeof(IPlainKeyValueStorage<QuestionnaireQuestionsInfo>), 
             typeof (IQuestionnaireStorage), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
-             
+            typeof (IRostrerStructureService),
             typeof (IQuestionDetailsViewMapper), typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
             typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage)

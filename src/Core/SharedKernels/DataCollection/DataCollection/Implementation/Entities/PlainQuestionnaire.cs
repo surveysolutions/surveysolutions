@@ -17,8 +17,6 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -45,8 +43,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedStaticTextsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedGroupsCache = null;
-        private Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null;
-
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -148,14 +144,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                         .ToDictionary(
                             group => group.PublicKey.FormatGuid(),
                             group => group));
-            }
-        }
-
-        private Dictionary<ValueVector<Guid>, RosterScopeDescription> RosterScopes
-        {
-            get
-            {
-                return this.rosterScopes ?? (this.rosterScopes = this.CreateRosterScopes());
             }
         }
 
@@ -941,127 +929,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return true;
-        }
-
-
-        public Dictionary<ValueVector<Guid>, RosterScopeDescription> GetRosterScopes()
-        {
-            return this.RosterScopes;
-        }
-
-        public Dictionary<ValueVector<Guid>, RosterScopeDescription> CreateRosterScopes()
-        {
-            var result = new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
-            var groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId(this.innerDocument);
-            this.AddRosterScopes(this.innerDocument, groupsMappedOnPropagatableQuestion, result);
-
-            return result;
-        }
-
-        private void AddRosterScopes(QuestionnaireDocument questionnaire, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion,
-           Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
-        {
-            var rosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question);
-            var fixedRosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles).ToList();
-
-            var rosterSizeQuestions = questionnaire.Find<IQuestion>(question => rosterGroups.Any(group => group.RosterSizeQuestionId.Value == question.PublicKey));
-
-            foreach (var rosterSizeQuestion in rosterSizeQuestions)
-            {
-                var groupsFromRosterSizeQuestionScope =
-                    rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey).ToList();
-
-                var scopeVectorsOfTriggers = groupsFromRosterSizeQuestionScope.Select(
-                    roster =>
-                        this.GetScopeOfQuestionnaireItem(roster,
-                            groupsMappedOnPropagatableQuestion)).GroupBy(k => k);
-
-                foreach (var scopeVectorsOfTrigger in scopeVectorsOfTriggers)
-                {
-                    var rosterIdWithTitleQuestionIds =
-                        this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(questionnaire,
-                            groupsFromRosterSizeQuestionScope.Where(group =>
-                                GetScopeOfQuestionnaireItem(group, groupsMappedOnPropagatableQuestion)
-                                    .SequenceEqual(scopeVectorsOfTrigger.Key)));
-
-                    var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, rosterSizeQuestion.StataExportCaption,
-                        GetRosterScopeTypeByQuestionType(rosterSizeQuestion.QuestionType), rosterIdWithTitleQuestionIds);
-
-                    rosterScopes.Add(scopeVectorsOfTrigger.Key, rosterDescription);
-                }
-            }
-
-            foreach (var fixedRosterGroup in fixedRosterGroups)
-            {
-                var scopeVector = this.GetScopeOfQuestionnaireItem(fixedRosterGroup, groupsMappedOnPropagatableQuestion);
-                rosterScopes[scopeVector] =
-                    new RosterScopeDescription(scopeVector,
-                        string.Empty, RosterScopeType.Fixed,
-                        new Dictionary<Guid, RosterTitleQuestionDescription> { { fixedRosterGroup.PublicKey, null } });
-            }
-        }
-
-        private RosterScopeType GetRosterScopeTypeByQuestionType(QuestionType questionType)
-        {
-            switch (questionType)
-            {
-                case QuestionType.Numeric:
-                    return RosterScopeType.Numeric;
-                case QuestionType.MultyOption:
-                    return RosterScopeType.MultyOption;
-                case QuestionType.TextList:
-                    return RosterScopeType.TextList;
-            }
-            return RosterScopeType.Numeric;
-        }
-
-        private IDictionary<Guid, Guid> GetAllRosterScopesGroupedByRosterId(QuestionnaireDocument template)
-        {
-            var result = template.Find<IGroup>(group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question).ToDictionary(roster => roster.PublicKey, roster => roster.RosterSizeQuestionId.Value);
-
-            foreach (var roster in template.Find<IGroup>(group => group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles))
-            {
-                result.Add(roster.PublicKey, roster.PublicKey);
-            }
-
-            return result;
-        }
-
-        private ValueVector<Guid> GetScopeOfQuestionnaireItem(IComposite questionnaireItem,
-            IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion)
-        {
-            var result = new List<Guid>();
-            var questionParent = questionnaireItem;
-
-            while (questionParent != null)
-            {
-                var group = questionParent as IGroup;
-                if (group != null && (group.IsRoster))
-                {
-                    result.Add(groupsMappedOnPropagatableQuestion[group.PublicKey]);
-                }
-                questionParent = questionParent.GetParent();
-            }
-            result.Reverse();
-
-            return new ValueVector<Guid>(result);
-        }
-
-        private Dictionary<Guid, RosterTitleQuestionDescription> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(QuestionnaireDocument questionnaire, IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
-        {
-            return
-                groupsFromRosterSizeQuestionScope
-                    .ToDictionary(roster => roster.PublicKey,
-                        roster => roster.RosterTitleQuestionId.HasValue
-                            ? this.CreateRosterTitleQuestionDescription(
-                                questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == roster.RosterTitleQuestionId.Value))
-                            : null);
-        }
-
-        private RosterTitleQuestionDescription CreateRosterTitleQuestionDescription(IQuestion question)
-        {
-            return new RosterTitleQuestionDescription(question.PublicKey,
-                question.Answers.ToDictionary(a => a.AnswerCode.Value, a => a.AnswerText));
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
