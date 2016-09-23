@@ -470,12 +470,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (answers == null)
                 return null;
 
-            return EventConverter.GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
+            return GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
             {
                 Title = x.AnswerText,
                 Value = decimal.Parse(x.AnswerValue),
                 ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
             }).ToArray();
+        }
+
+        private static Answer[] GetValidAnswersCollection(Answer[] answers)
+        {
+            if (answers == null)
+                return null;
+
+            foreach (var answer in answers)
+            {
+                if (string.IsNullOrWhiteSpace(answer.AnswerValue))
+                {
+                    answer.AnswerValue = (new Random().NextDouble() * 100).ToString("0.00");
+                }
+                if (string.IsNullOrWhiteSpace(answer.AnswerText))
+                {
+                    answer.AnswerText = "Option " + answer.AnswerValue;
+                }
+            }
+            return answers;
         }
 
         private List<DropdownQuestionView> GetSourcesOfSingleQuestionBriefs(QuestionnaireDocument document, Guid questionId)
