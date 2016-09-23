@@ -1003,29 +1003,6 @@ namespace WB.Tests.Unit.Designer
             return new ValidationCondition(expression, message);
         }
 
-        public static CommandPostprocessor CommandPostprocessor(
-            IMembershipUserService membershipUserService,
-            IRecipientNotifier recipientNotifier,
-            IAccountRepository accountRepository,
-            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage,
-            ILogger logger,
-            IAttachmentService attachmentService = null,
-            ILookupTableService lookupTableService = null,
-            ITranslationsService translationsService = null,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
-            IReadSideRepositoryWriter<AccountDocument> accountStorage = null,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> questionnaireSharedPersonsStorage = null,
-            IQuestionnaireHistory questionnaireHistory = null)
-        {
-            return new CommandPostprocessor(
-               documentStorage,
-               logger,
-               attachmentService ?? Mock.Of<IAttachmentService>(),
-               lookupTableService ?? Mock.Of<ILookupTableService>(),
-               translationsService ?? Mock.Of<ITranslationsService>(),
-               questionnaireHistory ?? Mock.Of<IQuestionnaireHistory>());
-        }
-
         public static AttachmentService AttachmentService(
             IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
             IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
