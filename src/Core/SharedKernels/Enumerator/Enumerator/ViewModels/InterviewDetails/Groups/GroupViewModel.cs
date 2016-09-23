@@ -29,7 +29,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public EnablementViewModel Enablement { get; }
         public bool IsRoster { get; private set; }
-        public int SortIndex { get; protected set; }
 
         public DynamicTextViewModel GroupTitle { get; }
 
