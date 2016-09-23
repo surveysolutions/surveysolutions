@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Main.Core.Events.Questionnaire
 {
-    public class TemplateImported : IEvent
+    public class TemplateImported
     {
         public QuestionnaireDocument Source { get; set; }
     }

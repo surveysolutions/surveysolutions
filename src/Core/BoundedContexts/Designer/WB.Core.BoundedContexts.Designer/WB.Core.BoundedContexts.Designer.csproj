@@ -215,8 +215,6 @@
     <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="Events\Questionnaire\Attachments\AttachmentDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Attachments\AttachmentUpdated.cs" />
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Events\Questionnaire\LookupTables\LookupTableAdded.cs" />
     <Compile Include="Events\Questionnaire\LookupTables\LookupTableDeleted.cs" />
@@ -226,8 +224,6 @@
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireVariableEvent.cs" />
-    <Compile Include="Events\Questionnaire\Translation\TranslationDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Translation\TranslationUpdated.cs" />
     <Compile Include="Events\Questionnaire\VariableAdded.cs" />
     <Compile Include="Events\Questionnaire\VariableCloned.cs" />
     <Compile Include="Events\Questionnaire\VariableDeleted.cs" />
@@ -372,6 +368,9 @@
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\MultiLanguageQuestionnaireDocument.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\ResourcesPostProcessor.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\HistoryPostProcessor.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\ListViewPostProcessor.cs" />
     <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
@@ -502,7 +501,6 @@
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireCloned.cs" />
     <Compile Include="Events\Questionnaire\RosterChanged.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonToQuestionnaireAdded.cs" />
     <Compile Include="Events\Questionnaire\SharedPersonFromQuestionnaireRemoved.cs" />
@@ -520,7 +518,6 @@
     <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Questionnaire\TemplateImported.cs" />
@@ -576,6 +573,7 @@
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
+    <Compile Include="Services\IRecipientNotifier.cs" />
     <Compile Include="Translations\InvalidExcelFileException.cs" />
     <Compile Include="Translations\ITranslationsService.cs" />
     <Compile Include="Translations\TranslationFile.cs" />
@@ -602,7 +600,6 @@
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />
     <Compile Include="Views\Account\CQRSRoleRepository.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireChangeHistoryFactory.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireActionType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecord.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecordReference.cs" />
@@ -610,7 +607,6 @@
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeRecord.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeReference.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTracker.cs" />
     <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
@@ -712,6 +708,7 @@
     <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\ShareChangeType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">

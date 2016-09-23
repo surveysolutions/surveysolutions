@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaire = Create.QuestionnaireDocument(questionnaireId);
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
-            denormalizer.DeleteLookupTable(evnt.Payload);
+            denormalizer.DeleteLookupTable(evnt);
         };
 
-        Because of = () => denormalizer.DeleteLookupTable(evnt.Payload);
+        Because of = () => denormalizer.DeleteLookupTable(evnt);
 
         It should_delete_lookup_table = () =>
             questionnaire.LookupTables.Count.ShouldEqual(0);
@@ -30,6 +30,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
-        private static IPublishedEvent<LookupTableDeleted> evnt;
+        private static LookupTableDeleted evnt;
     }
 }

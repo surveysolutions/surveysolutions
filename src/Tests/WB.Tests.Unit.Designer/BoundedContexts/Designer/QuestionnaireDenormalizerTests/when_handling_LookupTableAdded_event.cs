@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 
-        Because of = () => denormalizer.AddLookupTable(evnt.Payload);
+        Because of = () => denormalizer.AddLookupTable(evnt);
 
         It should_add_one_lookup_table = () =>
             questionnaire.LookupTables.Count.ShouldEqual(1);
@@ -35,6 +35,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
-        private static IPublishedEvent<LookupTableAdded> evnt;
+        private static LookupTableAdded evnt;
     }
 }

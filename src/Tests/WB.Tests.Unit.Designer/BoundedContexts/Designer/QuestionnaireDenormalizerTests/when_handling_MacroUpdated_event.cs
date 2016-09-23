@@ -17,10 +17,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaire = Create.QuestionnaireDocument(questionnaireId);
             
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
-            denormalizer.AddMacro(Create.Event.MacroAdded(questionnaireId, entityId).Payload);
+            denormalizer.AddMacro(Create.Event.MacroAdded(questionnaireId, entityId));
         };
 
-        Because of = () => denormalizer.UpdateMacro(evnt.Payload);
+        Because of = () => denormalizer.UpdateMacro(evnt);
 
         It should_not_add_extra_macro = () =>
             questionnaire.Macros.Count.ShouldEqual(1);
@@ -41,6 +41,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static readonly string description = "macros description";
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
-        private static IPublishedEvent<MacroUpdated> evnt;
+        private static MacroUpdated evnt;
     }
 }

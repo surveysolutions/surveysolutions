@@ -29,7 +29,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public EnablementViewModel Enablement { get; }
         public bool IsRoster { get; private set; }
-        public int SortIndex { get; protected set; }
 
         public DynamicTextViewModel GroupTitle { get; }
 
@@ -87,7 +86,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
 
             this.IsRoster = questionnaire.IsRosterGroup(entityIdentity.Id);
-            this.SortIndex = statefulInterview.GetRosterSortIndex(entityIdentity);
 
             this.navigationState = navigationState;
             this.groupIdentity = entityIdentity;

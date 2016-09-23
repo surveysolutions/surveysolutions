@@ -284,14 +284,10 @@
     <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
     <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
     <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
-    <Compile Include="Code\Implementation\ShareChangeType.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
     <Compile Include="DesignerSettingsProvider.cs" />
-    <Compile Include="Code\ICommandPostprocessor.cs" />
-    <Compile Include="Code\Implementation\CommandPostprocessor.cs" />
     <Compile Include="Code\Implementation\MailNotifier.cs" />
-    <Compile Include="Code\IRecipientNotifier.cs" />
     <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Implementation\Services\AuthenticationService.cs" />

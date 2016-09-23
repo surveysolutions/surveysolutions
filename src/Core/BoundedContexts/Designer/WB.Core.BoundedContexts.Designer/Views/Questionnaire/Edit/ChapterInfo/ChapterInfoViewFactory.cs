@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 ItemId = staticText.PublicKey.FormatGuid(),
                 Text = staticText.Text,
                 AttachmentName = staticText.AttachmentName,
-                HasCondition = string.IsNullOrWhiteSpace(staticText.ConditionExpression),
+                HasCondition = !string.IsNullOrWhiteSpace(staticText.ConditionExpression),
                 HasValidation = staticText.ValidationConditions.Count > 0,
             };
         }
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 ItemId = group.PublicKey.FormatGuid(),
                 Title = group.Title,
                 IsRoster = group.IsRoster,
-                HasCondition = string.IsNullOrWhiteSpace(group.ConditionExpression),
+                HasCondition = !string.IsNullOrWhiteSpace(group.ConditionExpression),
                 Variable = group.VariableName,
                 Items = new List<IQuestionnaireItem>(),
                 GroupsCount = 0,

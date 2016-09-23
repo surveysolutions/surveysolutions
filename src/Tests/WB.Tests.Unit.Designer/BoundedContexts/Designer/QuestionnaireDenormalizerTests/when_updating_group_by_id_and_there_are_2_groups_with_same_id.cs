@@ -6,6 +6,7 @@ using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         };
 
         Because of = () =>
-            denormalizer.UpdateGroup(groupUpdatedEvent.Payload);
+            denormalizer.UpdateGroup(groupUpdatedEvent);
 
         It should_update_first_group = () =>
             firstGroup.Title.ShouldEqual(updatedGroupTitle);
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             secondGroup.Title.ShouldEqual(initialGroupTitle);
 
         private static Questionnaire denormalizer;
-        private static IPublishedEvent<GroupUpdated> groupUpdatedEvent;
+        private static GroupUpdated groupUpdatedEvent;
         private static Group firstGroup;
         private static Group secondGroup;
         private static string updatedGroupTitle;

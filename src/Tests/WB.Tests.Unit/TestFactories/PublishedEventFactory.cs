@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+
 
 namespace WB.Tests.Unit.TestFactories
 {
@@ -79,49 +79,6 @@ namespace WB.Tests.Unit.TestFactories
         public IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
             InterviewStatus status, string comment = null, Guid? interviewId = null)
             => Create.PublishedEvent.InterviewStatusChanged(interviewId ?? Guid.NewGuid(), status, comment: comment);
-
-        public IPublishedEvent<QuestionCloned> QuestionCloned(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            QuestionType questionType = QuestionType.Text, string questionConditionExpression = null,
-            string sourceQuestionId = null, IList<ValidationCondition> validationConditions = null,
-            bool hideIfDisabled = false, QuestionProperties properties = null, bool isTimestamp = false)
-            => new QuestionCloned(
-                publicKey: ToGuid(questionId) ?? Guid.NewGuid(),
-                groupPublicKey: ToGuid(parentGroupId) ?? Guid.NewGuid(),
-                stataExportCaption: questionVariable,
-                questionText: questionTitle,
-                questionType: questionType,
-                conditionExpression: questionConditionExpression,
-                hideIfDisabled: hideIfDisabled,
-                sourceQuestionId: ToGuid(sourceQuestionId) ?? Guid.NewGuid(),
-                targetIndex: 0,
-                featured: false,
-                instructions: null,
-                properties: properties ?? new QuestionProperties(false, false),
-                responsibleId: Guid.NewGuid(),
-                capital: false,
-                questionScope: QuestionScope.Interviewer,
-                variableLabel: null,
-                validationExpression: null,
-                validationMessage: null,
-                answerOrder: null,
-                answers: null,
-                linkedToQuestionId: null,
-                linkedToRosterId: null,
-                isInteger: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                mask: null,
-                maxAllowedAnswers: null,
-                isFilteredCombobox: null,
-                cascadeFromQuestionId: null,
-                sourceQuestionnaireId: null,
-                maxAnswerCount: null,
-                countOfDecimalPlaces: null,
-                validationConditions: validationConditions,
-                linkedFilterExpression: null,
-                isTimestamp: isTimestamp)
-                .ToPublishedEvent();
 
         public IPublishedEvent<SupervisorAssigned> SupervisorAssigned(Guid? interviewId = null, string userId = null,
             string supervisorId = null)
