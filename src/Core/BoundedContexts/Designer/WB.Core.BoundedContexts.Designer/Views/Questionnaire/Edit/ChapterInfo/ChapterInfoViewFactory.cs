@@ -81,6 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             return new VariableView()
             {
+                Id = variable.PublicKey,
                 ItemId = variable.PublicKey.FormatGuid(),
                 VariableData = new VariableData(variable.Type, variable.Name, variable.Expression),
             };

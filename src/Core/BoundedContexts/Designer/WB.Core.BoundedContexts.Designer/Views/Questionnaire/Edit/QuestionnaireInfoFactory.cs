@@ -465,7 +465,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return null;
         }
 
-        public static CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
+        private static CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
         {
             if (answers == null)
                 return null;

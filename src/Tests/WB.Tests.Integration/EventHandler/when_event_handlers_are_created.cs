@@ -109,7 +109,7 @@ namespace WB.Tests.Integration.EventHandler
             typeof (ILogger), typeof (IQuestionnaireEntityFactory), typeof(IPlainKeyValueStorage<QuestionnaireQuestionsInfo>), 
             typeof (IQuestionnaireStorage), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
              
-            typeof (IQuestionDetailsViewMapper), typeof(ISerializer), typeof(IMetaInfoBuilder),
+            typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
             typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage)
             
