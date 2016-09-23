@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
                     }
                 }
             );
-            rosterStructureService = new RostrerStructureService();
+            rosterStructureService = new RosterStructureService();
         };
 
         Because of = () =>

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     new ExportQuestionService(),
                     Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire &&
                                                         _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
-                    new RostrerStructureService())
+                    new RosterStructureService())
                  .CreateQuestionnaireExportStructure(new QuestionnaireIdentity());
 
             stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(fileSystemAccessor);

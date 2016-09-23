@@ -31,12 +31,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                                         new ExportQuestionService(),
                                         Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) && 
                                                                             _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
-                                        new RostrerStructureService())
+                                        new RosterStructureService())
                       .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));
 
             var questionnaireRosterScopes = (questionnaireDocument == null
                 ? null
-                : new RostrerStructureService().GetRosterScopes(questionnaireDocument));
+                : new RosterStructureService().GetRosterScopes(questionnaireDocument));
 
             var userViewFactory = new Mock<IUserViewFactory>();
             return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterScopes, questionnaireDocument,

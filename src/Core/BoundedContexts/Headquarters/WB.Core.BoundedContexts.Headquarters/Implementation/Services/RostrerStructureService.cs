@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    public class RostrerStructureService  : IRostrerStructureService
+    public class RosterStructureService  : IRostrerStructureService
     {
         public Dictionary<ValueVector<Guid>, RosterScopeDescription> GetRosterScopes(QuestionnaireDocument document)
         {
