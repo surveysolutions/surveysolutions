@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 Mock.Of<IFileSystemAccessor>(),
                 exportQuestionService ?? new ExportQuestionService(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                rostrerStructureService ?? new RostrerStructureService());
+                rostrerStructureService ?? new RosterStructureService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter( params IComposite[] chapterChildren)

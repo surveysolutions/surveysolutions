@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
                     RosterSizeQuestionId = numericQuestionId
                 }
             );
-            rosterStructureService = new RostrerStructureService();
+            rosterStructureService = new RosterStructureService();
         };
 
         Because of = () =>

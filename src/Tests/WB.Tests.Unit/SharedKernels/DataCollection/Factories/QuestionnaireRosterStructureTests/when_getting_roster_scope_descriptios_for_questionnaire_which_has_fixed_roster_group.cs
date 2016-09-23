@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
                     RosterSizeSource = RosterSizeSourceType.FixedTitles
                 }
             );
-            rosterStructureService = new RostrerStructureService();
+            rosterStructureService = new RosterStructureService();
         };
 
         Because of = () =>

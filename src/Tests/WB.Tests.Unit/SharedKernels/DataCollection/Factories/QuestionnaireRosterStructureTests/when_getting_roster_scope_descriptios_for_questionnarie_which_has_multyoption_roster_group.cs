@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
                     RosterSizeQuestionId = multyOptionQuestionId
                 }
             );
-            rosterStructureService = new RostrerStructureService();
+            rosterStructureService = new RosterStructureService();
         };
 
         Because of = () =>

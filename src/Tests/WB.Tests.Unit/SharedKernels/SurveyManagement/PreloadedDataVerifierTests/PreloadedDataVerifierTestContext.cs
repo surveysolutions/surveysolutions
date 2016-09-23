@@ -46,12 +46,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                                         new ExportQuestionService(),
                                         Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) && 
                                                                             x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
-                                        new RostrerStructureService())
+                                        new RosterStructureService())
                                        .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));
 
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
-                : new RostrerStructureService().GetRosterScopes(questionnaireDocument));
+                : new RosterStructureService().GetRosterScopes(questionnaireDocument));
 
             var preloadedService = new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure,
                 questionnaireDocument, new QuestionDataParser(), Mock.Of<IUserViewFactory>());
