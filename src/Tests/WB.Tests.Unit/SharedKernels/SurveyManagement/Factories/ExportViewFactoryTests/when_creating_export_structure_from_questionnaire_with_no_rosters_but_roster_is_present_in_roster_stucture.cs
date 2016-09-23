@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -33,12 +34,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
 
             var questionnaireMock = new Mock<IQuestionnaire>();
-            questionnaireMock.Setup(x => x.GetRosterScopes()).Returns(rosterScopes);
+
+            var rostrerStructureService = new Mock<IRostrerStructureService>();
+            rostrerStructureService.Setup(x => x.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>())).Returns(rosterScopes);
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaireMock.Object);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
-            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object, rostrerStructureService : rostrerStructureService.Object);
         };
 
         Because of = () =>
