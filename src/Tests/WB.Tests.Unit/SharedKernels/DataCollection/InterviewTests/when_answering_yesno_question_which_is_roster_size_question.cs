@@ -75,6 +75,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     option__Selected__FromNothing_ToYes____,
                     option__Selected__FromNo______ToYes____);
 
+        It should_raise_RosterInstancesAdded_event_with_SortIndexes = () =>
+        {
+            var addedRosters = eventContext.GetSingleEvent<RosterInstancesAdded>().Instances;
+            addedRosters[0].SortIndex.ShouldEqual(1);
+            addedRosters[1].SortIndex.ShouldEqual(2);
+        };
+
         It should_raise_RosterInstancesRemoved_event = () =>
             eventContext.ShouldContainEvent<RosterInstancesRemoved>();
 
