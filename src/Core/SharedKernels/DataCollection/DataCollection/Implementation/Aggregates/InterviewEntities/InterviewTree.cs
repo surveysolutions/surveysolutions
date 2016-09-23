@@ -117,8 +117,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
-        private readonly IReadOnlyCollection<RosterVector> linkedOptions;
-
         public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
             QuestionType questionType, object answer,
             IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity)
