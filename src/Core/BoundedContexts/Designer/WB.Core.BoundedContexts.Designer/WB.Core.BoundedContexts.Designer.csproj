@@ -368,6 +368,8 @@
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\MultiLanguageQuestionnaireDocument.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\ResourcesPostProcessor.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\HistoryPostProcessor.cs" />
     <Compile Include="Implementation\Services\QuestionnairePostProcessors\ListViewPostProcessor.cs" />
     <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
@@ -598,7 +600,6 @@
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />
     <Compile Include="Views\Account\CQRSRoleRepository.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireChangeHistoryFactory.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\IQuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireActionType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecord.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecordReference.cs" />
@@ -606,7 +607,6 @@
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeRecord.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeReference.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTracker.cs" />
     <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
