@@ -57,7 +57,6 @@ namespace WB.Core.BoundedContexts.Designer
                 new EventTypeResolver(
                     typeof(DesignerBoundedContextModule).Assembly));
 
-            this.Bind<IQuestionDetailsViewMapper>().To<QuestionDetailsViewMapper>().InSingletonScope();
             this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();

@@ -669,16 +669,6 @@
     <Compile Include="BoundedContexts\Designer\MoveStaticTextHandlerTests\when_moving_static_text_and_entity_does_not_exists.cs" />
     <Compile Include="BoundedContexts\Designer\MoveStaticTextHandlerTests\when_moving_static_text_and_target_entity_does_not_exists.cs" />
     <Compile Include="BoundedContexts\Designer\MoveStaticTextHandlerTests\when_moving_static_text_and_user_dont_have_permissions.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\QuestionDetailsFactoryTestContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_datetime_question_details_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_geo_location_details_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_multimedia_question_details_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_multi_option_details_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_numeric_question_details_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_qr_barcode_question_details_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_single_option_details_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_text_list_question_details_view.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionDetailsFactoryTests\when_creating_text_question_details_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionChangeEventTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />

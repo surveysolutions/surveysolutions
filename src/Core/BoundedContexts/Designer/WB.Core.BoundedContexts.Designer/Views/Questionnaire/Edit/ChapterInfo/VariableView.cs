@@ -6,13 +6,15 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
-    public class VariableView : DescendantItemView, INameable, IQuestionnaireItem
+    public class VariableView : INameable, IQuestionnaireItem
     {
         public VariableView()
         {
             this.Breadcrumbs = new Breadcrumb[] {};
             this.VariableData = new VariableData(VariableType.Boolean, null, null);
         }
+
+        public Guid Id { get; set; }
 
         public string ItemId { get; set; }
 

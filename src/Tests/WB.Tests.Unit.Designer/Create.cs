@@ -1077,44 +1077,6 @@ namespace WB.Tests.Unit.Designer
                 traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
                 questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
 
-        public static QuestionDetailsView NumericDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
-        {
-            return new NumericDetailsView
-            {
-                Id = id ?? Guid.NewGuid(),
-                IsInteger = true,
-                Title = "Numeric Integer",
-                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
-                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
-                RosterScopeIds = rosterScopeIds ?? new Guid[0]
-            };
-        }
-
-        public static QuestionDetailsView TextDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
-        {
-            return new TextDetailsView
-            {
-                Id = id ?? Guid.NewGuid(),
-                Title = "Text",
-                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
-                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
-                RosterScopeIds = rosterScopeIds ?? new Guid[0]
-            };
-        }
-
-        public static GroupAndRosterDetailsView GroupAndRosterDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null,
-            Guid? rosterSizeQuestionId = null)
-        {
-            return new GroupAndRosterDetailsView
-            {
-                Id = id ?? Guid.NewGuid(),
-                Title = "Numeric Ro",
-                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
-                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
-                RosterScopeIds = rosterScopeIds ?? new Guid[0],
-                RosterSizeQuestionId = rosterSizeQuestionId
-            };
-        }
 
         public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)
         {
