@@ -11,8 +11,10 @@ using Moq;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
@@ -28,6 +30,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
@@ -639,7 +642,7 @@ namespace WB.Tests.Unit.Designer
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null, Guid? responsibleId = null)
         {
             return new QuestionnaireDocument
             {
@@ -647,6 +650,7 @@ namespace WB.Tests.Unit.Designer
                 Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
                 Title = title,
+                CreatedBy = responsibleId ?? Guid.NewGuid()
             };
         }
 
@@ -982,6 +986,15 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteAttachment(questionnaireId, attachmentId, responsibleId);
             }
 
+            public static UpdateGroup UpdateGroup(Guid questionnaireId, Guid groupId, Guid? responsibleId = null,
+                string title = null, string variableName = null, Guid? rosterSizeQuestionId = null,
+                string condition = null, bool hideIfDisabled = false, bool isRoster = false,
+                RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
+                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null)
+                => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
+                    rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId);
+
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, Guid? userId = null)
             {
                 return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression));
@@ -996,6 +1009,24 @@ namespace WB.Tests.Unit.Designer
             {
                 return new DeleteTranslation(questionnaireId, responsibleId, translationId);
             }
+
+            public static MoveGroup MoveGroup(Guid questionnaireId, Guid groupId, Guid responsibleId, Guid? targetGroupId = null, int? tagretIndex = null)
+                => new MoveGroup(questionnaireId, groupId, targetGroupId, tagretIndex ?? 0, responsibleId);
+
+            public static MoveStaticText MoveStaticText(Guid questionnaireId, Guid staticTextId, Guid responsibleId,
+                Guid? targetGroupId = null, int? tagretIndex = null)
+                => new MoveStaticText(questionnaireId, staticTextId, targetGroupId ?? Guid.NewGuid(), tagretIndex ?? 0,
+                    responsibleId);
+
+            public static MoveVariable MoveVariable(Guid questionnaireId, Guid variableId, Guid responsibleId,
+                Guid? targetGroupId = null, int? tagretIndex = null)
+                => new MoveVariable(questionnaireId, variableId, targetGroupId ?? Guid.NewGuid(), tagretIndex ?? 0,
+                    responsibleId);
+
+            public static MoveQuestion MoveQuestion(Guid questionnaireId, Guid questionId, Guid responsibleId,
+                Guid? targetGroupId = null, int? targetIndex = null)
+                => new MoveQuestion(questionnaireId, questionId, targetGroupId ?? Guid.NewGuid(), targetIndex ?? 0,
+                    responsibleId);
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")

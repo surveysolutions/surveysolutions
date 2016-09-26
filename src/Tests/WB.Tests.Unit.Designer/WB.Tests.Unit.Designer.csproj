@@ -378,6 +378,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_variable_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_no_shared_persons.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_shared_persons_contains_viewer.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireHistoryPostProcessorTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewPostProcessorTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTranslationTests\QuestionnaireTranslationTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTranslationTests\when_getting_translations.cs" />
