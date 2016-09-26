@@ -386,49 +386,68 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         #region Paste
         public void Process(Questionnaire aggregate, PasteAfter command)
-            => this.CloneEntity(command.SourceDocument, command.QuestionnaireId, command.EntityId, command.SourceItemId, command.ResponsibleId);
+            => this.CloneEntity(aggregate, command.SourceDocument, command.QuestionnaireId, command.EntityId, command.SourceItemId, command.ResponsibleId);
 
         public void Process(Questionnaire aggregate, PasteInto command)
-            => this.CloneEntity(command.SourceDocument, command.QuestionnaireId, command.EntityId, command.SourceItemId, command.ResponsibleId);
+            => this.CloneEntity(aggregate, command.SourceDocument, command.QuestionnaireId, command.EntityId, command.SourceItemId, command.ResponsibleId);
 
-        private void CloneEntity(QuestionnaireDocument sourceQuestionnaire, Guid questionnaireId, Guid targetEntityId, Guid sourceEntityId, Guid responsibleId)
+        private void CloneEntity(Questionnaire aggregate, QuestionnaireDocument sourceQuestionnaire, Guid questionnaireId, Guid targetEntityId, Guid sourceEntityId, Guid responsibleId)
         {
             QuestionnaireItemType entityType = (QuestionnaireItemType)(-1);
             string entityTitle = "";
 
-            var sourceEntity = sourceQuestionnaire.Find<IComposite>(sourceEntityId);
+            var entities = new List<IComposite>();
 
-            var entityAsStaticText = sourceEntity as IStaticText;
-            var entityAsVariable = sourceEntity as IVariable;
-            var entityAsGroup = sourceEntity as IGroup;
-            var entityAsQuestion = sourceEntity as IQuestion;
+            var pasteEntity = aggregate.QuestionnaireDocument.Find<IComposite>(targetEntityId);
 
-            if (entityAsStaticText != null)
+            if (pasteEntity is IGroup)
             {
-                entityType = QuestionnaireItemType.StaticText;
-                entityTitle = entityAsStaticText.Text;
-                this.AddOrUpdateStaticTextState(questionnaireId, targetEntityId, entityTitle);
+                entities.AddRange(pasteEntity.TreeToEnumerable(x => x.Children).Reverse().ToList());
+            }
+            else
+            {
+                entities.Add(pasteEntity);
             }
 
-            if (entityAsQuestion != null)
-            {
-                entityType = QuestionnaireItemType.Question;
-                entityTitle = entityAsQuestion.QuestionText ?? entityAsQuestion.StataExportCaption;
-                this.AddOrUpdateQuestionState(questionnaireId, targetEntityId, entityTitle);
-            }
 
-            if (entityAsVariable != null)
+            foreach (var entity in entities)
             {
-                entityType = QuestionnaireItemType.Variable;
-                entityTitle = entityAsVariable.Name;
-                this.AddOrUpdateVariableState(questionnaireId, targetEntityId, entityTitle);
-            }
+                var entityAsStaticText = entity as IStaticText;
+                var entityAsVariable = entity as IVariable;
+                var entityAsGroup = entity as IGroup;
+                var entityAsQuestion = entity as IQuestion;
 
-            if (entityAsGroup != null)
-            {
-                entityType = entityAsGroup.IsRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Group;
-                entityTitle = entityAsGroup.Title ?? entityAsGroup.VariableName;
-                this.AddOrUpdateGroupState(questionnaireId, targetEntityId, entityTitle);
+                if (entityAsGroup != null)
+                {
+                    entityType = entityAsGroup.IsRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Group;
+                    entityTitle = entityAsGroup.Title ?? entityAsGroup.VariableName;
+                    this.AddOrUpdateGroupState(questionnaireId, entityAsGroup.PublicKey, entityTitle);
+                    continue;
+                }
+
+                if (entityAsStaticText != null)
+                {
+                    entityType = QuestionnaireItemType.StaticText;
+                    entityTitle = entityAsStaticText.Text;
+                    this.AddOrUpdateStaticTextState(questionnaireId, entityAsStaticText.PublicKey, entityTitle);
+                    continue;
+                }
+
+                if (entityAsQuestion != null)
+                {
+                    entityType = QuestionnaireItemType.Question;
+                    entityTitle = entityAsQuestion.QuestionText ?? entityAsQuestion.StataExportCaption;
+                    this.AddOrUpdateQuestionState(questionnaireId, entityAsQuestion.PublicKey, entityTitle);
+                    continue;
+                }
+
+                if (entityAsVariable != null)
+                {
+                    entityType = QuestionnaireItemType.Variable;
+                    entityTitle = entityAsVariable.Name;
+                    this.AddOrUpdateVariableState(questionnaireId, entityAsVariable.PublicKey, entityTitle);
+                    continue;
+                }
             }
 
             var linkToEntity = this.CreateQuestionnaireChangeReference(entityType, sourceEntityId, entityTitle);
