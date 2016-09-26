@@ -179,6 +179,22 @@ namespace WB.Core.Infrastructure.CommandBus
                 return Handles<TCommand>((command, aggregate) => commandHandler(aggregate)(command));
             }
 
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> Handles<TCommand>(Func<TAggregate, Action<TCommand>> commandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
+                where TCommand : TAggregateCommand
+            {
+                Register(command => this.aggregateRootIdResolver.Invoke(command), (command, aggregate) => commandHandler(aggregate)(command), isInitializer: true, isStateless: false, configurer: configurer);
+                return this;
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> Handles<TCommand>(Action<TCommand, TAggregate> commandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
+                where TCommand : TAggregateCommand
+            {
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, isStateless: false, configurer: configurer);
+                return this;
+            }
+
             public AggregateWithCommandSetup<TAggregate, TAggregateCommand> Handles<TCommand>(Action<TCommand, TAggregate> commandHandler)
                 where TCommand : TAggregateCommand
             {
