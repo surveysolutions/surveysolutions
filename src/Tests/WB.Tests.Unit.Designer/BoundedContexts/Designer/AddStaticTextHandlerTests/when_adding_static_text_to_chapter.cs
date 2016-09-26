@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTe
 
         Because of = () =>
                 questionnaire.AddStaticTextAndMoveIfNeeded(
-                    new AddStaticText(questionnaire.PublicKey, entityId, text, responsibleId, chapterId, index));
+                    new AddStaticText(questionnaire.Id, entityId, text, responsibleId, chapterId, index));
 
 
         It should_raise_StaticTextAdded_event_with_EntityId_specified = () =>

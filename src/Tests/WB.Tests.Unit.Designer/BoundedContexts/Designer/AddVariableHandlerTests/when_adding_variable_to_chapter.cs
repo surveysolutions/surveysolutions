@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
 
         Because of = () =>
                 questionnaire.AddVariableAndMoveIfNeeded(
-                    new AddVariable(questionnaire.PublicKey, entityId, new VariableData(variableType, variableName, variableExpression), responsibleId, chapterId, index));
+                    new AddVariable(questionnaire.Id, entityId, new VariableData(variableType, variableName, variableExpression), responsibleId, chapterId, index));
 
 
         It should_contains_Variable_with_EntityId_specified = () =>

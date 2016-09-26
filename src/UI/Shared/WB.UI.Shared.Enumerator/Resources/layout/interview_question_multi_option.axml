@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              local:MvxBind="Hidden HasOptions; HideKeyboardOnClick .;">
+              local:MvxBind="Hidden HasOptions; HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
   
   <LinearLayout style="@style/Interview_Question_Answer"
                 local:MvxBind="
