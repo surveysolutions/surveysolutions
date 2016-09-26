@@ -393,7 +393,7 @@
     <value>Сохранить текущее время</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
-    <value>Объекты с ошбками:</value>
+    <value>Объекты с ошибками:</value>
   </data>
   <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
     <value>Первые {0} объектов с ошибкам:</value>
