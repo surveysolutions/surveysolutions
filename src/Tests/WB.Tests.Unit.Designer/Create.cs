@@ -1027,6 +1027,10 @@ namespace WB.Tests.Unit.Designer
                 Guid? targetGroupId = null, int? targetIndex = null)
                 => new MoveQuestion(questionnaireId, questionId, targetGroupId ?? Guid.NewGuid(), targetIndex ?? 0,
                     responsibleId);
+
+            public static PasteAfter PasteAfter(Guid questionnaireId, Guid entityId, Guid itemToPasteAfterId, 
+                Guid sourceQuestionnaireId, Guid sourceItemId, Guid responsibleId) 
+                => new PasteAfter(questionnaireId, entityId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, responsibleId);
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
