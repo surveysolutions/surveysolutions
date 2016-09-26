@@ -302,7 +302,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
                 QuestionnaireItemType.Group, command.GroupId, groupTitle);
 
-            this.UpdateRoster(command);
+            this.UpdateRoster(command.QuestionnaireId, command.IsRoster, command.GroupId, command.ResponsibleId);
 
             if (command.Index.HasValue)
                 this.MoveEntity(command.QuestionnaireId, command.GroupId, command.ParentGroupId, command.ResponsibleId);
@@ -319,7 +319,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                     ? QuestionnaireItemType.Group
                     : QuestionnaireItemType.Roster, command.GroupId, groupTitle);
 
-            this.UpdateRoster(command);
+            this.UpdateRoster(command.QuestionnaireId, command.IsRoster, command.GroupId, command.ResponsibleId);
         }
 
         public void Process(Questionnaire aggregate, DeleteGroup command)
@@ -344,42 +344,42 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, MoveGroup command)
             => this.MoveEntity(command.QuestionnaireId, command.GroupId, command.TargetGroupId, command.ResponsibleId);
 
-        private void UpdateRoster(FullGroupDataCommand command)
+        private void UpdateRoster(Guid questionnaireId, bool isRoster, Guid groupId, Guid responsibleId)
         {
-            if (command.IsRoster)
+            if (isRoster)
             {
-                var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-                if (questionnaire.RosterState.ContainsKey(command.GroupId))
+                var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+                if (questionnaire.RosterState.ContainsKey(groupId))
                     return;
 
-                var groupTitle = questionnaire.GroupsState[command.GroupId];
+                var groupTitle = questionnaire.GroupsState[groupId];
 
-                questionnaire.RosterState[command.GroupId] = groupTitle;
-                questionnaire.GroupsState.Remove(command.GroupId);
+                questionnaire.RosterState[groupId] = groupTitle;
+                questionnaire.GroupsState.Remove(groupId);
 
-                this.questionnaireStateTackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
-                this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId,
-                    QuestionnaireActionType.GroupBecameARoster, QuestionnaireItemType.Group, command.GroupId, groupTitle);
+                this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
+                this.AddQuestionnaireChangeItem(questionnaireId, responsibleId,
+                    QuestionnaireActionType.GroupBecameARoster, QuestionnaireItemType.Group, groupId, groupTitle);
 
-                var rosterTitle = questionnaire.RosterState[command.GroupId];
-                this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-                    QuestionnaireItemType.Roster, command.GroupId, rosterTitle);
+                var rosterTitle = questionnaire.RosterState[groupId];
+                this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Update,
+                    QuestionnaireItemType.Roster, groupId, rosterTitle);
             }
             else
             {
-                var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+                var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
 
-                if (questionnaire.GroupsState.ContainsKey(command.GroupId))
+                if (questionnaire.GroupsState.ContainsKey(groupId))
                     return;
 
-                var rosterTitle = questionnaire.RosterState[command.GroupId];
+                var rosterTitle = questionnaire.RosterState[groupId];
 
-                questionnaire.GroupsState[command.GroupId] = rosterTitle;
-                questionnaire.RosterState.Remove(command.GroupId);
+                questionnaire.GroupsState[groupId] = rosterTitle;
+                questionnaire.RosterState.Remove(groupId);
 
-                this.questionnaireStateTackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
-                this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId,
-                    QuestionnaireActionType.RosterBecameAGroup, QuestionnaireItemType.Roster, command.GroupId, rosterTitle);
+                this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
+                this.AddQuestionnaireChangeItem(questionnaireId, responsibleId,
+                    QuestionnaireActionType.RosterBecameAGroup, QuestionnaireItemType.Roster, groupId, rosterTitle);
             }
         }
         #endregion
@@ -407,28 +407,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             {
                 entityType = QuestionnaireItemType.StaticText;
                 entityTitle = entityAsStaticText.Text;
+                this.AddOrUpdateStaticTextState(questionnaireId, targetEntityId, entityTitle);
             }
 
             if (entityAsQuestion != null)
             {
                 entityType = QuestionnaireItemType.Question;
                 entityTitle = entityAsQuestion.QuestionText ?? entityAsQuestion.StataExportCaption;
+                this.AddOrUpdateQuestionState(questionnaireId, targetEntityId, entityTitle);
             }
 
             if (entityAsVariable != null)
             {
                 entityType = QuestionnaireItemType.Variable;
                 entityTitle = entityAsVariable.Name;
+                this.AddOrUpdateVariableState(questionnaireId, targetEntityId, entityTitle);
             }
 
             if (entityAsGroup != null)
             {
                 entityType = entityAsGroup.IsRoster ? QuestionnaireItemType.Roster : QuestionnaireItemType.Group;
                 entityTitle = entityAsGroup.Title ?? entityAsGroup.VariableName;
+                this.AddOrUpdateGroupState(questionnaireId, targetEntityId, entityTitle);
             }
-
-
-            this.AddOrUpdateQuestionState(questionnaireId, targetEntityId, entityTitle);
 
             var linkToEntity = this.CreateQuestionnaireChangeReference(entityType, sourceEntityId, entityTitle);
             this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Clone, entityType,
@@ -570,8 +571,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 TargetItemType = targetType,
                 References = references.ToHashSet()
             };
-            this.questionnaireChangeItemStorage.Store(questionnaireChangeItem,
-                questionnaireChangeItem.QuestionnaireChangeRecordId);
+
+            this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
         }
 
         private string GetUserName(Guid? userId)

@@ -37,8 +37,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             lock (lockObject)
             {
-                base.Remove(id);
-                memoryCache.Remove(id);
+                try
+                { 
+                    base.Remove(id);
+                }
+                finally 
+                {
+                    memoryCache.Remove(id);
+                }
             }
         }
 
@@ -46,8 +52,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             lock (lockObject)
             {
-                base.Store(view, id);
-                memoryCache.Set(id, view, DateTimeOffset.Now.AddSeconds(10));
+                try
+                {
+                    base.Store(view, id);
+                    memoryCache.Set(id, view, DateTimeOffset.Now.AddSeconds(10));
+                }
+                catch
+                {
+                    memoryCache.Remove(id);
+                    throw;
+                }
             }
         }
 
@@ -55,8 +69,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             lock (lockObject)
             {
-                base.BulkStore(bulk);
-                bulk.ForEach(i => memoryCache.Remove(i.Item2));
+                try
+                {
+                    base.BulkStore(bulk);
+                }
+                finally
+                {
+                    bulk.ForEach(i => memoryCache.Remove(i.Item2));
+                }
             }
         }
 
@@ -64,12 +84,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             lock (lockObject)
             {
-                base.Clear();
-                memoryCache.Dispose();
-                memoryCache = new MemoryCache(typeof(TEntity).Name + " K/V memory cache");
+                try
+                {
+                    base.Clear();
+                }
+                finally
+                {
+                    memoryCache.Dispose();
+                    memoryCache = new MemoryCache(typeof(TEntity).Name + " K/V memory cache");
+                }
             }
         }
-
 
         public override string GetReadableStatus()
         {
