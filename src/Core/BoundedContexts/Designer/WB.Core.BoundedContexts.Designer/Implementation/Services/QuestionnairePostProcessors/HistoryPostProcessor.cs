@@ -113,10 +113,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             UpdateFullQuestionnaireState(command.Source, command.QuestionnaireId, creatorId);
 
-            var questionnaire = questionnaireStateTackerStorage.GetById(command.Source.PublicKey.FormatGuid());
-
             var linkToQuestionnaire = this.CreateQuestionnaireChangeReference(QuestionnaireItemType.Questionnaire,
-                command.Source.PublicKey, questionnaire.GroupsState[command.Source.PublicKey]);
+                command.Source.PublicKey, command.Source.Title);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, creatorId, QuestionnaireActionType.Clone,
                 QuestionnaireItemType.Questionnaire,
@@ -170,7 +168,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteStaticText command)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-            var staticTitle = questionnaire.StaticTextState[command.EntityId];
+            string staticTitle;
+            questionnaire.StaticTextState.TryGetValue(command.EntityId, out staticTitle);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
                 QuestionnaireItemType.StaticText, command.EntityId, staticTitle);
@@ -209,7 +208,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteVariable command)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-            var variableName = questionnaire.VariableState[command.EntityId];
+            string variableName;
+            questionnaire.VariableState.TryGetValue(command.EntityId, out variableName);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
                 QuestionnaireItemType.Variable, command.EntityId, variableName);
@@ -327,7 +327,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
 
             var isGroup = questionnaire.GroupsState.ContainsKey(command.GroupId);
-            var groupTitle = isGroup ? questionnaire.GroupsState[command.GroupId] : questionnaire.RosterState[command.GroupId];
+            string groupTitle;
+            if (isGroup)
+                questionnaire.GroupsState.TryGetValue(command.GroupId, out groupTitle);
+            else
+                questionnaire.RosterState.TryGetValue(command.GroupId, out groupTitle);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
                 isGroup ? QuestionnaireItemType.Group : QuestionnaireItemType.Roster, command.GroupId, groupTitle);
@@ -448,7 +452,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteQuestion command)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-            var questionTitle = questionnaire.QuestionsState[command.QuestionId];
+            string questionTitle;
+            questionnaire.QuestionsState.TryGetValue(command.QuestionId, out questionTitle);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
                 QuestionnaireItemType.Question, command.QuestionId, questionTitle);
