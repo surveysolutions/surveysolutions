@@ -1,4 +1,6 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
@@ -18,7 +20,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             items.Add("three");
 
             NotifyCollectionChangedEventArgs collectionChangedArgs = null;
-            items.CollectionChanged += (sender, args) => collectionChangedArgs = args;
+            items.CollectionChanged += (sender, args) =>
+            {
+                if (collectionChangedArgs != null) throw new Exception("Only one event expected");
+                collectionChangedArgs = args;
+            };
 
             childCollection.Clear();
 
@@ -26,6 +32,29 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
             Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(1));
             Assert.That(collectionChangedArgs.OldItems, Is.EquivalentTo(new[] { "one", "two" }));
+        }
+
+        [Test]
+        public void when_clearing_child_collection_should_raise_count_property_changed()
+        {
+            var items = Create.Entity.CompositeCollection<string>();
+
+            items.Add("zero");
+            var childCollection = new CompositeCollection<string> {"one", "two"};
+            items.AddCollection(childCollection);
+            items.Add("three");
+
+            PropertyChangedEventArgs propertyChangedEventArgs = null;
+            items.PropertyChanged += (sender, args) =>
+            {
+                if (propertyChangedEventArgs != null) throw new Exception("Only one event expected");
+                propertyChangedEventArgs = args;
+            };
+
+            childCollection.Clear();
+
+            Assert.That(propertyChangedEventArgs, Is.Not.Null);
+            Assert.That(propertyChangedEventArgs.PropertyName, Is.EqualTo("Count"));
         }
 
         [Test]
