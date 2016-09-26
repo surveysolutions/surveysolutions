@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using CsQuery.ExtensionMethods.Internal;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
@@ -90,39 +92,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             Guid? questionnaireId = null, string questionnaireTitle = null, Guid? createdBy = null,
             bool? isPublic = null, DateTime? creationDate = null)
         {
-            var questionnaireListViewItem = new QuestionnaireListViewItem
-            {
-                PublicId = questionnaireId ?? document.PublicKey,
-                Title = questionnaireTitle ?? document.Title,
-                CreationDate = creationDate ?? document.CreationDate,
-                LastEntryDate = DateTime.UtcNow,
-                CreatedBy = createdBy ?? document.CreatedBy,
-                IsPublic = isPublic ?? document.IsPublic
-            };
+            var questionnaireIdValue = questionnaireId ?? document.PublicKey;
+
+            var sourceQuestionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireIdValue.FormatGuid());
+            var questionnaireListViewItem = sourceQuestionnaireListViewItem ?? new QuestionnaireListViewItem();
+            questionnaireListViewItem.PublicId = questionnaireIdValue;
+            questionnaireListViewItem.Title = questionnaireTitle ?? document.Title;
+            questionnaireListViewItem.CreationDate = creationDate ?? document.CreationDate;
+            questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
+            questionnaireListViewItem.CreatedBy = createdBy ?? document.CreatedBy;
+            questionnaireListViewItem.IsPublic = isPublic ?? document.IsPublic;
+            questionnaireListViewItem.Owner = null;
+            questionnaireListViewItem.CreatorName = null;
+            questionnaireListViewItem.IsDeleted = false;
 
             if (document.CreatedBy.HasValue)
                 questionnaireListViewItem.CreatorName = this.accountStorage.GetById(document.CreatedBy.Value)?.UserName;
 
-            foreach (var sharedPerson in document.SharedPersons)
-                questionnaireListViewItem.SharedPersons.Add(sharedPerson);
+            if (!shouldPreserveSharedPersons)
+                questionnaireListViewItem.SharedPersons.Clear();
+            questionnaireListViewItem.SharedPersons.AddRange(document.SharedPersons);
 
-            if (shouldPreserveSharedPersons)
-            {
-                var sourceQuestionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireListViewItem.QuestionnaireId);
-                if (sourceQuestionnaireListViewItem != null)
-                {
-                    foreach (var sharedPerson in sourceQuestionnaireListViewItem.SharedPersons)
-                    {
-                        if (!questionnaireListViewItem.SharedPersons.Contains(sharedPerson))
-                        {
-                            questionnaireListViewItem.SharedPersons.Add(sharedPerson);
-                        }
-                    }
-                }
-            }
-
-            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem,
-                questionnaireListViewItem.QuestionnaireId);
+            this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireListViewItem.QuestionnaireId);
         }
 
         private void Create(CreateQuestionnaire command)
