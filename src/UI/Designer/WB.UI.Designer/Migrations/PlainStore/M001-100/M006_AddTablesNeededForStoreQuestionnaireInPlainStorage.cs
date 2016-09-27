@@ -37,12 +37,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
                     .WithColumn("referencetype").AsInt32().Nullable()
                     .WithColumn("referenceid").AsGuid().Nullable()
                     .WithColumn("referencetitle").AsString().Nullable()
-                    .WithColumn("questionnairechangerecord").AsString(255).Nullable()
                     .WithColumn("questionnairechangerecordid").AsString(255).Nullable();
-
-                Create.Index("questionnairechangerecords_questionnairechangereferences")
-                    .OnTable("questionnairechangereferences")
-                    .OnColumn("questionnairechangerecord");
 
                 Create.ForeignKey("questionnairechangereferences_questionnairechangerecordid")
                     .FromTable("questionnairechangereferences").ForeignColumn("questionnairechangerecordid")

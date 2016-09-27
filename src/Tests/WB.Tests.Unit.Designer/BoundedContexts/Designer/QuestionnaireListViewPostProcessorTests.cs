@@ -29,9 +29,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
 
+
             Guid questionnaireId = Guid.NewGuid();
-            var command = new CloneQuestionnaire(questionnaireId, "title", Guid.NewGuid(), true,
-                Create.QuestionnaireDocumentWithOneChapter(questionnaireId));
+            Guid creatorId = Guid.NewGuid();
+            Guid? clonnerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            string userName = "testname";
+
+            var accountStorage = new TestInMemoryWriter<AccountDocument>();
+            accountStorage.Store(new AccountDocument() {UserName = userName}, clonnerId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IReadSideRepositoryWriter<AccountDocument>>(accountStorage);
+
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId);
+            questionnaire.CreatedBy = creatorId;
+
+            var command = new CloneQuestionnaire(questionnaireId, "title", clonnerId.Value, true,
+                questionnaire);
             
             var listViewPostProcessor = CreateListViewPostProcessor();
             // act
@@ -43,6 +55,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireListViewItem.Title, Is.EqualTo(command.Title));
             Assert.That(questionnaireListViewItem.IsPublic, Is.EqualTo(command.IsPublic));
             Assert.That(questionnaireListViewItem.CreatedBy, Is.EqualTo(command.ResponsibleId));
+            Assert.That(questionnaireListViewItem.CreatorName, Is.EqualTo(userName));
         }
 
         [Test]
