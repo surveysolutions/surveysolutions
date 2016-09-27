@@ -1,3 +1,5 @@
+5.14
+- Compatible with EventStore 3.9
 5.13 
 - When updating Designer should be executed 'move-some-designer-rs-tables-to-plain.sql' from the same folder as README.md. Should be executed on plain database. Before execution should be changed connection string to read side database in 'move-some-designer-rs-tables-to-plain.sql' file in line:
 PERFORM dblink_connect('views','host=127.0.0.1 port=5432 dbname=Design-Views user=postgres password=P@$$w0rd');
