@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
                 set.Key(key => key.Column("QuestionnaireChangeRecordId"));
                 set.Lazy(CollectionLazy.NoLazy);
                 set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                set.Inverse(true);
             },
              relation => relation.OneToMany());
         }   
