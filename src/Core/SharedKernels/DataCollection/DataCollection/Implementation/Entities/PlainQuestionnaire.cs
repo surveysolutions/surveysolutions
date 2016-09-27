@@ -1054,14 +1054,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .ToDictionary(roster => roster.PublicKey,
                         roster => roster.RosterTitleQuestionId.HasValue
                             ? this.CreateRosterTitleQuestionDescription(
-                                questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == roster.RosterTitleQuestionId.Value))
+                                questionnaire.Find<IQuestion>(roster.RosterTitleQuestionId.Value))
                             : null);
         }
 
         private RosterTitleQuestionDescription CreateRosterTitleQuestionDescription(IQuestion question)
         {
             return new RosterTitleQuestionDescription(question.PublicKey,
-                question.Answers.ToDictionary(a => a.AnswerCode.Value, a => a.AnswerText));
+                question.Answers.ToDictionary(a => a.ParsedValue(), a => a.AnswerText));
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
