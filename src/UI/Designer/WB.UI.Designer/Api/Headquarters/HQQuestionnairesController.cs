@@ -88,7 +88,6 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpGet]
         [Route("{id:Guid}")]
-        [LogImportAction]
         public QuestionnaireCommunicationPackage Get(Guid id, int clientQuestionnaireContentVersion)
         {
             var questionnaireView = this.GetQuestionnaireViewOrThrow(id);
