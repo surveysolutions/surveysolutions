@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -628,13 +629,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-        {
-            return new QuestionnaireDocument
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
-            };
-        }
+            => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X");
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
         {
@@ -1028,9 +1023,15 @@ namespace WB.Tests.Unit.Designer
                 => new MoveQuestion(questionnaireId, questionId, targetGroupId ?? Guid.NewGuid(), targetIndex ?? 0,
                     responsibleId);
 
+            public static ImportQuestionnaire ImportQuestionnaire(QuestionnaireDocument questionnaireDocument)
+                => new ImportQuestionnaire(Guid.NewGuid(), questionnaireDocument);
+
             public static PasteAfter PasteAfter(Guid questionnaireId, Guid entityId, Guid itemToPasteAfterId, 
                 Guid sourceQuestionnaireId, Guid sourceItemId, Guid responsibleId) 
                 => new PasteAfter(questionnaireId, entityId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, responsibleId);
+
+            public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
+                => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
@@ -1125,5 +1126,7 @@ namespace WB.Tests.Unit.Designer
         {
             return new QuestionnaireListViewItem() { IsPublic = isPublic };
         }
+
+        public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();
     }
 }
