@@ -669,7 +669,8 @@ namespace WB.Tests.Unit.Designer
             return QuestionnaireDocumentWithOneChapter(null, null, null, translations, children);
         }
         
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, Translation[] translations = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, 
+            Translation[] translations = null, params IComposite[] children)
         {
             var result = new QuestionnaireDocument { PublicKey = questionnaireId ?? Guid.NewGuid() };
             var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
