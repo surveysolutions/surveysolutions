@@ -84,12 +84,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, CreateQuestionnaire command)
         {
+            UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, command.ResponsibleId);
+
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
                 QuestionnaireItemType.Questionnaire, command.QuestionnaireId, command.Title);
-
-            this.questionnaireStateTackerStorage.Store(new QuestionnaireStateTracker { CreatedBy = command.ResponsibleId }, command.QuestionnaireId.FormatGuid());
-
-            this.AddOrUpdateGroupState(command.QuestionnaireId, command.QuestionnaireId, command.Title, parentId: null);
         }
 
         public void Process(Questionnaire aggregate, UpdateQuestionnaire command)

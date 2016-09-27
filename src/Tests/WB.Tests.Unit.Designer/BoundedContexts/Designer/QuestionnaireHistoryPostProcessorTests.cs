@@ -73,6 +73,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         {
             // arrange
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            Guid chapterId = Guid.Parse("A1111111111111111111111111111111");
             Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
             string responsibleName = "owner";
 
@@ -87,16 +88,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            var questionnaireDocument = new QuestionnaireDocument()
+            {
+                Children = new List<IComposite>()
+                {
+                    Create.Group(chapterId)
+                }
+            };
+
+            var questionnaire = Create.Questionnaire();
+
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<Guid>());
+
             var command = new CreateQuestionnaire(questionnaireId, "title", responsibleId, true);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
                 historyItems => historyItems.First(historyItem =>
                     historyItem.QuestionnaireId == questionnaireId.FormatGuid()));
+
+            var stateTracker = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
 
             Assert.That(questionnaireHistoryItem, Is.Not.Null);
             Assert.That(questionnaireHistoryItem.QuestionnaireId, Is.EqualTo(command.QuestionnaireId.FormatGuid()));
@@ -107,6 +122,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(command.Title));
+
+            Assert.That(stateTracker.GroupsState.Keys.Count, Is.EqualTo(2));
+
         }
 
         [Test]

@@ -94,20 +94,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             var questionnaireIdValue = questionnaireId ?? document.PublicKey;
 
+            var creatorId = createdBy ?? document.CreatedBy;
+
             var sourceQuestionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireIdValue.FormatGuid());
             var questionnaireListViewItem = sourceQuestionnaireListViewItem ?? new QuestionnaireListViewItem();
             questionnaireListViewItem.PublicId = questionnaireIdValue;
             questionnaireListViewItem.Title = questionnaireTitle ?? document.Title;
             questionnaireListViewItem.CreationDate = creationDate ?? document.CreationDate;
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            questionnaireListViewItem.CreatedBy = createdBy ?? document.CreatedBy;
+            questionnaireListViewItem.CreatedBy = creatorId;
             questionnaireListViewItem.IsPublic = isPublic ?? document.IsPublic;
             questionnaireListViewItem.Owner = null;
             questionnaireListViewItem.CreatorName = null;
             questionnaireListViewItem.IsDeleted = false;
 
-            if (document.CreatedBy.HasValue)
-                questionnaireListViewItem.CreatorName = this.accountStorage.GetById(document.CreatedBy.Value)?.UserName;
+            if (creatorId.HasValue)
+                questionnaireListViewItem.CreatorName = this.accountStorage.GetById(creatorId.Value)?.UserName;
 
             if (!shouldPreserveSharedPersons)
                 questionnaireListViewItem.SharedPersons.Clear();
