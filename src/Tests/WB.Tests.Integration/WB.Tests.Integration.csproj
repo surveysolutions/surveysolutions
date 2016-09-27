@@ -47,12 +47,12 @@
       <HintPath>..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EventStore.ClientAPI, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EventStore.Client.3.6.3\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    <Reference Include="EventStore.ClientAPI, Version=3.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EventStore.Client.3.9.0\lib\net40\EventStore.ClientAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EventStore.ClientAPI.Embedded, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EventStore.Client.Embedded.3.6.3\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
+    <Reference Include="EventStore.ClientAPI.Embedded, Version=3.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EventStore.Client.Embedded.3.9.0\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions, Version=4.14.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -481,12 +481,12 @@
     </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\packages\EventStore.Client.Embedded.3.6.3\build\EventStore.Client.Embedded.targets" Condition="Exists('..\..\..\packages\EventStore.Client.Embedded.3.6.3\build\EventStore.Client.Embedded.targets')" />
+  <Import Project="..\..\..\packages\EventStore.Client.Embedded.3.9.0\build\EventStore.Client.Embedded.targets" Condition="Exists('..\..\..\packages\EventStore.Client.Embedded.3.9.0\build\EventStore.Client.Embedded.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\EventStore.Client.Embedded.3.6.3\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\EventStore.Client.Embedded.3.6.3\build\EventStore.Client.Embedded.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\EventStore.Client.Embedded.3.9.0\build\EventStore.Client.Embedded.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\EventStore.Client.Embedded.3.9.0\build\EventStore.Client.Embedded.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

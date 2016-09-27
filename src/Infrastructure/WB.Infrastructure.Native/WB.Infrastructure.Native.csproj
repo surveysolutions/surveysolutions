@@ -53,8 +53,8 @@
       <HintPath>..\..\..\packages\Microsoft.Database.Isam.1.9.3.2\lib\net40\Esent.Isam.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EventStore.ClientAPI, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EventStore.Client.3.6.3\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    <Reference Include="EventStore.ClientAPI, Version=3.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EventStore.Client.3.9.0\lib\net40\EventStore.ClientAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
