@@ -48,6 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 Create.QuestionnaireDocumentWithSharedPersons(questionnaireId, questionnaireOwner));
             
             var historyPostProcessor = CreateHistoryPostProcessor();
+
             // act
             historyPostProcessor.Process(null, command);
 
@@ -106,6 +107,53 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(command.Title));
+        }
+
+        [Test]
+        public void when_delete_group_it_should_remove_child_question()
+        {
+            // given
+            AssemblyContext.SetupServiceLocator();
+
+            Guid questionnaireId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            Guid groupId = Guid.Parse("11111111111111111111111111111111");
+            Guid removedQuestionId = Guid.Parse("22222222222222222222222222222222");
+            Guid notRemovedQuestionId = Guid.Parse("33333333333333333333333333333333");
+
+            var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
+
+            var usersStorage = new TestInMemoryWriter<AccountDocument>();
+            Setup.InstanceToMockedServiceLocator<IReadSideRepositoryWriter<AccountDocument>>(usersStorage);
+
+            var questionnaireStateTrackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
+            Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTrackerStorage);
+
+            var historyPostProcessor = CreateHistoryPostProcessor();
+
+            var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
+            {
+                Create.Chapter(children: new IComposite[]
+                {
+                    Create.Group(groupId: groupId, children: new IComposite[]
+                    {
+                        Create.Question(questionId: removedQuestionId),
+                    }),
+                    Create.Group(children: new IComposite[]
+                    {
+                        Create.Question(questionId: notRemovedQuestionId),
+                    }),
+                }),
+            });
+
+            historyPostProcessor.Process(null, Create.Command.ImportQuestionnaire(questionnaireDocument: questionnaireDocument));
+
+            // when
+            historyPostProcessor.Process(null, Create.Command.DeleteGroup(questionnaireId: questionnaireId, groupId: groupId));
+
+            // then
+            var questionnaireStateTracker = questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
+            Assert.That(questionnaireStateTracker.QuestionsState.Keys, Is.EquivalentTo(new[] { notRemovedQuestionId }));
         }
 
         [Test]
@@ -803,6 +851,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
 
-        private static HistoryPostProcessor CreateHistoryPostProcessor() => new HistoryPostProcessor();
+        private static HistoryPostProcessor CreateHistoryPostProcessor() => Create.HistoryPostProcessor();
     }
 }

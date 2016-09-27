@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private RosterTitleQuestionDescription CreateRosterTitleQuestionDescription(IQuestion question)
         {
             return new RosterTitleQuestionDescription(question.PublicKey,
-                question.Answers.ToDictionary(a => a.AnswerCode.Value, a => a.AnswerText));
+                question.Answers.ToDictionary(a => a.GetParsedValue(), a => a.AnswerText));
         }
     }
    
