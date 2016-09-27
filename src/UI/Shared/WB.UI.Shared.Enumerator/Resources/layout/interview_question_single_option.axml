@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              local:MvxBind="Hidden HasOptions; HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
+              local:MvxBind="Hidden HasOptions; HideKeyboardOnClick .">
   <LinearLayout style="@style/Interview_Question_Answer"
                 local:MvxBind="Hidden HasOptions; BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
     <TextView style="@style/Interview_Question_EmptyOptions"
