@@ -184,6 +184,8 @@ namespace WB.UI.Headquarters.Injections
                 .WhenActionMethodHasNo<NoTransactionAttribute>();
             this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
+            this.BindFilter<GlobalNotificationAttribute>(FilterScope.Global, null)
+                .WhenActionMethodHasNo<NoTransactionAttribute>();
 
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
             this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
