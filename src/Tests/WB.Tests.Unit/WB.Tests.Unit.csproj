@@ -348,6 +348,8 @@
     <Compile Include="BoundedContexts\Headquarters\InterviewDetailsViewFactoryTests\InterviewDetailsViewFactoryTestsContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewDetailsViewFactoryTests\when_getting_interview_details_and_questionnaire_has_filtered_categorical_question.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewsExportDenormalizerTests\InterviewsExportDenormalizerNunitTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\RosterStructureServiceTests\RosterStructureServiceTestsContext.cs" />
+    <Compile Include="BoundedContexts\Headquarters\RosterStructureServiceTests\when_getting_roster_structures_for_questionnaire_with_multi_option_roster_title.cs" />
     <Compile Include="BoundedContexts\Interviewer\AttachmentsCleanupServiceTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_DateTimeQuestionAnswered_event_and_question_is_timestamp.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_DateTimeQuestionAnswered_event.cs" />
