@@ -15,7 +15,7 @@
                     @Html.AntiForgeryToken()
                     <input name="id" id="delete-modal-questionnaire-id" type="hidden" />
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    <button type="submit" class="btn btn-primary" value="Delete">Delete</button>
+                    <button type="submit" class="btn btn-primary" value="Delete" onclick="this.disabled = true; this.value = 'Deleting'; this.form.submit();">Delete</button>
                 }
             </div>
         </div>
