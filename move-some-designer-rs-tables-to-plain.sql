@@ -1,6 +1,8 @@
 ﻿DO language plpgsql $$
 DECLARE rscount integer DEFAULT 0;
 DECLARE pscount integer DEFAULT 0;
+DECLARE next_hi_rs integer DEFAULT 0;
+DECLARE next_hi_ps integer DEFAULT 0;
 BEGIN
 RAISE NOTICE 'migration started';
 RAISE NOTICE 'intalling DBLINK';
@@ -224,6 +226,16 @@ RAISE NOTICE 'questionnairechangereferences moved. Read side count:%, Plain Stor
   rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from sharedpersons t1') t2 (rec sharedpersons)) as foo);
 pscount := (select count(*) from public.sharedpersons);
 RAISE NOTICE 'sharedpersons moved. Read side count:%, Plain Storage count: %', rscount, pscount;
+
+
+next_hi_rs := (select next_hi from (select (rec).* from dblink('views','select t1 from hibernate_unique_key t1') t2 (rec hibernate_unique_key)) as foo);
+next_hi_ps := (select next_hi from public.hibernate_unique_key);
+RAISE NOTICE 'next_hi_rs values. Read side:%, Plain Storage: %', next_hi_rs, next_hi_ps;
+IF next_hi_rs > next_hi_ps THEN
+  UPDATE public.hibernate_unique_key SET next_hi=next_hi_rs;
+  RAISE NOTICE 'updated next_hi value for read side to :%', next_hi_rs;
+END IF;
+
 
 PERFORM dblink_disconnect('views');
 RAISE NOTICE 'migration finished';
