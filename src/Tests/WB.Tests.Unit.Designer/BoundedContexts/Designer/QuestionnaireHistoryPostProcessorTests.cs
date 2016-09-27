@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
@@ -730,6 +734,74 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(newHistoryItems[2].TargetItemType, Is.EqualTo(QuestionnaireItemType.Variable));
             Assert.That(newHistoryItems[3].TargetItemType, Is.EqualTo(QuestionnaireItemType.Question));
         }
+
+        [Test]
+        public void When_pasting_after_group_Then_children_should_be_added_to_history()
+        {
+            // arrange
+            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+            Guid groupId = Guid.Parse("33333333333333333333333333333333");
+            Guid staticTextId = Guid.Parse("44444444444444444444444444444444");
+            Guid variableId = Guid.Parse("55555555555555555555555555555555");
+            Guid questionId = Guid.Parse("66666666666666666666666666666666");
+            Guid targetGroupId = Guid.Parse("77777777777777777777777777777777");
+
+            AssemblyContext.SetupServiceLocator();
+            var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
+
+            var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
+            questionnaireStateTackerStorage.Store(
+                new QuestionnaireStateTracker
+                {
+                    CreatedBy = responsibleId,
+                    GroupsState = new Dictionary<Guid, string>() { { groupId, "" } },
+                    VariableState = new Dictionary<Guid, string>() {  },
+                    StaticTextState = new Dictionary<Guid, string>() {  },
+                    QuestionsState = new Dictionary<Guid, string>() {  }
+                },
+                questionnaireId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
+
+            var questionnaireDocument = new QuestionnaireDocument()
+            {
+                Children = new List<IComposite>()
+                {
+                    Create.Group(groupId),
+                    Create.Group(targetGroupId, children: new List<IComposite>()
+                    {
+                        Create.StaticText(staticTextId),
+                        Create.Variable(variableId),
+                        Create.TextQuestion(questionId: questionId)
+                    })
+                }
+            };
+            
+            var questionnaire = Create.Questionnaire();
+
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<Guid>());
+            var pastAfterCommand = Create.Command.PasteAfter(questionnaireId, targetGroupId, groupId, questionnaireId, groupId, responsibleId);
+            var historyPostProcessor = CreateHistoryPostProcessor();
+
+            //questionnaireStateTackerStorage
+
+            // act
+            historyPostProcessor.Process(questionnaire, pastAfterCommand);
+
+            // assert
+            var newHistoryItems = historyStorage.Query(historyItems => historyItems.ToArray());
+            var state = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+
+            Assert.That(newHistoryItems.Length, Is.EqualTo(1));
+            Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Group));
+
+            Assert.That(state.VariableState.ContainsKey(variableId));
+            Assert.That(state.QuestionsState.ContainsKey(questionId));
+            Assert.That(state.StaticTextState.ContainsKey(staticTextId));
+            Assert.That(state.GroupsState.ContainsKey(targetGroupId));
+        }
+
 
         private static HistoryPostProcessor CreateHistoryPostProcessor() => new HistoryPostProcessor();
     }
