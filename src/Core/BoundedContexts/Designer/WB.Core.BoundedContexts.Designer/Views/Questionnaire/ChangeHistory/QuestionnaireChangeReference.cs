@@ -8,6 +8,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public virtual QuestionnaireItemType ReferenceType { get; set; }
         public virtual Guid ReferenceId { get; set; }
         public virtual string ReferenceTitle { get; set; }
-        public virtual QuestionnaireChangeRecord QuestionnaireChangeRecord { get; set; }
     }
 }
