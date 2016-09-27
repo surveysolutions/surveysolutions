@@ -108,9 +108,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .ToList();
 
             this.Options.ForEach(x => x.DisposeIfDisposable());
-
-            this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
+
             optionViewModels.ForEach(x => this.Options.Add(x));
         }
 
