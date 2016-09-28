@@ -292,23 +292,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return columnName;
         }
 
-        private decimal[] GetAnswerOptionsAsValues(IQuestion question)
+        private IEnumerable<decimal> GetAnswerOptionsAsValues(IQuestion question)
         {
-            return
-                question.Answers.Select(answer => this.ParseAnswerOptionValueOrThrow(answer.AnswerValue))
-                    .Where(o => o.HasValue)
-                    .Select(o => o.Value)
-                    .ToArray();
-        }
-
-        private decimal? ParseAnswerOptionValueOrThrow(string value)
-        {
-            decimal parsedValue;
-
-            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
-                return null;
-
-            return parsedValue;
+            return question.Answers.Select(answer => answer.GetParsedValue());
         }
     }
 }
