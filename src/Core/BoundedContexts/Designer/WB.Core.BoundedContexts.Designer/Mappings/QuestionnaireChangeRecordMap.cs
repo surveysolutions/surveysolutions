@@ -29,9 +29,10 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
 
             Set(x => x.References, set =>
             {
-                set.Key(key => key.Column("QuestionnaireChangeRecordId"));
+                set.Key(key => key.Column("questionnairechangerecordid"));
                 set.Lazy(CollectionLazy.NoLazy);
                 set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                set.Inverse(true);
             },
              relation => relation.OneToMany());
         }   
@@ -46,6 +47,13 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.ReferenceType);
             Property(x => x.ReferenceId);
             Property(x => x.ReferenceTitle);
+            ManyToOne(x => x.QuestionnaireChangeRecord,
+                mto =>
+                {
+                    mto.Column("questionnairechangerecordid");
+                    mto.Cascade(Cascade.None);
+                    mto.Index("questionnairechangerecords_questionnairechangereferences");
+                });
         }
     }
 }
