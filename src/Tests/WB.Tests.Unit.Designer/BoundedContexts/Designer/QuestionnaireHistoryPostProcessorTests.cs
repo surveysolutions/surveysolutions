@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             var questionnaire = Create.Questionnaire();
 
-            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<Guid>());
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
 
             var command = new CreateQuestionnaire(questionnaireId, "title", responsibleId, true);
 
