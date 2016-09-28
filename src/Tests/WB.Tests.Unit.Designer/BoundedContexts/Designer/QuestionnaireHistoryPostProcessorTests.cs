@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -846,7 +847,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             
             var questionnaire = Create.Questionnaire();
 
-            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<Guid>());
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
             var pastAfterCommand = Create.Command.PasteAfter(questionnaireId, targetGroupId, groupId, questionnaireId, groupId, responsibleId);
             var historyPostProcessor = CreateHistoryPostProcessor();
 
