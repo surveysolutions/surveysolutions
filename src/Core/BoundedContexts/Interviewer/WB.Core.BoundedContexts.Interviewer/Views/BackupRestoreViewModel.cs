@@ -103,10 +103,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.restoreScope = value; this.RaisePropertyChanged(); }
         }
 
-        public IMvxCommand BackupCommand
-        {
-            get { return new MvxCommand(async () => await BackupAsync()); }
-        }
+        public IMvxAsyncCommand BackupCommand => new MvxAsyncCommand(this.BackupAsync);
 
         public IMvxCommand RestoreCommand
         {
@@ -156,7 +153,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsBackupInProgress = true;
             try
             {
-                var createdFileName = await this.backupRestoreService.BackupAsync(this.interviewerSettings.BackupFolder);
+                var createdFileName = await
+                    this.backupRestoreService.BackupAsync(this.interviewerSettings.BackupFolder)
+                        .ConfigureAwait(false);
 
                 this.BackupLocation = createdFileName;
                 this.BackupCreationDate = DateTime.Now;
