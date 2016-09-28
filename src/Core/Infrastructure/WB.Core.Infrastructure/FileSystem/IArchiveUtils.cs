@@ -20,6 +20,7 @@ namespace WB.Core.Infrastructure.FileSystem
         byte[] CompressStringToByteArray(string fileName, string fileContentAsString);
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);
+        Stream GetZipWithPassword(Stream inputZipStream, string password);
     }
 
     public class UnzippedFile

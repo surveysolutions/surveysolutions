@@ -4,22 +4,21 @@ using System.Threading.Tasks;
 using Ionic.Zip;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Security;
 using System;
+using ZipEntry = Ionic.Zip.ZipEntry;
+using ZipFile = Ionic.Zip.ZipFile;
 
 namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
     public class ZipArchiveUtilsWithEncryptionDecorator : IArchiveUtils
     {
         private readonly IArchiveUtils archiveUtils;
-        private IExportSettings exportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public ZipArchiveUtilsWithEncryptionDecorator(IArchiveUtils archiveUtils, IFileSystemAccessor fileSystemAccessor, IExportSettings exportSettings)
+        public ZipArchiveUtilsWithEncryptionDecorator(IArchiveUtils archiveUtils, IFileSystemAccessor fileSystemAccessor)
         {
             this.archiveUtils = archiveUtils;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.exportSettings = exportSettings;
         }
 
         public string CompressString(string stringToCompress)
@@ -35,6 +34,22 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public string DecompressString(string stringToDecompress)
         {
             return this.archiveUtils.DecompressString(stringToDecompress);
+        }
+
+        public Stream GetZipWithPassword(Stream inputZipStream, string password)
+        {
+            var outputZipStream = new MemoryStream();
+            using (var zipFile = ZipFile.Read(inputZipStream))
+            {
+                zipFile.Password = password;
+                foreach (ZipEntry zipEntry in zipFile)
+                {
+                    zipEntry.Password = password;
+                }
+                zipFile.Save(outputZipStream);
+            }
+            outputZipStream.Position = 0;
+            return outputZipStream;
         }
 
         public Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath)
@@ -81,9 +96,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                     AlternateEncodingUsage = ZipOption.Always
                 })
                 {
-                    if (this.exportSettings != null && this.exportSettings.EncryptionEnforced())
-                        zipFile.Password = this.exportSettings.GetPassword();
-                    
                     foreach (var filePath in this.fileSystemAccessor.GetFilesInDirectory(directory, true))
                     {
                         var filePathInZip = $"{this.fileSystemAccessor.GetFileName(directory)}\\{filePath.Substring(directory.Length).TrimStart('\\')}";
@@ -110,9 +122,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         {
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
-                if(this.exportSettings != null && this.exportSettings.EncryptionEnforced())
-                    zip.Password = this.exportSettings.GetPassword();
-
                 zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
                 zip.CompressionLevel = CompressionLevel.Default;
                 zip.AddFiles(files, "");
