@@ -39,12 +39,11 @@ namespace WB.UI.Designer.Migrations.PlainStore
                     .WithColumn("referencetitle").AsString().Nullable()
                     .WithColumn("questionnairechangerecordid").AsString(255).Nullable();
 
+                Create.Index("questionnairechangerecords_questionnairechangereferences")
+                    .OnTable("questionnairechangereferences").OnColumn("questionnairechangerecordid");
+
                 Create.ForeignKey("questionnairechangereferences_questionnairechangerecordid")
                     .FromTable("questionnairechangereferences").ForeignColumn("questionnairechangerecordid")
-                    .ToTable("questionnairechangerecords").PrimaryColumn("id");
-
-                Create.ForeignKey("questionnairechangereferences_questionnairechangerecord")
-                    .FromTable("questionnairechangereferences").ForeignColumn("questionnairechangerecord")
                     .ToTable("questionnairechangerecords").PrimaryColumn("id");
             }
 
