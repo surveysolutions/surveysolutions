@@ -29,6 +29,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.LookupTables;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.Macros;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
 using Group = Main.Core.Entities.SubEntities.Group;
 
@@ -68,10 +69,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
 
-        internal void Initialize(Guid aggregateId, QuestionnaireDocument document, IEnumerable<Guid> readOnlyPersons)
+        internal void Initialize(Guid aggregateId, QuestionnaireDocument document, IEnumerable<SharedPerson> sharedPersons)
         {
             this.innerDocument = document ?? new QuestionnaireDocument() { PublicKey = aggregateId };
-            this.readOnlyUsers = readOnlyPersons.ToHashSet();
+
+            var persons = sharedPersons?.ToList() ?? new List<SharedPerson>();
+            this.innerDocument.SharedPersons = persons.Select(p => p.Id).ToList();
+            this.readOnlyUsers = persons.Where(p => p.ShareType == ShareType.View).Select(p => p.Id).ToHashSet();
         }
 
         private bool wasExpressionsMigrationPerformed = false;
@@ -2768,7 +2772,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId)
+        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId) 
         {
             if (this.innerDocument.CreatedBy != viewerId && !this.innerDocument.SharedPersons.Contains(viewerId))
             {
