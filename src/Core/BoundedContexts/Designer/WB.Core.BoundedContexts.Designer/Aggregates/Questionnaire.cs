@@ -72,8 +72,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Initialize(Guid aggregateId, QuestionnaireDocument document, IEnumerable<SharedPerson> sharedPersons)
         {
             this.innerDocument = document ?? new QuestionnaireDocument() { PublicKey = aggregateId };
-            this.innerDocument.SharedPersons = sharedPersons.Select(p => p.Id).ToList();
-            this.readOnlyUsers = sharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.Id).ToHashSet();
+
+            var persons = sharedPersons?.ToList() ?? new List<SharedPerson>();
+            this.innerDocument.SharedPersons = persons.Select(p => p.Id).ToList();
+            this.readOnlyUsers = persons.Where(p => p.ShareType == ShareType.View).Select(p => p.Id).ToHashSet();
         }
 
         private bool wasExpressionsMigrationPerformed = false;
