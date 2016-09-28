@@ -552,7 +552,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         Title = q.QuestionText,
                         Breadcrumbs = GetBreadcrumbsAsString(document, q),
                         Type = q.QuestionType.ToString().ToLower(),
-                        VarName = q.VariableLabel
+                        VarName = q.StataExportCaption
                     }).ToList();
             return questions;
         }
