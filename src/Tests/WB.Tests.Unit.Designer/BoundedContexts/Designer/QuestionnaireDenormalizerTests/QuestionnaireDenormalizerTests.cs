@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -77,7 +78,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>());
-            questionnaireAr.Initialize(document.PublicKey, document, Enumerable.Empty<Guid>());
+            questionnaireAr.Initialize(document.PublicKey, document, Enumerable.Empty<SharedPerson>());
             return questionnaireAr;
         }
 
