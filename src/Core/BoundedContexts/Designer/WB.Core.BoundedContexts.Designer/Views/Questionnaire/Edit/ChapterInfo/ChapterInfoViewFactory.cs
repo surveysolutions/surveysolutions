@@ -135,14 +135,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             List<VariableName> variables = predefinedVariables.Select(x => new VariableName(null, x)).ToList();
 
-            variables.AddRange(document.TreeToEnumerable<IComposite>(x => x.Children)
+            var questionnaireItems = document.TreeToEnumerable<IComposite>(x => x.Children);
+            var variableNames = questionnaireItems
                 .Select(z => new VariableName(z.PublicKey.FormatGuid(), 
                     string.Empty +
-                    (z as IQuestion)?.VariableLabel + 
+                    (z as IQuestion)?.StataExportCaption + 
                     (z as IGroup)?.VariableName + 
                     (z as IVariable)?.Name) 
-                ).Where(kv => !string.IsNullOrWhiteSpace(kv.Name))
-                .ToList());
+                )
+                .Where(kv => !string.IsNullOrWhiteSpace(kv.Name))
+                .ToList();
+
+            variables.AddRange(variableNames);
 
             return variables.ToArray();
         }
