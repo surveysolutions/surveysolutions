@@ -29,7 +29,7 @@ namespace Main.Core.Entities.SubEntities
 
         public decimal ParsedValue()
         {
-            return this.AnswerCode ?? int.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+            return this.AnswerCode ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
         }
 
         public static Answer CreateFromOther(Answer answer)
