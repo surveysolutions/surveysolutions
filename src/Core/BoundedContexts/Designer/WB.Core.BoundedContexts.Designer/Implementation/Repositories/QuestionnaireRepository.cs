@@ -31,9 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         {
             var questionnaireDocument = this.questionnaireStorage.GetById(aggregateId.FormatGuid());
             var sharedPersons = this.sharedPersonsStorage.GetById(aggregateId.FormatGuid());
-            var readOnlyPersons = sharedPersons?.SharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.Id) ?? Enumerable.Empty<Guid>();
+            var personsCollection = sharedPersons?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
             var questionnaire = this.serviceLocator.GetInstance<Questionnaire>();
-            questionnaire.Initialize(aggregateId, questionnaireDocument, readOnlyPersons);
+            questionnaire.Initialize(aggregateId, questionnaireDocument, personsCollection);
             return questionnaire;
         }
 
