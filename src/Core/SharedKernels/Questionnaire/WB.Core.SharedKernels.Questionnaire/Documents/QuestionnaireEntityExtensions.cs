@@ -1,4 +1,5 @@
 ﻿using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.Questionnaire.Documents
 {
@@ -8,6 +9,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             => (entity as IQuestion)?.QuestionText
             ?? (entity as IStaticText)?.Text
             ?? (entity as IGroup)?.Title;
+
+        public static string GetVariable(this IQuestionnaireEntity entity)
+            => (entity as IQuestion)?.StataExportCaption
+            ?? (entity as IGroup)?.VariableName
+            ?? (entity as IVariable)?.Name;
 
         public static void SetTitle(this IQuestionnaireEntity entity, string title)
         {
