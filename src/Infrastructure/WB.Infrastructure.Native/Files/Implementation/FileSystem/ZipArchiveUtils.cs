@@ -154,5 +154,10 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 return Encoding.Unicode.GetString(mso.ToArray());
             }
         }
+
+        public Stream GetZipWithPassword(Stream inputZipStream, string password)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
