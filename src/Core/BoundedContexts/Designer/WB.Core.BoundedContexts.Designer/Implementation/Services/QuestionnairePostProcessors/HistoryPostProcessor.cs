@@ -596,9 +596,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 ActionType = actionType,
                 TargetItemId = targetId,
                 TargetItemTitle = targetTitle,
-                TargetItemType = targetType,
-                References = references.ToHashSet()
+                TargetItemType = targetType
             };
+
+            references.ForEach(r => r.QuestionnaireChangeRecord = questionnaireChangeItem);
+            questionnaireChangeItem.References = references.ToHashSet();
 
             this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
         }
