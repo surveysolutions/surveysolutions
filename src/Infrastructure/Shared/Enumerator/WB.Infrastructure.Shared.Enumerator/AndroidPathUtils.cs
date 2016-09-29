@@ -1,66 +1,48 @@
-using PCLStorage;
+using System;
+using System.IO;
 
 namespace WB.Infrastructure.Shared.Enumerator
 {
     public class AndroidPathUtils
     {
         public static string GetPathToSubfolderInLocalDirectory(string subFolderName)
-        {
-            return GetPathToSubfolderInDirectory(GetPathToLocalDirectory(), subFolderName);
-        }
+            => GetPathToSubfolderInDirectory(GetPathToLocalDirectory(), subFolderName);
 
         public static string GetPathToLocalDirectory()
-        {
-            return FileSystem.Current.LocalStorage.Path;
-        }
+            => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         public static string GetPathToExternalDirectory()
-        {
-            return Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
-        }
+            => Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
         public static string GetPathToSubfolderInExternalDirectory(string subFolderName)
-        {
-            return GetPathToSubfolderInDirectory(GetPathToExternalInterviewerDirectory(), subFolderName);
-        }
+            => GetPathToSubfolderInDirectory(GetPathToExternalInterviewerDirectory(), subFolderName);
 
         public static string GetPathToExternalInterviewerDirectory()
-        {
-            return PortablePath.Combine(GetPathToExternalDirectory(), "Interviewer");
-        }
+            => Path.Combine(GetPathToExternalDirectory(), "Interviewer");
 
         public static string GetPathToFileInLocalSubDirectory(string subFolderName, string fileName)
-        {
-            return GetPathToFileInSubDirectory(GetPathToSubfolderInLocalDirectory(subFolderName), fileName);
-        }
+            => GetPathToFileInSubDirectory(GetPathToSubfolderInLocalDirectory(subFolderName), fileName);
 
         public static string GetPathToFileInExternalSubDirectory(string subFolderName, string fileName)
-        {
-            return GetPathToFileInSubDirectory(GetPathToSubfolderInExternalDirectory(subFolderName), fileName);
-        }
+            => GetPathToFileInSubDirectory(GetPathToSubfolderInExternalDirectory(subFolderName), fileName);
 
         private static string GetPathToSubfolderInDirectory(string directory, string subFolderName)
         {
-            var pathToSubfolderInLocalDirectory = PortablePath.Combine(directory, subFolderName);
+            var pathToSubfolderInLocalDirectory = Path.Combine(directory, subFolderName);
 
-            var subfolderExistingStatus =
-                FileSystem.Current.LocalStorage.CheckExistsAsync(pathToSubfolderInLocalDirectory).Result;
-            if (subfolderExistingStatus != ExistenceCheckResult.FolderExists)
-            {
-                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToSubfolderInLocalDirectory,
-                    CreationCollisionOption.FailIfExists).Wait();
-            }
+            if(!Directory.Exists(pathToSubfolderInLocalDirectory))
+                Directory.CreateDirectory(pathToSubfolderInLocalDirectory);
 
             return pathToSubfolderInLocalDirectory;
         }
 
-        private static string GetPathToFileInSubDirectory(string  subFolder, string fileName)
+        private static string GetPathToFileInSubDirectory(string subFolder, string fileName)
         {
-            return FileSystem.Current.GetFolderFromPathAsync(subFolder)
-                .Result
-                .CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists)
-                .Result
-                .Path;
+            string filePath = Path.Combine(subFolder, fileName);
+            if(!File.Exists(filePath))
+                File.Create(filePath);
+                
+            return filePath;
         }
     }
 }

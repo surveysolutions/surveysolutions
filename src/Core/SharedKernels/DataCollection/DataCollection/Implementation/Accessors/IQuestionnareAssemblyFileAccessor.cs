@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
 
         void RemoveAssembly(Guid questionnaireId, long questionnaireVersion);
 
-        Task RemoveAssemblyAsync(QuestionnaireIdentity questionnaireIdentity);
+        void RemoveAssembly(QuestionnaireIdentity questionnaireIdentity);
 
         string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion);
 

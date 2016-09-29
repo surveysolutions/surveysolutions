@@ -14,14 +14,14 @@ namespace WB.UI.Interviewer.Services
     public class BackupRestoreService : IBackupRestoreService
     {
         private readonly IArchiveUtils archiver;
-        private readonly IAsynchronousFileSystemAccessor fileSystemAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
         private readonly string privateStorage;
         private readonly string logDirectoryPath;
 
         public BackupRestoreService(
             IArchiveUtils archiver,
-            IAsynchronousFileSystemAccessor fileSystemAccessor,
+            IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             string privateStorage,
             string logDirectoryPath)
@@ -40,16 +40,15 @@ namespace WB.UI.Interviewer.Services
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            var isBackupFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(backupToFolderPath).ConfigureAwait(false);
+            var isBackupFolderExists = this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath);
             if (!isBackupFolderExists)
-                await this.fileSystemAccessor.CreateDirectoryAsync(backupToFolderPath).ConfigureAwait(false);
+                this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
             this.BackupSqliteDbs();
 
-            var isLogFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(this.logDirectoryPath).ConfigureAwait(false);
+            var isLogFolderExists = this.fileSystemAccessor.IsDirectoryExists(this.logDirectoryPath);
             if (isLogFolderExists)
-                await this.fileSystemAccessor.CopyDirectoryAsync(this.logDirectoryPath, this.privateStorage)
-                                             .ConfigureAwait(false);
+                this.fileSystemAccessor.CopyFileOrDirectory(this.logDirectoryPath, this.privateStorage);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
@@ -158,12 +157,12 @@ namespace WB.UI.Interviewer.Services
 
         public async Task RestoreAsync(string backupFilePath)
         {
-            if (await this.fileSystemAccessor.IsFileExistsAsync(backupFilePath))
+            if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {
-                if (await this.fileSystemAccessor.IsDirectoryExistsAsync(this.privateStorage))
+                if (this.fileSystemAccessor.IsDirectoryExists(this.privateStorage))
                 {
-                    await this.fileSystemAccessor.RemoveDirectoryAsync(this.privateStorage);
-                    await this.fileSystemAccessor.CreateDirectoryAsync(this.privateStorage);
+                    this.fileSystemAccessor.DeleteDirectory(this.privateStorage);
+                    this.fileSystemAccessor.CreateDirectory(this.privateStorage);
                 }
 
                 await this.archiver.UnzipAsync(backupFilePath, this.privateStorage, true);

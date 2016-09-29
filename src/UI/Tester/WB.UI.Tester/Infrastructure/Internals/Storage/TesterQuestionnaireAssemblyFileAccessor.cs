@@ -74,7 +74,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
 
         }
 
-        public Task RemoveAssemblyAsync(QuestionnaireIdentity questionnaireIdentity)
+        public void RemoveAssembly(QuestionnaireIdentity questionnaireIdentity)
         {
             throw new NotImplementedException();
         }
