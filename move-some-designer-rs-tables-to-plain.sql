@@ -125,21 +125,11 @@ CREATE TABLE public.questionnairechangereferences
   referencetype integer,
   referenceid uuid,
   referencetitle text,
-  questionnairechangerecord character varying(255),
   questionnairechangerecordid character varying(255),
-  CONSTRAINT questionnairechangereferences_pkey PRIMARY KEY (id),
-  CONSTRAINT fk1d5d002f19131125 FOREIGN KEY (questionnairechangerecord)
-      REFERENCES public.questionnairechangerecords (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fk1d5d002f594ea6ac FOREIGN KEY (questionnairechangerecordid)
-      REFERENCES public.questionnairechangerecords (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT questionnairechangereferences_pkey PRIMARY KEY (id),      
   CONSTRAINT fkc4dca6594fec074b FOREIGN KEY (questionnairechangerecordid)
       REFERENCES public.questionnairechangerecords (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fkc4dca659fdf34748 FOREIGN KEY (questionnairechangerecord)
-      REFERENCES public.questionnairechangerecords (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+      ON UPDATE NO ACTION ON DELETE NO ACTION  
 )
 WITH (
   OIDS=FALSE
@@ -150,8 +140,7 @@ ALTER TABLE public.questionnairechangereferences
 CREATE INDEX questionnairechangerecords_questionnairechangereferences
   ON public.questionnairechangereferences
   USING btree
-  (questionnairechangerecord COLLATE pg_catalog."default");
-
+  (questionnairechangerecordid COLLATE pg_catalog."default");
 
 CREATE TABLE public.questionnairedocuments
 (
