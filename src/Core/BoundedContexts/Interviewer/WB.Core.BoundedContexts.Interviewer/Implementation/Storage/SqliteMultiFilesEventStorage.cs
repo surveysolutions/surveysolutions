@@ -375,7 +375,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 bool viewExists;
 
                 using (connection.Lock())
-                    viewExists = connection.Table<EventView>().FirstOrDefault(x => x.EventSourceId == eventStream.SourceId) != null;
+                    viewExists = connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
 
                 if (viewExists)
                 {
