@@ -113,12 +113,6 @@
       <HintPath>..\..\..\..\..\packages\modernhttpclient.2.4.2\lib\MonoAndroid\OkHttp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PCLStorage">
-      <HintPath>..\..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.dll</HintPath>
-    </Reference>
-    <Reference Include="PCLStorage.Abstractions">
-      <HintPath>..\..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO" />
@@ -168,7 +162,6 @@
     <Compile Include="Internals\FileSystem\AndroidFileInfo.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileSystem.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileSystemEntryInfo.cs" />
-    <Compile Include="Internals\FileSystem\AsynchronousFileSystemAccessor.cs" />
     <Compile Include="Internals\FileSystem\ZipArchiveUtils.cs" />
     <Compile Include="Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Internals\GpsLocationService.cs" />
