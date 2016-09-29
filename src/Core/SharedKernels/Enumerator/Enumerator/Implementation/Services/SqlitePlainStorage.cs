@@ -22,7 +22,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var entityName = typeof(TEntity).Name;
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
-            this.connection = new SQLiteConnectionWithLock(pathToDatabase, 
+
+            var sqliteConnectionString = new SQLiteConnectionString(pathToDatabase, true);
+            this.connection = new SQLiteConnectionWithLock(sqliteConnectionString, 
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
             
             this.logger = logger;

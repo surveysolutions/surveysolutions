@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         private SQLiteConnectionWithLock CreateConnection(string connectionString)
         {
-            var connection = new SQLiteConnectionWithLock(connectionString,
+            var sqConnection = new SQLiteConnectionString(connectionString, true);
+            var connection = new SQLiteConnectionWithLock(sqConnection,
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 
             connection.CreateTable<EventView>();
