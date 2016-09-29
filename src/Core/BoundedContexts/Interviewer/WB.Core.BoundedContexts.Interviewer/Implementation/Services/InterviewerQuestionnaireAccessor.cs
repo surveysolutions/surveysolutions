@@ -107,14 +107,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             });
         }
 
-        public async Task RemoveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
+        public void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaireId = questionnaireIdentity.ToString();
 
             this.DeleteInterviewsByQuestionnaire(questionnaireId);
             this.questionnaireStorage.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
             this.questionnaireViewRepository.Remove(questionnaireId);
-            await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
+            this.questionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity);
             optionsRepository.RemoveOptionsForQuestionnaire(questionnaireIdentity);
             this.RemoveTranslations(questionnaireIdentity);
         }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -49,8 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
                 interviewFactory: mockOfInterviewAccessor.Object);
         };
 
-        Because of = async () =>
-            await interviewerQuestionnaireAccessor.RemoveQuestionnaireAsync(questionnaireIdentity);
+        Because of = () => interviewerQuestionnaireAccessor.RemoveQuestionnaire(questionnaireIdentity);
 
         It should_remove_questionnaire_document_view_from_plain_storage = () =>
             mockOfPlainQuestionnaireRepository.Verify(x => x.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version), Times.Once);
@@ -59,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             mockOfQuestionnaireViewRepository.Verify(x => x.Remove(questionnaireIdentity.ToString()), Times.Once);
 
         It should_remove_questionnaire_assembly_from_file_storage = () =>
-            mockOfQuestionnaireAssemblyFileAccessor.Verify(x => x.RemoveAssemblyAsync(questionnaireIdentity), Times.Once);
+            mockOfQuestionnaireAssemblyFileAccessor.Verify(x => x.RemoveAssembly(questionnaireIdentity), Times.Once);
 
         It should_remove_interviews_by_questionnaire_from_plain_storage = () =>
             mockOfInterviewAccessor.Verify(x => x.RemoveInterview(Moq.It.IsAny<Guid>()), Times.Exactly(2));

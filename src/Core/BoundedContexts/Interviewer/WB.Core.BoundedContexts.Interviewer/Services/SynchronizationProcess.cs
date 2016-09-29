@@ -218,7 +218,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             foreach (var censusQuestionnaireIdentity in notExistingRemoteCensusQuestionnaireIdentities)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.questionnairesAccessor.RemoveQuestionnaireAsync(censusQuestionnaireIdentity);
+                this.questionnairesAccessor.RemoveQuestionnaire(censusQuestionnaireIdentity);
             }
 
             var processedQuestionnaires = 0;
@@ -263,7 +263,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Status = SynchronizationStatus.Download
                 });
 
-                await this.questionnairesAccessor.RemoveQuestionnaireAsync(questionnaireIdentity);
+                this.questionnairesAccessor.RemoveQuestionnaire(questionnaireIdentity);
             }
             if (questionnairesToRemove.Count > 0)
             {

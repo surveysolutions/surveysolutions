@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly ILogger logger;
 
         public SqlitePlainStorage(ILogger logger,
-            IAsynchronousFileSystemAccessor fileSystemAccessor,
+            IFileSystemAccessor fileSystemAccessor,
             SqliteSettings settings)
         {
             var entityName = typeof(TEntity).Name;
