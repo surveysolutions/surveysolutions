@@ -77,7 +77,8 @@ namespace WB.UI.Interviewer.Services
                 try
                 {
                     string destDBPath;
-                    using (var connection = new SQLiteConnectionWithLock(dbPathToBackup, openFlags: SQLiteOpenFlags.ReadOnly))
+                    var backupConnectionString = new SQLiteConnectionString(dbPathToBackup, true);
+                    using (var connection = new SQLiteConnectionWithLock(backupConnectionString, openFlags: SQLiteOpenFlags.ReadOnly))
                     {
                         destDBPath = $"{connection.DatabasePath}.{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss-fff}";
 
