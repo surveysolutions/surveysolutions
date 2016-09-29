@@ -23,18 +23,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Guid personId = Guid.NewGuid();
             string email = "unknown@u.com";
             Guid responsibleId = Guid.NewGuid();
+            ShareType shareType = ShareType.View;
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
                 
             // act
-            questionnaire.AddSharedPerson(personId, email, ShareType.Edit, responsibleId);
+            questionnaire.AddSharedPerson(personId, email, shareType, responsibleId);
 
             // assert
-            var evt = questionnaire.QuestionnaireDocument.SharedPersons.Find(p => p == personId);
+            var person = questionnaire.SharedPersons.Single(p => p.Id == personId);
 
-            Assert.IsNotNull(evt);
-//            Assert.That(evt.PersonId, Is.EqualTo(personId));
-//            Assert.That(evt.Email, Is.EqualTo(email));
-//            Assert.That(evt.ResponsibleId, Is.EqualTo(responsibleId));
+            Assert.IsNotNull(person);
+            Assert.That(person.Id, Is.EqualTo(personId));
+            Assert.That(person.Email, Is.EqualTo(email));
+            Assert.That(person.ShareType, Is.EqualTo(shareType));
         }
 
         [Test]
@@ -50,8 +51,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.RemoveSharedPerson(personId, string.Empty, responsibleId);
 
             // assert
-            var person = questionnaire.QuestionnaireDocument.SharedPersons.FirstOrDefault(p => p == personId);
-            Assert.That(person, Is.EqualTo(default(Guid)));
+            var isExistsPerson = questionnaire.SharedPersons.Any(p => p.Id == personId);
+            Assert.IsFalse(isExistsPerson);
         }
 
         [Test]

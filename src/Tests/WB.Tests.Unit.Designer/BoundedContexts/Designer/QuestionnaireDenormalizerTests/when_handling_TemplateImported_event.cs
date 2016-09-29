@@ -2,12 +2,13 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.DenormalizerStorage;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
@@ -18,27 +19,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         Establish context = () =>
         {
             questionnaireDocument = CreateQuestionnaireDocument();
-            questionnaireDocument.SharedPersons.Add(shredPersonWithBefore);
+            questionnaireDocument.Macros.Add(macrosWithBefore, new Macro() { Description = "before" });
 
             documentStorage = new InMemoryReadSideRepositoryAccessor<QuestionnaireDocument>();
             documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
 
             @event = Create.Event.TemplateImportedEvent(questionnaireId: questionnaireDocument.PublicKey.FormatGuid());
-            @event.Source.SharedPersons.Add(Guid.NewGuid());
+            @event.Source.Macros.Add(Guid.NewGuid(), new Macro() { Description = "event"});
 
-            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument, sharedPersons: macrosWithBefore.ToEnumerable());
         };
 
         Because of = () =>
             denormalizer.ImportTemplate(@event);
 
-        It should_list_of_shared_persons_contains_persons_from_replaced_questionnaire_only = () =>
-           documentStorage.GetById(questionnaireDocument.PublicKey).SharedPersons.ShouldContainOnly(shredPersonWithBefore);
+        It should_list_of_macroses_contains_macros_from_replaced_questionnaire_only = () =>
+           documentStorage.GetById(questionnaireDocument.PublicKey).Macros.Keys.ShouldContainOnly(macrosWithBefore);
 
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaireDocument;
         private static TemplateImported @event;
-        private static Guid shredPersonWithBefore = Guid.Parse("11111111111111111111111111111111");
+        private static Guid macrosWithBefore = Guid.Parse("11111111111111111111111111111111");
         private static InMemoryReadSideRepositoryAccessor<QuestionnaireDocument> documentStorage;
     }
 }

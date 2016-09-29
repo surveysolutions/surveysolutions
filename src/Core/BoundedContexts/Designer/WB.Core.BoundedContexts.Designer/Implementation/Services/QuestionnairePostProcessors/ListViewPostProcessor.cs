@@ -88,9 +88,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private IAccountRepository accountRepository => ServiceLocator.Current.GetInstance<IAccountRepository>();
 
-        private void Create(QuestionnaireDocument document, bool shouldPreserveSharedPersons,
+        private void Create(QuestionnaireDocument document, bool shouldPreserveSharedPersons, 
             Guid? questionnaireId = null, string questionnaireTitle = null, Guid? createdBy = null,
-            bool? isPublic = null, DateTime? creationDate = null)
+            bool? isPublic = null, DateTime? creationDate = null, IEnumerable<Guid> sharedPersonIds = null)
         {
             var questionnaireIdValue = questionnaireId ?? document.PublicKey;
 
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             if (!shouldPreserveSharedPersons)
                 questionnaireListViewItem.SharedPersons.Clear();
-            questionnaireListViewItem.SharedPersons.AddRange(document.SharedPersons);
+            questionnaireListViewItem.SharedPersons.AddRange(sharedPersonIds ?? Enumerable.Empty<Guid>());
 
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireListViewItem.QuestionnaireId);
         }
@@ -241,7 +241,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             }
         }
 
-        public void Process(Questionnaire aggregate, ImportQuestionnaire command) => this.Create(command.Source, true, command.QuestionnaireId);
+        public void Process(Questionnaire aggregate, ImportQuestionnaire command)
+            => this.Create(command.Source, true, command.QuestionnaireId);
 
         public void Process(Questionnaire aggregate, CloneQuestionnaire command)
             => this.Create(command.Source, false, command.QuestionnaireId, command.Title,
