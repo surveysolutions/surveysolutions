@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -30,6 +31,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         #region Gherkin
 
         private static GherkinGiven Given() => new GherkinGiven();
+
+        private static void Then(params Action[] shoulds)
+        {
+            var exceptions = new List<Exception>();
+
+            foreach (Action should in shoulds)
+            {
+                try
+                {
+                    should.Invoke();
+                }
+                catch (Exception exception)
+                {
+                    exceptions.Add(exception);
+                }
+            }
+
+            if (exceptions.Count > 0)
+            {
+                throw new AggregateException(
+                    "Expectation(s) failed:" + Environment.NewLine +
+                    string.Join(Environment.NewLine, exceptions.Select(exception => exception.Message)));
+            }
+        }
 
         private class GherkinGiven
         {
@@ -285,7 +310,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             // then
             var questionnaireStateTracker = questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
             var questions = questionnaireStateTracker.QuestionsState.Keys;
-            questions.ShouldBeEquivalentTo(new[] { notRemovedQuestionId });
+            Then(() => questions.ShouldBeEquivalentTo(new[] {notRemovedQuestionId}));
         }
 
         [Test]
@@ -316,15 +341,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 historyItems => historyItems.First(historyItem =>
                     historyItem.QuestionnaireId == questionnaireId.FormatGuid()));
 
-            Assert.That(questionnaireHistoryItem, Is.Not.Null);
-            Assert.That(questionnaireHistoryItem.QuestionnaireId, Is.EqualTo(command.QuestionnaireId.FormatGuid()));
-            Assert.That(questionnaireHistoryItem.ActionType, Is.EqualTo(QuestionnaireActionType.Import));
-            Assert.That(questionnaireHistoryItem.UserId, Is.EqualTo(questionnaireOwner));
-            Assert.That(questionnaireHistoryItem.UserName, Is.EqualTo(ownerName));
-            Assert.That(questionnaireHistoryItem.Sequence, Is.EqualTo(0));
-            Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
-            Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
-            Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(questionnnaireTitle));
+            Then(() => Assert.That(questionnaireHistoryItem, Is.Not.Null),
+                () => Assert.That(questionnaireHistoryItem, Is.Not.Null),
+                () => Assert.That(questionnaireHistoryItem.QuestionnaireId, Is.EqualTo(command.QuestionnaireId.FormatGuid())),
+                () => Assert.That(questionnaireHistoryItem.ActionType, Is.EqualTo(QuestionnaireActionType.Import)),
+                () => Assert.That(questionnaireHistoryItem.UserId, Is.EqualTo(questionnaireOwner)),
+                () => Assert.That(questionnaireHistoryItem.UserName, Is.EqualTo(ownerName)),
+                () => Assert.That(questionnaireHistoryItem.Sequence, Is.EqualTo(0)),
+                () => Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire)),
+                () => Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId)),
+                () => Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(questionnnaireTitle)));
         }
 
         [Test]
