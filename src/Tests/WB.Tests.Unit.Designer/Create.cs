@@ -69,10 +69,12 @@ namespace WB.Tests.Unit.Designer
 {
     internal static partial class Create
     {
-        public static AccountDocument AccountDocument(string userName = "")
-        {
-            return new AccountDocument() { UserName = userName };
-        }
+        public static AccountDocument AccountDocument(string userName = "", Guid? userId = null)
+            => new AccountDocument
+            {
+                ProviderUserKey = userId ?? Guid.NewGuid(),
+                UserName = userName,
+            };
 
         public static Answer Answer(string answer, decimal? value = null, string stringValue = null, decimal? parentValue = null)
         {
@@ -637,7 +639,8 @@ namespace WB.Tests.Unit.Designer
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null, Guid? responsibleId = null)
+        public static QuestionnaireDocument QuestionnaireDocument(
+            Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
         {
             return new QuestionnaireDocument
             {
@@ -645,7 +648,7 @@ namespace WB.Tests.Unit.Designer
                 Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
                 Title = title,
-                CreatedBy = responsibleId ?? Guid.NewGuid()
+                CreatedBy = userId ?? Guid.NewGuid()
             };
         }
 
@@ -1024,8 +1027,8 @@ namespace WB.Tests.Unit.Designer
                 => new MoveQuestion(questionnaireId, questionId, targetGroupId ?? Guid.NewGuid(), targetIndex ?? 0,
                     responsibleId);
 
-            public static ImportQuestionnaire ImportQuestionnaire(QuestionnaireDocument questionnaireDocument)
-                => new ImportQuestionnaire(Guid.NewGuid(), questionnaireDocument);
+            public static ImportQuestionnaire ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, Guid? responsibleId = null)
+                => new ImportQuestionnaire(responsibleId ?? Guid.NewGuid(), questionnaireDocument);
 
             public static PasteAfter PasteAfter(Guid questionnaireId, Guid entityId, Guid itemToPasteAfterId, 
                 Guid sourceQuestionnaireId, Guid sourceItemId, Guid responsibleId) 
