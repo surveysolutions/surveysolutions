@@ -835,7 +835,6 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\YesNoQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\QuestionnaireTests\when_cloning_questionnaire_document_with_lookup_tables.cs" />
     <Compile Include="SharedKernels\QuestionnaireTests\when_cloning_questionnaire_document_with_macros.cs" />
-    <Compile Include="SharedKernels\QuestionnaireTests\when_cloning_questionnaire_with_shared_persons.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewExportedCommentariesDenormalizerTests\InterviewExportedCommentariesDenormalizerNunitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_completed_event_received_after_restart.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_unapproved_by_headquarters_event_recived.cs" />

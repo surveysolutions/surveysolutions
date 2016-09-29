@@ -20,7 +20,6 @@ namespace Main.Core.Documents
             this.Children = new List<IComposite>();
             this.ConditionExpression = string.Empty;
             this.IsPublic = false;
-            this.SharedPersons = new List<Guid>();
             this.Macros = new Dictionary<Guid, Macro>();
             this.LookupTables = new Dictionary<Guid, LookupTable>();
             this.Attachments = new List<Attachment>();
@@ -93,14 +92,7 @@ namespace Main.Core.Documents
 
         public Guid? RosterTitleQuestionId => null;
 
-        public List<Guid> SharedPersons { get; set; }
-
         public long LastEventSequence { get; set; }
-
-        public void ReplaceSharedPersons(List<Guid> sharedPersons)
-        {
-            this.SharedPersons = sharedPersons;
-        }
 
         public void Insert(int index, IComposite c, Guid? parent)
         {
@@ -521,9 +513,6 @@ namespace Main.Core.Documents
 
             doc.LookupTables = new Dictionary<Guid, LookupTable>();
             this.LookupTables.ForEach(x => doc.LookupTables.Add(x.Key, x.Value.Clone()));
-
-            doc.SharedPersons = new List<Guid>();
-            this.SharedPersons.ForEach(x => doc.SharedPersons.Add(x));
 
             doc.Attachments = new List<Attachment>();
             this.Attachments.ForEach(x => doc.Attachments.Add(x.Clone()));

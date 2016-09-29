@@ -75,7 +75,6 @@ namespace WB.UI.Designer.Api.Headquarters
             QuestionnaireDocument questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
-            questionnaire.SharedPersons = null;
             questionnaire.Attachments = null;
             this.downgradeService.Downgrade(questionnaire, questionnaireContentVersion);
 

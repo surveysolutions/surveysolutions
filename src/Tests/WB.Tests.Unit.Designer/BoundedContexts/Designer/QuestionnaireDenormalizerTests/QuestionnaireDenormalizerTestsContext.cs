@@ -36,7 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         public static Questionnaire CreateQuestionnaireDenormalizer(QuestionnaireDocument questionnaire,
             IExpressionProcessor expressionProcessor = null,
-            IQuestionnaireEntityFactory questionnaireEntityFactory = null)
+            IQuestionnaireEntityFactory questionnaireEntityFactory = null,
+            IEnumerable<Guid> sharedPersons = null )
         {
             var questAr = new Questionnaire(
                 questionnaireEntityFactory ?? new QuestionnaireEntityFactory(),
@@ -48,7 +49,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>());
-            questAr.Initialize(questionnaire.PublicKey, questionnaire, questionnaire.SharedPersons.Select(p => new SharedPerson() { Id = p }));
+            var persons = sharedPersons?.Select(id => new SharedPerson() {Id = id}) ?? new List<SharedPerson>();
+            questAr.Initialize(questionnaire.PublicKey, questionnaire, persons);
             return questAr;
         }
 
