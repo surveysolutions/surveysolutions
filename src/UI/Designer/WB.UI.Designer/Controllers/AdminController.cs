@@ -129,8 +129,7 @@ namespace WB.UI.Designer.Controllers
                         this.zipUtils.DecompressGZip<QuestionnaireDocumentWithLookUpTables>(CreateStreamCopy(uploadFile.InputStream));
                     if (document != null)
                     {
-                        var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId,
-                            document.QuestionnaireDocument);
+                        var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, document.QuestionnaireDocument);
 
                         this.commandService.Execute(command);
                         foreach (var lookupTable in document.LookupTables)

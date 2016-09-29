@@ -626,7 +626,6 @@ namespace WB.Tests.Unit.Designer
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 CreatedBy = createdBy,
-                SharedPersons = sharedPersons
             };
         }
 

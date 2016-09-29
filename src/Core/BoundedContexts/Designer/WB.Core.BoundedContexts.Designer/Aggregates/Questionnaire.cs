@@ -65,17 +65,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region State
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-        private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
+        private List<SharedPerson> sharedPersons = new List<SharedPerson>();
+        private IEnumerable<Guid> ReadOnlyUsersIds => sharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.Id);
+        private IEnumerable<Guid> SharedUsersIds => sharedPersons.Select(p => p.Id);
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
+        public IEnumerable<SharedPerson> SharedPersons => this.sharedPersons;
 
         internal void Initialize(Guid aggregateId, QuestionnaireDocument document, IEnumerable<SharedPerson> sharedPersons)
         {
             this.innerDocument = document ?? new QuestionnaireDocument() { PublicKey = aggregateId };
-
-            var persons = sharedPersons?.ToList() ?? new List<SharedPerson>();
-            this.innerDocument.SharedPersons = persons.Select(p => p.Id).ToList();
-            this.readOnlyUsers = persons.Where(p => p.ShareType == ShareType.View).Select(p => p.Id).ToHashSet();
+            this.sharedPersons = sharedPersons?.ToList() ?? new List<SharedPerson>();
         }
 
         private bool wasExpressionsMigrationPerformed = false;
@@ -128,15 +128,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void AddSharedPersonToQuestionnaire(SharedPersonToQuestionnaireAdded e)
         {
-            this.innerDocument.SharedPersons.Add(e.PersonId);
-            if (e.ShareType == ShareType.View)
-                this.readOnlyUsers.Add(e.PersonId);
+            this.sharedPersons.Add(new SharedPerson()
+            {
+                Id = e.PersonId,
+                ShareType = e.ShareType,
+                Email = e.Email,
+            });
         }
 
         internal void RemoveSharedPersonFromQuestionnaire(SharedPersonFromQuestionnaireRemoved e)
         {
-            this.innerDocument.SharedPersons.Remove(e.PersonId);
-            this.readOnlyUsers.Remove(e.PersonId);
+            this.sharedPersons.RemoveAll(sp => sp.Id == e.PersonId);
         }
 
         internal void MigrateExpressionsToCSharp(ExpressionsMigratedToCSharp e)
@@ -196,9 +198,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void ImportTemplate(TemplateImported e)
         {
             var upgradedDocument = e.Source;
-
-            upgradedDocument.ReplaceSharedPersons(this.innerDocument.SharedPersons);
-
             this.innerDocument = upgradedDocument;
         }
 
@@ -625,10 +624,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             clonedDocument.CreationDate = this.clock.UtcNow();
             clonedDocument.Title = title;
             clonedDocument.IsPublic = isPublic;
-            if (clonedDocument.SharedPersons != null)
-            {
-                clonedDocument.SharedPersons.Clear();
-            }
 
             foreach (var lookupTable in clonedDocument.LookupTables)
             {
@@ -1856,7 +1851,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("User {0} is an owner of this questionnaire. Please, input another email.", email));
             }
 
-            if (this.innerDocument.SharedPersons.Contains(personId))
+            if (this.SharedUsersIds.Contains(personId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.UserExistInShareList,
@@ -1876,7 +1871,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
-            if (!this.innerDocument.SharedPersons.Contains(personId))
+            if (!this.SharedUsersIds.Contains(personId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.UserDoesNotExistInShareList,
@@ -2774,13 +2769,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(Guid viewerId) 
         {
-            if (this.innerDocument.CreatedBy != viewerId && !this.innerDocument.SharedPersons.Contains(viewerId))
+            if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.DoesNotHavePermissionsForEdit,
                     "You don't have permissions for changing this questionnaire");
             }
-            if (this.readOnlyUsers.Contains(viewerId))
+            if (this.ReadOnlyUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(
                    DomainExceptionType.DoesNotHavePermissionsForEdit,
