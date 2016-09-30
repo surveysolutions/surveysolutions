@@ -31,7 +31,7 @@ using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
 {
-    [CustomAuthorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
         private class RestoreState

@@ -29,7 +29,6 @@ using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
-    [CustomAuthorize]
     public class QuestionnaireController : BaseController
     {
         private readonly ICommandService commandService;
