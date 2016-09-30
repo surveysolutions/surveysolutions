@@ -10,7 +10,7 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
-    public class ZipArchiveUtils : IArchiveUtils
+    public class ZipArchiveUtils : IArchiveUtils, IZipArchiveProtectionService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 

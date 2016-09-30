@@ -63,6 +63,7 @@
     <Compile Include="EventBus\Lite\ILiteEventRaiseFilter.cs" />
     <Compile Include="EventBus\Lite\Implementation\LiteEventRegistryEntity.cs" />
     <Compile Include="EventBus\Lite\Implementation\RaiseFilters\AggregateRootRaiseFilter.cs" />
+    <Compile Include="FileSystem\IZipArchiveProtectionService.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepository.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepositoryWithCache.cs" />
     <Compile Include="CommandBus\Implementation\CommandService.cs" />

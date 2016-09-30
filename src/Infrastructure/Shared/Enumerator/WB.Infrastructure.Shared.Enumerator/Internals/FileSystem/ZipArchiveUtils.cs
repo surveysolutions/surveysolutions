@@ -219,10 +219,5 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
                 return Encoding.Unicode.GetString(mso.ToArray());
             }
         }
-
-        public Stream ProtectZipWithPassword(Stream inputZipStream, string password)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
