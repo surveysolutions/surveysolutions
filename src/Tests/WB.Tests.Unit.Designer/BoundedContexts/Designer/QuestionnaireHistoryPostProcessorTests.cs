@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using FluentAssertions;
+using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -310,6 +310,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             // then
             var questionnaireStateTracker = questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
             var questions = questionnaireStateTracker.QuestionsState.Keys;
+
             Then(() => questions.ShouldBeEquivalentTo(new[] {notRemovedQuestionId}));
         }
 
@@ -337,20 +338,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             historyPostProcessor.Process(null, command);
 
             // then
-            var questionnaireHistoryItem = historyStorage.Query(
-                historyItems => historyItems.First(historyItem =>
-                    historyItem.QuestionnaireId == questionnaireId.FormatGuid()));
+            var questionnaireHistoryItem = historyStorage.Query(historyItems
+                => historyItems.First(historyItem => historyItem.QuestionnaireId == questionnaireId.FormatGuid()));
 
-            Then(() => Assert.That(questionnaireHistoryItem, Is.Not.Null),
-                () => Assert.That(questionnaireHistoryItem, Is.Not.Null),
-                () => Assert.That(questionnaireHistoryItem.QuestionnaireId, Is.EqualTo(command.QuestionnaireId.FormatGuid())),
-                () => Assert.That(questionnaireHistoryItem.ActionType, Is.EqualTo(QuestionnaireActionType.Import)),
-                () => Assert.That(questionnaireHistoryItem.UserId, Is.EqualTo(questionnaireOwner)),
-                () => Assert.That(questionnaireHistoryItem.UserName, Is.EqualTo(ownerName)),
-                () => Assert.That(questionnaireHistoryItem.Sequence, Is.EqualTo(0)),
-                () => Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire)),
-                () => Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId)),
-                () => Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(questionnnaireTitle)));
+            Then(() => questionnaireHistoryItem.ShouldNotBeNull(),
+                () => questionnaireHistoryItem.QuestionnaireId.ShouldEqual(command.QuestionnaireId.FormatGuid()),
+                () => questionnaireHistoryItem.ActionType.ShouldEqual(QuestionnaireActionType.Import),
+                () => questionnaireHistoryItem.UserId.ShouldEqual(questionnaireOwner),
+                () => questionnaireHistoryItem.UserName.ShouldEqual(ownerName),
+                () => questionnaireHistoryItem.Sequence.ShouldEqual(0),
+                () => questionnaireHistoryItem.TargetItemType.ShouldEqual(QuestionnaireItemType.Questionnaire),
+                () => questionnaireHistoryItem.TargetItemId.ShouldEqual(questionnaireId),
+                () => questionnaireHistoryItem.TargetItemTitle.ShouldEqual(questionnnaireTitle));
         }
 
         [Test]
