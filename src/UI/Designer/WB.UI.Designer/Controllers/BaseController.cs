@@ -1,8 +1,10 @@
-﻿using WB.UI.Shared.Web.Controllers;
+﻿using System.Web.Mvc;
+using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
+    [Authorize]
     public class BaseController : BaseMessageDisplayController
     {
         protected readonly IMembershipUserService UserHelper;
