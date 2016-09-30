@@ -1270,7 +1270,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnYesNoQuestionAnswer(
-                command.Question, answer, command.AnswerTime, command.UserId, questionnaire, expressionProcessorState, this.interviewState, getAnswer);
+                command.Question.Id, command.Question.RosterVector, answer, command.AnswerTime, command.UserId, questionnaire, expressionProcessorState, this.interviewState, getAnswer);
 
             this.ApplyInterviewChanges(interviewChanges);
         }
