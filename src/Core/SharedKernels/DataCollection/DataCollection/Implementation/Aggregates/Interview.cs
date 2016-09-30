@@ -775,7 +775,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, RosterVector.Empty),
                     answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
 
-            ILatestInterviewExpressionState expressionProcessorStatePrototypeLocal = this.ExpressionProcessorStatePrototype.Clone();
+            ILatestInterviewExpressionState expressionProcessorStatePrototypeLocal = new InterviewExpressionStateForPreloading();
             this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
                 answersTime, newAnswers);
 
@@ -958,28 +958,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
         }
 
-        private static string FormatQuestionForException(Identity question, IQuestionnaire questionnaire)
-        {
-            return string.Format("'{0} [{1}] ({2:N} <{3}>)'",
-                GetQuestionTitleForException(question.Id, questionnaire),
-                GetQuestionVariableNameForException(question.Id, questionnaire),
-                question.Id,
-                string.Join("-", question.RosterVector));
-        }
-
         private static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
         {
             return string.Format("'{0} [{1}]'",
                 GetQuestionTitleForException(questionId, questionnaire),
                 GetQuestionVariableNameForException(questionId, questionnaire));
-        }
-
-        private static string FormatGroupForException(Identity group, IQuestionnaire questionnaire)
-        {
-            return string.Format("'{0} ({1:N} <{2}>)'",
-                GetGroupTitleForException(group.Id, questionnaire),
-                group.Id,
-                string.Join("-", group.RosterVector));
         }
 
         private static string FormatGroupForException(Guid groupId, IQuestionnaire questionnaire)
@@ -1094,7 +1077,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return groupRosterVectors.Select(groupRosterVector => new Identity(groupId, groupRosterVector));
         }
-
       
         private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(
             IEnumerable<Guid> groupIds, RosterVector rosterVector, IQuestionnaire questionnaire)
@@ -1231,7 +1213,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? answer
                     : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(expressionProcessorState, this.interviewState, userId,
                 questionId, rosterVector, answerTime, answer, getAnswer, questionnaire);
@@ -1257,7 +1239,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? selectedValues
                     : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(expressionProcessorState, this.interviewState, userId,
                 questionId, rosterVector, answerTime, selectedValues, getAnswer, questionnaire);
@@ -1282,7 +1264,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? answer
                     : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnYesNoQuestionAnswer(
                 command.Question.Id, command.Question.RosterVector, answer, command.AnswerTime, command.UserId, questionnaire, expressionProcessorState, this.interviewState, getAnswer);
@@ -1369,7 +1351,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answers :
                 this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerTextListQuestion(expressionProcessorState, this.interviewState, userId, questionId,
                 rosterVector, answerTime, answers, getAnswer, questionnaire);
@@ -1406,9 +1388,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             expressionProcessorState.UpdateMediaAnswer(questionId, rosterVector, pictureFileName);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(
-                userId, questionId, rosterVector, pictureFileName, AnswerChangeType.Picture, answerTime,
-                questionnaire, expressionProcessorState);
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, pictureFileName, 
+                AnswerChangeType.Picture, answerTime,questionnaire, expressionProcessorState);
             
             this.ApplyInterviewChanges(interviewChanges);
         }
@@ -1427,8 +1408,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             expressionProcessorState.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, selectedRosterVector);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(
-                userId, questionId, rosterVector, selectedRosterVector,
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, selectedRosterVector,
                 AnswerChangeType.SingleOptionLinked, answerTime, questionnaire, expressionProcessorState);
 
             this.ApplyInterviewChanges(interviewChanges);
@@ -2684,22 +2664,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
             
-            
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-
-            var changes = this.EmitInterviewStructuralChangesByExpressionStateRosterTitlesAndLinked(expressionProcessorState, rosterCalculationData,
-                 questionnaire, interviewByAnswerChange, userId, answerTime, questionId);
-
             IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
 
-            changes.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToArray();
-            changes.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToArray();
-            changes.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState).ToArray();
-
-            return changes;
+            return this.CalculateInterviewStructuralChanges(questionId, rosterVector, answerTime, userId, questionnaire, expressionProcessorState, 
+                interviewByAnswerChange, rosterCalculationData, alteredState);
+            
         }
 
         private InterviewChanges EmitInterviewStructuralChangesByExpressionStateRosterTitlesAndLinked(ILatestInterviewExpressionState expressionProcessorState,
@@ -2966,28 +2938,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
 
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-
-            var interviewChanges = this.EmitInterviewStructuralChangesByExpressionStateRosterTitlesAndLinked(expressionProcessorState,
-                rosterCalculationData,
-                questionnaire, interviewByAnswerChange, userId, answerTime, questionId);
-
-            IReadOnlyInterviewStateDependentOnAnswers alteredState =
-                state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
+            IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
                     => isRoster(groupId, groupOuterRosterVector)
                         ? rosterInstanceIds
                         : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
 
-            interviewChanges.ChangedQuestionTitles =
-                this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState)
-                    .ToArray();
-            interviewChanges.ChangedStaticTextTitles =
-                this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState)
-                    .ToArray();
-            interviewChanges.ChangedGroupTitles =
-                this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState)
-                    .ToArray();
+            return this.CalculateInterviewStructuralChanges(questionId, rosterVector, answerTime, userId, questionnaire, expressionProcessorState, 
+                interviewByAnswerChange, rosterCalculationData, alteredState);
+        }
 
+        private InterviewChanges CalculateInterviewStructuralChanges(Guid questionId, RosterVector rosterVector, DateTime answerTime, Guid userId, 
+            IQuestionnaire questionnaire, ILatestInterviewExpressionState expressionProcessorState, List<AnswerChange> interviewByAnswerChange,
+            RosterCalculationData rosterCalculationData, IReadOnlyInterviewStateDependentOnAnswers alteredState)
+        {
+            var interviewChanges = this.EmitInterviewStructuralChangesByExpressionStateRosterTitlesAndLinked(expressionProcessorState,
+                    rosterCalculationData, questionnaire, interviewByAnswerChange, userId, answerTime, questionId);
+
+            var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionId);
+
+            interviewChanges.ChangedQuestionTitles = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(alteredState,
+                substitutedQuestionIds, rosterVector, questionnaire).ToArray();
+
+            var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionId);
+
+            interviewChanges.ChangedStaticTextTitles = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(alteredState,
+                substitutedStaticTextIds, rosterVector, questionnaire).ToArray();
+
+            var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionId);
+
+            interviewChanges.ChangedGroupTitles = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(alteredState,
+                substitutedGroupIds, rosterVector, questionnaire).ToArray();
+            
             return interviewChanges;
         }
 
@@ -3013,7 +2994,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answers.Where(tuple => currentAnswer.Any(a => a.Item1 == tuple.Item1 && a.Item2 != tuple.Item2)).ToArray();
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromTextListQuestions(
-                state, questionnaire, rosterVector, rosterInstanceIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer,
+                state, rosterVector, rosterInstanceIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer,
                 answers, changedAnswers);
 
             var interviewByAnswerChange = new List<AnswerChange>()
@@ -3034,17 +3015,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     rosterInstanceToAdd.Key.SortIndex);
             }
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
-            
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
 
-            var interviewChanges = this.EmitInterviewStructuralChangesByExpressionStateRosterTitlesAndLinked(expressionProcessorState, rosterCalculationData,
-                 questionnaire, interviewByAnswerChange, userId, answerTime, questionId);
-
-            interviewChanges.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, state).ToArray();
-            interviewChanges.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, state).ToArray();
-            interviewChanges.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, state).ToArray();
-
-            return interviewChanges;
+            return this.CalculateInterviewStructuralChanges(questionId, rosterVector, answerTime, userId, questionnaire, expressionProcessorState,
+                interviewByAnswerChange, rosterCalculationData, state);
         }
 
         // do not triggers roster
@@ -3053,7 +3026,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
 
-            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, answer, AnswerChangeType.Text, answerTime, questionnaire, expressionProcessorState);
+            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, answer, AnswerChangeType.Text, 
+                answerTime, questionnaire, expressionProcessorState);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(ILatestInterviewExpressionState expressionProcessorState, Guid userId,
@@ -3061,16 +3035,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
 
-            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, answer, AnswerChangeType.DateTime, answerTime, questionnaire, expressionProcessorState);
+            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, answer, AnswerChangeType.DateTime, 
+                answerTime, questionnaire, expressionProcessorState);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerNumericRealQuestion(ILatestInterviewExpressionState expressionProcessorState, Guid userId,
-            Guid questionId, RosterVector rosterVector,
-            DateTime answerTime, decimal answer, IQuestionnaire questionnaire)
+            Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal answer, IQuestionnaire questionnaire)
         {
             expressionProcessorState.UpdateNumericRealAnswer(questionId, rosterVector, (double)answer);
 
-            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, answer, AnswerChangeType.NumericReal, answerTime, questionnaire, expressionProcessorState);
+            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, answer, AnswerChangeType.NumericReal, 
+                answerTime, questionnaire, expressionProcessorState);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(ILatestInterviewExpressionState expressionProcessorState, 
@@ -3090,7 +3065,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             answersToRemoveByCascading.ToList().ForEach(x => expressionProcessorState.UpdateSingleOptionAnswer(x.Id, x.RosterVector, (decimal?)null));
             expressionProcessorState.DisableQuestions(cascadingQuestionsToDisableIdentities);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, selectedValue, AnswerChangeType.SingleOption, answerTime, questionnaire, expressionProcessorState);
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, selectedValue, 
+                AnswerChangeType.SingleOption, answerTime, questionnaire, expressionProcessorState);
 
             interviewChanges.AnswersToRemove.AddRange(answersToRemoveByCascading);
             return interviewChanges;
@@ -3110,7 +3086,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude, accuracy, altitude);
 
-            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector,
+            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, 
                 new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp),
                 AnswerChangeType.GeoLocation, answerTime, questionnaire, expressionProcessorState);
         }
@@ -3146,17 +3122,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(AnswerChangeType.RemoveAnswer, userId, questionId, rosterVector, removeTime, null)
             };
 
-            var changes = this.EmitInterviewStructuralChangesByExpressionStateRosterTitlesAndLinked(expressionProcessorState, rosterCalculationData,
-                 questionnaire, interviewByAnswerChange, userId, removeTime, questionId);
-
             IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
 
-            changes.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState).ToArray();
-            changes.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, alteredState).ToArray();
-            changes.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, alteredState).ToArray();
+            var changes = this.CalculateInterviewStructuralChanges(questionId, rosterVector, removeTime, userId, questionnaire, expressionProcessorState,
+                interviewByAnswerChange, rosterCalculationData, alteredState);
 
             changes.AnswersToRemove.AddRange(answersToRemoveByCascading);
 
@@ -3201,9 +3173,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private ILatestInterviewExpressionState PrepareExpressionProcessorStateForCalculations()
         {
             ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
-
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-
             return expressionProcessorState;
         }
 
@@ -3217,14 +3187,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(answerChangeType, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            var changes = this.EmitInterviewStructuralChangesByExpressionStateRosterTitlesAndLinked(expressionProcessorState, null,
-                 questionnaire, interviewByAnswerChange, userId, answerTime, questionId);
-
-            changes.ChangedQuestionTitles = this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState).ToArray();
-            changes.ChangedStaticTextTitles = this.CalculateChangesInSubstitutedStaticTexts(questionId, rosterVector, questionnaire, this.interviewState).ToArray();
-            changes.ChangedGroupTitles = this.CalculateChangesInSubstitutedGroups(questionId, rosterVector, questionnaire, this.interviewState).ToArray();
-            
-            return changes;
+            return this.CalculateInterviewStructuralChanges(questionId, rosterVector, answerTime, userId, questionnaire, expressionProcessorState,
+                interviewByAnswerChange, null, this.interviewState);
         }
 
         private List<Identity> GetLinkedQuestionsAnswersToRemove(
@@ -3426,47 +3390,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private IEnumerable<Identity> CalculateChangesInSubstitutedQuestions(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-            IReadOnlyInterviewStateDependentOnAnswers state)
-        {
-            var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionId);
-
-            var instances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, 
-                substitutedQuestionIds, 
-                rosterVector, 
-                questionnaire);
-
-            return instances;
-        }
-
-        private IEnumerable<Identity> CalculateChangesInSubstitutedStaticTexts(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-            IReadOnlyInterviewStateDependentOnAnswers state)
-        {
-            var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionId);
-
-            var instances = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state,
-                substitutedStaticTextIds, 
-                rosterVector, 
-                questionnaire);
-
-            return instances;
-        }
-
-
-        private IEnumerable<Identity> CalculateChangesInSubstitutedGroups(Guid questionId, RosterVector rosterVector,
-            IQuestionnaire questionnaire,
-            IReadOnlyInterviewStateDependentOnAnswers state)
-        {
-            var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionId);
-
-            var instances = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(state,
-                substitutedGroupIds,
-                rosterVector,
-                questionnaire);
-
-            return instances;
-        }
-
         private IEnumerable<Identity> GetQuestionsToRemoveAnswersFromDependingOnCascading(Guid questionId, RosterVector rosterVector, 
             IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers state)
         {
@@ -3623,7 +3546,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         private RosterCalculationData CalculateRosterDataWithRosterTitlesFromTextListQuestions(IReadOnlyInterviewStateDependentOnAnswers state,
-            IQuestionnaire questionnare, 
             RosterVector rosterVector, 
             List<Guid> rosterIds, Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, 
             IQuestionnaire questionnaire, 
@@ -3665,29 +3587,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return rosterCalculationData;
         }
-
-        private RosterCalculationData CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid questionId, RosterVector rosterVector, List<Guid> rosterIds,
-            Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
-            Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
-        {
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds,
-                rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
-
-            var titlesForRosterInstances = rosterCalculationData
-                .RosterInstancesToAdd
-                .Select(rosterInstance => rosterInstance.RosterInstanceId)
-                .Distinct()
-                .ToDictionary(
-                    rosterInstanceId => rosterInstanceId,
-                    rosterInstanceId => questionnaire.GetAnswerOptionTitle(questionId, rosterInstanceId));
-
-            rosterCalculationData.SetTitlesForRosterInstances(titlesForRosterInstances);
-
-            return rosterCalculationData;
-        }
-
+       
         private RosterCalculationData CalculateRosterDataWithRosterTitlesFromYesNoQuestions(Guid questionId, RosterVector rosterVector, List<Guid> rosterIds,
              Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
              IReadOnlyInterviewStateDependentOnAnswers state, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
@@ -4220,7 +4120,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new Dictionary<decimal, Tuple<string, int?>>();
         }
 
-
         private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
             RosterVector rosterVector = null, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
         {
@@ -4271,7 +4170,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         }
                         else
                         {
-                            this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, (decimal[]) answer, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
+                            this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, (decimal[]) answer, questionnaire, answeredQuestion, 
+                                currentInterviewState, applyStrongChecks);
                         }
                         break;
                     case QuestionType.QRBarcode:
@@ -4281,7 +4181,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
                         break;
                     case QuestionType.TextList:
-                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, (Tuple<decimal, string>[])answer, applyStrongChecks);
+                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, 
+                            (Tuple<decimal, string>[])answer, applyStrongChecks);
                         break;
 
                     default:
@@ -4461,8 +4362,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var rostersWithTitles = new Dictionary<Identity, string>();
-            // this.GetUpdatedRosterTitles(questionnaire, interviewByAnswerChange, questionId);
-
+            
             var changedLinkedOptions =
               this.CreateChangedLinkedOptions(expressionProcessorState,
               this.interviewState,
