@@ -45,7 +45,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public Task ZipDirectoryToFileAsync(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
             string fileFilter = null)
         {
-            return Task.Run(() => this.ZipDirectoryToFile(sourceDirectory, archiveFilePath, directoryFilter, fileFilter));
+            throw new NotImplementedException();
         }
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
@@ -69,7 +69,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
-            return Task.Run(() => this.Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
+            throw new NotImplementedException();
         }
 
         public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
@@ -155,9 +155,21 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-        public Stream GetZipWithPassword(Stream inputZipStream, string password)
+        public Stream ProtectZipWithPassword(Stream inputZipStream, string password)
         {
-            throw new NotImplementedException();
+            var outputZipStream = new MemoryStream();
+            using (var zipFile = ZipFile.Read(inputZipStream))
+            {
+                zipFile.Password = password;
+                foreach (ZipEntry zipEntry in zipFile)
+                {
+                    zipEntry.Password = password;
+                }
+                zipFile.Save(outputZipStream);
+            }
+            outputZipStream.Position = 0;
+
+            return outputZipStream;
         }
     }
 }

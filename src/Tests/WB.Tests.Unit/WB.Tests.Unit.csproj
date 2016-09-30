@@ -83,6 +83,10 @@
       <HintPath>..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.8.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DotNetZip.1.9.8\lib\net20\Ionic.Zip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Machine.Specifications, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Machine.Specifications.0.11.0\lib\net45\Machine.Specifications.dll</HintPath>
       <Private>True</Private>
@@ -455,6 +459,7 @@
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_200_characters.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
+    <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_ordered_roster_size_question.cs" />
