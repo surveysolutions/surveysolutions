@@ -86,14 +86,12 @@ namespace WB.UI.Designer.Controllers
             return this.View("RenderQuestionnaireFooter");
         }
 
-        [CustomAuthorize]
         public ActionResult PrintPreview(Guid id)
         {
             PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
-        [CustomAuthorize]
         public ActionResult Download(Guid id)
         {
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(id);
@@ -115,7 +113,6 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        [CustomAuthorize]
         [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
         [System.Web.Mvc.HttpGet]
         public JsonResult Status(Guid id)
