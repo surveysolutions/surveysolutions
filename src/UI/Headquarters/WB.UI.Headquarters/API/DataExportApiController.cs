@@ -149,7 +149,7 @@ namespace WB.UI.Headquarters.API
             Stream exportZipStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
             if (this.exportSettings.EncryptionEnforced())
-                exportZipStream = this.archiveUtils.GetZipWithPassword(exportZipStream, this.exportSettings.GetPassword());
+                exportZipStream = this.archiveUtils.ProtectZipWithPassword(exportZipStream, this.exportSettings.GetPassword());
 
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportZipStream, @"application/zip");
             
