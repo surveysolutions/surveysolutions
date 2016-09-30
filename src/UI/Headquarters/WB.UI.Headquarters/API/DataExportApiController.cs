@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.API
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
-        private readonly IArchiveUtils archiveUtils;
+        private readonly IZipArchiveProtectionService zipArchiveProtectionService;
         private readonly IExportSettings exportSettings;
 
         public DataExportApiController(
@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.API
             IParaDataAccessor paraDataAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IDdiMetadataAccessor ddiMetadataAccessor,
-            IArchiveUtils archiveUtils,
+            IZipArchiveProtectionService zipArchiveProtectionService,
             IExportSettings exportSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.API
             this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
-            this.archiveUtils = archiveUtils;
+            this.zipArchiveProtectionService = zipArchiveProtectionService;
             this.exportSettings = exportSettings;
         }
 
@@ -149,7 +149,7 @@ namespace WB.UI.Headquarters.API
             Stream exportZipStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
             if (this.exportSettings.EncryptionEnforced())
-                exportZipStream = this.archiveUtils.ProtectZipWithPassword(exportZipStream, this.exportSettings.GetPassword());
+                exportZipStream = this.zipArchiveProtectionService.ProtectZipWithPassword(exportZipStream, this.exportSettings.GetPassword());
 
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportZipStream, @"application/zip");
             
