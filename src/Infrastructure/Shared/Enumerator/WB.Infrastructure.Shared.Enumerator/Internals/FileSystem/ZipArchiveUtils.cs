@@ -220,7 +220,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             }
         }
 
-        public Stream GetZipWithPassword(Stream inputZipStream, string password)
+        public Stream ProtectZipWithPassword(Stream inputZipStream, string password)
         {
             throw new NotImplementedException();
         }

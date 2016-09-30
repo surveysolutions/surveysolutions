@@ -171,8 +171,7 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<IExportSettings>().To<ExportSettings>();
 
-            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>().WhenInjectedInto<ZipArchiveUtilsWithEncryptionDecorator>();
-            this.Bind<IArchiveUtils>().To<ZipArchiveUtilsWithEncryptionDecorator>();
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
 
             this.BindFilter<TransactionFilter>(FilterScope.First, 0)
                 .WhenActionMethodHasNo<NoTransactionAttribute>();
