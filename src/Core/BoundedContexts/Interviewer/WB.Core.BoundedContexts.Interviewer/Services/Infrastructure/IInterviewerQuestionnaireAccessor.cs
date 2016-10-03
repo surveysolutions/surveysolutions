@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 {
     public interface IInterviewerQuestionnaireAccessor
     {
-        Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument,
+        void StoreQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument,
             bool census, List<TranslationDto> translationDtos);
 
         Task RemoveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity);
@@ -25,6 +25,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 
         bool IsAttachmentUsedAsync(string contentId);
 
-        Task StoreTranslationsAsync(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances);
+        void StoreTranslations(QuestionnaireIdentity questionnaireIdentity, List<TranslationInstance> translationInstances);
     }
 }

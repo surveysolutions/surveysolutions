@@ -2,11 +2,12 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using Group = Main.Core.Entities.SubEntities.Group;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -29,14 +30,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 secondGroup = CreateGroup(groupId: groupId, title: initialGroupTitle),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 
         Because of = () =>
-            denormalizer.Handle(groupUpdatedEvent);
+            denormalizer.UpdateGroup(groupUpdatedEvent);
 
         It should_update_first_group = () =>
             firstGroup.Title.ShouldEqual(updatedGroupTitle);
@@ -44,8 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         It should_not_update_second_group = () =>
             secondGroup.Title.ShouldEqual(initialGroupTitle);
 
-        private static QuestionnaireDenormalizer denormalizer;
-        private static IPublishedEvent<GroupUpdated> groupUpdatedEvent;
+        private static Questionnaire denormalizer;
+        private static GroupUpdated groupUpdatedEvent;
         private static Group firstGroup;
         private static Group secondGroup;
         private static string updatedGroupTitle;

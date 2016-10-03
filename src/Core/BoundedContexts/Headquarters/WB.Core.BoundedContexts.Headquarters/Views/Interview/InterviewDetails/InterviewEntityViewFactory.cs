@@ -258,8 +258,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     {
                         var dateTimeAnswer = ((DateTime)answer);
                         return isTimestamp
-                            ? dateTimeAnswer.ToString(ExportedQuestion.ExportDateTimeFormat)
-                            : dateTimeAnswer.ToString(ExportedQuestion.ExportDateFormat);
+                            ? dateTimeAnswer.ToString(ExportFormatSettings.ExportDateTimeFormat)
+                            : dateTimeAnswer.ToString(ExportFormatSettings.ExportDateFormat);
                     }
                     break;
                 case QuestionType.Numeric:

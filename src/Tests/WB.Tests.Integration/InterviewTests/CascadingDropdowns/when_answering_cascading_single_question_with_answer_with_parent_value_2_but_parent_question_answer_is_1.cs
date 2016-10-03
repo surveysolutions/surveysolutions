@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 Setup.MockedServiceLocator();
 
-                var questionnaire = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
                         Create.Option(value: "1", text: "parent option 1"),
@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             });
 
         It should_throw_InterviewException = () =>
-            results.ExceptionType.ShouldEqual(typeof(InterviewException));
+            results.ExceptionType.ShouldEqual(typeof(AnswerNotAcceptedException));
 
         It should_throw_exception_with_message_containting__answer____parent_value____incorrect__ = () =>
             new[] { "answer", "parent value", "do not correspond" }.ShouldEachConformTo(

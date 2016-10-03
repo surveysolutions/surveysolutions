@@ -1,7 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -10,37 +11,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupInGroupId, ParentGroupPublicKey = groupId });
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupInGroupId, ParentGroupPublicKey = groupId });
         };
 
         Because of = () => questionnaire.MoveGroup(groupInGroupId, null, 0, responsibleId);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+        It should_contains_group = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInGroupId).ShouldNotBeNull();
 
-        It should_raise_QuestionnaireItemMoved_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInGroupId)
                 .PublicKey.ShouldEqual(groupInGroupId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_ParentGroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-                .GroupKey.ShouldBeNull();
+        It should_contains_group_with_ParentGroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInGroupId)
+                .GetParent().PublicKey.ShouldEqual(questionnaire.QuestionnaireDocument.PublicKey);
 
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static Guid groupInGroupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static EventContext eventContext;
     }
 }

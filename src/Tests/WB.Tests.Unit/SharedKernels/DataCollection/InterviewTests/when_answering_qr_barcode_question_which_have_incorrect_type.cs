@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -16,11 +17,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
-            var questionnaire = Mock.Of<IQuestionnaire>
-                (_
-                    => _.HasQuestion(questionId) == true &&
-                        _.GetQuestionType(questionId) == QuestionType.Numeric
-                );
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: questionId),
+            }));
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                  answerTime: DateTime.Now, rosterVector: new decimal[0], answer: answer));
 
         It should_raise_InterviewException = () =>
-           exception.ShouldBeOfExactType<InterviewException>();
+           exception.ShouldBeOfExactType<AnswerNotAcceptedException>();
 
         It should_throw_exception_with_message_containting__type_QRBarcode_expected__ = () =>
              new [] { "type", QuestionType.QRBarcode.ToString().ToLower(), "expected" }.ShouldEachConformTo(

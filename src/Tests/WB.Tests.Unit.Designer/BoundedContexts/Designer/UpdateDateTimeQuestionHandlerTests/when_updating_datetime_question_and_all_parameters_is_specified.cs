@@ -2,10 +2,10 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(
                 Create.Event.NewQuestionAdded(
                     publicKey: questionId,
                     groupPublicKey: chapterId,
@@ -28,34 +28,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                     responsibleId: responsibleId,
                     questionType: QuestionType.QRBarcode
             ));
-            eventContext = new EventContext();
         };
 
         Because of = () => questionnaire.UpdateDateTimeQuestion(command);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         It should_raise_QuestionChanged_event_with_specified_properties = () =>
         {
-            var changedEvent = eventContext.GetSingleEvent<QuestionChanged>();
+            var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
 
-            changedEvent.PublicKey.ShouldEqual(questionId);
-            changedEvent.StataExportCaption.ShouldEqual(variableName);
-            changedEvent.QuestionText.ShouldEqual(title);
-            changedEvent.ConditionExpression.ShouldEqual(enablementCondition);
-            changedEvent.Instructions.ShouldEqual(instructions);
-            changedEvent.Featured.ShouldEqual(isPreFilled);
-            changedEvent.QuestionScope.ShouldEqual(scope);
-            changedEvent.ValidationConditions.First().Expression.ShouldEqual(validationExpression);
-            changedEvent.ValidationConditions.First().Message.ShouldEqual(validationMessage);
-            changedEvent.IsTimestamp.ShouldEqual(isTimestamp);
+            question.PublicKey.ShouldEqual(questionId);
+            question.StataExportCaption.ShouldEqual(variableName);
+            question.QuestionText.ShouldEqual(title);
+            question.ConditionExpression.ShouldEqual(enablementCondition);
+            question.Instructions.ShouldEqual(instructions);
+            question.Featured.ShouldEqual(isPreFilled);
+            question.QuestionScope.ShouldEqual(scope);
+            question.ValidationConditions.First().Expression.ShouldEqual(validationExpression);
+            question.ValidationConditions.First().Message.ShouldEqual(validationMessage);
+            question.IsTimestamp.ShouldEqual(isTimestamp);
         };
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

@@ -1,23 +1,17 @@
 using System;
 using Main.Core.Documents;
-using Ncqrs.Commanding;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
-    public class ImportQuestionnaire : CommandBase
+    public class ImportQuestionnaire : QuestionnaireCommand
     {
-        public ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
-            : base(source.PublicKey)
+        public ImportQuestionnaire(Guid responsibleId, QuestionnaireDocument source)
+            : base(source.PublicKey, responsibleId)
         {
-            CreatedBy = createdBy;
             Source = source;
-            QuestionnaireId = source.PublicKey;
         }
 
-        public Guid CreatedBy { get; private set; }
-
-        public IQuestionnaireDocument Source { get; private set; }
-
-        public Guid QuestionnaireId { get; private set; }
+        public QuestionnaireDocument Source { get; private set; }
     }
 }

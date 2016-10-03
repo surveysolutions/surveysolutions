@@ -1,9 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -19,50 +18,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterTitle = "Roster Title";
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: rosterSizeQuestionId,
                 groupPublicKey: chapterId,
                 questionType: QuestionType.MultyOption
             ));
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(new RosterChanged(responsibleId, rosterId)
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId, rosterId)
                 {
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = rosterSizeQuestionId
                 });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey: rosterTitleQuestionId,
                 groupPublicKey: rosterId,
                 questionType: QuestionType.Text
             ));
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () =>
                 questionnaire.DeleteQuestion(rosterTitleQuestionId, responsibleId);
 
-        It should_raise_QuestionDeleted_event = () =>
-          eventContext.ShouldContainEvent<QuestionDeleted>();
-
-        It should_raise_QuestionDeleted_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<QuestionDeleted>()
-                .QuestionId.ShouldEqual(rosterTitleQuestionId);
+        It should_doesnt_contain_question = () =>
+          questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId).ShouldBeNull();
 
         private static string rosterTitle;
         private static Questionnaire questionnaire;
         private static Guid rosterSizeQuestionId;
         private static Guid rosterTitleQuestionId;
         private static Guid responsibleId;
-        private static EventContext eventContext;
     }
 }

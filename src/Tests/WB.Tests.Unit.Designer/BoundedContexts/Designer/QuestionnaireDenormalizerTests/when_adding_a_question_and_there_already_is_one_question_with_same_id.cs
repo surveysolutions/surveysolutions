@@ -3,12 +3,13 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using Group = Main.Core.Entities.SubEntities.Group;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -32,20 +33,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 }),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
             var textQuestion = CreateTextQuestion(questionId: questionId, title: addedQuestionTitle);
 
             var questionFactory = Mock.Of<IQuestionnaireEntityFactory>(x =>
                 x.CreateQuestion(Moq.It.IsAny<QuestionData>()) == textQuestion
             );
 
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage, questionnaireEntityFactory: questionFactory);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 
         Because of = () =>
-            denormalizer.Handle(questionAddedEvent);
+            denormalizer.AddQuestion(questionAddedEvent);
 
         It should_be_2_questions_in_total = () =>
             singleGroup.Children.Count.ShouldEqual(2);
@@ -56,8 +54,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         It should_be_added_question_in_questionnaire = () =>
             singleGroup.Children.ShouldContain(question => ((AbstractQuestion)question).QuestionText == addedQuestionTitle);
 
-        private static QuestionnaireDenormalizer denormalizer;
-        private static IPublishedEvent<NewQuestionAdded> questionAddedEvent;
+        private static Questionnaire denormalizer;
+        private static NewQuestionAdded questionAddedEvent;
         private static Group singleGroup;
         private static AbstractQuestion existingQuestion;
         private static string addedQuestionTitle;

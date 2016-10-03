@@ -12,7 +12,6 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
     {
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
-        Guid InterviewerId { get; }
         InterviewStatus Status { get; }
 
         Guid Id { get; }
@@ -139,5 +138,9 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview();
 
         string GetLastSupervisorComment();
+
+        IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
+
+        int GetRosterSortIndex(Identity entityIdentity);
     }
 }

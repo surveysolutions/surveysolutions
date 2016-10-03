@@ -20,14 +20,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly ISynchronizationService synchronizationService;
 
         public LoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             ISynchronizationService synchronizationService,
             ILogger logger)
             : base(principal, viewModelNavigationService)
@@ -81,10 +81,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.isInProgress = value; RaisePropertyChanged(); }
         }
 
-        public IMvxCommand SignInCommand
-        {
-            get { return new MvxCommand(async () => await this.SignInAsync()); }
-        }
+        public IMvxCommand SignInCommand => new MvxCommand(this.SignIn);
 
         public IMvxCommand OnlineSignInCommand
         {
@@ -108,12 +105,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.ErrorMessage = InterviewerUIResources.Login_WrondPassword;
         }
 
-        private async Task SignInAsync()
+        private void SignIn()
         {
             var userName = this.UserName;
             var hashedPassword = this.passwordHasher.Hash(this.Password);
 
-            this.IsUserValid = await this.principal.SignInAsync(userName, hashedPassword, true);
+            this.IsUserValid = this.principal.SignIn(userName, hashedPassword, true);
 
             if (!this.IsUserValid)
             {
@@ -142,9 +139,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
                 localInterviewer.Password = restCredentials.Password;
 
-                await this.interviewersPlainStorage.StoreAsync(localInterviewer);
+                this.interviewersPlainStorage.Store(localInterviewer);
 
-                await this.SignInAsync();
+                this.SignIn();
             }
             catch (SynchronizationException ex)
             {

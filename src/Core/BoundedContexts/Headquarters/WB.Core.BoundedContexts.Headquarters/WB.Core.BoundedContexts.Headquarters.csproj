@@ -91,7 +91,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
@@ -101,8 +101,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Polly, Version=4.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Polly.4.2.1\lib\net45\Polly.dll</HintPath>
+    <Reference Include="Polly, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Polly.4.3.0\lib\net45\Polly.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
@@ -219,7 +219,6 @@
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Documents\TabletDocument.cs" />
     <Compile Include="EventHandler\CumulativeChartDenormalizer.cs" />
-    <Compile Include="EventHandler\DummyEventHandler.cs" />
     <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
@@ -246,7 +245,6 @@
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Factories\IQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Factories\IRecordsAccessorFactory.cs" />
-    <Compile Include="Factories\IReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\ExportSettings.cs" />
@@ -258,7 +256,6 @@
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireQuestionOptionsRepository.cs" />
@@ -292,7 +289,6 @@
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
-    <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
@@ -366,6 +362,7 @@
     <Compile Include="Services\DeleteQuestionnaireTemplate\IDeleteQuestionnaireService.cs" />
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\DeleteSupervisor\IDeleteSupervisorService.cs" />
+    <Compile Include="Services\Export\IExportQuestionService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />
@@ -376,7 +373,6 @@
     <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
-    <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />
@@ -434,7 +430,8 @@
     <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
     <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
-    <Compile Include="Views\DataExport\ExportedQuestion.cs" />
+    <Compile Include="Implementation\Services\Export\ExportQuestionService.cs" />
+    <Compile Include="Views\DataExport\ExportFormatSettings.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
     <Compile Include="Views\DataExport\InterviewComment.cs" />
     <Compile Include="Views\DataExport\InterviewCommentaries.cs" />
@@ -444,7 +441,6 @@
     <Compile Include="Views\DataExport\InterviewExportedAction.cs" />
     <Compile Include="Views\DataExport\InterviewExportedActionUtils.cs" />
     <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
-    <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
     <Compile Include="Views\DataExport\QuestionnaireExportStructure.cs" />
     <Compile Include="Views\DataExport\QuestionSubType.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
@@ -518,6 +514,7 @@
     <Compile Include="Views\Interview\TimeSpanBetweenStatuses.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\PreloadedData\PreloadedContentMetaData.cs" />
+    <Compile Include="Views\PreloadedData\PreloadedContentType.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataByFile.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataVerificationErrorsView.cs" />
     <Compile Include="Views\PreloadedData\PreloadedFileMetaData.cs" />
@@ -531,7 +528,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
-    <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadView.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadViewFactory.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadViewInputModel.cs" />

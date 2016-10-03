@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -36,15 +38,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
             answersTime = new DateTime(2013, 09, 01);
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.MultyOption
-                   && _.HasQuestion(prefilledQuestionId) == true
-                   && _.GetMultiSelectAnswerOptionsAsValues(prefilledQuestionId) == new decimal[] { 1, 2, 3 }
-                   && _.GetRosterGroupsByRosterSizeQuestion(prefilledQuestionId) == new Guid[] { rosterGroupId }
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.MultipleOptionsQuestion(questionId: prefilledQuestionId, answers: new decimal[] { 1, 2, 3 }),
 
-                   && _.HasGroup(rosterGroupId) == true
-                   && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                   && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
+                Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: prefilledQuestionId),
+            }));
+
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             eventContext = new EventContext();
 
@@ -52,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId, null);
+            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto, answersTime, supervisorId, null));
 
         Cleanup stuff = () =>
         {

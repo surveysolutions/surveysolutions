@@ -1,9 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -12,23 +11,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey : rosterSizeQuestionId,
                 groupPublicKey : chapterId,
                 isInteger : true
             ));
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId});
-            questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = groupId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-
-            eventContext = new EventContext();
-        };
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId});
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = groupId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
         };
 
         Because of = () =>
@@ -36,21 +27,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     description: null, condition: null, hideIfDisabled: false, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
                     rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-        It should_raise_GroupBecameARoster_event = () =>
-             eventContext.ShouldContainEvent<GroupBecameARoster>();
+        It should_contains_group = () =>
+             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_raise_GroupBecameARoster_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<GroupBecameARoster>()
-                .GroupId.ShouldEqual(groupId);
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .PublicKey.ShouldEqual(groupId);
 
-        It should_raise_RosterChanged_event = () =>
-            eventContext.ShouldContainEvent<RosterChanged>();
+        It should_contains_group_with_IsRoster_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .IsRoster.ShouldBeTrue();
 
-        It should_raise_RosterChanged_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<RosterChanged>()
-                .GroupId.ShouldEqual(groupId);
-
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

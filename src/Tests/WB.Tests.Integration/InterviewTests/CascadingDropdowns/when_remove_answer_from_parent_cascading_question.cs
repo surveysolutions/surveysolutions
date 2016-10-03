@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 childCascadingQuestionId = Guid.Parse("21111111111111111111111111111111");
                 childOfChildCascadingQuestionId = Guid.Parse("31111111111111111111111111111111");
 
-                QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
+                QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                     children: new IComposite[]
                     {
                         Create.SingleQuestion(id: parentCascadingQuestion, variable: "par",

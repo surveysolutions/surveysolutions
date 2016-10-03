@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -26,8 +30,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     }, areAnswersOrdered: false,
                     yesNoView: true));
 
-            exportViewFactory = CreateExportViewFactory();
-            questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaire, 1, null));
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
+
+            questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire.PublicKey, 1);
 
             interview = Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId, new[]
             {
@@ -42,9 +50,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         It should_fill_yesno_question_answer_without_order = () =>
         {
             InterviewDataExportLevelView first = result.Levels.First();
-            var exportedQuestion = first.Records.First().GetQuestions().First();
-            exportedQuestion.Answers.Length.ShouldEqual(4);
-            exportedQuestion.Answers.ShouldEqual(new[] { "1", "0", "1", ExportedQuestion.MissingNumericQuestionValue }); // 1 0 1
+            var exportedQuestion = first.Records.First().GetPlainAnswers().First();
+            exportedQuestion.Length.ShouldEqual(4);
+            exportedQuestion.ShouldEqual(new[] { "1", "0", "1", ExportFormatSettings.MissingNumericQuestionValue }); // 1 0 1
         };
 
         static ExportViewFactory exportViewFactory;

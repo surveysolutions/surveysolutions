@@ -1,8 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteVariableHandlerTests
@@ -12,28 +12,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteVariableHandlerT
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.VariableAdded(entityId : entityId, parentId : chapterId ));
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddVariable(Create.Event.VariableAdded(entityId : entityId, parentId : chapterId ));
         };
 
         Because of = () =>            
                 questionnaire.DeleteVariable(entityId: entityId, responsibleId: responsibleId);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_VariableDeleted_event = () =>
-            eventContext.ShouldContainEvent<VariableDeleted>();
+        It should_dont_contains_Variable = () =>
+            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).ShouldBeNull();
 
-        It should_raise_VariableDeleted_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<VariableDeleted>().EntityId.ShouldEqual(entityId);
         
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

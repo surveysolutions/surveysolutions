@@ -37,7 +37,6 @@ namespace WB.UI.Headquarters.Controllers
     public class HQController : BaseController
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
-        private readonly Func<ISampleImportService> sampleImportServiceFactory;
         private readonly ITakeNewInterviewViewFactory takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
@@ -51,7 +50,6 @@ namespace WB.UI.Headquarters.Controllers
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             ITakeNewInterviewViewFactory takeNewInterviewViewFactory,
-            Func<ISampleImportService> sampleImportServiceFactory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IPreloadingTemplateService preloadingTemplateService,
             IPreloadedDataRepository preloadedDataRepository,
@@ -74,7 +72,6 @@ namespace WB.UI.Headquarters.Controllers
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
-            this.sampleImportServiceFactory = sampleImportServiceFactory;
         }
 
         public ActionResult Index()
@@ -254,6 +251,17 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult VerifyPanel(Guid questionnaireId, long version, string id)
         {
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+
+            if (this.interviewImportService.Status.InterviewImportProcessId == id)
+            {
+                var inProgressModel = new PreloadedDataVerificationErrorsView(questionnaireId, version,
+                    questionnaireInfo?.Title, new PreloadedDataVerificationError[0],
+                    true, id, PreloadedContentType.Sample);
+
+                return this.View("VerifySample", inProgressModel);
+            }
+
             var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
             var verificationStatus = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData);
             
@@ -263,28 +271,10 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfPanel(id);
             }
 
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
-
             var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
                 verificationStatus.WasResponsibleProvided, id, PreloadedContentType.Panel);
 
-            return this.View(model);
-        }
-
-        public ActionResult SampleCreationResult(string id)
-        {
-            var sampleImportService = this.sampleImportServiceFactory.Invoke();
-
-            SampleCreationStatus result = sampleImportService.GetSampleCreationStatus(id);
-
-            return this.View(result);
-        }
-
-        public JsonResult GetSampleCreationStatus(string id)
-        {
-            var sampleImportService = this.sampleImportServiceFactory.Invoke();
-
-            return this.Json(sampleImportService.GetSampleCreationStatus(id));
+            return this.View("VerifySample", model);
         }
 
         public ActionResult TakeNew(Guid id, long? version)

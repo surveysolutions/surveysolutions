@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -14,12 +15,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
     {
         Establish context = () =>
         {
-            var questionnaireInfoViewRepository = Mock.Of<IReadSideKeyValueStorage<QuestionnaireInfoView>>(
-                x => x.GetById(questionnaireId) == CreateQuestionnaireInfoView(questionnaireId, questionnaireTitle));
+            var questionnaireDocument = CreateQuestionnaireDocument(questionnaireId, questionnaireTitle);
+            questionnaireDocument.CreatedBy = userId;
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithSharedPersons(Guid.Parse(questionnaireId), userId);
-
-            var questionnaireDocumentRepository = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(
+            var questionnaireInfoViewRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                 x => x.GetById(questionnaireId) == questionnaireDocument);
 
             var accountDocument = new AccountDocument { Email = userEmail };
@@ -27,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 x => x.GetById(userId.FormatGuid()) == accountDocument);
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
-                documentReader: questionnaireDocumentRepository, accountsDocumentReader: accountDocumentRepository);
+                accountsDocumentReader: accountDocumentRepository);
         };
 
         Because of = () => view = factory.Load(questionnaireId, userId);

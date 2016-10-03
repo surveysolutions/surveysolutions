@@ -61,7 +61,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             foreach (var historicalRecordReference in record.HistoricalRecordReferences)
             {
                 mainRecord += string.Format(" {0} {1}",
-                    GetStringRepresentation(historicalRecordReference.Type).ToLower(),
+                    GetStringRepresentation(historicalRecordReference.Type)?.ToLower(),
                     BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, historicalRecordReference.Id,
                         historicalRecordReference.ParentId,
                         historicalRecordReference.Title, historicalRecordReference.IsExist,

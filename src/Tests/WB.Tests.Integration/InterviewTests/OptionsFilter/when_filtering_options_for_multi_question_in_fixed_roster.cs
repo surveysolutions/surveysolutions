@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.Roster(rosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                         fixedRosterTitles: new[] { Create.FixedRosterTitle(1, "Roster 1"), Create.FixedRosterTitle(2, "Roster 2") }, children: new IComposite[]
                         {

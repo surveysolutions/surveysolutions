@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using System.Threading;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -22,7 +27,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireDocument =
                 Create.Entity.QuestionnaireDocument(children: Create.Entity.NumericRealQuestion(id: dateTimeQuestionId, variable: "real"));
 
-            exportViewFactory = CreateExportViewFactory();
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaireDocument, 1, null));
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
         };
 
         Because of = () =>
@@ -38,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 Thread.CurrentThread.CurrentCulture = culture;
                 Thread.CurrentThread.CurrentUICulture = culture;
                 result = exportViewFactory.CreateInterviewDataExportView(
-                            exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1),
+                            exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1)),
                             interviewData);
             }
             finally 
@@ -51,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
 
         It should_create_record__with_one_datetime_question_which_contains_composite_answer = () =>
-          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { value.ToString(CultureInfo.InvariantCulture)  });
+          result.Levels[0].Records[0].GetPlainAnswers().First().ShouldEqual(new[] { value.ToString(CultureInfo.InvariantCulture)  });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

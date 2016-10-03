@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Main.Core.Entities.SubEntities
 {
@@ -24,6 +25,11 @@ namespace Main.Core.Entities.SubEntities
         public Answer Clone()
         {
             return this.MemberwiseClone() as Answer;
+        }
+
+        public decimal ParsedValue()
+        {
+            return this.AnswerCode ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
         }
 
         public static Answer CreateFromOther(Answer answer)

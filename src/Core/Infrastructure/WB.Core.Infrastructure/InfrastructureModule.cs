@@ -16,7 +16,6 @@ namespace WB.Core.Infrastructure
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingleton<IEventTypeResolver, EventTypeResolver>();
             registry.Bind<IClock, DateTimeBasedClock>();
             
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepository>();

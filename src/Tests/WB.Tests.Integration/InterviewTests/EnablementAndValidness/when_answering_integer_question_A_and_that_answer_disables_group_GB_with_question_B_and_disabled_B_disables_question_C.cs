@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(questionAId, "a"),
                     Create.Group(groupGBId, enablementCondition: "a > 0", children: new IComposite[] {
                         Create.NumericIntegerQuestion(questionBId, "b")

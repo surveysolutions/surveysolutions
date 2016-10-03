@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Shared.Web.Membership;
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 
             var questionnaire = CreateQuestionnaireDocument(questoinnaireId, questionnaiteTitle, ownerId);
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
+            var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
                     => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, ownerId);

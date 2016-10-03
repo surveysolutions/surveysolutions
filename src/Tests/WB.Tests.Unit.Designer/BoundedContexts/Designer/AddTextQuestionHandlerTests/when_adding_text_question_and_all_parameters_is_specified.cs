@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandlerTests
@@ -12,9 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
         };
 
         Because of = () =>
@@ -34,63 +34,36 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 responsibleId: responsibleId,
                 index: index);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_NewQuestionAdded_event = () =>
-            eventContext.ShouldContainEvent<NewQuestionAdded>();
-
-        It should_raise_NewQuestionAdded_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
+        It should_contains_Question_with_QuestionId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_NewQuestionAdded_event_with_ParentGroupId_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
-                .GroupPublicKey.ShouldEqual(chapterId);
+        It should_contains_NewQuestion_with_ParentGroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(chapterId)
+                .Children.ShouldContain(q => q.PublicKey == questionId);
 
-        It should_raise_NewQuestionAdded_event_with_title_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
+        It should_contains_NewQuestion_with_title_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .QuestionText.ShouldEqual(title);
 
-        It should_raise_NewQuestionAdded_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_NewQuestion_with_variable_name_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .StataExportCaption.ShouldEqual(variableName);
 
-        It should_raise_NewQuestionAdded_event_with_enablementCondition_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_NewQuestion_with_enablementCondition_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_raise_NewQuestionAdded_event_with_ifeatured_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_NewQuestion_with_ifeatured_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .Featured.ShouldEqual(isPreFilled);
 
-        It should_raise_NewQuestionAdded_event_with_instructions_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_NewQuestion_with_instructions_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
 
-        It should_raise_QuestionnaireItemMoved_event_with_index_specified = () =>
-           eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-               .TargetIndex.ShouldEqual(index);
-
-        It should_raise_QuestionnaireItemMoved_event_with_GroupKey_specified = () =>
-           eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-               .GroupKey.ShouldEqual(chapterId);
-
-        It should_raise_QuestionnaireItemMoved_event_with_PublicKey_specified = () =>
-          eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-              .PublicKey.ShouldEqual(questionId);
-
-        It should_raise_QuestionnaireItemMoved_event_with_ResponsibleId_specified = () =>
-          eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-              .ResponsibleId.ShouldEqual(responsibleId);
-
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

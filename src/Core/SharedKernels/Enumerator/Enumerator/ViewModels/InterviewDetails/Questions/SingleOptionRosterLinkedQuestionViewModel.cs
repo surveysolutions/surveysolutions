@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<LinkedOptionsChanged>,
+        ICompositeQuestionWithChildren,
         IDisposable
     {
         private readonly Guid userId;
@@ -42,6 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
+            QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
         {
             if (principal == null) throw new ArgumentNullException("principal");
@@ -55,7 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher ?? MvxMainThreadDispatcher.Instance;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
+            this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
         }
 
@@ -63,10 +66,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid interviewId;
         private IStatefulInterview interview;
         private Guid referencedRosterId;
-        private ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
+        private CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
         private HashSet<Guid> parentRosters;
+        private readonly QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
+        private OptionBorderViewModel<SingleOptionLinkedQuestionAnswered> optionsTopBorderViewModel;
+        private OptionBorderViewModel<SingleOptionLinkedQuestionAnswered> optionsBottomBorderViewModel;
 
-        public ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
+        public CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
             get { return this.options; }
             private set
@@ -76,25 +82,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public bool HasOptions
+        public bool HasOptions => this.Options.Any();
+
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
+        public IObservableCollection<ICompositeEntity> Children
         {
-            get { return this.Options.Any(); }
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();
+                this.optionsTopBorderViewModel = new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.questionState, true)
+                {
+                    HasOptions = HasOptions
+                };
+                result.Add(this.optionsTopBorderViewModel);
+                result.AddCollection(this.Options);
+                this.optionsBottomBorderViewModel = new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.questionState, false)
+                {
+                    HasOptions = HasOptions
+                };
+                result.Add(this.optionsBottomBorderViewModel);
+                return result;
+            }
         }
 
-        public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; private set; }
+        public QuestionInstructionViewModel InstructionViewModel { get; set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        public Identity Identity
-        {
-            get { return this.questionIdentity; }
-        }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
-            this.QuestionState.Init(interviewId, questionIdentity, navigationState);
+            this.questionState.Init(interviewId, questionIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, questionIdentity);
 
             interview = this.interviewRepository.Get(interviewId);
 
@@ -104,10 +127,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
             this.referencedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id);
             this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.referencedRosterId).ToHashSet();
-            this.Options =
-                new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(
+            this.Options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(
                     this.GenerateOptionsFromModel(interview));
 
+            this.Options.CollectionChanged += (sender, args) =>
+            {
+                if (this.optionsTopBorderViewModel != null)
+                {
+                    this.optionsTopBorderViewModel.HasOptions = HasOptions;
+                }
+                if (this.optionsBottomBorderViewModel != null)
+                {
+                    this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
+                }
+            };
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
@@ -212,11 +245,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel
             {
-                Enablement = this.QuestionState.Enablement,
+                Enablement = this.questionState.Enablement,
                 RosterVector = rosterVector,
                 Title = title,
                 Selected = isSelected,
-                QuestionState = this.QuestionState
+                QuestionState = this.questionState
             };
 
             optionViewModel.BeforeSelected += this.OptionSelected;

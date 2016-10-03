@@ -1,5 +1,5 @@
 ﻿using System;
-using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
@@ -17,24 +17,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [Test]
         public void MoveGroup_When_target_group_is_regular_Then_rised_QuestionnaireItemMoved_event_s()
         {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var moveAutoPropagateGroupId = Guid.NewGuid();
-                var targetRegularGroupId = Guid.NewGuid();
-                Guid responsibleId = Guid.NewGuid();
-                var questionnaire =
-                    CreateQuestionnaireWithChapterWithRegularAndRosterGroup(
-                        rosterGroupId: moveAutoPropagateGroupId,
-                        regularGroupId: targetRegularGroupId,
-                        responsibleId: responsibleId);
+            // Arrange
+            var moveAutoPropagateGroupId = Guid.NewGuid();
+            var targetRegularGroupId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            var questionnaire =
+                CreateQuestionnaireWithChapterWithRegularAndRosterGroup(
+                    rosterGroupId: moveAutoPropagateGroupId,
+                    regularGroupId: targetRegularGroupId,
+                    responsibleId: responsibleId);
 
-                // Act
-                questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0, responsibleId: responsibleId);
+            // Act
+            questionnaire.MoveGroup(moveAutoPropagateGroupId, targetRegularGroupId, 0, responsibleId: responsibleId);
 
-                // Assert
-                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).PublicKey, Is.EqualTo(moveAutoPropagateGroupId));
-            }
+            // Assert
+            Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(moveAutoPropagateGroupId).PublicKey, Is.EqualTo(moveAutoPropagateGroupId));
         }
 
         [Test]

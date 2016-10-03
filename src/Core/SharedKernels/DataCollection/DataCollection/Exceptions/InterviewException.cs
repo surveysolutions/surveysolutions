@@ -6,17 +6,16 @@ namespace WB.Core.SharedKernels.DataCollection.Exceptions
     {
         public readonly InterviewDomainExceptionType ExceptionType;
 
-        internal InterviewException(string message, InterviewDomainExceptionType exceptionType = InterviewDomainExceptionType.Undefined)
+        internal InterviewException(string message, InterviewDomainExceptionType? exceptionType = null)
             : base(message)
         {
-            ExceptionType = exceptionType;
+            this.ExceptionType = exceptionType ?? InterviewDomainExceptionType.Undefined;
         }
 
-        internal InterviewException(string message, Exception innerException,
-            InterviewDomainExceptionType exceptionType = InterviewDomainExceptionType.Undefined)
+        internal InterviewException(string message, Exception innerException, InterviewDomainExceptionType? exceptionType = null)
             : base(message, innerException)
         {
-            ExceptionType = exceptionType;
+            this.ExceptionType = exceptionType ?? InterviewDomainExceptionType.Undefined;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(Create.Event.NumericQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded
             (
                 publicKey : rosterSizeQuestionId,
                 isInteger : true,
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             AddGroup(questionnaire: questionnaire, groupId: rosterGroupWithRosterTitleQuestionId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
             (
                 publicKey : rosterTitleQuestionId,
                 questionType : QuestionType.Text,
@@ -44,32 +44,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             AddGroup(questionnaire: questionnaire, groupId: targetGroupId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, isRoster: true, rosterSizeQuestionId: rosterSizeQuestionId);
-
-            eventContext = new EventContext();
         };
 
         Because of =
             () => questionnaire.MoveQuestion(questionId: rosterTitleQuestionId, responsibleId: responsibleId, targetIndex: 0,
                 targetGroupId: targetGroupId);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-           eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+        It should_contains_question = () =>
+           questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_PublicKey_equal_to_roster_title_question_id = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+        It should_contains_question_with_PublicKey_equal_to_roster_title_question_id = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId)
                 .PublicKey.ShouldEqual(rosterTitleQuestionId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_GroupKey_equal_to_new_group_id_for_roster_title_question = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-                .GroupKey.ShouldEqual(targetGroupId);
+        It should_contains_question_with_GroupKey_equal_to_new_group_id_for_roster_title_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId)
+                .GetParent().PublicKey.ShouldEqual(targetGroupId);
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid rosterGroupWithRosterTitleQuestionId;

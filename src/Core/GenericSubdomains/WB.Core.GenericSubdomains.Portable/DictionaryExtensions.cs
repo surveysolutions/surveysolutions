@@ -54,7 +54,8 @@ namespace WB.Core.GenericSubdomains.Portable
         public static TValue GetOrNull<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class
         {
-            return dictionary.ContainsKey(key) ? dictionary[key] : null;
+            TValue value;
+            return dictionary.TryGetValue(key, out value) ? value : null;
         }
 
         public static TValue? GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)

@@ -40,11 +40,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private const string OptionsWorksheetPreffix = "@@_";
 
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
 
         public TranslationsService(IPlainStorageAccessor<TranslationInstance> translations,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
             this.translations = translations;
             this.questionnaireStorage = questionnaireStorage;
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private TranslationFile GenerateTranslationFileWithGivenTranslation(Guid questionnaireId, Guid translationId, ITranslation translation)
         {
-            var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
 
             var translationFile = new TranslationFile
             {
@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
 
                         this.Delete(questionnaireId, translationId);
-                        var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+                        var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
                         HashSet<Guid> idsOfAllQuestionnaireEntities =
                             new HashSet<Guid>(questionnaire.Children.TreeToEnumerable(x => x.Children).Select(x => x.PublicKey));
 

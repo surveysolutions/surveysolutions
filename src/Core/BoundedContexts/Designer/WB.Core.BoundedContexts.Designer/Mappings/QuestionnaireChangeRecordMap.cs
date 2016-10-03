@@ -1,9 +1,11 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Mappings
 {
+    [PlainStorage]
     public class QuestionnaireChangeRecordMap : ClassMapping<QuestionnaireChangeRecord>
     {
         public QuestionnaireChangeRecordMap()
@@ -16,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.QuestionnaireId);
             Property(x => x.ActionType);
             Property(x => x.Timestamp);
-            Property(x=>x.Sequence);
+            Property(x => x.Sequence);
 
             Property(x => x.UserName, pm => pm.Index("QuestionnaireChangeRecord_UserName"));
             Property(x => x.UserId, pm => pm.Index("QuestionnaireChangeRecord_UserId"));
@@ -27,27 +29,31 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
 
             Set(x => x.References, set =>
             {
-                set.Key(key => key.Column("QuestionnaireChangeRecordId"));
+                set.Key(key => key.Column("questionnairechangerecordid"));
                 set.Lazy(CollectionLazy.NoLazy);
                 set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                set.Inverse(true);
             },
              relation => relation.OneToMany());
-        }
+        }   
+    }
 
-        public class QuestionnaireChangeReferenceMap : ClassMapping<QuestionnaireChangeReference>
+    [PlainStorage]
+    public class QuestionnaireChangeReferenceMap : ClassMapping<QuestionnaireChangeReference>
+    {
+        public QuestionnaireChangeReferenceMap()
         {
-            public QuestionnaireChangeReferenceMap()
-            {
-                Id(x => x.Id, Idmap => Idmap.Generator(Generators.HighLow));
-                Property(x => x.ReferenceType);
-                Property(x => x.ReferenceId);
-                Property(x => x.ReferenceTitle);
-                ManyToOne(x => x.QuestionnaireChangeRecord, mto =>
+            Id(x => x.Id, Idmap => Idmap.Generator(Generators.HighLow));
+            Property(x => x.ReferenceType);
+            Property(x => x.ReferenceId);
+            Property(x => x.ReferenceTitle);
+            ManyToOne(x => x.QuestionnaireChangeRecord,
+                mto =>
                 {
-                    mto.Index("QuestionnaireChangeRecords_QuestionnaireChangeReferences");
+                    mto.Column("questionnairechangerecordid");
                     mto.Cascade(Cascade.None);
+                    mto.Index("questionnairechangerecords_questionnairechangereferences");
                 });
-            }
         }
     }
 }

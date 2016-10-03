@@ -1,14 +1,11 @@
 using System;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTests
@@ -24,12 +21,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 Create.Entity.GpsCoordinateQuestion(variable: gpsVariable1),
                 Create.Entity.GpsCoordinateQuestion(variable: gpsVariable2),
             });
-            
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(
-                Create.Entity.InterviewReferences());
+
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(Create.Entity.InterviewReferences());
+
+            mapReportPointStorage.Store(Create.Entity.MapReportPoint(markerId1, 1, 3), markerId1);
+            mapReportPointStorage.Store(Create.Entity.MapReportPoint(markerId2, 2, 4), markerId2);
 
             denormalizer = Create.Service.MapReportDenormalizer(
-                mapReportPointStorage: mapReportPointStorageMock.Object,
+                mapReportPointStorage: mapReportPointStorage,
                 interviewReferencesStorage: interviewReferencesStorage,
                 questionnaireDocument: questionnaireDocument);
         };
@@ -37,17 +36,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should_delete_first_gps_question_map_report_point_for_deleted_interview = () =>
-            mapReportPointStorageMock.Verify(storage => storage.Remove($"{interviewId}-{gpsVariable1}-{RosterVector.Empty}"));
-
-        It should_delete_second_gps_question_map_report_point_for_deleted_interview = () =>
-            mapReportPointStorageMock.Verify(storage => storage.Remove($"{interviewId}-{gpsVariable2}-{RosterVector.Empty}"));
+        It should_delete_all_gps_question_map_report_point_for_deleted_interview = () =>
+            mapReportPointStorage.Count().ShouldEqual(0);
 
         private static MapReportDenormalizer denormalizer;
         private static IPublishedEvent<InterviewHardDeleted> @event;
-        private static Mock<IReadSideRepositoryWriter<MapReportPoint>> mapReportPointStorageMock = new Mock<IReadSideRepositoryWriter<MapReportPoint>>();
-        private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
-        private static string gpsVariable1 = "gps1";
-        private static string gpsVariable2 = "gps2";
+        private static readonly TestInMemoryWriter<MapReportPoint> mapReportPointStorage = Create.Storage.InMemoryReadeSideStorage<MapReportPoint>();
+        private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly string gpsVariable1 = "gps1";
+        private static readonly string gpsVariable2 = "gps2";
+        private static readonly string markerId1 = $"{interviewId}-{gpsVariable1}";
+        private static readonly string markerId2 = $"{interviewId}-{gpsVariable2}";
     }
 }

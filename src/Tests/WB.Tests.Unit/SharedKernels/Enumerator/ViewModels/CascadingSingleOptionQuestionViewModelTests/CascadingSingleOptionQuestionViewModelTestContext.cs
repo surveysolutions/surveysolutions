@@ -39,6 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
                 AnsweringViewModelMock.Object,
+                Mock.Of<QuestionInstructionViewModel>(),
                 EventRegistry.Object);
         }
 

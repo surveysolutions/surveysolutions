@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -15,28 +14,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterSizeQuestionId = null;
 
             questionnaire = CreateQuestionnaire(responsibleId);
-
-            eventContext = new EventContext();
         };
 
         Because of = () =>
             questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, false, null, false,
                 RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_GroupStoppedBeingARoster_event = () =>
-            eventContext.ShouldContainEvent<GroupStoppedBeingARoster>();
+        It should_contains_group = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_raise_GroupStoppedBeingARoster_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<GroupStoppedBeingARoster>()
-                .GroupId.ShouldEqual(groupId);
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .PublicKey.ShouldEqual(groupId);
 
-        private static EventContext eventContext;
+        It should_contains_group_with_IsRoster_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .IsRoster.ShouldEqual(false);
+
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid? rosterSizeQuestionId;

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Configuration;
 using System.IO;
 using System.Net;
@@ -15,8 +15,6 @@ using WB.UI.Designer.Pdf;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 
-using AuthorizeAttribute = System.Web.Mvc.AuthorizeAttribute;
-
 namespace WB.UI.Designer.Controllers
 {
     public class PdfController : BaseController
@@ -25,12 +23,15 @@ namespace WB.UI.Designer.Controllers
 
         private class PdfGenerationProgress
         {
+            private DateTime? finishTime = null;
+
             public string FilePath { get; } = Path.GetTempFileName();
             public bool IsFailed { get; private set; }
-            public bool IsFinished { get; private set; }
+            public bool IsFinished => finishTime.HasValue;
+            public TimeSpan TimeSinceFinished => this.finishTime.HasValue ? DateTime.Now - this.finishTime.Value : TimeSpan.Zero;
 
             public void Fail() => this.IsFailed = true;
-            public void Finish() => this.IsFinished = true;
+            public void Finish() => this.finishTime = DateTime.Now;
         }
 
         public class PdfStatus
@@ -51,7 +52,7 @@ namespace WB.UI.Designer.Controllers
 
         #endregion
 
-        private static readonly Dictionary<Guid, PdfGenerationProgress> GeneratedPdfs = new Dictionary<Guid, PdfGenerationProgress>();
+        private static readonly ConcurrentDictionary<Guid, PdfGenerationProgress> GeneratedPdfs = new ConcurrentDictionary<Guid, PdfGenerationProgress>();
 
         private readonly IPdfFactory pdfFactory;
         private readonly PdfSettings pdfSettings;
@@ -104,7 +105,7 @@ namespace WB.UI.Designer.Controllers
                 byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
                 this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
-                GeneratedPdfs.Remove(id);
+                GeneratedPdfs.TryRemove(id);
 
                 return this.File(content, "application/pdf", $"{questionnaireTitle}.pdf");
             }
@@ -119,29 +120,31 @@ namespace WB.UI.Designer.Controllers
         [System.Web.Mvc.HttpGet]
         public JsonResult Status(Guid id)
         {
-            PdfGenerationProgress existingPdfGenerationProgress;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(id, StartNewPdfGeneration);
 
-            if (GeneratedPdfs.TryGetValue(id, out existingPdfGenerationProgress))
-            {
-                if (existingPdfGenerationProgress.IsFailed)
-                    return this.Json(PdfStatus.Failed("Failed to generate PDF.\r\nPlease reload the page and try again or contact support@mysurvey.solutions"), JsonRequestBehavior.AllowGet);
+            if (pdfGenerationProgress.IsFailed)
+                return this.Json(PdfStatus.Failed("Failed to generate PDF.\r\nPlease reload the page and try again or contact support@mysurvey.solutions"), JsonRequestBehavior.AllowGet);
 
-                long sizeInKb = this.GetFileSizeInKb(existingPdfGenerationProgress.FilePath);
+            long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
-                if (sizeInKb == 0)
-                    return this.Json(PdfStatus.InProgress("Preparing to generate your PDF.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
+            if (sizeInKb == 0)
+                return this.Json(PdfStatus.InProgress("Preparing to generate your PDF.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
 
-                return existingPdfGenerationProgress.IsFinished
-                    ? this.Json(PdfStatus.Ready($"PDF document generated.\r\nSize: {sizeInKb}Kb"), JsonRequestBehavior.AllowGet)
-                    : this.Json(PdfStatus.InProgress($"Your PDF is being generated.\r\nSize: {sizeInKb}Kb"), JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                var newPdfGenerationProgress = new PdfGenerationProgress();
-                this.StartRenderPdf(id, newPdfGenerationProgress);
-                GeneratedPdfs[id] = newPdfGenerationProgress;
-                return this.Json(PdfStatus.InProgress("PDF generation requested.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
-            }
+            return this.Json(
+                pdfGenerationProgress.IsFinished
+                    ? PdfStatus.Ready(
+                        pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
+                            ? $"PDF document generated less than a minute ago.\r\nSize: {sizeInKb}Kb"
+                            : $"PDF document generated {(int) pdfGenerationProgress.TimeSinceFinished.TotalMinutes} minute(s) ago.\r\nSize: {sizeInKb}Kb")
+                    : PdfStatus.InProgress($"Your PDF is being generated.\r\nSize: {sizeInKb}Kb"),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        private PdfGenerationProgress StartNewPdfGeneration(Guid id)
+        {
+            var newPdfGenerationProgress = new PdfGenerationProgress();
+            this.StartRenderPdf(id, newPdfGenerationProgress);
+            return newPdfGenerationProgress;
         }
 
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress)
@@ -150,7 +153,7 @@ namespace WB.UI.Designer.Controllers
             var pdfDocument = this.GetSourceUrlsForPdf(id);
             var pdfOutput = new PdfOutput { OutputFilePath = generationProgress.FilePath };
 
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 try
                 {
@@ -200,7 +203,7 @@ namespace WB.UI.Designer.Controllers
 
         private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
-            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id, requestedByUserId, requestedByUserName);
+            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName);
             if (questionnaire == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

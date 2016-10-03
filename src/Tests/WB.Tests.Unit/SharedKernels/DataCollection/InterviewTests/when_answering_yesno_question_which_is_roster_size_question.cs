@@ -13,20 +13,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            command = Create.Command.AnswerYesNoQuestion(
-                answeredOptions: new[]
-                {
-                    Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromNo______ToNo_____, answer: false),
-                    Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromNothing_ToNo_____, answer: false),
-                    Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromYes_____ToNo_____, answer: false),
-                    Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromYes_____ToYes____, answer: true),
-                    Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNothing_ToYes____, answer: true),
-                    Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNo______ToYes____, answer: true),
-                });
-
-            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.YesNoQuestion(questionId: command.QuestionId, answers: new[]
+                Create.Entity.YesNoQuestion(questionId: questionId, answers: new[]
                 {
                     option_NotChanged_FromNothing_ToNothing,
                     option_NotChanged_FromNo______ToNo_____,
@@ -38,11 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     option_Deselected_FromYes_____ToNo_____,
                     option_Deselected_FromYes_____ToNothing,
                 }),
-                Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: command.QuestionId),
+                Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: questionId),
             });
 
             interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
-            interview.Apply(Create.Event.YesNoQuestionAnswered(questionId: command.QuestionId, answeredOptions: new []
+            interview.Apply(Create.Event.YesNoQuestionAnswered(questionId: questionId, answeredOptions: new []
             {
                 Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromNo______ToNo_____, answer: false),
                 Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNo______ToYes____, answer: false),
@@ -57,6 +46,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.RosterVector(option_Deselected_FromYes_____ToNo_____),
                 Create.Entity.RosterVector(option_Deselected_FromYes_____ToNothing),
             }));
+
+            command = Create.Command.AnswerYesNoQuestion(
+                questionId: questionId,
+                answeredOptions: new[]
+                {
+                    Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromNo______ToNo_____, answer: false),
+                    Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromNothing_ToNo_____, answer: false),
+                    Create.Entity.AnsweredYesNoOption(value: option_Deselected_FromYes_____ToNo_____, answer: false),
+                    Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromYes_____ToYes____, answer: true),
+                    Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNothing_ToYes____, answer: true),
+                    Create.Entity.AnsweredYesNoOption(value: option__Selected__FromNo______ToYes____, answer: true),
+                });
         };
 
         Because of = () =>
@@ -85,15 +86,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static AnswerYesNoQuestion command;
         private static Interview interview;
-        private static decimal option_NotChanged_FromNothing_ToNothing = 0.0m;
-        private static decimal option_NotChanged_FromNo______ToNo_____ = 1.1m;
-        private static decimal option_NotChanged_FromYes_____ToYes____ = 2.2m;
-        private static decimal option__Selected__FromNothing_ToYes____ = 0.2m;
-        private static decimal option__Selected__FromNo______ToYes____ = 1.2m;
-        private static decimal option_Deselected_FromNothing_ToNo_____ = 0.1m;
-        private static decimal option_Deselected_FromNo______ToNothing = 1.0m;
-        private static decimal option_Deselected_FromYes_____ToNo_____ = 2.1m;
-        private static decimal option_Deselected_FromYes_____ToNothing = 2.0m;
+        private static decimal option_NotChanged_FromNothing_ToNothing = 1m;
+        private static decimal option_NotChanged_FromNo______ToNo_____ = 2m;
+        private static decimal option_NotChanged_FromYes_____ToYes____ = 3m;
+        private static decimal option__Selected__FromNothing_ToYes____ = 4m;
+        private static decimal option__Selected__FromNo______ToYes____ = 5m;
+        private static decimal option_Deselected_FromNothing_ToNo_____ = 6m;
+        private static decimal option_Deselected_FromNo______ToNothing = 7m;
+        private static decimal option_Deselected_FromYes_____ToNo_____ = 8m;
+        private static decimal option_Deselected_FromYes_____ToNothing = 9m;
         private static Guid rosterId = Guid.Parse("44444444444444444444444444444444");
+        private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }
 }

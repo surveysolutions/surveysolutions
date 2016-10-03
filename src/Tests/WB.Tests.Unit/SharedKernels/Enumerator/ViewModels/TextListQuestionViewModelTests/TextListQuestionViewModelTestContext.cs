@@ -48,7 +48,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<TextListQuestionAnswered>>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                answering ?? Mock.Of<AnsweringViewModel>());
+                answering ?? Mock.Of<AnsweringViewModel>(),
+                instructionViewModel: Mock.Of<QuestionInstructionViewModel>());
         }
     }
 }

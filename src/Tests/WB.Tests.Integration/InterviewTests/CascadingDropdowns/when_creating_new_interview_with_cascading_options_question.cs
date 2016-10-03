@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var grandChildCascadedComboboxId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var questionnaireId = Guid.Parse("3B7145CD-A235-44D0-917C-7B34A1017AEC");
 
-                var questionnaire = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                     {
                         Create.Option(value: "1", text: "parent option 1"),

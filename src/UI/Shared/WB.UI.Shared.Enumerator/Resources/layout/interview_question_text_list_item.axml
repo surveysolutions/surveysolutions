@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
-  style="@style/Interview_Question_Answer_List_Item">
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              style="@style/Interview_Question_Answer_Option_Background"
+              android:orientation="horizontal"
+              local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
+                             LongClick QuestionState.ShowCommentEditorCommand">
+  
   <EditText style="@style/Interview_Question_Answer_List_Editor"
-    local:MvxBind="Text Title; FocusValueChanged ValueChangeCommand;" />
-  <LinearLayout local:MvxBind="Click DeleteListItemCommand;"
-          style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
-  <ImageButton style="@style/Interview_Question_Answer_List_DeleteButton"  android:duplicateParentState="true"
-    local:MvxBind="Click DeleteListItemCommand;"/>
-  </LinearLayout>
+   local:MvxBind="Text Title; FocusValueChanged ValueChangeCommand;" />
+
+  <ImageButton style="@style/Interview_Question_OptionRemoveAnswer"
+               local:MvxBind="HideKeyboardOnClick .;Click DeleteListItemCommand;"/>
 </LinearLayout>

@@ -2,18 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using SQLite.Net;
-using SQLite.Net.Interop;
+using SQLite;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -28,20 +25,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private readonly SqliteSettings settings;
         private readonly IEnumeratorSettings enumeratorSettings;
 
-        private readonly ISQLitePlatform sqLitePlatform;
         private readonly ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private ITraceListener traceListener;
 
         private string connectionStringToEventStoreInSingleFile;
-        private static readonly Object lockObject = new Object();
-        static readonly Encoding TextEncoding = Encoding.UTF8;
+        private static readonly object lockObject = new object();
         private readonly EventSerializer eventSerializer;
         private BackwardCompatibleEventSerializer backwardCompatibleEventSerializer;
 
-        public SqliteMultiFilesEventStorage(ISQLitePlatform sqLitePlatform,
-            ILogger logger,
-            ITraceListener traceListener,
+        public SqliteMultiFilesEventStorage(ILogger logger,
             SqliteSettings settings,
             IEnumeratorSettings enumeratorSettings,
             IFileSystemAccessor fileSystemAccessor,
@@ -50,9 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             this.fileSystemAccessor = fileSystemAccessor;
             this.settings = settings;
             this.enumeratorSettings = enumeratorSettings;
-            this.sqLitePlatform = sqLitePlatform;
             this.logger = logger;
-            this.traceListener = traceListener;
             this.eventSerializer = new EventSerializer(eventTypesResolver);
 
             this.InitializeEventStoreInSingleFile();
@@ -60,16 +50,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         private SQLiteConnectionWithLock CreateConnection(string connectionString)
         {
-            var connection = new SQLiteConnectionWithLock(this.sqLitePlatform,
-                new SQLiteConnectionString(connectionString, true,
-                    new BlobSerializerDelegate(
-                        (obj) => TextEncoding.GetBytes(JsonConvert.SerializeObject(obj, Formatting.None)),
-                        (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length), type),
-                        (type) => true),
-                    openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
-            {
-                //TraceListener = traceListener
-            };
+            var connection = new SQLiteConnectionWithLock(connectionString,
+                openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 
             connection.CreateTable<EventView>();
             connection.CreateIndex<EventView>(entity => entity.EventId);
@@ -81,7 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             => this.ToSqliteConnectionString(Path.Combine(this.settings.PathToInterviewsDirectory, $"{eventSourceId.FormatGuid()}.sqlite3"));
 
         private string ToSqliteConnectionString(string pathToDatabase)
-            => this.settings.InMemoryStorage ? $"file:{pathToDatabase}?mode=memory" : pathToDatabase;
+            => this.settings.InMemoryStorage ? $":memory:" : pathToDatabase;
 
         private SQLiteConnectionWithLock GetOrCreateConnection(Guid eventSourceId)
         {
@@ -134,8 +116,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             using (connection.Lock())
             {
                 var isDataExist = connection
-                    .Table<EventView>()
-                    .Any(eventView => eventView.EventSourceId == id);
+                                      .Table<EventView>()
+                                      .FirstOrDefault(eventView => eventView.EventSourceId == id) != null;
 
                 if (!isDataExist)
                     return null;
@@ -334,30 +316,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private List<CommittedEvent> LoadEvents(SQLiteConnectionWithLock connection, Guid eventSourceId, int startEventSequence, int skip, int take, IEventSerializer serializer)
         {
             using (connection.Lock())
-            {
                 return connection
-                    .Table<EventView>()
-                    .Where(eventView
-                        => eventView.EventSourceId == eventSourceId
-                        && eventView.EventSequence >= startEventSequence)
-                    .OrderBy(x => x.EventSequence)
-                    .Skip(skip)
-                    .Take(take)
-                    .Select(x => ToCommitedEvent(x, serializer))
-                    .ToList();
-            }
+                .Table<EventView>()
+                .Where(eventView
+                    => eventView.EventSourceId == eventSourceId
+                       && eventView.EventSequence >= startEventSequence)
+                .OrderBy(x => x.EventSequence)
+                .Skip(skip)
+                .Take(take)
+                .ToList()
+                .Select(x => ToCommitedEvent(x, serializer))
+                .ToList();
         }
 
         private int GetTotalEventsByEventSourceId(SQLiteConnectionWithLock connection, Guid eventSourceId, int startEventSequence)
         {
             using (connection.Lock())
-            {
                 return connection
-                    .Table<EventView>()
-                    .Count(eventView
-                        => eventView.EventSourceId == eventSourceId
-                        && eventView.EventSequence >= startEventSequence);
-            }
+                .Table<EventView>()
+                .Count(eventView
+                    => eventView.EventSourceId == eventSourceId
+                       && eventView.EventSequence >= startEventSequence);
         }
 
         private CommittedEventStream Store(SQLiteConnectionWithLock connection, UncommittedEventStream eventStream, IEventSerializer serializer)
@@ -366,25 +345,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             {
                 try
                 {
-                    connection.BeginTransaction();
-
-                    this.ValidateStreamVersion(connection, eventStream);
-
-                    List<EventView> storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer)).ToList();
-                    foreach (var @event in storedEvents)
+                    connection.RunInTransaction(() =>
                     {
-                        connection.Insert(@event);
-                    }
+                        this.ValidateStreamVersion(connection, eventStream);
 
-                    connection.Commit();
-                    return new CommittedEventStream(eventStream.SourceId, eventStream.Select(ToCommitedEvent));
+                        List<EventView> storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer)).ToList();
+                        foreach (var @event in storedEvents)
+                        {
+                            connection.Insert(@event);
+                        }
+                    });
                 }
-                catch
+                catch (SQLiteException ex)
                 {
-                    connection.Rollback();
+                    this.logger.Fatal($"Failed to persist eventstream {eventStream.SourceId}", ex);
                     throw;
                 }
             }
+
+            return new CommittedEventStream(eventStream.SourceId, eventStream.Select(ToCommitedEvent));
         }
 
         private void ValidateStreamVersion(SQLiteConnectionWithLock connection, UncommittedEventStream eventStream)
@@ -395,7 +374,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 bool viewExists;
 
                 using (connection.Lock())
-                    viewExists = connection.Table<EventView>().Any(x => x.EventSourceId == eventStream.SourceId);
+                    viewExists = connection.Table<EventView>().FirstOrDefault(x => x.EventSourceId == eventStream.SourceId) != null;
 
                 if (viewExists)
                 {
@@ -408,18 +387,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             {
                 int currentStreamVersion;
                 var commandText = $"SELECT MAX({nameof(EventView.EventSequence)}) FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
-
                 using (connection.Lock())
                 {
                     var sqLiteCommand = connection.CreateCommand(commandText, eventStream.SourceId);
-                    currentStreamVersion = sqLiteCommand.ExecuteScalar<int>();
+                    var scalarValue = sqLiteCommand.ExecuteScalar<string>();
+                    currentStreamVersion = scalarValue == null ? 0 : Convert.ToInt32(scalarValue);
                 }
-
 
                 var expectedExistingSequence = eventStream.Min(x => x.EventSequence) - 1;
                 if (expectedExistingSequence != currentStreamVersion)
                 {
-                    var errorMessage = $"Wrong version number. Expected event stream with version {expectedExistingSequence}, but actual {currentStreamVersion}. SourceId: {eventStream.SourceId}";
+                    var errorMessage =
+                        $"Wrong version number. Expected event stream with version {expectedExistingSequence}, but actual {currentStreamVersion}. SourceId: {eventStream.SourceId}";
                     this.logger.Error(errorMessage);
                     throw new InvalidOperationException(errorMessage);
                 }

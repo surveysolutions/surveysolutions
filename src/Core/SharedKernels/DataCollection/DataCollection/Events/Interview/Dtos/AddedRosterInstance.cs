@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 {
@@ -11,6 +13,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
             : base(groupId, outerRosterVector, rosterInstanceId)
         {
             this.SortIndex = sortIndex;
+        }
+
+        public Identity GetIdentity()
+        {
+            var rosterVector = new RosterVector(this.OuterRosterVector.Concat(RosterInstanceId.ToEnumerable()));
+            return new Identity(this.GroupId, rosterVector);
         }
     }
 }

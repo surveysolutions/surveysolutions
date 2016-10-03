@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
@@ -19,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     {
         Establish context = () =>
         {
-            publishableEvent = Create.PublishedEvent.QuestionCloned();
+            publishableEvent = Create.PublishedEvent.InterviewCreated();
 
             eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher();
 
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             eventDispatcher.Register(Mock.Of<IEventHandler>());
 
             var questionClonedHandlerMock = new Mock<IEventHandler>();
-            questionClonedHandlerMock.As<IEventHandler<QuestionCloned>>();
+            questionClonedHandlerMock.As<IEventHandler<InterviewCreated>>();
 
             eventDispatcher.Register(questionClonedHandlerMock.Object);
         };

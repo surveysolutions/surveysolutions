@@ -2,8 +2,9 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandlerTests
@@ -13,16 +14,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () =>
             questionnaire.AddTextQuestion(
@@ -40,19 +34,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 mask: null,
                 responsibleId: responsibleId);
 
-        It should_raise_NewQuestionAdded_event = () =>
-            eventContext.ShouldContainEvent<NewQuestionAdded>();
-
-        It should_raise_NewQuestionAdded_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<NewQuestionAdded>()
+        It should_contains_TextQuestion_with_QuestionId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_NewQuestionAdded_event_with_validationExpression_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
+        It should_contains_TextQuestion_with_validationExpression_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
                 .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         private static Questionnaire questionnaire;
-        private static EventContext eventContext;
 
         private static string variableName = "var";
         private static string validationExpression = string.Format("{0} == \"Hello\"", variableName);
