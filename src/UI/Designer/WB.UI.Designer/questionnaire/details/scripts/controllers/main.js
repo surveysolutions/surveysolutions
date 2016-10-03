@@ -99,6 +99,20 @@ angular.module('designerApp')
                 $scope.$broadcast("openChaptersList", "");
             });
 
+            hotkeys.add({
+                combo: 'ctrl+h',
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                description: 'Find and replace',
+                callback: function (event) {
+                    event.preventDefault();
+                    $modal.open({
+                        templateUrl: 'views/find-replace.html',
+                        backdrop: false,
+                        controller: 'findReplaceCtrl'
+                    });
+                }
+            });
+
             $scope.questionnaireId = $state.params.questionnaireId;
             var ERROR = "error";
             var WARNING = "warning";

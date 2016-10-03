@@ -457,7 +457,9 @@
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
+    <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
+    <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="questionnaire\vendor\js-cookie\MIT-LICENSE.txt" />
     <Content Include="questionnaire\vendor\js-cookie\src\js.cookie.js" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
