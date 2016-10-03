@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -29,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry eventRegistry;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly QuestionInstructionViewModel instructionViewModel;
+        private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
 
         public SingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -38,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,
-            QuestionInstructionViewModel instructionViewModel)
+            QuestionInstructionViewModel instructionViewModel,
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -52,6 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.instructionViewModel = instructionViewModel;
+            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
         }
 
@@ -106,8 +108,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
-            this.UpdateQuestionOptions();
-            this.RaisePropertyChanged(() => Options);
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(()=>
+            {
+                this.UpdateQuestionOptions();
+                this.RaisePropertyChanged(() => Options);
+            });
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
