@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.Designer
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
             QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
             string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null, bool hideIfDisabled = false,
-            QuestionProperties properties = null)
+            QuestionProperties properties = null, IList<ValidationCondition> validationConditions = null)
             {
                 return new NewQuestionAdded(
                     publicKey: publicKey,
@@ -172,7 +172,7 @@ namespace WB.Tests.Unit.Designer
                     mask: mask,
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
-                    validationConditions: new List<ValidationCondition>());
+                    validationConditions: validationConditions ?? new List<ValidationCondition>());
             }
 
             public static NumericQuestionChanged NumericQuestionChanged(
@@ -401,15 +401,21 @@ namespace WB.Tests.Unit.Designer
                 };
             }
 
-            public static StaticTextAdded StaticTextAdded(Guid? entityId = null, Guid ? parentId = null, string text = null, Guid? responsibleId = null)
+            public static StaticTextAdded StaticTextAdded(Guid? entityId = null, 
+                Guid? parentId = null, 
+                string text = null, 
+                Guid? responsibleId = null,
+                string enablementCondition = null,
+                IList<ValidationCondition> validationConditions = null)
             {
+                
                 return new StaticTextAdded(entityId.GetValueOrDefault(Guid.NewGuid()),
                     responsibleId ?? Guid.NewGuid(),
                     parentId ?? Guid.NewGuid(),
                     text,
-                    null,
+                    enablementCondition,
                     false,
-                    null);
+                    validationConditions);
             }
 
             public static StaticTextUpdated StaticTextUpdated(Guid? entityId = null, Guid? parentId = null, string text = null, string attachmentName = null,  Guid? responsibleId = null,
@@ -553,13 +559,15 @@ namespace WB.Tests.Unit.Designer
             }
 
             public static NewGroupAdded NewGroupAddedEvent(string groupId, string parentGroupId = null,
-                string groupTitle = null)
+                string groupTitle = null,
+                string enablementCondition = null)
             {
                 return new NewGroupAdded()
                 {
                     PublicKey = Guid.Parse(groupId),
                     ParentGroupPublicKey = GetQuestionnaireItemParentId(parentGroupId),
-                    GroupText = groupTitle
+                    GroupText = groupTitle,
+                    ConditionExpression = enablementCondition
                 };
             }
 

@@ -110,7 +110,7 @@ namespace WB.Core.GenericSubdomains.Portable
         public static T Parse<T>(this string text) where T : struct
         {
             if (string.IsNullOrEmpty(text))
-                throw new ArgumentNullException("text");
+                throw new ArgumentNullException(nameof(text));
 
             Type objectType = typeof(T);
             object returnValue = null;
