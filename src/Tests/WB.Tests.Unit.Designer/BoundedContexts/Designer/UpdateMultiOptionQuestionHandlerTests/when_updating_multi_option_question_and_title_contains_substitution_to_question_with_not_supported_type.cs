@@ -12,26 +12,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
     internal class when_updating_multi_option_question_and_title_contains_substitution_to_question_with_not_supported_type :
         QuestionnaireTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded {PublicKey = chapterId});
             questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : Guid.NewGuid(),
-                groupPublicKey : chapterId,
-                questionType : QuestionType.GpsCoordinates,
-                stataExportCaption : substitutionVariableName
+                publicKey: Guid.NewGuid(),
+                groupPublicKey: chapterId,
+                questionType: QuestionType.GpsCoordinates,
+                stataExportCaption: substitutionVariableName
             ));
             questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-publicKey: questionId,
-groupPublicKey: chapterId,
-questionText: "old title",
-stataExportCaption: "old_variable_name",
-instructions: "old instructions",
-conditionExpression: "old condition",
-responsibleId: responsibleId,
-questionType: QuestionType.QRBarcode
-));
+                publicKey: questionId,
+                groupPublicKey: chapterId,
+                questionText: "old title",
+                stataExportCaption: "old_variable_name",
+                instructions: "old instructions",
+                conditionExpression: "old condition",
+                responsibleId: responsibleId,
+                questionType: QuestionType.QRBarcode
+            ));
         };
 
         Because of = () =>
