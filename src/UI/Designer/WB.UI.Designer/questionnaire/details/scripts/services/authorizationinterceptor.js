@@ -6,7 +6,7 @@ angular.module('designerApp')
             return {
                 'responseError': function (rejection) {
                     if (rejection.status == 401) {
-                        window.location.href = '../../';
+                        window.location.href = '/';
                     }
                     return $q.reject(rejection);
                 }
