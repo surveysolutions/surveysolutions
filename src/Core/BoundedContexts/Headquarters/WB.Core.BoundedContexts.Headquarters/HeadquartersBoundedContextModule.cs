@@ -16,7 +16,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.C
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Headquarters.Implementation.TemporaryDataStorage;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -290,8 +289,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
-            this.Bind(typeof(ITemporaryDataStorage<>)).To(typeof(FileTemporaryDataStorage<>)).WithConstructorArgument("rootPath", this.currentFolderPath);
-            
             this.Bind<InterviewDetailsDataLoaderSettings>().ToConstant(this.interviewDetailsDataLoaderSettings);
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
@@ -299,14 +296,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
 
-
-            //this.Kernel.RegisterDenormalizer<CumulativeChartDenormalizer>();
-            //this.Kernel.RegisterDenormalizer<DummyEventHandler>();
-            //this.Kernel.RegisterDenormalizer<InterviewReferencesDenormalizer>();
-            //this.Kernel.RegisterDenormalizer<InterviewSummaryDenormalizer>();
-            //this.Kernel.RegisterDenormalizer<MapReportDenormalizer>();
-            //this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
-            //this.Kernel.RegisterDenormalizer<InterviewsExportDenormalizer>();
 
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<StatusChangeHistoryDenormalizerFunctional>();
