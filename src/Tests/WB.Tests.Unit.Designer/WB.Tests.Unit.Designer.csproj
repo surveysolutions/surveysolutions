@@ -306,6 +306,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\CustomWebApiAuthorizeFilterTests.cs" />
     <Compile Include="Api\Headquarters\QuestionnairesControllerTests\QuestionnairesControllerTestContext.cs" />
     <Compile Include="Api\Headquarters\QuestionnairesControllerTests\when_getting_Questionaire_but_client_version_lower_than_serrver_one.cs" />
     <Compile Include="Api\Tester\TranslationsControllerTests\TranslationsControllerTestsContext.cs" />

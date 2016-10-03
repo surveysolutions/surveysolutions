@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
+using System.Security.Principal;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.SessionState;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -16,9 +22,12 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -143,6 +152,50 @@ namespace WB.Tests.Unit.Designer
                  .Returns(translatedQuestionnaireDocument);
 
             return serviceMock.Object;
+        }
+
+        public static void ServiceLocatorForCustomWebApiAuthorizeFilter(ITransactionManagerProvider transactionManagerProvider = null,
+            IReadSideStatusService readSideStatusService = null,
+            IMembershipUserService membershipUserService = null)
+        {
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<ITransactionManagerProvider>())
+                .Returns(transactionManagerProvider ?? Mock.Of<ITransactionManagerProvider>(t => t.GetTransactionManager() == Mock.Of<ITransactionManager>()));
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IReadSideStatusService>())
+                .Returns(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IMembershipUserService>())
+                .Returns(membershipUserService ?? Mock.Of<IMembershipUserService>());
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+        }
+
+        public static HttpActionContext HttpActionContextWithOutAllowAnonymousOnAction()
+        {
+            var emptyAllowAnonymousList = new Collection<AllowAnonymousAttribute>();
+            var controllerDescriptor = Mock.Of<HttpControllerDescriptor>(c => c.GetCustomAttributes<AllowAnonymousAttribute>() == emptyAllowAnonymousList);
+            var actionDescriptor = Mock.Of<HttpActionDescriptor>(a => a.ControllerDescriptor == controllerDescriptor
+                && a.GetCustomAttributes<AllowAnonymousAttribute>() == emptyAllowAnonymousList);
+            return Mock.Of<HttpActionContext>(c => c.ActionDescriptor == actionDescriptor);
+        }
+
+        public static void HttpContextWithIsAuthenticatedFlag()
+        {
+            var httpRequest = new HttpRequest("", "http://same-url/", "");
+            var stringWriter = new StringWriter();
+            var httpResponse = new HttpResponse(stringWriter);
+            var httpContext = new HttpContext(httpRequest, httpResponse);
+
+            IIdentity identity = Mock.Of<IIdentity>(i => i.IsAuthenticated == true);
+            IPrincipal user = Mock.Of<IPrincipal>(u => u.Identity == identity);
+            httpContext.User = user;
+
+            HttpContext.Current = httpContext;
         }
     }
 }
