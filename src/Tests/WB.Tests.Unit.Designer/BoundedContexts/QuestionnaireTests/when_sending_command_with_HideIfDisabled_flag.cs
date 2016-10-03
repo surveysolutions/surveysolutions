@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -30,8 +28,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             AddQuestion(questionnaire, questionSingleOptionId, groupId, responsibleId, QuestionType.SingleOption, "SingleOption_question");
             AddQuestion(questionnaire, questionTextId, groupId, responsibleId, QuestionType.Text, "Text_question");
             AddQuestion(questionnaire, questionTextListId, groupId, responsibleId, QuestionType.TextList, "TextList_question");
-
-            eventContext = new EventContext();
         };
 
         private Because of = () =>
@@ -52,38 +48,37 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         };
 
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_Numeric_question = () =>
-            eventContext.GetEvents<NumericQuestionChanged>().Single(qc => qc.PublicKey == questionNumericId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_Numeric_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionNumericId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_DateTime_question = () =>
-            eventContext.GetEvents<QuestionChanged>().Single(qc => qc.PublicKey == questionDateTimeId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_DateTime_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionDateTimeId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_Multimedia_question = () =>
-            eventContext.GetEvents<MultimediaQuestionUpdated>().Single(qc => qc.QuestionId == questionMultimediaId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_Multimedia_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionMultimediaId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_GpsCoordinates_question = () =>
-            eventContext.GetEvents<QuestionChanged>().Single(qc => qc.PublicKey == questionGpsCoordinatesId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_GpsCoordinates_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionGpsCoordinatesId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_MultyOption_question = () =>
-            eventContext.GetEvents<QuestionChanged>().Single(qc => qc.PublicKey == questionMultyOptionId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_MultyOption_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionMultyOptionId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_QRBarcode_question = () =>
-            eventContext.GetEvents<QRBarcodeQuestionUpdated>().Single(qc => qc.QuestionId == questionQRBarcodeId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_QRBarcode_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionQRBarcodeId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_SingleOption_question = () =>
-            eventContext.GetEvents<QuestionChanged>().Single(qc => qc.PublicKey == questionSingleOptionId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_SingleOption_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionSingleOptionId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_Text_question = () =>
-            eventContext.GetEvents<QuestionChanged>().Single(qc => qc.PublicKey == questionTextId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_Text_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionTextId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_TextList_question = () =>
-            eventContext.GetEvents<TextListQuestionChanged>().Single(qc => qc.PublicKey == questionTextListId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_TextList_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionTextListId).HideIfDisabled.ShouldEqual(true);
 
-        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified_for_group_or_roster = () =>
-            eventContext.GetEvents<GroupUpdated>().Single(qc => qc.GroupPublicKey == groupId).HideIfDisabled.ShouldEqual(true);
+        It should_contains_question_with_hideIfDisabled_specified_for_group_or_roster = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).HideIfDisabled.ShouldEqual(true);
 
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
         private static Guid groupId;

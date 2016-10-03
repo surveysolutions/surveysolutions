@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -13,8 +16,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     {
         Establish context = () =>
         {
-            questionnaireEntityDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
-            questionnaireView = CreateQuestionsAndGroupsCollectionView();
+            questionnaireEntityDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaireView = CreateQuestionnaireDocument();
             questionnaireEntityDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaireView);
@@ -34,15 +37,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         It should_return_question_equals_g3 = () =>
             result.Text.ShouldEqual(GetStaticText(entityId).Text);
 
-        private static StaticTextDetailsView GetStaticText(Guid entityId)
+        private static IStaticText GetStaticText(Guid entityId)
         {
-            return questionnaireView.StaticTexts.Single(x => x.Id == entityId);
+            return questionnaireView.Find<IStaticText>(entityId);
         }
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditStaticTextView result;
-        private static QuestionsAndGroupsCollectionView questionnaireView;
-        private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionnaireEntityDetailsReaderMock;
+        private static QuestionnaireDocument questionnaireView;
+        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionnaireEntityDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid entityId = st1Id;
 

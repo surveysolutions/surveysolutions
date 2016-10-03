@@ -29,12 +29,6 @@
                 $scope.activeGroup.itemId = $stateParams.itemId;
                 $scope.activeGroup.variableName = $stateParams.variableName;
 
-                $scope.activeGroup.isFirstChapter = false;
-                if ($scope.activeGroup.isChapter) {
-                    if ($scope.questionnaire && $scope.questionnaire.chapters && $scope.questionnaire.chapters.length)
-                        $scope.activeGroup.isFirstChapter = $stateParams.itemId == $scope.questionnaire.chapters[0].itemId;
-                }
-
                 if (!_.isNull($scope.groupForm) && !_.isUndefined($scope.groupForm)) {
                     $scope.groupForm.$setPristine();
                 }

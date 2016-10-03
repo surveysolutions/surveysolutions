@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -22,27 +24,28 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 { "q2", unansweredQuestionId }
             };
             questionnaireDocument = CreateQuestionnaireDocument(variableNameAndQuestionId);
-            exportViewFactory = CreateExportViewFactory();
+
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaireDocument, 1, null));
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
         };
 
         Because of = () =>
-            result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1),
+            result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1),
                 CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)));
 
         It should_records_count_equals_1 = () =>
             result.Levels[0].Records.Length.ShouldEqual(1);
 
         It should__first_record_have_1_answers = () =>
-            result.Levels[0].Records[0].GetQuestions().Count().ShouldEqual(2);
+            result.Levels[0].Records[0].GetPlainAnswers().Count().ShouldEqual(2);
 
         It should_first_parent_ids_be_empty = () =>
            result.Levels[0].Records[0].ParentRecordIds.ShouldBeEmpty();
 
         It should_answered_question_be_not_empty = () =>
-           result.Levels[0].Records[0].GetQuestions()[0].Answers.Length.ShouldNotEqual(0);
-
-        It should_unanswered_question_be_empty = () =>
-          result.Levels[0].Records[0].GetQuestions()[0].Answers.Length.ShouldNotEqual(0);
+           result.Levels[0].Records[0].GetPlainAnswers().First().Length.ShouldNotEqual(0);
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

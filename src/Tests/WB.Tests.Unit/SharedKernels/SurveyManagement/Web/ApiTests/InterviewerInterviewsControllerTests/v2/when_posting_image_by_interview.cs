@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         Because of = () => controller.PostImage(new PostFileRequest { InterviewId = interviewId, FileName =  imageFileName, Data = imageAsBase64String });
 
         It should_store_image_to_plain_storage = () =>
-            mockOflainInterviewFileStorage.Verify(x=>x.StoreInterviewBinaryDataAsync(interviewId, imageFileName, imageBytes), Times.Once);
+            mockOflainInterviewFileStorage.Verify(x=>x.StoreInterviewBinaryData(interviewId, imageFileName, imageBytes), Times.Once);
         
         
         private static InterviewsApiV2Controller controller;

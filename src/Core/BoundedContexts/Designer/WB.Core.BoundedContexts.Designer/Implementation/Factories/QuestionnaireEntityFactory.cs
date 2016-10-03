@@ -4,7 +4,7 @@ using System.Linq;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 
@@ -25,48 +25,72 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 
         public IQuestion CreateQuestion(QuestionData data)
         {
-            AbstractQuestion q = CreateQuestion(data.QuestionType, data.PublicKey);
+            AbstractQuestion question = CreateQuestion(data.QuestionType, data.PublicKey);
 
-            UpdateQuestion(
-                q,
-                data.QuestionType,
-                data.QuestionScope,
-                data.QuestionText,
-                data.StataExportCaption,
-                data.VariableLabel,
-                data.ConditionExpression,
-                data.HideIfDisabled,
-                data.ValidationExpression,
-                data.ValidationMessage,
-                data.AnswerOrder,
-                data.Featured,
-                data.Capital,
-                data.Instructions,
-                data.Properties,
-                data.Mask,
-                data.LinkedToQuestionId,
-                data.LinkedToRosterId,
-                data.LinkedFilterExpression,
-                data.QuestionType == QuestionType.AutoPropagate ? true : data.IsInteger,
-                data.CountOfDecimalPlaces,
-                data.AreAnswersOrdered,
-                data.MaxAllowedAnswers,
-                data.MaxAnswerCount,
-                data.IsFilteredCombobox,
-                data.CascadeFromQuestionId,
-                data.YesNoView,
-                data.ValidationConditions,
-                data.IsTimestamp);
+            question.QuestionType = data.QuestionType;
+            question.QuestionScope = data.QuestionScope;
+            question.QuestionText = System.Web.HttpUtility.HtmlDecode(data.QuestionText);
+            question.StataExportCaption = data.StataExportCaption;
+            question.VariableLabel = data.VariableLabel;
+            question.ConditionExpression = data.ConditionExpression;
+            question.HideIfDisabled = data.HideIfDisabled;
+            question.ValidationExpression = data.ValidationExpression;
+            question.ValidationMessage = data.ValidationMessage;
+            question.AnswerOrder = data.AnswerOrder;
+            question.Featured = data.Featured;
+            question.Instructions = data.Instructions;
+            question.Properties = data.Properties ?? new QuestionProperties(false, false);
+            question.Capital = data.Capital;
+            question.LinkedToQuestionId = data.LinkedToQuestionId;
+            question.LinkedToRosterId = data.LinkedToRosterId;
+            question.LinkedFilterExpression = data.LinkedFilterExpression;
+            question.IsFilteredCombobox = data.IsFilteredCombobox;
+            question.CascadeFromQuestionId = data.CascadeFromQuestionId;
+            question.ValidationConditions = data.ValidationConditions;
 
-            UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                numericQuestion.IsInteger = data.QuestionType == QuestionType.AutoPropagate ? true : data.IsInteger ?? false;
+                numericQuestion.CountOfDecimalPlaces = data.CountOfDecimalPlaces;
+                numericQuestion.QuestionType = QuestionType.Numeric;
+                numericQuestion.UseFormatting = question.Properties?.UseFormatting ?? false;
+            }
 
-            return q;
+            var multioptionQuestion = question as IMultyOptionsQuestion;
+            if (multioptionQuestion != null)
+            {
+                multioptionQuestion.AreAnswersOrdered = data.AreAnswersOrdered ?? false;
+                multioptionQuestion.MaxAllowedAnswers = data.MaxAllowedAnswers;
+                multioptionQuestion.YesNoView = data.YesNoView ?? false;
+            }
+
+            var listQuestion = question as ITextListQuestion;
+            if (listQuestion != null)
+            {
+                listQuestion.MaxAnswerCount = data.MaxAnswerCount;
+            }
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                textQuestion.Mask = data.Mask;
+            }
+
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                dateTimeQuestion.IsTimestamp = data.IsTimestamp;
+            }
+
+            UpdateAnswerList(data.Answers, question, data.LinkedToQuestionId);
+
+            return question;
         }
 
-        public IVariable CreateVariable(QuestionnaireVariableEvent variableEvent)
+        public IVariable CreateVariable(QuestionnaireVariable questionnaireVariable)
         {
-            var variable = new Variable(variableEvent.EntityId, variableEvent.VariableData);
-            return variable;
+            var newVariable = new Variable(questionnaireVariable.EntityId, questionnaireVariable.VariableData);
+            return newVariable;
         }
 
         private AbstractQuestion CreateQuestion(QuestionType questionType, Guid publicKey)
@@ -134,93 +158,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 {
                     question.AddAnswer(answer);
                 }
-            }
-        }
-
-        private static void UpdateQuestion(
-            IQuestion question,
-            QuestionType questionType,
-            QuestionScope questionScope,
-            string questionText,
-            string stataExportCaption,
-            string variableLabel,
-            string conditionExpression,
-            bool hideIfDisabled,
-            string validationExpression,
-            string validationMessage,
-            Order? answerOrder,
-            bool featured,
-            bool capital,
-            string instructions,
-            QuestionProperties properties,
-            string mask,
-            Guid? linkedToQuestionId,
-            Guid? linkedToRosterId,
-            string linkedFilterExpression,
-            bool? isInteger,
-            int? countOfDecimalPlaces,
-            bool? areAnswersOrdered,
-            int? maxAllowedAnswers,
-            int? masAnswerCount,
-            bool? isFilteredCombobox,
-            Guid? cascadeFromQuestionId,
-            bool? yesNoView,
-            IList<ValidationCondition> validationConditions,
-            bool isTimestamp)
-        {
-            question.QuestionType = questionType;
-            question.QuestionScope = questionScope;
-            question.QuestionText = System.Web.HttpUtility.HtmlDecode(questionText);
-            question.StataExportCaption = stataExportCaption;
-            question.VariableLabel = variableLabel;
-            question.ConditionExpression = conditionExpression;
-            question.HideIfDisabled = hideIfDisabled;
-            question.ValidationExpression = validationExpression;
-            question.ValidationMessage = validationMessage;
-            question.AnswerOrder = answerOrder;
-            question.Featured = featured;
-            question.Instructions = instructions;
-            question.Properties = properties ?? new QuestionProperties(false, false);
-            question.Capital = capital;
-            question.LinkedToQuestionId = linkedToQuestionId;
-            question.LinkedToRosterId = linkedToRosterId;
-            question.LinkedFilterExpression = linkedFilterExpression;
-            question.IsFilteredCombobox = isFilteredCombobox;
-            question.CascadeFromQuestionId = cascadeFromQuestionId;
-            question.ValidationConditions = validationConditions;
-
-            var numericQuestion = question as INumericQuestion;
-            if (numericQuestion != null)
-            {
-                numericQuestion.IsInteger = isInteger ?? false;
-                numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
-                numericQuestion.QuestionType = QuestionType.Numeric;
-                numericQuestion.UseFormatting = question.Properties?.UseFormatting ?? false;
-            }
-
-            var multioptionQuestion = question as IMultyOptionsQuestion;
-            if (multioptionQuestion != null)
-            {
-                multioptionQuestion.AreAnswersOrdered = areAnswersOrdered ?? false;
-                multioptionQuestion.MaxAllowedAnswers = maxAllowedAnswers;
-                multioptionQuestion.YesNoView = yesNoView ?? false;
-            }
-
-            var listQuestion = question as ITextListQuestion;
-            if (listQuestion != null)
-            {
-                listQuestion.MaxAnswerCount = masAnswerCount;
-            }
-            var textQuestion = question as TextQuestion;
-            if (textQuestion != null)
-            {
-                textQuestion.Mask = mask;
-            }
-
-            var dateTimeQuestion = question as DateTimeQuestion;
-            if (dateTimeQuestion != null)
-            {
-                dateTimeQuestion.IsTimestamp = isTimestamp;
             }
         }
     }

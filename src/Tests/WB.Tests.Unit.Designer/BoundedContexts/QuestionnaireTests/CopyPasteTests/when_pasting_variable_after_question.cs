@@ -5,7 +5,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTests
@@ -25,8 +24,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                     Create.Variable(variableId, variableType, variableName, variableExpression)
                 }));
 
-            eventContext = new EventContext();
-
             command = new PasteAfter(
                questionnaireId: questionnaireId,
                entityId: targetId,
@@ -41,26 +38,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         Because of = () => 
             questionnaire.PasteAfter(command);
 
-        It should_raise_VariableCloned_event =
-            () => eventContext.ShouldContainEvent<VariableCloned>();
+        It should_contains_variable = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).ShouldNotBeNull();
 
-        It should_raise_VariableCloned_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<VariableCloned>().EntityId.ShouldEqual(targetId);
+        It should_contains_variable_with_QuestionId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).PublicKey.ShouldEqual(targetId);
 
-        It should_raise_VariableCloned_event_with_variableType_specified = () =>
-            eventContext.GetSingleEvent<VariableCloned>().VariableData.Type.ShouldEqual(variableType);
+        It should_contains_variable_with_variableType_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Type.ShouldEqual(variableType);
 
-        It should_raise_VariableCloned_event_with_variableName_specified = () =>
-            eventContext.GetSingleEvent<VariableCloned>().VariableData.Name.ShouldEqual(variableName);
+        It should_contains_variable_with_variableName_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Name.ShouldEqual(variableName);
 
-        It should_raise_VariableCloned_event_with_variableExpression_specified = () =>
-            eventContext.GetSingleEvent<VariableCloned>().VariableData.Expression.ShouldEqual(variableExpression);
+        It should_contains_variable_with_variableExpression_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Expression.ShouldEqual(variableExpression);
 
         static Questionnaire questionnaire;
         static Guid questionToPastAfterId;
 
         static Guid variableId = Guid.Parse("44DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        static EventContext eventContext;
         static Guid responsibleId;
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         static VariableType variableType = VariableType.LongInteger;

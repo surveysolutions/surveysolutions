@@ -7,9 +7,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -31,16 +31,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     title: title,
                     variableName: variableName));
 
-            @event = ToPublishedEvent(new QRBarcodeQuestionUpdated()
+            @event = new QRBarcodeQuestionUpdated()
             {
                 QuestionId = questionId,
                 EnablementCondition = condition,
                 Instructions = instructions,
                 Title = title,
                 VariableName = variableName
-            });
+            };
 
-            var questionnaireDocument = CreateQuestionnaireDocument(new[]
+            questionnaireView = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentGroupId,
                     children: new IComposite[]
@@ -56,24 +56,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     })
             });
 
-            var documentStorage = new Mock<IReadSideKeyValueStorage<QuestionnaireDocument>>();
-            
-            documentStorage
-                .Setup(writer => writer.GetById(Moq.It.IsAny<string>()))
-                .Returns(questionnaireDocument);
-            
-            documentStorage
-                .Setup(writer => writer.Store(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<string>()))
-                .Callback((QuestionnaireDocument document, string id) =>
-                {
-                    questionnaireView = document;
-                });
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage.Object, questionnaireEntityFactory: questionFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionFactory.Object);
         };
 
         Because of = () =>
-            denormalizer.Handle(@event);
+            denormalizer.UpdateQRBarcodeQuestion(@event);
 
         It should_call_question_factory_ones = () =>
            questionFactory.Verify(x => x.CreateQuestion(it.IsAny<QuestionData>()), Times.Once);
@@ -143,8 +130,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static QuestionData questionData;
         private static Mock<IQuestionnaireEntityFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
-        private static QuestionnaireDenormalizer denormalizer;
-        private static IPublishedEvent<QRBarcodeQuestionUpdated> @event;
+        private static Questionnaire denormalizer;
+        private static QRBarcodeQuestionUpdated @event;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string variableName = "qr_barcode_question";

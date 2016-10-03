@@ -1,5 +1,5 @@
 using System;
-using SQLite.Net.Attributes;
+using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 

@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         
         public virtual void PostImage(PostFileRequest request)
         {
-            this.plainInterviewFileStorage.StoreInterviewBinaryDataAsync(request.InterviewId, request.FileName,
+            this.plainInterviewFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data));
         }
     }

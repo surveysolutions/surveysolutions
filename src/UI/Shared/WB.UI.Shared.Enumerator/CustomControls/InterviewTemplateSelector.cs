@@ -20,6 +20,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
             {typeof (TextListQuestionViewModel), Resource.Layout.interview_question_text_list},
+            {typeof (TextListItemViewModel), Resource.Layout.interview_question_text_list_item},
+            {typeof (TextListAddNewItemViewModel), Resource.Layout.interview_question_text_list_add_new_item},
             {typeof (TextQuestionViewModel), Resource.Layout.interview_question_text},
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
             {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},
@@ -41,6 +43,17 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
             {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
+
+            {typeof (MultiOptionQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
+            {typeof (MultiOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
+            {typeof (SingleOptionQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
+            {typeof (SingleOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
+            {typeof (QuestionHeaderViewModel), Resource.Layout.interview_question__header},
+            {typeof (ValidityViewModel), Resource.Layout.interview_question__validation},
+            {typeof (CommentsViewModel), Resource.Layout.interview_question__comments},
+            {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
+            {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
+            {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
         };
 
         public int GetItemViewType(object forItemObject)
@@ -49,30 +62,40 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             var typeOfViewModel = source.GetType();
 
-            var enablementModel = this.GetEnablementViewModel(source);
-            if (typeOfViewModel.Name.EndsWith("QuestionViewModel"))
+            if (typeOfViewModel.IsGenericType )
             {
-                if (enablementModel != null && !enablementModel.Enabled)
+                if (typeOfViewModel.GetGenericTypeDefinition() == typeof(OptionBorderViewModel<>))
                 {
-                    return Resource.Layout.interview_disabled_question;
+                    return Resource.Layout.interview_question_option_rounded_corner;
                 }
             }
 
-            if (typeOfViewModel == typeof(GroupViewModel))
+            var disabledViewModelTypes = new[]
             {
+                typeof(QuestionHeaderViewModel),
+                typeof(GroupViewModel),
+                typeof(StaticTextViewModel)
+            };
+
+            if (disabledViewModelTypes.Contains(source.GetType()))
+            {
+                var enablementModel = this.GetEnablementViewModel(source) ?? (EnablementViewModel)((dynamic)source).Enablement;
+
                 if (enablementModel != null && !enablementModel.Enabled)
                 {
-                    return Resource.Layout.interview_disabled_group;
+                    if (enablementModel.HideIfDisabled) return UnknownViewType;
+
+                    if (typeOfViewModel == typeof(QuestionHeaderViewModel))
+                        return Resource.Layout.interview_disabled_question;
+
+                    if (typeOfViewModel == typeof(GroupViewModel))
+                        return Resource.Layout.interview_disabled_group;
+
+                    if (typeOfViewModel == typeof(StaticTextViewModel))
+                        return Resource.Layout.interview_disabled_static_text;
                 }
             }
 
-            if (typeOfViewModel == typeof(StaticTextViewModel))
-            {
-                if (enablementModel != null && !enablementModel.Enabled)
-                {
-                    return Resource.Layout.interview_disabled_static_text;
-                }
-            }
 
             return EntityTemplates.ContainsKey(typeOfViewModel)
                 ? EntityTemplates[typeOfViewModel]

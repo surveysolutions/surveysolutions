@@ -1,16 +1,23 @@
 ﻿using System;
 using MvvmCross.Core.ViewModels;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class TextListItemViewModel : MvxNotifyPropertyChanged
+    public class TextListItemViewModel : MvxNotifyPropertyChanged, ICompositeEntity
     {
+        private readonly QuestionStateViewModel<TextListQuestionAnswered> questionState;
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
+        public TextListItemViewModel(QuestionStateViewModel<TextListQuestionAnswered> questionState)
+        {
+            this.questionState = questionState;
+        }
+
+
         public event EventHandler ItemEdited;
-
         public event EventHandler ItemDeleted;
-
-        public EnablementViewModel Enablement { get; set; }
 
         public decimal Value { get; set; }
 
@@ -27,26 +34,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.RaisePropertyChanged();
             }
         }
+        
+        public IMvxCommand ValueChangeCommand => new MvxCommand(this.OnItemEdited);
 
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand
-        {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.OnItemEdited)); }
-        }
+        public IMvxCommand DeleteListItemCommand => new MvxCommand(this.DeleteListItem);
 
-        public IMvxCommand DeleteListItemCommand
-        {
-            get { return new MvxCommand(this.DeleteListItem); }
-        }
+        private void DeleteListItem() => this.ItemDeleted?.Invoke(this, EventArgs.Empty);
 
-        private void DeleteListItem()
-        {
-            if (this.ItemDeleted != null) this.ItemDeleted.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnItemEdited()
-        {
-            if (this.ItemEdited != null) this.ItemEdited.Invoke(this, EventArgs.Empty);
-        }
+        private void OnItemEdited() => this.ItemEdited?.Invoke(this, EventArgs.Empty);
     }
 }

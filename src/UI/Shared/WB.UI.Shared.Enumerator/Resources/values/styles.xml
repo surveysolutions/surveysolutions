@@ -62,7 +62,11 @@
     <item name="android:dividerHeight">@dimen/zero</item>
   </style>
 
-  <style name="PrefilledQuestions_List" parent="VerticalFullWidthWrappingLayout">
+  <style name="PrefilledQuestions_List">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:orientation">vertical</item>
+
     <item name="android:smoothScrollbar">true</item>
     <item name="android:scrollingCache">false</item>
     <item name="android:animationCache">false</item>
@@ -278,20 +282,23 @@
     <item name="android:dividerHeight">@dimen/zero</item>
     <item name="android:listSelector">@android:color/transparent</item>
   </style>
-  <style name="Interview_Confirmation_Editor" parent="Interview_Entity_BasicFont">
-    <item name="android:maxLines">1</item>
-    <item name="android:singleLine">true</item>
-    <item name="android:focusable">true</item>
-    <item name="android:focusableInTouchMode">true</item>
-    <item name="android:background">@drawable/question_text_question</item>
-    <item name="android:textCursorDrawable">@null</item>
+  
+  <style name="Interview_Confirmation_Editor">
     <item name="android:textStyle">bold</item>
     <item name="android:textColor">@color/editorTextColor</item>
     <item name="android:textColorHint">@color/editorHintTextColor</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:focusable">true</item>
+    <item name="android:focusableInTouchMode">true</item>
+    <item name="android:background">@drawable/user_interaction_input_editor</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="android:padding">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <!--<item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>-->
   </style>
+  
   <style name="Interview_Confirmation_Layout" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>

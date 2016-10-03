@@ -15,13 +15,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestion
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultyOption_Ordered, columnsCount: 3);
         };
 
-        It should_return_correct_filled_answer = () => filledQuestion.Answers.ShouldEqual(new []{ "2", "0", "1" });
-        It should_return_correct_disabled_answer = () => disabledQuestion.Answers.ShouldEqual(new []{ DisableQuestionValue, DisableQuestionValue, DisableQuestionValue });
-        It should_return_correct_missing_answer = () => missingQuestion.Answers.ShouldEqual(new []{ MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue });
+        It should_return_correct_filled_answer = () => filledQuestion.ShouldEqual(new []{ "2", "0", "1" });
+        It should_return_correct_disabled_answer = () => disabledQuestion.ShouldEqual(new []{ DisableQuestionValue, DisableQuestionValue, DisableQuestionValue });
+        It should_return_correct_missing_answer = () => missingQuestion.ShouldEqual(new []{ MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue });
 
 
-        private static ExportedQuestion filledQuestion;
-        private static ExportedQuestion disabledQuestion;
-        private static ExportedQuestion missingQuestion;
+        private static string[] filledQuestion;
+        private static string[] disabledQuestion;
+        private static string[] missingQuestion;
     }
 }

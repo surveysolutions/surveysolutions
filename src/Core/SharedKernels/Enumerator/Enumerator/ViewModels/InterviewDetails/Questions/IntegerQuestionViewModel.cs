@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel, 
         ILiteEventHandler<AnswerRemoved>,
+        ICompositeQuestion,
         IDisposable
     {
         private readonly IPrincipal principal; 
@@ -32,7 +33,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
 
-        public QuestionStateViewModel<NumericIntegerQuestionAnswered> QuestionState { get; private set; }
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
+        public QuestionInstructionViewModel InstructionViewModel { get; }
+
         public AnsweringViewModel Answering { get; private set; }
 
         private bool isRosterSizeQuestion;
@@ -62,6 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }  
         
         private IMvxCommand answerRemoveCommand;
+        private readonly QuestionStateViewModel<NumericIntegerQuestionAnswered> questionState;
 
         public IMvxCommand RemoveAnswerCommand
         {
@@ -74,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RemoveAnswer()
         {
-            if (!QuestionState.IsAnswered)
+            if (!questionState.IsAnswered)
             {
                 this.Answer = null;
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -113,14 +118,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
-            AnsweringViewModel answering, ILiteEventRegistry liteEventRegistry)
+            AnsweringViewModel answering, 
+            QuestionInstructionViewModel instructionViewModel,
+            ILiteEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
             this.userInteractionService = userInteractionService;
+            this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
         }
@@ -135,10 +143,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
+
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 

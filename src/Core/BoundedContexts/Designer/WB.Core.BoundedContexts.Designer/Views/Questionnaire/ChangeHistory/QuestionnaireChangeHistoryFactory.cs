@@ -3,18 +3,19 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
     internal class QuestionnaireChangeHistoryFactory : IQuestionnaireChangeHistoryFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
 
         public QuestionnaireChangeHistoryFactory(
-            IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage)
+            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage)
         {
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
             this.questionnaireDocumentStorage = questionnaireDocumentStorage;
@@ -22,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         public QuestionnaireChangeHistory Load(Guid id, int page,int pageSize)
         {
-            var questionnaire = questionnaireDocumentStorage.GetById(id);
+            var questionnaire = questionnaireDocumentStorage.GetById(id.FormatGuid());
 
             if (questionnaire == null)
                 return null;
@@ -100,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 case QuestionnaireItemType.Person:
                     return true;
                 case QuestionnaireItemType.Questionnaire:
-                    var questionnaireItem = questionnaireDocumentStorage.GetById(itemId);
+                    var questionnaireItem = questionnaireDocumentStorage.GetById(itemId.FormatGuid());
                     return questionnaireItem != null && !questionnaireItem.IsDeleted;
                 case QuestionnaireItemType.Macro:
                 case QuestionnaireItemType.LookupTable:

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             var userInteraction = new Mock<IUserInteractionService>();
 
             userInteraction
-                .Setup(x => x.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                .Setup(x => x.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .ReturnsAsync(false);
 
             listModel = CreateTextListQuestionViewModel(
@@ -54,19 +55,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         Because of = () =>
-            listModel.Answers[deletedItemIndex].DeleteListItemCommand.Execute();
+            answerViewModels[deletedItemIndex].DeleteListItemCommand.Execute();
 
         It should_not_delete_anything_from_Answers_list = () =>
-            listModel.Answers.Count.ShouldEqual(5);
+            answerViewModels.Count.ShouldEqual(5);
 
         It should_not_delete_item_with_index_equals__deletedItemIndex__ = () =>
-            listModel.Answers.Any(x
+            answerViewModels.Any(x
                 => x.Value == savedAnswers[deletedItemIndex].Item1
                    && x.Title == savedAnswers[deletedItemIndex].Item2)
                 .ShouldBeTrue();
 
-        It should_set_IsAddNewItemVisible_flag_in_false = () =>
-            listModel.IsAddNewItemVisible.ShouldBeFalse();
+        It should_not_contain_add_new_item_view_model = () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
 
         It should_not_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);
@@ -95,5 +96,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                                                                         };
 
         private static readonly int deletedItemIndex = 2;
+        private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();
     }
 }

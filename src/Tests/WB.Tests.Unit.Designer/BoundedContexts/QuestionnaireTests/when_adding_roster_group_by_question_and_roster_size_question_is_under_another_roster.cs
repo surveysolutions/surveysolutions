@@ -1,9 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -18,47 +17,36 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = anotherRosterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, anotherRosterId));
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : anotherRosterId,
                 questionType: QuestionType.Numeric));
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () =>
                 questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, false, anotherRosterId, true,
                     RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-        It should_raise_NewGroupAdded_event = () =>
-           eventContext.ShouldContainEvent<NewGroupAdded>();
+        It should_contains_group = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_raise_NewGroupAdded_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .PublicKey.ShouldEqual(groupId);
 
-        It should_raise_NewGroupAdded_event_with_ParentGroupId_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .ParentGroupPublicKey.ShouldEqual(anotherRosterId);
+        It should_contains_group_with_ParentGroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .GetParent().PublicKey.ShouldEqual(anotherRosterId);
 
-        It should_raise_NewGroupAdded_event_with_Title_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .GroupText.ShouldEqual("title");
-
-        It should_raise_NewGroupAdded_event_with_ResponsibleId_specified = () =>
-            eventContext.GetSingleEvent<NewGroupAdded>()
-                .ResponsibleId.ShouldEqual(responsibleId);
+        It should_contains_group_with_Title_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .Title.ShouldEqual("title");
 
 
-        private static EventContext eventContext;
+
         private static Guid responsibleId;
         private static Guid groupId;
         private static Guid chapterId;

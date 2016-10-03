@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Designer.Views;
 using WB.UI.Designer.Code.Implementation;
 
 namespace WB.UI.Designer.Models
@@ -9,7 +10,7 @@ namespace WB.UI.Designer.Models
 
         public string Email { get; set; }
 
-        public Guid QuestionnaireId { get; set; }
+        public string QuestionnaireId { get; set; }
         public string QuestionnaireDisplayTitle { get; set; }
         public string ShareTypeName { get; set; }
         public string UserCallName { get; set; }

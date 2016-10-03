@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -72,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewData, TranslationSwitched>
     {
         private readonly IPlainStorageAccessor<UserDocument> users;
-        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public override object[] Readers
         {
@@ -86,13 +88,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return vector.CreateLeveKeyFromPropagationVector();
         }
 
-        private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId, QuestionnaireRosterStructure questionnarie)
+        private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId, Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
         {
-            foreach (var scopeId in questionnarie.RosterScopes.Keys)
+            foreach (var scopeId in rosterScopes.Keys)
             {
-                if (questionnarie.RosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.ContainsKey(groupId))
+                if (rosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.ContainsKey(groupId))
                 {
-                    return questionnarie.RosterScopes[scopeId];
+                    return rosterScopes[scopeId];
                 }
             }
 
@@ -291,12 +293,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewEventHandlerFunctional(
             IPlainStorageAccessor<UserDocument> users,
-            IReadSideKeyValueStorage<InterviewData> interviewData, 
-            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+            IReadSideKeyValueStorage<InterviewData> interviewData,
+            IQuestionnaireStorage questionnaireStorage)
             : base(interviewData)
         {
             this.users = users;
-            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewCreated> @event)
@@ -375,8 +377,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<RosterInstancesAdded> @event)
         {
-            var questionnarie = this.questionnaireRosterStructureStorage.GetById(
-                new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion).ToString());
+            var questionnarie = this.questionnaireStorage.GetQuestionnaire(
+                new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion), null).GetRosterScopes();
 
             foreach (var instance in @event.Payload.Instances)
             {
@@ -391,8 +393,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<RosterInstancesRemoved> @event)
         {
-            var questionnarie = this.questionnaireRosterStructureStorage.GetById(
-               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion).ToString());
+            var questionnarie = this.questionnaireStorage.GetQuestionnaire(
+               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion), null).GetRosterScopes();
 
             foreach (var instance in @event.Payload.Instances)
             {
@@ -408,11 +410,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<GroupPropagated> @event)
         {
-            var questionnarie = this.questionnaireRosterStructureStorage.GetById(
-               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion).ToString());
+            var questionnarie = this.questionnaireStorage.GetQuestionnaire(
+               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion), null).GetRosterScopes();
 
-            var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state,
-                                                          @event.Payload.GroupId, questionnarie);
+            var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, @event.Payload.GroupId, questionnarie);
             List<string> keysOfLevelsByScope =
                 this.GetLevelsByScopeFromInterview(interview: state, scopeVector: scopeOfCurrentGroup.ScopeVector);
 

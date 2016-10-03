@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -45,24 +46,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
 
         Because of = () =>
         {
-            listModel.NewListItem = newListItemTitle;
-            listModel.ValueChangeCommand.Execute();
+            var textListAddNewItemViewModel = listModel.Answers.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
+
+            textListAddNewItemViewModel.Text = newListItemTitle;
+            textListAddNewItemViewModel.AddNewItemCommand.Execute();
         };
 
         It should_create_list_with_5_answers = () =>
-            listModel.Answers.Count.ShouldEqual(5);
+            answerViewModels.Count.ShouldEqual(5);
 
         It should_add_item_with_Title_equals_trimmed_newListItemTitle = () =>
-            listModel.Answers.Last().Title.ShouldEqual(newListItemTitle.Trim());
+            answerViewModels.Last().Title.ShouldEqual(newListItemTitle.Trim());
 
         It should_add_new_item_with_Value_equals_9 = () =>
-            listModel.Answers.Last().Value.ShouldEqual(9m);
+            answerViewModels.Last().Value.ShouldEqual(9m);
 
-        It should_set_IsAddNewItemVisible_flag_in_false = () =>
-            listModel.IsAddNewItemVisible.ShouldBeFalse();
-
-        It should_clear_NewListItem_field = () =>
-            listModel.NewListItem.ShouldBeEmpty();
+        It should_not_contain_add_new_item_view_model = () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
@@ -90,5 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         private static readonly string newListItemTitle = "   Hello World!      ";
+        private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();
     }
 }

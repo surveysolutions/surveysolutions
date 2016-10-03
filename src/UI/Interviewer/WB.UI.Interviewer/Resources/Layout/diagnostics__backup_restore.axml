@@ -75,5 +75,6 @@
               local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-        local:MvxBind="ShowProgress BackupRestore.IsBackupInProgress" />
+               android:indeterminateOnly="true"
+               local:MvxBind="Visible BackupRestore.IsBackupInProgress" />
 </LinearLayout>

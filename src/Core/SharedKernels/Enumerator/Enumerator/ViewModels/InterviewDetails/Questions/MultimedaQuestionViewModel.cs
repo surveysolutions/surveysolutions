@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MvvmCross.Platform;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.PictureChooser;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -22,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswerRemoved>,
+        ICompositeQuestion,
         IDisposable
     {
         private readonly Guid userId;
@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             IQuestionnaireStorage questionnaireStorage,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
+            QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
@@ -48,13 +49,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.eventRegistry = eventRegistry;
             this.questionnaireStorage = questionnaireStorage;
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
+            this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
         }
 
         public AnsweringViewModel Answering { get; private set; }
-
-        public QuestionStateViewModel<PictureQuestionAnswered> QuestionState { get; private set; }
 
         public byte[] Answer
         {
@@ -66,11 +66,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
+        public IMvxAsyncCommand RequestAnswerCommand => new MvxAsyncCommand(this.RequestAnswerAsync);
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
+
+        public QuestionInstructionViewModel InstructionViewModel { get; }
+
+        private readonly QuestionStateViewModel<PictureQuestionAnswered> questionState;
+        public IQuestionStateViewModel QuestionState => this.questionState;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
             this.questionIdentity = entityIdentity;
 
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
@@ -87,66 +95,54 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        public IMvxCommand RequestAnswerCommand
+        private async Task RequestAnswerAsync()
         {
-            get
+            var pictureFileName = this.GetPictureFileName();
+
+            var pictureChooserTask = Mvx.Resolve<IMvxPictureChooserTask>();
+            using (Stream pictureStream = await pictureChooserTask.TakePictureAsync(400, 95))
             {
-                return new MvxCommand(async () =>
+                if (pictureStream != null)
                 {
-                    var pictureFileName = this.GetPictureFileName();
+                    this.StorePictureFile(pictureStream, pictureFileName);
 
-                    var pictureChooserTask = Mvx.Resolve<IMvxPictureChooserTask>();
-                    using (Stream pictureStream = await pictureChooserTask.TakePictureAsync(400, 95))
+                    var command = new AnswerPictureQuestionCommand(
+                        this.interviewId,
+                        this.userId,
+                        this.questionIdentity.Id,
+                        this.questionIdentity.RosterVector,
+                        DateTime.UtcNow,
+                        pictureFileName);
+
+                    try
                     {
-                        if (pictureStream != null)
-                        {
-                            await this.StorePictureFileAsync(pictureStream, pictureFileName);
-
-                            var command = new AnswerPictureQuestionCommand(
-                                this.interviewId,
-                                this.userId,
-                                this.questionIdentity.Id,
-                                this.questionIdentity.RosterVector,
-                                DateTime.UtcNow,
-                                pictureFileName);
-
-                            try
-                            {
-                                await this.Answering.SendAnswerQuestionCommandAsync(command);
-                                this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
-                                this.QuestionState.Validity.ExecutedWithoutExceptions();
-                            }
-                            catch (InterviewException ex)
-                            {
-                                this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
-                                this.QuestionState.Validity.ProcessException(ex);
-                            }
-                        }
+                        await this.Answering.SendAnswerQuestionCommandAsync(command);
+                        this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
                     }
-                });
+                    catch (InterviewException ex)
+                    {
+                        this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                        this.QuestionState.Validity.ProcessException(ex);
+                    }
+                }
             }
         }
 
-        public IMvxCommand RemoveAnswerCommand
+        private async Task RemoveAnswerAsync()
         {
-            get
+            try
             {
-                return new MvxCommand(async () =>
-                {
-                    try
-                    {
-                        await this.Answering.SendRemoveAnswerCommandAsync(
-                            new RemoveAnswerCommand(this.interviewId,
-                                this.userId, 
-                                this.questionIdentity,
-                                DateTime.UtcNow));
-                        this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    }
-                    catch (InterviewException exception)
-                    {
-                        this.QuestionState.Validity.ProcessException(exception);
-                    }
-                });
+                await this.Answering.SendRemoveAnswerCommandAsync(
+                    new RemoveAnswerCommand(this.interviewId,
+                        this.userId,
+                        this.questionIdentity,
+                        DateTime.UtcNow));
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException exception)
+            {
+                this.QuestionState.Validity.ProcessException(exception);
             }
         }
 
@@ -161,20 +157,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async Task StorePictureFileAsync(Stream pictureStream, string pictureFileName)
+        private void StorePictureFile(Stream pictureStream, string pictureFileName)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 pictureStream.CopyTo(ms);
                 byte[] pictureBytes = ms.ToArray();
-                await this.plainInterviewFileStorage.StoreInterviewBinaryDataAsync(this.interviewId, pictureFileName, pictureBytes);
+                this.plainInterviewFileStorage.StoreInterviewBinaryData(this.interviewId, pictureFileName, pictureBytes);
             }
         }
 
-        private string GetPictureFileName()
-        {
-            return String.Format("{0}{1}.jpg", this.variableName, string.Join("-", this.questionIdentity.RosterVector));
-        }
+        private string GetPictureFileName() => $"{this.variableName}{string.Join("-", this.questionIdentity.RosterVector)}.jpg";
 
         public void Dispose()
         {

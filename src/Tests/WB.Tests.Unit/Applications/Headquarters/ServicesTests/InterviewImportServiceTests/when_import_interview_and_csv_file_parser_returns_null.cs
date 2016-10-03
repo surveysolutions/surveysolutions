@@ -18,23 +18,21 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter();
             
-            var mockOfPreloadedDataRepository = new Mock<IPreloadedDataRepository>();
             var mockOfSamplePreloadingDataParsingService = new Mock<IInterviewImportDataParsingService>();
 
-            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetInterviewsImportData("sampleId", questionnaireIdentity))
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetInterviewsImportDataForSample("sampleId", questionnaireIdentity))
                 .Returns((InterviewImportData[])null);
 
             interviewImportService =
                 CreateInterviewImportService(
                     sampleImportSettings: new SampleImportSettings(1),
                     commandService: mockOfCommandService.Object,
-                    preloadedDataRepository: mockOfPreloadedDataRepository.Object,
                     interviewImportDataParsingService: mockOfSamplePreloadingDataParsingService.Object, 
                     questionnaireDocument: questionnaireDocument);
         };
 
         Because of = () => 
-            interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"));
+            interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId",false, null, Guid.Parse("22222222222222222222222222222222"));
 
         It should_in_progress_be_false = () =>
             interviewImportService.Status.IsInProgress.ShouldBeFalse();

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -143,9 +144,11 @@ namespace WB.UI.Headquarters.API
 
             var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             var result = new ProgressiveDownload(this.Request).ResultMessage(stream, "application/zip");
-
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileNameStar = HttpUtility.UrlEncode(fileSystemAccessor.GetFileName(filePath));
+            
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileNameStar = fileSystemAccessor.GetFileName(filePath)
+            };
 
             return result;
         }

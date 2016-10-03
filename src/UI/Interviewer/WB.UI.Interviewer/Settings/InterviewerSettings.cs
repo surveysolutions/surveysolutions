@@ -6,6 +6,7 @@ using Android.Content;
 using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
@@ -15,10 +16,10 @@ namespace WB.UI.Interviewer.Settings
 {
     internal class InterviewerSettings : IInterviewerSettings
     {
-        private readonly IAsyncPlainStorage<ApplicationSettingsView> settingsStorage;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
-        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IPlainStorage<ApplicationSettingsView> settingsStorage;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -27,12 +28,12 @@ namespace WB.UI.Interviewer.Settings
         private readonly string restoreFolder;
 
         public InterviewerSettings(
-            IAsyncPlainStorage<ApplicationSettingsView> settingsStorage, 
+            IPlainStorage<ApplicationSettingsView> settingsStorage, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider, 
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
-            IAsyncPlainStorage<InterviewView> interviewViewRepository, 
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository, 
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IPlainStorage<InterviewView> interviewViewRepository, 
+            IPlainStorage<QuestionnaireView> questionnaireViewRepository, 
             IFileSystemAccessor fileSystemAccessor,
             string backupFolder, 
             string restoreFolder)
@@ -88,7 +89,7 @@ namespace WB.UI.Interviewer.Settings
         public string GetDeviceTechnicalInformation()
         {
             var interviewIds = string.Join(","+ Environment.NewLine, this.interviewViewRepository.LoadAll().Select(i => i.InterviewId));
-            var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.LoadAll().Select(i => i.Identity));
+            var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.LoadAll().Select(i => i.Id));
 
             return $"Version:{this.GetApplicationVersionName()} {Environment.NewLine}" +
                    $"SyncProtocolVersion:{this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +
@@ -107,9 +108,9 @@ namespace WB.UI.Interviewer.Settings
                    $"InterviewsList:{interviewIds}";
         }
 
-        public async Task SetEventChunkSize(int eventChunkSize)
+        public void SetEventChunkSize(int eventChunkSize)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.EventChunkSize = eventChunkSize;
             });
@@ -120,49 +121,49 @@ namespace WB.UI.Interviewer.Settings
             return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
         }
 
-        public async Task SetEndpointAsync(string endpoint)
+        public void SetEndpoint(string endpoint)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.Endpoint = endpoint;
             });
         }
 
-        public async Task SetHttpResponseTimeoutAsync(int timeout)
+        public void SetHttpResponseTimeout(int timeout)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.HttpResponseTimeoutInSec = timeout;
             });
         }
 
-        public async Task SetGpsResponseTimeoutAsync(int timeout)
+        public void SetGpsResponseTimeout(int timeout)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.GpsResponseTimeoutInSec = timeout;
             });
         }
 
-        public async Task SetGpsDesiredAccuracy(double value)
+        public void SetGpsDesiredAccuracy(double value)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.GpsDesiredAccuracy = value;
             });
         }
 
-        public async Task SetCommunicationBufferSize(int bufferSize)
+        public void SetCommunicationBufferSize(int bufferSize)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.CommunicationBufferSize = bufferSize;
             });
         }
 
-        public async Task SetVibrateOnErrorAsync(bool vibrateOnError)
+        public void SetVibrateOnError(bool vibrateOnError)
         {
-            await this.SaveCurrentSettings(settings =>
+            this.SaveCurrentSettings(settings =>
             {
                 settings.VibrateOnError = vibrateOnError;
             });
@@ -172,11 +173,11 @@ namespace WB.UI.Interviewer.Settings
 
         public string RestoreFolder => restoreFolder;
 
-        private async Task SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
+        private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
             var settings = this.CurrentSettings;
             onChanging(settings);
-            await this.settingsStorage.StoreAsync(settings);
+            this.settingsStorage.Store(settings);
         }
 
         private string GetUserInformation()

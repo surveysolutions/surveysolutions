@@ -668,9 +668,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Roster cannot have more than {0} child elements.
         /// </summary>
-        internal static string WB0068_RosterHasMoreThanAllowedChiledElements {
+        internal static string WB0068_RosterHasMoreThanAllowedChildElements {
             get {
-                return ResourceManager.GetString("WB0068_RosterHasMoreThanAllowedChiledElements", resourceCulture);
+                return ResourceManager.GetString("WB0068_RosterHasMoreThanAllowedChildElements", resourceCulture);
             }
         }
         
@@ -1315,11 +1315,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translations has duplicate names.
+        ///   Looks up a localized string similar to Translations have duplicate names.
         /// </summary>
-        internal static string WB0258_TranslationsHasDuplicatedNames {
+        internal static string WB0258_TranslationsHaveDuplicatedNames {
             get {
-                return ResourceManager.GetString("WB0258_TranslationsHasDuplicatedNames", resourceCulture);
+                return ResourceManager.GetString("WB0258_TranslationsHaveDuplicatedNames", resourceCulture);
             }
         }
         
@@ -1338,6 +1338,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0260_GroupTitleIsTooLong {
             get {
                 return ResourceManager.GetString("WB0260_GroupTitleIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire contains rosters that cumulative size is not allowed..
+        /// </summary>
+        internal static string WB0261_RosterStructureTooExplosive {
+            get {
+                return ResourceManager.GetString("WB0261_RosterStructureTooExplosive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster has reached size limit. Reduce roster size or decrease nesting..
+        /// </summary>
+        internal static string WB0262_RosterHasTooBigPropagation {
+            get {
+                return ResourceManager.GetString("WB0262_RosterHasTooBigPropagation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First chapter can not have enabling condition..
+        /// </summary>
+        internal static string WB0263_FirstChapterHasEnablingCondition {
+            get {
+                return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
             }
         }
     }

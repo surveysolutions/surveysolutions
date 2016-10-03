@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -16,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     {
         Establish context = () =>
         {
-            questionnaireView = CreateQuestionsAndGroupsCollectionViewWithBrokenLinks();
+            questionnaireView = CreateQuestionnaireDocumentWithBrokenLinks();
 
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
@@ -46,8 +48,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         private static QuestionnaireInfoFactory factory;
         private static List<QuestionnaireItemLink> result;
-        private static QuestionsAndGroupsCollectionView questionnaireView;
-        private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
+        private static QuestionnaireDocument questionnaireView;
+        private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid groupId = multiOptionRoster;
         private static Mock<IExpressionProcessor> expressionProcessorMock = new Mock<IExpressionProcessor>();

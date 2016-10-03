@@ -20,8 +20,6 @@
     </td>
     <td class="question-answer">
         @Html.Partial("ReadOnlyQuestionPartialView", Model)
-
-
         @if (!Model.IsValid)
         {
             <dl>
@@ -37,7 +35,6 @@
             </dl>
         }
     </td>
-
     <td class="comments col-sm-3">
         <dl class="@css("hidden", Model.Comments == null || Model.Comments.Count == 0)">
             @if (Model.Comments != null && Model.Comments.Count > 0)

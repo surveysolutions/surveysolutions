@@ -123,17 +123,18 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
             IEnumerable<Action<IAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
+            IEnumerable<Action<IAggregateRoot, ICommand>> postProcessors = CommandRegistry.GetPostProcessors(command, this.serviceLocator);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
             switch (aggregateKind)
             {
                 case AggregateKind.EventSourced:
-                    this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
+                    this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, postProcessors, commandHandler, cancellationToken);
                     break;
 
                 case AggregateKind.Plain:
-                    this.ExecutePlainCommand(command, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
+                    this.ExecutePlainCommand(command, aggregateType, aggregateId, validators, postProcessors, commandHandler, cancellationToken);
                     break;
 
                 default:
@@ -143,6 +144,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         private void ExecuteEventSourcedCommand(ICommand command, string origin,
             Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
+            IEnumerable<Action<IAggregateRoot, ICommand>> postProcessors,
             Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
         {
             IEventSourcedAggregateRoot aggregate;
@@ -187,6 +189,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             try
             {
                 this.eventBus.PublishCommittedEvents(commitedEvents);
+
+                foreach (Action<IAggregateRoot, ICommand> postProcessor in postProcessors)
+                {
+                    postProcessor.Invoke(aggregate, command);
+                }
             }
             finally
             {
@@ -196,6 +203,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         private void ExecutePlainCommand(ICommand command,
             Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
+            IEnumerable<Action<IAggregateRoot, ICommand>> postProcessors,
             Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
         {
             IPlainAggregateRoot aggregate = this.plainRepository.Get(aggregateType, aggregateId);
@@ -221,6 +229,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             commandHandler.Invoke(command, aggregate);
 
             this.plainRepository.Save(aggregate);
+
+            foreach (Action<IAggregateRoot, ICommand> postProcessor in postProcessors)
+            {
+                postProcessor.Invoke(aggregate, command);
+            }
         }
     }
 }

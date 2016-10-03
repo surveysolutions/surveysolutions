@@ -1,9 +1,9 @@
 using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
 {
@@ -16,32 +16,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.Edit, ownerId);
 
             updateMacro = Create.Command.UpdateMacro(questionnaireId, macroId, name, content, description, sharedPersonId);
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () => questionnaire.UpdateMacro(updateMacro);
 
-        It should_raise_MacroUpdated_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<MacroUpdated>().MacroId.ShouldEqual(macroId);
+        It should_contains_Macro_with_EntityId_specified = () =>
+            questionnaire.QuestionnaireDocument.Macros.ShouldContain(t => t.Key == macroId);
 
-        It should_raise_MacroUpdated_event_with_ResponsibleId_specified = () =>
-            eventContext.GetSingleEvent<MacroUpdated>().ResponsibleId.ShouldEqual(sharedPersonId);
+        It should_contains_Macro_with_Name_specified = () =>
+            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Name.ShouldEqual(name);
 
-        It should_raise_MacroUpdated_event_with_Name_specified = () =>
-            eventContext.GetSingleEvent<MacroUpdated>().Name.ShouldEqual(name);
+        It should_contains_Macro_with_Content_specified = () =>
+            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Content.ShouldEqual(content);
 
-        It should_raise_MacroUpdated_event_with_Content_specified = () =>
-            eventContext.GetSingleEvent<MacroUpdated>().Content.ShouldEqual(content);
-
-        It should_raise_MacroUpdated_event_with_Description_specified = () =>
-            eventContext.GetSingleEvent<MacroUpdated>().Description.ShouldEqual(description);
+        It should_contains_Macro_with_Description_specified = () =>
+            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Description.ShouldEqual(description);
 
         private static UpdateMacro updateMacro;
         private static Questionnaire questionnaire;
@@ -52,6 +42,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
         private static readonly Guid sharedPersonId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid macroId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static EventContext eventContext;
     }
 }

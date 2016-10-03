@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IAnswerToStringService answerToStringService;
         protected readonly IPrincipal principal;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
+        private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
 
         public CoverStateViewModel InterviewState { get; set; }
         public DynamicTextViewModel Name { get; }
@@ -36,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
             IAnswerToStringService answerToStringService, 
-            IEntitiesListViewModelFactory entitiesListViewModelFactory)
+            IEntitiesListViewModelFactory entitiesListViewModelFactory, 
+            IDynamicTextViewModelFactory dynamicTextViewModelFactory)
         {
             this.commandService = commandService;
             this.principal = principal;
@@ -47,6 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
+            this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
 
         public string QuestionnaireTitle { get; set; }
@@ -83,11 +87,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Where(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates)
                 .Select(questionId => new CoverPrefilledQuestion
                 {
-                    Question = questionnaire.GetQuestionTitle(questionId),
+                    Question = this.CreateQuestionTitle(interviewId, new Identity(questionId, RosterVector.Empty), questionnaire.GetQuestionTitle(questionId)),
                     Answer = this.GetAnswer(questionnaire, interview, questionId)
                 })
                 .ToList();
-
+           
             this.HasPrefilledQuestions = this.PrefilledQuestions.Any();
 
             this.CountOfCommentedQuestions = interview.CountCommentedQuestions();
@@ -100,6 +104,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.SupervisorNote = interview.GetLastSupervisorComment();
         }
 
+        private DynamicTextViewModel CreateQuestionTitle(string interviewId, Identity entityIdentity, string textWithSubstitutions)
+        {
+            var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
+
+            title.Init(interviewId, entityIdentity, textWithSubstitutions);
+
+            return title;
+        }
 
         private Identity firstSectionIdentity;
 

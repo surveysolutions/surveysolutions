@@ -3,7 +3,6 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
@@ -15,23 +14,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             addOrUpdateTranslation = Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", sharedPersonId);
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.Edit, ownerId);
-
-            eventContext = new EventContext();
         };
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         Because of = () => questionnaire.AddOrUpdateTranslation(addOrUpdateTranslation);
 
-        It should_raise_TranslationUpdated_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<TranslationUpdated>().TranslationId.ShouldEqual(translationId);
-
-        It should_raise_TranslationUpdated_event_with_ResponsibleId_specified = () =>
-            eventContext.GetSingleEvent<TranslationUpdated>().ResponsibleId.ShouldEqual(sharedPersonId);
+        It should_contains_Translation_with_EntityId_specified = () =>
+            questionnaire.QuestionnaireDocument.Translations.ShouldContain(t => t.Id == translationId);
 
         private static AddOrUpdateTranslation addOrUpdateTranslation;
         private static Questionnaire questionnaire;
@@ -39,6 +28,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
         private static readonly Guid sharedPersonId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid translationId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static EventContext eventContext;
     }
 }

@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -18,11 +18,13 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
+        ICompositeQuestionWithChildren,
         IInterviewEntityViewModel,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         IDisposable
@@ -33,6 +35,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IUserInteractionService userInteraction;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
+        private readonly QuestionInstructionViewModel instructionViewModel;
+        private readonly QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState;
+
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
@@ -40,7 +45,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool isRosterSizeQuestion;
         private bool areAnswersOrdered;
 
-        public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; private set; }
+        public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
+        public IQuestionStateViewModel QuestionState => this.questionState;
         public AnsweringViewModel Answering { get; private set; }
 
         public MultiOptionQuestionViewModel(
@@ -51,20 +57,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IUserInteractionService userInteraction,
             AnsweringViewModel answering,
-            FilteredOptionsViewModel filteredOptionsViewModel)
+            FilteredOptionsViewModel filteredOptionsViewModel, 
+            QuestionInstructionViewModel instructionViewModel)
         {
-            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(new List<MultiOptionQuestionOptionViewModel>());
-            this.QuestionState = questionStateViewModel;
+            this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
+            this.questionState = questionStateViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
             this.principal = principal;
             this.userInteraction = userInteraction;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
+            this.instructionViewModel = instructionViewModel;
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -72,7 +80,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.eventRegistry.Subscribe(this, interviewId);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.instructionViewModel.Init(interviewId, entityIdentity);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
@@ -95,10 +104,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
             MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(questionIdentity);
             var optionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select((x, index) => this.ToViewModel(x, existingAnswer, index))
+                .Select((x, index) => this.ToViewModel(x, existingAnswer))
                 .ToList();
 
-            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(optionViewModels);
+            this.Options.ForEach(x => x.DisposeIfDisposable());
+            this.Options.Clear();
+
+            optionViewModels.ForEach(x => this.Options.Add(x));
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -113,17 +125,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.filteredOptionsViewModel.Dispose();
             this.eventRegistry.Unsubscribe(this);
-            this.QuestionState.Dispose();
+            this.questionState.Dispose();
         }
 
-        public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
+        public CovariantObservableCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
 
-        public bool HasOptions
-        {
-            get { return true; }
-        }
+        public bool HasOptions => true;
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer, int answerIndex)
+        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {
@@ -131,12 +140,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Title = model.Title,
                 Checked = multiOptionAnswer != null &&
                           multiOptionAnswer.IsAnswered &&
-                          multiOptionAnswer.Answers.Any(x => model.Value == x)
+                          multiOptionAnswer.Answers.Any(x => model.Value == x),
             };
             var indexOfAnswer = Array.IndexOf(multiOptionAnswer.Answers ?? new decimal[]{}, model.Value);
 
             result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?) null;
-            result.QuestionState = this.QuestionState;
+            result.QuestionState = this.questionState;
 
             return result;
         }
@@ -215,6 +224,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     option.CheckedOrder = null;
                     option.Checked = false;
                 }
+            }
+        }
+
+        public IObservableCollection<ICompositeEntity> Children
+        {
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();
+                result.Add(new OptionBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState, true));
+                result.AddCollection(this.Options);
+                result.Add(new OptionBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState, false));
+                return result;
             }
         }
     }

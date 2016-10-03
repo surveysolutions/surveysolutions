@@ -3,7 +3,7 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
               style="@style/Interview_Question_Answer_Option_Background"
               android:orientation="horizontal"
-              local:MvxBind="BackgroundStyle ViewOptionStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+              local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered))">
   <TextView
     style="@style/Interview_Question_MultiOptionOrder"
     local:MvxBind="Text CheckedOrder; Visible CheckedOrder"/>

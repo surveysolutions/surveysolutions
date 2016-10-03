@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Mvc.Mailer;
+using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code.Implementation;
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.Designer.Applications.MailNotifierTests
                )), Times.Once);
        
         private static Guid responsibleId = Guid.Parse("23333333333333333333333333333333");
-        private static Guid questoinnaireId = Guid.Parse("13333333333333333333333333333333");
+        private static string questoinnaireId = "13333333333333333333333333333333";
         
         private static string receiverEmail = "test@example.com";
         private static string receiverName = "receiverName";

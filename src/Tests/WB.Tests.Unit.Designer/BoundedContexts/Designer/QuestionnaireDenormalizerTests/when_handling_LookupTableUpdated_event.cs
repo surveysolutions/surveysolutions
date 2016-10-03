@@ -1,11 +1,9 @@
 using System;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.LookupTables;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -18,13 +16,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             
             questionnaire = Create.QuestionnaireDocument(questionnaireId);
             
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage => storage.GetById(Moq.It.IsAny<string>()) == questionnaire);
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
-            denormalizer.Handle(Create.Event.MacroAdded(questionnaireId, entityId));
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
+            denormalizer.AddMacro(Create.Event.MacroAdded(questionnaireId, entityId));
         };
 
-        Because of = () => denormalizer.Handle(evnt);
+        Because of = () => denormalizer.UpdateLookupTable(evnt);
 
         It should_not_add_extra_lookup_table = () =>
             questionnaire.LookupTables.Count.ShouldEqual(1);
@@ -39,8 +35,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static readonly string name = "macros";
         private static readonly string fileName = "macros fileName";
-        private static QuestionnaireDenormalizer denormalizer;
+        private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
-        private static IPublishedEvent<LookupTableUpdated> evnt;
+        private static LookupTableUpdated evnt;
     }
 }

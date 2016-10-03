@@ -40,7 +40,7 @@
         var negativeSign = '-';
         var periodLength = 3;
         var split = val.toString().split(comma).join('').split('.');
-        var isNegative = split[0].startsWith(negativeSign);
+        var isNegative = _.startsWith(split[0], negativeSign);
         var numeric = isNegative ? split[0].substr(1) : split[0];
         var numericSign = isNegative ? negativeSign : '';
         var decimal = split.length > 1 ? period + split[1] : '';

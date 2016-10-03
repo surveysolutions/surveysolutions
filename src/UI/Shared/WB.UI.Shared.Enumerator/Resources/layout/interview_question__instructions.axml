@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_Question_Instruction"
-    local:MvxBind="Visible QuestionState.Header.Instruction">
+    local:MvxBind="Visible Instruction">
   <TextView style="@style/Interview_Question_Instruction_ShowInstruction"
-            local:MvxBind="Text Localization('Interview_Instruction_ShowInstruction'); Click QuestionState.Header.ShowInstructions; Visible QuestionState.Header.IsInstructionsHidden"/>
+            local:MvxBind="Text Localization('Interview_Instruction_ShowInstruction'); Click ShowInstructions; Visible IsInstructionsHidden"/>
   <TextView
       style="@style/Interview_Question_Instruction_Title"
-      local:MvxBind="Text Localization('Interview_Instruction_Title'); Visible Not(QuestionState.Header.IsInstructionsHidden)" />
+      local:MvxBind="Text Localization('Interview_Instruction_Title'); Visible Not(IsInstructionsHidden)" />
   <TextView
       style="@style/Interview_Question_Instruction_Details"
-      local:MvxBind="Text QuestionState.Header.Instruction; Visible Not(QuestionState.Header.IsInstructionsHidden)" />
+      local:MvxBind="Text Instruction; Visible Not(IsInstructionsHidden)" />
 </LinearLayout>

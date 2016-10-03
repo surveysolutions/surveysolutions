@@ -4,9 +4,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
@@ -30,14 +29,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
             @event = CreateGroupStoppedBeingARosterEvent(groupId: groupId);
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(writer
-                => writer.GetById(Moq.It.IsAny<string>()) == questionnaireDocument);
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireDocument);
         };
 
         Because of = () =>
-            denormalizer.Handle(@event);
+            denormalizer.RemoveRosterFlagFromGroup(@event);
 
         It should_set_group_IsRoster_property_to_false = () =>
             questionnaireDocument.GetGroup(groupId)
@@ -59,8 +55,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaireDocument.GetGroup(groupId)
                 .FixedRosterTitles.Length.ShouldEqual(0);
 
-        private static QuestionnaireDenormalizer denormalizer;
-        private static IPublishedEvent<GroupStoppedBeingARoster> @event;
+        private static Questionnaire denormalizer;
+        private static GroupStoppedBeingARoster @event;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid groupId;
     }

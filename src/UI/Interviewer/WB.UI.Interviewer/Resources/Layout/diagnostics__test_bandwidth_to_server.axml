@@ -44,5 +44,6 @@
   </LinearLayout>
 
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-       local:MvxBind="ShowProgress BandwidthTest.IsInProgress" />
+               android:indeterminateOnly="true"
+               local:MvxBind="Visible BandwidthTest.IsInProgress" />
 </LinearLayout>

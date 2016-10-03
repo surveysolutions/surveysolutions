@@ -4,42 +4,17 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
     internal class InterviewDataAndQuestionnaireMergerTestContext
     {
-        internal static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(QuestionnaireDocument document)
-        {
-            return new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1);
-        }
-
-        internal static QuestionnaireRosterStructure CreateQuestionnaireRosterStructureWithOneFixedRoster(Guid fixedRosterId)
-        {
-            return new QuestionnaireRosterStructure()
-            {
-                RosterScopes = new Dictionary<ValueVector<Guid>, RosterScopeDescription>()
-                {
-                    {
-                        new ValueVector<Guid> { fixedRosterId },
-                        new RosterScopeDescription(new ValueVector<Guid> { fixedRosterId }, string.Empty, RosterScopeType.Fixed, new Dictionary<Guid, RosterTitleQuestionDescription>()
-                        {
-                            { fixedRosterId, null }
-                        })
-                    }
-                }
-            };
-        }
-
+        
         internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector,
             decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions = null,
             Dictionary<Guid, string> rosterTitles = null, int? sortIndex = null, Dictionary<Guid, object> variables = null)
@@ -102,14 +77,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 g.RosterVector.SequenceEqual(questionRosterVector));
 
             return interviewGroupView?.Entities.OfType<InterviewStaticTextView>().FirstOrDefault(q => q.Id == staticTextId);
-        }
-
-        internal static ReferenceInfoForLinkedQuestions CreateQuestionnaireReferenceInfo(QuestionnaireDocument questionnaireDocument = null)
-        {
-            if (questionnaireDocument == null)
-                return new ReferenceInfoForLinkedQuestions();
-            questionnaireDocument.ConnectChildrenWithParent();
-            return new ReferenceInfoForLinkedQuestionsFactory().CreateReferenceInfoForLinkedQuestions(questionnaireDocument, 1);
         }
 
         internal static QuestionnaireDocument CreateQuestionnaireDocumentWithGroupAndFixedRoster(Guid groupId, string groupTitle, Guid fixedRosterId, string fixedRosterTitle, string[] rosterFixedTitles)

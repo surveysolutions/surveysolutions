@@ -295,19 +295,19 @@
     <value>Row</value>
   </data>
   <data name="VerifySampleData" xml:space="preserve">
-    <value>Verify sample data</value>
+    <value>Verify data</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
     <value>Other interview import process is running. Only one interview import process at a time is allowed.Wait until the process is finished and upload the sample again. Follow the link if you want to get more detailed progress information about the other import process.</value>
   </data>
   <data name="CreateSample" xml:space="preserve">
-    <value>Create sample from this data</value>
+    <value>Create interviews from this data</value>
   </data>
   <data name="SampleSuccess" xml:space="preserve">
-    <value>Sample import is successfully completed</value>
+    <value>Interview import is successfully completed</value>
   </data>
   <data name="SampleImportWithErrors" xml:space="preserve">
-    <value>Sample import is completed with errors</value>
+    <value>Interview import is completed with errors</value>
   </data>
   <data name="ImportStatus" xml:space="preserve">
     <value>Import status</value>
@@ -322,7 +322,7 @@
     <value>Download invalid interviews</value>
   </data>
   <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
-    <value>Responsible supervisor will be assigned automatically</value>
+    <value>Responsible will be assigned automatically</value>
   </data>
   <data name="VerifyPanelData" xml:space="preserve">
     <value>Verify panel data</value>

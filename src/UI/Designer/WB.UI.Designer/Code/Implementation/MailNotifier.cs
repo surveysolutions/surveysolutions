@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Mailers;
@@ -24,8 +26,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         private readonly ILogger logger;
         
-        public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType, string email, string userName, Guid questionnaireId, 
-            string questionnaireTitle, ShareType shareType, string actionPersonEmail)
+        public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string actionPersonEmail)
         {
             var message = this.Mailer.GetShareChangeNotificationEmail(
                                 new SharingNotificationModel
@@ -41,8 +42,7 @@ namespace WB.UI.Designer.Code.Implementation
             message.SendAsync().ContinueWith(exception => logger.Error("Sending failed: " + exception), TaskContinuationOptions.OnlyOnFaulted);
         }
         
-        public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, Guid questionnaireId, string questionnaireTitle,
-            ShareType shareType, string actionPersonEmail, string sharedWithPersonEmail)
+        public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string actionPersonEmail, string sharedWithPersonEmail)
         {
             var message = this.Mailer.GetOwnerShareChangeNotificationEmail(
                                 new SharingNotificationModel

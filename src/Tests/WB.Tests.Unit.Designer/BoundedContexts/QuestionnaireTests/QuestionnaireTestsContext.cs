@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -67,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId, expressionProcessor: expressionProcessor);
 
             groupId = groupId ?? Guid.NewGuid();
-            questionnaire.Apply(new NewGroupAdded
+            questionnaire.AddGroup(new NewGroupAdded
             {
                 PublicKey = groupId.Value,
                 ResponsibleId = responsibleId,
@@ -76,7 +75,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             if (isRoster)
             {
-                questionnaire.Apply(new GroupBecameARoster(responsibleId, groupId.Value));
+                questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId.Value));
             }
 
             return questionnaire;
@@ -87,7 +86,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
 
             Guid chapterId = mainChapterId ?? Guid.NewGuid();
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId, ResponsibleId = responsibleId, GroupText = "New section" });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId, ResponsibleId = responsibleId, GroupText = "New section" });
             AddQuestion(questionnaire, rosterSizeQuestionId, chapterId, responsibleId, QuestionType.MultyOption, "rosterSizeQuestion",
                 new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") });
             AddGroup(questionnaire, rosterGroupId, chapterId, "", responsibleId, rosterSizeQuestionId, isRoster: true);
@@ -191,7 +190,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             AddGroup(questionnaire, nonRosterGroupId, chapterId, "", responsibleId, null);
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
                 (
                     publicKey: autoQuestionId,
                     groupPublicKey: rosterId,
@@ -222,7 +221,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(rosterId,
                                                                                           secondGroup, responsibleId);
 
-            questionnaire.Apply(Create.Event.NewQuestionAdded
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
                 (
                     publicKey : autoQuestionId,
                     groupPublicKey : rosterId,
@@ -337,7 +336,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             if (depth > 0)
             {
                 Guid parentId = depth == 1 ? dippestGroupId : Guid.NewGuid();
-                questionnaire.Apply(new NewGroupAdded
+                questionnaire.AddGroup(new NewGroupAdded
                 {
                     PublicKey = parentId,
                     ResponsibleId = responsibleId,
@@ -349,7 +348,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     var groupId = (i == depth - 2) ? dippestGroupId : Guid.NewGuid();
 
                     AddGroup(questionnaire, groupId, parentId, "", responsibleId, null);
-                    //questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parentId });
                     
                     parentId = groupId;
                 }

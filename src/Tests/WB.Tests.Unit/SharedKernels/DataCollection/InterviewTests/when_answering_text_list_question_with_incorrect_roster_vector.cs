@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         new Tuple<decimal, string>(3, "Answer 3"),
                     }));
 
-        private It should_raise_InterviewException = () =>
+        It should_raise_InterviewException = () =>
             exception.ShouldBeOfExactType<InterviewException>();
 
         It should_throw_exception_with_message_containting__roster__ = () =>

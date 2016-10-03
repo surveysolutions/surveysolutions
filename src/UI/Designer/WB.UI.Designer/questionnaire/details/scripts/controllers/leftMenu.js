@@ -123,4 +123,8 @@
             $scope.$on('closeTranslations', function () {
                 closeAllPanel();
             });
+
+            $scope.$on('verifing', function () {
+                closeOpenPanelIfAny();
+            });
         });

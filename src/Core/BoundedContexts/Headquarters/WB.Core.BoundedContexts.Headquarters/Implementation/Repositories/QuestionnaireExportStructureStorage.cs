@@ -27,8 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             var cachedQuestionnaireExportStructure = this.cache.Get(idStringKey);
             if (cachedQuestionnaireExportStructure == null)
             {
-                cachedQuestionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(
-                    this.questionnaireStorage.GetQuestionnaireDocument(id), id.Version);
+                cachedQuestionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(id);
 
                 this.cache.Set(idStringKey, 
                     cachedQuestionnaireExportStructure,

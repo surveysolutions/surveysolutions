@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -11,6 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
         ILiteEventHandler<TAnswerEvent>,
+        IQuestionStateViewModel,
         IDisposable
         where TAnswerEvent : QuestionAnswered
     {
@@ -65,6 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Enablement.Init(interviewId, entityIdentity);
             this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
+            this.Header.ShowComments += this.ShowCommentsCommand;
         }
 
         private void AnswerRemoved(object sender, EventArgs eventArgs)
@@ -98,13 +98,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.IsAnswered = interview.WasAnswered(this.questionIdentity);
         }
 
-        private IMvxCommand showCommentEditorCommand;
-        public IMvxCommand ShowCommentEditorCommand
-        {
-            get { return this.showCommentEditorCommand ?? (this.showCommentEditorCommand = new MvxCommand(this.ShowCommentsCommand)); }
-        }
+        public IMvxCommand ShowCommentEditorCommand =>  new MvxCommand(() => this.ShowCommentsCommand(this, EventArgs.Empty));
 
-        private void ShowCommentsCommand()
+        private void ShowCommentsCommand(object sender, EventArgs eventArgs)
         {
             if (this.Enablement.Enabled)
             {
@@ -117,6 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry.Unsubscribe(this);
             this.Enablement.EntityEnabled -= this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved -= this.AnswerRemoved;
+            this.Header.ShowComments -= this.ShowCommentsCommand;
             Header.Dispose();
             Validity.Dispose();
             Enablement.Dispose();

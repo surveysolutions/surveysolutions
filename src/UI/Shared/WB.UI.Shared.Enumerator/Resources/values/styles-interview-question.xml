@@ -1,61 +1,85 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
   <style name="Interview_QuestionWithDivider" parent="VerticalFullWidthWrappingLayout">
     <item name="android:background">@drawable/question_background</item>
   </style>
 
-  <style name="Interview_DisabledQuestionWithDivider" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_DisabledQuestion">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
     <item name="android:background">@drawable/question_background_disabled</item>
   </style>
 
-  <style name="Interview_DisabledQuestion_Header" parent="Interview_Entity">
-    
-  </style>
-
   <style name="Interview_DisabledQuestion_Title" parent="Interview_Entity_Title" >
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    
     <item name="android:textColor">@color/disabledTextColor</item>
+
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_top</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
 
   <style name="Interview_Question" parent="Interview_Entity" />
-
-  <style name="Interview_Question_Header" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+  
+  <!--should be removed-->
+  <style name="Interview_Question_Header">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
   </style>
 
-  <style name="Interview_Question_Title" parent="Interview_Entity_Title" />
-
-  <style name="Interview_Question_Instruction" parent="Interview_Question_Header" />
-
-  <style name="Interview_Question_Instruction_Title">
-    <item name="android:layout_width">wrap_content</item>
+  <style name="Interview_Question_Title">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/question_title_text</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_top</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_top</item>
+  </style>
+
+  <style name="Interview_Question_Instruction" parent="Interview_Question_Header">
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
+  </style>
+
+  <style name="Interview_Question_Instruction_text_styles">
     <item name="android:fontFamily">Trebuchet</item>
     <item name="android:textSize">@dimen/textsize_12</item>
-    <item name="android:textColor">@color/instructions</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:letterSpacing">0.1</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_InputButton_DoublePadding</item>
+  </style>
+
+  <style name="Interview_Question_Instruction_Title"  parent="Interview_Question_Instruction_text_styles">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/instructions</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
   </style>
   
-  <style name="Interview_Question_Instruction_ShowInstruction" parent="Interview_Question_Instruction_Title">
-    <item name="android:layout_marginTop">@dimen/Interview_Question_InputButton_padding_old</item>
+  <style name="Interview_Question_Instruction_ShowInstruction" parent="Interview_Question_Instruction_text_styles">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">@color/show_instructions</item>
-    <item name="android:paddingTop">@dimen/Interview_Question_InputButton_padding_old</item>
-    <item name="android:paddingBottom">@dimen/Interview_Question_InputButton_padding_old</item>
+    <item name="android:paddingTop">@dimen/Interview_Entity_margin_vertical</item>
+    <item name="android:paddingBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
   
   <style name="Interview_Question_Instruction_Details">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">Arial</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Instructions_margin</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/btn_default</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Instructions_margin</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
 
   <style name="Interview_Question_Body" parent="VerticalFullWidthWrappingLayout">
@@ -64,7 +88,9 @@
   <style name="Interview_Question_Answer">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_gravity">center_horizontal</item>
+    
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_margin_top</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_margin_bottom</item>
   </style>
@@ -86,13 +112,17 @@
     <item name="android:layout_height">wrap_content</item>
   </style>
 
-  <style name="Interview_Question_Answer_TextEditor" parent="Interview_Question_Answer_Editor">
+  <style name="Interview_TextEditor" parent="Interview_Question_Answer_Editor">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
     <item name="android:focusable">true</item>
     <item name="android:focusableInTouchMode">true</item>
-    <item name="android:background">@drawable/question_text_question</item>
+    <item name="android:background">@drawable/text_editor_border</item>
     <item name="android:textCursorDrawable">@null</item>
+  </style>
+
+  <style name="Interview_Question_TextEditor" parent="Interview_Question_Answer_Editor">
+    <item name="android:background">@drawable/question_text_question</item>
   </style>
   
    <style name="Interview_Question_Answer_Text_Editor" >
@@ -128,7 +158,7 @@
     <item name="android:background">@drawable/question_text_question</item>
   </style>
   
-  <style name="Interview_Question_Answer_FilteredComboBox" parent="Interview_Question_Answer_TextEditor">
+  <style name="Interview_Question_Answer_FilteredComboBox" parent="Interview_Question_TextEditor">
     <item name="android:background">@null</item>
     <item name="android:completionThreshold">1</item>
     <item name="android:drawablePadding">@dimen/Interview_Question_Answer_FilteredComboBox_padding</item>
@@ -137,8 +167,7 @@
     <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
-   
-  </style>    
+  </style>
   
   <style name="Interview_Question_Answer_FilteredComboBox_Item" parent="Interview_Entity_BasicFont">
     <item name="android:layout_width">match_parent</item>
@@ -146,44 +175,38 @@
     <item name="android:textColor">@color/editorTextColor</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
-  </style>  
-  
+  </style>
+
   <style name="Interview_Question_Answer_FilteredComboBox_Item_Background">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
 
-  <style name="Interview_Question_Answer_Options" parent="VerticalFullWidthWrappingLayout" />
-
-  <style name="Interview_Question_Answer_Option" parent="Interview_Entity_BasicFont">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
-    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
-    <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:textColor">@drawable/question_option_text_color</item>
-    <item name="android:background">@drawable/question_option_background</item>
-  </style>
-
   <style name="Interview_Question_Answer_Option_Background">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Question_Answer_Option_margin_vertical</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Option_margin_horizontal</item>
-    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
+    
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
   </style>
 
+  <style name="Interview_Question_Answer_Option_Corner" parent="Interview_Question_Answer_Option_Background">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/Interview_Question_Answer_background_corners_radius</item>
+  </style>
+  
+  <style name="Interview_Question_MultiOptionOrder" parent="Interview_Entity_BasicFont">
+    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:gravity">center</item>
+  </style>
+    
   <style name="Interview_Question_Answer_Option_Input" parent="Interview_Entity_BasicFont">
-    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_width">@dimen/zero</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_weight">1</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
     <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
     <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
@@ -206,6 +229,7 @@
   <style name="Interview_Question_YesNo_Title" parent="Interview_Entity_BasicFont">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:paddingLeft">@dimen/Interview_Question_YesNo_paddingLeft</item>
     <item name="android:orientation">horizontal</item>
   </style> 
@@ -220,16 +244,6 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">@color/interview_question_yes_no</item>
   </style> 
-
-  <style name="Interview_Question_MultiOptionOrder" parent="Interview_Entity_BasicFont">
-    <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
-    <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">match_parent</item>
-    <item name="android:gravity">center</item>
-  </style>
 
   <style name="Interview_Question_Answer_List_Item">
     <item name="android:layout_width">match_parent</item>
@@ -263,7 +277,7 @@
     <item name="android:background">@drawable/delete_button</item>
   </style>
 
-  <style name="Interview_Question_Answer_List_NewItem_Editor" parent="Interview_Question_Answer_TextEditor">
+  <style name="Interview_Question_Answer_List_NewItem_Editor" parent="Interview_Question_TextEditor">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
     <item name="android:focusable">true</item>
@@ -347,17 +361,17 @@
   </style>
 
   <style name="Interview_Question_Errors">
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Question_Errors_margin_bottom</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
+    <item name="android:layout_marginBottom">@dimen/zero</item>
   </style>
 
   <style name="Interview_Question_Errors_Title" parent="FullWidthWrappingLayout">
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:letterSpacing">0.1</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_Errors_Title_margin_top</item>
   </style>
 
   <style name="Interview_Question_Errors_Details">
@@ -365,21 +379,21 @@
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Question_Errors_Details_margin_top</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_small_vertical</item>
   </style>
 
   <style name="Interview_Question_Comments">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>
     <item name="android:layout_marginTop">@dimen/zero</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_Element_margin_large_vertical</item>
   </style>
 
   <style name="Interview_Question_Comment_Item">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">@dimen/Interview_Comment_Item_margin_top</item>
   </style>
 
   <style name="Interview_Question_Comment_Editor">
@@ -395,8 +409,9 @@
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:letterSpacing">0.1</item>
-    <item name="android:textColor">@color/commentInterviewerTextColor</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Comment_Caption_margin_bottom</item>
+    <item name="android:textColor">@color/comment_from_interviewer</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_small_vertical</item>
   </style>
 
   <style name="Interview_Question_Comments_InterviewerDetails" parent="FullWidthWrappingLayout">
@@ -407,9 +422,19 @@
     <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
   </style>
 
-  <style name="Interview_Question_Comments_InterviewerDetails_Editor" parent="Interview_Question_Answer_TextEditor">
-    <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
-    <item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>
+  <style name="Interview_Question_Comments_InterviewerDetails_Editor">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/editorTextColor</item>
+    <item name="android:textColorHint">@color/editorHintTextColor</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:focusable">true</item>
+    <item name="android:focusableInTouchMode">true</item>
+    <item name="android:background">@drawable/question_comment_editor</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="android:padding">@dimen/Interview_Entity_Element_margin_horizontal</item>
   </style>
   
   <style name="Interview_Question_Divider" parent="Interview_Entity_Divider" />
@@ -417,14 +442,10 @@
   <style name="Interview_Question_Progress_Indicator" parent="android:Widget.ProgressBar.Horizontal">
     <item name="android:focusable">false</item>
     <item name="android:layout_height">@dimen/Interview_Question_Progress_Indicator_height</item>
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:keepScreenOn">false</item>    
-    <item name="android:progressDrawable">@drawable/question_save_answer_progress_bar_states</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:keepScreenOn">false</item>
     <item name="android:indeterminateDrawable">@drawable/question_save_answer_progress_bar</item>
-    <item name="android:minHeight">@dimen/Interview_Question_Progress_Indicator_height</item>
-    <item name="android:maxHeight">@dimen/Interview_Question_Progress_Indicator_height</item>
   </style>
-
 
   <style name="Interview_Previous_Group_Navigation_Layout">
     <item name="android:layout_height">wrap_content</item>

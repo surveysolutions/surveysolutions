@@ -1,9 +1,9 @@
 using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey: questionId,
                 groupPublicKey: chapterId,
                 questionText: "old title",
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 conditionExpression: "old condition",
                 responsibleId: responsibleId
             ));
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey: question1Id,
                 groupPublicKey: chapterId,
                 questionText: "old title",
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 conditionExpression: "old condition",
                 responsibleId: responsibleId
             ));
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
                 publicKey : question2Id,
                 groupPublicKey : chapterId,
                 questionText : "old title",

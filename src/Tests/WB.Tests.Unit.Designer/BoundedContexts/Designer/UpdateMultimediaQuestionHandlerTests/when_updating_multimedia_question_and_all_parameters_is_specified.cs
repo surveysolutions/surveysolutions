@@ -1,9 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -14,8 +13,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
                 questionType : QuestionType.Text,
                 publicKey : questionId,
                 groupPublicKey : chapterId,
@@ -25,7 +24,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
                 conditionExpression : "old condition",
                 responsibleId : responsibleId
             ));
-            eventContext = new EventContext();
         };
 
         Because of = () =>
@@ -34,40 +32,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
                     variableLabel: variableName, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions,
                     responsibleId: responsibleId, scope: QuestionScope.Interviewer, properties: Create.QuestionProperties());
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_MultimediaQuestionUpdated_event = () =>
-            eventContext.ShouldContainEvent<MultimediaQuestionUpdated>();
 
-        It should_raise_MultimediaQuestionUpdated_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
-                .QuestionId.ShouldEqual(questionId);
+        It should_contains_question_with_QuestionId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .PublicKey.ShouldEqual(questionId);
 
-        It should_raise_MultimediaQuestionUpdated_event_with_variable_name_specified = () =>
-            eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
-                .VariableName.ShouldEqual(variableName);
+        It should_contains_question_with_variable_name_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .VariableLabel.ShouldEqual(variableName);
 
-        It should_raise_MultimediaQuestionUpdated_event_with_title_specified = () =>
-            eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
-                .Title.ShouldEqual(title);
+        It should_contains_question_with_title_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .QuestionText.ShouldEqual(title);
 
-        It should_raise_MultimediaQuestionUpdated_event_with_condition_specified = () =>
-            eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
-                .EnablementCondition.ShouldEqual(condition);
+        It should_contains_question_with_condition_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
+                .ConditionExpression.ShouldEqual(condition);
 
-        It should_raise_MultimediaQuestionUpdated_event_with_hideIfDisabled_specified = () =>
-            eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
+        It should_contains_question_with_hideIfDisabled_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
-        It should_raise_MultimediaQuestionUpdated_event_with_instructions_specified = () =>
-            eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
+        It should_contains_question_with_instructions_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .Instructions.ShouldEqual(instructions);
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

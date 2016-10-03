@@ -151,10 +151,6 @@ namespace WB.UI.Interviewer
             kernel.Bind<InterviewerDashboardEventHandler>().ToSelf().InSingletonScope();
             kernel.Get<InterviewerDashboardEventHandler>();
 
-            kernel.Unbind<IEventTypeResolver>();
-            kernel.Bind<IEventTypeResolver>().ToConstant(new EventTypeResolver(typeof(InterviewActiveEvent).Assembly,
-                typeof(InterviewAnswersFromSyncPackageRestored).Assembly));
-            
             return kernel;
         }
 

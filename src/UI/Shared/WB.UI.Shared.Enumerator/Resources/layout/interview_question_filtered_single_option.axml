@@ -2,24 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <LinearLayout style="@style/Interview_Question">
-    <include layout="@layout/interview_question__title" />
-    <LinearLayout style="@style/Interview_Question_Body">
-      <include layout="@layout/interview_question__instructions" />
-      <LinearLayout style="@style/Interview_Question_Answer"
-        local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+  <LinearLayout style="@style/Interview_Question_Answer"
+                local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-        <LinearLayout android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:orientation="horizontal"
-                     local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-            <MvxAutoCompleteTextView
-              style="@style/Interview_Question_Answer_FilteredComboBox"
-              android:completionThreshold="1"
-              android:inputType="textVisiblePassword"
-              android:layout_weight="1"
-              local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
-              local:MvxBind="FocusValueChanged ValueChangeCommand; 
+    <MvxAutoCompleteTextView
+      style="@style/Interview_Question_Answer_FilteredComboBox"
+      android:completionThreshold="1"
+      android:inputType="textVisiblePassword"
+      android:layout_weight="1"
+      local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
+      local:MvxBind="FocusValueChanged ValueChangeCommand; 
                          Text DefaultText;
                          ItemsSource AutoCompleteSuggestions; 
                          PartialText FilterText; 
@@ -28,22 +20,17 @@
                          ShowPopupOnFocus .;
                          HidePopupOnDone .;
                          Watermark Localization('FilteredComboboxQuestion_Hint');" />
-          <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText);"
-                          style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
-            <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                         android:layout_gravity="right"
-                         android:layout_weight="0" android:duplicateParentState="true"
-                         local:MvxBind="Click RemoveAnswerCommand; 
+    <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible IsStringNotEmpty(FilterText);"
+                  style="@style/Interview_Question_Answer_Input_RemoveAnswerWrapper">
+      <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                   android:layout_gravity="right"
+                   android:layout_weight="0" android:duplicateParentState="true"
+                   local:MvxBind="Click RemoveAnswerCommand; 
                                       HideKeyboardOnClick .; " />
-          </LinearLayout>
-        </LinearLayout>
-      
-      </LinearLayout>
-      <include layout="@layout/interview_question__errors" />
-      <include layout="@layout/interview_question__comments" />
     </LinearLayout>
+
+
   </LinearLayout>
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress Answering.InProgress" />
-  <View style="@style/Interview_Question_Divider" />
+
+
 </LinearLayout>

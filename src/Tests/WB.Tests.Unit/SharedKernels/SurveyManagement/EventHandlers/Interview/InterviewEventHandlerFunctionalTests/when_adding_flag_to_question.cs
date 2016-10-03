@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using It = Machine.Specifications.It;
 
@@ -21,7 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         Because of = () => viewData = eventHandler.Update(viewData, CreatePublishableEvent(new FlagSetToAnswer(userId, questionId, new decimal[0])));
 
-        It should_mark_question_as_flagged = () => GetQuestion(questionId, viewData).IsFlagged().ShouldBeTrue();
+        It should_mark_question_as_flagged = 
+            () => GetQuestion(questionId, viewData).IsFlagged().ShouldBeTrue();
 
         static InterviewEventHandlerFunctional eventHandler;
         static InterviewData viewData;

@@ -1,12 +1,11 @@
 ﻿extern alias designer;
 using System;
 using Main.Core.Documents;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
+using TemplateImported = WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.TemplateImported;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -16,26 +15,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         public void SetUp()
         {
             AssemblyContext.SetupServiceLocator();
-        }
-
-        [Test]
-        public void CreateNewSnapshot_When_ArgumentIsNotNull_Then_TemplateImportedEventIsRised()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Guid responsibleId = Guid.NewGuid();
-                Guid sharedPersonWith = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-                questionnaire.Apply(new SharedPersonToQuestionnaireAdded() { PersonId = sharedPersonWith });
-                var newState = new QuestionnaireDocument();
-                // act
-                questionnaire.ImportQuestionnaire(responsibleId,newState);
-
-                // assert
-                Assert.That(GetSingleEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
-                Assert.That(questionnaire.CreateSnapshot().QuestionnaireDocument.SharedPersons.Contains(sharedPersonWith), Is.True);
-            }
         }
 
 

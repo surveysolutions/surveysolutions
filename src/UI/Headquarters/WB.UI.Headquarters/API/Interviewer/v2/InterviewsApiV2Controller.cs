@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [WriteToSyncLog(SynchronizationLogType.GetInterview)]
         public HttpResponseMessage Details(Guid id)
         {
-            var interviewDetails = this.interviewsFactory.GetInterviewDetails(id);
+            var interviewDetails = this.interviewsFactory.GetInProgressInterviewDetails(id);
             if (interviewDetails == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 

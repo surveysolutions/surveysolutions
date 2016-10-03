@@ -19,11 +19,11 @@ namespace WB.UI.Tester.Activities
         {
         }
 
-        protected override async void TriggerFirstNavigate()
+        protected override void TriggerFirstNavigate()
         {
-            await ClearAttachmentStorage().ConfigureAwait(false);
+            ClearAttachmentStorage();
 
-            await Mvx.Resolve<IAsyncPlainStorage<TranslationInstance>>().RemoveAllAsync().ConfigureAwait(false);
+            Mvx.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
 
             IPrincipal principal = Mvx.Resolve<IPrincipal>();
             IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
@@ -38,13 +38,13 @@ namespace WB.UI.Tester.Activities
             }
         }
 
-        private async Task ClearAttachmentStorage()
+        private void ClearAttachmentStorage()
         {
-            var attachmentContentMetadataStorage = Mvx.Resolve<IAsyncPlainStorage<AttachmentContentMetadata>>();
-            await attachmentContentMetadataStorage.RemoveAllAsync().ConfigureAwait(false);
+            var attachmentContentMetadataStorage = Mvx.Resolve<IPlainStorage<AttachmentContentMetadata>>();
+            attachmentContentMetadataStorage.RemoveAll();
 
-            var attachmentContentDataStorage = Mvx.Resolve<IAsyncPlainStorage<AttachmentContentData>>();
-            await attachmentContentDataStorage.RemoveAllAsync().ConfigureAwait(false);
+            var attachmentContentDataStorage = Mvx.Resolve<IPlainStorage<AttachmentContentData>>();
+            attachmentContentDataStorage.RemoveAll();
         }
     }
 }

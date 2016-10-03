@@ -1,11 +1,11 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -44,39 +44,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             // arrange
             Guid responsibleId = Guid.NewGuid();
+            var groupId = Guid.NewGuid();
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             string notEmptyNewTitle = "Some new title";
 
-            using (var eventContext = new EventContext())
-            {
-                // act
-                questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: responsibleId, title: notEmptyNewTitle, variableName: null, rosterSizeQuestionId: null,
-                    description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            // act
+            questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId: responsibleId, title: notEmptyNewTitle, variableName: null, rosterSizeQuestionId: null,
+                description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-                // assert
-                Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
-            }
+            // assert
+            Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Title, Is.EqualTo(notEmptyNewTitle));
         }
 
         [Test]
         public void NewAddGroup_When_parent_group_is_not_roster_Then_raised_NewAddGroup_event_contains_regular_group_id_as_parent()
         {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneNotRosterGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);
+            // arrange
+            var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            Guid responsibleId = Guid.NewGuid();
+            var groupId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneNotRosterGroup(groupId: parentRegularGroupId, responsibleId: responsibleId);
 
-                // act
-                questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null,
-                    description: null, condition: null, hideIfDisabled: false, parentGroupId: parentRegularGroupId, isRoster: false,
-                    rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+            // act
+            questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null,
+                description: null, condition: null, hideIfDisabled: false, parentGroupId: parentRegularGroupId, isRoster: false,
+                rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
-                // assert
-                Assert.That(GetLastEvent<NewGroupAdded>(eventContext).ParentGroupPublicKey, Is.EqualTo(parentRegularGroupId));
-            }
+            // assert
+            Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).GetParent().PublicKey, Is.EqualTo(parentRegularGroupId));
         }
 
         public void NewAddGroup_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown()
@@ -100,7 +96,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             // arrange
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
             var readOnlyUser = Guid.NewGuid();
-            questionnaire.Apply(new SharedPersonToQuestionnaireAdded()
+            questionnaire.AddSharedPersonToQuestionnaire(new SharedPersonToQuestionnaireAdded()
             {
                 PersonId = readOnlyUser,
                 ShareType = ShareType.View

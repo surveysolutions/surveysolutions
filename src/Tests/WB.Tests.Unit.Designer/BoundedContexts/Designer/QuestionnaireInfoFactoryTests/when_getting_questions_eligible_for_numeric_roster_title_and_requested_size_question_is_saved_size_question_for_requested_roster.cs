@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
@@ -15,17 +19,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
     {
         Establish context = () =>
         {
-            questionnaireView = Create.QuestionsAndGroupsCollectionView(
-                groups : new [] 
+            questionnaireView = Create.QuestionnaireDocument(Guid.NewGuid(),
+                Create.Roster(roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new List<IComposite>()
                 {
-                    Create.GroupAndRosterDetailsView(id: roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterScopeIds: new [] { rosterSizeQuestionId }),
-                    Create.GroupAndRosterDetailsView(id: roster2Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterScopeIds: new [] { rosterSizeQuestionId })
-                },
-                questions : new [] 
-                {
-                    Create.NumericDetailsView(rosterSizeQuestionId),
-                    Create.TextDetailsView(rosterTitleQuestionId, parentGroupId: roster1Id, rosterScopeIds: new [] { rosterSizeQuestionId })
-                }); 
+                    Create.TextQuestion(rosterTitleQuestionId),
+                }),
+                Create.Roster(roster2Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question),
+                Create.NumericIntegerQuestion(rosterSizeQuestionId)
+            ); 
 
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
@@ -45,8 +46,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
 
         private static QuestionnaireInfoFactory factory;
         private static List<DropdownQuestionView> result;
-        private static QuestionsAndGroupsCollectionView questionnaireView;
-        private static readonly Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
+        private static QuestionnaireDocument questionnaireView;
+        private static readonly Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
         private static string questionnaireId = "11111111111111111111111111111111";
         private static readonly Guid roster1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid roster2Id = Guid.Parse("22222222222222222222222222222222");

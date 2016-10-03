@@ -5,7 +5,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class MultiOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged
+    public class MultiOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity
     {
         private readonly MultiOptionLinkedQuestionViewModel questionViewModel;
 
@@ -34,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.checkedOrder; }
             set
             {
+                if (this.checkedOrder == value) return;
                 this.checkedOrder = value;
                 this.RaisePropertyChanged();
             }
@@ -44,6 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.@checked; }
             set
             {
+                if (this.@checked == value) return;
                 this.@checked = value;
                 this.CheckedTimeStamp = value ? DateTime.Now : DateTime.MinValue;
 

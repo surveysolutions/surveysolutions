@@ -130,9 +130,9 @@ namespace WB.Tests.Unit.Designer
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
 
-        public static IReadSideKeyValueStorage<QuestionnaireStateTracker> QuestionnaireStateTrackerForOneQuestionnaire()
+        public static IPlainKeyValueStorage<QuestionnaireStateTracker> QuestionnaireStateTrackerForOneQuestionnaire()
         {
-            return Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTracker>>(_ => 
+            return Mock.Of<IPlainKeyValueStorage<QuestionnaireStateTracker>>(_ => 
                 _.GetById(It.IsAny<string>()) == Create.QuestionnaireStateTacker());
         }
 

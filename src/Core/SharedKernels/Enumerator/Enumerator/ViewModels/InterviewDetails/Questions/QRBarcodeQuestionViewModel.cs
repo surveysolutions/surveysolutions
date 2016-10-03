@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -17,9 +15,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel, 
         ILiteEventHandler<AnswerRemoved>,
+        ICompositeQuestion,
         IDisposable
     {
-        public QuestionStateViewModel<QRBarcodeQuestionAnswered> QuestionState { get; private set; }
+        public IQuestionStateViewModel QuestionState
+        {
+            get { return this.questionState; }
+        }
+
+        public QuestionInstructionViewModel InstructionViewModel { get; set; }
         public AnsweringViewModel Answering { get; private set; }
         
         private bool isInProgress;
@@ -49,6 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Identity questionIdentity;
         private Guid interviewId;
+        private readonly QuestionStateViewModel<QRBarcodeQuestionAnswered> questionState;
 
         public QRBarcodeQuestionViewModel(
             IPrincipal principal,
@@ -56,6 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQRBarcodeScanService qrBarcodeScanService,
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
+            QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
@@ -63,7 +69,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.qrBarcodeScanService = qrBarcodeScanService;
             this.eventRegistry = eventRegistry;
 
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
+            this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
         }
 
@@ -79,7 +86,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             var answerModel = interview.GetQRBarcodeAnswer(entityIdentity);
             if (answerModel.IsAnswered)

@@ -34,6 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         {
             return new MultiOptionLinkedToQuestionQuestionViewModel(questionState ?? Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 answering ?? Mock.Of<AnsweringViewModel>(),
+                Mock.Of<QuestionInstructionViewModel>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 answerToStringService ?? Create.Service.AnswerToStringService(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
@@ -58,6 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(
                         x => x.Validity == Mock.Of<ValidityViewModel>()),
                     answering ?? Mock.Of<AnsweringViewModel>(),
+                    Mock.Of<QuestionInstructionViewModel>(),
                     interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                     questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                     userIdentity ??
