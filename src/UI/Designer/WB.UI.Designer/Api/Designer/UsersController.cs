@@ -47,6 +47,7 @@ namespace WB.UI.Designer.Api
 
         [HttpPost]
         [ApiValidationAntiForgeryToken]
+        [AllowAnonymous]
         public LoginResponseModel Login(LoginRequestModel model)
         {
             if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
