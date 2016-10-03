@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http.Controllers;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -1131,5 +1132,10 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();
+
+        public static CustomWebApiAuthorizeFilter CustomWebApiAuthorizeFilter()
+        {
+            return new CustomWebApiAuthorizeFilter();
+        }
     }
 }
