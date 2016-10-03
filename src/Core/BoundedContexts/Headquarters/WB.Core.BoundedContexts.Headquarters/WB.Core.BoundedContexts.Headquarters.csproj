@@ -297,7 +297,6 @@
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesService.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
-    <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Mappings\AttachmentContentMap.cs" />
     <Compile Include="Mappings\BrokenInterviewPackageMap.cs" />
     <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
