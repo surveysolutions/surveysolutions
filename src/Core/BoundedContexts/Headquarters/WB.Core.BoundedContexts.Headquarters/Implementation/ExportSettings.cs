@@ -1,5 +1,6 @@
 ﻿using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Security;
+using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation
@@ -8,25 +9,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
     {
         private ExportEncryptionSettings settingCache = null;
 
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
+
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> settingsStorage;
 
-        public ExportSettings(IPlainKeyValueStorage<ExportEncryptionSettings> settingsStorage)
+        public ExportSettings(
+            IPlainKeyValueStorage<ExportEncryptionSettings> settingsStorage, 
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.settingsStorage = settingsStorage;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         public bool EncryptionEnforced()
         {
             if (this.settingCache == null)
-                this.settingCache = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
-            
+            {
+                this.PlainTransactionManager.ExecuteInQueryTransaction(() =>
+                {
+                    this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
+                    {
+                        this.settingCache = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+                    });
+                });
+            }
+
             return this.settingCache != null && this.settingCache.IsEnabled;
         }
 
         public string GetPassword()
         {
             if (this.settingCache == null)
-                this.settingCache = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+            {
+                this.PlainTransactionManager.ExecuteInQueryTransaction(() =>
+                {
+                    this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
+                    {
+                        this.settingCache = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+                    });
+                });
+            }
 
             return this.settingCache != null ? this.settingCache.Value : string.Empty;
         }
