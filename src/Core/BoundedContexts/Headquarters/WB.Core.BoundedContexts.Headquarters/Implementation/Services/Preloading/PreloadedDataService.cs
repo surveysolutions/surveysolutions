@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -11,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -19,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading
@@ -27,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
     internal class PreloadedDataService : IPreloadedDataService
     {
         private readonly QuestionnaireExportStructure exportStructure;
-        private readonly QuestionnaireRosterStructure questionnaireRosterStructure;
+        private readonly Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes;
         private readonly QuestionnaireDocument questionnaireDocument;
         private readonly IQuestionDataParser dataParser;
         private readonly IUserViewFactory userViewFactory;
@@ -56,14 +53,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         }
 
 
-        public PreloadedDataService(QuestionnaireExportStructure exportStructure, 
-            QuestionnaireRosterStructure questionnaireRosterStructure,
+        public PreloadedDataService(QuestionnaireExportStructure exportStructure,
+            Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes,
             QuestionnaireDocument questionnaireDocument, 
             IQuestionDataParser dataParser,
             IUserViewFactory userViewFactory)
         {
             this.exportStructure = exportStructure;
-            this.questionnaireRosterStructure = questionnaireRosterStructure;
+            this.rosterScopes = rosterScopes;
             this.questionnaireDocument = questionnaireDocument;
             this.dataParser = dataParser;
             this.userViewFactory = userViewFactory;
@@ -83,10 +80,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (levelExportStructure == null)
                 return null;
 
-            if (!this.questionnaireRosterStructure.RosterScopes.ContainsKey(levelExportStructure.LevelScopeVector))
+            if (!this.rosterScopes.ContainsKey(levelExportStructure.LevelScopeVector))
                 return null;
 
-            var rosterScopeDescription = this.questionnaireRosterStructure.RosterScopes[levelExportStructure.LevelScopeVector];
+            var rosterScopeDescription = this.rosterScopes[levelExportStructure.LevelScopeVector];
 
             var parentLevel =
                 this.exportStructure.HeaderToLevelMap.Values.FirstOrDefault(
@@ -114,12 +111,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (row == null)
                 return null;
 
-            if (!this.questionnaireRosterStructure.RosterScopes.ContainsKey(levelScopeVector))
+            if (!this.rosterScopes.ContainsKey(levelScopeVector))
                 return null;
 
-            var rosterScopeDescription = this.questionnaireRosterStructure.RosterScopes[levelScopeVector];
+            var rosterScopeDescription = this.rosterScopes[levelScopeVector];
 
-            if (rosterScopeDescription.ScopeType == RosterScopeType.Fixed)
+            if (rosterScopeDescription.Type == RosterScopeType.Fixed)
             {
                 return this.GroupsCache.ContainsKey(levelScopeVector.Last()) 
                     ? this.GroupsCache[levelScopeVector.Last()].FixedRosterTitles.Select(x => x.Value).ToArray() 
@@ -138,17 +135,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (answerObject == null)
                 return new decimal[0];
 
-            if (rosterScopeDescription.ScopeType == RosterScopeType.Numeric)
+            if (rosterScopeDescription.Type == RosterScopeType.Numeric)
             {
                 return Enumerable.Range(0, (int)answerObject).Select(i => (decimal)i).ToArray();
             }
 
-            if (rosterScopeDescription.ScopeType == RosterScopeType.MultyOption)
+            if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
                 return answerObject as decimal[];
             }
 
-            if (rosterScopeDescription.ScopeType == RosterScopeType.TextList)
+            if (rosterScopeDescription.Type == RosterScopeType.TextList)
             {
                 return ((Tuple<decimal, string>[])answerObject).Select(a => a.Item1).ToArray();
             }
@@ -327,7 +324,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GroupsCache.Values.Any(g => g.RosterSizeQuestionId == question.PublicKey);
         }
 
-        public bool IsQuestionIsRosterSizeForLongRoster(Guid questionId)
+        public bool IsRosterSizeQuestionForLongRoster(Guid questionId)
         {
             IEnumerable<IGroup> rosters = this.GroupsCache.Values.Where(g => g.RosterSizeQuestionId == questionId);
             foreach (var roster in rosters)
@@ -342,9 +339,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     return false;
                 }
 
-                var hasNestedRosters = roster.TreeToEnumerableDepthFirst<IComposite>(group => group.Children)
-                    .Skip(1)
-                    .Any(x => (x as IGroup)?.IsRoster ?? false);
+                var hasNestedRosters = roster.Find<IGroup>(group => group.IsRoster).Any();
 
                 if (hasNestedRosters)
                     return false;
@@ -355,14 +350,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private IEnumerable<IGroup> GetParentGroups(IGroup roster)
         {
             var parent = roster.GetParent();
-            while (true)
+            while (!(parent is IQuestionnaireDocument))
             {
-                if (parent == null)
-                    yield break;
-
-                if (parent is QuestionnaireDocument)
-                    yield break;
-
                 yield return (IGroup)parent;
                 parent = parent.GetParent();
             }
@@ -432,8 +421,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var result = new Dictionary<Guid, object>();
 
             var rowWithoutMissingValues = row.Select(v =>
-                  v?.Replace(ExportedQuestion.MissingNumericQuestionValue, string.Empty)
-                    .Replace(ExportedQuestion.MissingStringQuestionValue, string.Empty))
+                  v?.Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty)
+                    .Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty))
                 .ToArray();
 
             foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
@@ -478,11 +467,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             if (levelExportStructure.LevelScopeVector.Length == 0)
                 children =
-                    this.questionnaireRosterStructure.RosterScopes.Values.Where(
+                    this.rosterScopes.Values.Where(
                         scope => scope.ScopeVector.Length == 1);
             else
                 children =
-                    this.questionnaireRosterStructure.RosterScopes.Values.Where(
+                    this.rosterScopes.Values.Where(
                         scope =>
                             scope.ScopeVector.Length == levelExportStructure.LevelScopeVector.Length + 1 &&
                                 scope.ScopeVector.Take(levelExportStructure.LevelScopeVector.Length)

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTests
 {
@@ -27,7 +27,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                     Create.StaticText(staticTextId: staticTextId, text:text)
                     
                 }));
-            eventContext = new EventContext();
 
             command = new PasteAfter(
                questionnaireId: questionnaireId,
@@ -43,15 +42,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         Because of = () => 
             questionnaire.PasteAfter(command);
 
-        private It should_clone_MaxAnswerCount_value =
-            () => eventContext.ShouldContainEvent<StaticTextCloned>();
+        It should_clone_MaxAnswerCount_value = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId).ShouldNotBeNull();
 
-        It should_raise_QuestionCloned_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<StaticTextCloned>()
-                .EntityId.ShouldEqual(targetId);
+        It should_raise_QuestionCloned_event_with_PublicKey_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId)
+                .PublicKey.ShouldEqual(targetId);
 
         It should_raise_QuestionCloned_event_with_stataExportCaption_specified = () =>
-            eventContext.GetSingleEvent<StaticTextCloned>()
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId)
                 .Text.ShouldEqual(text);
 
         static Questionnaire questionnaire;
@@ -59,7 +58,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 
         static Guid sourceQuestionaireId;
         static Guid staticTextId = Guid.Parse("44DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        static EventContext eventContext;
         static Guid responsibleId;
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string text = "varrr";

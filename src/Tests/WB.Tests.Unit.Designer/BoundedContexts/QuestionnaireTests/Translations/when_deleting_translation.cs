@@ -2,7 +2,6 @@ using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Translation;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
@@ -15,29 +14,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", responsibleId));
 
             deleteTranslation = Create.Command.DeleteTranslation(questionnaireId, translationId, responsibleId);
-
-            eventContext = new EventContext();
-        };
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
         };
 
         Because of = () => questionnaire.DeleteTranslation(deleteTranslation);
 
-        It should_raise_TranslationDeleted_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<TranslationDeleted>().TranslationId.ShouldEqual(translationId);
-
-        It should_raise_TranslationDeleted_event_with_ResponsibleId_specified = () =>
-            eventContext.GetSingleEvent<TranslationDeleted>().ResponsibleId.ShouldEqual(responsibleId);
+        It should_doesnt_contain_Translation_with_EntityId_specified = () =>
+            questionnaire.QuestionnaireDocument.Translations.ShouldNotContain(t => t.Id == translationId);
 
         private static DeleteTranslation deleteTranslation;
         private static Questionnaire questionnaire;
         private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid translationId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static EventContext eventContext;
     }
 }

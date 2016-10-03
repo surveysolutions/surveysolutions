@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
@@ -18,31 +17,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             
-            questionnaire.Apply(Create.Event.NewQuestionAdded (publicKey : questionId, groupPublicKey : chapterId, questionType : QuestionType.Text ));
-
-            eventContext = new EventContext();
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded (publicKey : questionId, groupPublicKey : chapterId, questionType : QuestionType.Text ));
         };
 
         Because of = () =>
             questionnaire.UpdateNumericQuestion(questionId, "title",
                 "var1",null, false, QuestionScope.Interviewer, null, false, null, properties: Create.QuestionProperties(), responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>());
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_NumericQuestionChanged_event = () =>
-            eventContext.ShouldContainEvent<NumericQuestionChanged>();
+        It should_contains_question = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ShouldNotBeNull();
 
-        It should_raise_NumericQuestionChanged_event_with_PublicKey_equal_to_question_id = () =>
-            eventContext.GetSingleEvent<NumericQuestionChanged>()
+        It should_contains_question_with_PublicKey_equal_to_question_id = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
                 .PublicKey.ShouldEqual(questionId);
 
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid questionId;
         private static Guid chapterId;

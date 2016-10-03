@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -19,20 +18,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         [Test]
         public void DeleteGroup_When_group_public_key_specified_Then_raised_GroupDeleted_event_with_same_group_public_key()
         {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Guid groupPublicKey = Guid.NewGuid();
-                Guid responsibleId = Guid.NewGuid();
-                Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupPublicKey, responsibleId: responsibleId);
+            // arrange
+            Guid groupPublicKey = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupPublicKey, responsibleId: responsibleId);
 
-                // act
-                Guid parentPublicKey = Guid.NewGuid();
-                questionnaire.DeleteGroup(groupPublicKey, responsibleId: responsibleId);
+            // act
+            Guid parentPublicKey = Guid.NewGuid();
+            questionnaire.DeleteGroup(groupPublicKey, responsibleId: responsibleId);
 
-                // assert
-                Assert.That(GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
-            }
+            // assert
+            Assert.That(questionnaire.QuestionnaireDocument.Find<IGroup>(groupPublicKey), Is.Null);
         }
 
         [Test]

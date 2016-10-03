@@ -4,10 +4,13 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using It = Machine.Specifications.It;
 
@@ -30,12 +33,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             };
 
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
-            questionnarie = CreateQuestionnaireDocumentWith1PropagationLevel();
-            exportViewFactory = CreateExportViewFactory();
+            questionnaire = CreateQuestionnaireDocumentWith1PropagationLevel();
+
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaire, 1, null));
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
         };
 
         Because of = () =>
-            result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
+            result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
                 CreateInterviewDataWith2PropagatedLevels());
 
         It should_records_count_equals_4 = () =>
@@ -98,7 +105,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static Guid secondQuestionId;
         private static Guid firstQuestionId;
         private static int levelCount;
-        private static QuestionnaireDocument questionnarie;
+        private static QuestionnaireDocument questionnaire;
         private static ExportViewFactory exportViewFactory;
     }
 }

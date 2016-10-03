@@ -6,7 +6,7 @@ using Ncqrs.Eventing.Storage;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using WB.Core.GenericSubdomains.Portable;
 
-using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
+using TemplateImported = WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.TemplateImported;
 using System;
 using Newtonsoft.Json;
 using WB.Infrastructure.Native.Storage;

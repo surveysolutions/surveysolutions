@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ActionUtils.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
+    <Compile Include="CustomCollections\OrderedAdditiveSet.cs" />
     <Compile Include="DecimalExtensions.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
@@ -130,12 +131,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Flurl, Version=1.0.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Flurl.1.0.10\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+    <Reference Include="Flurl, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Flurl.2.2.0\lib\portable40-net40+sl5+win8+wp8+wpa81\Flurl.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Flurl.Http, Version=0.6.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Flurl.Http.0.6.4\lib\portable-net45+sl50+win+wpa81+wp80\Flurl.Http.dll</HintPath>
+    <Reference Include="Flurl.Http, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Flurl.Http.1.0.1\lib\portable40-net45+sl5+win8+wp8+wpa81\Flurl.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

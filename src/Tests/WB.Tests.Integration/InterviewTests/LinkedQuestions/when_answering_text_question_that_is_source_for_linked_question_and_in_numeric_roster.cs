@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             {
                 Setup.MockedServiceLocator();
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Create.NumericIntegerQuestion(q1Id, variable: "q1"),
                     Create.Roster(rosterId, variable:"r1", rosterSizeQuestionId: q1Id, rosterTitleQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]

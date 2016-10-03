@@ -7,7 +7,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
-using IRecipientNotifier = WB.UI.Designer.Code.IRecipientNotifier;
+using IRecipientNotifier = WB.Core.BoundedContexts.Designer.Services.IRecipientNotifier;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
@@ -23,7 +23,7 @@ namespace WB.UI.Designer
         {
             //this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
-            this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
+            this.BindFilter<CustomAuthorizeFilter>(FilterScope.Global, 0).InSingletonScope();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
             this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());

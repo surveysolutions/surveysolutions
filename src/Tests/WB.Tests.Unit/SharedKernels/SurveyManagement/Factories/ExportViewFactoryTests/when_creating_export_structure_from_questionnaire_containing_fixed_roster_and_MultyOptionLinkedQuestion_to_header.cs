@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -32,11 +34,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                             QuestionType = QuestionType.MultyOption
                         }
                     }));
-            exportViewFactory = CreateExportViewFactory();
+
+
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaire, 1, null));
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
         };
 
         private Because of = () =>
-            questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
+            questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1));
 
         It should_create_header_with_2_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);

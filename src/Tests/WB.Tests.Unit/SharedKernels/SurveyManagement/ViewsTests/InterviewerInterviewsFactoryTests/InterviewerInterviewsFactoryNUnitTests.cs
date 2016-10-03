@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     synchronizationDtoFactory: interviewSynchronizationDtoFactoryMock.Object,
                     statusHistory: new[] {Create.Entity.CommentedStatusHistroyView()});
 
-            interviewerInterviewsFactory.GetInterviewDetails(interviewId);
+            interviewerInterviewsFactory.GetInProgressInterviewDetails(interviewId);
 
             interviewSynchronizationDtoFactoryMock.Verify(
                 x =>
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                                 timestamp: new DateTime(1984, 4, 17))
                         });
 
-            interviewerInterviewsFactory.GetInterviewDetails(interviewId);
+            interviewerInterviewsFactory.GetInProgressInterviewDetails(interviewId);
 
             interviewSynchronizationDtoFactoryMock.Verify(
                 x =>
@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                             Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor, "comment")
                         });
 
-            interviewerInterviewsFactory.GetInterviewDetails(interviewId);
+            interviewerInterviewsFactory.GetInProgressInterviewDetails(interviewId);
 
             interviewSynchronizationDtoFactoryMock.Verify(
                 x =>
@@ -108,7 +108,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                             Create.Entity.CommentedStatusHistroyView()
                         });
 
-            interviewerInterviewsFactory.GetInterviewDetails(interviewId);
+            interviewerInterviewsFactory.GetInProgressInterviewDetails(interviewId);
 
             interviewSynchronizationDtoFactoryMock.Verify(
                 x =>
@@ -137,9 +137,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                             Create.Entity.CommentedStatusHistroyView(InterviewStatus.Completed),
                         });
 
-            var result = interviewerInterviewsFactory.GetInterviewDetails(interviewId);
+            var result = interviewerInterviewsFactory.GetInProgressInterviewDetails(interviewId);
 
-            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
@@ -162,7 +162,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                             Create.Entity.CommentedStatusHistroyView(InterviewStatus.RejectedBySupervisor)
                         });
 
-            interviewerInterviewsFactory.GetInterviewDetails(interviewId);
+            interviewerInterviewsFactory.GetInProgressInterviewDetails(interviewId);
 
             interviewSynchronizationDtoFactoryMock.Verify(
                 x =>

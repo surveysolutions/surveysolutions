@@ -20,11 +20,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             Guid rosterSizeQuestionWithThirdRosteLevelId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                new NumericQuestion
+                new TextListQuestion()
                 {
                     PublicKey = rosterSizeQuestionId,
                     StataExportCaption = "var1",
-                    IsInteger = true
+                    QuestionType = QuestionType.TextList,
+                    MaxAnswerCount = 2
                 },
                 new NumericQuestion
                 {

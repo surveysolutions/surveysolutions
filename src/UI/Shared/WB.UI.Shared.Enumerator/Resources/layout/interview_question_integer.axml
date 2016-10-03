@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
-  style="@style/Interview_QuestionWithDivider"
-  local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <LinearLayout style="@style/Interview_Question">
-    <include layout="@layout/interview_question__title" />
-    <LinearLayout style="@style/Interview_Question_Body">
-      <include layout="@layout/interview_question__instructions" />
-      <LinearLayout style="@style/Interview_Question_Answer"
-        local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-        <LinearLayout  style="@style/Interview_Question_Border"
-                       local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
+  <LinearLayout style="@style/Interview_Question_Answer"
+                local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-          <NumericEditText style="@style/Interview_Question_Answer_Text_Editor"
-                           local:numbersOnly="true"
-                           local:MvxBind="UseGroupSeparator UseFormatting;
+    <NumericEditText style="@style/Interview_Question_Answer_Text_Editor"
+                     local:numbersOnly="true"
+                     local:MvxBind="UseGroupSeparator UseFormatting;
                                           Value Answer; 
                                           FocusValueChanged ValueChangeCommand; 
                                           Watermark Localization('IntegerQuestion_Hint');" />
-           <include layout="@layout/interview_question__remove_button_input" />
-        </LinearLayout>
-      </LinearLayout>
-      <include layout="@layout/interview_question__errors" />
-      <include layout="@layout/interview_question__comments" />
-    </LinearLayout>
+    <include layout="@layout/interview_question__remove_button_input" />
+
   </LinearLayout>
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress Answering.InProgress" />
-  <View style="@style/Interview_Question_Divider" />
 </LinearLayout>

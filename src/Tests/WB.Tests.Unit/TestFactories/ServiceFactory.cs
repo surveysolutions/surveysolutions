@@ -16,7 +16,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -35,6 +34,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -45,6 +45,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -52,6 +53,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
@@ -83,11 +85,14 @@ namespace WB.Tests.Unit.TestFactories
                 interviewReferencesStorage ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
 
         public InterviewerDashboardEventHandler DashboardDenormalizer(
-            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            ILiteEventRegistry liteEventRegistry = null)
+            ILiteEventRegistry liteEventRegistry = null,
+            IPlainStorage<PrefilledQuestionView> prefilledQuestions = null
+            )
             => new InterviewerDashboardEventHandler(
-                interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 liteEventRegistry ?? Mock.Of<ILiteEventRegistry>());
 
@@ -130,21 +135,22 @@ namespace WB.Tests.Unit.TestFactories
                 Mock.Of<IQuestionnaireTranslator>());
 
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
-            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null,
             IInterviewerEventStorage eventStore = null,
             ICommandService commandService = null,
-            IAsyncPlainStorage<QuestionnaireView> questionnaireRepository = null,
+            IPlainStorage<QuestionnaireView> questionnaireRepository = null,
             IInterviewerPrincipal principal = null,
             IJsonAllTypesSerializer synchronizationSerializer = null,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
             ISnapshotStoreWithCache snapshotStoreWithCache = null,
-            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
-            IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository = null)
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
+            IPlainStorage<InterviewFileView> interviewFileViewRepository = null)
             => new InterviewerInterviewAccessor(
-                questionnaireRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(),
-                interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
-                interviewMultimediaViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewMultimediaView>>(),
-                interviewFileViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewFileView>>(),
+                questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
+                Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                interviewMultimediaViewRepository ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
+                interviewFileViewRepository ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 eventStore ?? Mock.Of<IInterviewerEventStorage>(),
@@ -194,17 +200,19 @@ namespace WB.Tests.Unit.TestFactories
 
         public PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
             => new PreloadedDataService(
-                new ExportViewFactory(new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
-                    .CreateQuestionnaireExportStructure(questionnaire, 1),
-                new QuestionnaireRosterStructureFactory()
-                    .CreateQuestionnaireRosterStructure(questionnaire, 1),
+                new ExportViewFactory(new FileSystemIOAccessor(), 
+                                      new ExportQuestionService(), 
+                                      Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
+                                                                          _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaire, 1, null)))
+                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
+                new PlainQuestionnaire(questionnaire, 1, null).GetRosterScopes(), 
                 questionnaire,
                 new QuestionDataParser(),
                 new UserViewFactory(new TestPlainStorage<UserDocument>()));
 
-        public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
+        public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
-                questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
+                questionnaireDocumentViewRepository ?? Mock.Of<IPlainStorage<QuestionnaireDocumentView>>());
 
         public QuestionnaireNameValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)

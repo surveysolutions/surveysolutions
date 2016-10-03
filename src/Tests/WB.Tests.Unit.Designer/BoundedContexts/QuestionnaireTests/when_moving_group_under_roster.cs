@@ -1,8 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -11,36 +11,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, GroupText = "group to move", ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, GroupText = "group to move", ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parentRosterId));
         };
 
         Because of = () => questionnaire.MoveGroup(groupId, parentRosterId, targetIndex, responsibleId);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+        It should_contains_group = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
 
-        It should_raise_QuestionnaireItemMoved_event_with_GroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
+        It should_contains_group_with_GroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
                 .PublicKey.ShouldEqual(groupId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_ParentGroupId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-                .GroupKey.ShouldEqual(parentRosterId);
+        It should_contains_group_with_ParentGroupId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .GetParent().PublicKey.ShouldEqual(parentRosterId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_TargetIndex_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>()
-                .TargetIndex.ShouldEqual(targetIndex);
+        It should_contains_group_with_TargetIndex_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
+                .GetParent().Children[targetIndex].PublicKey.ShouldEqual(groupId);
 
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -48,6 +41,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private static Guid parentRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static int targetIndex = 0;
-        private static EventContext eventContext;
     }
 }

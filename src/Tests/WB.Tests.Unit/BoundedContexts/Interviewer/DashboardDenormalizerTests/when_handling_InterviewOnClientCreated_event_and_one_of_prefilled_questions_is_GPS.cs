@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -17,7 +17,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
     internal class when_handling_InterviewOnClientCreated_event_and_one_of_prefilled_questions_is_GPS
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             @event = Create.Event
                 .InterviewOnClientCreated(
@@ -35,31 +36,29 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 Mock.Of<IQuestionnaireStorage>(storage
                     => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaire);
 
-            var storeAsyncTask = new Task(() => { });
-            storeAsyncTask.Start();
-
-            var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer =>
+            var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer =>
             writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
-                .Setup(storage => storage.StoreAsync(it.IsAny<InterviewView>()))
-                .Callback<InterviewView>((view) => dashboardItem = view)
-                .Returns(storeAsyncTask);
+                .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
+                .Callback<InterviewView>(view => dashboardItem = view);
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
                 questionnaireStorage: questionnaireStorage);
-        };
+        }
 
-        Because of = () =>
+        [SetUp]
+        public void because_of () =>
             denormalizer.Handle(@event);
 
-        It should_store_prefilled_GPS_question_ID_to_result_dashboard_item = () =>
-            dashboardItem.GpsLocation.PrefilledQuestionId.ShouldEqual(prefilledGpsQuestionId);
+        [Test]
+        public void should_store_prefilled_GPS_question_ID_to_result_dashboard_item() =>
+            dashboardItem.LocationQuestionId.ShouldEqual(prefilledGpsQuestionId);
 
-        private static InterviewerDashboardEventHandler denormalizer;
-        private static IPublishedEvent<InterviewOnClientCreated> @event;
-        private static InterviewView dashboardItem;
-        private static Guid prefilledGpsQuestionId = Guid.Parse("11111111111111111111111111111111");
-        private static Guid interviewId = Guid.Parse("cccccccccccccccccccccccccccccccc");
+        static InterviewerDashboardEventHandler denormalizer;
+        static IPublishedEvent<InterviewOnClientCreated> @event;
+        static InterviewView dashboardItem;
+        static Guid prefilledGpsQuestionId = Guid.Parse("11111111111111111111111111111111");
+        static Guid interviewId = Guid.Parse("cccccccccccccccccccccccccccccccc");
     }
 }

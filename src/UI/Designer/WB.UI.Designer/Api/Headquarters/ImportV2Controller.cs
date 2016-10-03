@@ -54,7 +54,6 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpPost]
         [Route("Questionnaire")]
-        [LogImportAction]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));

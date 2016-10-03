@@ -26,19 +26,22 @@
                 case "SingleOption":
                     item.isFilteredCombobox = ko.observable(dto.Settings.IsFilteredCombobox || false);
                     item.selectedOption.extend({ required: true });
-                    item.answer = ko.computed(function () {
-                        var o = _.find(item.options(), function (option) {
-                            return item.selectedOption() == option.value();
+                    
+                    if (dto.Settings.IsFilteredCombobox) {
+                        item.selectedOption.extend({
+                            validation:[
+                            {
+                                validator: function (value, params) {
+                                    var opt = _.find(item.options(), function(option) {
+                                        return option.label() === value.label();
+                                    });
+
+                                    return !_.isUndefined(opt);
+                                },
+                                message: "Choose one of suggested values"
+                            }]
                         });
-                        return _.isEmpty(o) ? "" : o.label();
-                    });
-                    item.value = ko.observable().extend({
-                        equal: {
-                            params: item.answer,
-                            message: "Choose one of suggested values"
-                        },
-                        required: true
-                    });
+                    };
                     break;
                 case "MultyOption":
                     item.selectedOptions.extend({ notempty: true });

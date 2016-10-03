@@ -170,11 +170,6 @@
             };
 
             $scope.$on('openTranslations', function (scope, params) {
-
-                $rootScope.$broadcast("closeChaptersListRequested", {});
-                $rootScope.$broadcast("closeMacrosListRequested", {});
-                $rootScope.$broadcast("closeAttachmentsRequested", {});
-
                 $scope.unfold();
                 if (!_.isUndefined(params) && !_.isUndefined(params.focusOn)) {
                     setTimeout(function () { utilityService.focus("focusTranslation" + params.focusOn); }, 500);

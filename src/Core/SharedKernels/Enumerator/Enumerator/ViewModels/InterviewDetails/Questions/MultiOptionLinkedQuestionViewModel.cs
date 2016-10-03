@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -24,6 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public abstract class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IInterviewEntityViewModel,
+        ICompositeQuestionWithChildren,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -37,13 +39,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected Guid userId;
         protected Identity questionIdentity;
         protected bool areAnswersOrdered;
-        private ObservableCollection<MultiOptionLinkedQuestionOptionViewModel> options;
-        public QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> QuestionState { get; protected set; }
+        protected readonly QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState;
+        private OptionBorderViewModel<MultipleOptionsLinkedQuestionAnswered> optionsTopBorderViewModel;
+        private OptionBorderViewModel<MultipleOptionsLinkedQuestionAnswered> optionsBottomBorderViewModel;
+
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
         public AnsweringViewModel Answering { get; protected set; }
+        public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
         protected MultiOptionLinkedQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
+            QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity,
@@ -55,23 +63,41 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userIdentity = userIdentity;
             this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.QuestionState = questionState;
+            this.questionState = questionState;
             this.Answering = answering;
-            this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>();
+            this.InstructionViewModel = instructionViewModel;
+            this.Options = new CovariantObservableCollection<MultiOptionLinkedQuestionOptionViewModel>();
         }
 
         public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.eventRegistry.Subscribe(this, interviewId);
             this.questionIdentity = entityIdentity;
             this.userId = this.userIdentity.CurrentUserIdentity.UserId;
             this.interview = this.interviewRepository.Get(interviewId);
             this.interviewId = this.interview.Id;
             this.InitFromModel(this.questionnaireStorage.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language));
-            this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
+
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            var childViewModels = this.CreateOptions();
+
+            this.Options.Clear();
+            this.Options.CollectionChanged += (sender, args) =>
+            {
+                if (this.optionsTopBorderViewModel != null)
+                {
+                    this.optionsTopBorderViewModel.HasOptions = HasOptions;
+                }
+                if (this.optionsBottomBorderViewModel != null)
+                {
+                    this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
+                }
+            };
+            
+            childViewModels.ForEach(x => this.Options.Add(x));
         }
         protected abstract void InitFromModel(IQuestionnaire questionnaire);
         protected abstract IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions();
@@ -82,11 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Dispose();
         }
 
-        public ObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options
-        {
-            get { return this.options; }
-            private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions); }
-        }
+        public CovariantObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options { get; }
 
         public bool HasOptions => this.Options.Any();
 
@@ -157,5 +179,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.PutOrderOnOptions(@event);
             }
         }
+
+        public IObservableCollection<ICompositeEntity> Children
+        {
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();
+                this.optionsTopBorderViewModel = new OptionBorderViewModel<MultipleOptionsLinkedQuestionAnswered>(this.questionState, true)
+                {
+                    HasOptions = HasOptions
+                };
+                result.Add(this.optionsTopBorderViewModel);
+                result.AddCollection(this.Options);
+                this.optionsBottomBorderViewModel = new OptionBorderViewModel<MultipleOptionsLinkedQuestionAnswered>(this.questionState, false)
+                {
+                    HasOptions = HasOptions
+                };
+                result.Add(this.optionsBottomBorderViewModel);
+                return result;
+            }
+        }
+
     }
 }

@@ -7,19 +7,19 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
     internal class TesterPrincipal : IPrincipal
     {
-        private readonly IAsyncPlainStorage<TesterUserIdentity> usersStorage;
+        private readonly IPlainStorage<TesterUserIdentity> usersStorage;
         private TesterUserIdentity currentUserIdentity;
 
         public bool IsAuthenticated => this.currentUserIdentity != null;
         public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
 
-        public TesterPrincipal(IAsyncPlainStorage<TesterUserIdentity> usersStorage)
+        public TesterPrincipal(IPlainStorage<TesterUserIdentity> usersStorage)
         {
             this.usersStorage = usersStorage;
             this.currentUserIdentity = usersStorage.FirstOrDefault();
         }
 
-        public async Task<bool> SignInAsync(string userName, string password, bool staySignedIn)
+        public bool SignIn(string userName, string password, bool staySignedIn)
         {
             this.currentUserIdentity = new TesterUserIdentity
             {
@@ -31,7 +31,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
 
             if (staySignedIn)
             {
-                await this.usersStorage.StoreAsync(this.currentUserIdentity).ConfigureAwait(false);
+                this.usersStorage.Store(this.currentUserIdentity);
             }
 
             return this.IsAuthenticated;

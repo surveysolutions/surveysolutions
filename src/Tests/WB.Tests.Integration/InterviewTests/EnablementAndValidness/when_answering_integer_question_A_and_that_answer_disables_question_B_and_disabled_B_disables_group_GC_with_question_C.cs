@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 var questionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 var groupGCId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
-                var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(questionAId, "a"),
                     Create.NumericIntegerQuestion(questionBId, "b", enablementCondition: "a > 0"),
                     Create.Group(groupGCId, enablementCondition: "b > 0", children: new IComposite[] {

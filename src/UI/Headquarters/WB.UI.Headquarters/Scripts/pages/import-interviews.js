@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ImportInterviews = function (interviewImportProcessId, questionnaireId, questionnaireVersion, importInterviewsStatusUrl, importInterviewsUrl, responsiblesUrl, processUrl) {
+﻿Supervisor.VM.ImportInterviews = function (interviewImportProcessId, questionnaireId, questionnaireVersion, preloadingType, wasResponsibleProvided, importInterviewsStatusUrl, importInterviewsUrl, responsiblesUrl, processUrl) {
     Supervisor.VM.ImportInterviews.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -13,7 +13,9 @@
         isInProgress: ko.observable(false),
         questionnaireTitle: ko.observable(''),
         hasErrors: ko.observable(false),
-        interviewImportProcessId: ko.observable()
+        interviewImportProcessId: ko.observable(),
+        preloadingType: ko.observable(),
+        wasResponsibleProvided: ko.observable()
     };
     self.isResponsiblesLoading = ko.observable(false);
     self.responsibles = function (query, sync, pageSize) {
@@ -25,6 +27,10 @@
         });
     }
     self.selectedResponsible = ko.observable(undefined).extend({ required: { shouldValidateOnStart: false } });
+
+    self.IsSupervisorSelected = ko.computed(function () {
+        return !_.isUndefined(self.selectedResponsible());
+    });
 
     self.isStatusLoaded = ko.observable(false);
 
@@ -88,17 +94,14 @@
             questionnaireId: questionnaireId,
             questionnaireVersion: questionnaireVersion,
             supervisorId: _.isUndefined(self.selectedResponsible()) ? "" : self.selectedResponsible().UserId,
-            interviewImportProcessId: interviewImportProcessId
+            interviewImportProcessId: interviewImportProcessId,
+            preloadingType: preloadingType,
+            wasResponsibleProvided: wasResponsibleProvided
         };
 
         self.SendRequestWithFiles(importInterviewsUrl, request, function (response) {
             if (response.IsSupervisorRequired) {
                 self.selectedResponsible.isValid();
-                $("#dialogSelectSupervisor").modal({
-                    "backdrop": "static",
-                    "keyboard": true,
-                    "show": true
-                });
             }
         },
             function (response) {
@@ -106,13 +109,6 @@
             });
     }
 
-    self.selectSupervisor = function () {
-        self.importInterviews();
-        $('#dialogSelectSupervisor').modal('hide');
-    }
-
-    self.cancelSupervisorSelection = function () {
-        self.selectedResponsible(undefined);
-    }
+    
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ImportInterviews, Supervisor.VM.BasePage);

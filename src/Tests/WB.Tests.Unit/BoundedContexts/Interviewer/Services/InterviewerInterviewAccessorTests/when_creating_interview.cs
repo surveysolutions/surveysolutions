@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             var synchronizationSerializer = Mock.Of<IJsonAllTypesSerializer>(
                 x => x.Deserialize<InterviewSynchronizationDto>(Moq.It.IsAny<string>()) == new InterviewSynchronizationDto());
 
-            var quetstionnaireRepository = Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(x=>x.GetById(questionnaireId.ToString()) == questionnaireInfo);
+            var quetstionnaireRepository = Mock.Of<IPlainStorage<QuestionnaireView>>(x=>x.GetById(questionnaireId.ToString()) == questionnaireInfo);
 
             interviewerInterviewAccessor = Create.Service.InterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
@@ -52,7 +52,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static readonly QuestionnaireView questionnaireInfo = new QuestionnaireView
         {
             Id = questionnaireId.ToString(),
-            Identity = questionnaireId,
             Census = false
         };
         private static readonly InterviewApiView interviewInfo = new InterviewApiView

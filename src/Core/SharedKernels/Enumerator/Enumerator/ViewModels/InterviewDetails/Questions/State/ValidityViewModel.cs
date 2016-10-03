@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -22,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<StaticTextsDeclaredValid>,
         ILiteEventHandler<StaticTextsDeclaredInvalid>,
         ILiteEventHandler<QuestionsEnabled>,
+        ICompositeEntity,
         IDisposable
     {
         private readonly ILiteEventRegistry liteEventRegistry;

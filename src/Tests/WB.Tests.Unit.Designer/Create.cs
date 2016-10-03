@@ -11,8 +11,10 @@ using Moq;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
@@ -22,15 +24,18 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -345,7 +350,8 @@ namespace WB.Tests.Unit.Designer
             string variable = null,
             string enablementCondition = null,
             bool hideIfDisabled = false,
-            IEnumerable<IComposite> children = null)
+            IEnumerable<IComposite> children = null,
+            Guid? rosterSizeQuestionId = null)
         {
             return new Group(title)
             {
@@ -354,6 +360,7 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 Children = children != null ? children.ToList() : new List<IComposite>(),
+                RosterSizeQuestionId = rosterSizeQuestionId,
             };
         }
 
@@ -391,11 +398,11 @@ namespace WB.Tests.Unit.Designer
 
         public static LookupTableService LookupTableService(
             IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> documentStorage = null)
         {
             return new LookupTableService(
                 lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
+                documentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)
@@ -432,6 +439,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false, List<Answer> answersList = null,
+            string title = null,
             params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
@@ -446,14 +454,15 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
-                Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
+                Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                QuestionText = title,
             };
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
             string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null,
-            int? maxAllowedAnswers = null)
+            int? maxAllowedAnswers = null, string title = null)
         {
             return new MultyOptionsQuestion
             {
@@ -472,7 +481,8 @@ namespace WB.Tests.Unit.Designer
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
-            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
+            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
+            string title = null)
         {
             return new NumericQuestion
             {
@@ -487,10 +497,12 @@ namespace WB.Tests.Unit.Designer
                 Featured = isPrefilled,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
+                QuestionText = title
             };
         }
 
-        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null)
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null,
+            string title = null)
         {
             return new NumericQuestion
             {
@@ -500,7 +512,8 @@ namespace WB.Tests.Unit.Designer
                 IsInteger = false,
                 ConditionExpression = enablementCondition,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
-                ValidationExpression = validationExpression
+                ValidationExpression = validationExpression,
+                QuestionText = title
             };
         }
 
@@ -616,13 +629,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-        {
-            return new QuestionnaireDocument
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
-            };
-        }
+            => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X");
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
         {
@@ -630,13 +637,15 @@ namespace WB.Tests.Unit.Designer
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null, Guid? responsibleId = null)
         {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
+                Title = title,
+                CreatedBy = responsibleId ?? Guid.NewGuid()
             };
         }
 
@@ -660,7 +669,8 @@ namespace WB.Tests.Unit.Designer
             return QuestionnaireDocumentWithOneChapter(null, null, null, translations, children);
         }
         
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, Translation[] translations = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, 
+            Translation[] translations = null, params IComposite[] children)
         {
             var result = new QuestionnaireDocument { PublicKey = questionnaireId ?? Guid.NewGuid() };
             var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
@@ -784,7 +794,7 @@ namespace WB.Tests.Unit.Designer
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer,
             bool isFilteredCombobox = false, Guid? linkedToRosterId = null, string optionsFilter = null, bool isPrefilled = false,
-            string linkedFilter = null)
+            string linkedFilter = null, string title = null)
         {
             return new SingleQuestion
             {
@@ -801,7 +811,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionScope = scope,
                 IsFilteredCombobox = isFilteredCombobox,
                 Featured = isPrefilled,
-                Properties = {OptionsFilterExpression = optionsFilter}
+                Properties = {OptionsFilterExpression = optionsFilter},
+                QuestionText = title,
             };
         }
 
@@ -829,7 +840,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false)
+            int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false, string title = null)
         {
             return new TextListQuestion("Question TL")
             {
@@ -839,7 +850,8 @@ namespace WB.Tests.Unit.Designer
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
                 QuestionType = QuestionType.TextList,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                QuestionText = title,
             };
         }
 
@@ -871,7 +883,8 @@ namespace WB.Tests.Unit.Designer
                 Featured = preFilled,
                 VariableLabel = label,
                 Instructions = instruction,
-                ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage)
+                ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage),
+                
             };
         }
 
@@ -969,6 +982,15 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteAttachment(questionnaireId, attachmentId, responsibleId);
             }
 
+            public static UpdateGroup UpdateGroup(Guid questionnaireId, Guid groupId, Guid? responsibleId = null,
+                string title = null, string variableName = null, Guid? rosterSizeQuestionId = null,
+                string condition = null, bool hideIfDisabled = false, bool isRoster = false,
+                RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
+                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null)
+                => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
+                    rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId);
+
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, Guid? userId = null)
             {
                 return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression));
@@ -983,32 +1005,39 @@ namespace WB.Tests.Unit.Designer
             {
                 return new DeleteTranslation(questionnaireId, responsibleId, translationId);
             }
+
+            public static MoveGroup MoveGroup(Guid questionnaireId, Guid groupId, Guid responsibleId, Guid? targetGroupId = null, int? tagretIndex = null)
+                => new MoveGroup(questionnaireId, groupId, targetGroupId, tagretIndex ?? 0, responsibleId);
+
+            public static MoveStaticText MoveStaticText(Guid questionnaireId, Guid staticTextId, Guid responsibleId,
+                Guid? targetGroupId = null, int? tagretIndex = null)
+                => new MoveStaticText(questionnaireId, staticTextId, targetGroupId ?? Guid.NewGuid(), tagretIndex ?? 0,
+                    responsibleId);
+
+            public static MoveVariable MoveVariable(Guid questionnaireId, Guid variableId, Guid responsibleId,
+                Guid? targetGroupId = null, int? tagretIndex = null)
+                => new MoveVariable(questionnaireId, variableId, targetGroupId ?? Guid.NewGuid(), tagretIndex ?? 0,
+                    responsibleId);
+
+            public static MoveQuestion MoveQuestion(Guid questionnaireId, Guid questionId, Guid responsibleId,
+                Guid? targetGroupId = null, int? targetIndex = null)
+                => new MoveQuestion(questionnaireId, questionId, targetGroupId ?? Guid.NewGuid(), targetIndex ?? 0,
+                    responsibleId);
+
+            public static ImportQuestionnaire ImportQuestionnaire(QuestionnaireDocument questionnaireDocument)
+                => new ImportQuestionnaire(Guid.NewGuid(), questionnaireDocument);
+
+            public static PasteAfter PasteAfter(Guid questionnaireId, Guid entityId, Guid itemToPasteAfterId, 
+                Guid sourceQuestionnaireId, Guid sourceItemId, Guid responsibleId) 
+                => new PasteAfter(questionnaireId, entityId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, responsibleId);
+
+            public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
+                => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
         {
             return new ValidationCondition(expression, message);
-        }
-
-        public static CommandPostprocessor CommandPostprocessor(
-            IMembershipUserService membershipUserService,
-            IRecipientNotifier recipientNotifier,
-            IAccountRepository accountRepository,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
-            ILogger logger,
-            IAttachmentService attachmentService = null,
-            ILookupTableService lookupTableService = null,
-            ITranslationsService translationsService = null)
-        {
-            return new CommandPostprocessor(
-               membershipUserService,
-               recipientNotifier,
-               accountRepository,
-               documentStorage,
-               logger,
-               attachmentService ?? Mock.Of<IAttachmentService>(),
-               lookupTableService ?? Mock.Of<ILookupTableService>(),
-               translationsService ?? Mock.Of<ITranslationsService>());
         }
 
         public static AttachmentService AttachmentService(
@@ -1080,58 +1109,11 @@ namespace WB.Tests.Unit.Designer
 
         public static TranslationsService TranslationsService(
             IPlainStorageAccessor<TranslationInstance> traslationsStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
             => new TranslationsService(
                 traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
-                questionnaireStorage ?? Stub<IReadSideKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
+                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
 
-        public static QuestionDetailsView NumericDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
-        {
-            return new NumericDetailsView
-            {
-                Id = id ?? Guid.NewGuid(),
-                IsInteger = true,
-                Title = "Numeric Integer",
-                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
-                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
-                RosterScopeIds = rosterScopeIds ?? new Guid[0]
-            };
-        }
-
-        public static QuestionDetailsView TextDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null)
-        {
-            return new TextDetailsView
-            {
-                Id = id ?? Guid.NewGuid(),
-                Title = "Text",
-                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
-                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
-                RosterScopeIds = rosterScopeIds ?? new Guid[0]
-            };
-        }
-
-        public static GroupAndRosterDetailsView GroupAndRosterDetailsView(Guid? id = null, Guid? parentGroupId = null, Guid[] parentGroupsIds = null, Guid[] rosterScopeIds = null,
-            Guid? rosterSizeQuestionId = null)
-        {
-            return new GroupAndRosterDetailsView
-            {
-                Id = id ?? Guid.NewGuid(),
-                Title = "Numeric Ro",
-                ParentGroupId = parentGroupId ?? Guid.NewGuid(),
-                ParentGroupsIds = parentGroupsIds ?? new Guid[0],
-                RosterScopeIds = rosterScopeIds ?? new Guid[0],
-                RosterSizeQuestionId = rosterSizeQuestionId
-            };
-        }
-
-        public static QuestionsAndGroupsCollectionView QuestionsAndGroupsCollectionView(GroupAndRosterDetailsView[] groups, QuestionDetailsView[] questions)
-        {
-            return new QuestionsAndGroupsCollectionView
-            {
-                Groups = groups.ToList(),
-                Questions = questions.ToList()
-            };
-        }
 
         public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)
         {
@@ -1140,5 +1122,12 @@ namespace WB.Tests.Unit.Designer
 
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false)
             => new UpdateQuestionnaire(Guid.NewGuid(), title, isPublic, responsibleId, isResponsibleAdmin);
+
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(bool isPublic = false)
+        {
+            return new QuestionnaireListViewItem() { IsPublic = isPublic };
+        }
+
+        public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();
     }
 }

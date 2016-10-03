@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -16,13 +16,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId ));
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId ));
 
             command = Create.Command.UpdateStaticText(
-                questionnaire.EventSourceId,
+                questionnaire.Id,
                 entityId: entityId,
                 text: text,
                 attachmentName: "",
@@ -36,38 +34,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
         Because of = () =>            
                 questionnaire.UpdateStaticText(command);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_StaticTextUpdated_event = () =>
-            eventContext.ShouldContainEvent<StaticTextUpdated>();
 
-        It should_raise_StaticTextUpdated_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<StaticTextUpdated>().EntityId.ShouldEqual(entityId);
+        It should_contains_statictext = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ShouldNotBeNull();
 
-        It should_raise_StaticTextUpdated_event_with_Text_specified = () =>
-            eventContext.GetSingleEvent<StaticTextUpdated>().Text.ShouldEqual(text);
+        It should_contains_statictext_with_EntityId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).PublicKey.ShouldEqual(entityId);
 
-        It should_raise_StaticTextUpdated_event_with_enablement_condition_specified = () =>
-            eventContext.GetSingleEvent<StaticTextUpdated>().EnablementCondition.ShouldEqual(enablementCondition);
+        It should_contains_statictext_with_Text_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Text.ShouldEqual(text);
 
-        private It should_raise_StaticTextUpdated_event_with_hide_if_disabled_specified = () =>
-            eventContext.GetSingleEvent<StaticTextUpdated>().HideIfDisabled.ShouldBeTrue();
+        It should_contains_statictext_with_enablement_condition_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ConditionExpression.ShouldEqual(enablementCondition);
 
-        private It should_raise_StaticTextUpdated_event_with_validation_condition_count_equals_1 = () =>
-            eventContext.GetSingleEvent<StaticTextUpdated>().ValidationConditions.Count.ShouldEqual(1);
+        private It should_contains_statictext_with_hide_if_disabled_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).HideIfDisabled.ShouldBeTrue();
 
-        private It should_raise_StaticTextUpdated_event_with_validation_condition_expression_specified = () =>
-            eventContext.GetSingleEvent<StaticTextUpdated>().ValidationConditions.Single().Expression.ShouldEqual(validationCondition);
+        private It should_contains_statictext_with_validation_condition_count_equals_1 = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Count.ShouldEqual(1);
 
-        private It should_raise_StaticTextUpdated_event_with_validation_condition_message_specified = () =>
-            eventContext.GetSingleEvent<StaticTextUpdated>().ValidationConditions.Single().Message.ShouldEqual(validationMessage);
+        private It should_contains_statictext_with_validation_condition_expression_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Expression.ShouldEqual(validationCondition);
+
+        private It should_contains_statictext_with_validation_condition_message_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Message.ShouldEqual(validationMessage);
 
         private static UpdateStaticText command;
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

@@ -8,26 +8,21 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class RosterVector : IEnumerable<decimal>
     {
+        private int? cachedHashCode = null;
         public static readonly RosterVector Empty = new decimal[]{};
 
         private readonly ReadOnlyCollection<decimal> coordinates;
 
         public RosterVector(IEnumerable<decimal> coordinates)
         {
-            if (coordinates == null) throw new ArgumentNullException("coordinates");
+            if (coordinates == null) throw new ArgumentNullException(nameof(coordinates));
 
             this.coordinates = new ReadOnlyCollection<decimal>(new List<decimal>(coordinates));
         }
 
-        public IReadOnlyCollection<decimal> Coordinates
-        {
-            get { return this.coordinates; }
-        }
+        public IReadOnlyCollection<decimal> Coordinates => this.coordinates;
 
-        public override string ToString()
-        {
-            return string.Format("<{0}>", string.Join("-", this.Coordinates));
-        }
+        public override string ToString() => $"<{string.Join("-", this.Coordinates)}>";
 
         public RosterVector Shrink(int targetLength)
         {
@@ -52,46 +47,25 @@ namespace WB.Core.SharedKernels.DataCollection
 
         private decimal[] array;
 
-        private decimal[] Array
-        {
-            get { return this.array ?? (this.array = this.Coordinates.ToArray()); }
-        }
+        private decimal[] Array => this.array ?? (this.array = this.Coordinates.ToArray());
 
-        IEnumerator<decimal> IEnumerable<decimal>.GetEnumerator()
-        {
-            return ((IEnumerable<decimal>)this.Array).GetEnumerator();
-        }
+        IEnumerator<decimal> IEnumerable<decimal>.GetEnumerator() => ((IEnumerable<decimal>)this.Array).GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.Array.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => this.Array.GetEnumerator();
 
-        public int Length
-        {
-            get { return this.Array.Length; }
-        }
+        public int Length => this.Array.Length;
 
-        public decimal this[int index]
-        {
-            get { return this.Array[index]; }
-        }
+        public decimal this[int index] => this.Array[index];
 
-        public static implicit operator decimal[](RosterVector rosterVector)
-        {
-            return rosterVector.Array;
-        }
+        public static implicit operator decimal[](RosterVector rosterVector) => rosterVector.Array;
 
-        public static implicit operator RosterVector(decimal[] array)
-        {
-            return new RosterVector(array);
-        }
+        public static implicit operator RosterVector(decimal[] array) => new RosterVector(array);
 
         public bool Identical(RosterVector other)
         {
             if (other == null) return false;
 
-            if (this.Length == 0 && other.Length == 0 || ReferenceEquals(this, other))
+            if ((this.Length == 0 && other.Length == 0) || ReferenceEquals(this, other))
             {
                 return true;
             }
@@ -122,17 +96,29 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override int GetHashCode()
         {
-            unchecked
+            if (!this.cachedHashCode.HasValue)
             {
-                int hc = this.Coordinates.Count;
-
-                foreach (var coordinate in this.Coordinates)
+                unchecked
                 {
-                    hc = unchecked(hc * 13 + coordinate.GetHashCode());
-                }
+                    int hc = this.Coordinates.Count;
 
-                return hc;
+                    foreach (var coordinate in this.Coordinates)
+                    {
+                        hc = unchecked(hc*13 + coordinate.GetHashCode());
+                    }
+
+                    this.cachedHashCode = hc;
+                }
             }
+
+            return this.cachedHashCode.Value;
         }
+
+        public static bool operator ==(RosterVector a, RosterVector b)
+            => ReferenceEquals(a, b)
+            || (a?.Equals(b) ?? false);
+
+        public static bool operator !=(RosterVector a, RosterVector b)
+            => !(a == b);
     }
 }

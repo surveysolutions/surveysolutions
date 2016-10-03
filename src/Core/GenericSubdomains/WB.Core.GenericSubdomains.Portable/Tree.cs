@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
@@ -67,18 +68,19 @@ namespace WB.Core.GenericSubdomains.Portable
             }
         }
 
-        public static IEnumerable<T> AsDepthFirstEnumerable<T>(this T head, Func<T, IEnumerable<T>> childrenFunc)
+        public static void ForEachTreeElement<T>(this T root, Func<T, IEnumerable<T>> getChildren, Action<T, T> parentWithChildren)
         {
-            yield return head;
-
-            foreach (var node in childrenFunc(head))
+            var stack = new Stack<Tuple<T, T>>();
+            stack.Push(new Tuple<T, T>(default(T), root));
+            while (stack.Count > 0)
             {
-                foreach (var child in AsDepthFirstEnumerable(node, childrenFunc))
-                {
-                    yield return child;
-                }
+                var current = stack.Pop();
+                parentWithChildren(current.Item1, current.Item2);
+                IEnumerable<T> childItems = getChildren(current.Item2);
+                childItems = childItems.Reverse();
+                foreach (var child in childItems)
+                    stack.Push(new Tuple<T, T>(current.Item2, child));
             }
-
         }
     }
 }

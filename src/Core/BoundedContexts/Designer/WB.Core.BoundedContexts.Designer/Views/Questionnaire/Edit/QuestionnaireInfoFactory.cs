@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EmitMapper;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Properties;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -22,8 +25,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             public string Text { get; set; }
         }
 
-        private readonly IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader;
-
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+       
         private readonly IExpressionProcessor expressionProcessor;
 
         private static readonly SelectOption[] AllQuestionScopeOptions =
@@ -35,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         };
 
         private static readonly Type[] QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new[]
-        {typeof (TextDetailsView), typeof (NumericDetailsView), typeof (DateTimeDetailsView)};
+        {typeof (TextQuestion), typeof (NumericQuestion), typeof (DateTimeQuestion)};
 
         private static readonly SelectOption[] VariableTypeOptions =
         {
@@ -120,34 +123,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static readonly SelectOption[] RosterTypeOptions =
         {
-            new SelectOption() {Value = RosterType.Fixed.ToString(), Text = Properties.Roster.RosterType_Fixed},
-            new SelectOption() {Value = RosterType.List.ToString(), Text = Properties.Roster.RosterType_List},
-            new SelectOption() {Value = RosterType.Multi.ToString(), Text = Properties.Roster.RosterType_Multi},
-            new SelectOption() {Value = RosterType.Numeric.ToString(), Text = Properties.Roster.RosterType_Numeric}
+            new SelectOption {Value = RosterType.Fixed.ToString(), Text = Roster.RosterType_Fixed},
+            new SelectOption {Value = RosterType.List.ToString(), Text = Roster.RosterType_List},
+            new SelectOption {Value = RosterType.Multi.ToString(), Text = Roster.RosterType_Multi},
+            new SelectOption {Value = RosterType.Numeric.ToString(), Text = Roster.RosterType_Numeric}
         };
 
-        public QuestionnaireInfoFactory(IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView> questionDetailsReader,
+        public QuestionnaireInfoFactory(
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IExpressionProcessor expressionProcessor)
         {
-            this.questionDetailsReader = questionDetailsReader;
+            this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.expressionProcessor = expressionProcessor;
         }
 
         public NewEditGroupView GetGroupEditView(string questionnaireId, Guid groupId)
         {
-            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
-            if (questionnaire == null)
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var group = questionnaire?.Find<IGroup>(groupId);
+            if (@group == null)
                 return null;
-            var group = questionnaire.Groups.FirstOrDefault(x => x.Id == groupId);
-            if (group == null)
-                return null;
+
             var result = new NewEditGroupView
             {
                 Group = ReplaceGuidsInValidationAndConditionRules(new GroupDetailsView
                 {
-                    Id = group.Id,
+                    Id = group.PublicKey,
                     Title = group.Title,
-                    EnablementCondition = group.EnablementCondition,
+                    EnablementCondition = group.ConditionExpression,
                     HideIfDisabled = group.HideIfDisabled,
                     VariableName = group.VariableName
                 }, questionnaire, questionnaireId),
@@ -157,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         }
 
 
-        private GroupDetailsView ReplaceGuidsInValidationAndConditionRules(GroupDetailsView model, QuestionsAndGroupsCollectionView questionnaire, string questionnaireKey)
+        private GroupDetailsView ReplaceGuidsInValidationAndConditionRules(GroupDetailsView model, QuestionnaireDocument questionnaire, string questionnaireKey)
         {
             var expressionReplacer = new ExpressionReplacer(questionnaire);
             Guid questionnaireGuid = Guid.Parse(questionnaireKey);
@@ -167,22 +170,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public NewEditRosterView GetRosterEditView(string questionnaireId, Guid rosterId)
         {
-            var questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
             if (questionnaire == null)
                 return null;
-            var roster = questionnaire.Groups.FirstOrDefault(x => x.Id == rosterId);
+            questionnaire.ConnectChildrenWithParent();
+
+            var roster = questionnaire.Find<IGroup>(rosterId);
             if (roster == null)
                 return null;
 
             RosterType rosterType = this.getRosterType(questionnaire: questionnaire,
-                rosterSizeSourceType: roster.RosterSizeSourceType, rosterSizeQuestionId: roster.RosterSizeQuestionId);
+                rosterSizeSourceType: roster.RosterSizeSource, rosterSizeQuestionId: roster.RosterSizeQuestionId);
 
-            var parentRosterScopeIds = roster.RosterScopeIds.Skip(1).ToArray();
+            var parentRosterScopeIds = GetRosterScopeIds(roster).Skip(1).ToArray();
             var result = new NewEditRosterView
             {
-                ItemId = roster.Id.FormatGuid(),
+                ItemId = roster.PublicKey.FormatGuid(),
                 Title = roster.Title,
-                EnablementCondition = roster.EnablementCondition,
+                EnablementCondition = roster.ConditionExpression,
                 HideIfDisabled = roster.HideIfDisabled,
                 VariableName = roster.VariableName,
 
@@ -204,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        private RosterType getRosterType(QuestionsAndGroupsCollectionView questionnaire,
+        private RosterType getRosterType(QuestionnaireDocument questionnaire,
             RosterSizeSourceType rosterSizeSourceType, Guid? rosterSizeQuestionId)
         {
             if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
@@ -212,13 +217,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (rosterSizeQuestionId.HasValue)
             {
                 var rosterSizeQuestion =
-                    questionnaire.Questions.Find(question => question.Id == rosterSizeQuestionId.Value);
+                    questionnaire.Find<IQuestion>(rosterSizeQuestionId.Value);
                 
                 if (rosterSizeQuestion == null)
                     return RosterType.Numeric;
                 else
                 {
-                    switch (rosterSizeQuestion.Type)
+                    switch (rosterSizeQuestion.QuestionType)
                     {
                         case QuestionType.MultyOption:
                             return RosterType.Multi;
@@ -235,9 +240,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId)
         {
-            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
-            var questions = questionnaire?.Questions.ToList();
-            QuestionDetailsView question = questions?.FirstOrDefault(x => x.Id == questionId);
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
+            if (questionnaire == null)
+                return null;
+            questionnaire.ConnectChildrenWithParent();
+
+            var question = questionnaire.Find<IQuestion>(questionId);
             if (question == null)
                 return null;
 
@@ -249,7 +257,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
-            result.ValidationConditions.AddRange(question.ValidationConditions);
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
@@ -258,41 +265,48 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId)
         {
-            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
 
-            var staticTexts = questionnaire?.StaticTexts.ToList();
-            StaticTextDetailsView staticTextDetailsView = staticTexts?.FirstOrDefault(x => x.Id == staticTextId);
-            if (staticTextDetailsView == null)
+            var staticText = questionnaire?.Find<IStaticText>(staticTextId);
+            if (staticText == null)
                 return null;
 
-            var result = ObjectMapperManager.DefaultInstance.GetMapper<StaticTextDetailsView, NewEditStaticTextView>()
-                            .Map(staticTextDetailsView);
+            var result = new NewEditStaticTextView()
+            {
+                Id = staticText.PublicKey,
+                Text = staticText.Text,
+                AttachmentName = staticText.AttachmentName,
+                EnablementCondition = staticText.ConditionExpression,
+                HideIfDisabled = staticText.HideIfDisabled,
+            }; 
 
-            result.ValidationConditions.AddRange(staticTextDetailsView.ValidationConditions);
-            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, staticTextDetailsView);
+            result.ValidationConditions.AddRange(staticText.ValidationConditions);
+            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, staticText);
 
             return result;
         }
 
         public List<DropdownQuestionView> GetQuestionsEligibleForNumericRosterTitle(string questionnaireId, Guid rosterId, Guid rosterSizeQuestionId)
         {
-            var questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
             if (questionnaire == null)
                 return null;
 
-            var roster = this.GetRoster(questionnaire, rosterId);
+            questionnaire.ConnectChildrenWithParent();
 
-            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter;
+            var roster = this.GetRoster(questionnaire, rosterId); 
+
+            Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter;
 
             var areTitlesForUnsavedRosterSizeRequested = roster.RosterSizeQuestionId != rosterSizeQuestionId;
             if (areTitlesForUnsavedRosterSizeRequested)
             {
-                var prospectiveRosterScopeIds = roster.RosterScopeIds.Take(roster.RosterScopeIds.Length - 1).Union(rosterSizeQuestionId.ToEnumerable()).ToArray();
-                questionFilter = q => q.Where(x => x.ParentGroupId == rosterId || x.RosterScopeIds.SequenceEqual(prospectiveRosterScopeIds) && x.Type != QuestionType.Multimedia).ToList();
+                var prospectiveRosterScopeIds = GetRosterScopeIds(roster).Take(GetRosterScopeIds(roster).Length - 1).Union(rosterSizeQuestionId.ToEnumerable()).ToArray();
+                questionFilter = q => q.Where(x => x.GetParent()?.PublicKey == rosterId || GetRosterScopeIds(x).SequenceEqual(prospectiveRosterScopeIds) && x.QuestionType != QuestionType.Multimedia).ToList();
             }
             else
             {
-                questionFilter = q => q.Where(x => x.RosterScopeIds.SequenceEqual(roster.RosterScopeIds) && x.Type != QuestionType.Multimedia).ToList();
+                questionFilter = q => q.Where(x => GetRosterScopeIds(x).SequenceEqual(GetRosterScopeIds(roster)) && x.QuestionType != QuestionType.Multimedia).ToList();
             }
              
             return this.PrepareGroupedQuestionsListForDropdown(questionnaire, questionFilter);
@@ -300,59 +314,66 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public VariableView GetVariableEditView(string questionnaireId, Guid variableId)
         {
-            QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
 
-            var variables = questionnaire?.Variables.ToList();
-            VariableView result = variables?.FirstOrDefault(x => x.Id == variableId);
-            if (result == null)
+            var variable = questionnaire?.Find<IVariable>(variableId);
+            if (variable == null)
                 return null;
-
+            VariableView result = new VariableView()
+            {
+                Id = variable.PublicKey,
+                ItemId = variable.PublicKey.FormatGuid(),
+                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression),
+            };
             result.TypeOptions = VariableTypeOptions;
-            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, result);
+            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, variable);
 
             return result;
         }
 
         public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string questionnaireId, Guid id)
         {
-            var questionnaire = this.questionDetailsReader.GetById(questionnaireId);
-            if (questionnaire == null)
+            var questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
+            if (questionnaireDocument == null)
                 return null;
 
-            var variablesToBeDeleted = questionnaire.Questions
-                .Where(x => x.ParentGroupsIds.Contains(id))
-                .Select(x => x.VariableName)
+            questionnaireDocument.ConnectChildrenWithParent();
+
+            ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(questionnaireDocument);
+
+            var variablesToBeDeleted = questionnaire.Find<IQuestion>()
+                .Where(x => this.GetParentGroupsIds(x).Contains(id))
+                .Select(x => x.StataExportCaption)
                 .ToList();
 
-            var allReferencedQuestionsByExpressions = questionnaire.Questions
-                .Where(x => !x.ParentGroupsIds.Contains(id))
-                .Where(x => !string.IsNullOrEmpty(x.EnablementCondition) || x.ValidationConditions.Any(q => !string.IsNullOrEmpty(q.Expression)))
-                .Where(x => this.expressionProcessor.GetIdentifiersUsedInExpression(x.EnablementCondition).Any(v => variablesToBeDeleted.Contains(v))
+            var allReferencedQuestionsByExpressions = questionnaire.Find<IQuestion>()
+                .Where(x => !this.GetParentGroupsIds(x).Contains(id))
+                .Where(x => !string.IsNullOrEmpty(x.ConditionExpression) || x.ValidationConditions.Any(q => !string.IsNullOrEmpty(q.Expression)))
+                .Where(x => this.expressionProcessor.GetIdentifiersUsedInExpression(x.ConditionExpression).Any(v => variablesToBeDeleted.Contains(v))
                          || x.ValidationConditions.SelectMany(q => this.expressionProcessor.GetIdentifiersUsedInExpression(q.Expression)).Any(v => variablesToBeDeleted.Contains(v)));
 
-            var singleQuestionIdsToBeDeleted = questionnaire.Questions
-                .Where(x => x.ParentGroupsIds.Contains(id))
-                .Where(x => x.Type == QuestionType.SingleOption)
-                .Select(x => x.Id)
+            var singleQuestionIdsToBeDeleted = questionnaire.Find<IQuestion>()
+                .Where(x => this.GetParentGroupsIds(x).Contains(id))
+                .Where(x => x.QuestionType == QuestionType.SingleOption)
+                .Select(x => x.PublicKey)
                 .ToList();
 
-            var allCascadingDependentOutsideQestions = questionnaire.Questions
-                .OfType<SingleOptionDetailsView>()
-                .Where(x => !x.ParentGroupsIds.Contains(id))
-                .Where(x => x.Type == QuestionType.SingleOption)
+            var allCascadingDependentOutsideQuestions = questionnaire.Find<IQuestion>()
+                .Where(x => x.QuestionType == QuestionType.SingleOption)
+                .Where(x => !this.GetParentGroupsIds(x).Contains(id))
                 .Where(x => x.CascadeFromQuestionId != null && singleQuestionIdsToBeDeleted.Contains(x.CascadeFromQuestionId.Value));
 
 
-            var allQuestions = allReferencedQuestionsByExpressions.Concat(allCascadingDependentOutsideQestions);
+            var allQuestions = allReferencedQuestionsByExpressions.Concat(allCascadingDependentOutsideQuestions);
             return allQuestions.Select(x => new QuestionnaireItemLink
                                                       {
-                                                          Id = x.Id.FormatGuid(),
-                                                          ChapterId = x.ParentGroupsIds.Last().FormatGuid(),
-                                                          Title = x.Title
+                                                          Id = x.PublicKey.FormatGuid(),
+                                                          ChapterId = this.GetParentGroupsIds(x).Last().FormatGuid(),
+                                                          Title = x.QuestionText
                                                       }).ToList();
         }
 
-        private void ReplaceGuidsInValidationAndConditionRules(NewEditQuestionView model, QuestionsAndGroupsCollectionView questionnaire, string questionnaireKey)
+        private void ReplaceGuidsInValidationAndConditionRules(NewEditQuestionView model, QuestionnaireDocument questionnaire, string questionnaireKey)
         {
             var expressionReplacer = new ExpressionReplacer(questionnaire);
             Guid questionnaireGuid = Guid.Parse(questionnaireKey);
@@ -364,86 +385,147 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
         }
 
-        private static NewEditQuestionView MapQuestionFields(QuestionDetailsView question)
+        private static NewEditQuestionView MapQuestionFields(IQuestion question)
         {
-            switch (question.Type)
+            var questionView = new NewEditQuestionView()
+            {
+                Title = question.QuestionText,
+                Type = question.QuestionType,
+                VariableLabel = question.VariableLabel,
+                Id = question.PublicKey,
+                ParentGroupId = question.GetParent().PublicKey,
+                Instructions = question.Instructions,
+                EnablementCondition = question.ConditionExpression,
+                IsPreFilled = question.Featured,
+                IsTimestamp = question.IsTimestamp,
+                IsFilteredCombobox = question.IsFilteredCombobox,
+                QuestionScope = question.QuestionScope,
+                HideIfDisabled = question.HideIfDisabled,
+                CascadeFromQuestionId = question.CascadeFromQuestionId?.FormatGuid(),
+                LinkedFilterExpression = question.LinkedFilterExpression,
+                HideInstructions = question.Properties?.HideInstructions ?? false,
+                UseFormatting = question.Properties?.UseFormatting ?? false,
+                OptionsFilterExpression = question.Properties?.OptionsFilterExpression,
+                VariableName = question.StataExportCaption,
+                LinkedToEntityId = (question.LinkedToQuestionId ?? question.LinkedToRosterId)?.FormatGuid(),
+                QuestionTypeOptions = question.Answers.Select(a => new SelectOption() { Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
+            };
+            questionView.ValidationConditions.AddRange(question.ValidationConditions);
+
+            questionView.RosterScopeIds = new Guid[0];
+            questionView.ParentGroupsIds = new Guid[0];
+
+
+            switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    var multiOptionDetailsView = question as MultiOptionDetailsView;
-                    var newEditQuestionView = ObjectMapperManager.DefaultInstance
-                                                                 .GetMapper<MultiOptionDetailsView, NewEditQuestionView>()
-                                                                 .Map(multiOptionDetailsView);
-                    newEditQuestionView.LinkedToEntityId = Monads.Maybe(() => multiOptionDetailsView.LinkedToEntityId.FormatGuid());
-                    newEditQuestionView.LinkedFilterExpression = Monads.Maybe(() => multiOptionDetailsView.LinkedFilterExpression);
-                    return
-                        newEditQuestionView;
-                case QuestionType.SingleOption:
-                    var singleOptionDetailsView = question as SingleOptionDetailsView;
-                    var editQuestionView = ObjectMapperManager.DefaultInstance
-                                                              .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
-                                                              .Map(singleOptionDetailsView);
-                    editQuestionView.LinkedToEntityId = Monads.Maybe(() => singleOptionDetailsView.LinkedToEntityId.FormatGuid());
-                    editQuestionView.LinkedFilterExpression = Monads.Maybe(() => singleOptionDetailsView.LinkedFilterExpression);
-                    editQuestionView.CascadeFromQuestionId = Monads.Maybe(() => singleOptionDetailsView.CascadeFromQuestionId.FormatGuid());
-                    return editQuestionView;
-                case QuestionType.Text:
-                    return
-                        ObjectMapperManager.DefaultInstance.GetMapper<TextDetailsView, NewEditQuestionView>()
-                            .Map(question as TextDetailsView);
-                case QuestionType.DateTime:
-                    return
-                        ObjectMapperManager.DefaultInstance.GetMapper<DateTimeDetailsView, NewEditQuestionView>()
-                            .Map(question as DateTimeDetailsView);
-                case QuestionType.Numeric:
-                    return
-                        ObjectMapperManager.DefaultInstance.GetMapper<NumericDetailsView, NewEditQuestionView>()
-                            .Map(question as NumericDetailsView);
-                case QuestionType.GpsCoordinates:
-                    return ObjectMapperManager.DefaultInstance.GetMapper<GeoLocationDetailsView, NewEditQuestionView>()
-                        .Map(question as GeoLocationDetailsView);
+                    var multyOptionsQuestion = (IMultyOptionsQuestion)question;
+                    questionView.YesNoView = multyOptionsQuestion.YesNoView;
+                    questionView.AreAnswersOrdered = multyOptionsQuestion.AreAnswersOrdered;
+                    questionView.MaxAllowedAnswers = multyOptionsQuestion.MaxAllowedAnswers;
+                    questionView.LinkedToEntityId = multyOptionsQuestion.LinkedToQuestionId?.FormatGuid() ?? multyOptionsQuestion.LinkedToRosterId?.FormatGuid();
+                    questionView.LinkedFilterExpression = multyOptionsQuestion.LinkedFilterExpression;
+                    questionView.Options = CreateCategoricalOptions(multyOptionsQuestion.Answers);
+                    questionView.OptionsFilterExpression = multyOptionsQuestion.Properties.OptionsFilterExpression;
+                    return questionView;
                 case QuestionType.TextList:
-                    return
-                        ObjectMapperManager.DefaultInstance.GetMapper<TextListDetailsView, NewEditQuestionView>()
-                            .Map(question as TextListDetailsView);
+                    var textListQuestion = (ITextListQuestion) question;
+                    questionView.MaxAnswerCount = textListQuestion.MaxAnswerCount;
+                    return questionView;
+                case QuestionType.Numeric:
+                    var numericQuestion = (INumericQuestion)question;
+                    questionView.CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces;
+                    questionView.IsInteger = numericQuestion.IsInteger;
+                    questionView.UseFormatting = numericQuestion.UseFormatting;
+                    return questionView;
+                case QuestionType.SingleOption:
+                    var singleoptionQuestion = (SingleQuestion)question;
+                    questionView.LinkedToEntityId = singleoptionQuestion.LinkedToQuestionId?.FormatGuid() ??
+                                            singleoptionQuestion.LinkedToRosterId?.FormatGuid();
+                    questionView.LinkedFilterExpression = singleoptionQuestion.LinkedFilterExpression;
+                    questionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
+                    questionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId?.FormatGuid();
+                    questionView.Options = CreateCategoricalOptions(singleoptionQuestion.Answers);
+                    questionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
+                    return questionView;
+                case QuestionType.Text:
+                    var textQuestion = (TextQuestion)question;
+                    questionView.Mask = textQuestion.Mask;
+                    return questionView;
+                case QuestionType.DateTime:
+                    var dateTimeQuestion = (DateTimeQuestion)question;
+                    questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
+                    return questionView;
                 case QuestionType.QRBarcode:
-                    return ObjectMapperManager.DefaultInstance.GetMapper<QrBarcodeDetailsView, NewEditQuestionView>()
-                        .Map(question as QrBarcodeDetailsView);
                 case QuestionType.Multimedia:
-                    return ObjectMapperManager.DefaultInstance.GetMapper<MultimediaDetailsView, NewEditQuestionView>()
-                        .Map(question as MultimediaDetailsView);
+                case QuestionType.GpsCoordinates:
+                    return questionView;
             }
             return null;
         }
 
-        private List<DropdownQuestionView> GetSourcesOfSingleQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
+        private static CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
         {
-            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                x => x.Where(q => q.Id != questionId)
-                    .Where(q => q is SingleOptionDetailsView)
-                    .Where(q => !(q as SingleOptionDetailsView).LinkedToEntityId.HasValue)
+            if (answers == null)
+                return null;
+
+            return GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
+            {
+                Title = x.AnswerText,
+                Value = decimal.Parse(x.AnswerValue),
+                ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
+            }).ToArray();
+        }
+
+        private static Answer[] GetValidAnswersCollection(Answer[] answers)
+        {
+            if (answers == null)
+                return null;
+
+            foreach (var answer in answers)
+            {
+                if (string.IsNullOrWhiteSpace(answer.AnswerValue))
+                {
+                    answer.AnswerValue = (new Random().NextDouble() * 100).ToString("0.00");
+                }
+                if (string.IsNullOrWhiteSpace(answer.AnswerText))
+                {
+                    answer.AnswerText = "Option " + answer.AnswerValue;
+                }
+            }
+            return answers;
+        }
+
+        private List<DropdownQuestionView> GetSourcesOfSingleQuestionBriefs(QuestionnaireDocument document, Guid questionId)
+        {
+            Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter =
+                x => x.Where(q => q.PublicKey != questionId)
+                    .Where(q => q is SingleQuestion)
+                    .Cast<SingleQuestion>()
+                    .Where(q => !q.LinkedToRosterId.HasValue && !q.LinkedToQuestionId.HasValue)
                     .ToList();
 
-            var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+            var result = this.PrepareGroupedQuestionsListForDropdown(document, questionFilter);
 
             return result;
         }
 
         private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(
-            QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
+            QuestionnaireDocument document, Guid questionId)
         {
             var result = new List<DropdownQuestionView>();
 
-            var rosters = questionsCollection.Groups.Where(g => g.IsRoster).ToList();
+            var rosters = document.Find<IGroup>().Where(g => g.IsRoster).ToList();
 
             foreach (var roster in rosters)
             {
-                var rosterPlaceholder = this.CreateRosterBreadcrumbPlaceholder(questionsCollection, roster);
+                var rosterPlaceholder = this.CreateRosterBreadcrumbPlaceholder(document, roster);
                 result.Add(rosterPlaceholder);
 
-                var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder, questionsCollection);
+                var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder, document);
                 result.Add(rosterTitlePlaceholder);
 
-                var questions = GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(questionsCollection, questionId, roster);
+                var questions = GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(document, questionId, roster);
                 result.AddRange(questions);
             }
 
@@ -451,146 +533,144 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         }
 
         private List<DropdownQuestionView> GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(
-            QuestionsAndGroupsCollectionView questionsCollection, Guid questionId, GroupAndRosterDetailsView roster)
+            QuestionnaireDocument document, Guid questionId, IGroup roster)
         {
             
-            var pathInsideRoster = new[] {roster.Id}.Union(roster.ParentGroupsIds).ToArray();
+            var pathInsideRoster = new[] {roster.PublicKey}.Union(this.GetParentGroupsIds(roster)).ToArray();
             var questions =
-                questionsCollection.Questions.Where(
+                document.Find<IQuestion>().Where(
                     q => QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion.Contains(q.GetType()))
                     .Where(
                         q =>
-                            pathInsideRoster.SequenceEqual(q.ParentGroupsIds.Skip(q.ParentGroupsIds.Length - pathInsideRoster.Length)) 
-                            && q.RosterScopeIds.SequenceEqual(roster.RosterScopeIds)
-                            && q.Id != questionId)
-                    .OrderBy(q => q.ParentGroupsIds.Length)
+                            pathInsideRoster.SequenceEqual(GetParentGroupsIds(q).Skip(GetParentGroupsIds(q).Length - pathInsideRoster.Length)) 
+                            && GetRosterScopeIds(q).SequenceEqual(GetRosterScopeIds(roster))
+                            && q.PublicKey != questionId)
+                    .OrderBy(q => GetParentGroupsIds(q).Length)
                     .Select(q => new DropdownQuestionView
                     {
-                        Id = q.Id.FormatGuid(),
-                        Title = q.Title,
-                        Breadcrumbs = GetBreadcrumbsAsString(questionsCollection,q),
-                        Type = q.Type.ToString().ToLower(),
-                        VarName = q.VariableName
+                        Id = q.PublicKey.FormatGuid(),
+                        Title = q.QuestionText,
+                        Breadcrumbs = GetBreadcrumbsAsString(document, q),
+                        Type = q.QuestionType.ToString().ToLower(),
+                        VarName = q.StataExportCaption
                     }).ToList();
             return questions;
         }
 
-        private DropdownQuestionView CreateRosterTitlePlaceholder(GroupAndRosterDetailsView roster,
-            DropdownQuestionView rosterPlaceholder, QuestionsAndGroupsCollectionView questionsCollection)
+        private DropdownQuestionView CreateRosterTitlePlaceholder(IGroup roster,
+            DropdownQuestionView rosterPlaceholder, QuestionnaireDocument document)
         {
             var rosterTitlePlaceholder = new DropdownQuestionView
             {
                 Title = string.Format(Roster.RosterTitle, roster.Title),
-                Id = roster.Id.FormatGuid(),
+                Id = roster.PublicKey.FormatGuid(),
                 IsSectionPlaceHolder = false,
                 Breadcrumbs = rosterPlaceholder.Title,
                 Type = this.rosterType,
                 VarName = roster.VariableName,
-                QuestionType = GetRosterSourceType(roster, questionsCollection)
+                QuestionType = GetRosterSourceType(roster, document)
             };
             return rosterTitlePlaceholder;
         }
 
-        private static string GetRosterSourceType(GroupAndRosterDetailsView roster,
-            QuestionsAndGroupsCollectionView questionsCollection) => roster.RosterSizeQuestionId.HasValue
-                ? questionsCollection?.Questions?.Find(x => x.Id == roster.RosterSizeQuestionId.Value)?
-                    .Type.ToString()
-                    .ToLower()
+        private static string GetRosterSourceType(IGroup roster, QuestionnaireDocument document)
+        {
+            return roster.RosterSizeQuestionId.HasValue
+                ? document?.Find<IQuestion>(roster.RosterSizeQuestionId.Value)?.QuestionType.ToString().ToLower()
                 : null;
+        }
 
-        private DropdownQuestionView CreateRosterBreadcrumbPlaceholder(QuestionsAndGroupsCollectionView questionsCollection,
-            GroupAndRosterDetailsView roster)
+        private DropdownQuestionView CreateRosterBreadcrumbPlaceholder(QuestionnaireDocument document,
+            IGroup roster)
         {
             var rosterPlaceholder = new DropdownQuestionView
             {
-                Title =
-                    string.Join(" / ",
-                        this.GetBreadcrumbs(questionsCollection, roster)
-                            .Select(x => x.Title)),
+                Title = string.Join(" / ", this.GetBreadcrumbs(document, roster).Select(x => x.Title)),
                 IsSectionPlaceHolder = true
             };
             return rosterPlaceholder;
         }
 
-        private List<DropdownQuestionView> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection,
-            GroupAndRosterDetailsView roster)
+        private List<DropdownQuestionView> GetNumericIntegerTitles(QuestionnaireDocument document,
+            IGroup roster)
         {
             var rosterSizeQuestion = roster.RosterSizeQuestionId;
 
-            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter;
+            Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter;
 
-            if (rosterSizeQuestion.HasValue && this.IsQuestionIsNumeric(questionsCollection, rosterSizeQuestion.Value))
+            if (rosterSizeQuestion.HasValue && this.IsQuestionIsNumeric(document, rosterSizeQuestion.Value))
             {
-                Guid? rosterSizeQuestionId = rosterSizeQuestion.Value;
-                Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter1 = q => q.Where(x => x.RosterScopeIds.SequenceEqual(roster.RosterScopeIds) && x.Type != QuestionType.Multimedia).ToList();
-                return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter1);
+                questionFilter = q => q.Where(x => GetRosterScopeIds(x).SequenceEqual(GetRosterScopeIds(roster)) && x.QuestionType != QuestionType.Multimedia).ToList();
             }
             else
             {
-                questionFilter = q => q.Where(x => x.ParentGroupId == roster.Id && x.Type != QuestionType.Multimedia).ToList();
+                questionFilter = q => q.Where(x => x.GetParent()?.PublicKey == roster.PublicKey && x.QuestionType != QuestionType.Multimedia).ToList();
             }
 
-            return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+            return this.PrepareGroupedQuestionsListForDropdown(document, questionFilter);
         }
 
-        private bool IsQuestionIsNumeric(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
+        private bool IsQuestionIsNumeric(QuestionnaireDocument document, Guid questionId)
         {
-            return questionsCollection.Questions.OfType<NumericDetailsView>().Any(x => x.Id == questionId);
+            return document.Find<IQuestion>(questionId)?.QuestionType == QuestionType.Numeric;
         }
 
-        private GroupAndRosterDetailsView GetRoster(QuestionsAndGroupsCollectionView questionnaire, Guid rosterId)
+        private IGroup GetRoster(QuestionnaireDocument document, Guid rosterId)
         {
-            return questionnaire.Groups.FirstOrDefault(x => x.Id == rosterId);
+            var roster = document.Find<IGroup>(rosterId);
+            if (roster?.IsRoster ?? false)
+                return roster;
+            return null;
         }
 
-        private List<DropdownQuestionView> GetNumericIntegerQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid[] rosterScopeIds)
+        private List<DropdownQuestionView> GetNumericIntegerQuestionBriefs(QuestionnaireDocument document, Guid[] rosterScopeIds)
         {
-            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+            Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter =
                 questions => questions
-                    .OfType<NumericDetailsView>()
+                    .OfType<INumericQuestion>()
                     .Where(x => x.IsInteger)
-                    .Where(x => x.RosterScopeIds.Length <= rosterScopeIds.Length)
-                    .Where(x => x.RosterScopeIds.All(rosterScopeIds.Contains))
-                    .Cast<QuestionDetailsView>().ToList();
+                    .Where(x => GetRosterScopeIds(x).Length <= rosterScopeIds.Length)
+                    .Where(x => GetRosterScopeIds(x).All(rosterScopeIds.Contains))
+                    .ToList();
 
-            return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+            return this.PrepareGroupedQuestionsListForDropdown(document, questionFilter);
         }
 
-        private List<DropdownQuestionView> GetNotLinkedMultiOptionQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid[] rosterScopeIds)
+        private List<DropdownQuestionView> GetNotLinkedMultiOptionQuestionBriefs(QuestionnaireDocument document, Guid[] rosterScopeIds)
         {
-            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+            Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter =
                 questions => questions
-                    .OfType<MultiOptionDetailsView>()
-                    .Where(x => x.LinkedToEntityId == null)
-                    .Where(x => x.RosterScopeIds.Length <= rosterScopeIds.Length)
-                    .Where(x => x.RosterScopeIds.All(rosterScopeIds.Contains))
-                    .Cast<QuestionDetailsView>().ToList();
+                    .OfType<IMultyOptionsQuestion>()
+                    .Where(x => !x.LinkedToQuestionId.HasValue && !x.LinkedToRosterId.HasValue)
+                    .Where(x => GetRosterScopeIds(x).Length <= rosterScopeIds.Length)
+                    .Where(x => GetRosterScopeIds(x).All(rosterScopeIds.Contains))
+                    .ToList();
 
-            return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+            return this.PrepareGroupedQuestionsListForDropdown(document, questionFilter);
         }
 
-        private List<DropdownQuestionView> GetTextListsQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid[] rosterScopeIds)
+        private List<DropdownQuestionView> GetTextListsQuestionBriefs(QuestionnaireDocument document, Guid[] rosterScopeIds)
         {
-            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
+            Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter =
                 questions => questions
-                    .OfType<TextListDetailsView>()
-                    .Where(x => x.RosterScopeIds.Length <= rosterScopeIds.Length)
-                    .Where(x => x.RosterScopeIds.All(rosterScopeIds.Contains))
-                    .Cast<QuestionDetailsView>().ToList();
+                    .OfType<ITextListQuestion>()
+                    .Where(x => GetRosterScopeIds(x).Length <= rosterScopeIds.Length)
+                    .Where(x => GetRosterScopeIds(x).All(rosterScopeIds.Contains))
+                    .ToList();
 
-            return this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+            return this.PrepareGroupedQuestionsListForDropdown(document, questionFilter);
         }
 
-        private List<DropdownQuestionView> PrepareGroupedQuestionsListForDropdown(QuestionsAndGroupsCollectionView questionsCollection, Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter)
+        private List<DropdownQuestionView> PrepareGroupedQuestionsListForDropdown(QuestionnaireDocument document, Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter)
         {
-            var questions = questionFilter(questionsCollection.Questions)
+            var questions = questionFilter(document.Find<IQuestion>())
                 .Select(q => new DropdownQuestionView
                 {
-                    Id = q.Id.FormatGuid(),
-                    Title = q.Title,
-                    Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
-                    Type = q.Type.ToString().ToLower(),
-                    VarName = q.VariableName
+                    Id = q.PublicKey.FormatGuid(),
+                    Title = q.QuestionText,
+                    Breadcrumbs = this.GetBreadcrumbsAsString(document, q),
+                    Type = q.QuestionType.ToString().ToLower(),
+                    VarName = q.StataExportCaption
                 }).ToArray();
 
 
@@ -619,19 +699,59 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        private Breadcrumb[] GetBreadcrumbs(QuestionsAndGroupsCollectionView entitiesCollection, DescendantItemView entity)
+        private Breadcrumb[] GetBreadcrumbs(QuestionnaireDocument document, IComposite entity)
         {
-            return entity.ParentGroupsIds.Reverse().Select(x => entitiesCollection.Groups.Single(g => g.Id == x)).Select(x => new Breadcrumb
+            List<IGroup> parents = new List<IGroup>();
+            var parent = (IGroup)entity.GetParent();
+            while (parent != null && parent != document)
             {
-                Id = x.Id.FormatGuid(),
+                parents.Add(parent);
+                parent = (IGroup)parent.GetParent();
+            }
+            parents.Reverse();
+
+            return parents.Select(x => new Breadcrumb
+            {
+                Id = x.PublicKey.FormatGuid(),
                 Title = x.Title,
                 IsRoster = x.IsRoster
             }).ToArray();
         }
 
-        private string GetBreadcrumbsAsString(QuestionsAndGroupsCollectionView questionsCollection, QuestionDetailsView question)
+        private string GetBreadcrumbsAsString(QuestionnaireDocument document, IComposite question)
         {
-            return string.Join(" / ", GetBreadcrumbs(questionsCollection, question).Select(x => x.Title));
+            return string.Join(" / ", GetBreadcrumbs(document, question).Select(x => x.Title));
+        }
+
+        private Guid[] GetRosterScopeIds(IComposite entity)
+        {
+            var rosterScopes = new List<Guid>();
+            while (entity != null)
+            {
+                IGroup group = entity as IGroup;
+                if (group?.IsRoster ?? false)
+                {
+                    rosterScopes.Add(@group.RosterSizeSource == RosterSizeSourceType.FixedTitles
+                        ? @group.PublicKey
+                        : @group.RosterSizeQuestionId.Value);
+                }
+
+                entity = (IGroup)entity.GetParent();
+            }
+            return rosterScopes.ToArray();
+        }
+
+        private Guid[] GetParentGroupsIds(IComposite entity)
+        {
+            List<IGroup> parents = new List<IGroup>();
+            var parent = (IGroup)entity.GetParent();
+            while (parent != null && !(parent is QuestionnaireDocument))
+            {
+                parents.Add(parent);
+                parent = (IGroup)parent.GetParent();
+            }
+            //parents.Reverse();
+            return parents.Select(x => x.PublicKey).ToArray();
         }
     }
 }

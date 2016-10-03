@@ -1,14 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using MvvmCross.Platform;
 using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class SingleOptionQuestionOptionViewModel : MvxNotifyPropertyChanged
+    public class SingleOptionQuestionOptionViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity
     {
         public event EventHandler BeforeSelected;
         public event EventHandler AnswerRemoved;

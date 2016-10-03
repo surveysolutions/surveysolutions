@@ -1,9 +1,9 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -17,8 +17,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NewQuestionAdded(publicKey: rosterSizeQuestionId, groupPublicKey: chapterId, isInteger: false, questionType:QuestionType.Numeric));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(publicKey: rosterSizeQuestionId, groupPublicKey: chapterId, isInteger: false, questionType:QuestionType.Numeric));
         };
 
         Because of = () =>

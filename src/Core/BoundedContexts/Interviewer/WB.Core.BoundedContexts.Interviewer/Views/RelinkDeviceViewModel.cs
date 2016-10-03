@@ -17,13 +17,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
 
         public RelinkDeviceViewModel(
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ISynchronizationService synchronizationService,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage)
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -86,8 +86,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     },
                     token: this.cancellationTokenSource.Token);
 
-                await this.interviewersPlainStorage.StoreAsync(this.userIdentityToRelink);
-                await this.principal.SignInAsync(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
+                this.interviewersPlainStorage.Store(this.userIdentityToRelink);
+                this.principal.SignIn(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
                 this.viewModelNavigationService.NavigateToDashboard();
             }
             catch (SynchronizationException ex)

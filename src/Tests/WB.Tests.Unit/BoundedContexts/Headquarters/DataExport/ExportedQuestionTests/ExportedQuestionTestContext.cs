@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using QuestionState = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.QuestionState;
@@ -10,14 +11,14 @@ using QuestionState = WB.Core.SharedKernels.DataCollection.ValueObjects.Intervie
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestionTests
 {
-    [Subject(typeof(ExportedQuestion))]
+    [Subject(typeof(ExportQuestionService))]
     public class ExportedQuestionTestContext
     {
-        public static string MissingNumericQuestionValue { get { return ExportedQuestion.MissingNumericQuestionValue; } }
-        public static string MissingStringQuestionValue { get { return ExportedQuestion.MissingStringQuestionValue; } }
-        public static string DisableQuestionValue { get { return ExportedQuestion.DisableQuestionValue; } }
+        public static string MissingNumericQuestionValue { get { return ExportFormatSettings.MissingNumericQuestionValue; } }
+        public static string MissingStringQuestionValue { get { return ExportFormatSettings.MissingStringQuestionValue; } }
+        public static string DisableQuestionValue { get { return ExportFormatSettings.DisableQuestionValue; } }
 
-        private static ExportedQuestion CreateExportedQuestion(QuestionType questionType, 
+        private static string[] CreateExportedQuestion(QuestionType questionType, 
             object value,
             string[] columnNames = null,
             QuestionSubtype ? questionSubType = null,
@@ -38,10 +39,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestion
                 ColumnNames = columnNames,
                 ColumnValues = columnValues,
             };
-            return new ExportedQuestion(interviewQuestion, headerItem);
+            return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem);
         }
 
-        public static ExportedQuestion CreateFilledExportedQuestion(QuestionType questionType,
+        public static string[] CreateFilledExportedQuestion(QuestionType questionType,
             object value,
             QuestionSubtype? questionSubType = null)
         {
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestion
             return CreateExportedQuestion(questionType, value, columnNames, questionSubType, false);
         }
 
-        public static ExportedQuestion CreateFilledExportedQuestion(QuestionType questionType,
+        public static string[] CreateFilledExportedQuestion(QuestionType questionType,
             int columnsCount,
             object value,
             QuestionSubtype? questionSubType = null)
@@ -58,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestion
             return CreateExportedQuestion(questionType, value, columnNames, questionSubType, false);
         }
 
-        public static ExportedQuestion CreateDisabledExportedQuestion(QuestionType questionType, 
+        public static string[] CreateDisabledExportedQuestion(QuestionType questionType, 
             QuestionSubtype? questionSubType = null,
             int columnsCount = 1)
         {
@@ -66,7 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport.ExportedQuestion
             return CreateExportedQuestion(questionType, null, columnNames, questionSubType, true);
         }
 
-        public static ExportedQuestion CreateMissingValueExportedQuestion(QuestionType questionType,
+        public static string[] CreateMissingValueExportedQuestion(QuestionType questionType,
             QuestionSubtype? questionSubType = null,
             int columnsCount = 1)
         {

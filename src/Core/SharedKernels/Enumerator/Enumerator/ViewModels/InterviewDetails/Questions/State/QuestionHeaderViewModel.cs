@@ -9,31 +9,31 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionHeaderViewModel : MvxNotifyPropertyChanged,
+        ICompositeEntity,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
 
-        public DynamicTextViewModel Title { get; }
+        public event EventHandler ShowComments;
 
+        public DynamicTextViewModel Title { get; }
+        public EnablementViewModel Enablement { get; }
+
+        public Identity Identity => this.questionIdentity;
+
+        private Identity questionIdentity;
         public QuestionHeaderViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            DynamicTextViewModel dynamicTextViewModel)
+            DynamicTextViewModel dynamicTextViewModel,
+            EnablementViewModel enablementViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
 
+            this.Enablement = enablementViewModel;
             this.Title = dynamicTextViewModel;
-        }
-
-        public string Instruction { get; private set; }
-
-        private bool isInstructionsHidden;
-        public bool IsInstructionsHidden
-        {
-            get { return this.isInstructionsHidden; }
-            set { this.RaiseAndSetIfChanged(ref this.isInstructionsHidden, value); }
         }
 
         public void Init(string interviewId, Identity questionIdentity)
@@ -41,20 +41,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
+            this.questionIdentity = questionIdentity;
+
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             
-            this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
-            this.Instruction = questionnaire.GetQuestionInstruction(questionIdentity.Id);
-
             this.Title.Init(interviewId, questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id));
+            this.Enablement.Init(interviewId, questionIdentity);
         }
 
-        public ICommand ShowInstructions => new MvxCommand(() => this.IsInstructionsHidden = false);
+        public ICommand ShowCommentEditorCommand => new MvxCommand(() => ShowComments?.Invoke(this, EventArgs.Empty));
 
         public void Dispose()
         {
             this.Title.Dispose();
+            this.Enablement.Dispose();
         }
     }
 }

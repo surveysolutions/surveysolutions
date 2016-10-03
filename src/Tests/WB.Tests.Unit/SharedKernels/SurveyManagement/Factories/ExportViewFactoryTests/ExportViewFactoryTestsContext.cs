@@ -8,11 +8,12 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Factories;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
@@ -21,12 +22,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
     internal class ExportViewFactoryTestsContext
     {
         protected static ExportViewFactory CreateExportViewFactory(
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory = null)
+            IQuestionnaireStorage questionnaireStorage = null,
+            IExportQuestionService exportQuestionService = null)
         {
-            return new ExportViewFactory(questionnaireRosterStructureFactory ?? new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
+            return new ExportViewFactory(
+                Mock.Of<IFileSystemAccessor>(),
+                exportQuestionService ?? new ExportQuestionService(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
 
-        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter( params IComposite[] chapterChildren)
         {
             var questionnaireDocument= new QuestionnaireDocument
             {

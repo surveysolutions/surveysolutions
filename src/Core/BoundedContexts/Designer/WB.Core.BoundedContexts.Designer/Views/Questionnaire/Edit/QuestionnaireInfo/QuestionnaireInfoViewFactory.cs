@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Shared.Web.Membership;
 
@@ -14,21 +15,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 {
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
         private readonly IAttachmentService attachmentService;
         private readonly IMembershipUserService membershipUserService;
 
-        public QuestionnaireInfoViewFactory(IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage,
-            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+        public QuestionnaireInfoViewFactory(
+            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
             IAttachmentService attachmentService,
             IMembershipUserService membershipUserService)
         {
-            this.questionnaireStorage = questionnaireStorage;
             this.sharedPersonsStorage = sharedPersonsStorage;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.accountsDocumentReader = accountsDocumentReader;
@@ -38,12 +37,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public QuestionnaireInfoView Load(string questionnaireId, Guid viewerId)
         {
-            QuestionnaireInfoView questionnaireInfoView = this.questionnaireStorage.GetById(questionnaireId);
-
-            if (questionnaireInfoView == null)
-                return null;
-
             QuestionnaireDocument questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
+
+            var questionnaireInfoView = new QuestionnaireInfoView()
+            {
+                QuestionnaireId = questionnaireId,
+                Title = questionnaireDocument.Title,
+                Chapters = new List<ChapterInfoView>(),
+                IsPublic = questionnaireDocument.IsPublic
+            };
+
+            foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
+            {
+                questionnaireInfoView.Chapters.Add(new ChapterInfoView()
+                {
+                    ItemId = chapter.PublicKey.FormatGuid(),
+                    Title = chapter.Title,
+                    GroupsCount = 0,
+                    RostersCount = 0,
+                    QuestionsCount = 0
+                });
+            }
+
             int questionsCount = 0, groupsCount = 0, rostersCount = 0;
             questionnaireDocument.Children.TreeToEnumerable(item => item.Children).ForEach(item =>
             {

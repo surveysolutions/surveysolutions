@@ -9,7 +9,7 @@
 }
 <div class="question-container">
     <div class="question">
-        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">@question.QuestionText.SanitizeHtml()</div>
+        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">@questionnaire.GetQuestionTitle(question)</div>
         <div class="common-info">
             @if (questionnaire.QuestionHasInstructions(question))
             {
@@ -130,11 +130,11 @@
                                 </div>
 
                             }
-</div>
+                        </div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
-                        <div class="more">And <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other []</a></div>
+                        <div class="more">And <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O")]</a></div>
                     }
                 </div>
                 break;

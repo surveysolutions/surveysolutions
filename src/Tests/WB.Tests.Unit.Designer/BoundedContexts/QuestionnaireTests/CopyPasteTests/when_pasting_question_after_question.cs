@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 
@@ -28,7 +28,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                     Create.NumericIntegerQuestion(id: level1QuestionId, variable: stataExportCaption)
                     
                 }));
-            eventContext = new EventContext();
 
             command = new PasteAfter(
                questionnaireId: questionnaireId,
@@ -44,15 +43,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         Because of = () => 
             questionnaire.PasteAfter(command);
 
-        private It should_clone_MaxAnswerCount_value =
-            () => eventContext.ShouldContainEvent<QuestionCloned>();
+        It should_exists_question_in_document = () => 
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId).ShouldNotBeNull();
 
-        It should_raise_QuestionCloned_event_with_QuestionId_specified = () =>
-            eventContext.GetSingleEvent<QuestionCloned>()
+        It should_exists_question_with_QuestionId_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId)
                 .PublicKey.ShouldEqual(targetId);
 
-        It should_raise_QuestionCloned_event_with_stataExportCaption_specified = () =>
-            eventContext.GetSingleEvent<QuestionCloned>()
+        It should_exists_question_with_stataExportCaption_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId)
                 .StataExportCaption.ShouldEqual(stataExportCaption);
 
         static Questionnaire questionnaire;
@@ -60,7 +59,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 
         static Guid sourceQuestionaireId;
         static Guid level1QuestionId = Guid.Parse("44DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        static EventContext eventContext;
         static Guid responsibleId;
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string stataExportCaption = "varrr";

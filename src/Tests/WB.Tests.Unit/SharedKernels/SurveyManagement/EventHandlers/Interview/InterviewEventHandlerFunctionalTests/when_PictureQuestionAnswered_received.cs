@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
@@ -18,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            var questionnaireRosterStructure = new Mock<QuestionnaireRosterStructure>();
+            var questionnaireRosterStructure = new Mock<Dictionary<ValueVector<Guid>, RosterScopeDescription>>();
 
             interviewEventHandlerFunctional = CreateInterviewEventHandlerFunctional(questionnaireRosterStructure.Object);
             viewState = CreateViewWithSequenceOfInterviewData();

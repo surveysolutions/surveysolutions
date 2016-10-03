@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IInterviewEntityViewModel,
         ILiteEventHandler<TextQuestionAnswered>,
         ILiteEventHandler<AnswerRemoved>,
+        ICompositeQuestion,
         IDisposable
     {
         private readonly ILiteEventRegistry liteEventRegistry;
@@ -33,7 +34,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
 
-        public QuestionStateViewModel<TextQuestionAnswered> QuestionState { get; private set; }
+        public IQuestionStateViewModel QuestionState => this.questionState;
+
+        public QuestionInstructionViewModel InstructionViewModel { get; set; }
         public AnsweringViewModel Answering { get; private set; }
 
         public TextQuestionViewModel(
@@ -42,29 +45,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<TextQuestionAnswered> questionStateViewModel,
+            QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
-            this.QuestionState = questionStateViewModel;
+            this.questionState = questionStateViewModel;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.questionState.Init(interviewId, entityIdentity, navigationState);
+            this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             this.InitQuestionSettings();
             this.UpdateSelfFromModel();
@@ -111,6 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxAsyncCommand ValueChangeCommand => new MvxAsyncCommand<string>(this.SaveAnswer);
 
         private IMvxCommand answerRemoveCommand;
+        private readonly QuestionStateViewModel<TextQuestionAnswered> questionState;
 
         public IMvxCommand RemoveAnswerCommand
         {

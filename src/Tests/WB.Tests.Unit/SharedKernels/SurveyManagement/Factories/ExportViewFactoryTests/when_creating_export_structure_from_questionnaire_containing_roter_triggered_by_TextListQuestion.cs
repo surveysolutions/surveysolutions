@@ -5,10 +5,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -38,11 +41,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                         new NumericQuestion() { PublicKey = questionInsideRosterId, QuestionType = QuestionType.Numeric }
                     }
                 });
-            exportViewFactory = CreateExportViewFactory();
+
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(new PlainQuestionnaire(questionnaireDocument, 1, null));
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
+            exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
         };
 
         Because of = () =>
-            questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1);
+            questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1));
 
         It should_create_header_with_1_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideRosterId].ColumnNames.Length.ShouldEqual(1);

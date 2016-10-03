@@ -1,17 +1,16 @@
 ﻿using System;
 using Main.Core.Documents;
-using Ncqrs.Commanding;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    public class CloneQuestionnaire : CommandBase
+    public class CloneQuestionnaire : QuestionnaireCommand
     {
-        public CloneQuestionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument doc)
-            : base(publicKey)
+        public CloneQuestionnaire(Guid questionnaireId, string title, Guid responsibleId, bool isPublic, QuestionnaireDocument doc)
+            : base(questionnaireId, responsibleId)
         {
-            this.PublicKey = publicKey;
-            this.CreatedBy = createdBy;
+            this.ResponsibleId = responsibleId;
             this.Title = CommandUtils.SanitizeHtml(title);
             this.IsPublic = isPublic;
             this.Source = doc;
@@ -21,10 +20,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 
         public bool IsPublic { get; private set; }
 
-        public Guid CreatedBy { get; private set; }
-
-        public Guid PublicKey { get; private set; }
-
-        public IQuestionnaireDocument Source { get; private set; }
+        public QuestionnaireDocument Source { get; private set; }
     }
 }

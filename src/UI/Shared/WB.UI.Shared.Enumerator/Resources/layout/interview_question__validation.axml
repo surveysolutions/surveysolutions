@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    style="@style/Interview_Question_Errors"
+    local:MvxBind="Visible IsInvalid">
+  <TextView
+      style="@style/Interview_Question_Errors_Title"
+      local:MvxBind="Text Error.Caption;
+      Visible IsInvalid" />
+  <MvxLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        local:MvxBind="ItemsSource Error.ValidationErrors;Visible IsInvalid"
+        local:MvxItemTemplate="@layout/interview_question__validation_item"/>
+</LinearLayout>

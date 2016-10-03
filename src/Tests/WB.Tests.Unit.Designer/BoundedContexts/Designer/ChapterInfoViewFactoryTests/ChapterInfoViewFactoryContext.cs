@@ -1,37 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactoryTests
 {
     internal class ChapterInfoViewFactoryContext
     {
-        protected static GroupInfoView CreateChapterInfoView(string questionnaireId, string chapterId)
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId, string chapterId)
         {
-            return new GroupInfoView()
-                {
-                    ItemId = questionnaireId,
-                    Items = new List<IQuestionnaireItem>() {new GroupInfoView() {ItemId = chapterId}}
-                };
+            return new QuestionnaireDocument()
+            {
+                PublicKey = Guid.Parse(questionnaireId),
+                Children = new List<IComposite>() { new Group() { PublicKey = Guid.Parse(chapterId) } }
+            };
         }
 
-        protected static GroupInfoView CreateChapterInfoViewWithoutChapters(string questionnaireId, string chapterId)
+        protected static QuestionnaireDocument CreateQuestionnaireDocumentWithoutChapters(string questionnaireId)
         {
-            return new GroupInfoView()
+            return new QuestionnaireDocument()
             {
-                ItemId = questionnaireId,
-                Items = new List<IQuestionnaireItem>()
+                PublicKey = Guid.Parse(questionnaireId),
+                Children = new List<IComposite>()
             };
         }
 
         protected static ChapterInfoViewFactory CreateChapterInfoViewFactory(
-            IReadSideKeyValueStorage<GroupInfoView> repository = null)
+            IPlainKeyValueStorage<QuestionnaireDocument> repository = null)
         {
             return
-                new ChapterInfoViewFactory(repository ??
-                                                 Mock.Of<IReadSideKeyValueStorage<GroupInfoView>>());
+                new ChapterInfoViewFactory(repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
         }
     }
 }

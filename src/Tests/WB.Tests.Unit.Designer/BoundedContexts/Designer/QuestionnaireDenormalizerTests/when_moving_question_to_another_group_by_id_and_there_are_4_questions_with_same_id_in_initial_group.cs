@@ -2,11 +2,12 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using Group = Main.Core.Entities.SubEntities.Group;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -34,14 +35,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 anotherGroup = CreateGroup(groupId: anotherGroupId),
             });
 
-            var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
-                => storage.GetById(it.IsAny<string>()) == questionnaire);
-
-            denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 
         Because of = () =>
-            denormalizer.Handle(questionMovedEvent);
+            denormalizer.MoveQuestionnaireItem(questionMovedEvent);
 
         It should_move_first_question_to_another_group = () =>
             anotherGroup.Children.ShouldContainOnly(firstQuestion);
@@ -55,7 +53,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static AbstractQuestion secondQuestion;
         private static AbstractQuestion thirdQuestion;
         private static AbstractQuestion forthQuestion;
-        private static QuestionnaireDenormalizer denormalizer;
-        private static IPublishedEvent<QuestionnaireItemMoved> questionMovedEvent;
+        private static Questionnaire denormalizer;
+        private static QuestionnaireItemMoved questionMovedEvent;
     }
 }

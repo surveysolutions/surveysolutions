@@ -45,10 +45,10 @@ namespace WB.UI.Headquarters
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/moment.js",
-                "~/Scripts/modernizr-2.7.2.js",
+                "~/Scripts/modernizr-2.8.3.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/director.js",
-                "~/Scripts/knockout-3.2.0.js",
+                "~/Scripts/knockout-3.4.0.js",
                 "~/Scripts/knockout.mapping-latest.js",
                 "~/Scripts/lodash.underscore.js",
                 "~/Scripts/query-string.js",
@@ -72,13 +72,13 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interview-general").Include(
-                "~/Scripts/knockout.validation.js",
                 "~/Scripts/bootstrap-datepicker.js",
                 "~/Scripts/Math.uuid.js",
-                "~/Scripts/viewmodels/pages/interview/custom.js",
                 "~/Scripts/knockout/ko.numericformatter.js",
                 "~/Scripts/lodash.underscore.js",
-                "~/Scripts/jquery.maskedinput.js"
+                "~/Scripts/jquery.maskedinput.js",
+                "~/Scripts/knockout.validation.min.js",
+                "~/Scripts/viewmodels/pages/interview/custom.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/interview-new").Include(
                 "~/Scripts/bootstrap3-typeahead.js",
@@ -112,14 +112,6 @@ namespace WB.UI.Headquarters
                 "~/Scripts/bootstrap-datepicker.js",
                 "~/Scripts/ko.datepicker.js",
                 "~/Scripts/viewmodels/pages/periodicstatusreport.js"
-                ));
-            bundles.Add(new ScriptBundle("~/js/batch-upload").Include(
-                "~/Scripts/bootstrap3-typeahead.js",
-                "~/Scripts/knockout/ko.typeahead.js",
-                "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/pages/batchupload.js",
-                "~/Scripts/spin.js",
-                "~/Scripts/knockout/ko.spin.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/synclog").Include(
                 "~/Scripts/bootstrap-datepicker.js",

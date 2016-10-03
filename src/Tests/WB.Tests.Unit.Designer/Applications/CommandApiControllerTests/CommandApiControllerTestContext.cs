@@ -18,7 +18,6 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             ICommandDeserializer commandDeserializer = null, 
             ILogger logger = null, 
             ICommandInflater commandInflater = null, 
-            ICommandPostprocessor commandPostprocessor = null,
             HttpRequestMessage httpRequestMessage = null,
             HttpConfiguration httpConfiguration = null,
             IAttachmentService attachmentService = null,
@@ -29,7 +28,6 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
                 commandDeserializer ?? Mock.Of<ICommandDeserializer>(),
                 logger ?? Mock.Of<ILogger>(),
                 commandInflater ?? Mock.Of<ICommandInflater>(),
-                commandPostprocessor ?? Mock.Of<ICommandPostprocessor>(),
                 Mock.Of<ILookupTableService>(),
                 attachmentService ?? Mock.Of<IAttachmentService>(),
                 translationsService ?? Mock.Of<ITranslationsService>());

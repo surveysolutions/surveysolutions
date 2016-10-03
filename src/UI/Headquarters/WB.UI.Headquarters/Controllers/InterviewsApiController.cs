@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,11 +14,8 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Threading;
-using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
@@ -31,57 +25,25 @@ namespace WB.UI.Headquarters.Controllers
     public class InterviewsApiController : BaseApiController
     {
         private readonly IPreloadedDataRepository preloadedDataRepository;
-        readonly Func<ISampleImportService> sampleImportServiceFactory;
         private readonly IInterviewImportService interviewImportService;
         private readonly IArchiveUtils archiver;
         private readonly IGlobalInfoProvider globalInfoProvider;
 
         public InterviewsApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IPreloadedDataRepository preloadedDataRepository, Func<ISampleImportService> sampleImportServiceFactory,
+            IPreloadedDataRepository preloadedDataRepository, 
             IInterviewImportService interviewImportService,
             IArchiveUtils archiver,
             IGlobalInfoProvider globalInfoProvider)
             : base(commandService, globalInfo, logger)
         {
             this.preloadedDataRepository = preloadedDataRepository;
-            this.sampleImportServiceFactory = sampleImportServiceFactory;
             this.interviewImportService = interviewImportService;
             this.archiver = archiver;
             this.globalInfoProvider = globalInfoProvider;
         }
 
-        [ObserverNotAllowedApi]
-        [ApiValidationAntiForgeryToken]
-        public void ImportPanelData(BatchUploadModel model)
-        {
-            PreloadedDataByFile[] preloadedData = this.preloadedDataRepository.GetPreloadedDataOfPanel(model.InterviewId);
-            Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
-
-            new Task(() =>
-            {
-                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
-                try
-                {
-                    var sampleImportService = this.sampleImportServiceFactory.Invoke();
-
-                    sampleImportService.CreatePanel(
-                        model.QuestionnaireId,
-                        model.QuestionnaireVersion,
-                        model.InterviewId,
-                        preloadedData,
-                        responsibleHeadquarterId,
-                        model.ResponsibleSupervisor);
-                }
-                finally
-                {
-                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                    ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
-                }
-            }).Start();
-        }
-
+        
         [HttpGet]
         public InterviewImportStatusApiView GetImportInterviewsStatus()
         {
@@ -114,19 +76,25 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
-            var isSupervisorRequired = !this.interviewImportService.HasResponsibleColumn(request.InterviewImportProcessId) &&
-                                       !request.SupervisorId.HasValue;
+            var isSupervisorRequired = !request.WasResponsibleProvided && !request.SupervisorId.HasValue;
 
             var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
 
             if (!isSupervisorRequired)
             {
+                if (this.interviewImportService.Status.IsInProgress)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                           "Import interviews is in progress. Wait until current operation is finished.");
+                }
+
                 ThreadMarkerManager.MarkCurrentThreadAsIsolated();
 
                 try
                 {
                     this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
-                        questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: request.InterviewImportProcessId,
+                        questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: request.InterviewImportProcessId, 
+                        isPanel: request.PreloadingType == PreloadedContentType.Panel,
                         headquartersId: headquartersId);
                 }
                 finally
@@ -182,6 +150,10 @@ namespace WB.UI.Headquarters.Controllers
 
             public string InterviewImportProcessId { get; set; }
             public Guid? SupervisorId { get; set; }
+
+            public PreloadedContentType PreloadingType { get; set; }
+
+            public bool WasResponsibleProvided { get; set; }
         }
 
         public class InterviewImportStatusApiView

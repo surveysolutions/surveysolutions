@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -9,7 +10,10 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
@@ -20,6 +24,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
+        private ICompositeCollectionInflationService compositeCollectionInflationService;
+
 
         protected BasePrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
@@ -28,7 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             ILogger logger,
             IPrincipal principal,
-            ICommandService commandService)
+            ICommandService commandService,
+            ICompositeCollectionInflationService compositeCollectionInflationService)
             : base(principal, viewModelNavigationService, commandService)
         {
             if (interviewViewModelFactory == null) throw new ArgumentNullException(nameof(interviewViewModelFactory));
@@ -41,12 +48,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
             this.logger = logger;
+            this.compositeCollectionInflationService = compositeCollectionInflationService;
         }
 
         public string QuestionnaireTitle { get; set; }
 
-        private ObservableCollection<dynamic> prefilledQuestions;
-        public ObservableCollection<dynamic> PrefilledQuestions
+        private CompositeCollection<ICompositeEntity> prefilledQuestions;
+        public CompositeCollection<ICompositeEntity> PrefilledQuestions
         {
             get { return this.prefilledQuestions; }
             set { this.prefilledQuestions = value; this.RaisePropertyChanged(); }
@@ -82,11 +90,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
 
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = new ObservableCollection<dynamic>();
+            
+            var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId).ToList();
 
-            var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
-            questions.ForEach(x => this.PrefilledQuestions.Add(x));
-
+            this.PrefilledQuestions = this.compositeCollectionInflationService.GetInflatedCompositeCollection(questions);
+            
             var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.Init(interviewId, null, null);
             this.PrefilledQuestions.Add(startButton);
@@ -98,5 +106,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         public void NavigateToPreviousViewModel() => this.viewModelNavigationService.NavigateToDashboard();
+
+        public void Dispose()
+        {
+            var disposableItems = this.prefilledQuestions.OfType<IDisposable>().ToArray();
+
+            foreach (var disposableItem in disposableItems)
+            {
+                disposableItem.Dispose();
+            }
+        }
     }
 }

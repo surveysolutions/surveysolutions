@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -30,31 +31,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionFromRosterId = Guid.Parse("32222222222222222222222222222222");
             questionFromNestedRosterId = Guid.Parse("42222222222222222222222222222222");
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId),
 
-                => _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
-                    && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
-                    && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                    && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new[] { parentRosterGroupId, nestedRosterGroupId }
+                Create.Entity.Roster(rosterId: parentRosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
+                {
+                    Create.Entity.Question(questionId: questionFromRosterId),
 
-                    && _.HasGroup(nestedRosterGroupId) == true
-                    && _.GetRosterLevelForGroup(nestedRosterGroupId) == 2
-                    && _.GetRosterLevelForGroup(parentRosterGroupId) == 1
-                    && _.GetRostersFromTopToSpecifiedGroup(nestedRosterGroupId) == new[] { parentRosterGroupId, nestedRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedGroup(parentRosterGroupId) == new[] { parentRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedQuestion(questionWhichIncreasesRosterSizeId) == new Guid[0]
-
-                    && _.GetNestedRostersOfGroupById(parentRosterGroupId) == new[] { nestedRosterGroupId }
-                    && _.GetRosterSizeQuestion(nestedRosterGroupId) == questionWhichIncreasesRosterSizeId
-
-
-                    && _.GetAllUnderlyingQuestions(parentRosterGroupId) == new[] { questionFromRosterId, questionFromNestedRosterId }
-                    && _.GetAllUnderlyingQuestions(nestedRosterGroupId) == new[] { questionFromNestedRosterId }
-                    && _.GetRosterLevelForEntity(questionFromRosterId) == 1
-                    && _.GetRosterLevelForEntity(questionFromNestedRosterId) == 2
-                    && _.GetRostersFromTopToSpecifiedEntity(questionFromRosterId) == new[] { parentRosterGroupId }
-                    && _.GetRostersFromTopToSpecifiedEntity(questionFromNestedRosterId) == new[] { parentRosterGroupId, nestedRosterGroupId }
-                    );
+                    Create.Entity.Roster(rosterId: nestedRosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
+                    {
+                        Create.Entity.Question(questionId: questionFromNestedRosterId),
+                    }),
+                }),
+            }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 

@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
 
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -68,7 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
-        decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
+        int GetCascadingParentValue(Guid questionId, decimal answerOptionValue);
 
         int? GetMaxSelectedAnswerOptions(Guid questionId);
 
@@ -203,11 +205,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// <summary>
         /// Gets first level child entities of a group
         /// </summary>
-        ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
+        IReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildStaticTexts(Guid groupId);
+
+        IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId);
 
         bool IsPrefilled(Guid questionId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
@@ -231,5 +235,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IReadOnlyCollection<string> GetTranslationLanguages();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
+
+        Dictionary<ValueVector<Guid>, RosterScopeDescription>  GetRosterScopes();
     }
 }

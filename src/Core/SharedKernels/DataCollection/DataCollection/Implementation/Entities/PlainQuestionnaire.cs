@@ -17,6 +17,8 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -43,6 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedStaticTextsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedGroupsCache = null;
+        private Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null;
 
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -89,7 +92,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             {
                 return this.sectionsCache ?? (this.sectionsCache 
                     = this.innerDocument
-                    .Children.Cast<IGroup>()
+                    .Children
+                    .OfType<IGroup>()
                     .Where(x => x != null)
                     .Select(x => x.PublicKey)
                     .ToReadOnlyCollection());
@@ -144,6 +148,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                         .ToDictionary(
                             group => group.PublicKey.FormatGuid(),
                             group => group));
+            }
+        }
+
+        private Dictionary<ValueVector<Guid>, RosterScopeDescription> RosterScopes
+        {
+            get
+            {
+                return this.rosterScopes ?? (this.rosterScopes = this.CreateRosterScopes());
             }
         }
 
@@ -433,7 +445,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue) => this.GetAnswerOption(questionId, answerOptionValue).Title;
 
-        public decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
+        public int GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
         {
             var answerOption = this.GetAnswerOption(questionId, answerOptionValue);
             if (!answerOption.ParentValue.HasValue)
@@ -736,7 +748,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfChildQuestions[groupId];
         }
 
-        public ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId)
+        public IReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId)
         {
             if (!this.cacheOfChildEntities.ContainsKey(groupId))
             {
@@ -749,6 +761,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return this.cacheOfChildEntities[groupId];
+        }
+
+        public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
+        {
+            if (!this.cacheOfChildEntities.ContainsKey(groupId))
+            {
+                this.cacheOfChildEntities[groupId] =
+                    this.GetGroupOrThrow(groupId)
+                        .Children
+                        .Where(entity => !(entity is IVariable))
+                        .Select(entity => entity.PublicKey)
+                        .ToReadOnlyCollection();
+            }
+
+            var result = this.cacheOfChildEntities[groupId].Except(x => this.IsQuestion(x) && !this.IsInterviewierQuestion(x));
+            return new ReadOnlyCollection<Guid>(result.ToList());
         }
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
@@ -897,14 +925,143 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!rosters.Any())
                 return false;
 
+            int childItemsCount = 0;
+
             foreach (var roster in rosters)
             {
                 if (GetRosterLevelForEntity(roster) > 1)
                     return false;
                 if (GetAllUnderlyingChildRosters(roster).Any())
                     return false;
+
+                childItemsCount += GetGroupOrThrow(roster).Children.TreeToEnumerable(x => x.Children).Count();
+
+                if (childItemsCount > Constants.MaxAmountOfItemsInLongRoster)
+                    return false;
             }
+
             return true;
+        }
+
+
+        public Dictionary<ValueVector<Guid>, RosterScopeDescription> GetRosterScopes()
+        {
+            return this.RosterScopes;
+        }
+
+        public Dictionary<ValueVector<Guid>, RosterScopeDescription> CreateRosterScopes()
+        {
+            var result = new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
+            var groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId(this.innerDocument);
+            this.AddRosterScopes(this.innerDocument, groupsMappedOnPropagatableQuestion, result);
+
+            return result;
+        }
+
+        private void AddRosterScopes(QuestionnaireDocument questionnaire, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion,
+           Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
+        {
+            var rosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question);
+            var fixedRosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles).ToList();
+
+            var rosterSizeQuestions = questionnaire.Find<IQuestion>(question => rosterGroups.Any(group => group.RosterSizeQuestionId.Value == question.PublicKey));
+
+            foreach (var rosterSizeQuestion in rosterSizeQuestions)
+            {
+                var groupsFromRosterSizeQuestionScope =
+                    rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey).ToList();
+
+                var scopeVectorsOfTriggers = groupsFromRosterSizeQuestionScope.Select(
+                    roster =>
+                        this.GetScopeOfQuestionnaireItem(roster,
+                            groupsMappedOnPropagatableQuestion)).GroupBy(k => k);
+
+                foreach (var scopeVectorsOfTrigger in scopeVectorsOfTriggers)
+                {
+                    var rosterIdWithTitleQuestionIds =
+                        this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(questionnaire,
+                            groupsFromRosterSizeQuestionScope.Where(group =>
+                                GetScopeOfQuestionnaireItem(group, groupsMappedOnPropagatableQuestion)
+                                    .SequenceEqual(scopeVectorsOfTrigger.Key)));
+
+                    var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, rosterSizeQuestion.StataExportCaption,
+                        GetRosterScopeTypeByQuestionType(rosterSizeQuestion.QuestionType), rosterIdWithTitleQuestionIds);
+
+                    rosterScopes.Add(scopeVectorsOfTrigger.Key, rosterDescription);
+                }
+            }
+
+            foreach (var fixedRosterGroup in fixedRosterGroups)
+            {
+                var scopeVector = this.GetScopeOfQuestionnaireItem(fixedRosterGroup, groupsMappedOnPropagatableQuestion);
+                rosterScopes[scopeVector] =
+                    new RosterScopeDescription(scopeVector,
+                        string.Empty, RosterScopeType.Fixed,
+                        new Dictionary<Guid, RosterTitleQuestionDescription> { { fixedRosterGroup.PublicKey, null } });
+            }
+        }
+
+        private RosterScopeType GetRosterScopeTypeByQuestionType(QuestionType questionType)
+        {
+            switch (questionType)
+            {
+                case QuestionType.Numeric:
+                    return RosterScopeType.Numeric;
+                case QuestionType.MultyOption:
+                    return RosterScopeType.MultyOption;
+                case QuestionType.TextList:
+                    return RosterScopeType.TextList;
+            }
+            return RosterScopeType.Numeric;
+        }
+
+        private IDictionary<Guid, Guid> GetAllRosterScopesGroupedByRosterId(QuestionnaireDocument template)
+        {
+            var result = template.Find<IGroup>(group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question).ToDictionary(roster => roster.PublicKey, roster => roster.RosterSizeQuestionId.Value);
+
+            foreach (var roster in template.Find<IGroup>(group => group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles))
+            {
+                result.Add(roster.PublicKey, roster.PublicKey);
+            }
+
+            return result;
+        }
+
+        private ValueVector<Guid> GetScopeOfQuestionnaireItem(IComposite questionnaireItem,
+            IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion)
+        {
+            var result = new List<Guid>();
+            var questionParent = questionnaireItem;
+
+            while (questionParent != null)
+            {
+                var group = questionParent as IGroup;
+                if (group != null && (group.IsRoster))
+                {
+                    result.Add(groupsMappedOnPropagatableQuestion[group.PublicKey]);
+                }
+                questionParent = questionParent.GetParent();
+            }
+            result.Reverse();
+
+            return new ValueVector<Guid>(result);
+        }
+
+        private Dictionary<Guid, RosterTitleQuestionDescription> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(QuestionnaireDocument questionnaire, IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
+        {
+            return
+                groupsFromRosterSizeQuestionScope
+                    .ToDictionary(roster => roster.PublicKey,
+                        roster => roster.RosterTitleQuestionId.HasValue
+                            ? this.CreateRosterTitleQuestionDescription(
+                                questionnaire.Find<IQuestion>(roster.RosterTitleQuestionId.Value))
+                            : null);
+        }
+
+        private RosterTitleQuestionDescription CreateRosterTitleQuestionDescription(IQuestion question)
+        {
+            return new RosterTitleQuestionDescription(question.PublicKey,
+                question.Answers.ToDictionary(a => a.ParsedValue(), a => a.AnswerText));
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
@@ -1253,20 +1410,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
-            Guid? rosterAffectedByBackwardCompatibility =
-                question.Capital
-                    ? this.GetRostersFromTopToSpecifiedQuestion(questionId).Cast<Guid?>().LastOrDefault()
-                    : null;
-
             IEnumerable<Guid> rostersAffectedByCurrentDomain =
                 from @group in this.AllGroups
                 where this.IsRosterGroup(@group.PublicKey) && @group.RosterTitleQuestionId == questionId
                 select @group.PublicKey;
 
-            return Enumerable.ToList(
-                rosterAffectedByBackwardCompatibility.HasValue
-                    ? rostersAffectedByCurrentDomain.Union(new[] { rosterAffectedByBackwardCompatibility.Value })
-                    : rostersAffectedByCurrentDomain);
+            return rostersAffectedByCurrentDomain.ToList();
         }
 
         private IEnumerable<Guid> GetAllUnderlyingStaticTextsImpl(Guid groupId)

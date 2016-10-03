@@ -90,7 +90,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
@@ -215,23 +215,20 @@
     <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="Events\Questionnaire\Attachments\AttachmentDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Attachments\AttachmentUpdated.cs" />
-    <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
-    <Compile Include="Events\Questionnaire\LookupTables\LookupTableAdded.cs" />
-    <Compile Include="Events\Questionnaire\LookupTables\LookupTableDeleted.cs" />
-    <Compile Include="Events\Questionnaire\LookupTables\LookupTableUpdated.cs" />
-    <Compile Include="Events\Questionnaire\Macros\MacroAdded.cs" />
-    <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
-    <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireVariableEvent.cs" />
-    <Compile Include="Events\Questionnaire\Translation\TranslationDeleted.cs" />
-    <Compile Include="Events\Questionnaire\Translation\TranslationUpdated.cs" />
-    <Compile Include="Events\Questionnaire\VariableAdded.cs" />
-    <Compile Include="Events\Questionnaire\VariableCloned.cs" />
-    <Compile Include="Events\Questionnaire\VariableDeleted.cs" />
-    <Compile Include="Events\Questionnaire\VariableUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\ExpressionsMigratedToCSharp.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableAdded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableDeleted.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\Macros\MacroAdded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\Macros\MacroDeleted.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\Macros\MacroUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireVariable.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableAdded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableCloned.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableDeleted.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableUpdated.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
@@ -371,6 +368,9 @@
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\MultiLanguageQuestionnaireDocument.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\ResourcesPostProcessor.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\HistoryPostProcessor.cs" />
+    <Compile Include="Implementation\Services\QuestionnairePostProcessors\ListViewPostProcessor.cs" />
     <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
@@ -480,49 +480,47 @@
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
-    <Compile Include="Events\Questionnaire\AbstractListQuestionDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\AbstractNumericQuestionDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\AbstractQuestionDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\AbstractQuestionAdded.cs" />
-    <Compile Include="Events\Questionnaire\AbstractQuestionUpdated.cs" />
-    <Compile Include="Events\Questionnaire\AbstractQuestionCloned.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireEntityEvent.cs" />
-    <Compile Include="Events\Questionnaire\StaticTextCloned.cs" />
-    <Compile Include="Events\Questionnaire\StaticTextDeleted.cs" />
-    <Compile Include="Events\Questionnaire\StaticTextUpdated.cs" />
-    <Compile Include="Events\Questionnaire\StaticTextAdded.cs" />
-    <Compile Include="Events\Questionnaire\QRBarcodeQuestionCloned.cs" />
-    <Compile Include="Events\Questionnaire\QRBarcodeQuestionUpdated.cs" />
-    <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
-    <Compile Include="Events\Questionnaire\GroupEvent.cs" />
-    <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />
-    <Compile Include="Events\Questionnaire\TextListQuestionCloned.cs" />
-    <Compile Include="Events\Questionnaire\TextListQuestionChanged.cs" />
-    <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
-    <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireCloned.cs" />
-    <Compile Include="Events\Questionnaire\RosterChanged.cs" />
-    <Compile Include="Events\Questionnaire\SharedPersonToQuestionnaireAdded.cs" />
-    <Compile Include="Events\Questionnaire\SharedPersonFromQuestionnaireRemoved.cs" />
-    <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\FullQuestionDataEvent.cs" />
-    <Compile Include="Events\Questionnaire\GroupCloned.cs" />
-    <Compile Include="Events\Questionnaire\GroupDeleted.cs" />
-    <Compile Include="Events\Questionnaire\GroupUpdated.cs" />
-    <Compile Include="Events\Questionnaire\ImageDeleted.cs" />
-    <Compile Include="Events\Questionnaire\ImageUpdated.cs" />
-    <Compile Include="Events\Questionnaire\ImageUploaded.cs" />
-    <Compile Include="Events\Questionnaire\NewGroupAdded.cs" />
-    <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
-    <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs" />
-    <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
-    <Compile Include="Events\Questionnaire\QuestionCloned.cs" />
-    <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
-    <Compile Include="Events\Questionnaire\TemplateImported.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractListQuestionData.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractNumericQuestionData.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionData.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionAdded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionCloned.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireEntity.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\StaticTextCloned.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\StaticTextDeleted.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\StaticTextUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\StaticTextAdded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QRBarcodeQuestionCloned.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QRBarcodeQuestionUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupBecameARoster.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\Group.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupStoppedBeingARoster.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\TextListQuestionCloned.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\TextListQuestionChanged.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\NumericQuestionChanged.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\NumericQuestionCloned.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireActive.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\RosterChanged.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\SharedPersonToQuestionnaireAdded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\SharedPersonFromQuestionnaireRemoved.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\FullGroupData.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\FullQuestionData.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupCloned.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupDeleted.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\ImageDeleted.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\ImageUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\ImageUploaded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\NewGroupAdded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\NewQuestionAdded.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\NewQuestionnaireCreated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionChanged.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionCloned.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionDeleted.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireItemMoved.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireUpdated.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireDto\TemplateImported.cs" />
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Exceptions\DomainExceptionType.cs" />
     <Compile Include="Implementation\Factories\IQuestionnaireEntityFactory.cs" />
@@ -575,6 +573,7 @@
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
+    <Compile Include="Services\IRecipientNotifier.cs" />
     <Compile Include="Translations\InvalidExcelFileException.cs" />
     <Compile Include="Translations\ITranslationsService.cs" />
     <Compile Include="Translations\TranslationFile.cs" />
@@ -606,21 +605,16 @@
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoricalRecordReference.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryFactory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeRecord.cs" />
-    <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistoryDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeHistory.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireChangeReference.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireItemType.cs" />
     <Compile Include="Views\Questionnaire\ChangeHistory\QuestionnaireStateTracker.cs" />
-    <Compile Include="Views\Questionnaire\Document\QuestionnaireDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\Edit\Breadcrumb.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterItemType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\GroupInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IQuestionnaireItem.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\StaticTextInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\QuestionInfoView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChaptersInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\FixedRosterTitleItem.cs" />
     <Compile Include="Views\Questionnaire\Edit\GroupDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\IChapterInfoViewFactory.cs" />
@@ -632,25 +626,7 @@
     <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditStaticTextView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\CategoricalOption.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DateTimeDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\DescendantItemView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\EventConverter.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GeoLocationDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\GroupAndRosterDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\IQuestionDetailsViewMapper.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultimediaDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\MultiOptionDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\NumericDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QrBarcodeDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsViewMapper.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\QuestionsAndGroupsCollectionDenormalizer.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\SingleOptionDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\StaticTextDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\CategoricalOption.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\TranslationView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\AttachmentView.cs" />
@@ -667,7 +643,6 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityNode.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireEntityType.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\ChapterInfoViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\ChapterInfo\VariableView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemLink.cs" />
     <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
@@ -690,7 +665,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItemDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewItemSearchable.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -709,9 +683,6 @@
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -721,6 +692,7 @@
     <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\ShareChangeType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">

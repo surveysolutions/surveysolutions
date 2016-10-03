@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Moq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
@@ -24,7 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.StaticText(staticText2Id),
                     Create.Entity.Group(children: new[]
                     {
-                        Create.Entity.TextQuestion(questionId)
+                        Create.Entity.TextQuestion(questionId),
+                        Create.Entity.TextQuestion(disabledQuestionId)
                     })
                 })));
 
@@ -35,7 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.Apply(Create.Event.StaticTextsDeclaredInvalid(Create.Entity.Identity(staticText1Id)));
             interview.Apply(Create.Event.StaticTextsDeclaredValid(Create.Entity.Identity(staticText2Id)));
             interview.Apply(Create.Event.StaticTextsDeclaredInvalid(Create.Entity.Identity(staticText2Id)));
-            interview.Apply(Create.Event.AnswersDeclaredInvalid(new[] {Create.Entity.Identity(questionId)}));
+            interview.Apply(Create.Event.AnswersDeclaredInvalid(new[] {Create.Entity.Identity(questionId), Create.Entity.Identity(disabledQuestionId) }));
+            interview.Apply(Create.Event.QuestionsDisabled(new[] { Create.Entity.Identity(disabledQuestionId) }));
         };
 
         Because of = () =>
@@ -44,19 +42,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It shouldreturn_3_entities_with_error = () =>
           invalidEntitiesInInterview.Count().ShouldEqual(3);
 
-        It should_contain_first_invalid_static_text = () =>
-            invalidEntitiesInInterview.ShouldContain(Create.Entity.Identity(staticText1Id));
-
-        It should_contain_second_invalid_static_text = () =>
-            invalidEntitiesInInterview.ShouldContain(Create.Entity.Identity(staticText2Id));
-
-        It should_contain_invalid_question = () =>
-            invalidEntitiesInInterview.ShouldContain(Create.Entity.Identity(questionId));
+        It should_contain_only_invalid_enabled_elements = () =>
+            invalidEntitiesInInterview.ShouldContainOnly(
+                Create.Entity.Identity(staticText1Id),
+                Create.Entity.Identity(staticText2Id),
+                Create.Entity.Identity(questionId));
 
         private static StatefulInterview interview;
         private static readonly Guid staticText1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static readonly Guid staticText2Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static readonly Guid questionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static readonly Guid disabledQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static IEnumerable<Identity> invalidEntitiesInInterview;
         private static Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
         static readonly Identity group = new Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);

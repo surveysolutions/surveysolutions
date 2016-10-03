@@ -1,8 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerTests
@@ -12,38 +12,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerT
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId));
-            questionnaire.Apply(new NewGroupAdded { PublicKey = targetEntityId });
-
-            eventContext = new EventContext();
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId));
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = targetEntityId });
         };
 
         Because of = () =>            
                 questionnaire.MoveStaticText(entityId: entityId, responsibleId: responsibleId, targetEntityId: targetEntityId, targetIndex: targetIndex);
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
-        It should_raise_QuestionnaireItemMoved_event = () =>
-            eventContext.ShouldContainEvent<QuestionnaireItemMoved>();
+        It should_moved_statictext_to_new_group_with_PublicKey_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).GetParent().PublicKey.ShouldEqual(targetEntityId);
 
-        It should_raise_QuestionnaireItemMoved_event_with_PublicKey_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>().PublicKey.ShouldEqual(entityId);
-
-        It should_raise_QuestionnaireItemMoved_event_with_ResponsibleId_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>().ResponsibleId.ShouldEqual(responsibleId);
-
-        It should_raise_QuestionnaireItemMoved_event_with_GroupKey_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>().GroupKey.ShouldEqual(targetEntityId);
-
-        It should_raise_QuestionnaireItemMoved_event_with_TargetIndex_specified = () =>
-            eventContext.GetSingleEvent<QuestionnaireItemMoved>().TargetIndex.ShouldEqual(targetIndex);
+        It should_moved_statictext_to_new_group_with_TargetIndex_specified = () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).GetParent().Children[targetIndex].PublicKey.ShouldEqual(entityId);
         
-        private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid targetEntityId = Guid.Parse("22222222222222222222222222222222");

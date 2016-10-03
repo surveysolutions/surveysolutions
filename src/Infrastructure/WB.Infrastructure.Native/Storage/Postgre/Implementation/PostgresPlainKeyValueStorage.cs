@@ -1,40 +1,39 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
+using NHibernate;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresPlainKeyValueStorage<TEntity> : PostgresKeyValueStorageWithCache<TEntity>,
         IPlainKeyValueStorage<TEntity>, IDisposable where TEntity : class
     {
-        private readonly PostgresPlainStorageSettings connectionSettings;
+        private readonly IPlainSessionProvider sessionProvider;
 
-        public PostgresPlainKeyValueStorage(PostgresPlainStorageSettings connectionSettings, ILogger logger)
+        public PostgresPlainKeyValueStorage(IPlainSessionProvider sessionProvider, PostgresPlainStorageSettings connectionSettings, ILogger logger)
             : base(connectionSettings.ConnectionString, logger)
         {
-            this.connectionSettings = connectionSettings;
+            this.sessionProvider = sessionProvider;
         }
 
         protected override object ExecuteScalar(IDbCommand command)
         {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                command.Connection = connection;
-                return command.ExecuteScalar();
-            }
+            var session = this.sessionProvider.GetSession();
+            command.Connection = session.Connection; 
+            session.Transaction.Enlist(command);
+            return command.ExecuteScalar();
         }
 
         protected override int ExecuteNonQuery(IDbCommand command)
         {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                command.Connection = connection;
-                return command.ExecuteNonQuery();
-            }
+            var session = this.sessionProvider.GetSession();
+            command.Connection = session.Connection;
+            session.Transaction.Enlist(command);
+            return command.ExecuteNonQuery();
         }
     }
 }

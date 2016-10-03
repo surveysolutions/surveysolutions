@@ -9,6 +9,7 @@ using System.Globalization;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -16,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
@@ -32,6 +34,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -125,6 +128,9 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
+        public CompositeCollection<T> CompositeCollection<T>()
+            => new CompositeCollection<T>();
+
         public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null)
             => new DataExportProcessDetails(
                 DataExportFormat.Tabular,
@@ -193,12 +199,13 @@ namespace WB.Tests.Unit.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X")
+        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null)
             => Create.Entity.Roster(
                 rosterId: rosterId,
                 children: children,
                 title: title,
                 variable: variable,
+                fixedRosterTitles: fixedRosterTitles,
                 fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public FixedRosterTitle FixedRosterTitle(decimal value, string title)
@@ -319,7 +326,7 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
-        public InterviewDataExportRecord InterviewDataExportRecord(Guid interviewId, params ExportedQuestion[] questions)
+        public InterviewDataExportRecord InterviewDataExportRecord(Guid interviewId, params ExportQuestionService[] questions)
             => new InterviewDataExportRecord("test", new string[0], new string[0], new string[0])
             {
                 Answers = questions.Select(x => string.Join("\n", x)).ToArray(),
@@ -466,7 +473,7 @@ namespace WB.Tests.Unit.TestFactories
                 disabledVariables ?? new HashSet<InterviewItemId>(),
                 wasCompleted ?? false);
 
-        public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null)
+        public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null, InterviewStatus? status = null)
         {
             interviewId = interviewId ?? Guid.NewGuid();
             return new InterviewView
@@ -474,10 +481,8 @@ namespace WB.Tests.Unit.TestFactories
                 Id = interviewId.FormatGuid(),
                 InterviewId = interviewId.Value,
                 QuestionnaireId = questionnaireId,
-                GpsLocation = new InterviewGpsLocationView
-                {
-                    PrefilledQuestionId = prefilledQuestionId
-                }
+                LocationQuestionId = prefilledQuestionId,
+                Status = status ?? default(InterviewStatus)
             };
         }
 
@@ -523,7 +528,8 @@ namespace WB.Tests.Unit.TestFactories
 
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null,
-            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, params decimal[] answers)
+            bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null,
+            params decimal[] answers)
             => new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -536,7 +542,7 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
-                Answers = answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList(),
+                Answers = textAnswers?.ToList() ?? answers.Select(a => Create.Entity.Answer(a.ToString(), a)).ToList(),
                 Properties = new QuestionProperties(false, false)
                 {
                     OptionsFilterExpression = optionsFilterExpression
@@ -726,11 +732,12 @@ namespace WB.Tests.Unit.TestFactories
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
-            => this.QuestionnaireDocumentWithOneChapter(null, children);
+            => this.QuestionnaireDocumentWithOneChapter(null, null, children);
 
-        public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+        public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
             {
+                PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IComposite>
                 {
                     new Group("Chapter")
@@ -776,7 +783,7 @@ namespace WB.Tests.Unit.TestFactories
             string enablementCondition = null,
             string[] fixedTitles = null,
             IEnumerable<IComposite> children = null,
-            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+            RosterSizeSourceType? rosterSizeSourceType = null,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null)
@@ -789,9 +796,9 @@ namespace WB.Tests.Unit.TestFactories
                 children: children);
 
             group.IsRoster = true;
-            group.RosterSizeSource = rosterSizeSourceType;
+            group.RosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
 
-            if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
+            if (group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
             {
                 if (fixedRosterTitles == null)
                 {
@@ -828,9 +835,10 @@ namespace WB.Tests.Unit.TestFactories
             string linkedFilterExpression = null,
             Guid? linkedToRosterId = null,
             bool? isFilteredCombobox = null,
-            string optionsFilterExpression = null)
+            string optionsFilterExpression = null,
+            List<Answer> answers = null)
         {
-            var answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
+            answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
             {
                 for (int i = 0; i < parentCodes.Length; i++)
@@ -1046,11 +1054,12 @@ namespace WB.Tests.Unit.TestFactories
         public YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
             => new YesNoAnswers(allOptionCodes, yesNoAnswersOnly);
 
-        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null)
+        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null, bool ordered = false)
             => Create.Entity.MultipleOptionsQuestion(
                 isYesNo: true,
                 questionId: questionId,
-                answers: answers ?? new decimal[] { });
+                answers: answers ?? new decimal[] { },
+                areAnswersOrdered: ordered);
 
         public TranslationInstance TranslationInstance(string value = null,
             Guid? translationId = null, 
@@ -1108,6 +1117,37 @@ namespace WB.Tests.Unit.TestFactories
         public RosterSynchronizationDto RosterSynchronizationDto(Guid rosterId)
         {
             return new RosterSynchronizationDto(rosterId, new decimal[] {}, 0, 0, "roster title");
+        }
+
+        public MapReportPoint MapReportPoint(string id, double latitude, double longitude)
+        {
+            return new MapReportPoint(id)
+            {
+                Latitude = latitude,
+                Longitude = longitude
+            };
+        }
+
+        public PrefilledQuestionView PrefilledQuestionView(Guid? interviewId = null, 
+            string answer = null, 
+            Guid? questionId = null,
+            string questionText = null)
+        {
+            var prefilledQuestionView = new PrefilledQuestionView
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                Answer = answer,
+                QuestionId = questionId ?? Guid.NewGuid(),
+                QuestionText = questionText
+            };
+            prefilledQuestionView.Id = $"{prefilledQuestionView.InterviewId:N}${prefilledQuestionView.QuestionId}";
+            return prefilledQuestionView;
+        }
+
+        public QuestionnaireView QuestionnaireView(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return new QuestionnaireView { Id = questionnaireIdentity.ToString()};
+            
         }
     }
 }

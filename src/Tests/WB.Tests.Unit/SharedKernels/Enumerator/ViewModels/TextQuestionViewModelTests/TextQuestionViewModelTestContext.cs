@@ -40,6 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
                 interviewRepository: interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionStateViewModel: QuestionStateMock.Object,
                 answering: AnsweringViewModelMock.Object,
+                instructionViewModel: Mock.Of<QuestionInstructionViewModel>(),
                 liteEventRegistry: Mock.Of<ILiteEventRegistry>());
         }
 

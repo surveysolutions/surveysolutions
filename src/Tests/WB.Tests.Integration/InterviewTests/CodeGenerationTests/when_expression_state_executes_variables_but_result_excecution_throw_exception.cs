@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 AssemblyContext.SetupServiceLocator();
 
-                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
+                QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(id:questionId, variable:"num"),

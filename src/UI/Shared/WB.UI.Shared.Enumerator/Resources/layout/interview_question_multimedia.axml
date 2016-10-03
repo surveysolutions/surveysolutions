@@ -2,43 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <LinearLayout style="@style/Interview_Question">
-    <include layout="@layout/interview_question__title" />
-    <LinearLayout style="@style/Interview_Question_Body">
-      <include layout="@layout/interview_question__instructions" />
-      <LinearLayout style="@style/Interview_Question_Answer"
-        local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+  <LinearLayout style="@style/Interview_Question_Answer"
+                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-        <TableLayout style="@style/FullWidthWrappingLayout"
+    <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+      <TableLayout style="@style/FullWidthWrappingLayout"
             android:stretchColumns="0">
-          <TableRow local:MvxBind="Visible QuestionState.IsAnswered;">
-            <ImageView style="@style/Interview_Question_Multimedia_Picture"
+        <TableRow>
+          <ImageView style="@style/Interview_Question_Multimedia_Picture"
               android:maxHeight="@dimen/Interview_Sidebar_GpsQuestions_max_height"
               android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
               android:scaleType="centerCrop"
               android:adjustViewBounds="true"
-              local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault; 
-                                 Visible QuestionState.IsAnswered"/>
-            <include layout="@layout/interview_question__remove_button_recorded" />
-          </TableRow>
-          <TableRow>
-            <FrameLayout android:layout_height="wrap_content"
-                         android:layout_width="wrap_content">
-              <Button style="@style/Interview_Question_InputButton"
+              local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault; Visible QuestionState.IsAnswered"/>
+          <include layout="@layout/interview_question__remove_button_recorded" />
+        </TableRow>
+      </TableLayout>
+      <Button style="@style/Interview_Question_InputButton"
                       local:MvxBind="HideKeyboardOnClick .; 
                                        Click RequestAnswerCommand; 
                                        Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');
                                        BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
-            </FrameLayout>
-          </TableRow>
-        </TableLayout>
-
-      </LinearLayout>
-      <include layout="@layout/interview_question__errors" />
-      <include layout="@layout/interview_question__comments" />
     </LinearLayout>
   </LinearLayout>
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-               local:MvxBind="ShowProgress Answering.InProgress" />
-  <View style="@style/Interview_Question_Divider" />
 </LinearLayout>
