@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.Look
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.Macros;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 
@@ -684,6 +685,44 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void DeleteQuestionnaire()
         {
             this.innerDocument.IsDeleted = true;
+        }
+
+        public void ReplaceTexts(string searchTerm, string replaceWith)
+        {
+            var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
+            foreach (var questionnaireItem in allEntries)
+            {
+                var title = questionnaireItem.GetTitle();
+                if (!title.IsNullOrEmpty())
+                {
+                    questionnaireItem.SetTitle(title.Replace(searchTerm, replaceWith));
+                }
+
+                var conditional = questionnaireItem as IConditional;
+                if (!string.IsNullOrEmpty(conditional?.ConditionExpression))
+                {
+                    conditional.ConditionExpression = conditional.ConditionExpression.Replace(searchTerm, replaceWith);
+                }
+
+                var validatable = questionnaireItem as IValidatable;
+                if (validatable != null)
+                {
+                    foreach (var validationCondition in validatable.ValidationConditions)
+                    {
+                        validationCondition.Expression = validationCondition.Expression?.Replace(searchTerm, replaceWith);
+                        validationCondition.Message = validationCondition.Message?.Replace(searchTerm, replaceWith);
+                    }
+                }
+            }
+
+            foreach (var macro in this.innerDocument.Macros.Values)
+            {
+                if (!macro.Content.IsNullOrEmpty())
+                {
+                    macro.Content = macro.Content.Replace(searchTerm, replaceWith);
+                }
+            }
+
         }
 
         #endregion
