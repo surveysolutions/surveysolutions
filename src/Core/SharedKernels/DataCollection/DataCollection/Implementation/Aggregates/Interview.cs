@@ -762,6 +762,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var interviewChangeStructures = new InterviewChangeStructures();
            
             this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, RosterVector.Empty, interviewChangeStructures.State);
+
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
+
             foreach (var newAnswer in answersToFeaturedQuestions)
             {
                 string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, RosterVector.Empty);
@@ -793,7 +796,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
+
+            //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
+            this.ApplyRostersEvents(questionnaire, sourceInterviewTree, interviewChangeStructures.State);
+
             this.ApplyInterviewChanges(enablementAndValidityChanges);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -805,6 +811,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetQuestionnaireProperties(questionnaireIdentity.QuestionnaireId, questionnaire.Version);
 
             InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
+
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
 
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
@@ -821,7 +829,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
-            this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
+
+
+            //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
+            this.ApplyRostersEvents(questionnaire, sourceInterviewTree, interviewChangeStructures.State);
+
+
             this.ApplyInterviewChanges(enablementAndValidityChanges);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -2180,6 +2193,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterInstances.ToArray()));
             }
+        }
+
+        private void ApplyRostersEvents(IQuestionnaire questionnaire, InterviewTree sourceInterview,
+            IReadOnlyInterviewStateDependentOnAnswers interviewExpressionState)
+        {
+            var changedInterview = this.BuildInterviewTree(questionnaire, interviewExpressionState);
+
+            new InterviewTreeEventPublisher(this.EventSourceId).ApplyRosterEvents(sourceInterview, changedInterview, questionnaire);
         }
 
         private void ApplyRostersEvents(params RosterCalculationData[] rosterDatas)
