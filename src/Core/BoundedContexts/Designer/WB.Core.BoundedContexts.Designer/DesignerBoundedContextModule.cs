@@ -1,4 +1,5 @@
 ﻿using Ncqrs.Eventing.Storage;
+using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -62,6 +63,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
             this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
+            this.Bind<IFindReplaceService>().ToMethod((c) => new FindReplaceService(c.Kernel.Get<IPlainAggregateRootRepository<Questionnaire>>()));
 
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
             this.Bind<IQuestionnaireChangeHistoryFactory>().To<QuestionnaireChangeHistoryFactory>();

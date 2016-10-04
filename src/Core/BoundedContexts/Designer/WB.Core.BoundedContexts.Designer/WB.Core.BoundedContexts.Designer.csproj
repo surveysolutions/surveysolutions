@@ -297,6 +297,8 @@
     <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
+    <Compile Include="Implementation\Services\FindReplaceService.cs" />
+    <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableAdded.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableDeleted.cs" />
@@ -667,7 +669,7 @@
     <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntryMap.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationMessage.cs" />
-    <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
+    <Compile Include="ValueObjects\QuestionnaireNodeReference.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
     <Compile Include="ValueObjects\VerificationMessageLevel.cs" />
     <Compile Include="Views\Account\AccountDenormalizer.cs" />

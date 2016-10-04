@@ -273,7 +273,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                questionnaire
                    .Attachments
                    .Where(x => hasError(x, questionnaire))
-                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
+                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
         }
 
 
@@ -291,7 +291,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire) =>
                    this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
                    .Where(x => hasError(x, questionnaire))
-                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
+                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
