@@ -26,6 +26,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.LookupTables;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.Macros;
@@ -685,6 +686,46 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void DeleteQuestionnaire()
         {
             this.innerDocument.IsDeleted = true;
+        }
+
+        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor)
+        {
+            var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
+            foreach (var questionnaireItem in allEntries)
+            {
+                var title = questionnaireItem.GetTitle();
+                if (!title.IsNullOrEmpty() && title.Contains(searchFor))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                }
+
+                var conditional = questionnaireItem as IConditional;
+                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(searchFor))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                }
+
+                var validatable = questionnaireItem as IValidatable;
+                if (validatable != null)
+                {
+                    foreach (var validationCondition in validatable.ValidationConditions)
+                    {
+                        if ((validationCondition.Expression != null && validationCondition.Expression.Contains(searchFor))||
+                            validationCondition.Message != null && validationCondition.Message.Contains(searchFor))
+                        {
+                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                        }
+                    }
+                }
+            }
+
+            foreach (var macro in this.innerDocument.Macros)
+            {
+                if (!macro.Value.Content.IsNullOrEmpty() && macro.Value.Content.Contains(searchFor))
+                {
+                    yield return QuestionnaireNodeReference.CreateForMacro(macro.Key);
+                }
+            }
         }
 
         public void ReplaceTexts(string searchTerm, string replaceWith)

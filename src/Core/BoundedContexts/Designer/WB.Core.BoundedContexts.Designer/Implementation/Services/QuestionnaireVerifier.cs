@@ -1726,18 +1726,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireNodeReference CreateReference(IComposite entity)
         {
-            if (entity is IVariable)
-                return QuestionnaireNodeReference.CreateForVariable(entity.PublicKey);
-
-            if (entity is IGroup)
-                return ((IGroup)entity).IsRoster
-                    ? QuestionnaireNodeReference.CreateForRoster(entity.PublicKey)
-                    : QuestionnaireNodeReference.CreateForGroup(entity.PublicKey);
-
-            if (entity is IQuestion)
-                return QuestionnaireNodeReference.CreateForQuestion(entity.PublicKey);
-
-            return QuestionnaireNodeReference.CreateForStaticText(entity.PublicKey);
+            return QuestionnaireNodeReference.CreateFrom(entity);
         }
 
         private static QuestionnaireNodeReference CreateReference(IComposite entity, int? failedValidationIndex)
