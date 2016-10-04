@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -16,11 +17,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.questionnaires = questionnaires;
         }
 
-        public IEnumerable<string> FindAll(Guid questionnaireId, string searchFor)
+        public IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor)
         {
-            //var questionnaire = this.questionnaires.Get(questionnaireId);
-
-            return Enumerable.Empty<string>();
+            var questionnaire = this.questionnaires.Get(questionnaireId);
+            return questionnaire.FindAllTexts(searchFor);
         }
 
         public void ReplaceAll(Guid questionnaireId, string searchFor, string replaceWith)

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IFindReplaceService
     {
-        IEnumerable<string> FindAll(Guid questionnaireId, string searchFor);
+        IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor);
         void ReplaceAll(Guid questionnaireId, string searchFor, string replaceWith);
     }
 }
