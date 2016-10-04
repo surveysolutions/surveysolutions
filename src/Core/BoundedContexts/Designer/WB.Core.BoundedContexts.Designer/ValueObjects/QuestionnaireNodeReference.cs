@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public Guid Id { get; private set; }
         public string ItemId { get; private set; }
         public int? FailedValidationConditionIndex { get; set; }
-        public Guid? SectionId { get; set; }
+        public Guid? ChapterId { get; set; }
 
         protected bool Equals(QuestionnaireNodeReference other)
             => this.Id.Equals(other.Id)
@@ -86,6 +86,23 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 result = QuestionnaireNodeReference.CreateForQuestion(entity.PublicKey);
             else
                 result = QuestionnaireNodeReference.CreateForStaticText(entity.PublicKey);
+
+
+            var section = entity;
+            while (true)
+            {
+                IComposite grandParent = section.GetParent();
+                if (grandParent?.GetParent() == null)
+                {
+                    break;
+                }
+                else
+                {
+                    section = grandParent;
+                }
+            }
+
+            result.ChapterId = section.PublicKey;
 
             return result;
         }

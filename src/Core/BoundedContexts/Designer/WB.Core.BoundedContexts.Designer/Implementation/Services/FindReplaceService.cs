@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor)
         {
             var questionnaire = this.questionnaires.Get(questionnaireId);
+            questionnaire.QuestionnaireDocument.ConnectChildrenWithParent();
             return questionnaire.FindAllTexts(searchFor);
         }
 
