@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -21,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public Guid Id { get; private set; }
         public string ItemId { get; private set; }
         public int? FailedValidationConditionIndex { get; set; }
+        public Guid? SectionId { get; set; }
 
         protected bool Equals(QuestionnaireNodeReference other)
             => this.Id.Equals(other.Id)
@@ -70,20 +72,22 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public static QuestionnaireNodeReference CreateForTranslation(Guid translationId)
             => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Translation, translationId);
 
-        public static QuestionnaireNodeReference CreateFrom(IQuestionnaireEntity entity)
+        public static QuestionnaireNodeReference CreateFrom(IComposite entity)
         {
-            if (entity is IVariable)
-                return QuestionnaireNodeReference.CreateForVariable(entity.PublicKey);
+            QuestionnaireNodeReference result;
 
-            if (entity is IGroup)
-                return ((IGroup)entity).IsRoster
+            if (entity is IVariable)
+                result = QuestionnaireNodeReference.CreateForVariable(entity.PublicKey);
+            else if (entity is IGroup)
+                result = ((IGroup) entity).IsRoster
                     ? QuestionnaireNodeReference.CreateForRoster(entity.PublicKey)
                     : QuestionnaireNodeReference.CreateForGroup(entity.PublicKey);
+            else if (entity is IQuestion)
+                result = QuestionnaireNodeReference.CreateForQuestion(entity.PublicKey);
+            else
+                result = QuestionnaireNodeReference.CreateForStaticText(entity.PublicKey);
 
-            if (entity is IQuestion)
-                return QuestionnaireNodeReference.CreateForQuestion(entity.PublicKey);
-
-            return QuestionnaireNodeReference.CreateForStaticText(entity.PublicKey);
+            return result;
         }
     }
 }
