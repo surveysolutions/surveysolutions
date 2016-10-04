@@ -27,8 +27,8 @@
             <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0">Replace all ({{foundReferences.length}})</button>
 
             <div class="pull-right" ng-show="foundReferences.length">
-                <button type="button" class="btn btn-lg btn-link">Next</button>
-                <button type="button" class="btn btn-lg btn-link">Previous</button>
+                <button type="button" class="btn btn-lg btn-link" ng-click="navigatePrev()">Previous</button>
+                <button type="button" class="btn btn-lg btn-link" ng-click="navigateNext()">Next</button>
             </div>
         </div>
     </div>

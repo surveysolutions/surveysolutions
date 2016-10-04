@@ -223,7 +223,7 @@ angular.module('designerApp')
                 }
             };
 
-            $scope.navigateTo = function (reference) {
+            $rootScope.navigateTo = function (reference) {
                 if (reference.type.toLowerCase() === "macro") {
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openMacrosList", { focusOn: reference.itemId });
