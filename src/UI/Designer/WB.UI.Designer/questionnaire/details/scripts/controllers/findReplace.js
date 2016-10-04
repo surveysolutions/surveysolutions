@@ -15,6 +15,8 @@
                     id: $state.params.questionnaireId
                 },
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+            }).then(function(response) {
+                $scope.foundReferences = response.data;
             });
         }
     });

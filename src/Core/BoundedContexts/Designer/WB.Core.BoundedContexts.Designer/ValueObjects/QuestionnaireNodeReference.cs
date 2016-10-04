@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {
@@ -66,5 +69,21 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
         public static QuestionnaireNodeReference CreateForTranslation(Guid translationId)
             => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Translation, translationId);
+
+        public static QuestionnaireNodeReference CreateFrom(IQuestionnaireEntity entity)
+        {
+            if (entity is IVariable)
+                return QuestionnaireNodeReference.CreateForVariable(entity.PublicKey);
+
+            if (entity is IGroup)
+                return ((IGroup)entity).IsRoster
+                    ? QuestionnaireNodeReference.CreateForRoster(entity.PublicKey)
+                    : QuestionnaireNodeReference.CreateForGroup(entity.PublicKey);
+
+            if (entity is IQuestion)
+                return QuestionnaireNodeReference.CreateForQuestion(entity.PublicKey);
+
+            return QuestionnaireNodeReference.CreateForStaticText(entity.PublicKey);
+        }
     }
 }

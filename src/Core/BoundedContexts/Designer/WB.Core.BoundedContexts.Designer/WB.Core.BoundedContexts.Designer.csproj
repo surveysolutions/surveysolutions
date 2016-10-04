@@ -665,8 +665,6 @@
     <Compile Include="Translations\TranslationInstanceMap.cs" />
     <Compile Include="Translations\TranslationsService.cs" />
     <Compile Include="Translations\TranslationValidationError.cs" />
-    <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntry.cs" />
-    <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntryMap.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationMessage.cs" />
     <Compile Include="ValueObjects\QuestionnaireNodeReference.cs" />
