@@ -118,7 +118,8 @@ namespace WB.UI.Headquarters
             var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
-                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                SchemaName = "plainstore",
                 DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
@@ -147,7 +148,8 @@ namespace WB.UI.Headquarters
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(
-                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
+                    WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                    "readside",
                     new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace), 
                     cacheSettings, 
                     mappingAssemblies)

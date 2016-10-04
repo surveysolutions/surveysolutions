@@ -64,7 +64,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings
             {
-                ConnectionString = this.connectionString
+                ConnectionString = this.connectionString,
+                SchemaName = "readside",
             });
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>()

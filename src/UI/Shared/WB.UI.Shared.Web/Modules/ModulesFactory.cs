@@ -29,7 +29,8 @@ namespace WB.UI.Shared.Web.Modules
             else if (storeProvider == StoreProviders.Postgres)
             {
                 var eventStoreSettings = new PostgreConnectionSettings();
-                eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["EventStore"].ConnectionString;
+                eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString;
+                eventStoreSettings.SchemaName = "events";
                 return new PostgresWriteSideModule(eventStoreSettings);
             }
 

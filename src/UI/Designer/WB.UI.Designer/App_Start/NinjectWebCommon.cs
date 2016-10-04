@@ -101,7 +101,8 @@ namespace WB.UI.Designer.App_Start
 
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
-                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                SchemaName = "plainstore",
                 DbUpgradeSettings = new DbUpgradeSettings(typeof(Migrations.PlainStore.M001_Init).Assembly, typeof(Migrations.PlainStore.M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
@@ -123,7 +124,8 @@ namespace WB.UI.Designer.App_Start
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(
-                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
+                    WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                    "readside",
                     new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                     cacheSettings, 
                     mappingAssemblies),
