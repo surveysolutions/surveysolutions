@@ -124,6 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.Title = title;
             this.VariableName = variableName;
+            this.Answer = answer;
 
             if (questionType == QuestionType.SingleOption)
                 this.AsSingleOption = new InterviewTreeSingleOptionQuestion(answer);
@@ -137,6 +138,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string Title { get; }
         public string VariableName { get; }
+
+        public object Answer { get; }
 
         public InterviewTreeSingleOptionQuestion AsSingleOption { get; }
         public bool IsSingleOption => this.AsSingleOption != null;
