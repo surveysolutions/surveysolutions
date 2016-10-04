@@ -1,6 +1,5 @@
 ﻿angular.module('designerApp')
-    .directive('help', [
-        'helpService',
+    .directive('help',
         function(helpService) {
             return {
                 restrict: 'E',
@@ -18,4 +17,4 @@
                 replace: false //otherwise we are getting conflict with angular ui popover directive
             };
         }
-    ]);
+    );

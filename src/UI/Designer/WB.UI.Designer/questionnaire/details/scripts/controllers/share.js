@@ -2,7 +2,7 @@
     'use strict';
     angular.module('designerApp').controller('shareCtrl',
     [
-        '$scope', '$log', '$modalInstance', 'questionnaire', 'shareService',
+        '$scope', '$log', '$uibModalInstance', 'questionnaire', 'shareService',
         function($scope, $log, $modalInstance, questionnaire, shareService) {
             $scope.questionnaire = questionnaire;
             $scope.questionnaire.editedTitle = questionnaire.title;
