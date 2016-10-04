@@ -690,7 +690,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor)
         {
-            var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
+            var allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
             foreach (var questionnaireItem in allEntries)
             {
                 var title = questionnaireItem.GetTitle();

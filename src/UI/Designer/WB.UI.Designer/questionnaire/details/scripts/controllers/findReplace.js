@@ -23,11 +23,11 @@
         }
         $scope.navigateNext = function() {
             indexOfCurrentReference++;
-            if (indexOfCurrentReference > $scope.foundReferences.length) {
+            if (indexOfCurrentReference >= $scope.foundReferences.length) {
                 indexOfCurrentReference = 0; 
-            } else {
-                $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference]);
             }
+
+            $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference]);
         };
         $scope.navigatePrev = function() {
             indexOfCurrentReference--;
