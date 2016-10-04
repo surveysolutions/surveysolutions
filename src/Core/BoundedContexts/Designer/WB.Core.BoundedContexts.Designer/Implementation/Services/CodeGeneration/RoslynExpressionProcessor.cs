@@ -16,13 +16,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             string code = string.Format("class a {{ bool b() {{ return ({0}); }} }} ", expression);
 
-            return SyntaxFactory
-                .ParseSyntaxTree(code).GetRoot().ChildNodesAndTokens().TreeToEnumerable(_ => _.ChildNodesAndTokens())
+            var tree = SyntaxFactory.ParseSyntaxTree(code);
+                
+                
+            return 
+                tree.GetRoot().ChildNodesAndTokens().TreeToEnumerable(_ => _.ChildNodesAndTokens())
                 .Where(IsIdentifierToken)
                 .Except(IsFunction)
                 .Except(IsConstructorCall)
                 .Except(IsLambdaParameter)
-                .Except(identifierToken => IsPropertyOrMethod(identifierToken) && !IsPropertyOfLambdaParameter(identifierToken))
+                //.Except(identifierToken => IsPropertyOrMethod(identifierToken) && !IsPropertyOfLambdaParameter(identifierToken))
                 .Select(token => token.ToString())
                 .Except(string.IsNullOrEmpty)
                 .Distinct();
@@ -37,7 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static bool IsFunction(SyntaxNodeOrToken identifierToken)
         {
-            return identifierToken.Parent.Parent is InvocationExpressionSyntax;
+            var t = identifierToken.Parent.Parent is InvocationExpressionSyntax;
+            return t;
         }
 
         private static bool IsConstructorCall(SyntaxNodeOrToken identifierToken)
