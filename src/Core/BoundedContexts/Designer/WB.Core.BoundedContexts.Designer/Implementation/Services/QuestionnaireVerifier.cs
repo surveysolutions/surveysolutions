@@ -319,7 +319,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             QuestionnaireVerificationMessage.Error(
                                 "WB0102",
                                 VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
-                                group.Select(x => new QuestionnaireVerificationReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
+                                group.Select(x => new QuestionnaireNodeReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
         }
 
         private static QuestionnaireVerificationReferenceType GetReferenceTypeByItemTypeAndId(MultiLanguageQuestionnaireDocument questionnaire, Guid id, Type entityType)
@@ -699,7 +699,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire) => questionnaire
                     .Macros
                     .Where(entity => hasError(entity.Value, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForMacro(entity.Key)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForMacro(entity.Key)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> AttachmentVerifier(
@@ -708,7 +708,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire) => questionnaire
                     .Attachments
                     .Where(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForAttachment(entity.AttachmentId)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier(
@@ -717,7 +717,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire) => questionnaire
                     .Translations
                     .Where(entity => hasError(entity, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireVerificationReference.CreateForTranslation(entity.Id)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForTranslation(entity.Id)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
@@ -726,7 +726,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire) => questionnaire
                     .LookupTables
                     .Where(entity => hasError(entity.Key, entity.Value, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireVerificationReference.CreateForLookupTable(entity.Key)));
+                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireNodeReference.CreateForLookupTable(entity.Key)));
         }
 
         private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
@@ -737,7 +737,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 let lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, lookupTable.Key)
                 where lookupTableContent != null
                 where hasError(lookupTable.Value, lookupTableContent, questionnaire)
-                select QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireVerificationReference.CreateForLookupTable(lookupTable.Key));
+                select QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireNodeReference.CreateForLookupTable(lookupTable.Key));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier(
@@ -1589,7 +1589,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                              QuestionnaireVerificationMessage.Error(
                                 "WB0020",
                                 VerificationMessages.WB0020_NameForMacrosIsNotUnique,
-                                group.Select(e => QuestionnaireVerificationReference.CreateForMacro(e.Key)).ToArray()));
+                                group.Select(e => QuestionnaireNodeReference.CreateForMacro(e.Key)).ToArray()));
         }
 
 
@@ -1605,7 +1605,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             QuestionnaireVerificationMessage.Error(
                                 "WB0065",
                                 VerificationMessages.WB0065_NameForAyyachmentIsNotUnique,
-                                group.Select(e => QuestionnaireVerificationReference.CreateForAttachment(e.AttachmentId)).ToArray()));
+                                group.Select(e => QuestionnaireNodeReference.CreateForAttachment(e.AttachmentId)).ToArray()));
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLookupTablesWithDuplicateVariableName(
@@ -1616,7 +1616,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Select(r => new
                 {
                     Name = r.VariableName,
-                    Reference = QuestionnaireVerificationReference.CreateForRoster(r.PublicKey)
+                    Reference = QuestionnaireNodeReference.CreateForRoster(r.PublicKey)
                 })
                 .Union(questionnaire.Find<IQuestion>(q => true)
                         .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
@@ -1629,7 +1629,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         .Select(r => new
                         {
                             Name = r.Value.TableName,
-                            Reference = QuestionnaireVerificationReference.CreateForLookupTable(r.Key)
+                            Reference = QuestionnaireNodeReference.CreateForLookupTable(r.Key)
                         }))
                 .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
                         .Where(x => !string.IsNullOrEmpty(x.Name))
@@ -1724,25 +1724,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             || entity is IStaticText
             || entity is IGroup;
 
-        private static QuestionnaireVerificationReference CreateReference(IComposite entity)
+        private static QuestionnaireNodeReference CreateReference(IComposite entity)
         {
             if (entity is IVariable)
-                return QuestionnaireVerificationReference.CreateForVariable(entity.PublicKey);
+                return QuestionnaireNodeReference.CreateForVariable(entity.PublicKey);
 
             if (entity is IGroup)
                 return ((IGroup)entity).IsRoster
-                    ? QuestionnaireVerificationReference.CreateForRoster(entity.PublicKey)
-                    : QuestionnaireVerificationReference.CreateForGroup(entity.PublicKey);
+                    ? QuestionnaireNodeReference.CreateForRoster(entity.PublicKey)
+                    : QuestionnaireNodeReference.CreateForGroup(entity.PublicKey);
 
             if (entity is IQuestion)
-                return QuestionnaireVerificationReference.CreateForQuestion(entity.PublicKey);
+                return QuestionnaireNodeReference.CreateForQuestion(entity.PublicKey);
 
-            return QuestionnaireVerificationReference.CreateForStaticText(entity.PublicKey);
+            return QuestionnaireNodeReference.CreateForStaticText(entity.PublicKey);
         }
 
-        private static QuestionnaireVerificationReference CreateReference(IComposite entity, int? failedValidationIndex)
+        private static QuestionnaireNodeReference CreateReference(IComposite entity, int? failedValidationIndex)
         {
-            return new QuestionnaireVerificationReference(
+            return new QuestionnaireNodeReference(
                 entity is IGroup
                     ? QuestionnaireVerificationReferenceType.Group
                     : (entity is IStaticText
@@ -1870,27 +1870,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
-            QuestionnaireVerificationReference reference;
+            QuestionnaireNodeReference reference;
 
             switch (expressionLocation.ItemType)
             {
                 case ExpressionLocationItemType.Group:
-                    reference = QuestionnaireVerificationReference.CreateForGroup(expressionLocation.Id);
+                    reference = QuestionnaireNodeReference.CreateForGroup(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Roster:
-                    reference = QuestionnaireVerificationReference.CreateForRoster(expressionLocation.Id);
+                    reference = QuestionnaireNodeReference.CreateForRoster(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Question:
-                    reference = QuestionnaireVerificationReference.CreateForQuestion(expressionLocation.Id);
+                    reference = QuestionnaireNodeReference.CreateForQuestion(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.StaticText:
-                    reference = QuestionnaireVerificationReference.CreateForStaticText(expressionLocation.Id);
+                    reference = QuestionnaireNodeReference.CreateForStaticText(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.LookupTable:
-                    reference = QuestionnaireVerificationReference.CreateForLookupTable(expressionLocation.Id);
+                    reference = QuestionnaireNodeReference.CreateForLookupTable(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Variable:
-                    reference = QuestionnaireVerificationReference.CreateForVariable(expressionLocation.Id);
+                    reference = QuestionnaireNodeReference.CreateForVariable(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Questionnaire:
                     return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);

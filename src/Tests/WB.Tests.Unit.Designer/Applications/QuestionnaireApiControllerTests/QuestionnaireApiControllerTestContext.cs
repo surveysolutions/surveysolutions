@@ -88,9 +88,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 questionnaireItems.Select(
                     questionnaireItem =>
                         Create.VerificationError("aaa", "aaaa",
-                            new QuestionnaireVerificationReference[1]
+                            new QuestionnaireNodeReference[1]
                             {
-                                new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,
+                                new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question,
                                     questionnaireItem.PublicKey)
                             })).ToArray();
         }
