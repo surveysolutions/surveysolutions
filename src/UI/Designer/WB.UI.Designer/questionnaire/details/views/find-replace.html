@@ -23,7 +23,7 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-lg btn-primary" ng-click="">Find all</button>
+            <button type="button" class="btn btn-lg btn-primary" ng-disabled="searchFor.length === 0" ng-click="findAll()">Find all</button>
             <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0">Replace all ({{foundReferences.length}})</button>
 
             <div class="pull-right" ng-show="foundReferences.length">

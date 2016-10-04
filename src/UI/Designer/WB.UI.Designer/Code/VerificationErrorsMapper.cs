@@ -54,7 +54,7 @@ namespace WB.UI.Designer.Code
         }
 
         private IEnumerable<VerificationReferenceEnriched> GetEnrichedReferences(
-            IEnumerable<QuestionnaireVerificationReference> references,
+            IEnumerable<QuestionnaireNodeReference> references,
             QuestionnaireDocument questionnaireDocument)
         {
             foreach (var reference in references)
