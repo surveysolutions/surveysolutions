@@ -7,6 +7,7 @@ using WB.UI.Designer.Filters;
 namespace WB.UI.Designer.Api
 {
     [CamelCase]
+    [Authorize]
     public class FindReplaceController : ApiController
     {
         private readonly IFindReplaceService replaceService;

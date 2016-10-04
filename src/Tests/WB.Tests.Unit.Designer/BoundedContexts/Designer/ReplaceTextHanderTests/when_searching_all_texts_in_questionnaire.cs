@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -23,6 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 enablementCondition: $"static text enablement {searchFor}",
                 validationConditions: new List<ValidationCondition>
                 {
+                    Create.ValidationCondition($"st validation exp {searchFor}", message: $"st validation msg {searchFor}"),
                     Create.ValidationCondition($"st validation exp {searchFor}", message: $"st validation msg {searchFor}")
                 }));
 
@@ -49,13 +51,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         Because of = () => foundReferences = questionnaire.FindAllTexts(searchFor);
 
         It should_find_text_in_static_text = () =>
-                foundReferences.ShouldContain(x => x.Id == staticTextId && x.Type == QuestionnaireVerificationReferenceType.StaticText);
+            foundReferences.ShouldContain(x => x.Id == staticTextId && x.Type == QuestionnaireVerificationReferenceType.StaticText);
 
         It should_find_text_in_question = () =>
             foundReferences.ShouldContain(x => x.Id == questionId && x.Type == QuestionnaireVerificationReferenceType.Question);
 
         It should_find_text_in_group = () =>
             foundReferences.ShouldContain(x => x.Id == groupId && x.Type == QuestionnaireVerificationReferenceType.Group);
+
+        It should_not_duplicate_found_entities = () =>
+            foundReferences.Count(x => x.Id == staticTextId).ShouldEqual(1);
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;

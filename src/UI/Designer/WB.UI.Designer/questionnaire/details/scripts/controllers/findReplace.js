@@ -1,9 +1,9 @@
 ﻿angular.module('designerApp')
-    .controller('findReplaceCtrl', function ($rootScope, $scope, $http, $state) {
+    .controller('findReplaceCtrl', function ($rootScope, $scope, $http, $state, commandService) {
         var baseUrl = '../../api/findReplace';
 
         $scope.searchFor = '';
-        $scope.relaceWith = '';
+        $scope.replaceWith = '';
         var indexOfCurrentReference = -1;
         $scope.foundReferences = [];
 
@@ -21,6 +21,16 @@
                 $scope.indexOfCurrentReference = -1;
             });
         }
+
+        $scope.replaceAll = function () {
+            commandService.execute('ReplaceTexts',
+            {
+                questionnaireId: $state.params.questionnaireId,
+                SearchFor: $scope.searchFor,
+                ReplaceWith: $scope.replaceWith,
+            });
+        }
+
         $scope.navigateNext = function() {
             indexOfCurrentReference++;
             if (indexOfCurrentReference >= $scope.foundReferences.length) {
