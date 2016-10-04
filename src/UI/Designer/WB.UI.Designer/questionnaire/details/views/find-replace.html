@@ -17,14 +17,16 @@
                 <div class="form-group">
                     <label for="relaceWith" class="control-label">Replace with:</label>
                     <div class="">
-                        <input type="text" class="form-control" id="relaceWith" ng-model="relaceWith">
+                        <input type="text" class="form-control" id="relaceWith" ng-model="replaceWith">
                     </div>
                 </div>
             </form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-lg btn-primary" ng-disabled="searchFor.length === 0" ng-click="findAll()">Find all</button>
-            <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0">Replace all ({{foundReferences.length}})</button>
+            <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0" ng-click="replaceAll()">
+                Replace all ({{foundReferences.length}})
+            </button>
 
             <div class="pull-right" ng-show="foundReferences.length">
                 <button type="button" class="btn btn-lg btn-link" ng-click="navigatePrev()">Previous</button>

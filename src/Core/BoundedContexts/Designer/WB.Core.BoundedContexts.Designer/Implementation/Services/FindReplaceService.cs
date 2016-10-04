@@ -23,10 +23,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             questionnaire.QuestionnaireDocument.ConnectChildrenWithParent();
             return questionnaire.FindAllTexts(searchFor);
         }
-
-        public void ReplaceAll(Guid questionnaireId, string searchFor, string replaceWith)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
