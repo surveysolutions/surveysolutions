@@ -696,13 +696,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var title = questionnaireItem.GetTitle();
                 if (!title.IsNullOrEmpty() && title.Contains(searchFor))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                   yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                   continue;
                 }
 
                 var conditional = questionnaireItem as IConditional;
                 if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(searchFor))
                 {
                     yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    continue;
                 }
 
                 var validatable = questionnaireItem as IValidatable;
@@ -728,21 +730,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        public void ReplaceTexts(string searchTerm, string replaceWith)
+        public void ReplaceTexts(ReplaceTextsCommand command)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
+            int affectedEntries = 0;
             foreach (var questionnaireItem in allEntries)
             {
+                bool replacedAny = false;
                 var title = questionnaireItem.GetTitle();
-                if (!title.IsNullOrEmpty())
+                if (!title.IsNullOrEmpty() && title.Contains(command.SearchFor))
                 {
-                    questionnaireItem.SetTitle(title.Replace(searchTerm, replaceWith));
+                    replacedAny = true;
+                    questionnaireItem.SetTitle(title.Replace(command.SearchFor, command.ReplaceWith));
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (!string.IsNullOrEmpty(conditional?.ConditionExpression))
+                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(command.SearchFor))
                 {
-                    conditional.ConditionExpression = conditional.ConditionExpression.Replace(searchTerm, replaceWith);
+                    replacedAny = true;
+                    conditional.ConditionExpression = conditional.ConditionExpression.Replace(command.SearchFor, command.ReplaceWith);
                 }
 
                 var validatable = questionnaireItem as IValidatable;
@@ -750,20 +756,34 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     foreach (var validationCondition in validatable.ValidationConditions)
                     {
-                        validationCondition.Expression = validationCondition.Expression?.Replace(searchTerm, replaceWith);
-                        validationCondition.Message = validationCondition.Message?.Replace(searchTerm, replaceWith);
+                        if (validationCondition.Expression != null &&
+                            validationCondition.Expression.Contains(command.SearchFor))
+                        {
+                            replacedAny = true;
+                            validationCondition.Expression = validationCondition.Expression?.Replace(command.SearchFor, command.ReplaceWith);
+                        }
+                        if (validationCondition.Message != null && validationCondition.Message.Contains(command.SearchFor))
+                        {
+                            replacedAny = true;
+                            validationCondition.Message = validationCondition.Message?.Replace(command.SearchFor, command.ReplaceWith);
+                        }
                     }
+                }
+
+                if (replacedAny)
+                {
+                    affectedEntries++;
                 }
             }
 
             foreach (var macro in this.innerDocument.Macros.Values)
             {
-                if (!macro.Content.IsNullOrEmpty())
+                if (!macro.Content.IsNullOrEmpty() && macro.Content.Contains(command.SearchFor))
                 {
-                    macro.Content = macro.Content.Replace(searchTerm, replaceWith);
+                    affectedEntries++;
+                    macro.Content = macro.Content.Replace(command.SearchFor, command.ReplaceWith);
                 }
             }
-
         }
 
         #endregion

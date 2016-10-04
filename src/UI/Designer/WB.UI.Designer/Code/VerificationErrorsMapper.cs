@@ -111,7 +111,7 @@ namespace WB.UI.Designer.Code
                 while (parent != null)
                 {
                     IComposite grandParent = parent.GetParent();
-                    if (grandParent == null || grandParent.GetParent() == null)
+                    if (grandParent?.GetParent() == null)
                     {
                         break;
                     }
