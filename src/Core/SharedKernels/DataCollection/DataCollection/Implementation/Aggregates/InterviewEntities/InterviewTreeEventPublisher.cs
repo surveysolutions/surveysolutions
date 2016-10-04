@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ApplyRosterEvents(InterviewTree sourceInterview, InterviewTree changedInterview, IQuestionnaire questionnaire)
         {
-            var diff = sourceInterview.Diff(changedInterview);
+            var diff = sourceInterview.FindDiff(changedInterview);
 
             var removedRosters = diff
                 .Where(x => x.SourceNode is InterviewTreeRoster && x.ChangedNode == null)
