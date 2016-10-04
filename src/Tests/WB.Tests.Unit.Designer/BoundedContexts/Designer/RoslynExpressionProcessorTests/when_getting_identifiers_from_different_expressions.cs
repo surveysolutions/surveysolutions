@@ -21,15 +21,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProces
                 { "r + r - r", new[] { "r" } },
                 { "c1 + \"s\"", new[] { "c1" } },
                 { "c2 + 's'", new[] { "c2" } },
-                { "mo1.Contains(1)", new[] { "mo1" } },
-                { "a.b() + x.y(z) + k(l) + w()", new[] { "a", "x", "z", "l" } },
-                { "a.x", new[] { "a" } },
+                { "mo1.Contains(1)", new[] { "mo1", "Contains" } },
+                { "a.b() + x.y(z) + k(l) + w()", new[] { "a", "b", "x", "y", "z", "l" } },
+                { "a.x", new[] { "a", "x"} },
                 { "x_date > new DateTime(2014, 08, 19)", new[] { "x_date" } },
                 { "if then else", new[] { "then" } },
-                { "roster.Select(x => x.age).Max()", new[] { "roster", "age" } },
-                { "roster.Select((x, i) => x.age).Max()", new[] { "roster", "age" } },
-                { "roster.Select(y => new { age2 = y.age*100 }).Select(x => x.age2).Max()", new[] { "roster", "age", "age2" } },
-                { "roster.Select(x => x.gps.Latitude).Max()", new[] { "roster", "gps" } },
+                { "roster.Select(x => x.age).Max()", new[] { "roster", "age", "Select", "Max" } },
+                { "roster.Select((x, i) => x.age).Max()", new[] { "roster", "age", "Select", "Max" } },
+                { "roster.Select(y => new { age2 = y.age*100 }).Select(x => x.age2).Max()", new[] { "roster", "age", "age2", "Select", "Max" } },
+                { "roster.Select(x => x.gps.Latitude).Max()", new[] { "roster", "gps", "Select", "Max", "Latitude" } },
+
+                { "roster[1].variable", new[] { "roster", "variable" } },
+                { "roster.First().variable", new[] { "roster", "variable", "First" } },
+                { "roster.First().roster1.First().gps.Latitude > 0", new[] { "roster", "roster1", "gps", "First", "Latitude" } }
+                
+
             };
 
             analyzer = Create.RoslynExpressionProcessor();
