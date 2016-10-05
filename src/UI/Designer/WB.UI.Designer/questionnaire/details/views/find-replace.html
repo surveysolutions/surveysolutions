@@ -23,6 +23,31 @@
                     <input type="text" class="form-control" id="relaceWith" ng-model="replaceWith">
                 </div>
             </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="checkbox col-sm-4">
+                        <input id="cb-match-case" type="checkbox" class="wb-checkbox" ng-model="matchCase" />
+                        <label for="cb-match-case" class="wb-label">
+                            <span></span>
+                            Match case
+                        </label>
+                    </div>
+                    <div class="checkbox col-sm-4">
+                        <input id="cb-match-wholeword" type="checkbox" class="wb-checkbox" />
+                        <label for="cb-match-wholeword" class="wb-label">
+                            <span></span>
+                            Match whole word
+                        </label>
+                    </div>
+                    <div class="checkbox col-sm-4">
+                        <input id="cb-use-regexp" type="checkbox" class="wb-checkbox" />
+                        <label for="cb-use-regexp" class="wb-label">
+                            <span></span>
+                            Use regexp
+                        </label>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
     <div class="modal-footer">
