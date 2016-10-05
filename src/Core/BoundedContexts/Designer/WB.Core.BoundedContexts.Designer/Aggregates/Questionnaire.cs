@@ -692,17 +692,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
-            var allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
-
-            var searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
-
+            Regex searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
+            IEnumerable<IComposite> allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
             foreach (var questionnaireItem in allEntries)
             {
                 var title = questionnaireItem.GetTitle();
-                if (MatchesSearchTerm(title, searchRegex))
+                var variable = questionnaireItem.GetVariable();
+
+                if (MatchesSearchTerm(title, searchRegex) || MatchesSearchTerm(variable, searchRegex))
                 {
-                   yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
-                   continue;
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    continue;
                 }
 
                 var conditional = questionnaireItem as IConditional;
@@ -712,18 +712,26 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     continue;
                 }
 
-                var validatable = questionnaireItem as IValidatable;
-                if (validatable != null)
+                var question = questionnaireItem as IQuestion;
+                if (question?.Answers != null && question.Answers.Any(x => MatchesSearchTerm(x.AnswerText, searchRegex)))
                 {
-                    foreach (var validationCondition in validatable.ValidationConditions)
-                    {
-                        if (MatchesSearchTerm(validationCondition.Expression, searchRegex) ||
-                            MatchesSearchTerm(validationCondition.Message, searchRegex))
-                        {
-                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
-                        }
-                    }
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    continue;
                 }
+
+                var validatable = questionnaireItem as IValidatable;
+                if (validatable != null && validatable.ValidationConditions.Any(x => MatchesSearchTerm(x.Expression, searchRegex) ||
+                                                                  MatchesSearchTerm(x.Message, searchRegex)))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    continue;
+                }
+                var questionnaireVariable = questionnaireItem as IVariable;
+                if (questionnaireVariable != null && MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                }
+             
             }
 
             foreach (var macro in this.innerDocument.Macros)
@@ -776,6 +784,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     questionnaireItem.SetTitle(ReplaceUsingSearchTerm(title, searchRegex, command.ReplaceWith));
                 }
 
+                var variableName = questionnaireItem.GetVariable();
+                if (MatchesSearchTerm(variableName, searchRegex))
+                {
+                    replacedAny = true;
+                    questionnaireItem.SetVariable(ReplaceUsingSearchTerm(variableName, searchRegex, command.ReplaceWith));
+                }
+
                 var conditional = questionnaireItem as IConditional;
                 if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
@@ -800,6 +815,29 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             replacedAny = true;
                             string newMessage = ReplaceUsingSearchTerm(validationCondition.Message, searchRegex, command.ReplaceWith);
                             validationCondition.Message = newMessage;
+                        }
+                    }
+                }
+
+                var questionnaireVariable = questionnaireItem as IVariable;
+                if (questionnaireVariable != null)
+                {
+                    if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                    {
+                        replacedAny = true;
+                        questionnaireVariable.Expression = ReplaceUsingSearchTerm(questionnaireVariable.Expression, searchRegex, command.ReplaceWith);
+                    }
+                }
+
+                var question = questionnaireItem as IQuestion;
+                if (question?.Answers != null)
+                {
+                    foreach (var questionAnswer in question.Answers)
+                    {
+                        if (MatchesSearchTerm(questionAnswer.AnswerText, searchRegex))
+                        {
+                            replacedAny = true;
+                            questionAnswer.AnswerText = ReplaceUsingSearchTerm(questionAnswer.AnswerText, searchRegex, command.ReplaceWith);
                         }
                     }
                 }

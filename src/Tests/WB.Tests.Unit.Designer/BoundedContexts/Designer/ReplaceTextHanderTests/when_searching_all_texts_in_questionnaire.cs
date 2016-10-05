@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
@@ -37,12 +38,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
                 }));
 
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId1,
+                stataExportCaption: $"variable_{searchFor}",
+                groupPublicKey: chapterId));
+             
+
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId2,
+                questionType: QuestionType.MultyOption,
+                answers: new Answer[]
+                {
+                    Create.Answer($"answer with {searchFor}")
+                }));
+
+            questionnaire.AddVariable(Create.Event.VariableAdded(variableId,
+                variableExpression: $"expression {searchFor}",
+                parentId: chapterId));
+
             questionnaire.AddGroup(Create.Event.NewGroupAddedEvent(groupId.FormatGuid(),
                 parentGroupId: chapterId.FormatGuid(),
                 groupTitle: $"group title with {searchFor}",
                 enablementCondition: $"group enablement {searchFor}"
                 ));
-
+            
             questionnaire.AddMacro(Create.Event.MacroAdded(questionnaire.Id, macroId, responsibleId));
             questionnaire.UpdateMacro(Create.Event.MacroUpdated(questionId, macroId, "macro_name",
                 $"macro content {searchFor}", "desc", responsibleId));
@@ -62,11 +79,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         It should_not_duplicate_found_entities = () =>
             foundReferences.Count(x => x.Id == staticTextId).ShouldEqual(1);
 
+        It should_find_text_in_variable_name = () =>
+            foundReferences.ShouldContain(x => x.Id == questionId1);
+
+        It should_find_variables_by_content = () => 
+            foundReferences.ShouldContain(x => x.Id == variableId && x.Type == QuestionnaireVerificationReferenceType.Variable);
+
+        It should_find_question_by_option_text = () => 
+            foundReferences.ShouldContain(x => x.Id == questionId2);
+
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
 
         static readonly Guid staticTextId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         static readonly Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        static readonly Guid questionId1 = Guid.Parse("11111111111111111111111111111111");
+        static readonly Guid questionId2 = Guid.Parse("33333333333333333333333333333333");
+        static readonly Guid variableId = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         const string searchFor = "%to replace%";
