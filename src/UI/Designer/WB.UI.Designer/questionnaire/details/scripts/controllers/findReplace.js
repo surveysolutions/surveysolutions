@@ -10,7 +10,7 @@
         $scope.foundReferences = [];
 
         var indexOfCurrentReference = -1;
-        $scope.findAll = function() {
+        $scope.findAll = function () {
             return $http({
                 method: 'GET',
                 url: baseUrl + '/findAll',
@@ -20,8 +20,7 @@
                     matchWholeWord: $scope.matchWholeWord,
                     useRegex: $scope.useRegex,
                     id: $state.params.questionnaireId
-                },
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+                }
             }).then(function(response) {
                 $scope.foundReferences = response.data;
                 $scope.indexOfCurrentReference = -1;
@@ -37,7 +36,7 @@
                 matchCase: $scope.matchCase,
                 matchWholeWord: $scope.matchWholeWord,
                 useRegex: $scope.useRegex
-            });
+            }).then(function() { return $scope.findAll(); });
         }
 
         $scope.navigateNext = function() {

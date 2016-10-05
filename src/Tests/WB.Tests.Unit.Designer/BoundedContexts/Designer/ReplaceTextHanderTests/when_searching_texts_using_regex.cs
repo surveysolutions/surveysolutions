@@ -7,7 +7,7 @@ using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 {
-    internal class when_searching_texts_using_case_insensitive_option : QuestionnaireTestsContext
+    internal class when_searching_texts_using_regex : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -16,19 +16,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 groupId: chapterId);
 
             questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId: staticTextId,
-                text: $"static text title with {searchFor}",
+                text: "static text 5 title with",
                 parentId: chapterId));
         };
 
-        Because of = () => matches = questionnaire.FindAllTexts(searchFor.ToLower(), false, false, false);
+        Because of = () => matches = questionnaire.FindAllTexts("\\d", false, false, true);
 
-        It should_find_ignoring_casing = () => matches.ShouldContain(x => x.Id == staticTextId);
+        It should_find_text_using_regex = () => matches.ShouldContain(x => x.Id == staticTextId);
 
         static Questionnaire questionnaire;
 
-        static Guid chapterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        static Guid staticTextId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        static string searchFor = "With Casing";
+        static readonly Guid chapterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        static readonly Guid staticTextId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static IEnumerable<QuestionnaireNodeReference> matches;
     }
 }

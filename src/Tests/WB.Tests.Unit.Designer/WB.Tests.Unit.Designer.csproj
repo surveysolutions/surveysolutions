@@ -527,6 +527,7 @@
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_texts_in_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_for_text_with_match_whole_word_option.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_texts_using_case_insensitive_option.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_texts_using_regex.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\TranslationsServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_empty_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_one_question.cs" />
