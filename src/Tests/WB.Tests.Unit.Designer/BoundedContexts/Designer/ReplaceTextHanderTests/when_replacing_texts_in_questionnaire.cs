@@ -39,6 +39,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
                 }));
 
+            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId1,
+                stataExportCaption: $"variable_{searchFor}",
+                groupPublicKey: chapterId,
+                questionType: QuestionType.MultyOption,
+                answers: new Answer[]
+                {
+                    Create.Answer($"answer with {searchFor}")
+                }));
+
+            questionnaire.AddVariable(Create.Event.VariableAdded(variableId,
+                variableExpression: $"var expression {searchFor}",
+                parentId: chapterId));
+
             questionnaire.AddGroup(Create.Event.NewGroupAddedEvent(groupId.FormatGuid(), 
                 parentGroupId: chapterId.FormatGuid(), 
                 groupTitle: $"group title with {searchFor}",
@@ -87,11 +100,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         It should_replace_content_of_macro = () =>
             questionnaire.QuestionnaireDocument.Macros[macroId].Content.ShouldEqual($"macro content {replaceWith}");
 
+        It should_repalce_variable_expressions = () => 
+            questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Expression.ShouldEqual($"var expression {replaceWith}");
+
+        It should_replace_variable_names = () => 
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"variable_{replaceWith}");
+
+        It should_replace_option_text = () => 
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).Answers.First().AnswerText.ShouldEqual($"answer with {replaceWith}");
+
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
 
         static readonly Guid staticTextId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         static readonly Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        static readonly Guid questionId1 = Guid.Parse("11111111111111111111111111111111");
+        static readonly Guid variableId = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static ReplaceTextsCommand command;
