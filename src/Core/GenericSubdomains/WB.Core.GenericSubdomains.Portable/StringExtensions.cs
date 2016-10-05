@@ -6,6 +6,22 @@ namespace WB.Core.GenericSubdomains.Portable
 {
     public static class StringExtensions
     {
+        public static string Replace(this string source, string oldString,
+                           string newString, StringComparison comparison)
+        {
+            int index = source.IndexOf(oldString, comparison);
+
+            while (index > -1)
+            {
+                source = source.Remove(index, oldString.Length);
+                source = source.Insert(index, newString);
+
+                index = source.IndexOf(oldString, index + newString.Length, comparison);
+            }
+
+            return source;
+        }
+
         public static bool IsNullOrEmpty(this string input)
         {
             return string.IsNullOrEmpty(input);
