@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 $"macro content {searchFor}", "desc", responsibleId));
         };
 
-        Because of = () => foundReferences = questionnaire.FindAllTexts(searchFor);
+        Because of = () => foundReferences = questionnaire.FindAllTexts(searchFor, true);
 
         It should_find_text_in_static_text = () =>
             foundReferences.ShouldContain(x => x.Id == staticTextId && x.Type == QuestionnaireVerificationReferenceType.StaticText);
