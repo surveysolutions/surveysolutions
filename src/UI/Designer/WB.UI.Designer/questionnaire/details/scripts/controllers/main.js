@@ -113,6 +113,7 @@ angular.module('designerApp')
                 $uibModal.open({
                     templateUrl: 'views/find-replace.html',
                     backdrop: false,
+                    windowClass: "test-class",
                     controller: 'findReplaceCtrl'
                 });
             }
