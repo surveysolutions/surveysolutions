@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -688,20 +689,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor)
+        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
             foreach (var questionnaireItem in allEntries)
             {
                 var title = questionnaireItem.GetTitle();
-                if (!title.IsNullOrEmpty() && title.Contains(searchFor))
+                if (MatchesSearchTerm(title, searchFor, matchCase))
                 {
                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
                    continue;
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(searchFor))
+                if (MatchesSearchTerm(conditional?.ConditionExpression, searchFor, matchCase))
                 {
                     yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
                     continue;
@@ -712,8 +713,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     foreach (var validationCondition in validatable.ValidationConditions)
                     {
-                        if ((validationCondition.Expression != null && validationCondition.Expression.Contains(searchFor))||
-                            validationCondition.Message != null && validationCondition.Message.Contains(searchFor))
+                        if (MatchesSearchTerm(validationCondition.Expression, searchFor, matchCase)||
+                            MatchesSearchTerm(validationCondition.Message, searchFor, matchCase))
                         {
                             yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
                         }
@@ -723,11 +724,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var macro in this.innerDocument.Macros)
             {
-                if (!macro.Value.Content.IsNullOrEmpty() && macro.Value.Content.Contains(searchFor))
+                if (MatchesSearchTerm(macro.Value.Content, searchFor, matchCase))
                 {
                     yield return QuestionnaireNodeReference.CreateForMacro(macro.Key);
                 }
             }
+        }
+
+        private static bool MatchesSearchTerm(string target, string searchFor, bool matchCase)
+        {
+            if (target.IsNullOrEmpty()) return false;
+
+            return matchCase ? target.Contains(searchFor) : CultureInfo.InvariantCulture.CompareInfo.IndexOf(target, searchFor, CompareOptions.IgnoreCase) >= 0;
         }
 
         public void ReplaceTexts(ReplaceTextsCommand command)

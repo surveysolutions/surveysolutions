@@ -4,6 +4,7 @@
 
         $scope.searchFor = '';
         $scope.replaceWith = '';
+        $scope.matchCase = false;
         var indexOfCurrentReference = -1;
         $scope.foundReferences = [];
 
@@ -13,6 +14,7 @@
                 url: baseUrl + '/findAll',
                 params: {
                     searchFor: $scope.searchFor,
+                    matchCase: $scope.matchCase,
                     id: $state.params.questionnaireId
                 },
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
