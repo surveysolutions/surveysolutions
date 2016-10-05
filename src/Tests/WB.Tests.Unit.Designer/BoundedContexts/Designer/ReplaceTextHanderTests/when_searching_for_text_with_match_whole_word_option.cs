@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             
         };
 
-        Because of = () => matches = questionnaire.FindAllTexts(searchFor.ToLower(), false, true);
+        Because of = () => matches = questionnaire.FindAllTexts(searchFor.ToLower(), false, true, false);
 
         It should_find_whole_word_match = () => matches.ShouldContain(x => x.Id == staticTextId);
 

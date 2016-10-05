@@ -690,11 +690,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord)
+        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
 
-            var searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord);
+            var searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
 
             foreach (var questionnaireItem in allEntries)
             {
@@ -735,14 +735,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord)
+        private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             RegexOptions options = RegexOptions.Compiled | RegexOptions.CultureInvariant;
             if (!matchCase)
             {
                 options |= RegexOptions.IgnoreCase;
             }
-            string encodedSearchPattern = Regex.Escape(searchFor);
+            string encodedSearchPattern = useRegex ? searchFor : Regex.Escape(searchFor);
             string pattern = matchWholeWord ? $@"\b{encodedSearchPattern}\b" : encodedSearchPattern;
 
             Regex searchRegex = new Regex(pattern, options);
@@ -765,7 +765,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
             int affectedEntries = 0;
-            var searchRegex = BuildSearchRegex(command.SearchFor, command.MatchCase, command.MatchWholeWord);
+            var searchRegex = BuildSearchRegex(command.SearchFor, command.MatchCase, command.MatchWholeWord, command.UseRegex);
             foreach (var questionnaireItem in allEntries)
             {
                 bool replacedAny = false;
