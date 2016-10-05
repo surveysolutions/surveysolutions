@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
                 }));
 
-            command = new ReplaceTextsCommand(questionId, responsibleId, searchFor.ToLower(), replaceWith, false);
+            command = Create.Command.ReplaceTextsCommand(searchFor.ToLower(), replaceWith);
         };
 
         Because of = () => questionnaire.ReplaceTexts(command);
