@@ -1038,9 +1038,9 @@ namespace WB.Tests.Unit.Designer
             public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
                 => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
 
-            public static ReplaceTextsCommand ReplaceTextsCommand(string searchFor, string replaceWith, bool matchWholeWord = false, bool matchCase = false)
+            public static ReplaceTextsCommand ReplaceTextsCommand(string searchFor, string replaceWith, bool matchWholeWord = false, bool matchCase = false, bool useRegex = false)
             {
-                return new ReplaceTextsCommand(Guid.Empty, Guid.NewGuid(), searchFor.ToLower(), replaceWith, matchCase, matchWholeWord);
+                return new ReplaceTextsCommand(Guid.Empty, Guid.NewGuid(), searchFor.ToLower(), replaceWith, matchCase, matchWholeWord, useRegex);
             }
         }
 
