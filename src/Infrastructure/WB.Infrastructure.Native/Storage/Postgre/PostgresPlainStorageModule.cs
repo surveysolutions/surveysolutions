@@ -34,7 +34,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             
             try
             {
-                DatabaseManagement.InitDatabase(this.settings.ConnectionString);
+                DatabaseManagement.InitDatabase(this.settings.ConnectionString, this.settings.SchemaName);
             }
             catch (Exception exc)
             {
@@ -42,7 +42,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 throw;
             }
 
-            this.Bind<ISessionFactory>().ToMethod(context => this.BuildSessionFactory())
+            this.Bind<ISessionFactory>().ToMethod(context => this.BuildSessionFactory(settings.SchemaName))
                                         .InSingletonScope()
                                         .Named(SessionFactoryName);
 
@@ -69,10 +69,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
 
-            DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.DbUpgradeSettings);
+            DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
         }
 
-        private ISessionFactory BuildSessionFactory()
+        private ISessionFactory BuildSessionFactory(string schemaName)
         {
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
@@ -82,11 +82,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
-            cfg.AddDeserializedMapping(this.GetMappings(), "Plain");
+            cfg.AddDeserializedMapping(this.GetMappings(schemaName), "Plain");
             return cfg.BuildSessionFactory();
         }
 
-        private HbmMapping GetMappings()
+        private HbmMapping GetMappings(string schemaName)
         {
             var mapper = new ModelMapper();
             var mappingTypes = this.settings.MappingAssemblies
@@ -107,6 +107,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 var tableName = type.Name.Pluralize();
                 customizer.Table(tableName);
+                customizer.Schema(schemaName);
             };
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
