@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
@@ -1036,6 +1037,11 @@ namespace WB.Tests.Unit.Designer
 
             public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
                 => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
+
+            public static ReplaceTextsCommand ReplaceTextsCommand(string searchFor, string replaceWith, bool matchWholeWord = false, bool matchCase = false)
+            {
+                return new ReplaceTextsCommand(Guid.Empty, Guid.NewGuid(), searchFor.ToLower(), replaceWith, matchCase, matchWholeWord);
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
