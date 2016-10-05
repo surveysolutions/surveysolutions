@@ -1,5 +1,5 @@
 ﻿angular.module('designerApp')
-    .controller('findReplaceCtrl', function ($rootScope, $scope, $http, $state, commandService) {
+    .controller('findReplaceCtrl', function ($rootScope, $scope, $http, $state, commandService, confirmService) {
         var baseUrl = '../../api/findReplace';
 
         $scope.searchFor = '';
@@ -28,15 +28,28 @@
         }
 
         $scope.replaceAll = function () {
-            commandService.execute('ReplaceTexts',
-            {
-                questionnaireId: $state.params.questionnaireId,
-                searchFor: $scope.searchFor,
-                replaceWith: $scope.replaceWith,
-                matchCase: $scope.matchCase,
-                matchWholeWord: $scope.matchWholeWord,
-                useRegex: $scope.useRegex
-            }).then(function() { return $scope.findAll(); });
+            var confirmModal = confirmService.open({
+                title: "Replace '" + $scope.searchFor + "' with '" + $scope.replaceWith + "' in all found items?",
+                okButtonTitle: "Replace",
+                cancelButtonTitle: "Back to search"
+            });
+            confirmModal.result.then(function(confirmResult) {
+                if (confirmResult === 'ok') {
+                    commandService
+                        .execute('ReplaceTexts',
+                        {
+                            questionnaireId: $state.params.questionnaireId,
+                            searchFor: $scope.searchFor,
+                            replaceWith: $scope.replaceWith,
+                            matchCase: $scope.matchCase,
+                            matchWholeWord: $scope.matchWholeWord,
+                            useRegex: $scope.useRegex
+                        })
+                        .then(function() {
+                            return $scope.findAll();
+                        });
+                }
+            });
         }
 
         $scope.navigateNext = function() {
