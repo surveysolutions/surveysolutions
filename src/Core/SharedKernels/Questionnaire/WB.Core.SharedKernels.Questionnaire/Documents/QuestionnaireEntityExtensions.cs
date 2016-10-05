@@ -15,6 +15,17 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             ?? (entity as IGroup)?.VariableName
             ?? (entity as IVariable)?.Name;
 
+        public static void SetVariable(this IQuestionnaireEntity entity, string variableName)
+        {
+            var question = entity as IQuestion;
+            var variable = entity as IVariable;
+            var group = entity as IGroup;
+
+            if (question != null) question.StataExportCaption = variableName;
+            if (variable != null) variable.Name = variableName;
+            if (group != null) group.VariableName = variableName;
+        }
+
         public static void SetTitle(this IQuestionnaireEntity entity, string title)
         {
             var question = entity as IQuestion;
