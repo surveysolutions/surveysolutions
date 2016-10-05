@@ -5,9 +5,11 @@
         $scope.searchFor = '';
         $scope.replaceWith = '';
         $scope.matchCase = false;
-        var indexOfCurrentReference = -1;
+        $scope.matchWholeWord = false;
+        $scope.useRegex = false;
         $scope.foundReferences = [];
 
+        var indexOfCurrentReference = -1;
         $scope.findAll = function() {
             return $http({
                 method: 'GET',
@@ -15,6 +17,8 @@
                 params: {
                     searchFor: $scope.searchFor,
                     matchCase: $scope.matchCase,
+                    matchWholeWord: $scope.matchWholeWord,
+                    useRegex: $scope.useRegex,
                     id: $state.params.questionnaireId
                 },
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
@@ -28,9 +32,11 @@
             commandService.execute('ReplaceTexts',
             {
                 questionnaireId: $state.params.questionnaireId,
-                SearchFor: $scope.searchFor,
-                ReplaceWith: $scope.replaceWith,
-                MatchCase: $scope.matchCase
+                searchFor: $scope.searchFor,
+                replaceWith: $scope.replaceWith,
+                matchCase: $scope.matchCase,
+                matchWholeWord: $scope.matchWholeWord,
+                useRegex: $scope.useRegex
             });
         }
 

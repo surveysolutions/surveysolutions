@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -689,20 +690,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase)
+        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
+
+            var searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord);
+
             foreach (var questionnaireItem in allEntries)
             {
                 var title = questionnaireItem.GetTitle();
-                if (MatchesSearchTerm(title, searchFor, matchCase))
+                if (MatchesSearchTerm(title, searchRegex))
                 {
                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
                    continue;
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (MatchesSearchTerm(conditional?.ConditionExpression, searchFor, matchCase))
+                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
                     yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
                     continue;
@@ -713,8 +717,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     foreach (var validationCondition in validatable.ValidationConditions)
                     {
-                        if (MatchesSearchTerm(validationCondition.Expression, searchFor, matchCase)||
-                            MatchesSearchTerm(validationCondition.Message, searchFor, matchCase))
+                        if (MatchesSearchTerm(validationCondition.Expression, searchRegex) ||
+                            MatchesSearchTerm(validationCondition.Message, searchRegex))
                         {
                             yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
                         }
@@ -724,51 +728,59 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var macro in this.innerDocument.Macros)
             {
-                if (MatchesSearchTerm(macro.Value.Content, searchFor, matchCase))
+                if (MatchesSearchTerm(macro.Value.Content, searchRegex))
                 {
                     yield return QuestionnaireNodeReference.CreateForMacro(macro.Key);
                 }
             }
         }
 
-        private static bool MatchesSearchTerm(string target, string searchFor, bool matchCase)
+        private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord)
+        {
+            RegexOptions options = RegexOptions.Compiled | RegexOptions.CultureInvariant;
+            if (!matchCase)
+            {
+                options |= RegexOptions.IgnoreCase;
+            }
+            string encodedSearchPattern = Regex.Escape(searchFor);
+            string pattern = matchWholeWord ? $@"\b{encodedSearchPattern}\b" : encodedSearchPattern;
+
+            Regex searchRegex = new Regex(pattern, options);
+            return searchRegex;
+        }
+
+        private static bool MatchesSearchTerm(string target, Regex searchRegex)
         {
             if (target.IsNullOrEmpty()) return false;
 
-            return matchCase ? target.Contains(searchFor) : CultureInfo.InvariantCulture.CompareInfo.IndexOf(target, searchFor, CompareOptions.IgnoreCase) >= 0;
+            return searchRegex.IsMatch(target);
         }
 
-        private static string ReplaceUsingSearchTerm(string target, string searchFor, string replaceWith, bool matchCase)
+        private static string ReplaceUsingSearchTerm(string target, Regex searchFor, string replaceWith)
         {
-            if (matchCase)
-            {
-                return target.Replace(searchFor, replaceWith);
-            }
-            else
-            {
-                return target.Replace(searchFor, replaceWith, StringComparison.InvariantCultureIgnoreCase);
-            }
+            return searchFor.Replace(target, replaceWith);
         }
 
         public void ReplaceTexts(ReplaceTextsCommand command)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
             int affectedEntries = 0;
+            var searchRegex = BuildSearchRegex(command.SearchFor, command.MatchCase, command.MatchWholeWord);
             foreach (var questionnaireItem in allEntries)
             {
                 bool replacedAny = false;
                 var title = questionnaireItem.GetTitle();
-                if (MatchesSearchTerm(title, command.SearchFor, command.MatchCase))
+                if (MatchesSearchTerm(title, searchRegex))
                 {
                     replacedAny = true;
-                    questionnaireItem.SetTitle(ReplaceUsingSearchTerm(title, command.SearchFor, command.ReplaceWith, command.MatchCase));
+                    questionnaireItem.SetTitle(ReplaceUsingSearchTerm(title, searchRegex, command.ReplaceWith));
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (MatchesSearchTerm(conditional?.ConditionExpression, command.SearchFor, command.MatchCase))
+                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
                     replacedAny = true;
-                    string newCondition = ReplaceUsingSearchTerm(conditional.ConditionExpression, command.SearchFor, command.ReplaceWith, command.MatchCase);
+                    string newCondition = ReplaceUsingSearchTerm(conditional.ConditionExpression, searchRegex, command.ReplaceWith);
                     conditional.ConditionExpression = newCondition;
                 }
 
@@ -777,16 +789,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     foreach (var validationCondition in validatable.ValidationConditions)
                     {
-                        if (MatchesSearchTerm(validationCondition.Expression, command.SearchFor, command.MatchCase))
+                        if (MatchesSearchTerm(validationCondition.Expression, searchRegex))
                         {
                             replacedAny = true;
-                            string newValidationCondition = ReplaceUsingSearchTerm(validationCondition.Expression, command.SearchFor, command.ReplaceWith, command.MatchCase);
+                            string newValidationCondition = ReplaceUsingSearchTerm(validationCondition.Expression, searchRegex, command.ReplaceWith);
                             validationCondition.Expression = newValidationCondition;
                         }
-                        if (MatchesSearchTerm(validationCondition.Message, command.SearchFor, command.MatchCase))
+                        if (MatchesSearchTerm(validationCondition.Message, searchRegex))
                         {
                             replacedAny = true;
-                            string newMessage = ReplaceUsingSearchTerm(validationCondition.Message, command.SearchFor, command.ReplaceWith, command.MatchCase);
+                            string newMessage = ReplaceUsingSearchTerm(validationCondition.Message, searchRegex, command.ReplaceWith);
                             validationCondition.Message = newMessage;
                         }
                     }
@@ -800,10 +812,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var macro in this.innerDocument.Macros.Values)
             {
-                if (MatchesSearchTerm(macro.Content, command.SearchFor, command.MatchCase))
+                if (MatchesSearchTerm(macro.Content, searchRegex))
                 {
                     affectedEntries++;
-                    macro.Content = ReplaceUsingSearchTerm(macro.Content, command.SearchFor, command.ReplaceWith, command.MatchCase);
+                    macro.Content = ReplaceUsingSearchTerm(macro.Content, searchRegex, command.ReplaceWith);
                 }
             }
         }
