@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire.UpdateMacro(Create.Event.MacroUpdated(questionId, macroId, "macro_name", 
                 $"macro content {searchFor}", "desc", responsibleId));
 
-            command = new ReplaceTextsCommand(questionId, responsibleId, searchFor, replaceWith);
+            command = new ReplaceTextsCommand(questionId, responsibleId, searchFor, replaceWith, true);
         };
 
         Because of = () => questionnaire.ReplaceTexts(command);

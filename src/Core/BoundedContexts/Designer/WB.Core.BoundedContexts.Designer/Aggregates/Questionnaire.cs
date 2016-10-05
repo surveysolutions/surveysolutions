@@ -738,6 +738,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return matchCase ? target.Contains(searchFor) : CultureInfo.InvariantCulture.CompareInfo.IndexOf(target, searchFor, CompareOptions.IgnoreCase) >= 0;
         }
 
+        private static string ReplaceUsingSearchTerm(string target, string searchFor, string replaceWith, bool matchCase)
+        {
+            if (matchCase)
+            {
+                return target.Replace(searchFor, replaceWith);
+            }
+            else
+            {
+                return target.Replace(searchFor, replaceWith, StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
+
         public void ReplaceTexts(ReplaceTextsCommand command)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
@@ -746,17 +758,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 bool replacedAny = false;
                 var title = questionnaireItem.GetTitle();
-                if (!title.IsNullOrEmpty() && title.Contains(command.SearchFor))
+                if (MatchesSearchTerm(title, command.SearchFor, command.MatchCase))
                 {
                     replacedAny = true;
-                    questionnaireItem.SetTitle(title.Replace(command.SearchFor, command.ReplaceWith));
+                    questionnaireItem.SetTitle(ReplaceUsingSearchTerm(title, command.SearchFor, command.ReplaceWith, command.MatchCase));
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(command.SearchFor))
+                if (MatchesSearchTerm(conditional?.ConditionExpression, command.SearchFor, command.MatchCase))
                 {
                     replacedAny = true;
-                    conditional.ConditionExpression = conditional.ConditionExpression.Replace(command.SearchFor, command.ReplaceWith);
+                    string newCondition = ReplaceUsingSearchTerm(conditional.ConditionExpression, command.SearchFor, command.ReplaceWith, command.MatchCase);
+                    conditional.ConditionExpression = newCondition;
                 }
 
                 var validatable = questionnaireItem as IValidatable;
@@ -764,16 +777,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     foreach (var validationCondition in validatable.ValidationConditions)
                     {
-                        if (validationCondition.Expression != null &&
-                            validationCondition.Expression.Contains(command.SearchFor))
+                        if (MatchesSearchTerm(validationCondition.Expression, command.SearchFor, command.MatchCase))
                         {
                             replacedAny = true;
-                            validationCondition.Expression = validationCondition.Expression?.Replace(command.SearchFor, command.ReplaceWith);
+                            string newValidationCondition = ReplaceUsingSearchTerm(validationCondition.Expression, command.SearchFor, command.ReplaceWith, command.MatchCase);
+                            validationCondition.Expression = newValidationCondition;
                         }
-                        if (validationCondition.Message != null && validationCondition.Message.Contains(command.SearchFor))
+                        if (MatchesSearchTerm(validationCondition.Message, command.SearchFor, command.MatchCase))
                         {
                             replacedAny = true;
-                            validationCondition.Message = validationCondition.Message?.Replace(command.SearchFor, command.ReplaceWith);
+                            string newMessage = ReplaceUsingSearchTerm(validationCondition.Message, command.SearchFor, command.ReplaceWith, command.MatchCase);
+                            validationCondition.Message = newMessage;
                         }
                     }
                 }
@@ -786,10 +800,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var macro in this.innerDocument.Macros.Values)
             {
-                if (!macro.Content.IsNullOrEmpty() && macro.Content.Contains(command.SearchFor))
+                if (MatchesSearchTerm(macro.Content, command.SearchFor, command.MatchCase))
                 {
                     affectedEntries++;
-                    macro.Content = macro.Content.Replace(command.SearchFor, command.ReplaceWith);
+                    macro.Content = ReplaceUsingSearchTerm(macro.Content, command.SearchFor, command.ReplaceWith, command.MatchCase);
                 }
             }
         }
