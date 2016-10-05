@@ -30,6 +30,7 @@
                 questionnaireId: $state.params.questionnaireId,
                 SearchFor: $scope.searchFor,
                 ReplaceWith: $scope.replaceWith,
+                MatchCase: $scope.matchCase
             });
         }
 
