@@ -2,68 +2,80 @@
     .controller('findReplaceCtrl', function ($rootScope, $scope, $http, $state, commandService, confirmService) {
         var baseUrl = '../../api/findReplace';
 
-        $scope.searchFor = '';
-        $scope.replaceWith = '';
-        $scope.matchCase = false;
-        $scope.matchWholeWord = false;
-        $scope.useRegex = false;
+        $scope.searchForm = {
+            searchFor: '',
+            replaceWith: '',
+            matchCase: false,
+            matchWholeWord: false,
+            useRegex: false
+        };
+
         $scope.foundReferences = [];
+        $scope.step = 'search';
 
         var indexOfCurrentReference = -1;
+
+        $scope.$watch('searchForm.searchFor', function (newValue) {
+            if ($scope.foundReferences.length) {
+                $scope.foundReferences.splice(0, $scope.foundReferences.length);
+            }
+        });
+
         $scope.findAll = function () {
             return $http({
                 method: 'GET',
                 url: baseUrl + '/findAll',
                 params: {
-                    searchFor: $scope.searchFor,
-                    matchCase: $scope.matchCase,
-                    matchWholeWord: $scope.matchWholeWord,
-                    useRegex: $scope.useRegex,
+                    searchFor: $scope.searchForm.searchFor,
+                    matchCase: $scope.searchForm.matchCase,
+                    matchWholeWord: $scope.searchForm.matchWholeWord,
+                    useRegex: $scope.searchForm.useRegex,
                     id: $state.params.questionnaireId
                 }
-            }).then(function(response) {
+            }).then(function (response) {
                 $scope.foundReferences = response.data;
                 $scope.indexOfCurrentReference = -1;
             });
         }
 
-        $scope.replaceAll = function () {
-            var confirmModal = confirmService.open({
-                title: "Replace '" + $scope.searchFor + "' with '" + $scope.replaceWith + "' in all found items?",
-                okButtonTitle: "Replace",
-                cancelButtonTitle: "Back to search"
-            });
-            confirmModal.result.then(function(confirmResult) {
-                if (confirmResult === 'ok') {
-                    commandService
-                        .execute('ReplaceTexts',
-                        {
-                            questionnaireId: $state.params.questionnaireId,
-                            searchFor: $scope.searchFor,
-                            replaceWith: $scope.replaceWith,
-                            matchCase: $scope.matchCase,
-                            matchWholeWord: $scope.matchWholeWord,
-                            useRegex: $scope.useRegex
-                        })
-                        .then(function() {
-                            return $scope.findAll();
-                        });
-                }
-            });
-        }
+        $scope.confirmReplaceAll = function() {
+            $scope.step = 'confirm';
+        };
 
-        $scope.navigateNext = function() {
+        $scope.replaceAll = function() {
+            commandService
+                .execute('ReplaceTexts',
+                {
+                    questionnaireId: $state.params.questionnaireId,
+                    searchFor: $scope.searchForm.searchFor,
+                    replaceWith: $scope.searchForm.replaceWith,
+                    matchCase: $scope.searchForm.matchCase,
+                    matchWholeWord: $scope.searchForm.matchWholeWord,
+                    useRegex: $scope.searchForm.useRegex
+                })
+                .then(function() {
+                    $scope.step = 'done';
+                });
+        };
+
+        $scope.backToSearch = function() {
+            $scope.step = 'search';
+            $scope.foundReferences.splice(0, $scope.foundReferences.length);
+        };
+
+        $scope.navigateNext = function () {
             indexOfCurrentReference++;
             if (indexOfCurrentReference >= $scope.foundReferences.length) {
-                indexOfCurrentReference = 0; 
+                indexOfCurrentReference = 0;
             }
 
             $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference]);
         };
-        $scope.navigatePrev = function() {
+
+        $scope.navigatePrev = function () {
             indexOfCurrentReference--;
             if (indexOfCurrentReference < 0) {
-                indexOfCurrentReference = 0;
+                indexOfCurrentReference = $scope.foundReferences.length - 1;
             }
             $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference]);
         };
