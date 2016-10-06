@@ -109,6 +109,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         It should_replace_option_text = () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).Answers.First().AnswerText.ShouldEqual($"answer with {replaceWith}");
 
+        It should_record_number_of_affected_entities = () => 
+            questionnaire.GetLastReplacedEntriesCount().ShouldEqual(6);
+
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
 

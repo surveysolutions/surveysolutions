@@ -561,6 +561,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
+        private int affectedByReplaceEntries;
 
         #endregion
 
@@ -772,7 +773,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void ReplaceTexts(ReplaceTextsCommand command)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
-            int affectedEntries = 0;
+            this.affectedByReplaceEntries = 0;
             var searchRegex = BuildSearchRegex(command.SearchFor, command.MatchCase, command.MatchWholeWord, command.UseRegex);
             foreach (var questionnaireItem in allEntries)
             {
@@ -844,7 +845,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if (replacedAny)
                 {
-                    affectedEntries++;
+                    this.affectedByReplaceEntries++;
                 }
             }
 
@@ -852,10 +853,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 if (MatchesSearchTerm(macro.Content, searchRegex))
                 {
-                    affectedEntries++;
+                    this.affectedByReplaceEntries++;
                     macro.Content = ReplaceUsingSearchTerm(macro.Content, searchRegex, command.ReplaceWith);
                 }
             }
+        }
+
+        public int GetLastReplacedEntriesCount()
+        {
+            return this.affectedByReplaceEntries;
         }
 
         #endregion
