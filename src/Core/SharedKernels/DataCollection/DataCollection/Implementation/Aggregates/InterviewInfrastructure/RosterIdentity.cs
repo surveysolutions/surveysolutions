@@ -18,6 +18,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.RosterInstanceId = rosterInstanceId;
             this.SortIndex = sortIndex;
         }
+
+        public Identity ToIdentity()
+        {
+            var extendedRosterVector = new List<decimal>(OuterRosterVector) { RosterInstanceId };
+            return new Identity(GroupId, extendedRosterVector.ToArray());
+        }
     }
 
     internal class RosterIdentityComparer : IEqualityComparer<RosterIdentity>

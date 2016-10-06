@@ -91,7 +91,12 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null, bool useLatestEngine = true)
+        protected static StatefulInterview SetupStatefullInterview(
+            QuestionnaireDocument questionnaireDocument, 
+            IEnumerable<object> events = null, 
+            ILatestInterviewExpressionState precompiledState = null, 
+            bool useLatestEngine = true,
+            Dictionary<Guid, object> answersOnPrefilledQuestions = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -105,7 +110,8 @@ namespace WB.Tests.Integration.InterviewTests
             var interview = Create.StatefulInterview(
                 questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository,
-                expressionProcessorStatePrototypeProvider: statePrototypeProvider);
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider,
+                answersOnPrefilledQuestions: answersOnPrefilledQuestions);
 
             interview.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, 1);
             ApplyAllEvents(interview, events);

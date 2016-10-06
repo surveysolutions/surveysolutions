@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         Identity Identity { get; }
         IInterviewTreeNode Parent { get; }
-        IReadOnlyCollection<IInterviewTreeNode> Children { get; }
+        ICollection<IInterviewTreeNode> Children { get; }
 
         bool IsDisabled();
     }
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Identity Identity { get; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
-        IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
+        ICollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree) => this.Tree = tree;
         void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Identity Identity { get; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
-        public IReadOnlyCollection<IInterviewTreeNode> Children { get; }
+        public ICollection<IInterviewTreeNode> Children { get; }
 
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree)
         {
