@@ -1,5 +1,6 @@
 ﻿using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Security;
+using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation
@@ -10,7 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
 
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> settingsStorage;
 
-        public ExportSettings(IPlainKeyValueStorage<ExportEncryptionSettings> settingsStorage)
+        public ExportSettings(
+            IPlainKeyValueStorage<ExportEncryptionSettings> settingsStorage)
         {
             this.settingsStorage = settingsStorage;
         }
@@ -19,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         {
             if (this.settingCache == null)
                 this.settingCache = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
-            
+
             return this.settingCache != null && this.settingCache.IsEnabled;
         }
 
