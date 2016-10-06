@@ -10,7 +10,7 @@
             <button ng-click="hideSearch();$event.stopPropagation()" title="Cancel search" type="button"></button>
         </div>
 
-        <div ng-switch-when="default">
+        <div ng-switch-when="default" class="chapter-name">
             <a id="group-{{currentChapter.itemId}}" class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
                 <span>{{currentChapter.title}}</span>
             </a>
