@@ -798,7 +798,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
 
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
-            this.ApplyRostersEvents(questionnaire, sourceInterviewTree, interviewChangeStructures.State);
+            var changedInterview = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
+            this.ApplyRostersEvents(sourceInterviewTree, changedInterview);
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
@@ -832,7 +833,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
-            this.ApplyRostersEvents(questionnaire, sourceInterviewTree, interviewChangeStructures.State);
+            var changedInterview = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
+            this.ApplyRostersEvents(sourceInterviewTree, changedInterview);
 
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);
@@ -2195,13 +2197,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ApplyRostersEvents(IQuestionnaire questionnaire, InterviewTree sourceInterview,
-            IReadOnlyInterviewStateDependentOnAnswers interviewExpressionState)
-        {
-            var changedInterview = this.BuildInterviewTree(questionnaire, interviewExpressionState);
-
-            new InterviewTreeEventPublisher(this.EventSourceId).ApplyRosterEvents(sourceInterview, changedInterview, questionnaire);
-        }
+        private void ApplyRostersEvents(InterviewTree sourceInterview, InterviewTree changedInterview)
+            => InterviewTreeEventPublisher.ApplyRosterEvents(this.ApplyEvent, sourceInterview, changedInterview);
 
         private void ApplyRostersEvents(params RosterCalculationData[] rosterDatas)
         {
