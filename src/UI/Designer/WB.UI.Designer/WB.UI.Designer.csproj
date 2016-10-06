@@ -484,6 +484,7 @@
     <Content Include="questionnaire\vendor\js-cookie\CONTRIBUTING.md" />
     <Content Include="questionnaire\vendor\js-cookie\README.md" />
     <Content Include="questionnaire\vendor\js-cookie\SERVER_SIDE.md" />
+    <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
