@@ -13,6 +13,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             Guid? targetParentId, 
             string title,
             QuestionnaireItemType type, 
+            string targetNewTitle,
+            int? affectedEntries,
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences)
         {
             UserName = userName;
@@ -23,6 +25,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             TargetId = targetId;
             TargetTitle = title;
             TargetType = type;
+            this.TargetNewTitle = targetNewTitle;
+            this.AffectedEntries = affectedEntries;
         }
 
         public string UserName { get; private set; }
@@ -33,6 +37,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public string TargetTitle { get; private set; }
         public Guid? TargetParentId { get; private set; }
         public QuestionnaireItemType TargetType { get; private set; }
+        public string TargetNewTitle { get; private set; }
+        public int? AffectedEntries { get; private set; }
 
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; private set; }
     }

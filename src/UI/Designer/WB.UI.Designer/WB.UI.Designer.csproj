@@ -302,6 +302,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M007_UpdateQuestionnairechangereferencesTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M006_AddTablesNeededForStoreQuestionnaireInPlainStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M005_AddNhibernateKeyIfMissing.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M008_AddFindReplaceToHistory.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M002_AddRolesIndex.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
