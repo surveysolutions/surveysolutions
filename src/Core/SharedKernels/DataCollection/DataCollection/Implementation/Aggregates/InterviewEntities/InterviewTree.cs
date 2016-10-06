@@ -38,6 +38,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private IEnumerable<IInterviewTreeNode> GetNodes()
             => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(node => node.Children);
 
+        public void RemoveNode(Identity identity)
+        {
+            foreach (var node in this.GetNodes().Where(x => x.Identity.Equals(identity)))
+                ((InterviewTreeGroup) node.Parent)?.RemoveChildren(node.Identity);
+        }
+
         public override string ToString()
             => $"Tree ({this.InterviewId})" + Environment.NewLine
             + string.Join(Environment.NewLine, this.Sections.Select(section => section.ToString().PrefixEachLine("  ")));
@@ -47,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         Identity Identity { get; }
         IInterviewTreeNode Parent { get; }
-        ICollection<IInterviewTreeNode> Children { get; }
+        IReadOnlyCollection<IInterviewTreeNode> Children { get; }
 
         bool IsDisabled();
     }
@@ -71,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Identity Identity { get; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
-        ICollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
+        IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree) => this.Tree = tree;
         void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
@@ -82,11 +88,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public abstract class InterviewTreeGroup : IInterviewTreeNode, IInternalInterviewTreeNode
     {
         private readonly bool isDisabled;
+        private readonly List<IInterviewTreeNode> children;
 
         protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
         {
             this.Identity = identity;
-            this.Children = children.ToList();
+            this.children = children.ToList();
             this.isDisabled = isDisabled;
 
             foreach (var child in this.Children)
@@ -98,7 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Identity Identity { get; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
-        public ICollection<IInterviewTreeNode> Children { get; }
+        public IReadOnlyCollection<IInterviewTreeNode> Children => this.children;
 
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree)
         {
@@ -111,6 +118,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
+
+        public void AddChildren(IInterviewTreeNode child)
+        {
+            var internalTreeNode = child as IInternalInterviewTreeNode;
+            if (internalTreeNode == null) throw new ArgumentException(nameof(child));
+
+            internalTreeNode.SetTree(this.Tree);
+            internalTreeNode.SetParent(this);
+            this.children.Add(child);
+        } 
+
+        public void RemoveChildren(Identity identity)
+        {
+            foreach (var child in this.children.Where(x => x.Identity.Equals(identity)))
+                this.children.Remove(child);
+        }
+
+        public void RemoveChildren(Identity[] identities)
+        {
+            foreach (var child in this.children.Where(x => identities.Contains(x.Identity)))
+                this.children.Remove(child);
+        }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
     }
@@ -139,7 +168,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string Title { get; }
         public string VariableName { get; }
 
-        public object Answer { get; }
+        public object Answer { get; private set; }
 
         public InterviewTreeSingleOptionQuestion AsSingleOption { get; }
         public bool IsSingleOption => this.AsSingleOption != null;
@@ -149,6 +178,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeCascadingQuestion AsCascading { get; }
         public bool IsCascading => this.AsCascading != null;
+
+        public void ClearAnswer() => this.Answer = null;
+        public void SetAnswer(object answer) => this.Answer = answer;
 
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
