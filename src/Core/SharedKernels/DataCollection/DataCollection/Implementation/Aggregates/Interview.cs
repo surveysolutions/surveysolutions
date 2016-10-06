@@ -876,7 +876,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 foreach (var fixedRosterIdentity in fixedRosterIdentities)
                                 {
                                     var rosterNode = BuildInterviewTreeRoster(fixedRosterIdentity.ToIdentity(), questionnaire, state);
-                                    group.Children.Add(rosterNode);
+                                    group.AddChildren(rosterNode);
                                     itemsQueue.Enqueue(rosterNode);
                                 }
                             }
