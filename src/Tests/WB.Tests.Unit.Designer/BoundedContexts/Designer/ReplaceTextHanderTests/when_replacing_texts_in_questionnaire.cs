@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -47,9 +48,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire.AddMacro(Create.Event.MacroAdded(questionnaire.Id, macroId, responsibleId));
             questionnaire.UpdateMacro(Create.Event.MacroUpdated(questionId, macroId, "macro_name", 
                 $"macro content {searchFor}", "desc", responsibleId));
+
+            command = new ReplaceTextsCommand(questionId, responsibleId, searchFor, replaceWith);
         };
 
-        Because of = () => questionnaire.ReplaceTexts(searchFor, replaceWith);
+        Because of = () => questionnaire.ReplaceTexts(command);
 
         It should_replace_title_of_static_text = () => 
             questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).GetTitle().ShouldEqual($"static text title with {replaceWith}");
@@ -91,6 +94,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        private static ReplaceTextsCommand command;
         const string replaceWith = "replaced";
         const string searchFor = "%to replace%";
     }

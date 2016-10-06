@@ -481,6 +481,7 @@
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
     <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_featured_questions.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_ordered_roster_size_question.cs" />
     <Compile Include="SharedKernels\Enumerator\SqliteStorageTests.cs" />

@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('TranslationsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $modal, notificationService, moment) {
+        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
             'use strict';
 
             $scope.downloadBaseUrl = '../../translations';
