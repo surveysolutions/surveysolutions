@@ -891,19 +891,19 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireNodeReference[] questionnaireNodeReferences)
         {
-            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireVerificationReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireNodeReferences);
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireNodeReference[] questionnaireNodeReferences)
         {
-            return QuestionnaireVerificationMessage.Error(code, message, questionnaireVerificationReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, questionnaireNodeReferences);
         }
 
-        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireNodeReference[] questionnaireNodeReferences)
         {
-            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireVerificationReferences);
+            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireNodeReferences);
         }
 
         public static VerificationMessage VerificationMessage(string code, string message, params VerificationReferenceEnriched[] references)
@@ -922,9 +922,9 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireVerificationReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
+        public static QuestionnaireNodeReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
         {
-            return new QuestionnaireVerificationReference(type, id ?? Guid.NewGuid());
+            return new QuestionnaireNodeReference(type, id ?? Guid.NewGuid());
         }
 
         public static VerificationReferenceEnriched VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)

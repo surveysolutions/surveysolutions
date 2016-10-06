@@ -54,7 +54,7 @@ namespace WB.UI.Designer.Code
         }
 
         private IEnumerable<VerificationReferenceEnriched> GetEnrichedReferences(
-            IEnumerable<QuestionnaireVerificationReference> references,
+            IEnumerable<QuestionnaireNodeReference> references,
             QuestionnaireDocument questionnaireDocument)
         {
             foreach (var reference in references)
@@ -111,7 +111,7 @@ namespace WB.UI.Designer.Code
                 while (parent != null)
                 {
                     IComposite grandParent = parent.GetParent();
-                    if (grandParent == null || grandParent.GetParent() == null)
+                    if (grandParent?.GetParent() == null)
                     {
                         break;
                     }

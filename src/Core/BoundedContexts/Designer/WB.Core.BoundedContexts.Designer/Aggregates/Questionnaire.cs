@@ -26,6 +26,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.LookupTables;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.Macros;
@@ -687,21 +688,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public void ReplaceTexts(string searchTerm, string replaceWith)
+        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor)
         {
-            var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
+            var allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
             foreach (var questionnaireItem in allEntries)
             {
                 var title = questionnaireItem.GetTitle();
-                if (!title.IsNullOrEmpty())
+                if (!title.IsNullOrEmpty() && title.Contains(searchFor))
                 {
-                    questionnaireItem.SetTitle(title.Replace(searchTerm, replaceWith));
+                   yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                   continue;
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (!string.IsNullOrEmpty(conditional?.ConditionExpression))
+                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(searchFor))
                 {
-                    conditional.ConditionExpression = conditional.ConditionExpression.Replace(searchTerm, replaceWith);
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    continue;
                 }
 
                 var validatable = questionnaireItem as IValidatable;
@@ -709,20 +712,78 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     foreach (var validationCondition in validatable.ValidationConditions)
                     {
-                        validationCondition.Expression = validationCondition.Expression?.Replace(searchTerm, replaceWith);
-                        validationCondition.Message = validationCondition.Message?.Replace(searchTerm, replaceWith);
+                        if ((validationCondition.Expression != null && validationCondition.Expression.Contains(searchFor))||
+                            validationCondition.Message != null && validationCondition.Message.Contains(searchFor))
+                        {
+                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                        }
                     }
+                }
+            }
+
+            foreach (var macro in this.innerDocument.Macros)
+            {
+                if (!macro.Value.Content.IsNullOrEmpty() && macro.Value.Content.Contains(searchFor))
+                {
+                    yield return QuestionnaireNodeReference.CreateForMacro(macro.Key);
+                }
+            }
+        }
+
+        public void ReplaceTexts(ReplaceTextsCommand command)
+        {
+            var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
+            int affectedEntries = 0;
+            foreach (var questionnaireItem in allEntries)
+            {
+                bool replacedAny = false;
+                var title = questionnaireItem.GetTitle();
+                if (!title.IsNullOrEmpty() && title.Contains(command.SearchFor))
+                {
+                    replacedAny = true;
+                    questionnaireItem.SetTitle(title.Replace(command.SearchFor, command.ReplaceWith));
+                }
+
+                var conditional = questionnaireItem as IConditional;
+                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(command.SearchFor))
+                {
+                    replacedAny = true;
+                    conditional.ConditionExpression = conditional.ConditionExpression.Replace(command.SearchFor, command.ReplaceWith);
+                }
+
+                var validatable = questionnaireItem as IValidatable;
+                if (validatable != null)
+                {
+                    foreach (var validationCondition in validatable.ValidationConditions)
+                    {
+                        if (validationCondition.Expression != null &&
+                            validationCondition.Expression.Contains(command.SearchFor))
+                        {
+                            replacedAny = true;
+                            validationCondition.Expression = validationCondition.Expression?.Replace(command.SearchFor, command.ReplaceWith);
+                        }
+                        if (validationCondition.Message != null && validationCondition.Message.Contains(command.SearchFor))
+                        {
+                            replacedAny = true;
+                            validationCondition.Message = validationCondition.Message?.Replace(command.SearchFor, command.ReplaceWith);
+                        }
+                    }
+                }
+
+                if (replacedAny)
+                {
+                    affectedEntries++;
                 }
             }
 
             foreach (var macro in this.innerDocument.Macros.Values)
             {
-                if (!macro.Content.IsNullOrEmpty())
+                if (!macro.Content.IsNullOrEmpty() && macro.Content.Contains(command.SearchFor))
                 {
-                    macro.Content = macro.Content.Replace(searchTerm, replaceWith);
+                    affectedEntries++;
+                    macro.Content = macro.Content.Replace(command.SearchFor, command.ReplaceWith);
                 }
             }
-
         }
 
         #endregion

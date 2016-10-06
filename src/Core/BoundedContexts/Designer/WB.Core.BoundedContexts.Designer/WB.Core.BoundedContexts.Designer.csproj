@@ -285,6 +285,7 @@
     <Compile Include="Commands\Questionnaire\Group\UpdateGroup.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\ReplaceTextsCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\AddStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />
@@ -297,6 +298,8 @@
     <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
+    <Compile Include="Implementation\Services\FindReplaceService.cs" />
+    <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableAdded.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableDeleted.cs" />
@@ -663,11 +666,9 @@
     <Compile Include="Translations\TranslationInstanceMap.cs" />
     <Compile Include="Translations\TranslationsService.cs" />
     <Compile Include="Translations\TranslationValidationError.cs" />
-    <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntry.cs" />
-    <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntryMap.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationMessage.cs" />
-    <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
+    <Compile Include="ValueObjects\QuestionnaireNodeReference.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
     <Compile Include="ValueObjects\VerificationMessageLevel.cs" />
     <Compile Include="Views\Account\AccountDenormalizer.cs" />

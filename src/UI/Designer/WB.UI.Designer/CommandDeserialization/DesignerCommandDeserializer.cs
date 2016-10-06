@@ -31,6 +31,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "MoveQuestion", typeof (MoveQuestion) },
                     { "AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaire) },
                     { "RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaire) },
+                    { "ReplaceTexts", typeof (ReplaceTextsCommand) },
                     //Update questions command
                     { "UpdateTextQuestion", typeof (UpdateTextQuestion) },
                     { "UpdateNumericQuestion", typeof (UpdateNumericQuestion) },

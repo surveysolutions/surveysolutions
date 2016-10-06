@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, notificationService, userService) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
@@ -105,7 +105,7 @@ angular.module('designerApp')
                 description: 'Find and replace',
                 callback: function (event) {
                     event.preventDefault();
-                    $modal.open({
+                    $uibModal.open({
                         templateUrl: 'views/find-replace.html',
                         backdrop: false,
                         controller: 'findReplaceCtrl'
@@ -223,7 +223,7 @@ angular.module('designerApp')
                 }
             };
 
-            $scope.navigateTo = function (reference) {
+            $rootScope.navigateTo = function (reference) {
                 if (reference.type.toLowerCase() === "macro") {
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openMacrosList", { focusOn: reference.itemId });
@@ -379,7 +379,7 @@ angular.module('designerApp')
             };
 
             $scope.showShareInfo = function () {
-                $modal.open({
+                $uibModal.open({
                     templateUrl: 'views/share.html',
                     controller: 'shareCtrl',
                     windowClass: 'share-window',

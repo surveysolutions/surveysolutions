@@ -11,8 +11,8 @@
         <div class="row">
             <div class="form-group col-xs-6">
                 <label class="wb-label">Question type</label><br>
-                <div class="btn-group type-container-dropdown" dropdown>
-                    <button id="questionTypeBtn" class="btn btn-default form-control" dropdown-toggle type="button">
+                <div class="btn-group type-container-dropdown" uib-dropdown>
+                    <button id="questionTypeBtn" class="btn btn-default form-control" uib-dropdown-toggle type="button">
                         <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
                         <span class="vertical-line"></span>
                         {{activeQuestion.typeName}}
@@ -113,8 +113,8 @@
     <div class="form-group">
         <div class="form-group pull-right">
             <label for="Question-scope">Question scope&nbsp;</label>
-            <div class="btn-group dropup " dropdown>
-                <button class="btn dropdown-toggle" id="Question-scope" dropdown-toggle type="button">
+            <div class="btn-group dropup " uib-dropdown>
+                <button class="btn dropdown-toggle" id="Question-scope" uib-dropdown-toggle type="button">
                     {{ activeQuestion.questionScope }}
                     <span class="dropdown-arrow"></span>
                 </button>
@@ -143,8 +143,8 @@
         <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
             <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
             <label for="linkedEntitySource">Bind to question from roster group</label>
-            <div class="btn-group" dropdown>
-                <button class="btn dropdown-toggle" dropdown-toggle id="linkedEntitySource" type="button">
+            <div class="btn-group" uib-dropdown>
+                <button class="btn dropdown-toggle" uib-dropdown-toggle id="linkedEntitySource" type="button">
                     <span class="select-placeholder" ng-if="(activeQuestion.linkedToEntity.title || '') == ''">Select question</span>
 
                     <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
