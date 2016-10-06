@@ -735,7 +735,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
              
             }
 
-            foreach (var macro in this.innerDocument.Macros)
+            foreach (var macro in this.innerDocument.Macros.OrderBy(x => x.Value.Name))
             {
                 if (MatchesSearchTerm(macro.Value.Content, searchRegex))
                 {
