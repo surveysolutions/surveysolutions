@@ -2,17 +2,16 @@ using System;
 using System.Linq;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    public class InterviewTreeEventPublisher : EventSourcedAggregateRoot
+    public static class InterviewTreeEventPublisher
     {
-        public InterviewTreeEventPublisher(Guid interviewId) : base(interviewId) { }
-
-        public void ApplyRosterEvents(InterviewTree sourceInterview, InterviewTree changedInterview, IQuestionnaire questionnaire)
+        public static void ApplyRosterEvents(Action<IEvent> ApplyEvent, InterviewTree sourceInterview, InterviewTree changedInterview)
         {
             var diff = sourceInterview.FindDiff(changedInterview);
 
@@ -22,59 +21,54 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .ToArray();
 
             var addedRosters = diff
-                .Where(x => x.ChangedNode is InterviewTreeRoster && x.SourceNode == null)
+                .Where(x => x.SourceNode == null && x.ChangedNode is InterviewTreeRoster)
                 .Select(x => x.ChangedNode)
                 .ToArray();
 
             var removedAnswersByRemovedRosters = removedRosters
                 .TreeToEnumerable(x => x.Children)
+                .DistinctBy(x => x.Identity)
                 .OfType<InterviewTreeQuestion>()
                 .Select(x => x.Identity)
                 .ToArray();
 
-            var rosterTitleQuestionIds = questionnaire.GetRostersWithTitlesToChange().ToArray();
-
-            var changedRosterTitleQuestions = diff
-                .Where(x => IsChangedRosterTitleQuestion(x, rosterTitleQuestionIds))
+            var changedRosterTitles = diff
+                .Where(HasChangedRosterTitle)
                 .Select(x => x.ChangedNode)
-                .Cast<InterviewTreeQuestion>()
+                .Cast<InterviewTreeRoster>()
                 .ToArray();
 
 
             if (removedRosters.Any())
-                this.ApplyEvent(new RosterInstancesRemoved(removedRosters.Select(ToRosterInstance).ToArray()));
+                ApplyEvent(new RosterInstancesRemoved(removedRosters.Select(ToRosterInstance).ToArray()));
 
             if (removedAnswersByRemovedRosters.Any())
-                this.ApplyEvent(new AnswersRemoved(removedAnswersByRemovedRosters));
+                ApplyEvent(new AnswersRemoved(removedAnswersByRemovedRosters));
 
             if (addedRosters.Any())
-                this.ApplyEvent(new RosterInstancesAdded(addedRosters.Select(ToAddedRosterInstance).ToArray()));
+                ApplyEvent(new RosterInstancesAdded(addedRosters.Select(ToAddedRosterInstance).ToArray()));
 
-            if(changedRosterTitleQuestions.Any())
-                this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitleQuestions.Select(ToChangedRosterInstanceTitleDto).ToArray()));
+            if(changedRosterTitles.Any())
+                ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
         }
 
-        private ChangedRosterInstanceTitleDto ToChangedRosterInstanceTitleDto(InterviewTreeQuestion rosterTitleQuestion)
-            => new ChangedRosterInstanceTitleDto(
-                new RosterInstance(rosterTitleQuestion.Parent.Identity.Id,
-                    rosterTitleQuestion.Parent.Identity.RosterVector,
-                    rosterTitleQuestion.Identity.RosterVector.Last()), rosterTitleQuestion.Title);
-
-        private bool IsChangedRosterTitleQuestion(InterviewTreeNodeDiff diff, Guid[] rosterTitleQuestionIds)
+        private static bool HasChangedRosterTitle(InterviewTreeNodeDiff diffNode)
         {
-            var sourceQuestion = diff.SourceNode as InterviewTreeQuestion;
-            var changedQuestion = diff.ChangedNode as InterviewTreeQuestion;
+            var sourceRoster = diffNode.SourceNode as InterviewTreeRoster;
+            var changedRoster = diffNode.ChangedNode as InterviewTreeRoster;
 
-            if (sourceQuestion == null || changedQuestion == null) return false;
-            if (!rosterTitleQuestionIds.Contains(sourceQuestion.Identity.Id)) return false;
+            if (sourceRoster == null || changedRoster == null) return false;
 
-            return !sourceQuestion.Equals(changedQuestion.Answer);
+            return sourceRoster.RosterTitle != changedRoster.RosterTitle;
         }
+
+        private static ChangedRosterInstanceTitleDto ToChangedRosterInstanceTitleDto(InterviewTreeRoster roster)
+            => new ChangedRosterInstanceTitleDto(ToRosterInstance(roster), roster.RosterTitle);
 
         private static AddedRosterInstance ToAddedRosterInstance(IInterviewTreeNode rosterNode)
             => new AddedRosterInstance(rosterNode.Identity.Id, rosterNode.Parent.Identity.RosterVector, rosterNode.Identity.RosterVector.Last(), 0);
 
-        private static RosterInstance ToRosterInstance(IInterviewTreeNode x)
-            => new RosterInstance(x.Identity.Id, x.Parent.Identity.RosterVector, x.Identity.RosterVector.Last());
+        private static RosterInstance ToRosterInstance(IInterviewTreeNode rosterNode)
+            => new RosterInstance(rosterNode.Identity.Id, rosterNode.Parent.Identity.RosterVector, rosterNode.Identity.RosterVector.Last());
     }
 }

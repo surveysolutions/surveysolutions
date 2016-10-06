@@ -230,6 +230,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeRoster : InterviewTreeGroup
     {
+        public string RosterTitle { get; set; }
+
         public InterviewTreeRoster(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
             : base(identity, children, isDisabled) {}
 
