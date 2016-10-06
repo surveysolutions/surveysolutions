@@ -6841,11 +6841,10 @@ input.wb-radio {
 }
 input.wb-checkbox + label,
 input.wb-radio + label {
-  font-size: 14px;
   margin: 4px 6px 4px 0;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: normal;
-  font-size: 12px;
+  font-size: 14px;
 }
 input.wb-checkbox + label > span,
 input.wb-radio + label > span {
@@ -9041,7 +9040,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .chapter-title > .search-box > .input-group > input {
   height: 40px;
   border: none;
-  border-radius: 3px 0 0 3px;
   padding: 0 14px;
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
@@ -9050,11 +9048,8 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   outline: none;
 }
 .chapter-title > .search-box > .input-group > span {
-  height: 40px;
   border: none;
-  border-radius: 0 3px 3px 0;
   background-color: #fff;
-  cursor: pointer;
   top: 0;
 }
 .chapter-title > .search-box > button {
@@ -9377,6 +9372,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .attachment-preview-window .modal-body img {
   max-width: 100%;
 }
+.pointer {
+  cursor: pointer;
+}
 #verify-popover {
   display: none;
 }
@@ -9592,4 +9590,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 .share-question-dialog a.owner {
   color: #2fc507;
+}
+.findReplaceModal .modal-dialog {
+  width: 650px;
+}
+.findReplaceModal .modal-dialog .modal-body {
+  min-height: 160px;
+}
+.findReplaceModal label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
 }

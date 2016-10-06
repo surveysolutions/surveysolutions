@@ -302,6 +302,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M007_UpdateQuestionnairechangereferencesTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M006_AddTablesNeededForStoreQuestionnaireInPlainStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M005_AddNhibernateKeyIfMissing.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M008_AddFindReplaceToHistory.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M002_AddRolesIndex.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
@@ -483,6 +484,7 @@
     <Content Include="questionnaire\vendor\js-cookie\CONTRIBUTING.md" />
     <Content Include="questionnaire\vendor\js-cookie\README.md" />
     <Content Include="questionnaire\vendor\js-cookie\SERVER_SIDE.md" />
+    <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />

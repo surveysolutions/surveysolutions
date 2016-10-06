@@ -253,13 +253,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
                 var npgsqlCommand = connection.CreateCommand();
                 npgsqlCommand.CommandText = $"SELECT globalsequence FROM {tableName} WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
-                npgsqlCommand.Parameters.AddWithValue("eventSourceId", position.Value.EventSourceIdOfLastEvent);
-                npgsqlCommand.Parameters.AddWithValue("sequence", position.Value.SequenceOfLastEvent);
+                var positionValue = position.Value;
+                npgsqlCommand.Parameters.AddWithValue("eventSourceId", positionValue.EventSourceIdOfLastEvent);
+                npgsqlCommand.Parameters.AddWithValue("sequence", positionValue.SequenceOfLastEvent);
 
                 int globalSequence = (int) npgsqlCommand.ExecuteScalar();
 
                 NpgsqlCommand countCommand = connection.CreateCommand();
                 countCommand.CommandText = $"SELECT COUNT(*) FROM {tableName} WHERE globalsequence > {globalSequence}";
+                countCommand.Parameters.AddWithValue("globalSequence", globalSequence);
 
                 return (long) countCommand.ExecuteScalar();
             }

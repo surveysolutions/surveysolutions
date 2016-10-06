@@ -1,34 +1,69 @@
-﻿<div>
-    <div class="modal-content" drags>
-        <div class="modal-header">
-            <button type="button" class="close" aria-hidden="true" ng-click="$close()"> <!--&times;--> </button>
-            <h3 class="modal-title">
-                Find and replace
-            </h3>
-        </div>
-        <div class="modal-body">
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label for="searchFor" class="col-sm-3 control-label wb-label">
-                        Find what:
-                    </label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="searchFor" ng-model="searchFor">
-                    </div>
+﻿<div class="modal-header" drags>
+    <button type="button" class="close" aria-hidden="true" ng-click="$close()"> <!--&times;--> </button>
+    <h3 class="modal-title">
+        Find and replace
+    </h3>
+</div>
+<div class="modal-body">
+    <div ng-switch on="step">
+        <form class="form-horizontal" ng-switch-when="search">
+            <div class="form-group">
+                <label for="searchFor" class="col-sm-3 control-label wb-label">
+                    Find what:
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="searchFor" ng-model="searchForm.searchFor" autocomplete="off">
                 </div>
-                <div class="form-group">
-                    <label for="relaceWith" class="col-sm-3 control-label wb-label">
-                        Replace with:
-                    </label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="relaceWith" ng-model="replaceWith">
-                    </div>
+            </div>
+            <div class="form-group">
+                <label for="relaceWith" class="col-sm-3 control-label wb-label">
+                    Replace with:
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="relaceWith" ng-model="searchForm.replaceWith" autocomplete="off">
                 </div>
-            </form>
+            </div>
+            <div class="form-group">
+                <div class="checkbox col-sm-4">
+                    <input id="cb-match-case" type="checkbox" class="wb-checkbox" ng-model="searchForm.matchCase" />
+                    <label for="cb-match-case" class="wb-label">
+                        <span></span>
+                        Match case
+                    </label>
+                </div>
+                <div class="checkbox col-sm-4">
+                    <input id="cb-match-wholeword" type="checkbox" class="wb-checkbox" ng-model="searchForm.matchWholeWord" />
+                    <label for="cb-match-wholeword" class="wb-label">
+                        <span></span>
+                        Match whole word
+                    </label>
+                </div>
+                <div class="checkbox col-sm-4">
+                    <input id="cb-use-regexp" type="checkbox" class="wb-checkbox" ng-model="searchForm.useRegex" />
+                    <label for="cb-use-regexp" class="wb-label">
+                        <span></span>
+                        Use regexp
+                    </label>
+                </div>
+            </div>
+        </form>
+        
+        <div ng-switch-when="confirm">
+            <p>Please confirm action.</p>
+            <p>Replace all "<strong ng-bind="searchForm.searchFor"></strong>" with <strong ng-bind="searchForm.replaceWith"></strong></p>
+            <p>in all {{foundReferences.length}} found entities?</p>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-lg btn-primary" ng-disabled="searchFor.length === 0" ng-click="findAll()">Find all</button>
-            <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0" ng-click="replaceAll()">
+        <div ng-switch-when="done">
+            All {{foundReferences.length}} entities has been successfully updated.
+        </div>
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <div ng-switch on="step">
+        <div ng-switch-when="search">
+            <button type="button" class="btn btn-lg btn-primary" ng-disabled="searchForm.searchFor.length === 0" ng-click="findAll()">Find all</button>
+            <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0" ng-click="confirmReplaceAll()">
                 Replace all ({{foundReferences.length}})
             </button>
 
@@ -36,6 +71,15 @@
                 <button type="button" class="btn btn-lg btn-link" ng-click="navigatePrev()">Previous</button>
                 <button type="button" class="btn btn-lg btn-link" ng-click="navigateNext()">Next</button>
             </div>
+        </div>
+        <div ng-switch-when="confirm">
+            <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0" ng-click="replaceAll()">
+                Replace all ({{foundReferences.length}})
+            </button>
+            <button type="button" class="btn btn-lg btn-link" ng-click="backToSearch()">Back to search</button>
+        </div>
+        <div ng-switch-when="done">
+            <button type="button" class="btn btn-lg btn-primary" ng-click="$close()">Done</button>
         </div>
     </div>
 </div>

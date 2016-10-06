@@ -21,35 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             this.accountViewFactory = accountViewFactory;
         }
 
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets a value indicating whether is unique email required.
-        /// </summary>
         public bool IsUniqueEmailRequired { get; set; }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The create.
-        /// </summary>
-        /// <param name="providerUserKey">
-        /// The provider user key.
-        /// </param>
-        /// <param name="applicationName">
-        /// The application name.
-        /// </param>
-        /// <param name="username">
-        /// The username.
-        /// </param>
-        /// <param name="email">
-        /// The email.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IMembershipAccount"/>.
-        /// </returns>
         public IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email)
         {
             var account = new AccountView
@@ -62,18 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return account;
         }
 
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        /// <param name="username">
-        /// The username.
-        /// </param>
-        /// <param name="deleteAllRelatedData">
-        /// The delete all related data.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
         public bool Delete(string username, bool deleteAllRelatedData)
         {
             AccountView account = this.GetUser(accountName: username);
@@ -83,24 +44,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return this.GetUser(accountName: username) == null;
         }
 
-        /// <summary>
-        /// The find all.
-        /// </summary>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="totalRecords">
-        /// The total records.
-        /// </param>
-        /// <returns>
-        /// The <see>
-        ///         <cref>IEnumerable</cref>
-        ///     </see>
-        ///     .
-        /// </returns>
         public IEnumerable<IMembershipAccount> FindAll(int pageIndex, int pageSize, out int totalRecords)
         {
             AccountListView accounts =
@@ -111,27 +54,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return accounts.Items;
         }
 
-        /// <summary>
-        /// The find by email.
-        /// </summary>
-        /// <param name="emailToMatch">
-        /// The email to match.
-        /// </param>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="totalRecords">
-        /// The total records.
-        /// </param>
-        /// <returns>
-        /// The <see>
-        ///         <cref>IEnumerable</cref>
-        ///     </see>
-        ///     .
-        /// </returns>
         public IEnumerable<IMembershipAccount> FindByEmail(
             string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
@@ -143,27 +65,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return accounts.Items;
         }
 
-        /// <summary>
-        /// The find by user name.
-        /// </summary>
-        /// <param name="usernameToMatch">
-        /// The username to match.
-        /// </param>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="totalRecords">
-        /// The total records.
-        /// </param>
-        /// <returns>
-        /// The <see>
-        ///         <cref>IEnumerable</cref>
-        ///     </see>
-        ///     .
-        /// </returns>
         public IEnumerable<IMembershipAccount> FindByUserName(
             string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
@@ -175,24 +76,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return accounts.Items;
         }
 
-        /// <summary>
-        /// The find new accounts.
-        /// </summary>
-        /// <param name="pageIndex">
-        /// The page index.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="totalRecords">
-        /// The total records.
-        /// </param>
-        /// <returns>
-        /// The <see>
-        ///         <cref>IEnumerable</cref>
-        ///     </see>
-        ///     .
-        /// </returns>
         public IEnumerable<IMembershipAccount> FindNewAccounts(int pageIndex, int pageSize, out int totalRecords)
         {
             AccountListView accounts =
@@ -203,17 +86,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return accounts.Items;
         }
 
-        /// <summary>
-        /// The get.
-        /// </summary>
-        /// <param name="username">
-        /// The username.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IMembershipAccount"/>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// </exception>
         public IMembershipAccount Get(string username)
         {
             if (username == null)
@@ -224,17 +96,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return this.GetUser(accountName: username);
         }
 
-        /// <summary>
-        /// The get by provider key.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IMembershipAccount"/>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// </exception>
         public IMembershipAccount GetByProviderKey(object id)
         {
             if (id == null)
@@ -245,12 +106,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return this.accountViewFactory.Load(new AccountViewInputModel(Guid.Parse(id.ToString())));
         }
 
-        /// <summary>
-        /// The get number of users online.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
         public int GetNumberOfUsersOnline()
         {
             AccountListView accountsOnline =
@@ -259,48 +114,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return accountsOnline.TotalCount;
         }
 
-        /// <summary>
-        /// The get user by reset password token.
-        /// </summary>
-        /// <param name="token">
-        /// The token.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IMembershipAccount"/>.
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         public IMembershipAccount GetUserByResetPasswordToken(string token)
         {
             return this.GetUser(resetPasswordToken: token);
         }
 
-        /// <summary>
-        /// The get user name by confirmation token.
-        /// </summary>
-        /// <param name="confirmationToken">
-        /// The confirmation token.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         public string GetUserNameByConfirmationToken(string confirmationToken)
         {
             AccountView account = this.GetUser(confirmationToken: confirmationToken);
             return account == null ? string.Empty : account.UserName;
         }
 
-        /// <summary>
-        /// The get user name by email.
-        /// </summary>
-        /// <param name="email">
-        /// The email.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// </exception>
         public string GetUserNameByEmail(string email)
         {
             if (email == null)
@@ -312,15 +136,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return account == null ? string.Empty : account.UserName;
         }
 
-        /// <summary>
-        /// The register.
-        /// </summary>
-        /// <param name="account">
-        /// The account.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Web.Security.MembershipCreateStatus"/>.
-        /// </returns>
         public MembershipCreateStatus Register(IMembershipAccount account)
         {
             this.commandService.Execute(
@@ -336,15 +151,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return MembershipCreateStatus.Success;
         }
 
-        /// <summary>
-        /// The update.
-        /// </summary>
-        /// <param name="account">
-        /// The account.
-        /// </param>
-        /// <param name="eventType">
-        /// The event type.
-        /// </param>
         public void Update(IMembershipAccount account, MembershipEventType eventType)
         {
             var accountPublicKey = account.ProviderUserKey;
@@ -402,28 +208,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The get user.
-        /// </summary>
-        /// <param name="accountName">
-        /// The account name.
-        /// </param>
-        /// <param name="accountEmail">
-        /// The account email.
-        /// </param>
-        /// <param name="confirmationToken">
-        /// The confirmation token.
-        /// </param>
-        /// <param name="resetPasswordToken">
-        /// The reset password token.
-        /// </param>
-        /// <returns>
-        /// The <see cref="WB.Core.BoundedContexts.Designer.Views.Account.AccountView"/>.
-        /// </returns>
         private AccountView GetUser(
             string accountName = null, 
             string accountEmail = null, 
@@ -438,7 +222,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                         confirmationToken: confirmationToken, 
                         resetPasswordToken: resetPasswordToken));
         }
-
-        #endregion
     }
 }
