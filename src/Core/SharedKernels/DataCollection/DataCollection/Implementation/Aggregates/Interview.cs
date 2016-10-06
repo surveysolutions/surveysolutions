@@ -942,7 +942,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                     if (existingRosters.Any(x => x.Identity.Equals(identity)))
                                         continue;
                                     var rosterNode = BuildInterviewTreeRoster(identity, questionnaire, state);
-                                    group.Children.Add(rosterNode);
+                                    group.AddChildren(rosterNode);
                                     itemsQueue.Enqueue(rosterNode);
                                 }
                             }
@@ -953,10 +953,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 {
                                     if (rosterIdentities.Any(x => x.Equals(extisingRoster.Identity)))
                                         continue;
-                                    var nodeToRemove =
-                                        group.Children.Single(
-                                            x => x.Identity.Equals(extisingRoster.Identity));
-                                    group.Children.Remove(nodeToRemove);
+                                    group.RemoveChildren(extisingRoster.Identity);
                                 }
                             }
                         }
