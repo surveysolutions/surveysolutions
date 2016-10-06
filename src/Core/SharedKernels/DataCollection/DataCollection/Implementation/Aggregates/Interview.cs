@@ -760,7 +760,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
 
             var interviewChangeStructures = new InterviewChangeStructures();
-           
+
             this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, RosterVector.Empty, interviewChangeStructures.State);
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
@@ -777,6 +777,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answersToFeaturedQuestions.ToDictionary(
                     answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, RosterVector.Empty),
                     answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
+
+            UpdateTreeWithNewAnswers(sourceInterviewTree, questionnaire, interviewChangeStructures.State, newAnswers);
 
             ILatestInterviewExpressionState expressionProcessorStatePrototypeLocal = new InterviewExpressionStateForPreloading();
             this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
@@ -815,6 +817,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
 
+            UpdateTreeWithNewAnswers(sourceInterviewTree, questionnaire, interviewChangeStructures.State, new Dictionary<Identity, object>());
+
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
             var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
@@ -843,6 +847,86 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+        }
+
+        private void UpdateTreeWithNewAnswers(InterviewTree tree, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state, Dictionary<Identity, object> newAnswers)
+        {
+            var itemsQueue = new Queue<IInterviewTreeNode>(tree.Sections);
+
+            while (itemsQueue.Count > 0)
+            {
+                var currentItem = itemsQueue.Dequeue();
+
+                if (currentItem is InterviewTreeGroup)
+                {
+                    var group = currentItem as InterviewTreeGroup;
+                    var childEntities = questionnaire.GetChildEntityIds(currentItem.Identity.Id);
+
+                    foreach (var childEntity in childEntities)
+                    {
+                        if (questionnaire.IsFixedRoster(childEntity))
+                        {
+                            //calculate fixed roster here
+                            var rosterTitles = questionnaire.GetFixedRosterTitles(childEntity);
+                            if (group.Children.Count(x => x.Identity.Id == childEntity) != rosterTitles.Length)
+                            {
+                                var fixedRosterIdentities =
+                                    rosterTitles.Select((x, i) => new RosterIdentity(childEntity, currentItem.Identity.RosterVector, x.Value, sortIndex: i));
+
+                                foreach (var fixedRosterIdentity in fixedRosterIdentities)
+                                {
+                                    var rosterNode = BuildInterviewTreeRoster(fixedRosterIdentity.ToIdentity(), questionnaire, state);
+                                    group.Children.Add(rosterNode);
+                                    itemsQueue.Enqueue(rosterNode);
+                                }
+                            }
+                        }
+                        else if (questionnaire.IsRosterGroup(childEntity))
+                        {
+                            // calculate rosters
+                            var sourceQuestionId = questionnaire.GetRosterSizeQuestion(childEntity);
+                            if (sourceQuestionId == null)
+                                continue;
+                            if (newAnswers.Keys.Any(x => x.Id == sourceQuestionId.Value))
+                            {
+                                var questionaType = questionnaire.GetQuestionType(sourceQuestionId.Value);
+                                switch (questionaType)
+                                {
+                                    case QuestionType.MultyOption:
+                                        break;
+                                    case QuestionType.Numeric:
+                                        //get answer from dictionary
+                                        var rosterIdentities = Enumerable.Range(0, 3).Select(index => new RosterIdentity(childEntity, currentItem.Identity.RosterVector, index, index)).ToList();
+                                        var existingRosters = group.Children.Where(x => x.Identity.Id == childEntity).ToList();
+                                        if (existingRosters.Count < rosterIdentities.Count)
+                                        {
+                                            // add numeric rosters
+                                        }
+                                        else
+                                        {
+                                            // remove numeric rosters 
+                                        }
+                                        break;
+                                    case QuestionType.TextList:
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                    var childItems = currentItem.Children;
+
+                    if (childItems != null)
+                    {
+                        foreach (var childItem in childItems)
+                        {
+                            itemsQueue.Enqueue(childItem);
+                        }
+                    }
+                }
+            }
         }
 
         public void CreateInterviewCreatedOnClient(Guid questionnaireId, long questionnaireVersion,
