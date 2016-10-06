@@ -778,7 +778,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, RosterVector.Empty),
                     answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
 
-            UpdateTreeWithNewAnswers(sourceInterviewTree, questionnaire, interviewChangeStructures.State, newAnswers);
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
+
+            UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, interviewChangeStructures.State, newAnswers);
 
             ILatestInterviewExpressionState expressionProcessorStatePrototypeLocal = new InterviewExpressionStateForPreloading();
             this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
@@ -800,8 +802,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
 
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
-            var changedInterview = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
-            this.ApplyRostersEvents(sourceInterviewTree, changedInterview);
+            this.ApplyRostersEvents(sourceInterviewTree, changedInterviewTree);
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
@@ -816,8 +817,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
+            var changedInterview = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
 
-            UpdateTreeWithNewAnswers(sourceInterviewTree, questionnaire, interviewChangeStructures.State, new Dictionary<Identity, object>());
+            UpdateTreeWithNewAnswers(changedInterview, questionnaire, interviewChangeStructures.State, new Dictionary<Identity, object>());
 
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
@@ -835,9 +837,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
 
-
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
-            var changedInterview = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
             this.ApplyRostersEvents(sourceInterviewTree, changedInterview);
 
 
