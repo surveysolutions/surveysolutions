@@ -40,12 +40,8 @@
     }
 })(jQuery);
 
-
-angular.module('designerApp').directive('drags', function () {
-    return {
-        restrict: 'EA',
-        link: function(scope, element) {
-            element.drags({ handle: '.modal-header' });
-        }
-    }  
+angular.module('designerApp').directive('drags', function() {
+    return function(scope, elem) {
+        elem.parents('.modal-dialog').drags({ handle: elem });
+    }
 });
