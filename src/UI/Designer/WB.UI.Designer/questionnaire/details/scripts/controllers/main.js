@@ -105,13 +105,18 @@ angular.module('designerApp')
                 description: 'Find and replace',
                 callback: function (event) {
                     event.preventDefault();
-                    $uibModal.open({
-                        templateUrl: 'views/find-replace.html',
-                        backdrop: false,
-                        controller: 'findReplaceCtrl'
-                    });
+                    $scope.showFindReplaceDialog();
                 }
             });
+
+            $scope.showFindReplaceDialog = function() {
+                $uibModal.open({
+                    templateUrl: 'views/find-replace.html',
+                    backdrop: false,
+                    windowClass: "findReplaceModal",
+                    controller: 'findReplaceCtrl'
+                });
+            }
 
             $scope.questionnaireId = $state.params.questionnaireId;
             var ERROR = "error";

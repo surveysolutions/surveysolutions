@@ -7,7 +7,9 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -559,6 +561,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
+        private int affectedByReplaceEntries;
 
         #endregion
 
@@ -688,67 +691,113 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor)
+        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
-            var allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
+            Regex searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
+            IEnumerable<IComposite> allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
             foreach (var questionnaireItem in allEntries)
             {
                 var title = questionnaireItem.GetTitle();
-                if (!title.IsNullOrEmpty() && title.Contains(searchFor))
+                var variable = questionnaireItem.GetVariable();
+
+                if (MatchesSearchTerm(title, searchRegex) || MatchesSearchTerm(variable, searchRegex))
                 {
-                   yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
-                   continue;
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    continue;
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(searchFor))
+                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    continue;
+                }
+
+                var question = questionnaireItem as IQuestion;
+                if (question?.Answers != null && question.Answers.Any(x => MatchesSearchTerm(x.AnswerText, searchRegex)))
                 {
                     yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
                     continue;
                 }
 
                 var validatable = questionnaireItem as IValidatable;
-                if (validatable != null)
+                if (validatable != null && validatable.ValidationConditions.Any(x => MatchesSearchTerm(x.Expression, searchRegex) ||
+                                                                  MatchesSearchTerm(x.Message, searchRegex)))
                 {
-                    foreach (var validationCondition in validatable.ValidationConditions)
-                    {
-                        if ((validationCondition.Expression != null && validationCondition.Expression.Contains(searchFor))||
-                            validationCondition.Message != null && validationCondition.Message.Contains(searchFor))
-                        {
-                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
-                        }
-                    }
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    continue;
                 }
+                var questionnaireVariable = questionnaireItem as IVariable;
+                if (questionnaireVariable != null && MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                }
+             
             }
 
-            foreach (var macro in this.innerDocument.Macros)
+            foreach (var macro in this.innerDocument.Macros.OrderBy(x => x.Value.Name))
             {
-                if (!macro.Value.Content.IsNullOrEmpty() && macro.Value.Content.Contains(searchFor))
+                if (MatchesSearchTerm(macro.Value.Content, searchRegex))
                 {
                     yield return QuestionnaireNodeReference.CreateForMacro(macro.Key);
                 }
             }
         }
 
+        private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        {
+            RegexOptions options = RegexOptions.Compiled | RegexOptions.CultureInvariant;
+            if (!matchCase)
+            {
+                options |= RegexOptions.IgnoreCase;
+            }
+            string encodedSearchPattern = useRegex ? searchFor : Regex.Escape(searchFor);
+            string pattern = matchWholeWord ? $@"\b{encodedSearchPattern}\b" : encodedSearchPattern;
+
+            Regex searchRegex = new Regex(pattern, options);
+            return searchRegex;
+        }
+
+        private static bool MatchesSearchTerm(string target, Regex searchRegex)
+        {
+            if (target.IsNullOrEmpty()) return false;
+
+            return searchRegex.IsMatch(target);
+        }
+
+        private static string ReplaceUsingSearchTerm(string target, Regex searchFor, string replaceWith)
+        {
+            return searchFor.Replace(target, replaceWith);
+        }
+
         public void ReplaceTexts(ReplaceTextsCommand command)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
-            int affectedEntries = 0;
+            this.affectedByReplaceEntries = 0;
+            var searchRegex = BuildSearchRegex(command.SearchFor, command.MatchCase, command.MatchWholeWord, command.UseRegex);
             foreach (var questionnaireItem in allEntries)
             {
                 bool replacedAny = false;
                 var title = questionnaireItem.GetTitle();
-                if (!title.IsNullOrEmpty() && title.Contains(command.SearchFor))
+                if (MatchesSearchTerm(title, searchRegex))
                 {
                     replacedAny = true;
-                    questionnaireItem.SetTitle(title.Replace(command.SearchFor, command.ReplaceWith));
+                    questionnaireItem.SetTitle(ReplaceUsingSearchTerm(title, searchRegex, command.ReplaceWith));
+                }
+
+                var variableName = questionnaireItem.GetVariable();
+                if (MatchesSearchTerm(variableName, searchRegex))
+                {
+                    replacedAny = true;
+                    questionnaireItem.SetVariable(ReplaceUsingSearchTerm(variableName, searchRegex, command.ReplaceWith));
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(command.SearchFor))
+                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
                     replacedAny = true;
-                    conditional.ConditionExpression = conditional.ConditionExpression.Replace(command.SearchFor, command.ReplaceWith);
+                    string newCondition = ReplaceUsingSearchTerm(conditional.ConditionExpression, searchRegex, command.ReplaceWith);
+                    conditional.ConditionExpression = newCondition;
                 }
 
                 var validatable = questionnaireItem as IValidatable;
@@ -756,34 +805,63 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     foreach (var validationCondition in validatable.ValidationConditions)
                     {
-                        if (validationCondition.Expression != null &&
-                            validationCondition.Expression.Contains(command.SearchFor))
+                        if (MatchesSearchTerm(validationCondition.Expression, searchRegex))
                         {
                             replacedAny = true;
-                            validationCondition.Expression = validationCondition.Expression?.Replace(command.SearchFor, command.ReplaceWith);
+                            string newValidationCondition = ReplaceUsingSearchTerm(validationCondition.Expression, searchRegex, command.ReplaceWith);
+                            validationCondition.Expression = newValidationCondition;
                         }
-                        if (validationCondition.Message != null && validationCondition.Message.Contains(command.SearchFor))
+                        if (MatchesSearchTerm(validationCondition.Message, searchRegex))
                         {
                             replacedAny = true;
-                            validationCondition.Message = validationCondition.Message?.Replace(command.SearchFor, command.ReplaceWith);
+                            string newMessage = ReplaceUsingSearchTerm(validationCondition.Message, searchRegex, command.ReplaceWith);
+                            validationCondition.Message = newMessage;
+                        }
+                    }
+                }
+
+                var questionnaireVariable = questionnaireItem as IVariable;
+                if (questionnaireVariable != null)
+                {
+                    if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                    {
+                        replacedAny = true;
+                        questionnaireVariable.Expression = ReplaceUsingSearchTerm(questionnaireVariable.Expression, searchRegex, command.ReplaceWith);
+                    }
+                }
+
+                var question = questionnaireItem as IQuestion;
+                if (question?.Answers != null)
+                {
+                    foreach (var questionAnswer in question.Answers)
+                    {
+                        if (MatchesSearchTerm(questionAnswer.AnswerText, searchRegex))
+                        {
+                            replacedAny = true;
+                            questionAnswer.AnswerText = ReplaceUsingSearchTerm(questionAnswer.AnswerText, searchRegex, command.ReplaceWith);
                         }
                     }
                 }
 
                 if (replacedAny)
                 {
-                    affectedEntries++;
+                    this.affectedByReplaceEntries++;
                 }
             }
 
             foreach (var macro in this.innerDocument.Macros.Values)
             {
-                if (!macro.Content.IsNullOrEmpty() && macro.Content.Contains(command.SearchFor))
+                if (MatchesSearchTerm(macro.Content, searchRegex))
                 {
-                    affectedEntries++;
-                    macro.Content = macro.Content.Replace(command.SearchFor, command.ReplaceWith);
+                    this.affectedByReplaceEntries++;
+                    macro.Content = ReplaceUsingSearchTerm(macro.Content, searchRegex, command.ReplaceWith);
                 }
             }
+        }
+
+        public int GetLastReplacedEntriesCount()
+        {
+            return this.affectedByReplaceEntries;
         }
 
         #endregion

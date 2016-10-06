@@ -56,9 +56,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                     r => CreateQuestionnaireChangeHistoryReference(questionnaire, r)).ToList();
 
             return new QuestionnaireChangeHistoricalRecord(questionnaireChangeRecord.UserName,
-                questionnaireChangeRecord.Timestamp, questionnaireChangeRecord.ActionType,
-                questionnaireChangeRecord.TargetItemId, GetItemParentId(questionnaire, questionnaireChangeRecord.TargetItemId), questionnaireChangeRecord.TargetItemTitle,
-                questionnaireChangeRecord.TargetItemType, references);
+                questionnaireChangeRecord.Timestamp, 
+                questionnaireChangeRecord.ActionType,
+                questionnaireChangeRecord.TargetItemId, 
+                GetItemParentId(questionnaire, questionnaireChangeRecord.TargetItemId),
+                questionnaireChangeRecord.TargetItemTitle,
+                questionnaireChangeRecord.TargetItemType,
+                questionnaireChangeRecord.TargetItemNewTitle,
+                questionnaireChangeRecord.AffectedEntriesCount,
+                references);
         }
 
         private QuestionnaireChangeHistoricalRecordReference CreateQuestionnaireChangeHistoryReference(

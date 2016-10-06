@@ -18,9 +18,9 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage FindAll(Guid id, string searchFor)
+        public HttpResponseMessage FindAll(Guid id, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
-            return Request.CreateResponse(this.replaceService.FindAll(id, searchFor));
+            return Request.CreateResponse(this.replaceService.FindAll(id, searchFor, matchCase, matchWholeWord, useRegex));
         }
     }
 }

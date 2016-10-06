@@ -17,11 +17,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.questionnaires = questionnaires;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor)
+        public IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             var questionnaire = this.questionnaires.Get(questionnaireId);
             questionnaire.QuestionnaireDocument.ConnectChildrenWithParent();
-            return questionnaire.FindAllTexts(searchFor);
+            return questionnaire.FindAllTexts(searchFor, matchCase, matchWholeWord, useRegex);
         }
     }
 }
