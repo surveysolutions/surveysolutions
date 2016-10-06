@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -1149,5 +1150,18 @@ namespace WB.Tests.Unit.TestFactories
             return new QuestionnaireView { Id = questionnaireIdentity.ToString()};
             
         }
+
+        public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
+            params IInterviewTreeNode[] children)
+            => new InterviewTreeRoster(rosterIdentity, children, isDisabled) {RosterTitle = rosterTitle};
+
+        public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
+            => new InterviewTreeSection(sectionIdentity, children, isDisabled);
+
+        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
+            string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
+            Identity cascadingParentQuestionIdentity = null)
+            => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, questionType, answer,
+                linkedOptions, cascadingParentQuestionIdentity);
     }
 }
