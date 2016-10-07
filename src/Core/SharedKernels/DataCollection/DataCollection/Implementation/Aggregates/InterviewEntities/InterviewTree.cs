@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -42,6 +43,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             foreach (var node in this.GetNodes().Where(x => x.Identity.Equals(identity)))
                 ((InterviewTreeGroup) node.Parent)?.RemoveChildren(node.Identity);
+        }
+
+        public IReadOnlyCollection<InterviewTreeNodeDiff> FindDiff(InterviewTree changedTree)
+        {
+            var sourceNodes = this.Sections.SelectMany(x => x.Children).TreeToEnumerable(x => x.Children).ToList();
+            var changedNodes = changedTree.Sections.SelectMany(x => x.Children).TreeToEnumerable(x => x.Children).ToList();
+
+            var leftOuterJoin = from source in sourceNodes
+                                join changed in changedNodes
+                                    on source.Identity equals changed.Identity
+                                    into temp
+                                from changed in temp.DefaultIfEmpty()
+                                select new InterviewTreeNodeDiff() { SourceNode = source, ChangedNode = changed };
+
+            var rightOuterJoin = from changed in changedNodes
+                                 join source in sourceNodes
+                                     on changed.Identity equals source.Identity
+                                     into temp
+                                 from source in temp.DefaultIfEmpty()
+                                 select new InterviewTreeNodeDiff() { SourceNode = source, ChangedNode = changed };
+
+            var fullOuterJoin = leftOuterJoin.Concat(rightOuterJoin);
+
+            return fullOuterJoin
+                .DistinctBy(x => new { sourceIdentity = x.SourceNode?.Identity, changedIdentity = x.ChangedNode?.Identity })
+                .ToReadOnlyCollection();
         }
 
         public override string ToString()

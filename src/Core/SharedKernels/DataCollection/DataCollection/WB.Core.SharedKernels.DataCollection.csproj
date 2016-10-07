@@ -122,7 +122,6 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewEntities\InerviewTreeExtensions.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTree.cs" />
     <Compile Include="Implementation\Aggregates\Interview.Events.cs" />
