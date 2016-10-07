@@ -39,18 +39,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
                 });
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId1,
-                stataExportCaption: $"variable_{searchFor}",
-                groupPublicKey: chapterId,
-                questionType: QuestionType.MultyOption,
-                answers: new Answer[]
+            questionnaire.AddMultiOptionQuestion(questionId1,
+                variableName: $"var_{searchFor}",
+                responsibleId:responsibleId,
+                parentGroupId: chapterId,
+                options: new []
                 {
-                    Create.Answer($"answer with {searchFor}")
-                }));
+                    new Option(Guid.NewGuid() ,"1",$"answer with {searchFor}"),
+                    new Option(Guid.NewGuid() ,"2",$"2")
+                });
 
-            questionnaire.AddVariable(Create.Event.VariableAdded(variableId,
+            questionnaire.AddVariable(
+                variableId,
+                responsibleId:responsibleId,
                 variableExpression: $"var expression {searchFor}",
-                parentId: chapterId));
+                parentId: chapterId);
 
             questionnaire.AddGroup(Create.Event.NewGroupAddedEvent(groupId.FormatGuid(), 
                 parentGroupId: chapterId.FormatGuid(), 
@@ -105,7 +108,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Expression.ShouldEqual($"var expression {replaceWith}");
 
         It should_replace_variable_names = () => 
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"variable_{replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"var_{replaceWith}");
 
         It should_replace_option_text = () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).Answers.First().AnswerText.ShouldEqual($"answer with {replaceWith}");
@@ -124,6 +127,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static ReplaceTextsCommand command;
         const string replaceWith = "replaced";
-        const string searchFor = "%to replace%";
+        const string searchFor = "to_replace";
     }
 }

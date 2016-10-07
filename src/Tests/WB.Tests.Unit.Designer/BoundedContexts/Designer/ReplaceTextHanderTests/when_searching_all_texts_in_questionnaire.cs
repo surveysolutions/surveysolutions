@@ -31,21 +31,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
                 });
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId1,
-                stataExportCaption: $"variable_{searchFor}",
-                groupPublicKey: chapterId));
+            questionnaire.AddTextQuestion(questionId1,
+                chapterId,
+                responsibleId,
+                variableName: $"var_{searchFor}");
              
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId2,
-                questionType: QuestionType.MultyOption,
-                answers: new Answer[]
+            questionnaire.AddMultiOptionQuestion(questionId2,
+                chapterId,
+                responsibleId,
+                options: new []
                 {
-                    Create.Answer($"answer with {searchFor}")
-                }));
+                    new Option(Guid.NewGuid(),"2", $"answer with {searchFor}"),
+                    new Option(Guid.NewGuid(),"1", $"1")
+                });
 
-            questionnaire.AddVariable(Create.Event.VariableAdded(variableId,
+            questionnaire.AddVariable(
+                variableId,
+                responsibleId:responsibleId,
                 variableExpression: $"expression {searchFor}",
-                parentId: chapterId));
+                parentId: chapterId);
 
             questionnaire.AddGroup(Create.Event.NewGroupAddedEvent(groupId.FormatGuid(),
                 parentGroupId: chapterId.FormatGuid(),
@@ -93,7 +98,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid variableId = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-        const string searchFor = "%to replace%";
+        const string searchFor = "to_replace";
 
         private static IEnumerable<QuestionnaireNodeReference> foundReferences;
     }

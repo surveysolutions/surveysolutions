@@ -18,14 +18,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId,
-                questionText: $"question title with {searchFor}",
-                groupPublicKey: chapterId,
-                conditionExpression: $"question enablement {searchFor}",
+            questionnaire.AddTextQuestion(
+                questionId,
+                responsibleId:responsibleId,
+                title: $"question title with {searchFor}",
+                parentId: chapterId,
+                enablementCondition: $"question enablement {searchFor}",
                 validationConditions: new List<ValidationCondition>
                 {
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
-                }));
+                });
 
             command = Create.Command.ReplaceTextsCommand(searchFor.ToLower(), replaceWith);
         };
