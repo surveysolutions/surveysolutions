@@ -564,7 +564,9 @@
     <Content Include="questionnaire\details\scripts\services\optionsService.js" />
     <Content Include="questionnaire\content\designer-start\bootstrap-custom.css" />
     <Content Include="questionnaire\content\designer-start\designer-list.css" />
-    <Content Include="questionnaire\content\designer-start\designer-start.css" />
+    <Content Include="questionnaire\content\designer-start\designer-start.css">
+      <DependentUpon>designer-start.less</DependentUpon>
+    </Content>
     <Content Include="questionnaire\content\i\logo-designer-sm.png" />
     <Content Include="questionnaire\content\i\logo-questionnaire-designer.png" />
     <Content Include="questionnaire\content\i\loupe.png" />
