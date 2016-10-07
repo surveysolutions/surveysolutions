@@ -1,26 +1,22 @@
 using System;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.Macros;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
-    internal class when_handling_MacroAdded_event : QuestionnaireDenormalizerTestsContext
+    internal class when_AddingMacro : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>
         {
-            evnt = Create.Event.MacroAdded(questionnaireId, entityId);
-
-            questionnaire = Create.QuestionnaireDocument(questionnaireId);
-
+            questionnaire = Create.QuestionnaireDocument(questionnaireId, userId: creatorId);
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
+            command = new AddMacro(questionnaire.PublicKey, entityId, creatorId);
         };
 
-        Because of = () => denormalizer.AddMacro(evnt);
+        Because of = () => denormalizer.AddMacro(command);
 
         It should_add_one_macro = () =>
             questionnaire.Macros.Count.ShouldEqual(1);
@@ -39,8 +35,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid creatorId = Guid.Parse("11111111111111111111111111111112");
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
-        private static MacroAdded evnt;
+        private static AddMacro command;
     }
 }

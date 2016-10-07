@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -21,16 +23,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                groupPublicKey: chapterId,
-                publicKey: questionId,
-                stataExportCaption: "var",
-                questionText: "title"
-            ));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, questionId, "title", responsibleId, chapterId));
+            
             eventContext = new EventContext();
         };
 
-        Because of = () => exception = Catch.Exception(() => questionnaire.UpdateNumericQuestion(questionId, questionTitle, "var",null, false, QuestionScope.Interviewer, null, false, null, properties: Create.QuestionProperties(), responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>()));
+        Because of = () => exception = 
+            Catch.Exception(() =>
+            questionnaire.UpdateNumericQuestion(
+                    new UpdateNumericQuestion(questionnaire.Id,
+                    questionId,
+                    responsibleId,
+                    new CommonQuestionParameters()
+                    {
+                        Title = questionTitle,
+                        VariableName = "var"
+                    },
+                    false, QuestionScope.Interviewer, false, false, null,
+                    validationConditions: new List<ValidationCondition>())));
 
         Cleanup stuff = () =>
         {

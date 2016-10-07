@@ -2,8 +2,9 @@ using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
@@ -14,32 +15,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-publicKey: questionId,
-groupPublicKey: chapterId,
-questionText: "old title",
-stataExportCaption: "old_variable_name",
-instructions: "old instructions",
-conditionExpression: "old condition",
-responsibleId: responsibleId,
-questionType: QuestionType.QRBarcode
-));
+            questionnaire.AddQRBarcodeQuestion(questionId,
+                chapterId,
+                responsibleId,
+                title: "old title",
+                variableName: "old_variable_name",
+                instructions: "old instructions",
+                enablementCondition: "old condition");
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateTextQuestion(
-                    questionId: questionId,
-                    title: title,
-                    variableName: null,
-                    variableLabel: null,
-                    isPreFilled: isPreFilled,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    mask: null,
-                    responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
+                    new UpdateTextQuestion(
+                        questionnaire.Id,
+                        questionId,
+                        commonQuestionParameters: new CommonQuestionParameters()
+                        {
+                            Title = title,
+                            VariableName = null,
+                            EnablementCondition = enablementCondition,
+                            Instructions = instructions
+                        },
+                        isPreFilled: isPreFilled,
+                        scope: scope,
+                        mask: null,
+                        responsibleId: responsibleId,
+                        validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();
 

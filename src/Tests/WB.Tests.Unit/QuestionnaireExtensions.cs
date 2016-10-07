@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -27,23 +29,11 @@ namespace WB.Tests.Unit
             Guid responsibleId,
             int? index = null)
         {
-            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId, index));
-            var validationConditions = new List<ValidationCondition>().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage);
-            
-            questionnaire.UpdateTextQuestion(
-                questionId, 
-                title, 
-                variableName, 
-                variableLabel, 
-                isPreFilled, 
-                scope, 
-                enablementCondition, 
-                false,
-                instructions, 
-                mask, 
-                responsibleId, 
-                validationConditions, 
-                new QuestionProperties(false, false));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, questionId, parentGroupId, title, responsibleId, index));
+            var validationConditions = new List<ValidationCondition>().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage).ToList();
+
+            questionnaire.UpdateTextQuestion(new UpdateTextQuestion(questionnaire.Id,questionId, responsibleId,
+                new CommonQuestionParameters() { Title = title, VariableName = variableName}, mask, scope, isPreFilled, validationConditions));
         }
 
         public static void AddGpsCoordinatesQuestion(
@@ -56,10 +46,17 @@ namespace WB.Tests.Unit
             QuestionScope scope,
             string enablementCondition,
             string instructions,
-            Guid responsibleId)
+            Guid responsibleId,
+            bool isPreFilled = false)
         {
-            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel,false, scope, enablementCondition, false, instructions, responsibleId, new List<ValidationCondition>(), new QuestionProperties(false, false));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateGpsCoordinatesQuestion(
+                new UpdateGpsCoordinatesQuestion(questionnaire.Id, questionId, responsibleId,
+                    new CommonQuestionParameters() {Title = title, EnablementCondition = enablementCondition, VariableName = variableName, Instructions = instructions },
+                    isPreFilled,
+                    null,null,
+                    scope,  
+                    new List<ValidationCondition>()));
         }
 
         public static void AddMultiOptionQuestion(
@@ -125,21 +122,9 @@ namespace WB.Tests.Unit
             bool isInteger,
             int? countOfDecimalPlaces)
         {
-            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateNumericQuestion(
-                questionId: questionId,
-                title: title,
-                variableName: variableName,
-                variableLabel: null,
-                isPreFilled: isPreFilled,
-                scope: scope,
-                enablementCondition: enablementCondition,
-                hideIfDisabled: false,
-                instructions: instructions,
-                responsibleId: responsibleId,
-                validationConditions: new List<ValidationCondition>(), properties: new QuestionProperties(false, false),
-                isInteger: isInteger,
-                countOfDecimalPlaces: countOfDecimalPlaces);
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateNumericQuestion(new UpdateNumericQuestion(questionnaire.Id, questionId, responsibleId, new CommonQuestionParameters() {Title = title}, 
+                isPreFilled,scope, isInteger, false, countOfDecimalPlaces, new List<ValidationCondition>()));
         }
 
         public static void AddQRBarcodeQuestion(
@@ -155,10 +140,11 @@ namespace WB.Tests.Unit
             string validation,
             string validationMessage)
         {
-            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateQRBarcodeQuestion(questionId, 
-                title, variableName, variableLabel, enablementCondition, false, instructions, 
-                responsibleId, scope: QuestionScope.Interviewer, validationConditions: new List<ValidationCondition>(), properties: new QuestionProperties(false, false));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, questionId, parentGroupId, title, responsibleId));
+            questionnaire.UpdateQRBarcodeQuestion(
+                new UpdateQRBarcodeQuestion(questionnaire.Id,questionId,responsibleId,
+                    new CommonQuestionParameters() {Title = title, VariableName = variableName,EnablementCondition = enablementCondition, Instructions = instructions},
+                    validation, validationMessage, scope: QuestionScope.Interviewer, validationConditions: new List<ValidationCondition>()));
         }
     }
 }
