@@ -37,7 +37,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         public static Questionnaire CreateQuestionnaireDenormalizer(QuestionnaireDocument questionnaire,
             IExpressionProcessor expressionProcessor = null,
             IQuestionnaireEntityFactory questionnaireEntityFactory = null,
-            IEnumerable<Guid> sharedPersons = null )
+            IEnumerable<Guid> sharedPersons = null 
+            )
         {
             var questAr = new Questionnaire(
                 questionnaireEntityFactory ?? new QuestionnaireEntityFactory(),
@@ -65,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return CreateQuestionnaireDocument(children.AsEnumerable());
         }
 
-        protected static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> children = null)
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> children = null, Guid? createdBy = null)
         {
             var questionnaire = new QuestionnaireDocument();
 
@@ -73,6 +74,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             {
                 questionnaire.Children.AddRange(children);
             }
+
+            questionnaire.CreatedBy = createdBy;
 
             return questionnaire;
         }
@@ -155,22 +158,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             };
         }
         
-        protected static GroupDeleted CreateGroupDeletedEvent(Guid groupId)
-        {
-            return new GroupDeleted
-            {
-                GroupPublicKey = groupId,
-            };
-        }
-
-        protected static QuestionDeleted CreateQuestionDeletedEvent(Guid questionId)
-        {
-            return new QuestionDeleted
-            {
-                QuestionId = questionId,
-            };
-        }
-
         protected static NewGroupAdded CreateNewGroupAddedEvent(Guid groupId,
             string title = "New Group X")
         {
@@ -199,17 +186,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 GroupPublicKey = groupId,
                 GroupText = title,
             };
-        }
-
-        protected static NewQuestionAdded CreateNewQuestionAddedEvent(Guid questionId, Guid? groupId = null, string title = "New Question X")
-        {
-            return (Create.Event.NewQuestionAdded
-            (
-                publicKey : questionId,
-                groupPublicKey : groupId,
-                questionText : title,
-                questionType : QuestionType.Numeric
-            ));
         }
 
         protected static QuestionChanged CreateQuestionChangedEvent(Guid questionId, Guid targetGroupId, string title, QuestionType questionType = QuestionType.Numeric)
@@ -322,41 +298,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 MaxAnswerCount = maxAnswerCount
             });
         }
-
-        protected static StaticTextAdded CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
-        {
-            return (
-                Create.Event.StaticTextAdded(entityId : entityId,
-                    parentId : parentId,
-                    text : text));
-        }
-
-        protected static StaticTextUpdated CreateStaticTextUpdatedEvent(Guid entityId, string text = null, string attachmentName = null)
-        {
-            return (Create.Event.StaticTextUpdated(
-                entityId : entityId,
-                text : text,
-                attachmentName : attachmentName));
-        }
-
-        protected static StaticTextCloned CreateStaticTextClonedEvent(Guid targetEntityId,
-            Guid sourceEntityId, Guid parentId, string text = null, int targetIndex = 0)
-        {
-            return (Create.Event.StaticTextCloned(
-                publicKey: targetEntityId,
-                sourceEntityId : sourceEntityId,
-                parentId : parentId,
-                text : text,
-                targetIndex : targetIndex));
-        }
-
-        protected static StaticTextDeleted CreateStaticTextDeletedEvent(Guid entityId)
-        {
-            return (new StaticTextDeleted()
-            {
-                EntityId = entityId
-            });
-        }
-        
     }
 }

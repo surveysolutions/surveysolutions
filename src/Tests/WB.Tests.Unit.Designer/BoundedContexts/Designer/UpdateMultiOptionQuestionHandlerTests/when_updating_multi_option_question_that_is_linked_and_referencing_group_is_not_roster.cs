@@ -15,16 +15,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = linkedToGroupId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: linkedToGroupId,
-                questionText: "old title",
-                stataExportCaption: "old_variable_name",
-                instructions: "old instructions",
-                conditionExpression: "old condition",
-                responsibleId: responsibleId,
-                questionType: QuestionType.QRBarcode
-                ));
+            questionnaire.AddQRBarcodeQuestion(questionId,
+                        linkedToGroupId,
+                        responsibleId,
+                        title: "old title",
+                        variableName: "old_variable_name",
+                        instructions: "old instructions",
+                        enablementCondition: "old condition");
         };
 
         Because of = () =>

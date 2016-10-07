@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -16,8 +19,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(Create.Event.AddGroup(groupId: chapterId));
             questionnaire.AddGroup(Create.Event.AddGroup(rosterId));
             questionnaire.MarkGroupAsRoster(Create.Event.GroupBecameRoster(rosterId));
-            questionnaire.AddVariable(Create.Event.VariableAdded(entityId: variableId, parentId: rosterId, variableName: variableName));
-            questionnaire.AddQuestion(Create.Event.AddTextQuestion(questionId: questionWithSubstitutionId, parentId: chapterId));
+
+            questionnaire.AddVariableAndMoveIfNeeded(new AddVariable(questionnaire.Id,  variableId, new VariableData(VariableType.String, variableName, ""), responsibleId, parentId: rosterId ));
+
+            questionnaire.AddTextQuestion(questionWithSubstitutionId, chapterId, responsibleId);
+            
 
             eventContext = new EventContext();
         };
@@ -30,22 +36,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         Because of = () => exception =
             Catch.Exception(() => questionnaire.UpdateTextQuestion(
-                questionId: questionWithSubstitutionId,
-                responsibleId: responsibleId,
-                title: "title",
-                hideIfDisabled: false,
-                variableName: "var",
-                validationCoditions: new List<ValidationCondition>() {new ValidationCondition
-                {
-                    Message = $"error message with substitution %{variableName}%"
-                } },
-                variableLabel: null,
-                isPreFilled: false,
-                scope: QuestionScope.Interviewer,
-                enablementCondition: null,
-                instructions: null,
-                mask: null,
-                properties: null));
+                new UpdateTextQuestion(
+                    questionnaire.Id,
+                    questionWithSubstitutionId,
+                    responsibleId,
+                    new CommonQuestionParameters() {Title = "title", VariableName = "var", HideIfDisabled = false},
+                    validationConditions: new List<ValidationCondition>() {new ValidationCondition
+                    {
+                        Message = $"error message with substitution %{variableName}%"
+                    }
+                    },
+                    
+                    isPreFilled: false,
+                    scope: QuestionScope.Interviewer,
+                    mask: null)));
 
         It should_exception_has_specified_message = () =>
             new[] { "illegal", "substitution", "to", variableName }.ShouldEachConformTo(x =>

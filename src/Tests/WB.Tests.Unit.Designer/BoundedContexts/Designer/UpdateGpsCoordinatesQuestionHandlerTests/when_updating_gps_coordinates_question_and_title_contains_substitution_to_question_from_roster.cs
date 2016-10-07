@@ -2,6 +2,8 @@ using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -15,52 +17,42 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : chapterId,
-                isInteger : true,
-                stataExportCaption : "roster_size_question"
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey: chapterId,
-                    questionText: "old title",
-                    stataExportCaption: "old_variable_name",
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId,isInteger : true,variableName : "roster_size_question");
+
+            questionnaire.AddQRBarcodeQuestion(
+                    questionId,
+                    chapterId,
+                    responsibleId,
+                    title: "old title",
+                    variableName: "old_variable_name",
                     instructions: "old instructions",
-                    conditionExpression: "old condition",
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.QRBarcode
-            ));
+                    enablementCondition: "old condition");
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     FixedRosterTitles =  null,
-                    RosterTitleQuestionId =null 
+                    RosterTitleQuestionId = null 
                 });
 
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey: questionFromRosterId,
-                groupPublicKey: rosterId,
-                isInteger: true,
-                stataExportCaption: substitutionVariableName
-            ));
+            questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId, isInteger: true, variableName: substitutionVariableName);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
-                    questionId: questionId,
-                    title: titleWithSubstitution,
-                    variableName: variableName,
-                    variableLabel: null,
-                    isPreFilled: false,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    responsibleId: responsibleId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
+                    new UpdateGpsCoordinatesQuestion(
+                        questionnaire.Id,
+                        questionId,
+                        responsibleId,
+                        new CommonQuestionParameters() {Title = titleWithSubstitution, VariableName = variableName, VariableLabel = null,
+                            EnablementCondition = enablementCondition, Instructions = instructions}, 
+                        false,
+                        null,
+                        null,
+                        scope,
+                        validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

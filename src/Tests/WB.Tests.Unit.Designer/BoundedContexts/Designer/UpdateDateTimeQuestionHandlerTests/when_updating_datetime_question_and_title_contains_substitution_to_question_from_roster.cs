@@ -18,23 +18,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : chapterId,
+            questionnaire.AddNumericQuestion(
+                rosterSizeQuestionId,
+                chapterId,responsibleId,
                 isInteger : true,
-                stataExportCaption : "roster_size_question"
-            ));
-            questionnaire.AddQuestion(
-                Create.Event.NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey: chapterId,
-                    questionText: "old title",
-                    stataExportCaption: "old_variable_name",
+                variableName : "roster_size_question");
+
+            questionnaire.AddQRBarcodeQuestion(
+                    questionId,
+                    chapterId,
+                    responsibleId,
+                    title: "old title",
+                    variableName: "old_variable_name",
                     instructions: "old instructions",
-                    conditionExpression: "old condition",
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.QRBarcode
-            ));
+                    enablementCondition: "old condition");
+
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
@@ -45,14 +43,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                 });
 
 
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey: questionFromRosterId,
-                groupPublicKey: rosterId,
-                isInteger: true,
-                stataExportCaption: substitutionVariableName
-            ));
-
-            
+            questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId,
+                isInteger: true,variableName: substitutionVariableName);
         };
 
         Because of = () => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));

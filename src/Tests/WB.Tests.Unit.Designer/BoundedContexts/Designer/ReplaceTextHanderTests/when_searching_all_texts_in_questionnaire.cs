@@ -19,24 +19,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
-            questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId: staticTextId,
-                text: $"static text title with {searchFor}",
-                parentId: chapterId,
-                enablementCondition: $"static text enablement {searchFor}",
-                validationConditions: new List<ValidationCondition>
-                {
-                    Create.ValidationCondition($"st validation exp {searchFor}", message: $"st validation msg {searchFor}"),
-                    Create.ValidationCondition($"st validation exp {searchFor}", message: $"st validation msg {searchFor}")
-                }));
-
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId,
-                questionText: $"question title with {searchFor}",
-                groupPublicKey: chapterId,
-                conditionExpression: $"question enablement {searchFor}",
+            questionnaire.AddStaticTextAndMoveIfNeeded(Create.Command.AddStaticText(questionnaire.Id, staticTextId, $"static text title with {searchFor}", responsibleId, chapterId));
+            
+            questionnaire.AddTextQuestion(questionId,
+                chapterId,
+                responsibleId,
+                title: $"question title with {searchFor}",
+                enablementCondition: $"question enablement {searchFor}",
                 validationConditions: new List<ValidationCondition>
                 {
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
-                }));
+                });
 
             questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId1,
                 stataExportCaption: $"variable_{searchFor}",
@@ -59,9 +52,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 groupTitle: $"group title with {searchFor}",
                 enablementCondition: $"group enablement {searchFor}"
                 ));
-            
-            questionnaire.AddMacro(Create.Event.MacroAdded(questionnaire.Id, macroId, responsibleId));
-            questionnaire.UpdateMacro(Create.Event.MacroUpdated(questionId, macroId, "macro_name",
+
+            questionnaire.AddMacro(Create.Command.AddMacro(questionnaire.Id, macroId, responsibleId));
+
+
+            questionnaire.UpdateMacro(Create.Command.UpdateMacro(questionId, macroId, "macro_name",
                 $"macro content {searchFor}", "desc", responsibleId));
         };
 

@@ -3,6 +3,8 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -15,35 +17,41 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: chapterId,
-                questionText: "old title",
-                stataExportCaption: "old_variable_name",
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                title: "old title",
+                variableName: "old_variable_name",
                 instructions: "old instructions",
-                conditionExpression: "old condition",
-                responsibleId: responsibleId,
-                questionType: QuestionType.QRBarcode
-                ));
+                enablementCondition: "old condition",
+                responsibleId: responsibleId);
         };
 
         Because of = () =>            
-                questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
-                    variableName: "qr_barcode_question",
-                variableLabel: null, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions, 
-                    responsibleId: responsibleId, 
-                    scope: QuestionScope.Interviewer, 
-                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
-                    {
-                        new ValidationCondition
+                questionnaire.UpdateQRBarcodeQuestion(
+                    new UpdateQRBarcodeQuestion(
+                        questionnaire.Id,
+                        questionId: questionId, 
+                        commonQuestionParameters:new CommonQuestionParameters()
                         {
-                            Expression = validation,
-                            Message = validationMessage
-                        }
-                    },
-                    properties: Create.QuestionProperties());
-
-
+                            Title = "title",
+                            VariableName = "qr_barcode_question",
+                            EnablementCondition = condition,
+                            Instructions = instructions,
+                            HideIfDisabled = hideIfDisabled
+                        }, 
+                        validationExpression:null,
+                        validationMessage:null,
+                        responsibleId: responsibleId, 
+                        scope: QuestionScope.Interviewer, 
+                        validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
+                        {
+                            new ValidationCondition
+                           {
+                                Expression = validation,
+                                Message = validationMessage
+                            }
+                        }));
 
         It should_contains_question_with_QuestionId_specified = () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)

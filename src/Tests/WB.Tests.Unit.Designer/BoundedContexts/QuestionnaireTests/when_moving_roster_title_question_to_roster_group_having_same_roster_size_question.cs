@@ -21,22 +21,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded
-            (
-                publicKey : rosterSizeQuestionId,
-                isInteger : true,
-                groupPublicKey : chapterId
-            ));
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, isInteger : true, parentId: chapterId, responsibleId:responsibleId);
 
             AddGroup(questionnaire: questionnaire, groupId: rosterGroupWithRosterTitleQuestionId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : rosterTitleQuestionId,
-                questionType : QuestionType.Text,
-                groupPublicKey : rosterGroupWithRosterTitleQuestionId
-            ));
+            questionnaire.AddTextQuestion(
+                rosterTitleQuestionId,
+                rosterGroupWithRosterTitleQuestionId,
+                responsibleId);
 
             AddGroup(questionnaire: questionnaire, groupId: Guid.NewGuid(), parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true,
