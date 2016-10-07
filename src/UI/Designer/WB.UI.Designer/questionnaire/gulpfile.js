@@ -62,8 +62,8 @@ gulp.task('templates', function () {
 gulp.task('devJs', function () {
     return gulp.src(paths.scripts)
       //.pipe(debug({ title: 'unicorn:' }))
-      .pipe(plugins.jshint())
-      .pipe(plugins.jshint.reporter('default'))
+      //.pipe(plugins.jshint())
+      //.pipe(plugins.jshint.reporter('default'))
       .pipe(plugins.ngAnnotate())
       .pipe(plugins.uglify())
       .pipe(concat('app.js'))
