@@ -53,7 +53,7 @@ gulp.task("bowerJs", function(){
 
 gulp.task('templates', function () {
     return gulp.src(paths.htmls)
-      .pipe(minifyHTML({collapseWhitespace: true}))
+      .pipe(minifyHTML({collapseWhitespace: false}))
       .pipe(templateCache({ root: 'views' }))
       .pipe(plugins.rev())
       .pipe(gulp.dest('build'));
