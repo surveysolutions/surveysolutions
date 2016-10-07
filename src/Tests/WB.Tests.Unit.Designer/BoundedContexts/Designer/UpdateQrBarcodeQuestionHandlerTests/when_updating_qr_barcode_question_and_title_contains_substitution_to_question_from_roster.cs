@@ -2,9 +2,10 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerTests
@@ -15,46 +16,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : chapterId,
-                isInteger : true,
-                stataExportCaption : "roster_size_question"
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-publicKey: questionId,
-groupPublicKey: chapterId,
-questionText: "old title",
-stataExportCaption: "old_variable_name",
-instructions: "old instructions",
-conditionExpression: "old condition",
-responsibleId: responsibleId,
-questionType: QuestionType.QRBarcode
-));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId});
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId, isInteger: true, variableName: "roster_size_question");
+
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                responsibleId,
+                title: "old title",
+                variableName: "old_variable_name",
+                instructions: "old instructions",
+                enablementCondition: "old condition");
+
+            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles =  null,
-                    RosterTitleQuestionId =null 
-                });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : questionFromRosterId,
-                groupPublicKey : rosterId,
-                isInteger : true,
-                stataExportCaption : substitutionVariableName
-            ));
+            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId)
+            {
+                RosterSizeQuestionId = rosterSizeQuestionId,
+                RosterSizeSource = RosterSizeSourceType.Question,
+                FixedRosterTitles = null,
+                RosterTitleQuestionId = null
+            });
+            questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId, isInteger: true, variableName: substitutionVariableName);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: titleWithSubstitution,
-                    variableName: "var",
-                variableLabel: null, enablementCondition: null, hideIfDisabled: false, instructions: null,
-                    responsibleId: responsibleId, scope: QuestionScope.Interviewer,
-                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                    properties: Create.QuestionProperties()));
+                questionnaire.UpdateQRBarcodeQuestion(
+                    new UpdateQRBarcodeQuestion(questionnaire.Id,
+                    questionId, 
+                    responsibleId,
+                    new CommonQuestionParameters() {Title = titleWithSubstitution, VariableName = "var"}, 
+                    null,null,
+                    QuestionScope.Interviewer,
+                    new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -63,7 +57,7 @@ questionType: QuestionType.QRBarcode
              new[] { "text", "contains", "illegal", "substitution" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().Contains(keyword));
 
-        
+
         private static Questionnaire questionnaire;
         private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

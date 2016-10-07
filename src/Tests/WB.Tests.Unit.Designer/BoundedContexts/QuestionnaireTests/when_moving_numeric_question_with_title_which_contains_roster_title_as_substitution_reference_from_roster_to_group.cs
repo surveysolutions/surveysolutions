@@ -18,12 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(Guid.NewGuid(), rosterId));
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : questionId,
-                groupPublicKey : rosterId,
-                questionText : questionTitle,
-                stataExportCaption : "var"
-            ));
+            questionnaire.AddNumericQuestion(questionId, rosterId,responsibleId,title: questionTitle,variableName: "var");
             eventContext = new EventContext();
         };
 

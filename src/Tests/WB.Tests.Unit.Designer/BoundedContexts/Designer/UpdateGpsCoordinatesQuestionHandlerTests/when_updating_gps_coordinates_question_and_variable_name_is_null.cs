@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -14,31 +17,36 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey: chapterId,
-                    questionText: "old title",
-                    stataExportCaption: "old_variable_name",
-                    instructions: "old instructions",
-                    conditionExpression: "old condition",
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.QRBarcode
-            ));
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                title: "old title",
+                variableName: "old_variable_name",
+                instructions: "old instructions",
+                enablementCondition: "old condition",
+                responsibleId: responsibleId);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
+                exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
+                new UpdateGpsCoordinatesQuestion(
+                    questionnaire.Id,
                     questionId: questionId,
-                    title: title,
-                    variableName: null,
-                    variableLabel: null,
+                    commonQuestionParameters: new CommonQuestionParameters()
+                    {
+                        Title = title,
+                        VariableName = null,
+                        Instructions = instructions,
+                        EnablementCondition = enablementCondition
+                    },
+                    validationMessage: null,
+                    validationExpression: null,
                     isPreFilled: false,
                     scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    responsibleId: responsibleId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
+                    responsibleId: responsibleId,
+                    validationConditions: new List<ValidationCondition>()))));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();
 

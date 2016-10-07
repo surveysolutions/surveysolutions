@@ -22,11 +22,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                  publicKey: rosterSizeQuestionId,
-                  groupPublicKey: chapterId,
-                  questionType: QuestionType.TextList
-              ));
+            questionnaire.AddTextListQuestion(
+                rosterSizeQuestionId,
+                chapterId,
+                responsibleId);
 
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
         };

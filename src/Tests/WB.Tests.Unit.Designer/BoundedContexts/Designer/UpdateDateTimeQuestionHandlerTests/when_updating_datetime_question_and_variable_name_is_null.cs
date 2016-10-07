@@ -17,17 +17,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(
-                Create.Event.NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey: chapterId,
-                    questionText: "old title",
-                    stataExportCaption: "old_variable_name",
-                    instructions: "old instructions",
-                    conditionExpression: "old condition",
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.QRBarcode
-            ));
+            questionnaire.AddQRBarcodeQuestion(questionId,
+                         chapterId,
+                         responsibleId,
+                         title: "old title",
+                         variableName: "old_variable_name",
+                         instructions: "old instructions",
+                         enablementCondition: "old condition");
         };
 
         Because of = () => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));

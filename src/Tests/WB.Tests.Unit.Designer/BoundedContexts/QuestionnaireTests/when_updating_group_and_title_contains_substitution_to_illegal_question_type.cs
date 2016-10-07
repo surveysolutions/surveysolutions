@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(Create.Event.AddGroup(groupId: chapterId));
-            questionnaire.AddQuestion(Create.Event.AddTextQuestion(questionId: textQuestionId, parentId: chapterId));
+            questionnaire.AddTextQuestion(textQuestionId, chapterId, responsibleId);
             questionnaire.UpdateQuestion(Create.Event.QuestionChanged(publicKey: textQuestionId, groupPublicKey: chapterId,
                 questionType: QuestionType.GpsCoordinates, stataExportCaption: textQuestionVariable));
             questionnaire.AddGroup(Create.Event.AddGroup(groupId: groupId, parentId:chapterId));
