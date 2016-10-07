@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    [TestOf(typeof(InterviewTreeEventPublisher))]
     [TestFixture]
     public class InterviewTreeEventPublisherTests
     {
@@ -35,9 +36,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var changedTree = new InterviewTree(interviewId, new[] {mainSectionInChangedTree});
             
             var listOfPublishedEvents = new List<IEvent>();
-            Action<IEvent> applyEvent = (evnt) => { listOfPublishedEvents.Add(evnt); };
+            var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            InterviewTreeEventPublisher.ApplyRosterEvents(applyEvent, sourceTree, changedTree);
+            interview.ApplyRosterEvents(sourceTree, changedTree);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
@@ -78,9 +79,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
-            Action<IEvent> applyEvent = (evnt) => { listOfPublishedEvents.Add(evnt); };
+            var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            InterviewTreeEventPublisher.ApplyRosterEvents(applyEvent, sourceTree, changedTree);
+            interview.ApplyRosterEvents(sourceTree, changedTree);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
@@ -118,9 +119,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
-            Action<IEvent> applyEvent = (evnt) => { listOfPublishedEvents.Add(evnt); };
+            var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            InterviewTreeEventPublisher.ApplyRosterEvents(applyEvent, sourceTree, changedTree);
+            interview.ApplyRosterEvents(sourceTree, changedTree);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesAdded>(listOfPublishedEvents[0]);
@@ -161,9 +162,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
-            Action<IEvent> applyEvent = (evnt) => { listOfPublishedEvents.Add(evnt); };
+            var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            InterviewTreeEventPublisher.ApplyRosterEvents(applyEvent, sourceTree, changedTree);
+            interview.ApplyRosterEvents(sourceTree, changedTree);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesAdded>(listOfPublishedEvents[0]);
@@ -216,9 +217,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
-            Action<IEvent> applyEvent = (evnt) => { listOfPublishedEvents.Add(evnt); };
+            var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            InterviewTreeEventPublisher.ApplyRosterEvents(applyEvent, sourceTree, changedTree);
+            interview.ApplyRosterEvents(sourceTree, changedTree);
             //assert
             Assert.AreEqual(2, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
@@ -272,9 +273,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
-            Action<IEvent> applyEvent = (evnt) => { listOfPublishedEvents.Add(evnt); };
+            var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            InterviewTreeEventPublisher.ApplyRosterEvents(applyEvent, sourceTree, changedTree);
+            interview.ApplyRosterEvents(sourceTree, changedTree);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesTitleChanged>(listOfPublishedEvents[0]);
@@ -290,6 +291,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(nestedRosterIdentity.RosterVector.Shrink(), rosterTitleChangedEvent.ChangedInstances[1].RosterInstance.OuterRosterVector);
             Assert.AreEqual(nestedRosterIdentity.RosterVector.Last(), rosterTitleChangedEvent.ChangedInstances[1].RosterInstance.RosterInstanceId);
             Assert.AreEqual(changedNestedRoster.RosterTitle, rosterTitleChangedEvent.ChangedInstances[1].Title);
+        }
+
+        private static Interview InterviewTreeEventPublisher(Action<IEvent> applyEvent)
+        {
+            var mockOfInterview = new Mock<Interview>();
+            mockOfInterview.Setup(interview => interview.ApplyEvent(It.IsAny<IEvent>()))
+                .Callback<IEvent>(applyEvent.Invoke);
+
+            return mockOfInterview.Object;
         }
     }
 }

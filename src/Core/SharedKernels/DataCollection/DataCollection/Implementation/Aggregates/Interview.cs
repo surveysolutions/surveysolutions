@@ -25,8 +25,10 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class Interview : AggregateRootMappedByConvention
+    public partial class Interview : AggregateRootMappedByConvention
     {
+        public Interview() { }
+
         protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
 
         protected Guid questionnaireId;
@@ -802,7 +804,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
 
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
-            this.ApplyRostersEvents(sourceInterviewTree, changedInterviewTree);
+            this.ApplyRosterEvents(sourceInterviewTree, changedInterviewTree);
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
@@ -838,7 +840,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
 
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
-            this.ApplyRostersEvents(sourceInterviewTree, changedInterview);
+            this.ApplyRosterEvents(sourceInterviewTree, changedInterview);
 
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);
@@ -2323,9 +2325,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterInstances.ToArray()));
             }
         }
-
-        private void ApplyRostersEvents(InterviewTree sourceInterview, InterviewTree changedInterview)
-            => InterviewTreeEventPublisher.ApplyRosterEvents(this.ApplyEvent, sourceInterview, changedInterview);
 
         private void ApplyRostersEvents(params RosterCalculationData[] rosterDatas)
         {
