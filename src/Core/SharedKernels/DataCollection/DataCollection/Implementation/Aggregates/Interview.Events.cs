@@ -1,17 +1,15 @@
-using System;
 using System.Linq;
-using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public static class InterviewTreeEventPublisher
+    public partial class Interview
     {
-        public static void ApplyRosterEvents(Action<IEvent> ApplyEvent, InterviewTree sourceInterview, InterviewTree changedInterview)
+        public void ApplyRosterEvents(InterviewTree sourceInterview, InterviewTree changedInterview)
         {
             var diff = sourceInterview.FindDiff(changedInterview);
 
@@ -40,16 +38,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
 
             if (removedRosters.Any())
-                ApplyEvent(new RosterInstancesRemoved(removedRosters.Select(ToRosterInstance).ToArray()));
+                this.ApplyEvent(new RosterInstancesRemoved(removedRosters.Select(ToRosterInstance).ToArray()));
 
             if (removedAnswersByRemovedRosters.Any())
-                ApplyEvent(new AnswersRemoved(removedAnswersByRemovedRosters));
+                this.ApplyEvent(new AnswersRemoved(removedAnswersByRemovedRosters));
 
             if (addedRosters.Any())
-                ApplyEvent(new RosterInstancesAdded(addedRosters.Select(ToAddedRosterInstance).ToArray()));
+                this.ApplyEvent(new RosterInstancesAdded(addedRosters.Select(ToAddedRosterInstance).ToArray()));
 
             if(changedRosterTitles.Any())
-                ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
+                this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
         }
 
         private static bool HasChangedRosterTitle(InterviewTreeNodeDiff diffNode)
