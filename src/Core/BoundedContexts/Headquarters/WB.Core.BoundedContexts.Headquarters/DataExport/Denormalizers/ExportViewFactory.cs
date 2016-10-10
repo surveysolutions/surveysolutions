@@ -54,20 +54,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             result.QuestionnaireId = id.QuestionnaireId;
             result.Version = id.Version;
 
-            var rosterScopes = this.questionnaireStorage.GetQuestionnaire(id, null).GetRosterScopes();
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(id, null);
+            if (questionnaire == null)
+                return null;
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(id);
-            questionnaire.ConnectChildrenWithParent();
+            var rosterScopes = questionnaire.GetRosterScopes();
 
-            var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
+            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id);
+            questionnaireDocument.ConnectChildrenWithParent();
+
+            var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaireDocument);
 
             result.HeaderToLevelMap.Add(new ValueVector<Guid>(),
-                this.BuildHeaderByTemplate(questionnaire, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
+                this.BuildHeaderByTemplate(questionnaireDocument, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
 
             foreach (var rosterScopeDescription in rosterScopes)
             {
                 result.HeaderToLevelMap.Add(rosterScopeDescription.Key,
-                    this.BuildHeaderByTemplate(questionnaire, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
+                    this.BuildHeaderByTemplate(questionnaireDocument, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
             }
 
             return result;
