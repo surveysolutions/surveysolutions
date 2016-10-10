@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(publicKey: questionId, groupPublicKey: chapterId, questionType: QuestionType.Text));
+            questionnaire.AddTextQuestion(questionId, chapterId, responsibleId);
             
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parentGroupId });

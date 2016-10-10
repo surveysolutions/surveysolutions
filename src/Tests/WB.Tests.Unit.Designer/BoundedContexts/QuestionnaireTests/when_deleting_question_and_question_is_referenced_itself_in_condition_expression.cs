@@ -2,6 +2,7 @@ using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -11,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(Create.Event.AddGroup(groupId: chapterId));
-            questionnaire.AddQuestion(Create.Event.AddTextQuestion(questionId : questionToBeDeleted, parentId : chapterId));
-            questionnaire.UpdateNumericQuestion(Create.Event.UpdateNumericIntegerQuestion(questionToBeDeleted, "q", enablementCondition: "q > 10"));
+            questionnaire.AddTextQuestion(questionId : questionToBeDeleted, parentId : chapterId,responsibleId:responsibleId, variableName:"q", enablementCondition:"q != null");
         };
 
 

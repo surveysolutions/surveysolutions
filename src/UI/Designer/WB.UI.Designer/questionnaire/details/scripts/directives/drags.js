@@ -2,18 +2,20 @@
     $.fn.drags = function (opt) {
 
         opt = $.extend({ handle: "", cursor: "move" }, opt);
-
+        var $el = this;
         if (opt.handle === "") {
-            var $el = this;
+            $el = this;
         } else {
-            var $el = this.find(opt.handle);
+            $el = this.find(opt.handle);
         }
 
         return $el.css('cursor', opt.cursor).on("mousedown", function (e) {
+            var $drag;
+
             if (opt.handle === "") {
-                var $drag = $(this).addClass('draggable');
+                $drag = $(this).addClass('draggable');
             } else {
-                var $drag = $(this).addClass('active-handle').parent().addClass('draggable');
+                $drag = $(this).addClass('active-handle').parent().addClass('draggable');
             }
             var z_idx = $drag.css('z-index'),
                 drg_h = $drag.outerHeight(),
@@ -36,12 +38,5 @@
                 $(this).removeClass('active-handle').parent().removeClass('draggable');
             }
         });
-
     }
 })(jQuery);
-
-angular.module('designerApp').directive('drags', function() {
-    return function(scope, elem) {
-        elem.parents('.modal-dialog').drags({ handle: elem });
-    }
-});

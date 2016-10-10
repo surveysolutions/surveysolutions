@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -14,7 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(Create.Event.AddGroup(groupId: chapterId));
-            questionnaire.AddQuestion(Create.Event.AddTextQuestion(questionId: textQuestionId, parentId: chapterId));
+            questionnaire.AddTextQuestion(textQuestionId, chapterId, responsibleId);
 
             eventContext = new EventContext();
         };
@@ -27,22 +29,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         Because of = () => exception =
             Catch.Exception(() => questionnaire.UpdateTextQuestion(
-                questionId: textQuestionId,
-                responsibleId: responsibleId,
-                title: "title",
-                hideIfDisabled: false,
-                variableName: textQuestionVariable,
-                validationCoditions: new List<ValidationCondition>() {new ValidationCondition
+                new UpdateTextQuestion(
+                    questionnaire.Id,
+                 textQuestionId,
+                 responsibleId,
+                new CommonQuestionParameters() {Title = "title", VariableName = textQuestionVariable},
+                isPreFilled:false,
+                validationConditions: new List<ValidationCondition>() {new ValidationCondition
                 {
                     Message = $"error message with substitution %{textQuestionVariable}%"
                 } },
-                variableLabel: null,
-                isPreFilled: false,
+                
                 scope: QuestionScope.Interviewer,
-                enablementCondition: null,
-                instructions: null,
-                mask: null,
-                properties: null));
+                mask: null)));
 
         It should_exception_has_specified_message = () =>
             new[] { "substitution", "to", "self" }.ShouldEachConformTo(x =>

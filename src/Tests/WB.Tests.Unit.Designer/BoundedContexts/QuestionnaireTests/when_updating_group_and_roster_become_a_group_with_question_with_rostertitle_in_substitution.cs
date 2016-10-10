@@ -15,14 +15,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-            
-                publicKey : questionWithSubstitutionId,
-                groupPublicKey : rosterId,
-                questionType : QuestionType.Text,
-                questionText : "%rostertitle% hello",
-                stataExportCaption : "var"
-            ));
+            questionnaire.AddTextQuestion(questionWithSubstitutionId,
+                rosterId,
+                responsibleId,
+                title : "%rostertitle% hello",
+                variableName : "var");
         };
 
         Because of = () =>

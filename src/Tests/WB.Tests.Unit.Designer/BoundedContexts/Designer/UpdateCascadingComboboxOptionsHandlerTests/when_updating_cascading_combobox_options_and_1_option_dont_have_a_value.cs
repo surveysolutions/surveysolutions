@@ -15,31 +15,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: parentQuestionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.SingleOption,
-                questionText: "text",
-                stataExportCaption: "var",
-
-                responsibleId: responsibleId,
-                answers: new Answer[]
+            questionnaire.AddSingleOptionQuestion(
+                parentQuestionId,
+                chapterId,
+                responsibleId,
+                title: "text",
+                variableName: "var",
+                options: new Option[]
                 {
-                    new Answer { AnswerText = "Option 1", AnswerValue = "1" },
-                    new Answer { AnswerText = "Option 2", AnswerValue = "2" }
+                    new Option { Title= "Option 1", Value = "1" },
+                    new Option { Title = "Option 2", Value = "2" }
                 }
-            ));
+            );
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.SingleOption,
-                questionText: "text",
-                stataExportCaption: "var2",
+            questionnaire.AddSingleOptionQuestion(
+                questionId,
+                chapterId,
+                responsibleId,
+                title: "text",
+                variableName: "var2",
                 isFilteredCombobox: false,
-                responsibleId: responsibleId,
                 cascadeFromQuestionId: parentQuestionId
-            ));
+            );
         };
 
         Because of = () =>

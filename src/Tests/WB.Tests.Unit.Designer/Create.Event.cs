@@ -6,8 +6,6 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.LookupTables;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.Macros;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -29,62 +27,6 @@ namespace WB.Tests.Unit.Designer
                 };
             }
 
-            public static NewQuestionAdded AddTextQuestion(Guid questionId, Guid parentId)
-            {
-                return NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey: parentId,
-                    questionText: null,
-                    questionType: QuestionType.Text,
-                    stataExportCaption: null,
-                    variableLabel: null,
-                    featured: false,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: null,
-                    validationExpression: null,
-                    validationMessage: null,
-                    instructions: null,
-                    responsibleId: Guid.NewGuid(),
-                    linkedToQuestionId: null,
-                    isFilteredCombobox: false,
-                    cascadeFromQuestionId: null,
-                    capital: false,
-                    answerOrder: null,
-                    answers: null,
-                    isInteger: null);
-            }
-
-            public static NewQuestionAdded NumericQuestionAdded(Guid publicKey, Guid groupPublicKey,
-             bool? isInteger = null,
-             string stataExportCaption = null,
-             string questionText = null,
-             string variableLabel = null,
-             bool featured = false,
-             string conditionExpression = null,
-             string validationExpression = null,
-             string validationMessage = null,
-             string instructions = null,
-             Guid? responsibleId = null,
-             int? countOfDecimalPlaces = null,
-             QuestionScope? questionScope = null)
-            {
-                return Create.Event.NewQuestionAdded(publicKey: publicKey,
-                    groupPublicKey: groupPublicKey,
-                    questionText: questionText,
-                    stataExportCaption: stataExportCaption,
-                    variableLabel: variableLabel,
-                    featured: featured,
-                    questionScope: questionScope ?? QuestionScope.Interviewer,
-                    conditionExpression: conditionExpression,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    responsibleId: responsibleId ?? Guid.NewGuid(),
-                    capital: false,
-                    isInteger: isInteger,
-                    questionType:QuestionType.Numeric);
-            }
-
             public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
             {
                 return new ExpressionsMigratedToCSharp();
@@ -94,51 +36,8 @@ namespace WB.Tests.Unit.Designer
             {
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
-
-            public static LookupTableAdded LookupTableAdded(Guid questionnaireId, Guid entityId)
-            {
-                return (new LookupTableAdded
-                {
-                    LookupTableId = entityId
-                });
-            }
-
-            public static LookupTableDeleted LookupTableDeleted(Guid questionnaireId, Guid entityId)
-            {
-                return (new LookupTableDeleted
-                {
-                    LookupTableId = entityId
-                });
-            }
-
-            public static LookupTableUpdated LookupTableUpdated(Guid questionnaireId, Guid entityId, string name, string fileName)
-            {
-                return (new LookupTableUpdated
-                {
-                    LookupTableId = entityId,
-                    LookupTableName = name,
-                    LookupTableFileName = fileName
-                });
-            }
-
-            public static MacroAdded MacroAdded(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
-            {
-                return new MacroAdded(entityId, responsibleId ?? Guid.NewGuid());
-            }
-
-            public static MacroDeleted MacroDeleted(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
-            {
-                return new MacroDeleted(entityId, responsibleId ?? Guid.NewGuid());
-            }
-
-            public static MacroUpdated MacroUpdated(Guid questionnaireId, Guid entityId, 
-                string name, string content, string description,
-                Guid? responsibleId = null)
-            {
-                return new MacroUpdated(entityId, name, content, description, responsibleId ?? Guid.NewGuid());
-            }
-
-            public static NewQuestionAdded NewQuestionAdded(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
+            
+            /*public static NewQuestionAdded NewQuestionAdded(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string variableLabel = null, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
             QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
@@ -173,7 +72,7 @@ namespace WB.Tests.Unit.Designer
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     validationConditions: validationConditions ?? new List<ValidationCondition>());
-            }
+            }*/
 
             public static NumericQuestionChanged NumericQuestionChanged(
                 Guid publicKey,
@@ -400,55 +299,7 @@ namespace WB.Tests.Unit.Designer
                     RosterTitleQuestionId = null
                 };
             }
-
-            public static StaticTextAdded StaticTextAdded(Guid? entityId = null, 
-                Guid? parentId = null, 
-                string text = null, 
-                Guid? responsibleId = null,
-                string enablementCondition = null,
-                IList<ValidationCondition> validationConditions = null)
-            {
-                
-                return new StaticTextAdded(entityId.GetValueOrDefault(Guid.NewGuid()),
-                    responsibleId ?? Guid.NewGuid(),
-                    parentId ?? Guid.NewGuid(),
-                    text,
-                    enablementCondition,
-                    false,
-                    validationConditions);
-            }
-
-            public static StaticTextUpdated StaticTextUpdated(Guid? entityId = null, Guid? parentId = null, string text = null, string attachmentName = null,  Guid? responsibleId = null,
-                string enablementCondition = null, bool? hideIfDisabled = null, List<ValidationCondition> validationConditions = null)
-            {
-                return new StaticTextUpdated(
-                    entityId.GetValueOrDefault(Guid.NewGuid()),
-                    responsibleId ?? Guid.NewGuid(),
-                    text,
-                    attachmentName,
-                    hideIfDisabled ?? false,
-                    enablementCondition,
-                    validationConditions ?? new List<ValidationCondition>());
-            }
-
-            public static StaticTextCloned StaticTextCloned(Guid? parentId = null, string text = null, string attachmentName = null,
-                Guid? responsibleId = null, Guid? publicKey = null, Guid? sourceQuestionnaireId = null, Guid? sourceEntityId = null,
-                string enablementCondition = null, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null, int targetIndex = 0)
-            {
-                return new StaticTextCloned(
-                    publicKey.GetValueOrDefault(Guid.NewGuid()),
-                    responsibleId ?? Guid.NewGuid(),
-                    parentId ?? Guid.NewGuid(),
-                    sourceQuestionnaireId,
-                    sourceEntityId ?? Guid.NewGuid(),
-                    targetIndex,
-                    text,
-                    attachmentName,
-                    enablementCondition,
-                    hideIfDisabled,
-                    validationConditions);
-            }
-
+            
             public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)
             {
                 return NumericQuestionChanged
@@ -460,20 +311,7 @@ namespace WB.Tests.Unit.Designer
                     validationExpression : validationExpression
                 );
             }
-
-            public static VariableAdded VariableAdded(Guid? entityId = null, Guid? responsibleId = null, Guid? parentId = null, 
-                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
-            {
-                return new VariableAdded(
-                    entityId.GetValueOrDefault(Guid.NewGuid()),
-                    responsibleId ?? Guid.NewGuid(),
-                    parentId ?? Guid.NewGuid(),
-                    new VariableData(
-                        variableType,
-                        variableName,
-                        variableExpression
-                        ));
-            }
+            
             public static VariableUpdated VariableUpdated(Guid? entityId = null, Guid? responsibleId = null, 
                 VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
             {
@@ -503,11 +341,7 @@ namespace WB.Tests.Unit.Designer
                         variableExpression
                         ));
             }
-            public static VariableDeleted VariableDeleted(Guid? entityId = null)
-            {
-                return new VariableDeleted() { EntityId = entityId.GetValueOrDefault(Guid.NewGuid()) };
-            }
-
+            
             public static GroupBecameARoster GroupBecameARosterEvent(string groupId)
             {
                 return new GroupBecameARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId));
@@ -525,14 +359,7 @@ namespace WB.Tests.Unit.Designer
                 };
             }
 
-            public static GroupDeleted GroupDeletedEvent(string groupId)
-            {
-                return new GroupDeleted()
-                {
-                    GroupPublicKey = Guid.Parse(groupId)
-                };
-            }
-
+            
             public static GroupStoppedBeingARoster GroupStoppedBeingARosterEvent(string groupId)
             {
                 return new GroupStoppedBeingARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId));
@@ -570,21 +397,7 @@ namespace WB.Tests.Unit.Designer
                     ConditionExpression = enablementCondition
                 };
             }
-
-            public static NewQuestionAdded NewQuestionAddedEvent(string questionId = null,
-                string parentGroupId = null, QuestionType questionType = QuestionType.Text, string questionVariable = null,
-                string questionTitle = null, string questionConditionExpression = null)
-            {
-                return Event.NewQuestionAdded(
-                    publicKey: GetQuestionnaireItemId(questionId),
-                    groupPublicKey: GetQuestionnaireItemId(parentGroupId),
-                    questionType: questionType,
-                    stataExportCaption: questionVariable,
-                    questionText: questionTitle,
-                    conditionExpression: questionConditionExpression
-                    );
-            }
-
+            
             public static IPublishedEvent<NewQuestionnaireCreated> NewQuestionnaireCreatedEvent(string questionnaireId,
                 string questionnaireTitle = null,
                 bool? isPublic = null)
@@ -646,18 +459,6 @@ namespace WB.Tests.Unit.Designer
                 };
             }
 
-            public static QRBarcodeQuestionUpdated QRBarcodeQuestionUpdatedEvent(string questionId,
-                string questionVariable = null, string questionTitle = null, string questionConditionExpression = null)
-            {
-                return new QRBarcodeQuestionUpdated()
-                {
-                    QuestionId = Guid.Parse(questionId),
-                    VariableName = questionVariable,
-                    Title = questionTitle,
-                    EnablementCondition = questionConditionExpression
-                };
-            }
-
             public static QuestionChanged QuestionChangedEvent(string questionId, string parentGroupId = null,
                 string questionVariable = null, string questionTitle = null, QuestionType? questionType = null, string questionConditionExpression = null)
             {
@@ -715,12 +516,7 @@ namespace WB.Tests.Unit.Designer
                     isTimestamp: false
                     );
             }
-
-            public static QuestionDeleted QuestionDeletedEvent(string questionId = null)
-            {
-                return new QuestionDeleted(GetQuestionnaireItemId(questionId));
-            }
-
+            
             public static QuestionnaireItemMoved QuestionnaireItemMovedEvent(string itemId,
                 string targetGroupId = null, int? targetIndex = null, string questionnaireId = null)
             {
@@ -753,39 +549,7 @@ namespace WB.Tests.Unit.Designer
             {
                 return new SharedPersonToQuestionnaireAdded() { PersonId = personId };
             }
-
-            public static StaticTextAdded StaticTextAddedEvent(string entityId = null, string parentId = null, string text = null)
-            {
-                return Create.Event.StaticTextAdded(entityId : GetQuestionnaireItemId(entityId),
-                    parentId : GetQuestionnaireItemId(parentId),
-                    text : text);
-            }
-
-            public static StaticTextCloned StaticTextClonedEvent(string entityId = null,
-                string parentId = null, string sourceEntityId = null, string text = null, int targetIndex = 0)
-            {
-                return Create.Event.StaticTextCloned(
-                    publicKey: GetQuestionnaireItemId(entityId),
-                    parentId : GetQuestionnaireItemId(parentId),
-                    sourceEntityId : GetQuestionnaireItemId(sourceEntityId),
-                    text : text,
-                    targetIndex : targetIndex);
-            }
-
-            public static StaticTextDeleted StaticTextDeletedEvent(string entityId = null)
-            {
-                return new StaticTextDeleted()
-                {
-                    EntityId = GetQuestionnaireItemId(entityId)
-                };
-            }
-
-            public static StaticTextUpdated StaticTextUpdatedEvent(string entityId = null, string text = null)
-            {
-                return Create.Event.StaticTextUpdated(entityId : GetQuestionnaireItemId(entityId),
-                    text : text);
-            }
-
+           
             public static TemplateImported TemplateImportedEvent(
                 string questionnaireId,
                 string chapter1Id = null,

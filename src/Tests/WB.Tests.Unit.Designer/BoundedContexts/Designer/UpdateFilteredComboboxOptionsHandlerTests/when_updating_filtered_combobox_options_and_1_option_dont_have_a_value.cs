@@ -14,15 +14,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.SingleOption,
-                questionText: "text",
-                stataExportCaption: "var",
-                isFilteredCombobox: true,
-                responsibleId: responsibleId
-            ));
+            questionnaire.AddSingleOptionQuestion(
+                 questionId,
+                 chapterId,
+                 responsibleId,
+                title: "text",
+                variableName: "var",
+                isFilteredCombobox: true);
         };
 
         Because of = () =>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -19,12 +21,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded (publicKey : questionId, groupPublicKey : chapterId, questionType : QuestionType.Text ));
+            questionnaire.AddTextQuestion(questionId, chapterId, responsibleId);
         };
 
         Because of = () =>
-            questionnaire.UpdateNumericQuestion(questionId, "title",
-                "var1",null, false, QuestionScope.Interviewer, null, false, null, properties: Create.QuestionProperties(), responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>());
+            questionnaire.UpdateNumericQuestion(
+                new UpdateNumericQuestion(
+                    questionnaire.Id,
+                    questionId, 
+                    responsibleId,
+                    new CommonQuestionParameters() {Title = "title", VariableName = "var1"}, 
+                    false,
+                    QuestionScope.Interviewer, 
+                    useFormatting:false,
+                    isInteger: false, 
+                    countOfDecimalPlaces: null, 
+                    validationConditions: new List<ValidationCondition>()));
 
 
         It should_contains_question = () =>

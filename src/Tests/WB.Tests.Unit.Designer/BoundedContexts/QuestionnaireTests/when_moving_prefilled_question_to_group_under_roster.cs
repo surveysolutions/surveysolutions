@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
              questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
              questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
              questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
-             questionnaire.AddQuestion(Create.Event.NewQuestionAdded(publicKey: questionId, featured: true, groupPublicKey : chapterId, questionType : QuestionType.Text ));
+             questionnaire.AddTextQuestion(questionId, isPreFilled: true, parentId: chapterId, responsibleId:responsibleId);
     };
 
     Because of = () =>

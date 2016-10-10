@@ -108,15 +108,21 @@ angular.module('designerApp')
                     $scope.showFindReplaceDialog();
                 }
             });
-
+            var searchBoxOpened = false;
             $scope.showFindReplaceDialog = function() {
-                $uibModal.open({
-                    templateUrl: 'views/find-replace.html',
-                    backdrop: false,
-                    windowClass: "findReplaceModal",
-                    controller: 'findReplaceCtrl'
-                });
-            }
+                if (!searchBoxOpened) {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/find-replace.html',
+                        backdrop: false,
+                        windowClass: "findReplaceModal",
+                        controller: 'findReplaceCtrl'
+                    });
+                    searchBoxOpened = true;
+                    modalInstance.closed.then(function() {
+                        searchBoxOpened = false;
+                    });
+                }
+            };
 
             $scope.questionnaireId = $state.params.questionnaireId;
             var ERROR = "error";

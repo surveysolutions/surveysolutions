@@ -25,6 +25,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
         {
             Delete.Column("targetitemnewtitle").FromTable("questionnairechangerecords");
             Delete.Column("affectedentriescount").FromTable("questionnairechangerecords");
+            Delete.Index("questionnairechangerecords_questionnaireid").OnTable("questionnairechangerecords");
         }
     }
 }

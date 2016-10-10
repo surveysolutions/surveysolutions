@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -15,42 +16,44 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 {
     internal class when_replacing_texts_in_questionnaire : QuestionnaireTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
-            questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId: staticTextId,
-                text: $"static text title with {searchFor}",
-                parentId: chapterId,
-                enablementCondition: $"static text enablement {searchFor}",
-                validationConditions: new List<ValidationCondition>
+            questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, staticTextId, "static text", responsibleId, chapterId));
+            questionnaire.UpdateStaticText(new UpdateStaticText(questionnaire.Id, staticTextId, $"static text title with {searchFor}", null, 
+                responsibleId, $"static text enablement {searchFor}", false, new List<ValidationCondition>
                 {
                     Create.ValidationCondition($"st validation exp {searchFor}", message: $"st validation msg {searchFor}")
                 }));
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId, 
-                questionText: $"question title with {searchFor}",
-                groupPublicKey: chapterId,
-                conditionExpression: $"question enablement {searchFor}",
+            questionnaire.AddTextQuestion(questionId, 
+                chapterId,
+                responsibleId,
+                title: $"question title with {searchFor}",
+                enablementCondition: $"question enablement {searchFor}",
                 validationConditions: new List<ValidationCondition>
                 {
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
-                }));
+                });
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(questionId1,
-                stataExportCaption: $"variable_{searchFor}",
-                groupPublicKey: chapterId,
-                questionType: QuestionType.MultyOption,
-                answers: new Answer[]
+            questionnaire.AddMultiOptionQuestion(questionId1,
+                variableName: $"var_{searchFor}",
+                responsibleId:responsibleId,
+                parentGroupId: chapterId,
+                options: new []
                 {
-                    Create.Answer($"answer with {searchFor}")
-                }));
+                    new Option(Guid.NewGuid() ,"1",$"answer with {searchFor}"),
+                    new Option(Guid.NewGuid() ,"2",$"2")
+                });
 
-            questionnaire.AddVariable(Create.Event.VariableAdded(variableId,
+            questionnaire.AddVariable(
+                variableId,
+                responsibleId:responsibleId,
                 variableExpression: $"var expression {searchFor}",
-                parentId: chapterId));
+                parentId: chapterId);
 
             questionnaire.AddGroup(Create.Event.NewGroupAddedEvent(groupId.FormatGuid(), 
                 parentGroupId: chapterId.FormatGuid(), 
@@ -58,8 +61,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 enablementCondition: $"group enablement {searchFor}"
                 ));
 
-            questionnaire.AddMacro(Create.Event.MacroAdded(questionnaire.Id, macroId, responsibleId));
-            questionnaire.UpdateMacro(Create.Event.MacroUpdated(questionId, macroId, "macro_name", 
+            questionnaire.AddMacro(Create.Command.AddMacro(questionnaire.Id, macroId, responsibleId));
+
+            questionnaire.UpdateMacro(Create.Command.UpdateMacro(questionId, macroId, "macro_name", 
                 $"macro content {searchFor}", "desc", responsibleId));
 
             command = Create.Command.ReplaceTextsCommand(searchFor, replaceWith, matchCase: true);
@@ -104,7 +108,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Expression.ShouldEqual($"var expression {replaceWith}");
 
         It should_replace_variable_names = () => 
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"variable_{replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"var_{replaceWith}");
 
         It should_replace_option_text = () => 
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).Answers.First().AnswerText.ShouldEqual($"answer with {replaceWith}");
@@ -123,6 +127,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static ReplaceTextsCommand command;
         const string replaceWith = "replaced";
-        const string searchFor = "%to replace%";
+        const string searchFor = "to_replace";
     }
 }

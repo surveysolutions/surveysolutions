@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -15,34 +17,37 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(
-                Create.Event.NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey: chapterId,
-                    questionText: "old title",
-                    stataExportCaption: "old_variable_name",
-                    instructions: "old instructions",
-                    conditionExpression: "old condition",
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.QRBarcode
-            ));
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                title: "old title",
+                variableName: "old_variable_name",
+                instructions: "old instructions",
+                enablementCondition: "old condition",
+                responsibleId: responsibleId);
         };
 
         private Because of = () =>
             questionnaire.UpdateGpsCoordinatesQuestion(
-                questionId: questionId,
-                title: title,
-                variableName: variableName,
-                variableLabel: variableLabel,
-                isPreFilled: false,
-                scope: scope,
-                enablementCondition: enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                instructions: instructions,
-                responsibleId: responsibleId,
-                validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties());
+                new UpdateGpsCoordinatesQuestion(
+                    questionnaire.Id,
+                    questionId: questionId,
+                    commonQuestionParameters: new CommonQuestionParameters()
+                    {
+                        Title = title,
+                        VariableName = variableName,
+                        VariableLabel = variableLabel,
+                        Instructions = instructions,
+                        EnablementCondition = enablementCondition,
+                        HideIfDisabled = hideIfDisabled
 
-
+                    }, 
+                    validationMessage:null,
+                    validationExpression:null,
+                    isPreFilled: false,
+                    scope: scope,
+                    responsibleId: responsibleId,
+                    validationConditions: new List<ValidationCondition>()));
 
         It should_contains_question_with_QuestionId_specified = () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
