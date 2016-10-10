@@ -11,7 +11,7 @@
     "tests"
   ],
   "dependencies": {
-    "ace-builds": "^1.2.3",
+    "ace-builds": "^1.2.5",
     "angular": "^1.5.8",
     "angular-animate": "^1.5.8",
     "angular-block-ui": "0.2.2",
