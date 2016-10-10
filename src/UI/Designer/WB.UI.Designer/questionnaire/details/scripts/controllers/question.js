@@ -122,6 +122,7 @@
                     .success(function (result) {
                         $scope.initialQuestion = angular.copy(result);
                         dataBind(result);
+                        $scope.activeQuestion.focusProperty = $state.params.property;
                         utilityService.scrollToValidationCondition($state.params.validationIndex);
                     });
             };

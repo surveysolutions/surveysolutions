@@ -38,10 +38,27 @@
             replace: true,
             template: ""
         };
-    })
-    .directive('drags', function () {
-        return function (scope, elem) {
-            $(elem).parents('.modal-dialog').drags({ handle: elem });
-        }
+    }).directive('focusWhen', function ($timeout) {
+        return {
+            restrict: 'A',
+            link: {
+                post: function postLink(scope, element, attrs) {
+                    scope.$watch(attrs.focusWhen, function () {
+                        if (attrs.focusWhen) {
+                            if (scope.$eval(attrs.focusWhen)) {
+                                $timeout(function () {
+                                    if (attrs.hasOwnProperty('uiAce')) {
+                                        var edit = ace.edit(element.id);
+                                        edit.focus();
+                                    } else {
+                                        element.focus();
+                                    }
+                                }, 300);
+                            }
+                        }
+                    });
+                }
+            }
+        };
     });
 })(jQuery);
