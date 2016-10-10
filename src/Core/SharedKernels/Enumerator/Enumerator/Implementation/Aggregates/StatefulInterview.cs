@@ -1260,9 +1260,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                   .questionsComments
                   .Where(x => x.Value.Any(c => c.UserRole != UserRoles.Operator))
                   .Select(x => x.Key)
-                  .Where(x => HasGroup(GetParentGroup(x)))
                   .Where(this.IsEnabled)
-                  .Where(x => questionnaire.IsInterviewierQuestion(x.Id));
+                  .Where(x => questionnaire.IsInterviewierQuestion(x.Id))
+                  .Where(x => HasGroup(GetParentGroup(x)));
 
             var orderedCommentedQuestions = commentedEnabledInterviewerQuestionIds
                 .Select(x => new

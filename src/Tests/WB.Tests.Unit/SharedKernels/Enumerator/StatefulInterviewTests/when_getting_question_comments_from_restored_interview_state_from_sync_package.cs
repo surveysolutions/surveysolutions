@@ -20,7 +20,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                    && _.IsInterviewierQuestion(hiddenQuestionId) == false
                    && _.IsInterviewierQuestion(disabledQuestionId) == true
                    && _.IsInterviewierQuestion(interQuestionId) == true
-                   && _.IsInterviewierQuestion(repliedByInterQuestionId) == true);
+                   && _.IsInterviewierQuestion(repliedByInterQuestionId) == true
+                   && _.GetParentGroup(repliedByInterQuestionId) == parentGroupId
+                   && _.GetParentGroup(interQuestionId) == parentGroupId
+                   && _.HasGroup(parentGroupId) == true
+                   );
 
             interview = Create.AggregateRoot.StatefulInterview(
                 questionnaireId: questionnaireId,
@@ -63,6 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static readonly Guid disabledQuestionId = Guid.Parse("00000000000000000000000000000006");
         private static readonly Guid interQuestionId = Guid.Parse("00000000000000000000000000000007");
         private static readonly Guid repliedByInterQuestionId = Guid.Parse("00000000000000000000000000000008");
+        private static readonly Guid parentGroupId = Guid.Parse("11111111111111111111111111111111");
         private static readonly decimal[] rosterVector = new decimal[] { 1m, 0m };
         private static readonly Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
