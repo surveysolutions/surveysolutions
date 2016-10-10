@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -36,7 +35,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 responsibleId,
                 variableName: $"var_{searchFor}");
              
-
             questionnaire.AddMultiOptionQuestion(questionId2,
                 chapterId,
                 responsibleId,
@@ -68,25 +66,45 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         Because of = () => foundReferences = questionnaire.FindAllTexts(searchFor, true, false, false);
 
         It should_find_text_in_static_text = () =>
-            foundReferences.ShouldContain(x => x.Id == staticTextId && x.Type == QuestionnaireVerificationReferenceType.StaticText);
+            foundReferences.ShouldContain(x => x.Id == staticTextId && 
+                                               x.Type == QuestionnaireVerificationReferenceType.StaticText &&
+                                               x.Property == QuestionnaireVerificationReferenceProperty.Title);
 
-        It should_find_text_in_question = () =>
-            foundReferences.ShouldContain(x => x.Id == questionId && x.Type == QuestionnaireVerificationReferenceType.Question);
+        It should_find_text_in_question_title = () =>
+            foundReferences.ShouldContain(x => x.Id == questionId && 
+                                               x.Type == QuestionnaireVerificationReferenceType.Question &&
+                                               x.Property == QuestionnaireVerificationReferenceProperty.Title);
+
+        It should_find_text_in_question_validation_expression = () =>
+          foundReferences.ShouldContain(x => x.Id == questionId &&
+                                             x.Type == QuestionnaireVerificationReferenceType.Question &&
+                                             x.Property == QuestionnaireVerificationReferenceProperty.ValidationExpression);
+
+        It should_find_text_in_question_validation_message = () =>
+         foundReferences.ShouldContain(x => x.Id == questionId &&
+                                            x.Type == QuestionnaireVerificationReferenceType.Question &&
+                                            x.Property == QuestionnaireVerificationReferenceProperty.ValidationMessage);
+
+        It should_find_text_in_question_enablement_condition = () =>
+        foundReferences.ShouldContain(x => x.Id == questionId &&
+                                           x.Type == QuestionnaireVerificationReferenceType.Question &&
+                                           x.Property == QuestionnaireVerificationReferenceProperty.EnablingCondition);
 
         It should_find_text_in_group = () =>
-            foundReferences.ShouldContain(x => x.Id == groupId && x.Type == QuestionnaireVerificationReferenceType.Group);
-
-        It should_not_duplicate_found_entities = () =>
-            foundReferences.Count(x => x.Id == staticTextId).ShouldEqual(1);
+            foundReferences.ShouldContain(x => x.Id == groupId && x.Type == QuestionnaireVerificationReferenceType.Group && 
+                                               x.Property == QuestionnaireVerificationReferenceProperty.Title);
 
         It should_find_text_in_variable_name = () =>
-            foundReferences.ShouldContain(x => x.Id == questionId1);
+            foundReferences.ShouldContain(x => x.Id == questionId1 && 
+                                               x.Property == QuestionnaireVerificationReferenceProperty.VariableName);
 
         It should_find_variables_by_content = () => 
-            foundReferences.ShouldContain(x => x.Id == variableId && x.Type == QuestionnaireVerificationReferenceType.Variable);
+            foundReferences.ShouldContain(x => x.Id == variableId && 
+                                               x.Type == QuestionnaireVerificationReferenceType.Variable && 
+                                               x.Property == QuestionnaireVerificationReferenceProperty.VariableContent);
 
         It should_find_question_by_option_text = () => 
-            foundReferences.ShouldContain(x => x.Id == questionId2);
+            foundReferences.ShouldContain(x => x.Id == questionId2 && x.Property == QuestionnaireVerificationReferenceProperty.Option);
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
