@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -13,29 +17,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(publicKey : questionId, groupPublicKey : chapterId ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-publicKey: questionId,
-groupPublicKey: chapterId,
-questionText: "old title",
-stataExportCaption: "old_variable_name",
-instructions: "old instructions",
-conditionExpression: "old condition",
-responsibleId: responsibleId,
-questionType: QuestionType.QRBarcode
-));
+            questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+            var answers = new List<Answer>() { new Answer() { AnswerCode = 1, AnswerText = "1" }, new Answer() { AnswerCode = 2, AnswerText = "2" } };
+
+            var questionnaireDoc = Create.QuestionnaireDocument(
+                children: new List<IComposite>
+                {
+                    Create.SingleQuestion(id:questionId,isFilteredCombobox:false, options:answers),
+                    Create.SingleQuestion(id:questionId,isFilteredCombobox:false, options:answers)
+                });
+
+            questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(Guid.NewGuid(), questionnaireDoc, null);
+            
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
-                    variableName: "qr_barcode_question",
-                variableLabel: null, enablementCondition: null, hideIfDisabled: false, instructions: null,
-                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, 
-                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                    properties: Create.QuestionProperties()));
+                questionnaire.UpdateQRBarcodeQuestion(
+                    new UpdateQRBarcodeQuestion(
+                        questionnaire.Id,
+                        questionId: questionId,
+                        commonQuestionParameters: new CommonQuestionParameters()
+                        {
+                            Title = "title",
+                            VariableName = "var",
+
+                        },
+                        validationExpression: null,
+                        validationMessage: null,
+                        responsibleId: responsibleId,
+                        scope: QuestionScope.Interviewer,
+                        validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

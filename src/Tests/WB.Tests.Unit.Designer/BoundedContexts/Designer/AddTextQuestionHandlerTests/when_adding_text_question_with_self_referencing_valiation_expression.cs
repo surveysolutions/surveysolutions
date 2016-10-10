@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         Because of = () =>
             questionnaire.AddTextQuestion(
                 questionId: questionId,
-                parentGroupId: chapterId,
+                parentId: chapterId,
                 title: "title",
                 variableName: variableName,
                 variableLabel: null,

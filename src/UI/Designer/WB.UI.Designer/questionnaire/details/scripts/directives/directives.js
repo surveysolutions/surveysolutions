@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function($) {
     angular.module('designerApp').directive('focusOnOut', function () {
         return function(scope, elem, attr) {
             scope.$on('focusOn', function(e, name) {
@@ -38,5 +38,10 @@
             replace: true,
             template: ""
         };
+    })
+    .directive('drags', function () {
+        return function (scope, elem) {
+            $(elem).parents('.modal-dialog').drags({ handle: elem });
+        }
     });
-})();
+})(jQuery);

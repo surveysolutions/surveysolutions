@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -15,7 +16,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
-            questionnaire.AddStaticText(Create.Event.StaticTextAdded(entityId: staticTextId,
+            questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(
+                questionnaire.Id,
+                entityId: staticTextId,
+                responsibleId:responsibleId, 
                 text: $"static text title with {searchFor}",
                 parentId: chapterId));
         };

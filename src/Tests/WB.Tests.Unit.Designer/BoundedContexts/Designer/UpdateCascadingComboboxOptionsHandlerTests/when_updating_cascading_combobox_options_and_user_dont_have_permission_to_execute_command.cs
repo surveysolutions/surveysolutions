@@ -10,34 +10,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
 {
     internal class when_updating_cascading_combobox_options_and_user_dont_have_permission_to_execute_command : QuestionnaireTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : parentQuestionId,
-                groupPublicKey : chapterId,
-                questionType : QuestionType.SingleOption,
-                questionText : "text",
-                stataExportCaption : "var",
-                responsibleId : responsibleId,
-                answers : new Answer[]
+            questionnaire.AddSingleOptionQuestion(
+                parentQuestionId,
+                chapterId,
+                title: "text",
+                variableName: "var",
+                responsibleId: responsibleId,
+                options: new Option[]
                 {
-                    new Answer { AnswerText = "Option 1", AnswerValue = "1" },
-                    new Answer { AnswerText = "Option 2", AnswerValue = "2" }
+                    new Option() {Title = "Option 1", Value = "1"},
+                    new Option() {Title = "Option 2", Value = "2"}
                 }
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : questionId,
-                groupPublicKey : chapterId,
-                questionType : QuestionType.SingleOption,
-                questionText : "text",
-                stataExportCaption : "var",
+            );
+            questionnaire.AddSingleOptionQuestion(
+                questionId,
+                chapterId,
+                title: "text",
+                variableName : "q1",
                 isFilteredCombobox : false,
                 responsibleId : responsibleId,
                 cascadeFromQuestionId : parentQuestionId
-           ));
+           );
         };
 
         Because of = () =>
