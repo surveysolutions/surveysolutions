@@ -29,6 +29,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             {
                 cachedQuestionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(id);
 
+                if (cachedQuestionnaireExportStructure == null)
+                    return null;
+
                 this.cache.Set(idStringKey, 
                     cachedQuestionnaireExportStructure,
                     DateTime.Now.AddMinutes(5));
