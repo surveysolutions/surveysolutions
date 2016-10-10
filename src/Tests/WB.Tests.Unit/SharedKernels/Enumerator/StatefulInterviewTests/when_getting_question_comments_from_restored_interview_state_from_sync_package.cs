@@ -23,7 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                    && _.IsInterviewierQuestion(repliedByInterQuestionId) == true
                    && _.GetParentGroup(repliedByInterQuestionId) == parentGroupId
                    && _.GetParentGroup(interQuestionId) == parentGroupId
+                   && _.GetParentGroup(interFromMissingGroupQuestionId) == missingParentGroupId
                    && _.HasGroup(parentGroupId) == true
+                   && _.HasGroup(missingParentGroupId) == false
                    );
 
             interview = Create.AggregateRoot.StatefulInterview(
@@ -37,7 +39,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.AnsweredQuestionSynchronizationDto(hiddenQuestionId, rosterVector, 3, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(disabledQuestionId, rosterVector, 4, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(repliedByInterQuestionId, rosterVector, 5, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor), Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Operator)),
-                Create.Entity.AnsweredQuestionSynchronizationDto(interQuestionId, rosterVector, 6, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor))
+                Create.Entity.AnsweredQuestionSynchronizationDto(interQuestionId, rosterVector, 6, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
+                Create.Entity.AnsweredQuestionSynchronizationDto(interFromMissingGroupQuestionId, rosterVector, 7, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor))
             };
 
             interview.RestoreInterviewStateFromSyncPackage(userId, Create.Entity.InterviewSynchronizationDto(
@@ -67,7 +70,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static readonly Guid disabledQuestionId = Guid.Parse("00000000000000000000000000000006");
         private static readonly Guid interQuestionId = Guid.Parse("00000000000000000000000000000007");
         private static readonly Guid repliedByInterQuestionId = Guid.Parse("00000000000000000000000000000008");
+        private static readonly Guid interFromMissingGroupQuestionId = Guid.Parse("00000000000000000000000000000009");
         private static readonly Guid parentGroupId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid missingParentGroupId = Guid.Parse("22222222222222222222222222222222");
         private static readonly decimal[] rosterVector = new decimal[] { 1m, 0m };
         private static readonly Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
