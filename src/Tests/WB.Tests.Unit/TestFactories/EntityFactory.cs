@@ -1163,5 +1163,9 @@ namespace WB.Tests.Unit.TestFactories
             Identity cascadingParentQuestionIdentity = null)
             => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, questionType, answer,
                 linkedOptions, cascadingParentQuestionIdentity);
+
+        public InterviewTreeQuestion InterviewTreeQuestion_SingleOption(Identity questionIdentity,
+            bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
+            => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null);
     }
 }
