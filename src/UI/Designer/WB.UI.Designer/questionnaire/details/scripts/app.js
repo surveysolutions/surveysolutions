@@ -46,6 +46,9 @@
 
             }).state('questionnaire.chapter.question', {
                 url: "/question/{itemId}",
+                params: {
+                    property: 'None'
+                },
                 views: {
                     '': {
                         templateUrl: 'views/question.html',
