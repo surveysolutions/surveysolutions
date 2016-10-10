@@ -115,7 +115,8 @@ angular.module('designerApp')
                         templateUrl: 'views/find-replace.html',
                         backdrop: false,
                         windowClass: "findReplaceModal",
-                        controller: 'findReplaceCtrl'
+                        controller: 'findReplaceCtrl',
+                        appendTo: angular.element('.questionnaire-tree-holder')
                     });
                     searchBoxOpened = true;
                     modalInstance.closed.then(function() {
@@ -252,13 +253,15 @@ angular.module('designerApp')
                         $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + '.validation', {
                             chapterId: reference.chapterId,
                             itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex
+                            validationIndex: reference.failedValidationConditionIndex,
+                            property: reference.property
                         });
                     } else {
                         $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                             chapterId: reference.chapterId,
                             itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex
+                            validationIndex: reference.failedValidationConditionIndex,
+                            property: reference.property
                         });
                     }
                 }
@@ -427,7 +430,14 @@ angular.module('designerApp')
                 $rootScope.$on('variablesChanged', function() {
                     $scope.aceEditorUpdateMode(editor);
                 });
-                
+
+                editor.on('focus', function() {
+                    $('.ace_focus').parents('.pseudo-form-control').addClass('focused');
+                });
+
+                editor.on('blur', function () {
+                    $('.pseudo-form-control.focused').removeClass('focused');
+                });
             };
 
             $scope.getVariablesNames = function () {

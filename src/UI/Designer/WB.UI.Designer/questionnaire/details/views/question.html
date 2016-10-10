@@ -33,7 +33,10 @@
 
             <div class="form-group input-variable-name col-xs-5 pull-right">
                 <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left" /></label><br />
-                <input id="edit-question-variable-name" type="text" ng-model="activeQuestion.variable" spellcheck="false"
+                <input id="edit-question-variable-name" type="text" 
+                       ng-model="activeQuestion.variable" 
+                       spellcheck="false"
+                       focus-when="activeQuestion.focusProperty === 'VariableName'"
                        class="form-control" maxlength="32">
             </div>
         </div>
@@ -49,7 +52,7 @@
 
         <div class="form-group">
             <label for="edit-question-title" class="wb-label">Question text</label><br>
-            <textarea id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" msd-elastic></textarea>
+            <textarea id="edit-question-title" type="text" focus-when="activeQuestion.focusProperty === 'Title'" ng-model="activeQuestion.title" class="form-control" msd-elastic></textarea>
 
             <div class="question-type-specific-block"
                  ng-include="'views/question-details/' + activeQuestion.type + '-template.html'"
@@ -88,7 +91,9 @@
             <label for="cb-hideIfDisabled"><span></span>Hide if disabled <help key="hideIfDisabled" /></label>
 
             <div class="pseudo-form-control">
-                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.enablementCondition"></div>
+                <div id="edit-question-enablement-condition" 
+                     focus-when="activeQuestion.focusProperty === 'EnablingCondition'" 
+                     ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.enablementCondition"></div>
             </div>
         </div>
 
@@ -99,7 +104,9 @@
             <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
             <div class="pseudo-form-control">
-                <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="validation.expression" ng-attr-tabindex="{{$index + 1}}"></div>
+                <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" 
+                     ng-model="validation.expression" 
+                     ng-attr-tabindex="{{$index + 1}}"></div>
             </div>
 
             <label for="validationMessage{{$index}}" class="validation-message">Error message <help key="validationMessage" /></label>
