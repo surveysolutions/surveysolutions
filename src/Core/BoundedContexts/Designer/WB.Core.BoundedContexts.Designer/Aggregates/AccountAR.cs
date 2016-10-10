@@ -1,5 +1,6 @@
 ﻿using System;
 using Ncqrs.Domain;
+using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
@@ -7,39 +8,34 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
     public class AccountAR : AggregateRootMappedByConvention
     {
-        #region [Constants]
         private bool isLockOut = false;
         private bool isConfirmed = false;
-        #endregion
-
-        #region [State]
 
         public void Apply(AccountRegistered @event) { }
         public void Apply(AccountConfirmed @event)
         {
             this.isConfirmed = true;
         }
+
         public void Apply(AccountDeleted @event) {}
         public void Apply(AccountLocked @event)
         {
             this.isLockOut = true;
         }
-        public void Apply(AccountUnlocked @event)
-        {
-            this.isLockOut = false;
-        }
-        public void Apply(AccountLoginFailed @event) { }
         public void Apply(AccountOnlineUpdated @event) { }
         public void Apply(AccountPasswordChanged @event) { }
         public void Apply(AccountPasswordQuestionAndAnswerChanged @event) { }
         public void Apply(AccountPasswordReset @event) { }
+        public void Apply(AccountUnlocked @event)
+        {
+            this.isLockOut = false;
+        }
         public void Apply(AccountUpdated @event) { }
-        public void Apply(AccountPasswordResetTokenChanged @event) { }
         public void Apply(UserLoggedIn @event) { }
-        
-        #endregion
         public void Apply(AccountRoleAdded @event) { }
         public void Apply(AccountRoleRemoved @event) { }
+        public void Apply(AccountLoginFailed @event) { }
+        public void Apply(AccountPasswordResetTokenChanged @event) { }
 
         public AccountAR()
         {
