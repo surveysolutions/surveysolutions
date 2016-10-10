@@ -109,6 +109,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 customizer.Table(tableName);
                 customizer.Schema(schemaName);
             };
+            mapper.BeforeMapSet += (inspector, member, customizer) => customizer.Schema(schemaName);
+            mapper.BeforeMapBag += (inspector, member, customizer) => customizer.Schema(schemaName);
+            mapper.BeforeMapList += (inspector, member, customizer) => customizer.Schema(schemaName);
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
