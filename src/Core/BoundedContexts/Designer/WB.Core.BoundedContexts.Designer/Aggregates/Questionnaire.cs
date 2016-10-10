@@ -431,37 +431,47 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var title = questionnaireItem.GetTitle();
                 var variable = questionnaireItem.GetVariable();
 
-                if (MatchesSearchTerm(title, searchRegex) || MatchesSearchTerm(variable, searchRegex))
+                if (MatchesSearchTerm(variable, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
-                    continue;
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableName);
                 }
-
-                var conditional = questionnaireItem as IConditional;
-                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
+                if (MatchesSearchTerm(title, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
-                    continue;
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Title);
                 }
 
                 var question = questionnaireItem as IQuestion;
                 if (question?.Answers != null && question.Answers.Any(x => MatchesSearchTerm(x.AnswerText, searchRegex)))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
-                    continue;
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option);
+                }
+
+                var conditional = questionnaireItem as IConditional;
+                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.EnablingCondition);
                 }
 
                 var validatable = questionnaireItem as IValidatable;
-                if (validatable != null && validatable.ValidationConditions.Any(x => MatchesSearchTerm(x.Expression, searchRegex) ||
-                                                                  MatchesSearchTerm(x.Message, searchRegex)))
+                if (validatable != null)
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
-                    continue;
+                    for (int i = 0; i < validatable.ValidationConditions.Count; i++)
+                    {
+                        if(MatchesSearchTerm(validatable.ValidationConditions[i].Expression, searchRegex))
+                        {
+                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationExpression, i);
+                        }
+                        if (MatchesSearchTerm(validatable.ValidationConditions[i].Message, searchRegex))
+                        {
+                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationMessage, i);
+                        }
+                    }
                 }
+
                 var questionnaireVariable = questionnaireItem as IVariable;
                 if (questionnaireVariable != null && MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableContent);
                 }
              
             }
