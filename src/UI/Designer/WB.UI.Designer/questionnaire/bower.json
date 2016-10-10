@@ -25,7 +25,6 @@
     "angular-resource": "^1.5.8",
     "angular-sanitize": "^1.5.8",
     "angular-ui-ace": "~0.2.3",
-    "angular-ui-router": "0.2.15",
     "angular-ui-tree": "^2.22.1",
     "angular-ui-utils": "~0.1.1",
     "angular-unsavedChanges": "0.2.3-alpha.3",
