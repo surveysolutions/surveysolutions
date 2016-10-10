@@ -1,8 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using Group = Main.Core.Entities.SubEntities.Group;

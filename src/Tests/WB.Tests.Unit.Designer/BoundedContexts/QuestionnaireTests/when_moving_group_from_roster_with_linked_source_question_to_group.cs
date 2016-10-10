@@ -13,20 +13,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: categoricalLinkedQuestionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.MultyOption,
-                linkedToQuestionId: linkedSourceQuestionId
-            ));
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupInsideRosterId, ParentGroupPublicKey = rosterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : linkedSourceQuestionId,
-                groupPublicKey : groupInsideRosterId,
-                questionType : QuestionType.Text
-            ));
+            questionnaire.AddTextQuestion(linkedSourceQuestionId,
+                groupInsideRosterId,
+                responsibleId);
+
+            questionnaire.AddMultiOptionQuestion(categoricalLinkedQuestionId,
+                chapterId,
+                responsibleId,
+                options: new Option[0],
+                linkedToQuestionId: linkedSourceQuestionId
+            );
         };
 
         Because of = () => exception = Catch.Exception(() => questionnaire.MoveGroup(groupId: rosterId, targetGroupId: chapterId, responsibleId: responsibleId, targetIndex:0));

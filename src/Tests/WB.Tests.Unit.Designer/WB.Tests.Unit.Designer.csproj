@@ -619,18 +619,13 @@
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_integer_rowcode_value.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_unique_rowcode_values.cs" />
     <Compile Include="BoundedContexts\Designer\MacrosSubstitutionServiceTests\when_inlining_macroses_in_expression.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_duplicated_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_LookupTableAdded_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_LookupTableDeleted_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_LookupTableUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_roster_edit_view_referencing_non_existing_question.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_group_into_group.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_static_text_after_question.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_question_into_group.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_question_after_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_AddingMacro.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_with_macros_and_lookup_tables.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\LookupTables\when_adding_lookup_table.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\LookupTables\when_adding_lookup_table_with_invalid_variable_name.cs" />
@@ -678,7 +673,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_title_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_more_than_200_options.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_duplicated_var_name.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_contains_consecutive_underscore_characters.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_nested_roster_with_condition_on_parents_sibling_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_lower_then_5.cs" />
@@ -762,9 +756,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_adding_a_group_and_there_already_is_one_group_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_adding_a_question_and_there_already_is_one_question_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_deleting_group_by_id_and_there_are_3_groups_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_deleting_question_by_id_and_there_are_4_questions_with_same_id.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_ExpressionsMigratedToCSharp_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupBecameARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupStoppedBeingARoster_event.cs" />
@@ -774,8 +765,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event_and_max_value_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
@@ -823,7 +812,6 @@
     <Compile Include="BoundedContexts\QuestionnaireTests\UpdateQuestionnaireTests.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_group_under_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_group_with_invalid_variable_name.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_prefilled_question_under_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_paralell_roster_scope.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_under_deeper_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
@@ -1065,7 +1053,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_all_parameters_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_it_does_not_exists_in_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
@@ -1097,7 +1084,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_all_parameters_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_it_does_not_exists_in_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_title_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
@@ -1211,7 +1197,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_all_parameters_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_it_does_not_exists_in_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />

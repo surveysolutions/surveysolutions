@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var nestedRosterId = Guid.Parse("21111111111111111111111111111111");
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : chapterId ));
+            questionnaire.AddNumericQuestion( rosterSizeQuestionId, isInteger : true, parentId : chapterId , responsibleId:responsibleId);
 
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = rosterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, nestedRosterId));
 
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded( publicKey : titleQuestionId, isInteger : true, groupPublicKey : nestedRosterId ));
+            questionnaire.AddNumericQuestion( titleQuestionId, isInteger : true, parentId: nestedRosterId ,responsibleId:responsibleId);
         };
 
         Because of = () =>

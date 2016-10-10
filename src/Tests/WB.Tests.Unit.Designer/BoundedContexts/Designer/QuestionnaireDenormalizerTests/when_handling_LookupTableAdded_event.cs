@@ -1,10 +1,8 @@
 using System;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.LookupTables;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -13,14 +11,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
     {
         Establish context = () =>
         {
-            evnt = Create.Event.LookupTableAdded(questionnaireId, entityId);
-
-            questionnaire = Create.QuestionnaireDocument(questionnaireId);
+            questionnaire = Create.QuestionnaireDocument(questionnaireId, userId: creatorId);
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaire);
         };
 
-        Because of = () => denormalizer.AddLookupTable(evnt);
+        Because of = () => denormalizer.AddLookupTable(new AddLookupTable(questionnaire.PublicKey, null, "", entityId, creatorId));
 
         It should_add_one_lookup_table = () =>
             questionnaire.LookupTables.Count.ShouldEqual(1);
@@ -33,8 +29,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid creatorId = Guid.Parse("A1111111111111111111111111111111");
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaire;
-        private static LookupTableAdded evnt;
+        
     }
 }

@@ -14,14 +14,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded( publicKey : existingQuestionId, groupPublicKey : chapterId ));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, existingQuestionId, "title", responsibleId, chapterId));
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: existingQuestionId,
-                    parentGroupId: chapterId,
+                    parentId: chapterId,
                     title: title,
                     variableName: variableName,
                 variableLabel: null,

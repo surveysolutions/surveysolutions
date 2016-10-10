@@ -3,7 +3,6 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQuestionHandlerTests
@@ -14,10 +13,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(Create.Event.AddGroup(chapterId));
-            questionnaire.AddQuestion(Create.Event.AddTextQuestion(parentQuestionId, chapterId));
-            questionnaire.UpdateQuestion(Create.Event.QuestionChanged(parentQuestionId, "cascade_parent", questionType: QuestionType.SingleOption));
-            questionnaire.AddQuestion(Create.Event.AddTextQuestion(cascadingId, chapterId));
-            questionnaire.UpdateQuestion(Create.Event.QuestionChanged(cascadingId, "cascade_child", questionType: QuestionType.SingleOption));
+            questionnaire.AddSingleOptionQuestion(parentQuestionId, chapterId, responsibleId, variableName: "cascade_parent");
+            questionnaire.AddSingleOptionQuestion(cascadingId, chapterId, responsibleId, variableName: "cascade_child");
         };
 
         Because of = () =>

@@ -14,23 +14,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : Guid.NewGuid(),
-                groupPublicKey : chapterId,
-                questionType : QuestionType.GpsCoordinates,
-                stataExportCaption : substitutionVariableName
-            ));
+            questionnaire.AddGpsQuestion(Guid.NewGuid(), chapterId, responsibleId, variableName : substitutionVariableName);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
-                    parentGroupId: chapterId,
+                    parentId: chapterId,
                     title: titleWithSubstitution,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,

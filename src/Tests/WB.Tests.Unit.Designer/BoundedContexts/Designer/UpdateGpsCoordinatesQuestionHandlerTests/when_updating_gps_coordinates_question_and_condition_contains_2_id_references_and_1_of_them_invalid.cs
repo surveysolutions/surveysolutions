@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
@@ -22,33 +25,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(publicKey : existingQuestionId, groupPublicKey : chapterId ));
-            questionnaire.AddQuestion(
-                Create.Event.NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey: chapterId,
-                    questionText: "old title",
-                    stataExportCaption: "old_variable_name",
-                    instructions: "old instructions",
-                    conditionExpression: "old condition",
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.QRBarcode
-            ));
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, existingQuestionId, "title", responsibleId, chapterId));
+
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                title: "old title",
+                variableName: "old_variable_name",
+                instructions: "old instructions",
+                enablementCondition: "old condition",
+                responsibleId: responsibleId);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
+                new UpdateGpsCoordinatesQuestion(
+                    questionnaire.Id,
                     questionId: questionId,
-                    title: title,
-                    variableName: variableName,
-                    variableLabel: null,
+                    commonQuestionParameters: new CommonQuestionParameters()
+                    {
+                        Title = title,
+                        VariableName = variableName,
+                        
+                        Instructions = instructions,
+                        EnablementCondition = enablementCondition,
+                        HideIfDisabled = hideIfDisabled
+                    },
+                    validationMessage: null,
+                    validationExpression: null,
                     isPreFilled: false,
                     scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: hideIfDisabled,
-                    instructions: instructions,
-                    responsibleId: responsibleId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
+                    responsibleId: responsibleId,
+                    validationConditions: new List<ValidationCondition>())));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
