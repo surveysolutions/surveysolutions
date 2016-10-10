@@ -695,7 +695,6 @@
     <Content Include="questionnaire\vendor\angular-ui-ace\ui-ace.js" />
     <Content Include="questionnaire\vendor\angular-ui-ace\ui-ace.min.js" />
     <Content Include="questionnaire\vendor\angular-ui-router\.bower.json" />
-    <Content Include="questionnaire\vendor\angular-ui-router\api\angular-ui-router.d.ts" />
     <Content Include="questionnaire\vendor\angular-ui-router\bower.json" />
     <Content Include="questionnaire\vendor\angular-ui-router\CHANGELOG.md" />
     <Content Include="questionnaire\vendor\angular-ui-router\CONTRIBUTING.md" />
