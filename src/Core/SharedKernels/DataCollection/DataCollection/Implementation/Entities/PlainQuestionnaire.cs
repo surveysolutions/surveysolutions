@@ -1070,10 +1070,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return nestedRosters;
         }
 
-        public Guid? GetRosterSizeQuestion(Guid rosterId)
+        public Guid GetRosterSizeQuestion(Guid rosterId)
         {
             var roster = this.GetGroupOrThrow(rosterId);
-            return roster.RosterSizeQuestionId;
+            return roster.RosterSizeQuestionId.Value;
         }
 
         public Guid? GetRosterTitleQuestionId(Guid rosterId)

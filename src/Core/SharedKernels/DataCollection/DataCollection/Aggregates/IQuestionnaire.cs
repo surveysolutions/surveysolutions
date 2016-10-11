@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
 
-        Guid? GetRosterSizeQuestion(Guid rosterId);
+        Guid GetRosterSizeQuestion(Guid rosterId);
 
         Guid? GetRosterTitleQuestionId(Guid rosterId);
 
