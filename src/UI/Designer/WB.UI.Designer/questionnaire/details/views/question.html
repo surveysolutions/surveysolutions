@@ -36,7 +36,6 @@
                 <input id="edit-question-variable-name" type="text" 
                        ng-model="activeQuestion.variable" 
                        spellcheck="false"
-                       focus-when="activeQuestion.focusProperty === 'VariableName'"
                        class="form-control" maxlength="32">
             </div>
         </div>
@@ -52,7 +51,7 @@
 
         <div class="form-group">
             <label for="edit-question-title" class="wb-label">Question text</label><br>
-            <textarea id="edit-question-title" type="text" focus-when="activeQuestion.focusProperty === 'Title'" ng-model="activeQuestion.title" class="form-control" msd-elastic></textarea>
+            <textarea id="edit-question-title" type="text" ng-model="activeQuestion.title" class="form-control" msd-elastic></textarea>
 
             <div class="question-type-specific-block"
                  ng-include="'views/question-details/' + activeQuestion.type + '-template.html'"
@@ -92,7 +91,6 @@
 
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" 
-                     focus-when="activeQuestion.focusProperty === 'EnablingCondition'" 
                      ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.enablementCondition"></div>
             </div>
         </div>
@@ -105,6 +103,7 @@
 
             <div class="pseudo-form-control">
                 <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" 
+                     ng-attr-id="{{'validation-expression-' + $index}}"
                      ng-model="validation.expression" 
                      ng-attr-tabindex="{{$index + 1}}"></div>
             </div>
