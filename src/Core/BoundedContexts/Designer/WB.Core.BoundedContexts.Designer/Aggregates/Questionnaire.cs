@@ -452,6 +452,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     }
                 }
 
+                var group = questionnaireItem as IGroup;
+                if (group != null)
+                {
+                    if (group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                    {
+                        for (int i = 0; i < group.FixedRosterTitles.Length; i++)
+                        {
+                            if (MatchesSearchTerm(group.FixedRosterTitles[i].Title, searchRegex))
+                            {
+                                yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.FixedRosterItem, i);
+                            }
+                        }
+                    }
+                }
+
                 var conditional = questionnaireItem as IConditional;
                 if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
@@ -586,6 +601,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         {
                             replacedAny = true;
                             questionAnswer.AnswerText = ReplaceUsingSearchTerm(questionAnswer.AnswerText, searchRegex, command.ReplaceWith);
+                        }
+                    }
+                }
+
+                var group = questionnaireItem as IGroup;
+                if (group != null)
+                {
+                    if (group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                    {
+                        foreach (var fixedRosterTitle in group.FixedRosterTitles)
+                        {
+                            if (MatchesSearchTerm(fixedRosterTitle.Title, searchRegex))
+                            {
+                                replacedAny = true;
+                                fixedRosterTitle.Title = ReplaceUsingSearchTerm(fixedRosterTitle.Title, searchRegex, command.ReplaceWith);
+                            }
                         }
                     }
                 }
