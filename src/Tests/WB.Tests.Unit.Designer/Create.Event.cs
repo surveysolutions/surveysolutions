@@ -231,54 +231,7 @@ namespace WB.Tests.Unit.Designer
                 linkedFilterExpression: null,
                 isTimestamp: isTimestamp);
             }
-
-
-            public static QuestionCloned QuestionCloned(Guid publicKey, Guid sourceQuestionId, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
-                string stataExportCaption = null, Guid? linkedToQuestionId = null, string variableLabel = null, bool capital = false, string validationExpression = null, string validationMessage = null,
-                QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-                Guid? sourceQuestionnaireId = null, int targetIndex = 0, int? maxAnswerCount = null, int? countOfDecimalPlaces = null,
-                IList<ValidationCondition> validationConditions = null,
-            QuestionProperties properties = null, bool isTimestamp = false)
-            {
-                return new QuestionCloned(
-                    publicKey: publicKey,
-                    groupPublicKey: groupPublicKey,
-                    questionText: questionText,
-                    stataExportCaption: stataExportCaption,
-                    variableLabel: variableLabel,
-                    featured: featured,
-                    questionScope: questionScope,
-                    conditionExpression: conditionExpression,
-                    hideIfDisabled: false,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    properties: properties ?? new QuestionProperties(false, false),
-                    responsibleId: responsibleId ?? Guid.NewGuid(),
-                    capital: capital,
-                    isInteger: isInteger,
-                    questionType: questionType,
-                    answerOrder: answerOrder,
-                    answers: answers,
-                    linkedToQuestionId: null, 
-                    linkedToRosterId: null,
-                    areAnswersOrdered: null,
-                    yesNoView: null,
-                    maxAllowedAnswers: null,
-                    mask: null,
-                    isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: cascadeFromQuestionId,
-                    sourceQuestionnaireId: sourceQuestionnaireId,
-                    sourceQuestionId: sourceQuestionId,
-                    targetIndex: targetIndex,
-                    maxAnswerCount: maxAnswerCount,
-                    countOfDecimalPlaces: countOfDecimalPlaces,
-                    validationConditions: validationConditions ?? new List<ValidationCondition>(),
-                linkedFilterExpression: null,
-                isTimestamp: isTimestamp);
-            }
-
+            
             public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
             {
                 return new RosterChanged(Guid.NewGuid(), rosterId)
@@ -301,58 +254,10 @@ namespace WB.Tests.Unit.Designer
                     validationExpression : validationExpression
                 );
             }
-            
-            public static VariableUpdated VariableUpdated(Guid? entityId = null, Guid? responsibleId = null, 
-                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
-            {
-                return new VariableUpdated(
-                    entityId.GetValueOrDefault(Guid.NewGuid()),
-                    responsibleId ?? Guid.NewGuid(),
-                    new VariableData(
-                        variableType,
-                        variableName,
-                        variableExpression
-                        ));
-            }
-            public static VariableCloned VariableCloned(Guid? entityId = null, Guid? responsibleId = null, Guid? parentId = null,
-                Guid? sourceQuestionnaireId = null, Guid? sourceEntityId = null, int targetIndex = 0,
-                VariableType variableType = VariableType.Boolean, string variableName = null, string variableExpression = null)
-            {
-                return new VariableCloned(
-                    entityId.GetValueOrDefault(Guid.NewGuid()),
-                    responsibleId ?? Guid.NewGuid(),
-                    parentId ?? Guid.NewGuid(),
-                    sourceQuestionnaireId,
-                    sourceEntityId ?? Guid.NewGuid(),
-                    targetIndex,
-                    new VariableData(
-                        variableType,
-                        variableName,
-                        variableExpression
-                        ));
-            }
-            
+           
             public static GroupBecameARoster GroupBecameARosterEvent(string groupId)
             {
                 return new GroupBecameARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId));
-            }
-
-            public static GroupCloned GroupClonedEvent(string groupId, string groupTitle = null,
-                string parentGroupId = null)
-            {
-                return new GroupCloned()
-                {
-                    PublicKey = Guid.Parse(groupId),
-                    ParentGroupPublicKey = GetQuestionnaireItemParentId(parentGroupId),
-                    GroupText = groupTitle,
-                    TargetIndex = 0
-                };
-            }
-
-            
-            public static GroupStoppedBeingARoster GroupStoppedBeingARosterEvent(string groupId)
-            {
-                return new GroupStoppedBeingARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId));
             }
 
             public static GroupUpdated GroupUpdatedEvent(string groupId, string groupTitle)
@@ -375,19 +280,6 @@ namespace WB.Tests.Unit.Designer
                 };
             }
 
-            public static NewGroupAdded NewGroupAddedEvent(string groupId, string parentGroupId = null,
-                string groupTitle = null,
-                string enablementCondition = null)
-            {
-                return new NewGroupAdded()
-                {
-                    PublicKey = Guid.Parse(groupId),
-                    ParentGroupPublicKey = GetQuestionnaireItemParentId(parentGroupId),
-                    GroupText = groupTitle,
-                    ConditionExpression = enablementCondition
-                };
-            }
-            
             public static IPublishedEvent<NewQuestionnaireCreated> NewQuestionnaireCreatedEvent(string questionnaireId,
                 string questionnaireTitle = null,
                 bool? isPublic = null)
@@ -462,50 +354,6 @@ namespace WB.Tests.Unit.Designer
                     );
             }
 
-            public static QuestionCloned QuestionClonedEvent(string questionId = null,
-                string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-                QuestionType questionType = QuestionType.Text, string questionConditionExpression = null,
-                string sourceQuestionId = null,
-                IList<ValidationCondition> validationConditions = null, bool hideIfDisabled = false)
-            {
-                return new QuestionCloned(
-                    publicKey: GetQuestionnaireItemId(questionId),
-                    groupPublicKey: GetQuestionnaireItemId(parentGroupId),
-                    stataExportCaption: questionVariable,
-                    questionText: questionTitle,
-                    questionType: questionType,
-                    conditionExpression: questionConditionExpression,
-                    hideIfDisabled: hideIfDisabled,
-                    sourceQuestionId: GetQuestionnaireItemId(sourceQuestionId),
-                    targetIndex: 0,
-                    featured: false,
-                    instructions: null,
-                    properties: Create.QuestionProperties(),
-                    responsibleId: Guid.NewGuid(),
-                    capital: false,
-                    questionScope: QuestionScope.Interviewer,
-                    variableLabel: null,
-                    validationExpression: null,
-                    validationMessage: null,
-                    answerOrder: null,
-                    answers: null,
-                    linkedToQuestionId: null,
-                    linkedToRosterId: null,
-                    isInteger: null,
-                    areAnswersOrdered: null,
-                    yesNoView: null,
-                    mask: null,
-                    maxAllowedAnswers: null,
-                    isFilteredCombobox: null,
-                    cascadeFromQuestionId: null,
-                    sourceQuestionnaireId: null,
-                    maxAnswerCount: null,
-                    countOfDecimalPlaces: null,
-                    validationConditions: validationConditions,
-                    linkedFilterExpression: null,
-                    isTimestamp: false
-                    );
-            }
             
             public static QuestionnaireItemMoved QuestionnaireItemMovedEvent(string itemId,
                 string targetGroupId = null, int? targetIndex = null, string questionnaireId = null)
@@ -595,17 +443,6 @@ namespace WB.Tests.Unit.Designer
                     SourceQuestionId = GetQuestionnaireItemId(sourceQuestionId),
                     TargetIndex = 0
                 };
-            }
-
-            public static VariableCloned VariableClonedEvent(string entityId = null,
-                string parentId = null, string sourceEntityId = null, string variableName = null, int targetIndex = 0)
-            {
-                return Create.Event.VariableCloned(
-                    entityId: GetQuestionnaireItemId(entityId),
-                    parentId: GetQuestionnaireItemId(parentId),
-                    sourceEntityId: GetQuestionnaireItemId(sourceEntityId),
-                    variableName: variableName,
-                    targetIndex: targetIndex);
             }
         }
 

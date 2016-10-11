@@ -169,9 +169,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        internal void RemoveRosterFlagFromGroup(GroupStoppedBeingARoster e)
+        private void RemoveRosterFlagFromGroup(Guid groupId)
         {
-            this.innerDocument.UpdateGroup(e.GroupId, group =>
+            this.innerDocument.UpdateGroup(groupId, group =>
             {
                 group.IsRoster = false;
                 group.RosterSizeSource = RosterSizeSourceType.Question;
@@ -272,13 +272,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
         
-        internal void UpdateVariable(VariableUpdated e)
-        {
-            var oldVariable = this.innerDocument.Find<IVariable>(e.EntityId);
-            var newVariable = this.questionnaireEntityFactory.CreateVariable(e);
-            this.innerDocument.ReplaceEntity(oldVariable, newVariable);
-        }
-
         #endregion
 
         #region Dependencies
@@ -846,7 +839,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
             else
             {
-                this.RemoveRosterFlagFromGroup(new GroupStoppedBeingARoster(responsibleId, groupId));
+                this.RemoveRosterFlagFromGroup( groupId);
             }
 
             if (index.HasValue)
@@ -939,7 +932,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
             else
             {
-                this.RemoveRosterFlagFromGroup(new GroupStoppedBeingARoster(responsibleId, groupId));
+                this.RemoveRosterFlagFromGroup(groupId);
             }
         }
 
@@ -1833,7 +1826,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
 
-            this.UpdateVariable(new VariableUpdated(command.EntityId, command.ResponsibleId, command.VariableData));
+            var oldVariable = this.innerDocument.Find<IVariable>(command.EntityId);
+
+            var newVariable = new Variable(command.EntityId, command.VariableData);
+            this.innerDocument.ReplaceEntity(oldVariable, newVariable);
         }
 
         public void DeleteVariable(Guid entityId, Guid responsibleId)

@@ -304,8 +304,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireDto\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\MultimediaQuestionUpdated.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireVariable.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableUpdated.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
@@ -568,7 +566,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QRBarcodeQuestionCloned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupBecameARoster.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\Group.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupStoppedBeingARoster.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\TextListQuestionCloned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\TextListQuestionChanged.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\NumericQuestionChanged.cs" />
@@ -579,7 +576,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireDto\SharedPersonFromQuestionnaireRemoved.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\FullGroupData.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\FullQuestionData.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupCloned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupUpdated.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\ImageDeleted.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\ImageUpdated.cs" />
@@ -587,7 +583,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireDto\NewGroupAdded.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\NewQuestionnaireCreated.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionChanged.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionCloned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireItemMoved.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireUpdated.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\TemplateImported.cs" />

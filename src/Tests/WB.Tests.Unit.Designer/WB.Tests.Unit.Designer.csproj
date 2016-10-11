@@ -759,7 +759,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_ExpressionsMigratedToCSharp_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupBecameARoster_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupStoppedBeingARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
