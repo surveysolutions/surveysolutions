@@ -4735,7 +4735,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
             bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
-            bool isDecimalQuestion = questionnaire.IsQuestionInteger(questionIdentity.Id);
+            bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionIdentity.Id);
             object answer = interviewState.GetAnswerSupportedInExpressions(questionIdentity);
             IReadOnlyCollection<RosterVector> linkedOptions = interviewState.GetOptionsForLinkedQuestion(questionIdentity);
 
