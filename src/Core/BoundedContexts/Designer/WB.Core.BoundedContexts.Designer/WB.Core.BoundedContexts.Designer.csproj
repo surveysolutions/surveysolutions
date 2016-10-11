@@ -218,7 +218,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\AccountAR.cs" />
+    <Compile Include="Aggregates\Account.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
     <Compile Include="Commands\Account\AccountCommandBase.cs" />

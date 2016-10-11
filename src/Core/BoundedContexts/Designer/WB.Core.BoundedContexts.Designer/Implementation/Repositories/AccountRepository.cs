@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 {
-    internal class AccountRepository : IPlainAggregateRootRepository<AccountAR>
+    internal class AccountRepository : IPlainAggregateRootRepository<Account>
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> storage;
         private readonly IServiceLocator serviceLocator;
@@ -21,19 +21,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             this.storage = storage;
         }
 
-        public AccountAR Get(Guid aggregateId)
+        public Account Get(Guid aggregateId)
         {
             var document = this.storage.GetById(aggregateId.FormatGuid());
 
             if (document == null)
                 return null;
 
-            var account = this.serviceLocator.GetInstance<AccountAR>();
+            var account = this.serviceLocator.GetInstance<Account>();
             account.Document = document;
             return account;
         }
 
-        public void Save(AccountAR account)
+        public void Save(Account account)
         {
             var document = account.Document;
             this.storage.Store(document, account.Id.FormatGuid());
