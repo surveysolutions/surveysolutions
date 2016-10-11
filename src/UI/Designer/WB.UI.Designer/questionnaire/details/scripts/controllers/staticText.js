@@ -53,6 +53,26 @@
                         $scope.initialStaticText = angular.copy(result);
                         dataBind(result);
                         utilityService.scrollToValidationCondition($state.params.validationIndex);
+
+                        var focusId = null;
+                        switch ($state.params.property) {
+                            case 'Title':
+                                focusId = 'edit-static-text';
+                                break;
+                            case 'EnablingCondition':
+                                focusId = 'edit-question-enablement-condition';
+                                break;
+                            case 'ValidationExpression':
+                                focusId = 'validation-expression-' + $state.params.validationIndex;
+                                break;
+                            case 'ValidationMessage':
+                                focusId = 'validation-message-' + $state.params.validationIndex;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        utilityService.setFocusIn(focusId);
                     });
             };
 

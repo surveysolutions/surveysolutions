@@ -38,23 +38,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public void Handle(IPublishedEvent<AccountRegistered> @event)
         {
-            this._accounts.Store(
-                new AccountDocument
-                {
-                    ProviderUserKey = @event.EventSourceId,
-                    UserName = GetNormalizedUserName(@event.Payload.UserName),
-                    Email = @event.Payload.Email,
-                    ConfirmationToken = @event.Payload.ConfirmationToken,
-                    ApplicationName = @event.Payload.ApplicationName,
-                    CreatedAt = @event.Payload.CreatedDate
-                },
+            this._accounts.Store(null,
                 @event.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<AccountConfirmed> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
-            item.IsConfirmed = true;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -67,8 +57,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.IsLockedOut = true;
-            item.LastLockedOutAt = @event.Payload.LastLockedOutAt;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -76,7 +64,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.LastActivityAt = @event.Payload.LastActivityAt;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -84,8 +71,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.Password = @event.Payload.Password;
-            item.LastPasswordChangeAt = @event.Payload.LastPasswordChangeAt;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -93,8 +78,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.PasswordAnswer = @event.Payload.PasswordAnswer;
-            item.PasswordQuestion = @event.Payload.PasswordQuestion;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -102,8 +85,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.PasswordSalt = @event.Payload.PasswordSalt;
-            item.Password = @event.Payload.Password;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -111,7 +92,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.IsLockedOut = false;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -119,10 +99,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.Comment = @event.Payload.Comment;
-            item.Email = @event.Payload.Email;
-            item.PasswordQuestion = @event.Payload.PasswordQuestion;
-            item.UserName = GetNormalizedUserName(@event.Payload.UserName);
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -130,7 +106,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.LastLoginAt = @event.Payload.LastLoginAt;
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -138,7 +113,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.SimpleRoles.Add(@event.Payload.Role);
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -146,7 +120,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.SimpleRoles.Remove(@event.Payload.Role);
             this._accounts.Store(item, @event.EventSourceId);
         }
 
@@ -161,14 +134,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
-            item.PasswordResetToken = @event.Payload.PasswordResetToken;
-            item.PasswordResetExpirationDate = @event.Payload.PasswordResetExpirationDate;
             this._accounts.Store(item, @event.EventSourceId);
-        }
-
-        private static string GetNormalizedUserName(string userName)
-        {
-            return userName.ToLower();
         }
     }
 }
