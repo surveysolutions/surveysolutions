@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
             eventContext.GetSingleEvent<AccountUpdated>().PasswordQuestion.ShouldEqual(passwordQuestion);
 
         private static EventContext eventContext;
-        private static AccountAR account;
+        private static Account account;
         private static string userName;
         private static string userEmail;
         private static string comment;

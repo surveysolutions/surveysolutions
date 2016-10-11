@@ -31,6 +31,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
             eventContext.ShouldContainEvent<AccountConfirmed>();
 
         private static EventContext eventContext;
-        private static AccountAR account;
+        private static Account account;
     }
 }

@@ -7,7 +7,7 @@ using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    public class AccountAR : IPlainAggregateRoot
+    public class Account : IPlainAggregateRoot
     {
         private Guid? id;
 
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.Document.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
         }
 
-        public AccountAR()
+        public Account()
         {
         }
 
