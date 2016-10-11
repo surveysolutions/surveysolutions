@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterFixedTitles = new[] { new FixedRosterTitleItem("1", "fixed title") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId,
                 chapterId, responsibleId);
         };

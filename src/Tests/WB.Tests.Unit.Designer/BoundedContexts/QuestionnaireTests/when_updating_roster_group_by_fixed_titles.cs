@@ -20,10 +20,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterFixedTitles = new[] { new FixedRosterTitleItem("1", rosterFixedTitle1), new FixedRosterTitleItem("2", rosterFixedTitle2) };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddTextQuestion(questionId, chapterId, responsibleId);
             
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId });
+            questionnaire.AddGroup( groupId, responsibleId: responsibleId);
         };
 
         Because of = () =>

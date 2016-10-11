@@ -18,12 +18,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterTitle = "Roster Title";
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddMultiOptionQuestion(
                 rosterSizeQuestionId,
                 chapterId,
                 responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
+            questionnaire.AddGroup(rosterId, title: rosterTitle, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId, rosterId)
                 {

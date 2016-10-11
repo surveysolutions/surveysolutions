@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 e.HideIfDisabled);
         }
 
-        internal void AddGroup(NewGroupAdded e)
+        private void AddGroup(NewGroupAdded e)
         {
             var group = new Group();
             group.Title = System.Web.HttpUtility.HtmlDecode(e.GroupText);

@@ -14,13 +14,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
         private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(anotherRosterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, anotherRosterId, responsibleId, isInteger : true);
 
             questionnaire.AddMultiOptionQuestion(rosterTitleQuestionId,anotherRosterId,responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId });
+            questionnaire.AddGroup(groupId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId, groupId){
                     RosterSizeQuestionId = rosterSizeQuestionId,

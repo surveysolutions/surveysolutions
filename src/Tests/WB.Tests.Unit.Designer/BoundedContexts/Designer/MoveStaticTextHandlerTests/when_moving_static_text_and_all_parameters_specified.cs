@@ -13,9 +13,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerT
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = targetEntityId });
+            questionnaire.AddGroup(targetEntityId, responsibleId: responsibleId);
         };
 
         Because of = () =>            

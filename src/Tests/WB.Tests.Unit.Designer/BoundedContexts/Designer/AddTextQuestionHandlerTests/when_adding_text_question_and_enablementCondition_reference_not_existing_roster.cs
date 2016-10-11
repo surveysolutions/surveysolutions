@@ -20,8 +20,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 => processor.GetIdentifiersUsedInExpression("absentRoster.Max(x => x.age) > maxAge") == new[] { "absentRoster", "age", "maxAge" });
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
-            questionnaire.AddGroup(Create.Event.AddGroup(chapterId));
-            questionnaire.AddGroup(Create.Event.AddGroup(rosterId, parentId: chapterId, variableName: "roster"));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(rosterId, parentGroupId: chapterId, variableName: "roster");
             questionnaire.MarkGroupAsRoster(Create.Event.GroupBecameRoster(rosterId));
             questionnaire.ChangeRoster(Create.Event.RosterChanged(rosterId,  rosterType: RosterSizeSourceType.FixedTitles,
                 titles: new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") }));

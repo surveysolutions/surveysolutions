@@ -13,9 +13,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             var rosterFixedTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") };
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(parentRosterId, chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parentRosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
                     RosterSizeQuestionId = null,
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 });
 
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupToUpdateId, ParentGroupPublicKey = parentRosterId });
+            questionnaire.AddGroup(groupToUpdateId,  parentRosterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupToUpdateId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: groupToUpdateId)
             {

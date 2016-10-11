@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveVariableHandlerTes
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddVariable(entityId : entityId, parentId : chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = targetEntityId });
+            questionnaire.AddGroup(targetEntityId, responsibleId: responsibleId);
         };
 
         Because of = () =>            

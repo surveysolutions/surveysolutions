@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(Guid.NewGuid(),chapterId,responsibleId,variableName: notUniqueVariableName);
             questionnaire.AddQRBarcodeQuestion(
                 questionId,

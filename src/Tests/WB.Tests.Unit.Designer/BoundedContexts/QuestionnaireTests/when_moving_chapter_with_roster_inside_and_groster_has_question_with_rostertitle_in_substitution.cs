@@ -11,9 +11,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterBId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterAId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterAId });
+            questionnaire.AddGroup(chapterBId, responsibleId: responsibleId);
+            questionnaire.AddGroup( chapterAId, responsibleId: responsibleId);
+            questionnaire.AddGroup(rosterId,  chapterAId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
             questionnaire.AddTextQuestion(questionWithSubstitutionId,
                 rosterId,

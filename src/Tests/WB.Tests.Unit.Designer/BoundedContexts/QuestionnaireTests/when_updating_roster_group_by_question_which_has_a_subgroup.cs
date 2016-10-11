@@ -12,13 +12,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, rosterSizeQuestionId, "title", responsibleId, chapterId));
             questionnaire.UpdateNumericQuestion(Create.Command.UpdateNumericQuestion(questionnaire.Id, rosterSizeQuestionId, responsibleId, "title", isInteger:true));
             
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId});
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = subGroupId, ParentGroupPublicKey = groupId });
+            questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
+            questionnaire.AddGroup(subGroupId, groupId, responsibleId: responsibleId);
         };
 
         Because of = () => questionnaire.UpdateGroup(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, hideIfDisabled: false, isRoster: true,

@@ -16,11 +16,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         Establish context = () =>
         {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression("roster.Max(x => x.age) > maxAge") == new[] { "roster", "age", "maxAge" });
+                => processor.GetIdentifiersUsedInExpression("roster1.Max(x => x.age) > maxAge") == new[] { "roster", "age", "maxAge" });
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
-            questionnaire.AddGroup(Create.Event.AddGroup(chapterId));
-            questionnaire.AddGroup(Create.Event.AddGroup(rosterId, variableName: "roster", parentId: chapterId));
+            questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
+            questionnaire.AddGroup(rosterId, variableName: "roster1", parentGroupId: chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(Create.Event.GroupBecameRoster(rosterId));
             questionnaire.ChangeRoster(Create.Event.RosterChanged(rosterId, rosterType: RosterSizeSourceType.FixedTitles,
                 titles: new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") }));

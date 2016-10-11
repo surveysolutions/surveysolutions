@@ -239,20 +239,23 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static void AddGroup(this Questionnaire questionnaire, 
-            Guid? groupId = null,
+            Guid? groupId,
             Guid? parentGroupId = null,
-            bool isRoster = false,
             Guid? responsibleId = null,
+            string title = null,
+            string variableName = null,
+            bool isRoster = false,
+            string enablingCondition = null,
             RosterSizeSourceType rosterSourceType = RosterSizeSourceType.FixedTitles,
             FixedRosterTitleItem[] rosterFixedTitles = null)
         {
              questionnaire.AddGroupAndMoveIfNeeded(groupId ?? Guid.NewGuid(),
                  responsibleId ?? Guid.NewGuid(),
-                 "Title - " + Guid.NewGuid().FormatGuid(),
-                 "Variable_" + Guid.NewGuid().FormatGuid().Substring(0, 15),
+                 title ?? "Title - " + Guid.NewGuid().FormatGuid(),
+                 variableName ?? "Variable_" + Guid.NewGuid().FormatGuid().Substring(0, 15),
                  null,
                  "Description - " + Guid.NewGuid().FormatGuid(),
-                 null,
+                 enablingCondition,
                  false,
                  parentGroupId,
                  isRoster,

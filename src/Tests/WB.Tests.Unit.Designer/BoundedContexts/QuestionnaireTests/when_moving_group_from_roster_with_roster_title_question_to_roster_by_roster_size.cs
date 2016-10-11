@@ -11,9 +11,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId,chapterId,responsibleId, isInteger : true);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = targetGroupId, ParentGroupPublicKey = chapterId});
+            questionnaire.AddGroup(targetGroupId, chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, targetGroupId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: targetGroupId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     RosterTitleQuestionId = null
                 });
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = sourceRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(sourceRosterId, chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, sourceRosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: sourceRosterId)
             {
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 RosterTitleQuestionId = null
             });
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = sourceRosterId });
+            questionnaire.AddGroup(groupFromRosterId,  sourceRosterId, responsibleId: responsibleId);
             questionnaire.AddNumericQuestion(rosterTitleQuestionId, groupFromRosterId, responsibleId);
         };
 
