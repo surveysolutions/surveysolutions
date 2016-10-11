@@ -461,7 +461,6 @@
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
-    <Content Include="questionnaire\details\scripts\directives\drags.js" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="questionnaire\vendor\js-cookie\MIT-LICENSE.txt" />
     <Content Include="questionnaire\vendor\js-cookie\src\js.cookie.js" />
@@ -485,6 +484,7 @@
     <Content Include="questionnaire\vendor\js-cookie\README.md" />
     <Content Include="questionnaire\vendor\js-cookie\SERVER_SIDE.md" />
     <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
+    <Content Include="questionnaire\vendor\ace-builds\bower.json" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -695,7 +695,6 @@
     <Content Include="questionnaire\vendor\angular-ui-ace\ui-ace.js" />
     <Content Include="questionnaire\vendor\angular-ui-ace\ui-ace.min.js" />
     <Content Include="questionnaire\vendor\angular-ui-router\.bower.json" />
-    <Content Include="questionnaire\vendor\angular-ui-router\api\angular-ui-router.d.ts" />
     <Content Include="questionnaire\vendor\angular-ui-router\bower.json" />
     <Content Include="questionnaire\vendor\angular-ui-router\CHANGELOG.md" />
     <Content Include="questionnaire\vendor\angular-ui-router\CONTRIBUTING.md" />

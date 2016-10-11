@@ -248,19 +248,14 @@ angular.module('designerApp')
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openTranslations", { focusOn: reference.itemId });
                 } else {
-                    if (!_.isNull(reference.failedValidationConditionIndex) && !_.isUndefined(reference.failedValidationConditionIndex)) {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + '.validation', {
-                            chapterId: reference.chapterId,
-                            itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex
-                        });
-                    } else {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                            chapterId: reference.chapterId,
-                            itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex
-                        });
-                    }
+                    
+                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                        chapterId: reference.chapterId,
+                        itemId: reference.itemId,
+                        validationIndex: reference.failedValidationConditionIndex,
+                        property: reference.property
+                    });
+                    
                 }
             };
             
@@ -423,11 +418,19 @@ angular.module('designerApp')
 
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
+                editor.commands.bindKey("shift+tab", null);
 
                 $rootScope.$on('variablesChanged', function() {
                     $scope.aceEditorUpdateMode(editor);
                 });
-                
+
+                editor.on('focus', function() {
+                    $('.ace_focus').parents('.pseudo-form-control').addClass('focused');
+                });
+
+                editor.on('blur', function () {
+                    $('.pseudo-form-control.focused').removeClass('focused');
+                });
             };
 
             $scope.getVariablesNames = function () {
