@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -175,48 +176,310 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
             QuestionType questionType, object answer,
-            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity)
+            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, bool isYesNo, bool isDecimal)
             : base(identity, isDisabled)
         {
             this.Title = title;
             this.VariableName = variableName;
-            this.Answer = answer;
 
             if (questionType == QuestionType.SingleOption)
-                this.AsSingleOption = new InterviewTreeSingleOptionQuestion(answer);
+            {
+                if (linkedOptions == null)
+                    this.AsSingleOption = new InterviewTreeSingleOptionQuestion(answer);
+                else
+                    this.AsSingleLinkedOption = new InterviewTreeSingleLinkedOptionQuestion(linkedOptions, answer);
+            }
 
-            if (linkedOptions != null)
-                this.AsLinked = new InterviewTreeLinkedQuestion(linkedOptions);
+            if (questionType == QuestionType.MultyOption)
+            {
+                if (isYesNo)
+                    this.AsYesNo = new InterviewTreeYesNoQuestion(answer);
+                else if (linkedOptions != null)
+                    this.AsMultiLinkedOption = new InterviewTreeMultiLinkedOptionQuestion(linkedOptions, answer);
+                else
+                    this.AsMultiOption = new InterviewTreeMultiOptionQuestion(answer);
+            }
+
+            if(questionType == QuestionType.DateTime)
+                this.AsDateTime = new InterviewTreeDateTimeQuestion(answer);
+
+            if (questionType == QuestionType.GpsCoordinates)
+                this.AsGps = new InterviewTreeGpsQuestion(answer);
+
+            if (questionType == QuestionType.Multimedia)
+                this.AsMultimedia = new InterviewTreeMultimediaQuestion(answer);
+
+            if (questionType == QuestionType.Numeric)
+            {
+                if (isDecimal)
+                    this.AsDouble = new InterviewTreeDoubleQuestion(answer);
+                else
+                    this.AsInteger = new InterviewTreeIntegerQuestion(answer);
+            }
+
+            if (questionType == QuestionType.QRBarcode)
+                this.AsQRBarcode = new InterviewTreeQRBarcodeQuestion(answer);
+
+            if (questionType == QuestionType.Text)
+                this.AsText = new InterviewTreeTextQuestion(answer);
+
+            if (questionType == QuestionType.TextList)
+                this.AsTextList = new InterviewTreeTextListQuestion(answer);
 
             if (cascadingParentQuestionIdentity != null)
                 this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionIdentity);
         }
 
+        public InterviewTreeDoubleQuestion AsDouble { get; }
+        public InterviewTreeTextListQuestion AsTextList { get; }
+        public InterviewTreeTextQuestion AsText { get; }
+        public InterviewTreeQRBarcodeQuestion AsQRBarcode { get; }
+        public InterviewTreeIntegerQuestion AsInteger { get;}
+        public InterviewTreeMultimediaQuestion AsMultimedia { get; }
+        public InterviewTreeGpsQuestion AsGps { get; }
+        public InterviewTreeDateTimeQuestion AsDateTime { get;}
+        public InterviewTreeMultiOptionQuestion AsMultiOption { get; }
+        public InterviewTreeMultiLinkedOptionQuestion AsMultiLinkedOption { get; }
+        public InterviewTreeYesNoQuestion AsYesNo { get; }
+        public InterviewTreeSingleLinkedOptionQuestion AsSingleLinkedOption { get;  }
+        public InterviewTreeSingleOptionQuestion AsSingleOption { get; }
+        public InterviewTreeLinkedQuestion AsLinked { get; }
+        public InterviewTreeCascadingQuestion AsCascading { get; }
+
         public string Title { get; }
         public string VariableName { get; }
-
-        public object Answer { get; private set; }
-
-        public InterviewTreeSingleOptionQuestion AsSingleOption { get; }
+        
+        public bool IsDouble => this.AsDouble != null;
+        public bool IsInteger => this.AsInteger != null;
         public bool IsSingleOption => this.AsSingleOption != null;
+        public bool IsMultiOption => this.AsMultiOption != null;
+        public bool IsMultiLinkedOption => this.AsMultiLinkedOption != null;
+        public bool IsSingleLinkedOption => this.AsSingleLinkedOption != null;
+        public bool IsQRBarcode => this.AsQRBarcode != null;
+        public bool IsText => this.AsText != null;
+        public bool IsTextList => this.AsTextList != null;
+        public bool IsYesNo => this.AsYesNo != null;
+        public bool IsDateTime => this.AsDateTime != null;
+        public bool IsGps => this.AsGps != null;
+        public bool IsMultimedia => this.AsMultimedia != null;
 
-        public InterviewTreeLinkedQuestion AsLinked { get; }
         public bool IsLinked => this.AsLinked != null;
-
-        public InterviewTreeCascadingQuestion AsCascading { get; }
         public bool IsCascading => this.AsCascading != null;
-
-        public void ClearAnswer() => this.Answer = null;
-        public void SetAnswer(object answer) => this.Answer = answer;
 
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString() => $"Question ({this.Identity}) '{this.Title}'";
     }
 
-    public class InterviewTreeLinkedQuestion
+    public class InterviewTreeDateTimeQuestion
     {
-        public InterviewTreeLinkedQuestion(IEnumerable<RosterVector> linkedOptions)
+        private DateTime? answer;
+        public InterviewTreeDateTimeQuestion(object answer)
+        {
+            this.answer = (DateTime?)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public DateTime GetAnswer() => this.answer.Value;
+        public void SetAnswer(DateTime answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeDateTimeQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeGpsQuestion
+    {
+        private GeoPosition answer;
+
+        public InterviewTreeGpsQuestion(object answer)
+        {
+            this.answer = (GeoPosition)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public GeoPosition GetAnswer() => this.answer;
+        public void SetAnswer(GeoPosition answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeGpsQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeMultimediaQuestion
+    {
+        private string answer;
+
+        public InterviewTreeMultimediaQuestion(object answer)
+        {
+            this.answer = (string)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public string GetAnswer() => this.answer;
+        public void SetAnswer(string answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeMultimediaQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeIntegerQuestion
+    {
+        private int? answer;
+
+        public InterviewTreeIntegerQuestion(object answer)
+        {
+            this.answer = (int?)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public int GetAnswer() => this.answer.Value;
+        public void SetAnswer(int answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeIntegerQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeDoubleQuestion
+    {
+        private double? answer;
+
+        public InterviewTreeDoubleQuestion(object answer)
+        {
+            this.answer = (double?)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public double GetAnswer() => this.answer.Value;
+        public void SetAnswer(double answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeDoubleQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeQRBarcodeQuestion
+    {
+        private string answer;
+
+        public InterviewTreeQRBarcodeQuestion(object answer)
+        {
+            this.answer = (string)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public string GetAnswer() => this.answer;
+        public void SetAnswer(string answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeQRBarcodeQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeTextQuestion
+    {
+        private string answer;
+
+        public InterviewTreeTextQuestion(object answer)
+        {
+            this.answer = (string)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public string GetAnswer() => this.answer;
+        public void SetAnswer(string answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeTextQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeYesNoQuestion
+    {
+        private AnsweredYesNoOption[] answer;
+
+        public InterviewTreeYesNoQuestion(object answer)
+        {
+            this.answer = (AnsweredYesNoOption[])answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public AnsweredYesNoOption[] GetAnswer() => this.answer;
+        public void SetAnswer(AnsweredYesNoOption[] answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeYesNoQuestion question) => question.answer.SequenceEqual(this.answer);
+    }
+
+    public class InterviewTreeTextListQuestion
+    {
+        private Tuple<decimal, string>[] answer;
+
+        public InterviewTreeTextListQuestion(object answer)
+        {
+            this.answer = (Tuple<decimal, string>[])answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public Tuple<decimal, string>[] GetAnswer() => this.answer;
+        public void SetAnswer(Tuple<decimal, string>[] answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeTextListQuestion question) => question.answer.SequenceEqual(this.answer);
+    }
+
+    public class InterviewTreeSingleOptionQuestion
+    {
+        private int? answer;
+
+        public InterviewTreeSingleOptionQuestion(object answer)
+        {
+            this.answer = (int?)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+
+        public int GetAnswer() => this.answer.Value;
+        public void SetAnswer(int answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeSingleOptionQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeMultiOptionQuestion
+    {
+        private decimal[] answer;
+
+        public InterviewTreeMultiOptionQuestion(object answer)
+        {
+            this.answer = (decimal[])answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public decimal[] GetAnswer() => this.answer;
+        public void SetAnswer(decimal[] answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeMultiOptionQuestion question) => question.answer.SequenceEqual(this.answer);
+    }
+
+    public class InterviewTreeSingleLinkedOptionQuestion : InterviewTreeLinkedQuestion
+    {
+        private RosterVector answer;
+        public InterviewTreeSingleLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer) : base(linkedOptions)
+        {
+            this.answer = (RosterVector)answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public RosterVector GetAnswer() => this.answer;
+        public void SetAnswer(RosterVector answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeSingleLinkedOptionQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public class InterviewTreeMultiLinkedOptionQuestion : InterviewTreeLinkedQuestion
+    {
+        private decimal[] answer;
+        public InterviewTreeMultiLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer) : base(linkedOptions)
+        {
+            this.answer = (decimal[])answer;
+        }
+
+        public bool IsAnswered => this.answer != null;
+        public decimal[] GetAnswer() => this.answer;
+        public void SetAnswer(decimal[] answer) => this.answer = answer;
+        public void RemoveAnswer() => this.answer = null;
+        public bool EqualByAnswer(InterviewTreeMultiLinkedOptionQuestion question) => question.answer.Equals(this.answer);
+    }
+
+    public abstract class InterviewTreeLinkedQuestion
+    {
+        protected InterviewTreeLinkedQuestion(IEnumerable<RosterVector> linkedOptions)
         {
             if (linkedOptions == null) throw new ArgumentNullException(nameof(linkedOptions));
 
@@ -224,20 +487,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public IReadOnlyCollection<RosterVector> Options { get; }
-    }
-
-    public class InterviewTreeSingleOptionQuestion
-    {
-        private readonly object answer;
-
-        public InterviewTreeSingleOptionQuestion(object answer)
-        {
-            this.answer = answer;
-        }
-
-        public bool IsAnswered => this.answer != null;
-
-        public int GetAnswer() => Convert.ToInt32(this.answer);
     }
 
     public class InterviewTreeCascadingQuestion
