@@ -523,8 +523,10 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireViewFactoryTests\QuestionnaireViewFactoryTests.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_texts_with_ignoring_casing.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_with_match_whole_word.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replcaing_texts_in_fixed_rosters.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_all_texts_in_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_texts_in_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_for_text_in_fixed_rosters.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_for_text_with_match_whole_word_option.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_texts_using_case_insensitive_option.cs" />
     <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_texts_using_regex.cs" />

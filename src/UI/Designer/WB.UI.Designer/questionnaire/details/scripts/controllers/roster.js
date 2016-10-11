@@ -171,6 +171,9 @@
                                     case 'EnablingCondition':
                                         focusId = 'edit-group-condition';
                                         break;
+                                    case 'FixedRosterItem':
+                                        focusId = 'fixed-item-' + $state.params.validationIndex;
+                                        break;
                                     default:
                                         break;
                                 }

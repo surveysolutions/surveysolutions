@@ -6,6 +6,8 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -234,6 +236,30 @@ namespace WB.Tests.Unit.Designer
                     new VariableData(variableType, variableName, variableExpression), 
                     responsibleId, parentId));
             
+        }
+
+        public static void AddGroup(this Questionnaire questionnaire, 
+            Guid? groupId = null,
+            Guid? parentGroupId = null,
+            bool isRoster = false,
+            Guid? responsibleId = null,
+            RosterSizeSourceType rosterSourceType = RosterSizeSourceType.FixedTitles,
+            FixedRosterTitleItem[] rosterFixedTitles = null)
+        {
+             questionnaire.AddGroupAndMoveIfNeeded(groupId ?? Guid.NewGuid(),
+                 responsibleId ?? Guid.NewGuid(),
+                 "Title - " + Guid.NewGuid().FormatGuid(),
+                 "Variable_" + Guid.NewGuid().FormatGuid().Substring(0, 15),
+                 null,
+                 "Description - " + Guid.NewGuid().FormatGuid(),
+                 null,
+                 false,
+                 parentGroupId,
+                 isRoster,
+                 rosterSourceType,
+                 rosterFixedTitles ?? new FixedRosterTitleItem[] {},
+                 null,
+                 null);
         }
 
     }

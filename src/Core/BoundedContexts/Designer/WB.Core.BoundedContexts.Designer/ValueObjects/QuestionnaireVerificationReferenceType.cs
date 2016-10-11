@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         EnablingCondition = 4,
         VariableName = 5,
         Option = 6,
-        VariableContent = 7
+        VariableContent = 7,
+        FixedRosterItem = 8
     }
 }
