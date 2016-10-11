@@ -2,16 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
@@ -26,7 +19,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
             answersTime = new DateTime(2013, 09, 01);
-            var fixedRosterTitles = new[] { new FixedRosterTitle(0, "Title 1"), new FixedRosterTitle(1, "Title 2"), new FixedRosterTitle(2, "Title 3") };
+            var fixedRosterTitles = new[]
+            {
+                new FixedRosterTitle(0, "Title 1"),
+                new FixedRosterTitle(1, "Title 2"),
+                new FixedRosterTitle(2, "Title 3")
+            };
             fixedRosterId = Guid.Parse("a7b0d842-0355-4eab-a943-968c9c013d97");
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
