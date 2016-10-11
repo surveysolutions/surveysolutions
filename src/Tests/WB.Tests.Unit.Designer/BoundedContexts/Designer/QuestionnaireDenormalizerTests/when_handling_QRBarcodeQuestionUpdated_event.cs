@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Castle.Components.DictionaryAdapter;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities;
@@ -8,9 +10,12 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -31,15 +36,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     title: title,
                     variableName: variableName));
 
-            @event = new QRBarcodeQuestionUpdated()
-            {
-                QuestionId = questionId,
-                EnablementCondition = condition,
-                Instructions = instructions,
-                Title = title,
-                VariableName = variableName
-            };
-
             questionnaireView = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentGroupId,
@@ -54,13 +50,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                             Instructions = "old instructions"
                         }
                     })
-            });
+            }, createdBy: userId);
+
+            command = new UpdateQRBarcodeQuestion(questionnaireView.PublicKey,questionId, userId, 
+                new CommonQuestionParameters() {Title = title,EnablementCondition = condition,Instructions = instructions,VariableName = variableName},
+                null,null, QuestionScope.Interviewer, new List<ValidationCondition>());
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionFactory.Object);
         };
 
         Because of = () =>
-            denormalizer.UpdateQRBarcodeQuestion(@event);
+            denormalizer.UpdateQRBarcodeQuestion(command);
 
         It should_call_question_factory_ones = () =>
            questionFactory.Verify(x => x.CreateQuestion(it.IsAny<QuestionData>()), Times.Once);
@@ -131,9 +131,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Mock<IQuestionnaireEntityFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
         private static Questionnaire denormalizer;
-        private static QRBarcodeQuestionUpdated @event;
+        private static UpdateQRBarcodeQuestion command;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static Guid userId = Guid.Parse("A1111111111111111111111111111111");
         private static string variableName = "qr_barcode_question";
         private static string title = "title";
         private static string instructions = "intructions";

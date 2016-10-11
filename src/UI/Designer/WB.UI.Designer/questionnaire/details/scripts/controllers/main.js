@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, notificationService, userService) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
@@ -105,13 +105,24 @@ angular.module('designerApp')
                 description: 'Find and replace',
                 callback: function (event) {
                     event.preventDefault();
-                    $modal.open({
-                        templateUrl: 'views/find-replace.html',
-                        backdrop: false,
-                        controller: 'findReplaceCtrl'
-                    });
+                    $scope.showFindReplaceDialog();
                 }
             });
+            var searchBoxOpened = false;
+            $scope.showFindReplaceDialog = function() {
+                if (!searchBoxOpened) {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/find-replace.html',
+                        backdrop: false,
+                        windowClass: "findReplaceModal",
+                        controller: 'findReplaceCtrl'
+                    });
+                    searchBoxOpened = true;
+                    modalInstance.closed.then(function() {
+                        searchBoxOpened = false;
+                    });
+                }
+            };
 
             $scope.questionnaireId = $state.params.questionnaireId;
             var ERROR = "error";
@@ -237,19 +248,14 @@ angular.module('designerApp')
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openTranslations", { focusOn: reference.itemId });
                 } else {
-                    if (!_.isNull(reference.failedValidationConditionIndex) && !_.isUndefined(reference.failedValidationConditionIndex)) {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + '.validation', {
-                            chapterId: reference.chapterId,
-                            itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex
-                        });
-                    } else {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                            chapterId: reference.chapterId,
-                            itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex
-                        });
-                    }
+                    
+                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                        chapterId: reference.chapterId,
+                        itemId: reference.itemId,
+                        validationIndex: reference.failedValidationConditionIndex,
+                        property: reference.property
+                    });
+                    
                 }
             };
             
@@ -379,7 +385,7 @@ angular.module('designerApp')
             };
 
             $scope.showShareInfo = function () {
-                $modal.open({
+                $uibModal.open({
                     templateUrl: 'views/share.html',
                     controller: 'shareCtrl',
                     windowClass: 'share-window',
@@ -412,11 +418,19 @@ angular.module('designerApp')
 
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
+                editor.commands.bindKey("shift+tab", null);
 
                 $rootScope.$on('variablesChanged', function() {
                     $scope.aceEditorUpdateMode(editor);
                 });
-                
+
+                editor.on('focus', function() {
+                    $('.ace_focus').parents('.pseudo-form-control').addClass('focused');
+                });
+
+                editor.on('blur', function () {
+                    $('.pseudo-form-control.focused').removeClass('focused');
+                });
             };
 
             $scope.getVariablesNames = function () {

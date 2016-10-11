@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddVariable(Create.Event.VariableAdded(entityId : entityId, parentId : chapterId ));
+            questionnaire.AddVariable(entityId : entityId, parentId : chapterId ,responsibleId:responsibleId);
 
             command = Create.Command.UpdateVariable(
                 questionnaire.Id,

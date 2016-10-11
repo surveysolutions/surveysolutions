@@ -12,13 +12,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: categoricalLinkedQuestionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.MultyOption,
-                linkedToQuestionId:linkedSourceQuestionId
-            ));
-
             
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = roster1Id, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster1Id));
@@ -26,11 +19,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster2Id));
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupInsideRosterId, ParentGroupPublicKey = roster1Id });
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: linkedSourceQuestionId,
-                groupPublicKey: groupInsideRosterId,
-                questionType: QuestionType.Text
-            ));
+            questionnaire.AddTextQuestion(linkedSourceQuestionId,
+                groupInsideRosterId,
+                responsibleId);
+
+            questionnaire.AddMultiOptionQuestion(categoricalLinkedQuestionId,
+                chapterId,responsibleId,
+                options: new Option[0],
+                linkedToQuestionId: linkedSourceQuestionId
+            );
         };
 
         Because of = () => questionnaire.MoveGroup(groupId: groupInsideRosterId, targetGroupId: roster2Id, responsibleId: responsibleId, targetIndex:0);

@@ -6,7 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IFindReplaceService
     {
-        IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor);
-        void ReplaceAll(Guid questionnaireId, string searchFor, string replaceWith);
+        IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex);
     }
 }

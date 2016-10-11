@@ -15,11 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(publicKey: rosterSizeQuestionId,
-                groupPublicKey: chapterId,
-                isInteger: true,
-                stataExportCaption: "roster_size_question",
-                questionType: QuestionType.Numeric));
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId, isInteger: true, variableName: "roster_size_question");
 
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
@@ -29,30 +25,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = null
                 });
-            questionnaire.AddQuestion( Create.Event.NewQuestionAdded(
-                publicKey : questionFromRosterId,
-                groupPublicKey : rosterId,
-                isInteger : true,
-                stataExportCaption : substitutionVariableName,
-                questionType:QuestionType.Numeric
-            ));
+
+            questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId, isInteger : true, variableName : substitutionVariableName);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
-                    parentGroupId: chapterId,
+                    parentId: chapterId,
                     title: titleWithSubstitution,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
-                     mask: null,
+                    mask: null,
                     responsibleId: responsibleId));
 
         It should_throw_QuestionnaireException = () =>

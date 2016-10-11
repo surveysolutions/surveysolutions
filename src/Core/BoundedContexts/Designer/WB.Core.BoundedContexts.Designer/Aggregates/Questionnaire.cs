@@ -1,13 +1,14 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Aggregates.Snapshots;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -28,8 +29,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.LookupTables;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.Macros;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -83,51 +82,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private bool wasExpressionsMigrationPerformed = false;
 
         public Guid Id => this.innerDocument.PublicKey;
-
-        internal void AddMacro(MacroAdded e)
-        {
-            this.innerDocument.Macros[e.MacroId] = new Macro();
-        }
-
-        internal void UpdateMacro(MacroUpdated e)
-        {
-            if (!innerDocument.Macros.ContainsKey(e.MacroId))
-                return;
-
-            var macro = this.innerDocument.Macros[e.MacroId];
-            macro.Name = e.Name;
-            macro.Content = e.Content;
-            macro.Description = e.Description;
-        }
-
-        internal void DeleteMacro(MacroDeleted e)
-        {
-            innerDocument.Macros.Remove(e.MacroId);
-        }
-
-        internal void AddLookupTable(LookupTableAdded e)
-        {
-            innerDocument.LookupTables[e.LookupTableId] = new LookupTable()
-            {
-                TableName = e.LookupTableName,
-                FileName = e.LookupTableFileName
-            };
-        }
-
-        internal void UpdateLookupTable(LookupTableUpdated e)
-        {
-            innerDocument.LookupTables[e.LookupTableId] = new LookupTable
-            {
-                TableName = e.LookupTableName,
-                FileName = e.LookupTableFileName
-            };
-        }
-
-        internal void DeleteLookupTable(LookupTableDeleted e)
-        {
-            innerDocument.LookupTables.Remove(e.LookupTableId);
-        }
-
+        
         internal void AddSharedPersonToQuestionnaire(SharedPersonToQuestionnaireAdded e)
         {
             this.sharedPersons.Add(new SharedPerson()
@@ -149,12 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.UsesCSharp = true;
 
         }
-
-        internal void DeleteGroup(GroupDeleted e)
-        {
-            this.innerDocument.RemoveGroup(e.GroupPublicKey);
-        }
-
+        
         internal void UpdateGroup(GroupUpdated e)
         {
             this.innerDocument.UpdateGroup(e.GroupPublicKey, 
@@ -230,48 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 group.FixedRosterTitles = new FixedRosterTitle[0];
             });
         }
-
-        internal void AddQuestion(NewQuestionAdded e)
-        {
-            IQuestion question =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        e.QuestionType,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.VariableLabel,
-                        e.ConditionExpression,
-                        e.HideIfDisabled,
-                        e.AnswerOrder,
-                        e.Featured,
-                        e.Capital,
-                        e.Instructions,
-                        e.Properties,
-                        e.Mask,
-                        e.Answers,
-                        e.LinkedToQuestionId,
-                        e.LinkedToRosterId,
-                        e.IsInteger,
-                        null,
-                        e.AreAnswersOrdered,
-                        e.MaxAllowedAnswers,
-                        null,
-                        e.IsFilteredCombobox,
-                        e.CascadeFromQuestionId,
-                        null,
-                        e.ValidationConditions,
-                        e.LinkedFilterExpression,
-                        e.IsTimestamp));
-
-
-            this.innerDocument.Add(question, e.GroupPublicKey, null);
-
-            if (e.Capital)
-                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
-        }
-
+        
         internal void UpdateQuestion(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
@@ -312,147 +221,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
         }
-
-        internal void UpdateNumericQuestion(NumericQuestionChanged e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        question.PublicKey,
-                        QuestionType.Numeric,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.VariableLabel,
-                        e.ConditionExpression,
-                        e.HideIfDisabled,
-                        Order.AZ,
-                        e.Featured,
-                        e.Capital,
-                        e.Instructions,
-                        e.Properties,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.IsInteger,
-                        e.CountOfDecimalPlaces,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.ValidationConditions,
-                        null,
-                        false)
-                    );
-
-            this.innerDocument.ReplaceEntity(question, newQuestion);
-
-            if (e.Capital)
-                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
-        }
-
-        internal void UpdateTextListQuestion(TextListQuestionChanged e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        QuestionType.TextList,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.VariableLabel,
-                        e.ConditionExpression,
-                        e.HideIfDisabled,
-                        Order.AZ,
-                        false,
-                        false,
-                        e.Instructions,
-                        e.Properties,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.MaxAnswerCount,
-                        null,
-                        null,
-                        null,
-                        e.ValidationConditions,
-                        null,
-                        false));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.ReplaceEntity(question, newQuestion);
-        }
-
-        internal void DeleteQuestion(QuestionDeleted e)
-        {
-            this.innerDocument.RemoveEntity(e.QuestionId);
-
-            this.innerDocument.RemoveHeadPropertiesFromRosters(e.QuestionId);
-        }
-
+        
         internal void MoveQuestionnaireItem(QuestionnaireItemMoved e)
         {
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
 
             this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
-        }
-
-        internal void UpdateQRBarcodeQuestion(QRBarcodeQuestionUpdated e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionId);
-            IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.QuestionId,
-                        QuestionType.QRBarcode,
-                        e.QuestionScope,
-                        e.Title,
-                        e.VariableName,
-                        e.VariableLabel,
-                        e.EnablementCondition,
-                        e.HideIfDisabled,
-                        Order.AZ,
-                        false,
-                        false,
-                        e.Instructions,
-                        e.Properties,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.ValidationConditions,
-                        null,
-                        false));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
         internal void UpdateMultimediaQuestion(MultimediaQuestionUpdated e)
@@ -497,53 +271,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
-
-        internal void AddStaticText(StaticTextAdded e)
-        {
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
-                text: e.Text, 
-                attachmentName: null,
-                enablementCondition: e.EnablementCondition,
-                hideIfDisabled: e.HideIfDisabled,
-                validationConditions: e.ValidationConditions);
-
-            this.innerDocument.Add(c: staticText, parent: e.ParentId, parentPropagationKey: null);
-        }
-
-        internal void UpdateStaticText(StaticTextUpdated e)
-        {
-            var oldStaticText = this.innerDocument.Find<IStaticText>(e.EntityId);
-            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
-                text: e.Text, 
-                attachmentName: e.AttachmentName,
-                enablementCondition: e.EnablementCondition,
-                hideIfDisabled: e.HideIfDisabled,
-                validationConditions:e.ValidationConditions);
-
-            this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
-        }
-
-        internal void DeleteStaticText(StaticTextDeleted e)
-        {
-            this.innerDocument.RemoveEntity(e.EntityId);   
-        }
-
-        internal void AddVariable(VariableAdded e)
-        {
-            var variable = this.questionnaireEntityFactory.CreateVariable(e);
-            this.innerDocument.Add(c: variable, parent: e.ParentId, parentPropagationKey: null);
-        }
-
+        
         internal void UpdateVariable(VariableUpdated e)
         {
             var oldVariable = this.innerDocument.Find<IVariable>(e.EntityId);
             var newVariable = this.questionnaireEntityFactory.CreateVariable(e);
             this.innerDocument.ReplaceEntity(oldVariable, newVariable);
-        }
-
-        internal void DeleteVariable(VariableDeleted e)
-        {
-            this.innerDocument.RemoveEntity(e.EntityId);
         }
 
         #endregion
@@ -559,6 +292,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
+        private int affectedByReplaceEntries;
 
         #endregion
 
@@ -688,61 +422,123 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor)
+        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
-            var allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
+            Regex searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
+            IEnumerable<IComposite> allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
             foreach (var questionnaireItem in allEntries)
             {
                 var title = questionnaireItem.GetTitle();
-                if (!title.IsNullOrEmpty() && title.Contains(searchFor))
+                var variable = questionnaireItem.GetVariable();
+
+                if (MatchesSearchTerm(variable, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableName);
+                }
+                if (MatchesSearchTerm(title, searchRegex))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Title);
+                }
+
+                var question = questionnaireItem as IQuestion;
+                if (question?.Answers != null && question.Answers.Any(x => MatchesSearchTerm(x.AnswerText, searchRegex)))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option);
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (!string.IsNullOrEmpty(conditional?.ConditionExpression) && conditional.ConditionExpression.Contains(searchFor))
+                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.EnablingCondition);
                 }
 
                 var validatable = questionnaireItem as IValidatable;
                 if (validatable != null)
                 {
-                    foreach (var validationCondition in validatable.ValidationConditions)
+                    for (int i = 0; i < validatable.ValidationConditions.Count; i++)
                     {
-                        if ((validationCondition.Expression != null && validationCondition.Expression.Contains(searchFor))||
-                            validationCondition.Message != null && validationCondition.Message.Contains(searchFor))
+                        if(MatchesSearchTerm(validatable.ValidationConditions[i].Expression, searchRegex))
                         {
-                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem);
+                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationExpression, i);
+                        }
+                        if (MatchesSearchTerm(validatable.ValidationConditions[i].Message, searchRegex))
+                        {
+                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationMessage, i);
                         }
                     }
                 }
+
+                var questionnaireVariable = questionnaireItem as IVariable;
+                if (questionnaireVariable != null && MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                {
+                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableContent);
+                }
+             
             }
 
-            foreach (var macro in this.innerDocument.Macros)
+            foreach (var macro in this.innerDocument.Macros.OrderBy(x => x.Value.Name))
             {
-                if (!macro.Value.Content.IsNullOrEmpty() && macro.Value.Content.Contains(searchFor))
+                if (MatchesSearchTerm(macro.Value.Content, searchRegex))
                 {
                     yield return QuestionnaireNodeReference.CreateForMacro(macro.Key);
                 }
             }
         }
 
-        public void ReplaceTexts(string searchTerm, string replaceWith)
+        private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        {
+            RegexOptions options = RegexOptions.Compiled | RegexOptions.CultureInvariant;
+            if (!matchCase)
+            {
+                options |= RegexOptions.IgnoreCase;
+            }
+            string encodedSearchPattern = useRegex ? searchFor : Regex.Escape(searchFor);
+            string pattern = matchWholeWord ? $@"\b{encodedSearchPattern}\b" : encodedSearchPattern;
+
+            Regex searchRegex = new Regex(pattern, options);
+            return searchRegex;
+        }
+
+        private static bool MatchesSearchTerm(string target, Regex searchRegex)
+        {
+            if (target.IsNullOrEmpty()) return false;
+
+            return searchRegex.IsMatch(target);
+        }
+
+        private static string ReplaceUsingSearchTerm(string target, Regex searchFor, string replaceWith)
+        {
+            return searchFor.Replace(target, replaceWith);
+        }
+
+        public void ReplaceTexts(ReplaceTextsCommand command)
         {
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
+            this.affectedByReplaceEntries = 0;
+            var searchRegex = BuildSearchRegex(command.SearchFor, command.MatchCase, command.MatchWholeWord, command.UseRegex);
             foreach (var questionnaireItem in allEntries)
             {
+                bool replacedAny = false;
                 var title = questionnaireItem.GetTitle();
-                if (!title.IsNullOrEmpty())
+                if (MatchesSearchTerm(title, searchRegex))
                 {
-                    questionnaireItem.SetTitle(title.Replace(searchTerm, replaceWith));
+                    replacedAny = true;
+                    questionnaireItem.SetTitle(ReplaceUsingSearchTerm(title, searchRegex, command.ReplaceWith));
+                }
+
+                var variableName = questionnaireItem.GetVariable();
+                if (MatchesSearchTerm(variableName, searchRegex))
+                {
+                    replacedAny = true;
+                    questionnaireItem.SetVariable(ReplaceUsingSearchTerm(variableName, searchRegex, command.ReplaceWith));
                 }
 
                 var conditional = questionnaireItem as IConditional;
-                if (!string.IsNullOrEmpty(conditional?.ConditionExpression))
+                if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
-                    conditional.ConditionExpression = conditional.ConditionExpression.Replace(searchTerm, replaceWith);
+                    replacedAny = true;
+                    string newCondition = ReplaceUsingSearchTerm(conditional.ConditionExpression, searchRegex, command.ReplaceWith);
+                    conditional.ConditionExpression = newCondition;
                 }
 
                 var validatable = questionnaireItem as IValidatable;
@@ -750,20 +546,63 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     foreach (var validationCondition in validatable.ValidationConditions)
                     {
-                        validationCondition.Expression = validationCondition.Expression?.Replace(searchTerm, replaceWith);
-                        validationCondition.Message = validationCondition.Message?.Replace(searchTerm, replaceWith);
+                        if (MatchesSearchTerm(validationCondition.Expression, searchRegex))
+                        {
+                            replacedAny = true;
+                            string newValidationCondition = ReplaceUsingSearchTerm(validationCondition.Expression, searchRegex, command.ReplaceWith);
+                            validationCondition.Expression = newValidationCondition;
+                        }
+                        if (MatchesSearchTerm(validationCondition.Message, searchRegex))
+                        {
+                            replacedAny = true;
+                            string newMessage = ReplaceUsingSearchTerm(validationCondition.Message, searchRegex, command.ReplaceWith);
+                            validationCondition.Message = newMessage;
+                        }
                     }
+                }
+
+                var questionnaireVariable = questionnaireItem as IVariable;
+                if (questionnaireVariable != null)
+                {
+                    if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
+                    {
+                        replacedAny = true;
+                        questionnaireVariable.Expression = ReplaceUsingSearchTerm(questionnaireVariable.Expression, searchRegex, command.ReplaceWith);
+                    }
+                }
+
+                var question = questionnaireItem as IQuestion;
+                if (question?.Answers != null)
+                {
+                    foreach (var questionAnswer in question.Answers)
+                    {
+                        if (MatchesSearchTerm(questionAnswer.AnswerText, searchRegex))
+                        {
+                            replacedAny = true;
+                            questionAnswer.AnswerText = ReplaceUsingSearchTerm(questionAnswer.AnswerText, searchRegex, command.ReplaceWith);
+                        }
+                    }
+                }
+
+                if (replacedAny)
+                {
+                    this.affectedByReplaceEntries++;
                 }
             }
 
             foreach (var macro in this.innerDocument.Macros.Values)
             {
-                if (!macro.Content.IsNullOrEmpty())
+                if (MatchesSearchTerm(macro.Content, searchRegex))
                 {
-                    macro.Content = macro.Content.Replace(searchTerm, replaceWith);
+                    this.affectedByReplaceEntries++;
+                    macro.Content = ReplaceUsingSearchTerm(macro.Content, searchRegex, command.ReplaceWith);
                 }
             }
+        }
 
+        public int GetLastReplacedEntriesCount()
+        {
+            return this.affectedByReplaceEntries;
         }
 
         #endregion
@@ -774,7 +613,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroAlreadyExist(command.MacroId);
-            this.AddMacro(new MacroAdded(command.MacroId, command.ResponsibleId));
+
+            this.innerDocument.Macros[command.MacroId] = new Macro();
         }
 
         public void UpdateMacro(UpdateMacro command)
@@ -782,14 +622,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
             this.ThrowDomainExceptionIfMacroContentIsEmpty(command.Content);
-            this.UpdateMacro(new MacroUpdated(command.MacroId, command.Name, command.Content, command.Description, command.ResponsibleId));
+            
+            if (!innerDocument.Macros.ContainsKey(command.MacroId))
+                return;
+
+            var macro = this.innerDocument.Macros[command.MacroId];
+            macro.Name = command.Name;
+            macro.Content = command.Content;
+            macro.Description = command.Description;
         }
 
         public void DeleteMacro(DeleteMacro command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
-            this.DeleteMacro(new MacroDeleted(command.MacroId, command.ResponsibleId));
+
+            innerDocument.Macros.Remove(command.MacroId);
         }
 
         #endregion
@@ -852,7 +700,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableAlreadyExist, ExceptionMessages.LookupTableAlreadyExist);
             }
-            this.AddLookupTable(new LookupTableAdded(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
+
+            innerDocument.LookupTables[command.LookupTableId] = new LookupTable()
+            {
+                TableName = command.LookupTableName,
+                FileName = command.LookupTableFileName
+            };
         }
 
         public void UpdateLookupTable(UpdateLookupTable command)
@@ -865,7 +718,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
             }
-            this.UpdateLookupTable(new LookupTableUpdated(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
+
+            innerDocument.LookupTables[command.LookupTableId] = new LookupTable
+            {
+                TableName = command.LookupTableName,
+                FileName = command.LookupTableFileName
+            };
         }
 
         public void DeleteLookupTable(DeleteLookupTable command)
@@ -876,7 +734,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
             }
-            this.DeleteLookupTable(new LookupTableDeleted(command.LookupTableId, command.ResponsibleId));
+            innerDocument.LookupTables.Remove(command.LookupTableId);
         }
 
         #endregion
@@ -1059,7 +917,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
 
-            this.DeleteGroup(new GroupDeleted() { GroupPublicKey = groupId, ResponsibleId = responsibleId });
+            this.innerDocument.RemoveGroup(groupId);
         }
 
         public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex, Guid responsibleId)
@@ -1153,37 +1011,40 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
             }
-           
-            this.AddQuestion(new NewQuestionAdded(
-                publicKey : command.QuestionId,
-                groupPublicKey : command.ParentGroupId,
-                questionText : command.Title,
-                questionType : QuestionType.Text,
-                stataExportCaption : null,
-                variableLabel : null,
-                featured : false,
-                questionScope : QuestionScope.Interviewer,
-                conditionExpression : null,
+
+            IQuestion question =this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        publicKey: command.QuestionId,
+                        questionText: command.Title,
+                questionType: QuestionType.Text,
+                stataExportCaption: null,
+                variableLabel: null,
+                featured: false,
+                questionScope: QuestionScope.Interviewer,
+                conditionExpression: null,
                 hideIfDisabled: false,
-                validationExpression: null,
-                validationMessage : null,
-                instructions : null,
-                properties: new QuestionProperties(false, false), 
-                responsibleId : command.ResponsibleId,
-                linkedToQuestionId : null,
-                areAnswersOrdered : null,
-                maxAllowedAnswers : null,
-                mask : null,
-                isFilteredCombobox : false,
-                cascadeFromQuestionId : null,
-                capital:false,
-                answerOrder:null,
+                validationConditions: new List<ValidationCondition>(),
+                instructions: null,
+                questionProperties: new QuestionProperties(false, false),
+                linkedToQuestionId: null,
+                areAnswersOrdered: null,
+                maxAllowedAnswers: null,
+                mask: null,
+                isFilteredCombobox: false,
+                cascadeFromQuestionId: null,
+                capital: false,
+                answerOrder: null,
                 answers: null,
                 isInteger: null,
                 yesNoView: null,
-                validationConditions: new List<ValidationCondition>()
-            ));
+                linkedToRosterId:null,
+                countOfDecimalPlaces:null,
+                maxAnswerCount:null,
+                linkedFilterExpression:null,
+                isTimestamp:false));
 
+            this.innerDocument.Add(question, command.ParentGroupId, null);
+            
             if (command.Index.HasValue)
             {
                 this.MoveQuestionnaireItem(new QuestionnaireItemMoved
@@ -1206,7 +1067,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsUsedAsRosterTitle(questionId);
             this.ThrowIfQuestionIsUsedAsCascadingParent(questionId);
 
-            this.DeleteQuestion(new QuestionDeleted() { QuestionId = questionId, ResponsibleId = responsibleId });
+            this.innerDocument.RemoveEntity(questionId);
+            this.innerDocument.RemoveHeadPropertiesFromRosters(questionId);
         }
 
         public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex, Guid responsibleId)
@@ -1250,97 +1112,87 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateTextQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, string mask, Guid responsibleId, IList<ValidationCondition> validationCoditions, QuestionProperties properties)
+        public void UpdateTextQuestion(UpdateTextQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
             PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-               QuestionType.Text, responsibleId, validationCoditions);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled,
+               QuestionType.Text, command.ResponsibleId, command.ValidationConditions);
 
-            this.UpdateQuestion(new QuestionChanged
-            (
-                publicKey : questionId,
-                groupPublicKey : null, //?
-                questionText : title,
-                questionType : QuestionType.Text,
-                stataExportCaption : variableName,
-                variableLabel : variableLabel,
-                featured : isPreFilled,
-                questionScope : scope,
-                conditionExpression : enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression : null,
-                validationMessage : null,
-                instructions : instructions,
-                properties: properties,
-                responsibleId : responsibleId,
-                mask : mask,
-                capital:false,
-                answerOrder: null,
-                answers: null,
-                linkedToQuestionId: null,
-                linkedToRosterId: null,
-                isInteger: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                maxAllowedAnswers: null,
-                isFilteredCombobox: null,
-                cascadeFromQuestionId: null,
-                targetGroupKey: Guid.Empty,
-                validationConditions: validationCoditions,
-                linkedFilterExpression:null,
-                isTimestamp: false
-            ));
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion = this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        command.QuestionId,
+                        QuestionType.Text,
+                        command.Scope,
+                        title,
+                        variableName,
+                        command.VariableLabel,
+                        command.EnablementCondition,
+                        command.HideIfDisabled,
+                        null,
+                        command.IsPreFilled,
+                        false,
+                        command.Instructions,
+                        command.Properties,
+                        command.Mask,
+                        null, null, null, null,
+                        null, null, null, null,
+                        null, null, null,
+                        command.ValidationConditions,
+                        null,
+                        false));
+
+            this.innerDocument.ReplaceEntity(question, newQuestion);
+            
         }
 
-        public void UpdateGpsCoordinatesQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions, QuestionProperties properties)
+        public void UpdateGpsCoordinatesQuestion(UpdateGpsCoordinatesQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
             PrepareGeneralProperties(ref title, ref variableName);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.GpsCoordinates, responsibleId, validationConditions);
-            
-            this.UpdateQuestion(new QuestionChanged
-            (
-                publicKey: questionId,
-                groupPublicKey: null, //?
-                questionText: title,
-                questionType: QuestionType.GpsCoordinates,
-                stataExportCaption: variableName,
-                variableLabel: variableLabel,
-                featured: isPreFilled,
-                questionScope: scope,
-                conditionExpression: enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression: null,
-                validationMessage: null,
-                instructions: instructions,
-                properties: properties,
-                responsibleId: responsibleId,
-                mask: null,
-                capital: false,
-                answerOrder: null,
-                answers: null,
-                linkedToQuestionId: null, 
-                linkedToRosterId: null,
-                isInteger: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                maxAllowedAnswers: null,
-                isFilteredCombobox: null,
-                cascadeFromQuestionId: null,
-                targetGroupKey: Guid.Empty,
-                validationConditions: validationConditions,
-                linkedFilterExpression: null,
-                isTimestamp: false
-            ));
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled, QuestionType.GpsCoordinates, 
+                command.ResponsibleId, command.ValidationConditions);
+
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion =
+                this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        question.PublicKey,
+                        QuestionType.GpsCoordinates,
+                        command.Scope,
+                        title,
+                        variableName,
+                        command.VariableLabel,
+                        command.EnablementCondition,
+                        command.HideIfDisabled,
+                        Order.AZ,
+                        command.IsPreFilled,
+                        false,
+                        command.Instructions,
+                        command.Properties,
+                        null, null, null, null,
+                        null, null, null, null,
+                        null, null, null, null,
+                        command.ValidationConditions,
+                        null,
+                        false));
+
+            this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
         public void UpdateDateTimeQuestion(UpdateDateTimeQuestion command)
@@ -1449,7 +1301,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Question: SingleOption command handlers
 
-        public void UpdateSingleOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool isFilteredCombobox, Guid? cascadeFromQuestionId, IList<ValidationCondition> validationConditions, string linkedFilterExpression, QuestionProperties properties)
+        public void UpdateSingleOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope,
+            string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool isFilteredCombobox, 
+            Guid? cascadeFromQuestionId, IList<ValidationCondition> validationConditions, string linkedFilterExpression, QuestionProperties properties)
         {
             Answer[] answers;
 
@@ -1633,82 +1487,114 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
         #endregion
 
-        public void UpdateNumericQuestion(Guid questionId, 
-            string title, 
-            string variableName, 
-            string variableLabel, 
-            bool isPreFilled, 
-            QuestionScope scope, 
-            string enablementCondition,
-            bool hideIfDisabled, 
-            string instructions,
-            QuestionProperties properties,
-            Guid responsibleId, 
-            bool isInteger, int? countOfDecimalPlaces, List<ValidationCondition> validationConditions)
+
+        public void UpdateNumericQuestion(UpdateNumericQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
             PrepareGeneralProperties(ref title, ref variableName);
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.Numeric, responsibleId, validationConditions);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled, QuestionType.Numeric, command.ResponsibleId, command.ValidationConditions);
 
-            this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
-            this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
+            this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(command.IsInteger, command.CountOfDecimalPlaces);
+            this.ThrowIfDecimalPlacesValueIsIncorrect(command.CountOfDecimalPlaces);
 
-            this.UpdateNumericQuestion(new NumericQuestionChanged
-            (
-                publicKey : questionId,
-                questionText : title,
-                stataExportCaption : variableName,
-                variableLabel : variableLabel,
-                featured : isPreFilled,
-                capital : false,
-                questionScope : scope,
-                conditionExpression : enablementCondition,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression:null,
-                validationMessage:null,
-                instructions : instructions,
-                properties: properties, 
-                responsibleId : responsibleId,
-                isInteger : isInteger,
-                countOfDecimalPlaces : countOfDecimalPlaces,
-                validationConditions: validationConditions
-            ));
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion = this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        question.PublicKey,
+                        QuestionType.Numeric,
+                        command.Scope,
+                        title,
+                        variableName,
+                        command.VariableLabel,
+                        command.EnablementCondition,
+                        command.HideIfDisabled,
+                        Order.AZ,
+                        command.IsPreFilled,
+                        false,
+                        command.Instructions,
+                        command.Properties,
+                        null,
+                        null,
+                        null,
+                        null,
+                        command.IsInteger,
+                        command.CountOfDecimalPlaces,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        command.ValidationConditions,
+                        null,
+                        false)
+                    );
+
+            this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
-        public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, int? maxAnswerCount, QuestionScope scope, IList<ValidationCondition> validationConditions, QuestionProperties properties)
+        public void UpdateTextListQuestion(UpdateTextListQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
+
             PrepareGeneralProperties(ref title, ref variableName);
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
 
             var isPrefilled = false;
 
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.TextList, responsibleId, validationConditions);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled, 
+                QuestionType.TextList, command.ResponsibleId, command.ValidationConditions);
+            
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion =
+                this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        command.QuestionId,
+                        QuestionType.TextList,
+                        command.Scope,
+                        command.Title,
+                        command.VariableName,
+                        command.VariableLabel,
+                        command.EnablementCondition,
+                        command.HideIfDisabled,
+                        Order.AZ,
+                        false,
+                        false,
+                        command.Instructions,
+                        command.Properties,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        command.MaxAnswerCount,
+                        null,
+                        null,
+                        null,
+                        command.ValidationConditions,
+                        null,
+                        false));
 
-            this.UpdateTextListQuestion(new TextListQuestionChanged
+            if (question != null)
             {
-                PublicKey = questionId,
-
-                QuestionText = title,
-                StataExportCaption = variableName,
-                VariableLabel = variableLabel,
-                ConditionExpression = enablementCondition,
-                HideIfDisabled = hideIfDisabled,
-                Instructions = instructions,  
-                Properties = properties,
-                ResponsibleId = responsibleId,
-                QuestionScope = scope,
-                MaxAnswerCount = maxAnswerCount,
-                ValidationConditions = validationConditions
-            });
+                this.innerDocument.ReplaceEntity(question, newQuestion);
+            }
         }
 
         public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, QuestionScope scope, QuestionProperties properties)
@@ -1738,36 +1624,62 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, QuestionScope scope, IList<ValidationCondition> validationConditions, 
-            QuestionProperties properties)
+        public void UpdateQRBarcodeQuestion(UpdateQRBarcodeQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
             PrepareGeneralProperties(ref title, ref variableName);
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
 
             var isPrefilled = false;
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.QRBarcode, responsibleId, validationConditions);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled, QuestionType.QRBarcode, 
+                command.ResponsibleId, command.ValidationConditions);
             
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion =
+                this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        command.QuestionId,
+                        QuestionType.QRBarcode,
+                        command.Scope,
+                        command.Title,
+                        command.VariableName,
+                        command.VariableLabel,
+                        command.EnablementCondition,
+                        command.HideIfDisabled,
+                        Order.AZ,
+                        false,
+                        false,
+                        command.Instructions,
+                        command.Properties,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        command.ValidationConditions,
+                        null,
+                        false));
 
-            this.UpdateQRBarcodeQuestion(new QRBarcodeQuestionUpdated()
+            if (question == null)
             {
-                QuestionId = questionId,
-                Title = title,
-                VariableName = variableName,
-                VariableLabel = variableLabel,
-                EnablementCondition = enablementCondition,
-                HideIfDisabled = hideIfDisabled,
-                ValidationExpression = null,
-                ValidationMessage = null,
-                Instructions = instructions,
-                Properties = properties,
-                QuestionScope = scope,
-                ResponsibleId = responsibleId,
-                ValidationConditions = validationConditions
-            });
+                return;
+            }
+
+            this.innerDocument.ReplaceEntity(question, newQuestion);
+
+
         }
 
         #region Static text command handlers
@@ -1781,14 +1693,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
-            this.AddStaticText(new StaticTextAdded(command.EntityId, 
-                command.ResponsibleId,
-                command.ParentId, 
-                command.Text,
-                null,
-                false,
-                null));
-            
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: command.EntityId,
+                text: command.Text,
+                attachmentName: null,
+                enablementCondition: null,
+                hideIfDisabled: false,
+                validationConditions: null);
+
+            this.innerDocument.Add(c: staticText, parent: command.ParentId, parentPropagationKey: null);
+
             if (command.Index.HasValue)
             {
                 this.MoveQuestionnaireItem(new QuestionnaireItemMoved
@@ -1808,14 +1721,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
 
-            this.UpdateStaticText(new StaticTextUpdated(command.EntityId,
-                command.ResponsibleId, 
-                command.Text, 
-                command.AttachmentName, 
-                command.HideIfDisabled, 
-                command.EnablementCondition, 
-                command.ValidationConditions)
-            );
+            var oldStaticText = this.innerDocument.Find<IStaticText>(command.EntityId);
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: command.EntityId,
+                text: command.Text,
+                attachmentName: command.AttachmentName,
+                enablementCondition: command.EnablementCondition,
+                hideIfDisabled: command.HideIfDisabled,
+                validationConditions: command.ValidationConditions);
+
+            this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
         }
 
         public void DeleteStaticText(Guid entityId, Guid responsibleId)
@@ -1823,7 +1737,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
 
-            this.DeleteStaticText(new StaticTextDeleted() { EntityId = entityId, ResponsibleId = responsibleId });
+            this.innerDocument.RemoveEntity(entityId);
         }
 
         public void MoveStaticText(Guid entityId, Guid targetEntityId, int targetIndex, Guid responsibleId)
@@ -1860,11 +1774,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
-            this.AddVariable(new VariableAdded(
-                command.EntityId, 
-                command.ResponsibleId,
-                command.ParentId, 
-                command.VariableData));
+            var variable = this.questionnaireEntityFactory.CreateVariable(new QuestionnaireVariable(command.EntityId, command.ResponsibleId, command.VariableData));
+            this.innerDocument.Add(c: variable, parent: command.ParentId, parentPropagationKey: null);
             
             if (command.Index.HasValue)
             {
@@ -1893,7 +1804,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
 
-            this.DeleteVariable(new VariableDeleted() { EntityId = entityId, ResponsibleId = responsibleId });
+            this.innerDocument.RemoveEntity(entityId);
         }
 
         public void MoveVariable(Guid entityId, Guid targetEntityId, int targetIndex, Guid responsibleId)
