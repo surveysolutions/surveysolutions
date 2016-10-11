@@ -805,6 +805,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
             this.ApplyRosterEvents(sourceInterviewTree, changedInterviewTree);
+            this.UpdateExpressionState(sourceInterviewTree, changedInterviewTree);
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
@@ -841,7 +842,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
             this.ApplyRosterEvents(sourceInterviewTree, changedInterview);
-
+            this.UpdateExpressionState(sourceInterviewTree, changedInterview);
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
@@ -1259,7 +1260,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CheckTextQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
-            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerTextQuestion(expressionProcessorState, userId, questionId,
                 rosterVector, answerTime, answer, questionnaire);
@@ -1280,7 +1281,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CheckNumericRealQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion, this.interviewState);
 
-            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerNumericRealQuestion(expressionProcessorState, userId,
                 questionId, rosterVector, answerTime, answer, questionnaire);
@@ -1308,7 +1309,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
-            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQRBarcodeQuestion(expressionProcessorState, userId,
                 questionId, rosterVector, answerTime, answer, questionnaire);
@@ -1335,7 +1336,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
             treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
-            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             this.CalculateInterviewChangesOnAnswerPictureQuestion(expressionProcessorState, userId, questionId, rosterVector, answerTime, pictureFileName, questionnaire);
         }
@@ -1357,7 +1358,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? answer
                     : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            var expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(expressionProcessorState, this.interviewState, userId,
                 questionId, rosterVector, answerTime, answer, getAnswer, questionnaire);
@@ -1383,7 +1384,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? selectedValues
                     : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            var expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(expressionProcessorState, this.interviewState, userId,
                 questionId, rosterVector, answerTime, selectedValues, getAnswer, questionnaire);
@@ -1408,7 +1409,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? answer
                     : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            var expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnYesNoQuestionAnswer(
                 command.Question.Id, command.Question.RosterVector, answer, command.AnswerTime, command.UserId, questionnaire, expressionProcessorState, this.interviewState, getAnswer);
@@ -1429,7 +1430,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CheckLinkedMultiOptionQuestionInvariants(questionId, rosterVector, selectedRosterVectors, questionnaire, answeredQuestion);
 
-            ILatestInterviewExpressionState expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
+            ILatestInterviewExpressionState expressionProcessorState = this.GetClonedExpressionState();
 
             expressionProcessorState.UpdateLinkedMultiOptionAnswer(questionId, rosterVector, selectedRosterVectors);
 
@@ -1448,7 +1449,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
             this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
-            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerDateTimeQuestion(expressionProcessorState, userId,
                 questionId, rosterVector, answerTime, answer, questionnaire);
@@ -1469,7 +1470,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
                 this.interviewState);
 
-            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(expressionProcessorState, this.interviewState, userId,
                 questionId, rosterVector, answerTime, selectedValue, questionnaire);
@@ -1495,7 +1496,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 answers :
                 this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
-            var expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerTextListQuestion(expressionProcessorState, this.interviewState, userId, questionId,
                 rosterVector, answerTime, answers, getAnswer, questionnaire);
@@ -1516,7 +1517,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
             CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
-            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
+            var expressionProcessorState = this.GetClonedExpressionState();
 
             InterviewChanges interviewChanges = CalculateInterviewChangesOnAnswerGeoLocationQuestion(expressionProcessorState, userId, questionId,
                 rosterVector, answerTime, latitude, longitude, accuracy, altitude, timestamp, questionnaire);
@@ -1548,7 +1549,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CheckLinkedSingleOptionQuestionInvariants(questionId, rosterVector, selectedRosterVector, questionnaire, answeredQuestion);
 
-            ILatestInterviewExpressionState expressionProcessorState = PrepareExpressionProcessorStateForCalculations();
+            ILatestInterviewExpressionState expressionProcessorState = this.GetClonedExpressionState();
 
             expressionProcessorState.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, selectedRosterVector);
 
@@ -3314,13 +3315,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return underlyingQuestionsBeingRemovedByRemovedRosterInstances;
         }
 
-        private ILatestInterviewExpressionState PrepareExpressionProcessorStateForCalculations()
-        {
-            ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-            return expressionProcessorState;
-        }
-
 
         private InterviewChanges CalculateInterviewChangesOnAnswerQuestion(Guid userId, Guid questionId, RosterVector rosterVector,
             object answer, AnswerChangeType answerChangeType, DateTime answerTime, IQuestionnaire questionnaire,
@@ -4640,13 +4634,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any(x => !this.interviewState.DisabledQuestions.Contains(ConversionHelper.ConvertIdentityToString(x)));
         protected bool HasInvalidStaticTexts => this.interviewState.InvalidStaticTexts.Any(x => !this.interviewState.DisabledStaticTexts.Contains(x.Key));
 
-        private static YesNoAnswersOnly ConvertToYesNoAnswersOnly(AnsweredYesNoOption[] answeredOptions)
-        {
-            var yesAnswers = answeredOptions.Where(x => x.Yes).Select(x => x.OptionValue).ToArray();
-            var noAnswers = answeredOptions.Where(x => !x.Yes).Select(x => x.OptionValue).ToArray();
-            return new YesNoAnswersOnly(yesAnswers, noAnswers);
-        }
-
         private static AnsweredYesNoOption[] ConvertToAnsweredYesNoOptionArray(YesNoAnswersOnly answeredOptions)
         {
             return
@@ -4707,6 +4694,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isDisabled = interviewState.IsQuestionDisabled(questionIdentity);
             string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
+            bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
+            bool isDecimalQuestion = questionnaire.IsQuestionInteger(questionIdentity.Id);
             object answer = interviewState.GetAnswerSupportedInExpressions(questionIdentity);
             IReadOnlyCollection<RosterVector> linkedOptions = interviewState.GetOptionsForLinkedQuestion(questionIdentity);
 
@@ -4723,7 +4712,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 variableName: variableName,
                 answer: answer,
                 linkedOptions: linkedOptions,
-                cascadingParentQuestionIdentity: cascadingParentQuestionIdentity);
+                cascadingParentQuestionIdentity: cascadingParentQuestionIdentity,
+                isYesNo: isYesNoQuestion,
+                isDecimal: isDecimalQuestion);
         }
 
         private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)

@@ -1160,9 +1160,9 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
             string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
-            Identity cascadingParentQuestionIdentity = null)
+            Identity cascadingParentQuestionIdentity = null, bool isYesNo = false, bool isDecimal = false)
             => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, questionType, answer,
-                linkedOptions, cascadingParentQuestionIdentity);
+                linkedOptions, cascadingParentQuestionIdentity, isYesNo, isDecimal);
 
         public InterviewTreeQuestion InterviewTreeQuestion_SingleOption(Identity questionIdentity,
             bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
