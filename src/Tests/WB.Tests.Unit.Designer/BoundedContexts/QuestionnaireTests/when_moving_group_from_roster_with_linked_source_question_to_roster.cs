@@ -11,13 +11,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = roster1Id, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(roster1Id,  chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster1Id));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = roster2Id, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(roster2Id,  chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster2Id));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupInsideRosterId, ParentGroupPublicKey = roster1Id });
+            questionnaire.AddGroup(groupInsideRosterId,  roster1Id, responsibleId: responsibleId);
 
             questionnaire.AddTextQuestion(linkedSourceQuestionId,
                 groupInsideRosterId,

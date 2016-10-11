@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId,isInteger : true,parentId: chapterId,responsibleId:responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(anotherRosterId,  chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: anotherRosterId));
             questionnaire.AddTextQuestion(rosterTitleQuestionId,anotherRosterId, responsibleId);
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: anotherRosterId){
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     RosterTitleQuestionId =rosterTitleQuestionId 
                 });
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId:responsibleId, groupId: rosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
                     RosterSizeQuestionId = rosterSizeQuestionId,

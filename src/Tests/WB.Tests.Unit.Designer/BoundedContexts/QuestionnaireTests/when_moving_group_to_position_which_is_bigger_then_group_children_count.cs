@@ -16,9 +16,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             parentGroupId = Guid.Parse("33333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId, ParentGroupPublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parentGroupId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(parentGroupId,  chapterId, responsibleId: responsibleId);
+            questionnaire.AddGroup(groupId, parentGroupId, responsibleId: responsibleId);
 
             eventContext = new EventContext();
         };
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__move____group____position____acceptable__ = () =>
-          new[] { "move", "group", "position", "acceptable" }.ShouldEachConformTo(
+          new[] { "move", "section", "position", "acceptable" }.ShouldEachConformTo(
           keyword => exception.Message.ToLower().Contains(keyword));
 
 

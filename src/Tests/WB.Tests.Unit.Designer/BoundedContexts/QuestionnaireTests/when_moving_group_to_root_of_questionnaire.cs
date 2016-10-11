@@ -11,9 +11,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupInGroupId, ParentGroupPublicKey = groupId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(groupId,chapterId, responsibleId: responsibleId);
+            questionnaire.AddGroup(groupInGroupId, groupId, responsibleId: responsibleId);
         };
 
         Because of = () => questionnaire.MoveGroup(groupInGroupId, null, 0, responsibleId);

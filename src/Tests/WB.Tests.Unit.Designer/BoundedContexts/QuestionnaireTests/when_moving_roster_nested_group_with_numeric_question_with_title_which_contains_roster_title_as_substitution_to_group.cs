@@ -17,11 +17,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             nestedRosterId = Guid.Parse("31111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(Guid.NewGuid(), rosterId));
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = rosterId });
+            questionnaire.AddGroup(nestedRosterId,  rosterId, responsibleId: responsibleId);
             questionnaire.AddNumericQuestion(
                 questionId,
                 nestedRosterId,

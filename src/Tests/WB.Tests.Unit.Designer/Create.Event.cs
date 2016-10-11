@@ -17,16 +17,6 @@ namespace WB.Tests.Unit.Designer
     {
         internal static class Event
         {
-            public static NewGroupAdded AddGroup(Guid groupId, Guid? parentId = null, string variableName = null)
-            {
-                return new NewGroupAdded
-                {
-                    PublicKey = groupId,
-                    ParentGroupPublicKey = parentId,
-                    VariableName = variableName
-                };
-            }
-
             public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
             {
                 return new ExpressionsMigratedToCSharp();
