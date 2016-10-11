@@ -638,11 +638,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public string RosterTitle { get; set; }
 
-        public InterviewTreeRoster(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
-            : base(identity, children, isDisabled) {}
+        public InterviewTreeRoster(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled, string rosterTitle = null)
+            : base(identity, children, isDisabled)
+        {
+            RosterTitle = rosterTitle;
+        }
 
         public override string ToString()
-            => $"Roster ({this.Identity})" + Environment.NewLine
+            => $"Roster ({this.Identity}) [{RosterTitle}]" + Environment.NewLine
             + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
     }
 }
