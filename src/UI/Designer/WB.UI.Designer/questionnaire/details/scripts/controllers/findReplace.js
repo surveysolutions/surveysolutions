@@ -35,6 +35,9 @@
                     id: $state.params.questionnaireId
                 }
             }).then(function (response) {
+                var newParams = $state.params;
+                newParams.property = null;
+                $state.go($state.current.name, newParams, { notify: false, reload: false }); // reset state from previous search
                 $scope.foundReferences = response.data;
                 indexOfCurrentReference = -1;
             });
