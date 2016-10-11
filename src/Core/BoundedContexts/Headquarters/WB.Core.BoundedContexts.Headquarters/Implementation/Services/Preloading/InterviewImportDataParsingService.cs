@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -50,9 +51,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
-            var questionnaireRosterStructure =
+            var questionnaire =
                 this.questionnaireStorage.GetQuestionnaire(
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version), null).GetRosterScopes();
+                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
+                    null);
+            if (questionnaire == null)
+                throw new Exception("Questionnaire was not found");
+
+            var questionnaireRosterStructure = questionnaire.GetRosterScopes();
 
             var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
                     questionnaireRosterStructure, bigTemplateObject);
