@@ -47,10 +47,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 ((InterviewTreeGroup) node.Parent)?.RemoveChildren(node.Identity);
         }
 
-        public IReadOnlyCollection<InterviewTreeNodeDiff> FindDiff(InterviewTree changedTree)
+        public IReadOnlyCollection<InterviewTreeNodeDiff> Compare(InterviewTree changedTree)
         {
-            var sourceNodes = this.Sections.SelectMany(x => x.Children).TreeToEnumerable(x => x.Children).ToList();
-            var changedNodes = changedTree.Sections.SelectMany(x => x.Children).TreeToEnumerable(x => x.Children).ToList();
+            var sourceNodes = this.GetNodes().ToList();
+            var changedNodes = changedTree.GetNodes().ToList();
 
             var leftOuterJoin = from source in sourceNodes
                                 join changed in changedNodes
@@ -70,7 +70,67 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return fullOuterJoin
                 .DistinctBy(x => new { sourceIdentity = x.SourceNode?.Identity, changedIdentity = x.ChangedNode?.Identity })
+                .Where(IsRosterChanged)
+                .Where(IsGroupChanged)
+                .Where(IsQuestionChanged)
                 .ToReadOnlyCollection();
+        }
+
+        public static bool HasChangesByAnswer(InterviewTreeQuestion sourceQuestion,
+            InterviewTreeQuestion changedQuestion)
+        {
+            if (sourceQuestion.IsText) return !sourceQuestion.AsText.EqualByAnswer(changedQuestion.AsText);
+            if (sourceQuestion.IsInteger) return !sourceQuestion.AsInteger.EqualByAnswer(changedQuestion.AsInteger);
+            if (sourceQuestion.IsDouble) return !sourceQuestion.AsDouble.EqualByAnswer(changedQuestion.AsDouble);
+            if (sourceQuestion.IsDateTime) return !sourceQuestion.AsDateTime.EqualByAnswer(changedQuestion.AsDateTime);
+            if (sourceQuestion.IsMultimedia) return !sourceQuestion.AsMultimedia.EqualByAnswer(changedQuestion.AsMultimedia);
+            if (sourceQuestion.IsQRBarcode) return !sourceQuestion.AsQRBarcode.EqualByAnswer(changedQuestion.AsQRBarcode);
+            if (sourceQuestion.IsGps) return !sourceQuestion.AsGps.EqualByAnswer(changedQuestion.AsGps);
+            if (sourceQuestion.IsSingleOption) return !sourceQuestion.AsSingleOption.EqualByAnswer(changedQuestion.AsSingleOption);
+            if (sourceQuestion.IsSingleLinkedOption) return !sourceQuestion.AsSingleLinkedOption.EqualByAnswer(changedQuestion.AsSingleLinkedOption);
+            if (sourceQuestion.IsMultiOption) return !sourceQuestion.AsMultiOption.EqualByAnswer(changedQuestion.AsMultiOption);
+            if (sourceQuestion.IsMultiLinkedOption) return !sourceQuestion.AsMultiLinkedOption.EqualByAnswer(changedQuestion.AsMultiLinkedOption);
+            if (sourceQuestion.IsYesNo) return !sourceQuestion.AsYesNo.EqualByAnswer(changedQuestion.AsYesNo);
+            if (sourceQuestion.IsTextList) return !sourceQuestion.AsTextList.EqualByAnswer(changedQuestion.AsTextList);
+
+            return false;
+        }
+
+        private bool IsQuestionChanged(InterviewTreeNodeDiff diff)
+        {
+            var sourceQuestion = diff.SourceNode as InterviewTreeQuestion;
+            var changedQuestion = diff.ChangedNode as InterviewTreeQuestion;
+
+            if (sourceQuestion == null || changedQuestion == null) return true;
+
+            if ((sourceQuestion.IsDisabled() && !changedQuestion.IsDisabled()) ||
+                (!sourceQuestion.IsDisabled() && changedQuestion.IsDisabled())) return true;
+
+            if ((sourceQuestion.IsAnswered() && !changedQuestion.IsAnswered()) ||
+                (!sourceQuestion.IsAnswered() && changedQuestion.IsAnswered())) return true;
+            
+            return HasChangesByAnswer(sourceQuestion, changedQuestion);
+        }
+
+        private bool IsGroupChanged(InterviewTreeNodeDiff diff)
+        {
+            var sourcGroup = diff.SourceNode as InterviewTreeGroup;
+            var changedGroup = diff.ChangedNode as InterviewTreeGroup;
+
+            if (sourcGroup == null || changedGroup == null) return true;
+
+            return (sourcGroup.IsDisabled() && !changedGroup.IsDisabled()) ||
+                   (!sourcGroup.IsDisabled() && changedGroup.IsDisabled());
+        }
+
+        private bool IsRosterChanged(InterviewTreeNodeDiff diff)
+        {
+            var sourceRoster = diff.SourceNode as InterviewTreeRoster;
+            var changedRoster = diff.ChangedNode as InterviewTreeRoster;
+
+            if (this.IsGroupChanged(diff)) return true;
+
+            return sourceRoster?.RosterTitle != changedRoster?.RosterTitle;
         }
 
         public override string ToString()
@@ -286,6 +346,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool IsLinked => this.AsLinked != null;
         public bool IsCascading => this.AsCascading != null;
+
+        public bool IsAnswered()
+        {
+            if (this.IsText) return this.AsText.IsAnswered;
+            if (this.IsInteger) return this.AsInteger.IsAnswered;
+            if (this.IsDouble) return this.AsDouble.IsAnswered;
+            if (this.IsDateTime) return this.AsDateTime.IsAnswered;
+            if (this.IsMultimedia) return this.AsMultimedia.IsAnswered;
+            if (this.IsQRBarcode) return this.AsQRBarcode.IsAnswered;
+            if (this.IsGps) return this.AsGps.IsAnswered;
+            if (this.IsSingleOption) return this.AsSingleOption.IsAnswered;
+            if (this.IsSingleLinkedOption) return this.AsSingleLinkedOption.IsAnswered;
+            if (this.IsMultiOption) return this.AsMultiOption.IsAnswered;
+            if (this.IsMultiLinkedOption) return this.AsMultiLinkedOption.IsAnswered;
+            if (this.IsYesNo) return this.AsYesNo.IsAnswered;
+            if (this.IsTextList) return this.AsTextList.IsAnswered;
+
+            return false;
+        }
 
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 

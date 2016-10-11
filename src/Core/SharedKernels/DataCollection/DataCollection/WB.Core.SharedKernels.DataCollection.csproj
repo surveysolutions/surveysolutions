@@ -309,7 +309,6 @@
     <Compile Include="Services\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Services\IVariableToUIStringService.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
-    <Compile Include="Utils\Compare.cs" />
     <Compile Include="Utils\ConcurrentDistinctList.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />

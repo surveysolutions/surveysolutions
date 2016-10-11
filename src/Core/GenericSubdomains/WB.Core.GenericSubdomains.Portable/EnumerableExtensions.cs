@@ -7,6 +7,36 @@ namespace WB.Core.GenericSubdomains.Portable
 {
     public static class EnumerableExtensions
     {
+        public static IEnumerable<T> DistinctBy<T, TIdentity>(this IEnumerable<T> source, Func<T, TIdentity> identitySelector)
+        {
+            return source.Distinct(By(identitySelector));
+        }
+
+        public static IEqualityComparer<TSource> By<TSource, TIdentity>(Func<TSource, TIdentity> identitySelector)
+        {
+            return new DelegateComparer<TSource, TIdentity>(identitySelector);
+        }
+
+        private class DelegateComparer<T, TIdentity> : IEqualityComparer<T>
+        {
+            private readonly Func<T, TIdentity> identitySelector;
+
+            public DelegateComparer(Func<T, TIdentity> identitySelector)
+            {
+                this.identitySelector = identitySelector;
+            }
+
+            public bool Equals(T x, T y)
+            {
+                return Equals(this.identitySelector(x), this.identitySelector(y));
+            }
+
+            public int GetHashCode(T obj)
+            {
+                return this.identitySelector(obj).GetHashCode();
+            }
+        }
+
         public static IEnumerable<T> WithoutLast<T>(this IEnumerable<T> source)
         {
             using (var e = source.GetEnumerator())
