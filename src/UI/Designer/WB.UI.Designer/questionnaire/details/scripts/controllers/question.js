@@ -125,41 +125,31 @@
                         utilityService.scrollToValidationCondition($state.params.validationIndex);
 
 
-                        $timeout(function () {
-                            var elementToPutFocusIn = null;
-                            switch ($state.params.property) {
-                                case 'Title':
-                                    elementToPutFocusIn = angular.element('#edit-question-title');
-                                    break;
-                                case 'VariableName':
-                                    elementToPutFocusIn = angular.element('#edit-question-variable-name');
-                                    break;
-                                case 'EnablingCondition':
-                                    elementToPutFocusIn = angular.element('#edit-question-enablement-condition');
-                                    break;
-                                case 'ValidationExpression':
-                                    elementToPutFocusIn = angular.element('#validation-expression-' + $state.params.validationIndex);
-                                    break;
-                                case 'ValidationMessage':
-                                    elementToPutFocusIn = angular.element('#validationMessage' + $state.params.validationIndex);
-                                    break;
-                                case 'Option':
-                                    elementToPutFocusIn = angular.element('#option-title-' + $state.params.validationIndex);
-                                    break;
-                                default:
-                                    break;
-                            }
+                        var focusId = null;
+                        switch ($state.params.property) {
+                            case 'Title':
+                                focusId = 'edit-question-title';
+                                break;
+                            case 'VariableName':
+                                focusId = 'edit-question-variable-name';
+                                break;
+                            case 'EnablingCondition':
+                                focusId = "edit-question-enablement-condition";
+                                break;
+                            case 'ValidationExpression':
+                                focusId = 'validation-expression-' + $state.params.validationIndex;
+                                break;
+                            case 'ValidationMessage':
+                                focusId = 'validationMessage' + $state.params.validationIndex;
+                                break;
+                            case 'Option':
+                                focusId = 'option-title-' + $state.params.validationIndex;
+                                break;
+                            default:
+                                break;
+                        }
 
-                            if (elementToPutFocusIn !== null) {
-                                if (elementToPutFocusIn.attr('ui-ace')) {
-                                    var edit = ace.edit(elementToPutFocusIn.attr('id'));
-                                    edit.focus();
-                                    edit.navigateFileEnd();
-                                } else {
-                                    elementToPutFocusIn.focus();
-                                }
-                            }
-                        }, 300);
+                        utilityService.setFocusIn(focusId);
                     });
             };
 

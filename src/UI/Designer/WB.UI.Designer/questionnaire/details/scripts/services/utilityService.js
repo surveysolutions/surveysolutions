@@ -30,6 +30,24 @@
                         $rootScope.$broadcast('focusOn', name);
                     });
                 };
+
+                utilityService.setFocusIn = function(elementId) {
+                    $timeout(function() {
+                            var element = angular.element('#' + elementId);
+
+                            if (!_.isNull(element) && !_.isUndefined(element)) {
+
+                                if (element.attr('ui-ace')) {
+                                    var edit = ace.edit(element.attr('id'));
+                                    edit.focus();
+                                    edit.navigateFileEnd();
+                                } else {
+                                    element.focus();
+                                }
+                            }
+                        },
+                        300);
+                }
                 
                 utilityService.focusout = function (name) {
                     $timeout(function () {
