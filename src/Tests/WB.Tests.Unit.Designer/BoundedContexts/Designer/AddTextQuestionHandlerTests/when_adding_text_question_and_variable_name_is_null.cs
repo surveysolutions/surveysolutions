@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
             exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
-                    parentGroupId: chapterId,
+                    parentId: chapterId,
                     title: title,
                     variableName: null,
                     variableLabel: null,

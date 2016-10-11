@@ -6,8 +6,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
@@ -26,13 +26,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     {
                         Create.StaticText(staticTextId: entityId, text: "old text")
                     })
-            });
+            }, creatorId);
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionnaireEntityFactory.Object);
         };
 
         Because of = () =>
-            denormalizer.UpdateStaticText(CreateStaticTextUpdatedEvent(entityId: entityId, text: text, attachmentName: attachment));
+            denormalizer.UpdateStaticText(new UpdateStaticText(questionnaireView.PublicKey, entityId, text, attachment, creatorId, null, false, new List<ValidationCondition>()));
 
         It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
             questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text, attachment, null, false, Moq.It.IsAny<List<ValidationCondition>>()), Times.Once);
@@ -65,6 +65,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static Questionnaire denormalizer;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static Guid creatorId = Guid.Parse("BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string text = "some text";
         private static string attachment = "bananas";
     }

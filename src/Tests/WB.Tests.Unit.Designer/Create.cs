@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Controllers;
+using Castle.Components.DictionaryAdapter;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -10,8 +11,10 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -1036,6 +1039,34 @@ namespace WB.Tests.Unit.Designer
 
             public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
                 => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
+
+            public static ReplaceTextsCommand ReplaceTextsCommand(string searchFor, string replaceWith, bool matchWholeWord = false, bool matchCase = false, bool useRegex = false)
+            {
+                return new ReplaceTextsCommand(Guid.Empty, Guid.NewGuid(), searchFor.ToLower(), replaceWith, matchCase, matchWholeWord, useRegex);
+            }
+            
+            public static AddStaticText AddStaticText(Guid questionnaireId, Guid staticTextId, string text, Guid responsibleId, Guid parentId)
+            {
+                return new AddStaticText(questionnaireId, staticTextId, text, responsibleId, parentId);
+            }
+            
+            public static AddDefaultTypeQuestion AddDefaultTypeQuestion(Guid questionnaireId, Guid questionId, string text, Guid responsibleId, Guid parentId, int? tagretIndex = null)
+            {
+                return new AddDefaultTypeQuestion(questionnaireId, questionId, parentId, text, responsibleId, tagretIndex);
+            }
+
+            public static UpdateNumericQuestion UpdateNumericQuestion(Guid questionnaireId, Guid questionId, Guid responsibleId, 
+                string title, bool isPreFilled = false, QuestionScope scope = QuestionScope.Interviewer, bool isInteger = false, 
+                bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null)
+            {
+                return new UpdateNumericQuestion(questionnaireId, questionId, responsibleId, new CommonQuestionParameters {Title = title}, isPreFilled, scope, 
+                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>());
+            }
+
+            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, int? index =null)
+            {
+                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression), responsibleId, parentId, index);
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")

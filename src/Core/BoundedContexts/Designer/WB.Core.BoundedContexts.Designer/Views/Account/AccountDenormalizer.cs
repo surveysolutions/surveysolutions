@@ -36,10 +36,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             get { return new object[] { _accounts }; }
         }
 
+        public void Handle(IPublishedEvent<AccountRegistered> @event)
+        {
+            this._accounts.Store(
+                new AccountDocument
+                {
+                    ProviderUserKey = @event.EventSourceId,
+                    UserName = GetNormalizedUserName(@event.Payload.UserName),
+                    Email = @event.Payload.Email,
+                    ConfirmationToken = @event.Payload.ConfirmationToken,
+                    ApplicationName = @event.Payload.ApplicationName,
+                    CreatedAt = @event.Payload.CreatedDate
+                },
+                @event.EventSourceId);
+        }
+
         public void Handle(IPublishedEvent<AccountConfirmed> @event)
         {
             AccountDocument item = this._accounts.GetById(@event.EventSourceId);
-
             item.IsConfirmed = true;
             this._accounts.Store(item, @event.EventSourceId);
         }
@@ -91,21 +105,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             item.PasswordSalt = @event.Payload.PasswordSalt;
             item.Password = @event.Payload.Password;
             this._accounts.Store(item, @event.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<AccountRegistered> @event)
-        {
-            this._accounts.Store(
-                new AccountDocument
-                    {
-                        ProviderUserKey = @event.EventSourceId, 
-                        UserName = GetNormalizedUserName(@event.Payload.UserName), 
-                        Email = @event.Payload.Email, 
-                        ConfirmationToken = @event.Payload.ConfirmationToken, 
-                        ApplicationName = @event.Payload.ApplicationName, 
-                        CreatedAt = @event.Payload.CreatedDate
-                    }, 
-                @event.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<AccountUnlocked> @event)

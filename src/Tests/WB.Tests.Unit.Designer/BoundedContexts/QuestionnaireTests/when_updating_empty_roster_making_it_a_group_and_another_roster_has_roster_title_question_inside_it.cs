@@ -13,20 +13,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded
-            (
-                publicKey : rosterSizeQuestionId,
-                isInteger : true,
-                groupPublicKey : chapterId
-            ));
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId,isInteger : true,parentId: chapterId,responsibleId:responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: anotherRosterId));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : rosterTitleQuestionId,
-                groupPublicKey : anotherRosterId,
-                questionType : QuestionType.Text
-            ));
+            questionnaire.AddTextQuestion(rosterTitleQuestionId,anotherRosterId, responsibleId);
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: anotherRosterId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = RosterSizeSourceType.Question,

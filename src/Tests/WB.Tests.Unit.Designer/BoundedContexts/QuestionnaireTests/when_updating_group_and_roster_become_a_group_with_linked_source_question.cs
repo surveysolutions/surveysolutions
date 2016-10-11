@@ -13,19 +13,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : categoricalLinkedQuestionId,
-                groupPublicKey : chapterId,
-                questionType : QuestionType.MultyOption,
-                linkedToQuestionId : linkedSourceQuestionId
-            ));
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : linkedSourceQuestionId,
-                groupPublicKey : rosterId,
-                questionType : QuestionType.Text
-            ));
+            questionnaire.AddTextQuestion(linkedSourceQuestionId,rosterId,responsibleId);
+
+            questionnaire.AddMultiOptionQuestion(categoricalLinkedQuestionId,chapterId,responsibleId, options:new Option[0], linkedToQuestionId: linkedSourceQuestionId);
         };
 
         Because of = () =>

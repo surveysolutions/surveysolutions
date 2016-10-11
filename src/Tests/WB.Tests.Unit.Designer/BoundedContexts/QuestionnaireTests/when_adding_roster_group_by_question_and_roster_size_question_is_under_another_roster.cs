@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : anotherRosterId,
-                questionType: QuestionType.Numeric));
+            questionnaire.AddNumericQuestion(
+                rosterSizeQuestionId, isInteger : true, parentId : anotherRosterId,
+                responsibleId:responsibleId);
         };
 
 

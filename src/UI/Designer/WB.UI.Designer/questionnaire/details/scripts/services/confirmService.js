@@ -1,7 +1,7 @@
 ﻿(function() {
     angular.module('designerApp').factory('confirmService', [
-        '$modal',
-        function($modal) {
+        '$uibModal',
+        function ($uibModal) {
             var confirmService = {};
 
             confirmService.open = function (item) {
@@ -11,7 +11,7 @@
                     cancelButtonTitle: item.cancelButtonTitle || "BACK TO DESIGNER",
                     isReadOnly: item.isReadOnly || false
                 };
-                return $modal.open({
+                return $uibModal.open({
                     templateUrl: 'views/confirm.html',
                     controller: 'confirmCtrl',
                     windowClass: 'confirm-window',

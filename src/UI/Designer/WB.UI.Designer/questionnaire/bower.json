@@ -11,21 +11,20 @@
     "tests"
   ],
   "dependencies": {
-    "ace-builds": "^1.2.3",
-    "angular": "^1.5.6",
-    "angular-animate": "^1.5.6",
+    "ace-builds": "^1.2.5",
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
     "angular-block-ui": "0.2.2",
-    "angular-bootstrap": "0.13.4",
-    "angular-cookies": "^1.5.6",
+    "angular-bootstrap": "^2.1.4",
+    "angular-cookies": "^1.5.8",
     "angular-elastic": "^2.5.1",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#^1.7.0",
     "angular-loading-bar": "^0.9.0",
     "angular-perfect-scrollbar": "~0.1.4",
     "angular-pnotify": "~0.0.6",
-    "angular-resource": "^1.5.6",
-    "angular-sanitize": "^1.5.6",
+    "angular-resource": "^1.5.8",
+    "angular-sanitize": "^1.5.8",
     "angular-ui-ace": "~0.2.3",
-    "angular-ui-router": "0.2.15",
     "angular-ui-tree": "^2.22.1",
     "angular-ui-utils": "~0.1.1",
     "angular-unsavedChanges": "0.2.3-alpha.3",
@@ -45,10 +44,11 @@
     "moment": "^2.12.0",
     "position-calculator": "^1.1.2",
     "underscore": "^1.8.3",
-    "js-cookie": "^2.1.2"
+    "js-cookie": "^2.1.2",
+    "angular-ui-router": "ui-router#^0.3.1"
   },
   "resolutions": {
-    "angular": "^1.5.2"
+    "angular": "^1.5.8"
   },
   "overrides": {
     "prettycheckable": {

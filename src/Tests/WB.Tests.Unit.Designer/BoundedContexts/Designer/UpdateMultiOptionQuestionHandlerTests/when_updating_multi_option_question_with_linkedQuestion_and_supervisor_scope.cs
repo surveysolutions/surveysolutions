@@ -17,24 +17,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = parentGroupId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
+            questionnaire.AddTextQuestion
             (
-                publicKey : linkedToQuestionId,
-                groupPublicKey : rosterId,
-                questionType : QuestionType.Text,
-                questionText : "text question",
-                stataExportCaption : "source_of_linked_question"
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: parentGroupId,
-                questionText: "old title",
-                stataExportCaption: "old_variable_name",
-                instructions: "old instructions",
-                conditionExpression: "old condition",
-                responsibleId: responsibleId,
-                questionType: QuestionType.QRBarcode
-                ));
+                linkedToQuestionId,
+                rosterId,
+                responsibleId,
+                title : "text question",
+                variableName : "source_of_linked_question"
+            );
+            questionnaire.AddQRBarcodeQuestion(questionId,
+                        parentGroupId,
+                        responsibleId,
+                        title: "old title",
+                        variableName: "old_variable_name",
+                        instructions: "old instructions",
+                        enablementCondition: "old condition");
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
         };
 

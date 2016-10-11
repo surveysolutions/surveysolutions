@@ -8,7 +8,6 @@
         'ngAnimate',
         'ui.bootstrap',
         'ui.bootstrap.tpls',
-        'ui.bootstrap.transition',
         'ui.tree',
         'ui.utils',
         'jlareau.pnotify',
@@ -47,14 +46,10 @@
 
             }).state('questionnaire.chapter.question', {
                 url: "/question/{itemId}",
-                views: {
-                    '': {
-                        templateUrl: 'views/question.html',
-                        controller: 'QuestionCtrl'
-                    }
-                }
-            }).state('questionnaire.chapter.question.validation', {
-                url: "/val+{validationIndex}",
+                params: {
+                    property: 'None',
+                    validationIndex: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/question.html',

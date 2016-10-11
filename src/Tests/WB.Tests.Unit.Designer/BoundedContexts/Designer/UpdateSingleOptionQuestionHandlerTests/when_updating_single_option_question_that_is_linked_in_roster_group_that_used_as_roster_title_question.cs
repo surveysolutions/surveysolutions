@@ -17,18 +17,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded
-            (
-                publicKey : rosterSizeQuestionId,
-                isInteger : true,
-                groupPublicKey: anotherRosterId
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-                (
-                    publicKey: rosterTitleQuestionId,
-                    groupPublicKey: anotherRosterId,
-                    questionType : QuestionType.MultyOption
-            ));
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, anotherRosterId, responsibleId, isInteger : true);
+            questionnaire.AddMultiOptionQuestion(rosterTitleQuestionId,anotherRosterId,responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId, groupId){
