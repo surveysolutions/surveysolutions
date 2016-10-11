@@ -9,10 +9,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        private void UpdateExpressionState(InterviewTree sourceInterview, InterviewTree changedInterview)
+        private void UpdateExpressionState(InterviewTree sourceInterview, InterviewTree changedInterview, ILatestInterviewExpressionState expressionState)
         {
             var diff = sourceInterview.FindDiff(changedInterview);
-            var expressionState = this.GetClonedExpressionState();
 
             UpdateAnswers(diff, expressionState);
             UpdateRosters(diff, expressionState);
