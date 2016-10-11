@@ -4,12 +4,12 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
 {
-    [Subject(typeof(AccountAR))]
+    [Subject(typeof(Account))]
     internal class AccountTestsContext
     {
-        public static AccountAR CreateAccount(Guid accountId, bool isConfirmed = false)
+        public static Account CreateAccount(Guid accountId, bool isConfirmed = false)
         {
-            var accountAR = new AccountAR();
+            var accountAR = new Account();
 
             accountAR.SetId(accountId);
             if (isConfirmed)
