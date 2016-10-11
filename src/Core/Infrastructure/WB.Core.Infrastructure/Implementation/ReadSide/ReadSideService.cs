@@ -420,10 +420,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             try
             {
+                areViewsBeingRebuiltNow = true;
                 using (GlobalStopwatcher.Scope("Rebuild read side"))
                 {
-                    areViewsBeingRebuiltNow = true;
-
                     errors.Clear();
 
                     if (skipEvents == 0)
