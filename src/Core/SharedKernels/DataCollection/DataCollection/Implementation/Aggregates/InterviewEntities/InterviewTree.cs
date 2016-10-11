@@ -494,7 +494,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeSingleOptionQuestion(object answer)
         {
-            this.answer = this.answer == null? (int?)null : Convert.ToInt32(answer);
+            this.answer = answer == null? (int?)null : Convert.ToInt32(answer);
         }
 
         public bool IsAnswered => this.answer != null;

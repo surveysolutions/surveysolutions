@@ -5,13 +5,11 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -30,9 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var structuralChanges = new StructuralChanges();
             interviewExpressionStateMock.Setup(x => x.GetStructuralChanges()).Returns(structuralChanges);
 
-            IQuestionnaireStorage questionnaireRepository =
-                Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
-                    Create.Entity.QuestionnaireDocument(id: questionnaireId, children: new[]
+            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(
+                    Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
+                    Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new[]
                     {
                         Create.Entity.StaticText(publicKey: staticTextId)
                     }));

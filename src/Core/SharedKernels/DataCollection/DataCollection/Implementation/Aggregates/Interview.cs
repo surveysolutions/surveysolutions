@@ -762,26 +762,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
 
-            var interviewChangeStructures = new InterviewChangeStructures();
+            var state = new InterviewStateDependentOnAnswers();
 
-            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, RosterVector.Empty, interviewChangeStructures.State);
+            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, RosterVector.Empty, state);
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
-
-            foreach (var newAnswer in answersToFeaturedQuestions)
-            {
-                string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, RosterVector.Empty);
-
-                interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
-                interviewChangeStructures.State.AnsweredQuestions.Add(key);
-            }
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, state);
 
             var newAnswers =
                 answersToFeaturedQuestions.ToDictionary(
                     answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, RosterVector.Empty),
                     answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
 
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, state);
 
             foreach (var newAnswer in newAnswers)
             {
@@ -828,32 +820,87 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, interviewChangeStructures.State, newAnswers.Keys.ToArray());
+            UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, state, newAnswers.Keys.ToArray());
 
-            ILatestInterviewExpressionState expressionProcessorStatePrototypeLocal = new InterviewExpressionStateForPreloading();
-            this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
-                answersTime, newAnswers);
+            ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
-            var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
+            this.UpdateExpressionState(sourceInterviewTree, changedInterviewTree, expressionProcessorState);
 
-            var enablementAndValidityChanges = this.UpdateExpressionStateWithAnswersAndGetChanges(
-                this.ExpressionProcessorStatePrototype.Clone(),
-                interviewChangeStructures,
-                fixedRosterCalculationDatas,
-                questionnaire,
-                answersTime,
-                userId);
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
 
+            //calculate state
+            var structuralChanges = expressionProcessorState.GetStructuralChanges();
+
+            List<AnswerChange> interviewByAnswerChange = null;
+            RosterCalculationData rosterCalculationData = null;
+
+            if (structuralChanges.ChangedMultiQuestions != null && structuralChanges.ChangedMultiQuestions.Count > 0)
+            {
+                if (interviewByAnswerChange == null)
+                    interviewByAnswerChange = new List<AnswerChange>();
+
+                interviewByAnswerChange.AddRange(
+                    structuralChanges.ChangedMultiQuestions.Select(
+                        x => new AnswerChange(AnswerChangeType.MultipleOptions, userId, x.Key.Id, x.Key.RosterVector, answersTime, x.Value.Select(Convert.ToDecimal).ToArray())));
+            }
+
+            if (structuralChanges.ChangedSingleQuestions != null && structuralChanges.ChangedSingleQuestions.Count > 0)
+            {
+                if (interviewByAnswerChange == null)
+                    interviewByAnswerChange = new List<AnswerChange>();
+
+                interviewByAnswerChange.AddRange(
+                    structuralChanges.ChangedSingleQuestions.Select(
+                        x => new AnswerChange(AnswerChangeType.SingleOption, userId, x.Key.Id, x.Key.RosterVector, answersTime, x.Value)));
+            }
+
+            if (structuralChanges.ChangedYesNoQuestions != null && structuralChanges.ChangedYesNoQuestions.Count > 0)
+            {
+                if (interviewByAnswerChange == null)
+                    interviewByAnswerChange = new List<AnswerChange>();
+
+                interviewByAnswerChange.AddRange(
+                    structuralChanges.ChangedYesNoQuestions.Select(
+                        x => new AnswerChange(AnswerChangeType.YesNo, userId, x.Key.Id, x.Key.RosterVector, answersTime, ConvertToAnsweredYesNoOptionArray(x.Value))));
+            }
+
+            if (structuralChanges.RemovedRosters != null && structuralChanges.RemovedRosters.Count > 0)
+            {
+                if (rosterCalculationData == null)
+                    rosterCalculationData = new RosterCalculationData();
+
+                rosterCalculationData.RosterInstancesToRemove.AddRange(
+                    structuralChanges.RemovedRosters.Select(x => new RosterIdentity(x.Id, x.RosterVector.Shrink(), x.RosterVector.Last())));
+            }
+
+            var rostersWithTitles = new Dictionary<Identity, string>();
+
+            var changedLinkedOptions =
+                this.CreateChangedLinkedOptions(expressionProcessorState,
+                    this.interviewState,
+                    questionnaire,
+                    interviewByAnswerChange,
+                    enablementChanges,
+                    rosterCalculationData,
+                    rostersWithTitles).ToArray();
+
+            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
+
+            VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
+
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+          
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
-            this.ApplyInterviewChanges(interviewChangeStructures.Changes);
 
-            //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
             this.ApplyRosterEvents(sourceInterviewTree, changedInterviewTree);
-            this.UpdateExpressionState(sourceInterviewTree, changedInterviewTree);
+           
+            this.ApplyEnablementChangesEvents(enablementChanges);
 
-            this.ApplyInterviewChanges(enablementAndValidityChanges);
+            this.ApplyValidityChangesEvents(validationChanges);
+
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
@@ -888,7 +935,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //this.ApplyRostersEvents(fixedRosterCalculationDatas.ToArray());
             this.ApplyRosterEvents(sourceInterviewTree, changedInterview);
-            this.UpdateExpressionState(sourceInterviewTree, changedInterview);
+            this.UpdateExpressionState(sourceInterviewTree, changedInterview, this.GetClonedExpressionState());
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
@@ -925,18 +972,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             if (questionnaire.IsFixedRoster(childEntityId))
                             {
                                 var rosterTitles = questionnaire.GetFixedRosterTitles(childEntityId);
-                                if (group.Children.Count(x => x.Identity.Id == childEntityId) != rosterTitles.Length)
-                                {
-                                    var fixedRosterIdentities =
-                                        rosterTitles.Select((x, i) => new RosterIdentity(childEntityId, parentRosterVector, x.Value, sortIndex: i));
-
-                                    foreach (var fixedRosterIdentity in fixedRosterIdentities)
-                                    {
-                                        var rosterNode = BuildInterviewTreeRoster(fixedRosterIdentity.ToIdentity(), questionnaire, state);
-                                        group.AddChildren(rosterNode);
-                                        itemsQueue.Enqueue(rosterNode);
-                                    }
-                                }
+                               
+                                expectedRosterIdentities =
+                                    rosterTitles
+                                    .Select((x, i) => new RosterIdentity(childEntityId, parentRosterVector, x.Value))
+                                    .Select(x => x.ToIdentity())
+                                    .ToList();
                             }
                             else
                             {
@@ -2313,6 +2354,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyEnablementChangesEvents(EnablementChanges enablementChanges)
         {
+            //should be removed. bad tests setup
+            if (enablementChanges == null)
+                return;
+
             if (enablementChanges.GroupsToBeDisabled.Any())
             {
                 this.ApplyEvent(new GroupsDisabled(enablementChanges.GroupsToBeDisabled.ToArray()));
