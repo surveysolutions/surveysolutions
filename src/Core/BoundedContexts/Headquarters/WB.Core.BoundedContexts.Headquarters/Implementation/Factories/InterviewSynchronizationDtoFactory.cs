@@ -67,6 +67,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(
                     new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion), null);
 
+            if (questionnaire == null)
+                throw new Exception("Questionnaire was not found");
             var rosterScopes = questionnaire.GetRosterScopes();
             
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
