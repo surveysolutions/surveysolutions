@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public string ItemId { get; private set; }
         public int? FailedValidationConditionIndex { get; set; }
         public Guid? ChapterId { get; set; }
+        public QuestionnaireVerificationReferenceProperty Property { get; set; }
 
         protected bool Equals(QuestionnaireNodeReference other)
             => this.Id.Equals(other.Id)
@@ -72,7 +73,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public static QuestionnaireNodeReference CreateForTranslation(Guid translationId)
             => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Translation, translationId);
 
-        public static QuestionnaireNodeReference CreateFrom(IComposite entity)
+        public static QuestionnaireNodeReference CreateFrom(IComposite entity, 
+            QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None,
+            int? indexOfEntityInProperty = null)
         {
             QuestionnaireNodeReference result;
 
@@ -103,6 +106,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             }
 
             result.ChapterId = section.PublicKey;
+            result.Property = property;
+            result.FailedValidationConditionIndex = indexOfEntityInProperty;
 
             return result;
         }

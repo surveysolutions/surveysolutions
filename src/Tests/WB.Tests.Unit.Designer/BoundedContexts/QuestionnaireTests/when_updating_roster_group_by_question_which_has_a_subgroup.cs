@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
@@ -10,11 +11,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
     {
         Establish context = () =>
         {
-            
-
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(publicKey: rosterSizeQuestionId, isInteger: true, groupPublicKey: chapterId));
+
+            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, rosterSizeQuestionId, "title", responsibleId, chapterId));
+            questionnaire.UpdateNumericQuestion(Create.Command.UpdateNumericQuestion(questionnaire.Id, rosterSizeQuestionId, responsibleId, "title", isInteger:true));
             
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId});
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = subGroupId, ParentGroupPublicKey = groupId });

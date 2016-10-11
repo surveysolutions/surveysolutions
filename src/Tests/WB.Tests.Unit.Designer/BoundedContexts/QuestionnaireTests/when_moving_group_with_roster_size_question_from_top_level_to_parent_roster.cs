@@ -24,11 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 });
 
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupToMoveId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : groupToMoveId,
-                isInteger : true
-            ));
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, groupToMoveId, responsibleId, isInteger : true);
 
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = parentRosterId });
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, nestedRosterId));

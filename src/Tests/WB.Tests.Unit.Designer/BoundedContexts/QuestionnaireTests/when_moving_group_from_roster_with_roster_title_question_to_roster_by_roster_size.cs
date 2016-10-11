@@ -12,11 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : chapterId,
-                isInteger : true
-            ));
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId,chapterId,responsibleId, isInteger : true);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = targetGroupId, ParentGroupPublicKey = chapterId});
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, targetGroupId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: targetGroupId){
@@ -37,10 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             });
 
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = sourceRosterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterTitleQuestionId,
-                groupPublicKey : groupFromRosterId
-            ));
+            questionnaire.AddNumericQuestion(rosterTitleQuestionId, groupFromRosterId, responsibleId);
         };
 
         Because of = () => questionnaire.MoveGroup(groupFromRosterId, targetGroupId, 0, responsibleId);

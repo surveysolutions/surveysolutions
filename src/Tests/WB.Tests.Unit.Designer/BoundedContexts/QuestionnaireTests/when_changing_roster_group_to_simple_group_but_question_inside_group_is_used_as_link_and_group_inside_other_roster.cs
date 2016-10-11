@@ -36,18 +36,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             });
 
 
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : questionUsedAsLinkId,
-                groupPublicKey : groupToUpdateId,
-                isInteger : true
-            ));
+            questionnaire.AddNumericQuestion(questionUsedAsLinkId, groupToUpdateId, responsibleId, isInteger : true);
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : linkedQuestionInChapterId,
-                questionType : QuestionType.SingleOption,
-                groupPublicKey : chapterId,
-                linkedToQuestionId : questionUsedAsLinkId
-            ));
+            questionnaire.AddSingleOptionQuestion(
+                linkedQuestionInChapterId,
+                chapterId,
+                responsibleId,
+                options: new Option[0],
+                linkedToQuestionId : questionUsedAsLinkId);
         };
 
 

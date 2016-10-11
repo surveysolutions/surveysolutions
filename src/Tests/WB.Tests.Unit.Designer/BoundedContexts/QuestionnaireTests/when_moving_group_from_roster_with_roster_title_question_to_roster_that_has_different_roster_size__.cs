@@ -13,18 +13,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterSizeQuestion1Id,
-                groupPublicKey : chapterId,
-                isInteger : true,
-                questionType: QuestionType.Numeric
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterSizeQuestion2Id,
-                groupPublicKey : chapterId,
-                isInteger : true,
-                questionType:QuestionType.Numeric
-            ));
+            questionnaire.AddNumericQuestion(
+                rosterSizeQuestion1Id,
+                chapterId,
+                responsibleId,
+                isInteger : true);
+
+            questionnaire.AddNumericQuestion(
+                rosterSizeQuestion2Id,
+                chapterId,
+                responsibleId,
+                isInteger : true);
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = targetGroupId, ParentGroupPublicKey = chapterId});
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, targetGroupId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: targetGroupId){
@@ -44,11 +43,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 });
 
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = sourceRosterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterTitleQuestionId,
-                groupPublicKey : groupFromRosterId,
-                questionType:QuestionType.Numeric
-            ));
+            questionnaire.AddNumericQuestion(rosterTitleQuestionId,groupFromRosterId,
+                responsibleId);
         };
 
         Because of = () =>

@@ -22,12 +22,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(Guid.NewGuid(), rosterId));
 
             questionnaire.AddGroup(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = rosterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : questionId,
-                groupPublicKey : nestedRosterId,
-                questionText : questionTitle,
-                stataExportCaption : "var"
-                ));
+            questionnaire.AddNumericQuestion(
+                questionId,
+                nestedRosterId,
+                responsibleId,
+                title : questionTitle,
+                variableName : "var");
             eventContext = new EventContext();
         };
 

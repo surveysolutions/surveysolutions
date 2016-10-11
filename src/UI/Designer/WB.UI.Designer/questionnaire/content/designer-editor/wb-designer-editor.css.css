@@ -33,6 +33,11 @@
   border-radius: 4px;
   background-color: #fff;
 }
+.pseudo-form-control.focused {
+  border-color: #66afe9;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
 .ui-match {
   background-color: #FFCC00;
   border-top: solid 1px #FAD540;
@@ -1310,7 +1315,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .chapter-title > .search-box > .input-group > input {
   height: 40px;
   border: none;
-  border-radius: 3px 0 0 3px;
   padding: 0 14px;
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
@@ -1319,11 +1323,8 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   outline: none;
 }
 .chapter-title > .search-box > .input-group > span {
-  height: 40px;
   border: none;
-  border-radius: 0 3px 3px 0;
   background-color: #fff;
-  cursor: pointer;
   top: 0;
 }
 .chapter-title > .search-box > button {
@@ -1645,4 +1646,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 .attachment-preview-window .modal-body img {
   max-width: 100%;
+}
+.pointer {
+  cursor: pointer;
 }

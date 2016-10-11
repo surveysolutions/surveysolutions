@@ -16,8 +16,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid responsibleId,
             CommonQuestionParameters commonQuestionParameters,
             string mask,
-            string validationExpression,
-            string validationMessage,
             QuestionScope scope,
             bool isPreFilled,
             List<ValidationCondition> validationConditions)
