@@ -73,7 +73,7 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Clone(Guid id)
         {
-            QuestionnaireView model = this.GetQuestionnaire(id);
+            QuestionnaireView model = this.GetQuestionnaireOrThrow404(id);
             return
                 this.View(
                     new QuestionnaireCloneModel { Title = $"Copy of {model.Title}", Id = model.PublicKey });
@@ -85,7 +85,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                QuestionnaireView sourceModel = this.GetQuestionnaire(model.Id);
+                QuestionnaireView sourceModel = this.GetQuestionnaireOrThrow404(model.Id);
                 if (sourceModel == null)
                 {
                     throw new ArgumentNullException(nameof(model));
@@ -162,19 +162,21 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Delete(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
-            if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
+
+            if (model != null)
             {
-                this.Error("You don't  have permissions to delete this questionnaire.");
+                if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
+                {
+                    this.Error("You don't  have permissions to delete this questionnaire.");
+                }
+                else
+                {
+                    var command = new DeleteQuestionnaire(model.PublicKey, UserHelper.WebUser.UserId);
+                    this.commandService.Execute(command);
+
+                    this.Success($"Questionnaire \"{model.Title}\" successfully deleted");
+                }
             }
-            else
-            {
-                var command = new DeleteQuestionnaire(model.PublicKey, UserHelper.WebUser.UserId);
-
-                this.commandService.Execute(command);
-
-                this.Success($"Questionnaire \"{model.Title}\" successfully deleted");
-            }
-
             return this.Redirect(this.Request.UrlReferrer.ToString());
         }
 
@@ -444,11 +446,16 @@ namespace WB.UI.Designer.Controllers
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            return questionnaire;
+        }
+
+        private QuestionnaireView GetQuestionnaireOrThrow404(Guid id)
+        {
+            QuestionnaireView questionnaire = GetQuestionnaire(id);
 
             if (questionnaire == null)
             {
-                throw new HttpException(
-                    (int)HttpStatusCode.NotFound, $"Questionnaire with id={id} cannot be found");
+                throw new HttpException((int)HttpStatusCode.NotFound, $"Questionnaire with id={id} cannot be found");
             }
 
             return questionnaire;
