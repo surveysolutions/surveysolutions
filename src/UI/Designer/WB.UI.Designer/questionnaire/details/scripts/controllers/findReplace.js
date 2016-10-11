@@ -1,5 +1,5 @@
 ﻿angular.module('designerApp')
-    .controller('findReplaceCtrl', function ($rootScope, $scope, $http, $state, commandService, confirmService) {
+    .controller('findReplaceCtrl', function ($rootScope, $scope, $http, $state, commandService, utilityService) {
         var baseUrl = '../../api/findReplace';
 
         $scope.searchForm = {
@@ -12,6 +12,8 @@
 
         $scope.foundReferences = [];
         $scope.step = 'search';
+
+        utilityService.setFocusIn('searchFor');
 
         var indexOfCurrentReference = -1;
 
@@ -56,6 +58,11 @@
                 .then(function() {
                     $scope.step = 'done';
                 });
+        };
+
+        $scope.onDone = function() {
+            $scope.$close();
+            $state.reload();
         };
 
         $scope.backToSearch = function() {
