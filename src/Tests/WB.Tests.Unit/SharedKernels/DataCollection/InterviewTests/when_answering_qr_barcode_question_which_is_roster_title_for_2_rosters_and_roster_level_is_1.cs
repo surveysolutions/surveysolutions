@@ -3,15 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -24,16 +19,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
+                Create.Entity.NumericIntegerQuestion(id: numericQuestionId),
+                Create.Entity.Roster(rosterId: rosterAId, rosterSizeQuestionId:numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
                 {
                     Create.Entity.QRBarcodeQuestion(questionId: questionId),
                 }),
-                Create.Entity.Roster(rosterId: rosterBId, rosterTitleQuestionId: questionId),
+                Create.Entity.Roster(rosterId: rosterBId, rosterSizeQuestionId:numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId),
             }));
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview.Apply(Create.Event.NumericIntegerQuestionAnswered(numericQuestionId, emptyRosterVector, 1));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, rosterInstanceId));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId));
 
@@ -42,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         Because of = () =>
             interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, rosterVector: rosterVector, 
-                                              answerTime: DateTime.Now, answer: answer);
+                answerTime: DateTime.Now, answer: answer);
 
         Cleanup stuff = () =>
         {
@@ -76,6 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Interview interview;
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
+        private static Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid rosterAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static decimal rosterInstanceId = (decimal)22.5;
