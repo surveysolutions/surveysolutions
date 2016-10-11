@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(parentRosterId, chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parentRosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
                     RosterSizeQuestionId = null,
@@ -23,10 +23,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     RosterTitleQuestionId = null 
                 });
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupToMoveId });
+            questionnaire.AddGroup(groupToMoveId, responsibleId: responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, groupToMoveId, responsibleId, isInteger : true);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = nestedRosterId, ParentGroupPublicKey = parentRosterId });
+            questionnaire.AddGroup(nestedRosterId, parentRosterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, nestedRosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: nestedRosterId){
                     RosterSizeQuestionId = rosterSizeQuestionId,

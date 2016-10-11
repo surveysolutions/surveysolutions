@@ -15,11 +15,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var prefilledQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(
                  rosterSizeQuestionId, isInteger:true, parentId: chapterId,responsibleId:responsibleId);
             
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId });
+            questionnaire.AddGroup(rosterId, responsibleId: responsibleId);
             questionnaire.AddNumericQuestion(prefilledQuestionId, isInteger: true, parentId: rosterId, isPreFilled:true, responsibleId:responsibleId);
             
             eventContext = new EventContext();

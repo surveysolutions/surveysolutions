@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId });
+            questionnaire.AddGroup(anotherRosterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
             questionnaire.AddTextQuestion(linkedQuestionId, anotherRosterId,responsibleId);
 
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 responsibleId, 
                 options: new Option[0],
                 linkedToQuestionId : linkedQuestionId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId });
+            questionnaire.AddGroup(groupId, responsibleId: responsibleId);
         };
 
         Because of = () =>

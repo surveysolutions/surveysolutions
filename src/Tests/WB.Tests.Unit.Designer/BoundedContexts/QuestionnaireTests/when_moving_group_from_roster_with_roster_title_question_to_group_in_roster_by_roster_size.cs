@@ -11,10 +11,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(
                 rosterSizeQuestionId,chapterId, responsibleId, isInteger : true);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = targetRosterId, ParentGroupPublicKey = chapterId});
+            questionnaire.AddGroup(targetRosterId, chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, targetRosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: targetRosterId)
                 {
@@ -23,9 +23,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = null
                 });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromTargetRosterId, ParentGroupPublicKey = targetRosterId });
+            questionnaire.AddGroup(groupFromTargetRosterId,  targetRosterId, responsibleId: responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = sourceRosterId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(sourceRosterId, chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, sourceRosterId));
             questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: sourceRosterId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     RosterTitleQuestionId = rosterTitleQuestionId
                 });
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromSourceRosterId, ParentGroupPublicKey = sourceRosterId });
+            questionnaire.AddGroup(groupFromSourceRosterId, sourceRosterId, responsibleId: responsibleId);
             questionnaire.AddNumericQuestion(
                  rosterTitleQuestionId,
                 groupFromSourceRosterId,

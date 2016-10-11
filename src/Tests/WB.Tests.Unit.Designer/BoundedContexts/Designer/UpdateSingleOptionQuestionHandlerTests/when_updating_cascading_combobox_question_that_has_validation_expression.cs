@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(Create.Event.AddGroup(chapterId));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(parentQuestionId, chapterId, responsibleId, variableName: "cascade_parent");
             questionnaire.AddSingleOptionQuestion(cascadingId, chapterId, responsibleId, variableName: "cascade_child");
             
