@@ -94,10 +94,23 @@ namespace WB.Tests.Unit.Designer
             Guid? cascadeFromQuestionId = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+
+            var optionsList = options ?? new Option[] { new Option { Title = "one", Value = "1" }, new Option { Title = "two", Value = "2" } };
+
             questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, false, instructions, 
-                responsibleId, options ?? new Option[] {new Option{Title = "one",Value = "1"},new Option{Title = "two",Value = "2"}},
+                responsibleId, optionsList,
                 linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId, new List<ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties());
+
+            if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
+            {
+                var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
+                question.Answers = optionsList.Select(x => new Answer
+                {
+                    AnswerText = x.Title,
+                    AnswerValue = x.Value
+                }).ToList();
+            }
         }
 
         public static void AddNumericQuestion(

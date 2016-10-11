@@ -3,8 +3,8 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl',
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, optionsService) {
-                $scope.currentChapterId = $stateParams.chapterId;
+            function ($rootScope, $scope, $state, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, optionsService) {
+                $scope.currentChapterId = $state.params.chapterId;
                 $scope.selectedNumericQuestion = null;
                 $scope.selectedMultiQuestion = null;
                 $scope.selectedListQuestion = null;
@@ -94,7 +94,7 @@
                     $scope.activeRoster.rosterSizeNumericQuestionId = numericId;
                     $scope.selectedNumericQuestion = getSelected($scope.activeRoster.numerics, $scope.activeRoster.rosterSizeNumericQuestionId);
                     $scope.editRosterForm.$setDirty();
-                    questionnaireService.getQuestionsEligibleForNumericRosterTitle($stateParams.questionnaireId, $stateParams.itemId, $scope.activeRoster.rosterSizeNumericQuestionId).success(function (result) {
+                    questionnaireService.getQuestionsEligibleForNumericRosterTitle($state.params.questionnaireId, $state.params.itemId, $scope.activeRoster.rosterSizeNumericQuestionId).success(function (result) {
                         $scope.activeRoster.titles = result;
                         $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
                     });
@@ -155,17 +155,34 @@
                 };
 
                 $scope.loadRoster = function () {
-                    questionnaireService.getRosterDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function (result) {
-                        $scope.initialRoster = angular.copy(result);
-                        dataBind(result);
-                    }
-                    );
+                    questionnaireService.getRosterDetailsById($state.params.questionnaireId, $state.params.itemId)
+                        .success(function(result) {
+                                $scope.initialRoster = angular.copy(result);
+                                dataBind(result);
+
+                                var focusId = null;
+                                switch ($state.params.property) {
+                                    case 'Title':
+                                        focusId = 'edit-group-title';
+                                        break;
+                                    case 'VariableName':
+                                        focusId = 'edit-group-variableName';
+                                        break;
+                                    case 'EnablingCondition':
+                                        focusId = 'edit-group-condition';
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                utilityService.setFocusIn(focusId);
+                            }
+                        );
                 };
 
                 $scope.saveRoster = function (callback) {
                     if ($scope.editRosterForm.$valid) {
                         $scope.showRosterTitlesInList();
-                        commandService.updateRoster($stateParams.questionnaireId, $scope.activeRoster).success(function () {
+                        commandService.updateRoster($state.params.questionnaireId, $scope.activeRoster).success(function () {
                             $scope.initialRoster = angular.copy($scope.activeRoster);
 
                             $rootScope.$emit('rosterUpdated', {
@@ -186,8 +203,8 @@
 
                     modalInstance.result.then(function (confirmResult) {
                         if (confirmResult === 'ok') {
-                            commandService.deleteGroup($stateParams.questionnaireId, $stateParams.itemId).success(function () {
-                                var itemIdToDelete = $stateParams.itemId;
+                            commandService.deleteGroup($state.params.questionnaireId, $state.params.itemId).success(function () {
+                                var itemIdToDelete = $state.params.itemId;
                                 questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                 $scope.resetSelection();
                                 $rootScope.$emit('rosterDeleted', itemIdToDelete);
@@ -210,8 +227,8 @@
                 };
 
                 $rootScope.$on('groupMoved', function (event, data) {
-                    if (data === $stateParams.itemId && !_.isUndefined($scope.editRosterForm)) {
-                        questionnaireService.getRosterDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function (result) {
+                    if (data === $state.params.itemId && !_.isUndefined($scope.editRosterForm)) {
+                        questionnaireService.getRosterDetailsById($state.params.questionnaireId, $state.params.itemId).success(function (result) {
                             $scope.activeRoster.lists = result.textListsQuestions;
                             $scope.activeRoster.numerics = result.numericIntegerQuestions;
                             $scope.activeRoster.multiOption = result.notLinkedMultiOptionQuestions;
@@ -221,7 +238,7 @@
 
                             if (!_.isNull($scope.activeRoster.rosterSizeNumericQuestionId) && !_.isUndefined($scope.activeRoster.rosterSizeNumericQuestionId)) {
                                 $scope.editRosterForm.$setPristine();
-                                questionnaireService.getQuestionsEligibleForNumericRosterTitle($stateParams.questionnaireId, $stateParams.itemId, $scope.activeRoster.rosterSizeNumericQuestionId).success(function (result) {
+                                questionnaireService.getQuestionsEligibleForNumericRosterTitle($state.params.questionnaireId, $state.params.itemId, $scope.activeRoster.rosterSizeNumericQuestionId).success(function (result) {
                                     $scope.activeRoster.titles = result;
                                     $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
                                 });
