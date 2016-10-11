@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -159,8 +160,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void RemoveChildren(Identity identity)
         {
-            foreach (var child in this.children.Where(x => x.Identity.Equals(identity)))
-                this.children.Remove(child);
+            var nodesToRemove = this.children.Where(x => x.Identity.Equals(identity)).ToArray();
+            nodesToRemove.ForEach(nodeToRemove => this.children.Remove(nodeToRemove));
         }
 
         public void RemoveChildren(Identity[] identities)
@@ -184,6 +185,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             return question;
+        }
+
+        public bool HasChild(Identity identity)
+        {
+            return this.Children.Any(x => x.Identity.Equals(identity));
         }
     }
 
