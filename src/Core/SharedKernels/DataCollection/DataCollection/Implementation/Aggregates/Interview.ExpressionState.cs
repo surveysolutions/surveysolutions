@@ -47,25 +47,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         changedQuestion.Identity.RosterVector, changedQuestion.AsTextList.GetAnswer());
                 }
 
-                if (changedQuestion.IsDouble)
+                if (changedQuestion.IsDouble && changedQuestion.AsDouble.IsAnswered)
                 {
                     expressionState.UpdateNumericRealAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, changedQuestion.AsDouble.GetAnswer());
                 }
 
-                if (changedQuestion.IsInteger)
+                if (changedQuestion.IsInteger && changedQuestion.AsInteger.IsAnswered)
                 {
                     expressionState.UpdateNumericIntegerAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, changedQuestion.AsInteger.GetAnswer());
                 }
 
-                if (changedQuestion.IsDateTime)
+                if (changedQuestion.IsDateTime && changedQuestion.AsDateTime.IsAnswered)
                 {
                     expressionState.UpdateDateAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, changedQuestion.AsDateTime.GetAnswer());
                 }
 
-                if (changedQuestion.IsGps)
+                if (changedQuestion.IsGps && changedQuestion.AsGps.IsAnswered)
                 {
                     var gpsAnswer = changedQuestion.AsGps.GetAnswer();
                     expressionState.UpdateGeoLocationAnswer(changedQuestion.Identity.Id,
@@ -85,19 +85,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         changedQuestion.Identity.RosterVector, changedQuestion.AsMultimedia.GetAnswer());
                 }
 
-                if (changedQuestion.IsYesNo)
+                if (changedQuestion.IsYesNo && changedQuestion.AsYesNo.IsAnswered)
                 {
                     expressionState.UpdateYesNoAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, ConvertToYesNoAnswersOnly(changedQuestion.AsYesNo.GetAnswer()));
                 }
 
-                if (changedQuestion.IsSingleOption)
+                if (changedQuestion.IsSingleOption && changedQuestion.AsSingleOption.IsAnswered)
                 {
                     expressionState.UpdateSingleOptionAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, changedQuestion.AsSingleOption.GetAnswer());
                 }
 
-                if (changedQuestion.IsSingleOption)
+                if (changedQuestion.IsSingleOption && changedQuestion.AsSingleOption.IsAnswered)
                 {
                     expressionState.UpdateSingleOptionAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, changedQuestion.AsSingleOption.GetAnswer());

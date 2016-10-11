@@ -1148,7 +1148,6 @@ namespace WB.Tests.Unit.TestFactories
         public QuestionnaireView QuestionnaireView(QuestionnaireIdentity questionnaireIdentity)
         {
             return new QuestionnaireView { Id = questionnaireIdentity.ToString()};
-            
         }
 
         public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
