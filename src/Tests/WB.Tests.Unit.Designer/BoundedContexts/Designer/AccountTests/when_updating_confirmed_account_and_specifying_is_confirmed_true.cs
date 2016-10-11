@@ -5,6 +5,7 @@ using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
 {
+    [Ignore("KP-7922 KP-7923")]
     internal class when_updating_confirmed_account_and_specifying_is_confirmed_true : AccountTestsContext
     {
         Establish context = () =>

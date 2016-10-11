@@ -10,6 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountDenormalizerTests
 {
+    [Ignore("KP-7922 KP-7923")]
     internal class when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__ : AccountDenormalizerTestsContext
     {
         Establish context = () =>
