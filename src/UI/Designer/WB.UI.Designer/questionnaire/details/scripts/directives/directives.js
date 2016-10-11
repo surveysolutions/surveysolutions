@@ -38,10 +38,5 @@
             replace: true,
             template: ""
         };
-    })
-    .directive('drags', function () {
-        return function (scope, elem) {
-            $(elem).parents('.modal-dialog').drags({ handle: elem });
-        }
     });
 })(jQuery);
