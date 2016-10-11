@@ -1,22 +1,32 @@
 ﻿using System;
 using Ncqrs.Domain;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.Infrastructure.Aggregates;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    public class AccountAR : AggregateRootMappedByConvention
+    public class AccountAR : IPlainAggregateRoot
     {
-        private bool isLockOut = false;
-        private bool isConfirmed = false;
-        private AccountDocument document = null;
+        private Guid? id;
+
+        public Guid Id // TODO: TLK: make plain after Document inline
+        {
+            get { return this.id ?? this.Document.ProviderUserKey; }
+            private set { this.id = value; }
+        }
+
+        public AccountDocument Document { get; set; }
+
+        public void SetId(Guid id) => this.Id = id;
+        private void ApplyEvent(dynamic @event) => ((dynamic) this).Apply(@event);
 
         public void Apply(AccountRegistered @event)
         {
-            this.document = new AccountDocument
+            this.Document = new AccountDocument
             {
-                ProviderUserKey = this.EventSourceId,
+                ProviderUserKey = this.Id,
                 UserName = GetNormalizedUserName(@event.UserName),
                 Email = @event.Email,
                 ConfirmationToken = @event.ConfirmationToken,
@@ -26,77 +36,74 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
         public void Apply(AccountConfirmed @event)
         {
-            this.isConfirmed = true;
-            this.document.IsConfirmed = true;
+            this.Document.IsConfirmed = true;
         }
 
         public void Apply(AccountDeleted @event)
         {
-            this.document = null;
+            this.Document = null;
         }
         public void Apply(AccountLocked @event)
         {
-            this.isLockOut = true;
-            this.document.IsLockedOut = true;
-            this.document.LastLockedOutAt = @event.LastLockedOutAt;
+            this.Document.IsLockedOut = true;
+            this.Document.LastLockedOutAt = @event.LastLockedOutAt;
         }
 
         public void Apply(AccountOnlineUpdated @event)
         {
-            this.document.LastActivityAt = @event.LastActivityAt;
+            this.Document.LastActivityAt = @event.LastActivityAt;
         }
 
         public void Apply(AccountPasswordChanged @event)
         {
-            this.document.Password = @event.Password;
-            this.document.LastPasswordChangeAt = @event.LastPasswordChangeAt;
+            this.Document.Password = @event.Password;
+            this.Document.LastPasswordChangeAt = @event.LastPasswordChangeAt;
         }
 
         public void Apply(AccountPasswordQuestionAndAnswerChanged @event)
         {
-            this.document.PasswordAnswer = @event.PasswordAnswer;
-            this.document.PasswordQuestion = @event.PasswordQuestion;
+            this.Document.PasswordAnswer = @event.PasswordAnswer;
+            this.Document.PasswordQuestion = @event.PasswordQuestion;
         }
 
         public void Apply(AccountPasswordReset @event)
         {
-            this.document.PasswordSalt = @event.PasswordSalt;
-            this.document.Password = @event.Password;
+            this.Document.PasswordSalt = @event.PasswordSalt;
+            this.Document.Password = @event.Password;
         }
         public void Apply(AccountUnlocked @event)
         {
-            this.isLockOut = false;
-            this.document.IsLockedOut = false;
+            this.Document.IsLockedOut = false;
         }
 
         public void Apply(AccountUpdated @event)
         {
-            this.document.Comment = @event.Comment;
-            this.document.Email = @event.Email;
-            this.document.PasswordQuestion = @event.PasswordQuestion;
-            this.document.UserName = GetNormalizedUserName(@event.UserName);
+            this.Document.Comment = @event.Comment;
+            this.Document.Email = @event.Email;
+            this.Document.PasswordQuestion = @event.PasswordQuestion;
+            this.Document.UserName = GetNormalizedUserName(@event.UserName);
         }
 
         public void Apply(UserLoggedIn @event)
         {
-            this.document.LastLoginAt = @event.LastLoginAt;
+            this.Document.LastLoginAt = @event.LastLoginAt;
         }
 
         public void Apply(AccountRoleAdded @event)
         {
-            this.document.SimpleRoles.Add(@event.Role);
+            this.Document.SimpleRoles.Add(@event.Role);
         }
 
         public void Apply(AccountRoleRemoved @event)
         {
-            this.document.SimpleRoles.Remove(@event.Role);
+            this.Document.SimpleRoles.Remove(@event.Role);
         }
         public void Apply(AccountLoginFailed @event) { }
 
         public void Apply(AccountPasswordResetTokenChanged @event)
         {
-            this.document.PasswordResetToken = @event.PasswordResetToken;
-            this.document.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
+            this.Document.PasswordResetToken = @event.PasswordResetToken;
+            this.Document.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
         }
 
         public AccountAR()
@@ -203,12 +210,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     UserName = userName
                 });
             
-            if (!this.isConfirmed && isConfirmed)
+            if (!this.Document.IsConfirmed && isConfirmed)
             {
                 this.ApplyEvent(new AccountConfirmed());
             }
 
-            if (this.isLockOut != isLockedOut)
+            if (this.Document.IsLockedOut != isLockedOut)
             {
                 if (isLockedOut)
                 {
