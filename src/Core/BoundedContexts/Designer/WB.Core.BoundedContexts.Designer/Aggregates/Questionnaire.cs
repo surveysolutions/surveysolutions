@@ -439,11 +439,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Title);
                 }
-
+                
                 var question = questionnaireItem as IQuestion;
-                if (question?.Answers != null && question.Answers.Any(x => MatchesSearchTerm(x.AnswerText, searchRegex)))
+                if (question?.Answers != null && !(question.IsFilteredCombobox.GetValueOrDefault() || question.CascadeFromQuestionId.HasValue))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option);
+                    for (int i = 0; i < question.Answers.Count; i++)
+                    {
+                        if (MatchesSearchTerm(question.Answers[i].AnswerText, searchRegex))
+                        {
+                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option, i);
+                        }
+                    }
                 }
 
                 var conditional = questionnaireItem as IConditional;
@@ -572,7 +578,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
 
                 var question = questionnaireItem as IQuestion;
-                if (question?.Answers != null)
+                if (question?.Answers != null && !(question.IsFilteredCombobox.GetValueOrDefault() || question.CascadeFromQuestionId.HasValue))
                 {
                     foreach (var questionAnswer in question.Answers)
                     {
@@ -1327,7 +1333,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
                 var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
-                answers = categoricalOneAnswerQuestion != null ? categoricalOneAnswerQuestion.Answers.ToArray() : null;
+                answers = categoricalOneAnswerQuestion?.Answers.ToArray();
             }
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
