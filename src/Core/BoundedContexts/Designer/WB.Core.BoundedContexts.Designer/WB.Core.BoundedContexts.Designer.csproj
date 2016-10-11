@@ -298,6 +298,7 @@
     <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
+    <Compile Include="Implementation\Repositories\AccountRepository.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\ExpressionsMigratedToCSharp.cs" />
