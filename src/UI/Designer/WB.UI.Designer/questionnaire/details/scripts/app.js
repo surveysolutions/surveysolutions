@@ -47,16 +47,9 @@
             }).state('questionnaire.chapter.question', {
                 url: "/question/{itemId}",
                 params: {
-                    property: 'None'
+                    property: 'None',
+                    validationIndex: null
                 },
-                views: {
-                    '': {
-                        templateUrl: 'views/question.html',
-                        controller: 'QuestionCtrl'
-                    }
-                }
-            }).state('questionnaire.chapter.question.validation', {
-                url: "/val+{validationIndex}",
                 views: {
                     '': {
                         templateUrl: 'views/question.html',

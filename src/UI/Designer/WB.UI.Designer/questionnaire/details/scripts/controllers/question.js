@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService) {
+        function ($rootScope, $scope, $state, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
 
@@ -122,8 +122,41 @@
                     .success(function (result) {
                         $scope.initialQuestion = angular.copy(result);
                         dataBind(result);
-                        $scope.activeQuestion.focusProperty = $state.params.property;
                         utilityService.scrollToValidationCondition($state.params.validationIndex);
+
+
+                        $timeout(function () {
+                            var elementToPutFocusIn = null;
+                            switch ($state.params.property) {
+                                case 'Title':
+                                    elementToPutFocusIn = angular.element('#edit-question-title');
+                                    break;
+                                case 'VariableName':
+                                    elementToPutFocusIn = angular.element('#edit-question-variable-name');
+                                    break;
+                                case 'EnablingCondition':
+                                    elementToPutFocusIn = angular.element('#edit-question-enablement-condition');
+                                    break;
+                                case 'ValidationExpression':
+                                    elementToPutFocusIn = angular.element('#validation-expression-' + $state.params.validationIndex);
+                                    break;
+                                case 'ValidationMessage':
+                                    elementToPutFocusIn = angular.element('#validationMessage' + $state.params.validationIndex);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            if (elementToPutFocusIn !== null) {
+                                if (elementToPutFocusIn.attr('ui-ace')) {
+                                    var edit = ace.edit(elementToPutFocusIn.attr('id'));
+                                    edit.focus();
+                                    edit.navigateFileEnd();
+                                } else {
+                                    elementToPutFocusIn.focus();
+                                }
+                            }
+                        }, 300);
                     });
             };
 

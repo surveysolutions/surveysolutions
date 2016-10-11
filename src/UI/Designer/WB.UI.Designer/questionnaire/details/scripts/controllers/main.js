@@ -115,8 +115,7 @@ angular.module('designerApp')
                         templateUrl: 'views/find-replace.html',
                         backdrop: false,
                         windowClass: "findReplaceModal",
-                        controller: 'findReplaceCtrl',
-                        appendTo: angular.element('.questionnaire-tree-holder')
+                        controller: 'findReplaceCtrl'
                     });
                     searchBoxOpened = true;
                     modalInstance.closed.then(function() {
@@ -249,21 +248,14 @@ angular.module('designerApp')
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openTranslations", { focusOn: reference.itemId });
                 } else {
-                    if (!_.isNull(reference.failedValidationConditionIndex) && !_.isUndefined(reference.failedValidationConditionIndex)) {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + '.validation', {
-                            chapterId: reference.chapterId,
-                            itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex,
-                            property: reference.property
-                        });
-                    } else {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                            chapterId: reference.chapterId,
-                            itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex,
-                            property: reference.property
-                        });
-                    }
+                    
+                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                        chapterId: reference.chapterId,
+                        itemId: reference.itemId,
+                        validationIndex: reference.failedValidationConditionIndex,
+                        property: reference.property
+                    });
+                    
                 }
             };
             
@@ -426,6 +418,7 @@ angular.module('designerApp')
 
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
+                editor.commands.bindKey("shift+tab", null);
 
                 $rootScope.$on('variablesChanged', function() {
                     $scope.aceEditorUpdateMode(editor);
