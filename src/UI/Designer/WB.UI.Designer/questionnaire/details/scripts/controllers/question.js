@@ -143,6 +143,9 @@
                                 case 'ValidationMessage':
                                     elementToPutFocusIn = angular.element('#validationMessage' + $state.params.validationIndex);
                                     break;
+                                case 'Option':
+                                    elementToPutFocusIn = angular.element('#option-title-' + $state.params.validationIndex);
+                                    break;
                                 default:
                                     break;
                             }
