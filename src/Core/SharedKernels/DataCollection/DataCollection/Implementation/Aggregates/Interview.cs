@@ -895,7 +895,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            this.ApplyRosterEvents(sourceInterviewTree, changedInterviewTree);
+            this.ApplyEvents(sourceInterviewTree, changedInterviewTree);
 
             this.ApplyEnablementChangesEvents(enablementChanges);
 
@@ -933,7 +933,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
 
-            this.ApplyRosterEvents(sourceInterviewTree, changedInterview);
+            this.ApplyEvents(sourceInterviewTree, changedInterview);
             this.UpdateExpressionState(sourceInterviewTree, changedInterview, this.GetClonedExpressionState());
 
             this.ApplyInterviewChanges(enablementAndValidityChanges);

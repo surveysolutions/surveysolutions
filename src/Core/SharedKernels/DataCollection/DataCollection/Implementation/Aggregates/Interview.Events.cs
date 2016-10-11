@@ -1,18 +1,34 @@
+using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        public void ApplyRosterEvents(InterviewTree sourceInterview, InterviewTree changedInterview)
+        public void ApplyEvents(InterviewTree sourceInterview, InterviewTree changedInterview)
         {
-            var diff = sourceInterview.FindDiff(changedInterview);
+            var diff = sourceInterview.Compare(changedInterview);
 
+            this.ApplyRosterEvents(diff);
+            this.ApplyRemoveAnswerEvents(diff);
+        }
+
+        private void ApplyRemoveAnswerEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
+            var questionIdentittiesWithRemovedAnswer = diff
+                .Where(IsAnswerRemoved)
+                .Select(x => x.SourceNode.Identity)
+                .ToArray();
+
+            if (questionIdentittiesWithRemovedAnswer.Any())
+                this.ApplyEvent(new AnswersRemoved(questionIdentittiesWithRemovedAnswer));
+        }
+
+        private void ApplyRosterEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
             var removedRosters = diff
                 .Where(x => x.SourceNode is InterviewTreeRoster && x.ChangedNode == null)
                 .Select(x => x.SourceNode)
@@ -23,30 +39,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(x => x.ChangedNode)
                 .ToArray();
 
-            var removedAnswersByRemovedRosters = removedRosters
-                .TreeToEnumerable(x => x.Children)
-                .DistinctBy(x => x.Identity)
-                .OfType<InterviewTreeQuestion>()
-                .Select(x => x.Identity)
-                .ToArray();
-
             var changedRosterTitles = diff
                 .Where(HasChangedRosterTitle)
                 .Select(x => x.ChangedNode)
                 .Cast<InterviewTreeRoster>()
                 .ToArray();
 
-
             if (removedRosters.Any())
                 this.ApplyEvent(new RosterInstancesRemoved(removedRosters.Select(ToRosterInstance).ToArray()));
-
-            if (removedAnswersByRemovedRosters.Any())
-                this.ApplyEvent(new AnswersRemoved(removedAnswersByRemovedRosters));
 
             if (addedRosters.Any())
                 this.ApplyEvent(new RosterInstancesAdded(addedRosters.Select(ToAddedRosterInstance).ToArray()));
 
-            if(changedRosterTitles.Any())
+            if (changedRosterTitles.Any())
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
         }
 
@@ -58,6 +63,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (sourceRoster == null || changedRoster == null) return false;
 
             return sourceRoster.RosterTitle != changedRoster.RosterTitle;
+        }
+
+        private static bool IsAnswerRemoved(InterviewTreeNodeDiff diff)
+        {
+            var sourceQuestion = diff.SourceNode as InterviewTreeQuestion;
+            var changedQuestion = diff.ChangedNode as InterviewTreeQuestion;
+
+            if (sourceQuestion == null) return false;
+
+            return sourceQuestion.IsAnswered() && (changedQuestion == null || !changedQuestion.IsAnswered());
         }
 
         private static ChangedRosterInstanceTitleDto ToChangedRosterInstanceTitleDto(InterviewTreeRoster roster)

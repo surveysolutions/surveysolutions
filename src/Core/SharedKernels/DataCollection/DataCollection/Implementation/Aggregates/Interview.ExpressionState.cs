@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -11,29 +9,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         private void UpdateExpressionState(InterviewTree sourceInterview, InterviewTree changedInterview, ILatestInterviewExpressionState expressionState)
         {
-            var diff = sourceInterview.FindDiff(changedInterview);
+            var diff = sourceInterview.Compare(changedInterview);
 
-            UpdateAnswers(diff, expressionState);
-            UpdateRosters(diff, expressionState);
+            UpdateAnswersInExpressionState(diff, expressionState);
+            UpdateRostersInExpressionState(diff, expressionState);
         }
 
-        private static void UpdateAnswers(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
+        private static void UpdateAnswersInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
         {
-            var removedQuestionIdentitiesByRemovedRosters = diff
-                .Where(x => x.SourceNode is InterviewTreeRoster && x.ChangedNode == null)
-                .Select(x => x.SourceNode)
-                .TreeToEnumerable(x => x.Children)
-                .DistinctBy(x => x.Identity)
-                .OfType<InterviewTreeQuestion>()
-                .Select(x => x.Identity);
+            var diffByChangedQuestions = diff
+                .Where(x=>x.SourceNode is InterviewTreeQuestion || x.ChangedNode is InterviewTreeQuestion);
 
-            var changedQuestions = diff
-                .Where(IsQuestionWithChangedAnswer)
-                .Select(x => x.ChangedNode)
-                .Cast<InterviewTreeQuestion>();
-
-            foreach (var changedQuestion in changedQuestions)
+            foreach (var diffByQuestion in diffByChangedQuestions)
             {
+                var sourceQuestion = diffByQuestion.SourceNode as InterviewTreeQuestion;
+                var changedQuestion = diffByQuestion.ChangedNode as InterviewTreeQuestion;
+
+                if (sourceQuestion == null) continue;
+
+                if (IsAnswerRemoved(diffByQuestion))
+                {
+                    expressionState.RemoveAnswer(sourceQuestion.Identity);
+                    continue;
+                }
+
+                if (changedQuestion == null) continue;
+
                 if (changedQuestion.IsText)
                 {
                     expressionState.UpdateTextAnswer(changedQuestion.Identity.Id,
@@ -120,14 +121,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         changedQuestion.Identity.RosterVector, changedQuestion.AsMultiLinkedOption.GetAnswer());
                 }
             }
-
-            foreach (var removedQuestionIdentity in removedQuestionIdentitiesByRemovedRosters)
-            {
-                expressionState.RemoveAnswer(removedQuestionIdentity);
-            }
         }
 
-        private static void UpdateRosters(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
+        private static void UpdateRostersInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
         {
             var removedRosters =
                 diff.Where(x => x.SourceNode is InterviewTreeRoster && x.ChangedNode == null)
@@ -162,30 +158,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var yesAnswers = answeredOptions.Where(x => x.Yes).Select(x => x.OptionValue).ToArray();
             var noAnswers = answeredOptions.Where(x => !x.Yes).Select(x => x.OptionValue).ToArray();
             return new YesNoAnswersOnly(yesAnswers, noAnswers);
-        }
-
-        private static bool IsQuestionWithChangedAnswer(InterviewTreeNodeDiff diff)
-        {
-            var sourceQuestion = diff.SourceNode as InterviewTreeQuestion;
-            var changedQuestion = diff.ChangedNode as InterviewTreeQuestion;
-
-            if (sourceQuestion == null || changedQuestion == null) return false;
-
-            if (sourceQuestion.IsText) return !sourceQuestion.AsText.EqualByAnswer(changedQuestion.AsText);
-            if (sourceQuestion.IsInteger) return !sourceQuestion.AsInteger.EqualByAnswer(changedQuestion.AsInteger);
-            if (sourceQuestion.IsDouble) return !sourceQuestion.AsDouble.EqualByAnswer(changedQuestion.AsDouble);
-            if (sourceQuestion.IsDateTime) return !sourceQuestion.AsDateTime.EqualByAnswer(changedQuestion.AsDateTime);
-            if (sourceQuestion.IsMultimedia) return !sourceQuestion.AsMultimedia.EqualByAnswer(changedQuestion.AsMultimedia);
-            if (sourceQuestion.IsQRBarcode) return !sourceQuestion.AsQRBarcode.EqualByAnswer(changedQuestion.AsQRBarcode);
-            if (sourceQuestion.IsGps) return !sourceQuestion.AsGps.EqualByAnswer(changedQuestion.AsGps);
-            if (sourceQuestion.IsSingleOption) return !sourceQuestion.AsSingleOption.EqualByAnswer(changedQuestion.AsSingleOption);
-            if (sourceQuestion.IsSingleLinkedOption) return !sourceQuestion.AsSingleLinkedOption.EqualByAnswer(changedQuestion.AsSingleLinkedOption);
-            if (sourceQuestion.IsMultiOption) return !sourceQuestion.AsMultiOption.EqualByAnswer(changedQuestion.AsMultiOption);
-            if (sourceQuestion.IsMultiLinkedOption) return !sourceQuestion.AsMultiLinkedOption.EqualByAnswer(changedQuestion.AsMultiLinkedOption);
-            if (sourceQuestion.IsYesNo) return !sourceQuestion.AsYesNo.EqualByAnswer(changedQuestion.AsYesNo);
-            if (sourceQuestion.IsTextList) return !sourceQuestion.AsTextList.EqualByAnswer(changedQuestion.AsTextList);
-
-            return false;
         }
     }
 }
