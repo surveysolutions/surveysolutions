@@ -782,7 +782,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
 
-            UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, interviewChangeStructures.State, newAnswers);
+            foreach (var newAnswer in newAnswers)
+            {
+                var question = changedInterviewTree.GetQuestion(newAnswer.Key);
+                var questionId = newAnswer.Key.Id;
+                var answer = newAnswer.Value;
+
+                QuestionType questionType = questionnaire.GetQuestionType(questionId);
+                switch (questionType)
+                {
+                    case QuestionType.Text:
+                        question.AsText.SetAnswer(answer as string);
+                        break;
+                    case QuestionType.Numeric:
+                        if (questionnaire.IsQuestionInteger(questionId))
+                            question.AsInteger.SetAnswer((int)answer);
+                        else
+                            question.AsDouble.SetAnswer((double)answer);
+                        break;
+                    case QuestionType.DateTime:
+                        question.AsDateTime.SetAnswer((DateTime)answer);
+                        break;
+                    case QuestionType.SingleOption:
+                        question.AsSingleOption.SetAnswer((int)answer);
+                        break;
+
+                    case QuestionType.MultyOption:
+                        question.AsMultiOption.SetAnswer((decimal[])answer);
+                        break;
+                    case QuestionType.QRBarcode:
+                        question.AsQRBarcode.SetAnswer(answer as string);
+                        break;
+                    case QuestionType.GpsCoordinates:
+                        question.AsGps.SetAnswer((GeoPosition)answer);
+                        break;
+                    case QuestionType.TextList:
+                        question.AsTextList.SetAnswer((Tuple<decimal,string>[])answer);
+                        break;
+
+                    default:
+                        throw new InterviewException(string.Format(
+                            "Question {0} has type {1} which is not supported as initial pre-filled question. InterviewId: {2}",
+                            questionId, questionType, this.EventSourceId));
+                }
+            }
+
+            UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, interviewChangeStructures.State, newAnswers.Keys.ToArray());
 
             ILatestInterviewExpressionState expressionProcessorStatePrototypeLocal = new InterviewExpressionStateForPreloading();
             this.CalculateChangesByFeaturedQuestion(expressionProcessorStatePrototypeLocal, interviewChangeStructures, userId, questionnaire, answersToFeaturedQuestions,
@@ -822,7 +867,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
             var changedInterview = this.BuildInterviewTree(questionnaire, interviewChangeStructures.State);
 
-            UpdateTreeWithNewAnswers(changedInterview, questionnaire, interviewChangeStructures.State, new Dictionary<Identity, object>());
+            UpdateTreeWithNewAnswers(changedInterview, questionnaire, interviewChangeStructures.State, new Identity[0]);
 
             var fixedRosterCalculationDatas = this.CalculateFixedRostersData(interviewChangeStructures.State, questionnaire);
 
@@ -852,7 +897,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
         }
 
-        private void UpdateTreeWithNewAnswers(InterviewTree tree, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state, Dictionary<Identity, object> newAnswers)
+        private void UpdateTreeWithNewAnswers(InterviewTree tree, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state, 
+            Identity[] changedQuestions)
         {
             var itemsQueue = new Queue<IInterviewTreeNode>(tree.Sections);
 
@@ -890,7 +936,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             var sourceQuestionId = questionnaire.GetRosterSizeQuestion(childEntity);
                             if (sourceQuestionId == null)
                                 continue;
-                            if (!newAnswers.Keys.Any(x => x.Id == sourceQuestionId.Value))
+                            if (changedQuestions.All(x => x.Id != sourceQuestionId.Value))
                                 continue;
                             List<Identity> rosterIdentities = new List<Identity>();
                             var questionaType = questionnaire.GetQuestionType(sourceQuestionId.Value);
@@ -899,8 +945,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 case QuestionType.MultyOption:
                                     if (questionnaire.IsQuestionYesNo(sourceQuestionId.Value))
                                     {
-                                        //get answer from dictionary
-                                        var newYesNoAnswer = (AnsweredYesNoOption[])newAnswers.First(x => x.Key.Id == sourceQuestionId.Value).Value;
+                                        var newYesNoAnswer = group.GetQuestionFromThisOrUpperLevel(sourceQuestionId.Value).AsYesNo.GetAnswer();
                                         rosterIdentities = newYesNoAnswer
                                             .Where(x => x.Yes)
                                             .Select((selectedYesOption, index) => new RosterIdentity(childEntity, currentItem.Identity.RosterVector, selectedYesOption.OptionValue, index))
@@ -909,8 +954,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                     }
                                     else
                                     {
-                                        //get answer from dictionary
-                                        var newMultiAnswer = (decimal[])newAnswers.First(x => x.Key.Id == sourceQuestionId.Value).Value;
+                                        var newMultiAnswer = group.GetQuestionFromThisOrUpperLevel(sourceQuestionId.Value).AsMultiOption.GetAnswer();
                                         rosterIdentities = newMultiAnswer
                                             .Select((optionValue, index) => new RosterIdentity(childEntity, currentItem.Identity.RosterVector, optionValue, index))
                                             .Select(x => x.ToIdentity())
@@ -918,22 +962,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                     }
                                     break;
                                 case QuestionType.Numeric:
-                                    //get answer from dictionary
-                                    var newIntegerAnswer = (int)newAnswers.First(x => x.Key.Id == sourceQuestionId.Value).Value;
+                                    var newIntegerAnswer = group.GetQuestionFromThisOrUpperLevel(sourceQuestionId.Value).AsInteger.GetAnswer();
                                     rosterIdentities = Enumerable.Range(0, newIntegerAnswer)
                                         .Select(index => new RosterIdentity(childEntity, currentItem.Identity.RosterVector, index, index))
                                         .Select(x => x.ToIdentity())
                                         .ToList();
                                     break;
                                 case QuestionType.TextList:
-                                    var newListAnswer = (Tuple<decimal, string>[])newAnswers.First(x => x.Key.Id == sourceQuestionId.Value).Value;
+                                    var newListAnswer = group.GetQuestionFromThisOrUpperLevel(sourceQuestionId.Value).AsTextList.GetAnswer();
                                     rosterIdentities = newListAnswer
                                         .Select(x => x.Item1)
                                         .Select((code,index) => new RosterIdentity(childEntity, currentItem.Identity.RosterVector, code, index))
                                         .Select(x => x.ToIdentity())
                                         .ToList();
-                                    break;
-                                default:
                                     break;
                             }
                             var existingRosters = group.Children.Where(x => x.Identity.Id == childEntity).ToList();
@@ -951,7 +992,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             }
                             else
                             {
-                                // remove numeric rosters 
                                 foreach (var extisingRoster in existingRosters)
                                 {
                                     if (rosterIdentities.Any(x => x.Equals(extisingRoster.Identity)))
