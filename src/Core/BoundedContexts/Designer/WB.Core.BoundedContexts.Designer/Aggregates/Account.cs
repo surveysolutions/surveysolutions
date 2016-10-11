@@ -1,43 +1,112 @@
 ﻿using System;
 using Ncqrs.Domain;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.Infrastructure.Aggregates;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    public class AccountAR : AggregateRootMappedByConvention
+    public class Account : IPlainAggregateRoot
     {
-        private bool isLockOut = false;
-        private bool isConfirmed = false;
+        private Guid? id;
 
-        public void Apply(AccountRegistered @event) { }
+        public Guid Id // TODO: TLK: make plain after Document inline
+        {
+            get { return this.id ?? this.Document.ProviderUserKey; }
+            private set { this.id = value; }
+        }
+
+        public AccountDocument Document { get; set; }
+
+        public void SetId(Guid id) => this.Id = id;
+        private void ApplyEvent(dynamic @event) => ((dynamic) this).Apply(@event);
+
+        public void Apply(AccountRegistered @event)
+        {
+            this.Document = new AccountDocument
+            {
+                ProviderUserKey = this.Id,
+                UserName = GetNormalizedUserName(@event.UserName),
+                Email = @event.Email,
+                ConfirmationToken = @event.ConfirmationToken,
+                ApplicationName = @event.ApplicationName,
+                CreatedAt = @event.CreatedDate
+            };
+        }
         public void Apply(AccountConfirmed @event)
         {
-            this.isConfirmed = true;
+            this.Document.IsConfirmed = true;
         }
 
-        public void Apply(AccountDeleted @event) {}
+        public void Apply(AccountDeleted @event)
+        {
+            this.Document = null;
+        }
         public void Apply(AccountLocked @event)
         {
-            this.isLockOut = true;
+            this.Document.IsLockedOut = true;
+            this.Document.LastLockedOutAt = @event.LastLockedOutAt;
         }
-        public void Apply(AccountOnlineUpdated @event) { }
-        public void Apply(AccountPasswordChanged @event) { }
-        public void Apply(AccountPasswordQuestionAndAnswerChanged @event) { }
-        public void Apply(AccountPasswordReset @event) { }
+
+        public void Apply(AccountOnlineUpdated @event)
+        {
+            this.Document.LastActivityAt = @event.LastActivityAt;
+        }
+
+        public void Apply(AccountPasswordChanged @event)
+        {
+            this.Document.Password = @event.Password;
+            this.Document.LastPasswordChangeAt = @event.LastPasswordChangeAt;
+        }
+
+        public void Apply(AccountPasswordQuestionAndAnswerChanged @event)
+        {
+            this.Document.PasswordAnswer = @event.PasswordAnswer;
+            this.Document.PasswordQuestion = @event.PasswordQuestion;
+        }
+
+        public void Apply(AccountPasswordReset @event)
+        {
+            this.Document.PasswordSalt = @event.PasswordSalt;
+            this.Document.Password = @event.Password;
+        }
         public void Apply(AccountUnlocked @event)
         {
-            this.isLockOut = false;
+            this.Document.IsLockedOut = false;
         }
-        public void Apply(AccountUpdated @event) { }
-        public void Apply(UserLoggedIn @event) { }
-        public void Apply(AccountRoleAdded @event) { }
-        public void Apply(AccountRoleRemoved @event) { }
-        public void Apply(AccountLoginFailed @event) { }
-        public void Apply(AccountPasswordResetTokenChanged @event) { }
 
-        public AccountAR()
+        public void Apply(AccountUpdated @event)
+        {
+            this.Document.Comment = @event.Comment;
+            this.Document.Email = @event.Email;
+            this.Document.PasswordQuestion = @event.PasswordQuestion;
+            this.Document.UserName = GetNormalizedUserName(@event.UserName);
+        }
+
+        public void Apply(UserLoggedIn @event)
+        {
+            this.Document.LastLoginAt = @event.LastLoginAt;
+        }
+
+        public void Apply(AccountRoleAdded @event)
+        {
+            this.Document.SimpleRoles.Add(@event.Role);
+        }
+
+        public void Apply(AccountRoleRemoved @event)
+        {
+            this.Document.SimpleRoles.Remove(@event.Role);
+        }
+        public void Apply(AccountLoginFailed @event) { }
+
+        public void Apply(AccountPasswordResetTokenChanged @event)
+        {
+            this.Document.PasswordResetToken = @event.PasswordResetToken;
+            this.Document.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
+        }
+
+        public Account()
         {
         }
 
@@ -141,12 +210,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     UserName = userName
                 });
             
-            if (!this.isConfirmed && isConfirmed)
+            if (!this.Document.IsConfirmed && isConfirmed)
             {
                 this.ApplyEvent(new AccountConfirmed());
             }
 
-            if (this.isLockOut != isLockedOut)
+            if (this.Document.IsLockedOut != isLockedOut)
             {
                 if (isLockedOut)
                 {
@@ -158,5 +227,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
             }
         }
+
+        private static string GetNormalizedUserName(string userName) => userName.ToLower();
     }
 }

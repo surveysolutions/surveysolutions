@@ -5,6 +5,7 @@ using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
 {
+    [Ignore("KP-7922 KP-7923")]
     internal class when_updating_unlocked_account_and_specifying_is_locked_true : AccountTestsContext
     {
         Establish context = () =>
@@ -29,6 +30,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
             eventContext.ShouldContainEvent<AccountLocked>();
 
         private static EventContext eventContext;
-        private static AccountAR account;
+        private static Account account;
     }
 }
