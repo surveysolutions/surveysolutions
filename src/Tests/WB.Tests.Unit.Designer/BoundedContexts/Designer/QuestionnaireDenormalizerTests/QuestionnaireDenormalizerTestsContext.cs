@@ -158,26 +158,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             };
         }
         
-        protected static NewGroupAdded CreateNewGroupAddedEvent(Guid groupId,
-            string title = "New Group X")
-        {
-            return new NewGroupAdded
-            {
-                PublicKey = groupId,
-                GroupText = title,
-            };
-        }
-
-        protected static GroupCloned CreateGroupClonedEvent(Guid groupId,
-            string title = "New Cloned Group X")
-        {
-            return new GroupCloned
-            {
-                PublicKey = groupId,
-                GroupText = title,
-            };
-        }
-
         protected static GroupUpdated CreateGroupUpdatedEvent(Guid groupId,
             string title = "Updated Group Title X")
         {
@@ -210,11 +190,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         protected static GroupBecameARoster CreateGroupBecameARosterEvent(Guid groupId)
         {
             return (new GroupBecameARoster(Guid.NewGuid(), groupId));
-        }
-
-        protected static GroupStoppedBeingARoster CreateGroupStoppedBeingARosterEvent(Guid groupId)
-        {
-            return (new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
         }
 
         protected static RosterChanged CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, 
@@ -261,17 +236,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return (Create.Event.NumericQuestionCloned
             (
                 publicKey : questionId,
-                sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
-                groupPublicKey : parentGroupId ?? Guid.NewGuid()
-            ));
-        }
-
-        protected static QuestionCloned CreateQuestionClonedEvent(
-            Guid questionId, QuestionType questionType = QuestionType.Numeric, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxValue = null)
-        {
-            return (Create.Event.QuestionCloned(
-                publicKey : questionId,
-                questionType : questionType,
                 sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
                 groupPublicKey : parentGroupId ?? Guid.NewGuid()
             ));
