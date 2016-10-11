@@ -988,7 +988,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
-                throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
+                return false;
+                //throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
 
             return numericQuestion.IsInteger;
         }
@@ -999,7 +1000,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var multipleOptionsQuestion = question as IMultyOptionsQuestion;
             if (multipleOptionsQuestion == null)
-                throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
+                return false;
+                //throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
 
             return multipleOptionsQuestion.YesNoView;
         }
