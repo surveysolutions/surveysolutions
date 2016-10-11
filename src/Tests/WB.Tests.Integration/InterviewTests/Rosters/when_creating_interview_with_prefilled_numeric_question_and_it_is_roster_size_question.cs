@@ -39,8 +39,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                             { numericQuestionId, 3 }
                         });
 
-                    result.AnyNumericRosterWasCreated =
-                        eventContext.AnyEvent<RosterInstancesAdded>(x => x.Instances.Any(r => r.GroupId == roster1Id));
+                    result.AnyNumericRosterWasCreated = eventContext.AnyEvent<RosterInstancesAdded>(x => x.Instances.Any(r => r.GroupId == roster1Id));
+
+                    result.CountOfAddedRosters = eventContext.GetSingleEvent<RosterInstancesAdded>().Instances.Length;
                 }
 
                 return result;
@@ -66,6 +67,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         internal class InvokeResults
         {
             public bool AnyNumericRosterWasCreated { get; set; }
+            public int CountOfAddedRosters { get; set; }
         }
     }
 }
