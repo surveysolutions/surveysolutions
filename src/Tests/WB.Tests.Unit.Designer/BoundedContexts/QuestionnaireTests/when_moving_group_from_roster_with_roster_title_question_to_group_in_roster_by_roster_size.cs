@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -14,31 +13,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(
                 rosterSizeQuestionId,chapterId, responsibleId, isInteger : true);
-            questionnaire.AddGroup(targetRosterId, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, targetRosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: targetRosterId)
-                {
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles = null,
-                    RosterTitleQuestionId = null
-                });
+            questionnaire.AddGroup(targetRosterId, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
             questionnaire.AddGroup(groupFromTargetRosterId,  targetRosterId, responsibleId: responsibleId);
 
-            questionnaire.AddGroup(sourceRosterId, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, sourceRosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: sourceRosterId){
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles = null,
-                    RosterTitleQuestionId = rosterTitleQuestionId
-                });
+            questionnaire.AddGroup(sourceRosterId, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
 
             questionnaire.AddGroup(groupFromSourceRosterId, sourceRosterId, responsibleId: responsibleId);
-            questionnaire.AddNumericQuestion(
-                 rosterTitleQuestionId,
-                groupFromSourceRosterId,
-                responsibleId);
+            questionnaire.AddNumericQuestion(rosterTitleQuestionId,groupFromSourceRosterId,responsibleId);
+
+            //update roster title
+            /*questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: sourceRosterId)
+            {
+                RosterSizeQuestionId = rosterSizeQuestionId,
+                RosterSizeSource = RosterSizeSourceType.Question,
+                FixedRosterTitles = null,
+                RosterTitleQuestionId = rosterTitleQuestionId
+            });*/
         };
 
         Because of = () => questionnaire.MoveGroup(groupFromSourceRosterId, groupFromTargetRosterId, 0, responsibleId);

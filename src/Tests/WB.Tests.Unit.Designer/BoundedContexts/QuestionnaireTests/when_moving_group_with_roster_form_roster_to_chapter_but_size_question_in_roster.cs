@@ -20,15 +20,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, isInteger : true, parentId: roster1Id , responsibleId:responsibleId);
 
-            questionnaire.AddGroup( roster2Id, roster1Id, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster2Id));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId, roster2Id)
-            {
-                RosterSizeQuestionId = rosterSizeQuestionId,
-                RosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitles = null,
-                RosterTitleQuestionId = null
-            });
+            questionnaire.AddGroup( roster2Id, roster1Id, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
         };
 
         Because of = () =>

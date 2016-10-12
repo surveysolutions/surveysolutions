@@ -13,25 +13,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId,chapterId,responsibleId, isInteger : true);
-            questionnaire.AddGroup(targetGroupId, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, targetGroupId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: targetGroupId){
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles = null,
-                    RosterTitleQuestionId = null
-                });
+            questionnaire.AddGroup(targetGroupId, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            
 
-            questionnaire.AddGroup(sourceRosterId, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, sourceRosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: sourceRosterId)
-            {
-                RosterSizeQuestionId = rosterSizeQuestionId,
-                RosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitles = null,
-                RosterTitleQuestionId = null
-            });
-
+            questionnaire.AddGroup(sourceRosterId, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            
             questionnaire.AddGroup(groupFromRosterId,  sourceRosterId, responsibleId: responsibleId);
             questionnaire.AddNumericQuestion(rosterTitleQuestionId, groupFromRosterId, responsibleId);
         };
