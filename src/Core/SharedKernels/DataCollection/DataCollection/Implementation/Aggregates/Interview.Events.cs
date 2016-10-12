@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -57,10 +58,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static bool HasChangedRosterTitle(InterviewTreeNodeDiff diffNode)
         {
-            var sourceRoster = diffNode.SourceNode as InterviewTreeRoster;
-            var changedRoster = diffNode.ChangedNode as InterviewTreeRoster;
+            var nodeWasDeletedOrIsNotRosterNode = !(diffNode.ChangedNode is InterviewTreeRoster);
+            if (nodeWasDeletedOrIsNotRosterNode)
+                return false;
 
-            if (sourceRoster == null || changedRoster == null) return false;
+            var nodeIsNewlyAddedRoster = diffNode.SourceNode == null;
+            if (nodeIsNewlyAddedRoster)
+                return true;
+
+            var sourceRoster = diffNode.SourceNode as InterviewTreeRoster;
+
+            if (sourceRoster == null)
+                throw new Exception("Diff works wrong! Roster cannot be compared with non-roster element");
+
+            var changedRoster = (InterviewTreeRoster) diffNode.ChangedNode;
 
             return sourceRoster.RosterTitle != changedRoster.RosterTitle;
         }
