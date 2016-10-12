@@ -17,11 +17,6 @@ namespace WB.Tests.Unit.Designer
     {
         internal static class Event
         {
-            public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
-            {
-                return new ExpressionsMigratedToCSharp();
-            }
-
             public static GroupBecameARoster GroupBecameRoster(Guid rosterId)
             {
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
@@ -232,17 +227,6 @@ namespace WB.Tests.Unit.Designer
                 isTimestamp: isTimestamp);
             }
             
-            public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
-            {
-                return new RosterChanged(Guid.NewGuid(), rosterId)
-                {
-                    RosterSizeQuestionId = null,
-                    RosterSizeSource = rosterType,
-                    FixedRosterTitles = titles,
-                    RosterTitleQuestionId = null
-                };
-            }
-            
             public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)
             {
                 return NumericQuestionChanged
@@ -266,17 +250,6 @@ namespace WB.Tests.Unit.Designer
                 {
                     GroupPublicKey = Guid.Parse(groupId),
                     GroupText = groupTitle
-                };
-            }
-
-            public static MultimediaQuestionUpdated MultimediaQuestionUpdatedEvent(string questionId, string questionVariable = null, string questionTitle = null, string questionConditionExpression = null)
-            {
-                return new MultimediaQuestionUpdated()
-                {
-                    QuestionId = Guid.Parse(questionId),
-                    VariableName = questionVariable,
-                    Title = questionTitle,
-                    EnablementCondition = questionConditionExpression
                 };
             }
 
@@ -373,21 +346,6 @@ namespace WB.Tests.Unit.Designer
                 return new QuestionnaireUpdated() { Title = questionnaireTitle, IsPublic = isPublic };
             }
 
-            public static RosterChanged RosterChanged(string groupId)
-            {
-                return new RosterChanged(responsibleId: new Guid(), groupId: Guid.Parse(groupId));
-            }
-
-            public static SharedPersonFromQuestionnaireRemoved SharedPersonFromQuestionnaireRemoved(Guid questionnaireId, Guid personId)
-            {
-                return new SharedPersonFromQuestionnaireRemoved() { PersonId = personId };
-            }
-
-            public static SharedPersonToQuestionnaireAdded SharedPersonToQuestionnaireAdded(Guid questionnaireId, Guid personId)
-            {
-                return new SharedPersonToQuestionnaireAdded() { PersonId = personId };
-            }
-           
             public static TemplateImported TemplateImportedEvent(
                 string questionnaireId,
                 string chapter1Id = null,

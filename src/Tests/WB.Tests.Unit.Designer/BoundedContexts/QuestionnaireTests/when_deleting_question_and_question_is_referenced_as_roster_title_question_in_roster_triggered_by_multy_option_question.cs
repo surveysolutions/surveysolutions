@@ -23,15 +23,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 rosterSizeQuestionId,
                 chapterId,
                 responsibleId);
-            questionnaire.AddGroup(rosterId, title: rosterTitle, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId, rosterId)
+            questionnaire.AddGroup(rosterId, title: rosterTitle, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+
+            
+            /*questionnaire.ChangeRoster(new RosterChanged(responsibleId, rosterId)
                 {
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = rosterSizeQuestionId
-                });
+                });*/
             questionnaire.AddTextQuestion(
                 rosterTitleQuestionId,
                 rosterId,

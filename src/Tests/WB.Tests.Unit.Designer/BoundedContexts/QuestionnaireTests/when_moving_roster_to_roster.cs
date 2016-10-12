@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -13,14 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(roster1Id, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster1Id));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId, roster1Id){
-                    RosterSizeQuestionId = null,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    FixedRosterTitles = new[] { new FixedRosterTitle(1, "test"), new FixedRosterTitle(2, "test 2") },
-                    RosterTitleQuestionId = null 
-                });
+            questionnaire.AddGroup(roster1Id, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.FixedTitles,
+                rosterSizeQuestionId: null, rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "test"), new FixedRosterTitleItem("2", "test 2") });
             
             questionnaire.AddGroup(roster2Id, chapterId, responsibleId: responsibleId);
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster2Id));

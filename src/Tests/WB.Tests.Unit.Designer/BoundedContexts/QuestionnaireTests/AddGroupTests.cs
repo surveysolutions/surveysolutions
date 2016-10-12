@@ -94,13 +94,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         public void NewAddGroup_When_User_In_Readonly_mode_Questionnaire_Then_DomainException_should_be_thrown()
         {
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
+            var responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             var readOnlyUser = Guid.NewGuid();
-            questionnaire.AddSharedPersonToQuestionnaire(new SharedPersonToQuestionnaireAdded()
-            {
-                PersonId = readOnlyUser,
-                ShareType = ShareType.View
-            });
+            questionnaire.AddSharedPerson(readOnlyUser, null, ShareType.View, responsibleId);
             // act
             TestDelegate act =
                 () =>
