@@ -48,7 +48,7 @@
                 url: "/question/{itemId}",
                 params: {
                     property: 'None',
-                    validationIndex: null
+                    indexOfEntityInProperty: null
                 },
                 views: {
                     '': {
@@ -60,7 +60,7 @@
                 url: "/group/{itemId}",
                 params: {
                     property: 'None',
-                    validationIndex: null
+                    indexOfEntityInProperty: null
                 },
                 views: {
                     '': {
@@ -72,7 +72,7 @@
                 url: "/variable/{itemId}",
                 params: {
                     property: 'None',
-                    validationIndex: null
+                    indexOfEntityInProperty: null
                 },
                 views: {
                     '': {
@@ -84,7 +84,7 @@
                 url: "/roster/{itemId}",
                 params: {
                     property: 'None',
-                    validationIndex: null
+                    indexOfEntityInProperty: null
                 },
                 views: {
                     '': {
@@ -96,7 +96,7 @@
                 url: "/static-text/{itemId}",
                 params: {
                     property: 'None',
-                    validationIndex: null
+                    indexOfEntityInProperty: null
                 },
                 views: {
                     '': {

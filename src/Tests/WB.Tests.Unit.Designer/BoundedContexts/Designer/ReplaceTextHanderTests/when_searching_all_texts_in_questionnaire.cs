@@ -125,7 +125,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         It should_find_question_by_option_text = () => 
             foundReferences.ShouldContain(x => x.Id == questionId2 && 
                                                x.Property == QuestionnaireVerificationReferenceProperty.Option &&
-                                               x.FailedValidationConditionIndex == 1);
+                                               x.IndexOfEntityInProperty == 1);
 
         It should_not_include_references_to_filtered_combobox_options = () => 
             foundReferences.ShouldNotContain(x => x.Id == filteredQuestionId);

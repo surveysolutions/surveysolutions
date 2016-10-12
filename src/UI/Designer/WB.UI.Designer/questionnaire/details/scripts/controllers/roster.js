@@ -172,7 +172,7 @@
                                         focusId = 'edit-group-condition';
                                         break;
                                     case 'FixedRosterItem':
-                                        focusId = 'fixed-item-' + $state.params.validationIndex;
+                                        focusId = 'fixed-item-' + $state.params.indexOfEntityInProperty;
                                         break;
                                     default:
                                         break;

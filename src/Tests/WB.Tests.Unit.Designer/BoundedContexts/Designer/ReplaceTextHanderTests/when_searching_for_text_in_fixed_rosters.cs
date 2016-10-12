@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         It should_find_fixed_roster_items = () =>
             foundReferences.ShouldContain(x => x.Id == rosterId && 
                                                   x.Property == QuestionnaireVerificationReferenceProperty.FixedRosterItem &&
-                                                  x.FailedValidationConditionIndex == 1);
+                                                  x.IndexOfEntityInProperty == 1);
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
