@@ -820,7 +820,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            this.UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, newAnswers.Keys.ToArray());
+            var changedQuestionIdentities = newAnswers.Keys.ToList();
+            this.UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, changedQuestionIdentities.ToArray());
 
             ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -829,60 +830,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
 
-            //calculate state
-            var structuralChanges = expressionProcessorState.GetStructuralChanges();
+            this.UpdateTreeWithStructuralChanges(changedInterviewTree, expressionProcessorState.GetStructuralChanges());
 
-            List<AnswerChange> interviewByAnswerChange = null;
-            RosterCalculationData rosterCalculationData = null;
+            this.UpdateRosterTitles(changedInterviewTree, changedQuestionIdentities.ToArray());
 
-            if (structuralChanges.ChangedMultiQuestions != null && structuralChanges.ChangedMultiQuestions.Count > 0)
-            {
-                if (interviewByAnswerChange == null)
-                    interviewByAnswerChange = new List<AnswerChange>();
-
-                interviewByAnswerChange.AddRange(
-                    structuralChanges.ChangedMultiQuestions.Select(
-                        x => new AnswerChange(AnswerChangeType.MultipleOptions, userId, x.Key.Id, x.Key.RosterVector, answersTime, x.Value.Select(Convert.ToDecimal).ToArray())));
-            }
-
-            if (structuralChanges.ChangedSingleQuestions != null && structuralChanges.ChangedSingleQuestions.Count > 0)
-            {
-                if (interviewByAnswerChange == null)
-                    interviewByAnswerChange = new List<AnswerChange>();
-
-                interviewByAnswerChange.AddRange(
-                    structuralChanges.ChangedSingleQuestions.Select(
-                        x => new AnswerChange(AnswerChangeType.SingleOption, userId, x.Key.Id, x.Key.RosterVector, answersTime, x.Value)));
-            }
-
-            if (structuralChanges.ChangedYesNoQuestions != null && structuralChanges.ChangedYesNoQuestions.Count > 0)
-            {
-                if (interviewByAnswerChange == null)
-                    interviewByAnswerChange = new List<AnswerChange>();
-
-                interviewByAnswerChange.AddRange(
-                    structuralChanges.ChangedYesNoQuestions.Select(
-                        x => new AnswerChange(AnswerChangeType.YesNo, userId, x.Key.Id, x.Key.RosterVector, answersTime, ConvertToAnsweredYesNoOptionArray(x.Value))));
-            }
-
-            if (structuralChanges.RemovedRosters != null && structuralChanges.RemovedRosters.Count > 0)
-            {
-                if (rosterCalculationData == null)
-                    rosterCalculationData = new RosterCalculationData();
-
-                rosterCalculationData.RosterInstancesToRemove.AddRange(
-                    structuralChanges.RemovedRosters.Select(x => new RosterIdentity(x.Id, x.RosterVector.Shrink(), x.RosterVector.Last())));
-            }
-
+            this.UpdateLinkedQuestions(changedInterviewTree);
             var rostersWithTitles = new Dictionary<Identity, string>();
 
             var changedLinkedOptions =
                 this.CreateChangedLinkedOptions(expressionProcessorState,
                     this.interviewState,
                     questionnaire,
-                    interviewByAnswerChange,
+                    null,
                     enablementChanges,
-                    rosterCalculationData,
+                    null,
                     rostersWithTitles).ToArray();
 
             var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
@@ -903,6 +864,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+        }
+
+        private void UpdateRosterTitles(InterviewTree tree, Identity[] changedQuestionIdentities)
+        {
+        }
+
+        private void UpdateLinkedQuestions(InterviewTree tree)
+        {
         }
 
         public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
@@ -948,6 +917,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             public Identity Identity { get; set; }
             public string Title { get; set; }
+        }
+
+        private void UpdateTreeWithStructuralChanges(InterviewTree tree, StructuralChanges structuralChanges)
+        {
+            foreach (var changedMultiQuestion in structuralChanges.ChangedMultiQuestions)
+            {
+                tree.GetQuestion(changedMultiQuestion.Key).AsMultiOption.SetAnswer(changedMultiQuestion.Value);
+            }
+
+            foreach (var changedSingleQuestion in structuralChanges.ChangedSingleQuestions)
+            {
+                var question = tree.GetQuestion(changedSingleQuestion.Key).AsSingleOption;
+                if (changedSingleQuestion.Value.HasValue)
+                    question.SetAnswer(changedSingleQuestion.Value.Value);
+                else
+                    question.RemoveAnswer();
+            }
+
+            foreach (var changedYesNoQuestion in structuralChanges.ChangedYesNoQuestions)
+            {
+                YesNoAnswersOnly yesNoAnswersOnly = changedYesNoQuestion.Value;
+                var yesNoOptionsList = new List<AnsweredYesNoOption>();
+                yesNoOptionsList.AddRange(yesNoAnswersOnly.Yes.Select(yesOption => new AnsweredYesNoOption(yesOption, true)));
+                yesNoOptionsList.AddRange(yesNoAnswersOnly.No.Select(noOption => new AnsweredYesNoOption(noOption, false)));
+                tree.GetQuestion(changedYesNoQuestion.Key).AsYesNo.SetAnswer(yesNoOptionsList.ToArray());
+            }
+
+            foreach (var removedRosterIdentity in structuralChanges.RemovedRosters)
+            {
+                tree.RemoveNode(removedRosterIdentity);
+            }
         }
 
         private void UpdateTreeWithNewAnswers(
