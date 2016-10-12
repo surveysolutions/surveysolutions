@@ -122,7 +122,7 @@
                     .success(function (result) {
                         $scope.initialQuestion = angular.copy(result);
                         dataBind(result);
-                        utilityService.scrollToValidationCondition($state.params.validationIndex);
+                        utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
 
 
                         var focusId = null;
@@ -137,13 +137,13 @@
                                 focusId = "edit-question-enablement-condition";
                                 break;
                             case 'ValidationExpression':
-                                focusId = 'validation-expression-' + $state.params.validationIndex;
+                                focusId = 'validation-expression-' + $state.params.indexOfEntityInProperty;
                                 break;
                             case 'ValidationMessage':
-                                focusId = 'validationMessage' + $state.params.validationIndex;
+                                focusId = 'validationMessage' + $state.params.indexOfEntityInProperty;
                                 break;
                             case 'Option':
-                                focusId = 'option-title-' + $state.params.validationIndex;
+                                focusId = 'option-title-' + $state.params.indexOfEntityInProperty;
                                 break;
                             case 'OptionsFilter':
                                 focusId = 'optionsFilterExpression';
