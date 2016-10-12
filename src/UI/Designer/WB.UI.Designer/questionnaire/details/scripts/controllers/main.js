@@ -252,7 +252,7 @@ angular.module('designerApp')
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,
                         itemId: reference.itemId,
-                        validationIndex: reference.failedValidationConditionIndex,
+                        indexOfEntityInProperty: reference.indexOfEntityInProperty,
                         property: reference.property
                     });
                     
@@ -260,7 +260,7 @@ angular.module('designerApp')
             };
             
             $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams) {
-                utilityService.scrollToValidationCondition(toParams.validationIndex);
+                utilityService.scrollToValidationCondition(toParams.indexOfEntityInProperty);
             });
 
             $scope.removeItemWithIdFromErrors = function (itemId) {
