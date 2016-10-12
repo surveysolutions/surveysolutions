@@ -80,5 +80,13 @@ namespace Main.Core.Entities.SubEntities
                 return hashCode;
             }
         }
+
+        public static bool operator ==(GeoPosition x, GeoPosition y) => x?.Accuracy == y?.Accuracy &&
+                                                                        x?.Altitude == y?.Altitude &&
+                                                                        x?.Latitude == y?.Latitude &&
+                                                                        x?.Longitude == y?.Longitude &&
+                                                                        x?.Timestamp == y?.Timestamp;
+
+        public static bool operator !=(GeoPosition x, GeoPosition y) => !(x == y);
     }
 }
