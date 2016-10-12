@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
         
-        internal void UpdateQuestion(QuestionChanged e)
+        private void UpdateQuestion(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =

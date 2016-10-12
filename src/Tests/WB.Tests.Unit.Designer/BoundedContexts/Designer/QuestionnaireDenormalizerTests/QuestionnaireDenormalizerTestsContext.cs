@@ -167,16 +167,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             };
         }
 
-        protected static QuestionChanged CreateQuestionChangedEvent(Guid questionId, Guid targetGroupId, string title, QuestionType questionType = QuestionType.Numeric)
-        {
-            return (Create.Event.QuestionChanged
-            (
-                publicKey : questionId,
-                questionType : questionType,
-                questionText : title
-            ));
-        }
-
         protected static QuestionnaireItemMoved CreateQuestionnaireItemMovedEvent(Guid itemId, Guid? targetGroupId)
         {
             return (new QuestionnaireItemMoved

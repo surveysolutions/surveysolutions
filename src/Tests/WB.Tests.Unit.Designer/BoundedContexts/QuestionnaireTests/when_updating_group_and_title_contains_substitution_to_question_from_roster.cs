@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddGroup(rosterId, responsibleId: responsibleId, isRoster:true);
             
-            questionnaire.AddTextQuestion(textQuestionId, rosterId, responsibleId);
-            questionnaire.UpdateQuestion(Create.Event.QuestionChanged(publicKey: textQuestionId, groupPublicKey: rosterId, stataExportCaption: textQuestionVariable));
+            questionnaire.AddTextQuestion(textQuestionId, rosterId, responsibleId, variableName:textQuestionVariable);
+            
             questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
 
             eventContext = new EventContext();
