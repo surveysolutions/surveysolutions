@@ -118,13 +118,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 );
         }
 
-        private static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
-            where T : IEvent
-        {
-            IPublishedEvent<T> e = new PublishedEvent<T>(Create.Event.PublishableEvent(eventSourceId:questionnaireId, payload: evnt));
-            return e;
-        }
-
         public static QuestionChanged CreateQuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
