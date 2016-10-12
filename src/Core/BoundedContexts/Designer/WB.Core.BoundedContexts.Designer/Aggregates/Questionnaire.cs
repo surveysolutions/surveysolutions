@@ -447,7 +447,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         }
                     }
 
-                    if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex))
+                    if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex) || MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))
                     {
                         yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
                     }
@@ -608,11 +608,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         }
                     }
 
-
                     if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex))
                     {
                         replacedAny = true;
                         question.Properties.OptionsFilterExpression = ReplaceUsingSearchTerm(question.Properties.OptionsFilterExpression, searchRegex, command.ReplaceWith);
+                    }
+
+                    if (MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))
+                    {
+                        replacedAny = true;
+                        question.LinkedFilterExpression = ReplaceUsingSearchTerm(question.LinkedFilterExpression, searchRegex, command.ReplaceWith);
                     }
                 }
 
