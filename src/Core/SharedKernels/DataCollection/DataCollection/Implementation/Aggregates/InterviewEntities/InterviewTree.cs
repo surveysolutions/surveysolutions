@@ -376,7 +376,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private DateTime? answer;
         public InterviewTreeDateTimeQuestion(object answer)
         {
-            this.answer = (DateTime?)answer;
+            this.answer = answer == null ? (DateTime?)null : Convert.ToDateTime(answer);
         }
 
         public bool IsAnswered => this.answer != null;
@@ -384,12 +384,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(DateTime answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeDateTimeQuestion question)
-        {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.Equals(this.answer);
-        }
+        public bool EqualByAnswer(InterviewTreeDateTimeQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeGpsQuestion
@@ -398,7 +393,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeGpsQuestion(object answer)
         {
-            this.answer = (GeoPosition)answer;
+            this.answer = answer as GeoPosition;
         }
 
         public bool IsAnswered => this.answer != null;
@@ -406,12 +401,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(GeoPosition answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeGpsQuestion question)
-        {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.Equals(this.answer);
-        }
+        public bool EqualByAnswer(InterviewTreeGpsQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeMultimediaQuestion
@@ -420,7 +410,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeMultimediaQuestion(object answer)
         {
-            this.answer = (string)answer;
+            this.answer = answer as string;
         }
 
         public bool IsAnswered => this.answer != null;
@@ -428,7 +418,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(string answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeMultimediaQuestion question) => question.answer == this.answer;
+        public bool EqualByAnswer(InterviewTreeMultimediaQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeIntegerQuestion
@@ -445,12 +435,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(int answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeIntegerQuestion question)
-        {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.Equals(this.answer);
-        }
+        public bool EqualByAnswer(InterviewTreeIntegerQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeDoubleQuestion
@@ -467,12 +452,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(double answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeDoubleQuestion question)
-        {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.Equals(this.answer);
-        }
+        public bool EqualByAnswer(InterviewTreeDoubleQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeQRBarcodeQuestion
@@ -481,14 +461,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeQRBarcodeQuestion(object answer)
         {
-            this.answer = (string)answer;
+            this.answer = answer as string;
         }
 
         public bool IsAnswered => this.answer != null;
         public string GetAnswer() => this.answer;
         public void SetAnswer(string answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
-        public bool EqualByAnswer(InterviewTreeQRBarcodeQuestion question) => question.answer == this.answer;
+        public bool EqualByAnswer(InterviewTreeQRBarcodeQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeTextQuestion
@@ -505,7 +485,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(string answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeTextQuestion question) => question.answer == this.answer;
+        public bool EqualByAnswer(InterviewTreeTextQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeYesNoQuestion
@@ -514,7 +494,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeYesNoQuestion(object answer)
         {
-            this.answer = (AnsweredYesNoOption[])answer;
+            this.answer = answer as AnsweredYesNoOption[];
         }
 
         public bool IsAnswered => this.answer != null;
@@ -524,9 +504,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool EqualByAnswer(InterviewTreeYesNoQuestion question)
         {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.SequenceEqual(this.answer);
+            if (question?.answer == null && this.answer == null)
+                return true;
+
+            if (question?.answer != null && this.answer != null)
+                return question.answer.SequenceEqual(this.answer);
+
+            return false;
         }
     }
 
@@ -536,7 +520,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeTextListQuestion(object answer)
         {
-            this.answer = (Tuple<decimal, string>[])answer;
+            this.answer = answer as Tuple<decimal, string>[];
         }
 
         public bool IsAnswered => this.answer != null;
@@ -546,9 +530,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool EqualByAnswer(InterviewTreeTextListQuestion question)
         {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.SequenceEqual(this.answer);
+            if (question?.answer == null && this.answer == null)
+                return true;
+
+            if (question?.answer != null && this.answer != null)
+                return question.answer.SequenceEqual(this.answer);
+
+            return false;
         }
     }
 
@@ -567,12 +555,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(int answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeSingleOptionQuestion question)
-        {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.Equals(this.answer);
-        }
+        public bool EqualByAnswer(InterviewTreeSingleOptionQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeMultiOptionQuestion
@@ -581,7 +564,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeMultiOptionQuestion(object answer)
         {
-            this.answer = (decimal[])answer;
+            this.answer = answer as decimal[];
         }
 
         public bool IsAnswered => this.answer != null;
@@ -591,9 +574,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool EqualByAnswer(InterviewTreeMultiOptionQuestion question)
         {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.SequenceEqual(this.answer);
+            if (question?.answer == null && this.answer == null)
+                return true;
+
+            if (question?.answer != null && this.answer != null)
+                return question.answer.SequenceEqual(this.answer);
+
+            return false;
         }
     }
 
@@ -602,7 +589,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private RosterVector answer;
         public InterviewTreeSingleLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer) : base(linkedOptions)
         {
-            this.answer = (RosterVector)answer;
+            this.answer = answer as RosterVector;
         }
 
         public bool IsAnswered => this.answer != null;
@@ -610,12 +597,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(RosterVector answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeSingleLinkedOptionQuestion question)
-        {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.Equals(this.answer);
-        }
+        public bool EqualByAnswer(InterviewTreeSingleLinkedOptionQuestion question) => question?.answer == this.answer;
     }
 
     public class InterviewTreeMultiLinkedOptionQuestion : InterviewTreeLinkedQuestion
@@ -623,7 +605,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private decimal[] answer;
         public InterviewTreeMultiLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer) : base(linkedOptions)
         {
-            this.answer = (decimal[])answer;
+            this.answer = answer as decimal[];
         }
 
         public bool IsAnswered => this.answer != null;
@@ -633,9 +615,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool EqualByAnswer(InterviewTreeMultiLinkedOptionQuestion question)
         {
-            if (question?.answer == null || this.answer == null)
-                return false;
-            return question.answer.Equals(this.answer);
+            if (question?.answer == null && this.answer == null)
+                return true;
+
+            if(question?.answer != null && this.answer != null)
+                return question.answer.SequenceEqual(this.answer);
+
+            return false; 
         }
     }
 
