@@ -265,7 +265,7 @@ namespace WB.Tests.Unit.Designer
                  parentGroupId,
                  isRoster,
                  rosterSourceType,
-                 rosterFixedTitles ?? new FixedRosterTitleItem[] {},
+                 rosterFixedTitles ?? (rosterSourceType == RosterSizeSourceType.FixedTitles ? new FixedRosterTitleItem[] {new FixedRosterTitleItem("1","1"),new FixedRosterTitleItem("2","2")}: new FixedRosterTitleItem[0]),
                  null,
                  null);
         }

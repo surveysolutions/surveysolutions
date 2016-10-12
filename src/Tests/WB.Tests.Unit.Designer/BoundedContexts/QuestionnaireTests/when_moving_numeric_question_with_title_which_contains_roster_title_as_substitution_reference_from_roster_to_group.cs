@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterId = Guid.Parse("21111111111111111111111111111111");
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(Guid.NewGuid(), rosterId));
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
             questionnaire.AddNumericQuestion(questionId, rosterId,responsibleId,title: questionTitle,variableName: "var");
             eventContext = new EventContext();
         };

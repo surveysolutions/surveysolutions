@@ -19,8 +19,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var questionid = Guid.NewGuid();
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(rosterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddGroup(rosterId, responsibleId: responsibleId, isRoster: true);
+            
             questionnaire.AddTextQuestion(questionid, rosterId, responsibleId);
 
             questionnaire.AddMultiOptionQuestion(

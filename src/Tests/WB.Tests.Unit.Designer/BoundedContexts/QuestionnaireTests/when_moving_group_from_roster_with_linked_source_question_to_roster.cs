@@ -13,10 +13,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             
-            questionnaire.AddGroup(roster1Id,  chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster1Id));
-            questionnaire.AddGroup(roster2Id,  chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster2Id));
+            questionnaire.AddGroup(roster1Id,  chapterId, responsibleId: responsibleId, isRoster:true);
+            questionnaire.AddGroup(roster2Id,  chapterId, responsibleId: responsibleId, isRoster:true);
             questionnaire.AddGroup(groupInsideRosterId,  roster1Id, responsibleId: responsibleId);
 
             questionnaire.AddTextQuestion(linkedSourceQuestionId,

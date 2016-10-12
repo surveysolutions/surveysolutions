@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(anotherRosterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
+            questionnaire.AddGroup(anotherRosterId, responsibleId: responsibleId, isRoster: true);
+            
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, anotherRosterId, responsibleId, isInteger : true);
 
             questionnaire.AddMultiOptionQuestion(rosterTitleQuestionId, anotherRosterId, responsibleId);

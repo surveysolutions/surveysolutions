@@ -17,48 +17,6 @@ namespace WB.Tests.Unit.Designer
     {
         internal static class Event
         {
-            public static GroupBecameARoster GroupBecameRoster(Guid rosterId)
-            {
-                return new GroupBecameARoster(Guid.NewGuid(), rosterId);
-            }
-            
-            /*public static NewQuestionAdded NewQuestionAdded(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
-            string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string variableLabel = null, string validationExpression = null, string validationMessage = null,
-            QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-            QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null, bool hideIfDisabled = false,
-            QuestionProperties properties = null, IList<ValidationCondition> validationConditions = null)
-            {
-                return new NewQuestionAdded(
-                    publicKey: publicKey,
-                    groupPublicKey: groupPublicKey,
-                    questionText: questionText,
-                    stataExportCaption: stataExportCaption,
-                    variableLabel: variableLabel,
-                    featured: featured,
-                    questionScope: questionScope,
-                    conditionExpression: conditionExpression,
-                    hideIfDisabled: hideIfDisabled,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    properties: properties ?? new QuestionProperties(false, false),
-                    responsibleId: responsibleId ?? Guid.NewGuid(),
-                    capital: capital,
-                    isInteger: isInteger,
-                    questionType: questionType,
-                    answerOrder: answerOrder,
-                    answers: answers,
-                    linkedToQuestionId: linkedToQuestionId,
-                    areAnswersOrdered: areAnswersOrdered,
-                    yesNoView: yesNoView,
-                    maxAllowedAnswers: maxAllowedAnswers,
-                    mask: mask,
-                    isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: cascadeFromQuestionId,
-                    validationConditions: validationConditions ?? new List<ValidationCondition>());
-            }*/
-
             public static NumericQuestionChanged NumericQuestionChanged(
                 Guid publicKey,
                 bool? isInteger = null,
@@ -239,11 +197,6 @@ namespace WB.Tests.Unit.Designer
                 );
             }
            
-            public static GroupBecameARoster GroupBecameARosterEvent(string groupId)
-            {
-                return new GroupBecameARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId));
-            }
-
             public static GroupUpdated GroupUpdatedEvent(string groupId, string groupTitle)
             {
                 return new GroupUpdated()
@@ -344,35 +297,6 @@ namespace WB.Tests.Unit.Designer
                 bool isPublic = false)
             {
                 return new QuestionnaireUpdated() { Title = questionnaireTitle, IsPublic = isPublic };
-            }
-
-            public static TemplateImported TemplateImportedEvent(
-                string questionnaireId,
-                string chapter1Id = null,
-                string chapter1Title = null,
-                string chapter2Id = null,
-                string chapter2Title = null,
-                string questionnaireTitle = null,
-                string chapter1GroupId = null, string chapter1GroupTitle = null,
-                string chapter2QuestionId = null,
-                string chapter2QuestionTitle = null,
-                string chapter2QuestionVariable = null,
-                string chapter2QuestionConditionExpression = null,
-                string chapter1StaticTextId = null, string chapter1StaticText = null,
-                bool? isPublic = null)
-            {
-                return new TemplateImported()
-                {
-                    Source = CreateQuestionnaireDocument(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle,
-                        chapter1Id: chapter1Id ?? Guid.NewGuid().FormatGuid(), chapter1Title: chapter1Title,
-                        chapter2Id: chapter2Id ?? Guid.NewGuid().FormatGuid(),
-                        chapter2Title: chapter2Title, chapter1GroupId: chapter1GroupId,
-                        chapter1GroupTitle: chapter1GroupTitle, chapter2QuestionId: chapter2QuestionId,
-                        chapter2QuestionTitle: chapter2QuestionTitle, chapter2QuestionVariable: chapter2QuestionVariable,
-                        chapter2QuestionConditionExpression: chapter2QuestionConditionExpression,
-                        chapter1StaticTextId: chapter1StaticTextId, chapter1StaticText: chapter1StaticText,
-                        isPublic: isPublic ?? false)
-                };
             }
 
             public static TextListQuestionChanged TextListQuestionChangedEvent(string questionId,

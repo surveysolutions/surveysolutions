@@ -124,17 +124,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
-        internal void ImportTemplate(TemplateImported e)
-        {
-            var upgradedDocument = e.Source;
-            this.innerDocument = upgradedDocument;
-        }
-
-        internal void MarkGroupAsRoster(GroupBecameARoster e)
-        {
-            this.innerDocument.UpdateGroup(e.GroupId, group => group.IsRoster = true);
-        }
-
         private void RemoveRosterFlagFromGroup(Guid groupId)
         {
             this.innerDocument.UpdateGroup(groupId, group =>
@@ -252,8 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 CreatedBy = createdBy
             };
 
-            this.AddGroup(
-                new NewGroupAdded
+            this.AddGroup(new NewGroupAdded
                 {
                     GroupText = "New Section",
                     PublicKey = Guid.NewGuid(),
@@ -312,7 +300,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Trying to import template of deleted questionnaire");
 
             document.CreatedBy = createdBy;
-            this.ImportTemplate(new TemplateImported { Source = document });
+            
+            this.innerDocument = document;
         }
 
         public void UpdateQuestionnaire(UpdateQuestionnaire command)
@@ -768,7 +757,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (isRoster)
             {
-                this.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId));
+                this.innerDocument.UpdateGroup(groupId, group => group.IsRoster = true);
                 this.innerDocument.UpdateGroup(groupId, group =>
                 {
                     group.RosterSizeQuestionId = rosterSizeQuestionId;
@@ -861,7 +850,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (isRoster)
             {
-                this.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId));
+                this.innerDocument.UpdateGroup(groupId, groupToUpdate => groupToUpdate.IsRoster = true);
+                
                 this.innerDocument.UpdateGroup(groupId, groupToUpdate =>
                 {
                     groupToUpdate.RosterSizeQuestionId = rosterSizeQuestionId;

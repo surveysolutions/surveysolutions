@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster:true);
             questionnaire.AddTextQuestion(linkedSourceQuestionId,rosterId,responsibleId);
 
             questionnaire.AddMultiOptionQuestion(categoricalLinkedQuestionId,chapterId,responsibleId, options:new Option[0], linkedToQuestionId: linkedSourceQuestionId);
