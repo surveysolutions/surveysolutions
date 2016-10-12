@@ -562,7 +562,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionCloned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireEntity.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QRBarcodeQuestionCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupBecameARoster.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\Group.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\TextListQuestionCloned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\TextListQuestionChanged.cs" />
@@ -580,7 +579,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionChanged.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireItemMoved.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\TemplateImported.cs" />
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Exceptions\DomainExceptionType.cs" />
     <Compile Include="Implementation\Factories\IQuestionnaireEntityFactory.cs" />

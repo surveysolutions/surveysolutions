@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(roster1Id, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.FixedTitles,
                 rosterSizeQuestionId: null, rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "test"), new FixedRosterTitleItem("2", "test 2") });
             
-            questionnaire.AddGroup(roster2Id, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, roster2Id));
+            questionnaire.AddGroup(roster2Id, chapterId, responsibleId: responsibleId, isRoster:true);
         };
 
 

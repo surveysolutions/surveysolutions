@@ -16,12 +16,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddGroup( anotherRosterId,  chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
-
-            questionnaire.AddGroup(parallelRosterId,  chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parallelRosterId));
-
+            questionnaire.AddGroup( anotherRosterId,  chapterId, responsibleId: responsibleId, isRoster:true);
+            questionnaire.AddGroup(parallelRosterId,  chapterId, responsibleId: responsibleId, isRoster:true);
+            
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, isInteger : true, parentId :parallelRosterId , responsibleId:responsibleId);
 
             questionnaire.AddGroup( groupId, parallelRosterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,

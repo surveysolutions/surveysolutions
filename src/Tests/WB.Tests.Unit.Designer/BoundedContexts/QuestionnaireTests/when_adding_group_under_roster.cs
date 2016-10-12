@@ -13,8 +13,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(parentRosterId, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parentRosterId));
+            questionnaire.AddGroup(parentRosterId, chapterId, responsibleId: responsibleId, isRoster: true);
+            
         };
 
         Because of = () => questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: title, variableName: null, rosterSizeQuestionId: null, description: description,

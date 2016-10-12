@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(rosterId, chapterId, variableName: "valid", responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddGroup(rosterId, chapterId, variableName: "valid", responsibleId: responsibleId, isRoster:true);
         };
 
         Because of = () =>

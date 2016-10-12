@@ -21,12 +21,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddGroup(anotherRosterId, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
+            questionnaire.AddGroup(anotherRosterId, chapterId, responsibleId: responsibleId, isRoster: true);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId,  anotherRosterId, responsibleId, isInteger : true);
+            questionnaire.AddGroup(parallelRosterId,  chapterId, responsibleId: responsibleId, isRoster: true);
             
-            questionnaire.AddGroup(parallelRosterId,  chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parallelRosterId));
         };
 
         Because of = () =>

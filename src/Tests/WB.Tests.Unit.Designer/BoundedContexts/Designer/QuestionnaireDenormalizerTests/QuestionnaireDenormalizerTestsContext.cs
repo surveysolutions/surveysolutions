@@ -20,7 +20,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using Group = Main.Core.Entities.SubEntities.Group;
-using TemplateImported = WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.TemplateImported;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
@@ -186,12 +185,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 GroupKey = targetGroupId,
             });
         }
-
-        protected static GroupBecameARoster CreateGroupBecameARosterEvent(Guid groupId)
-        {
-            return (new GroupBecameARoster(Guid.NewGuid(), groupId));
-        }
-
+       
         protected static TextListQuestionCloned CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
         {
             return (new TextListQuestionCloned
