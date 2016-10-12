@@ -585,6 +585,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return false;
         }
+
+        internal void SetAnswer(int[] intValues)
+        {
+            SetAnswer((intValues ?? new int[0]).Select(Convert.ToDecimal).ToArray());
+        }
     }
 
     public class InterviewTreeSingleLinkedOptionQuestion : InterviewTreeLinkedQuestion
