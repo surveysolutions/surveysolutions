@@ -14,11 +14,9 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -155,83 +153,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = QuestionType.TextList
             };
-        }
-        
-        protected static GroupUpdated CreateGroupUpdatedEvent(Guid groupId,
-            string title = "Updated Group Title X")
-        {
-            return new GroupUpdated
-            {
-                GroupPublicKey = groupId,
-                GroupText = title,
-            };
-        }
-
-        protected static QuestionnaireItemMoved CreateQuestionnaireItemMovedEvent(Guid itemId, Guid? targetGroupId)
-        {
-            return (new QuestionnaireItemMoved
-            {
-                PublicKey = itemId,
-                GroupKey = targetGroupId,
-            });
-        }
-       
-        protected static TextListQuestionCloned CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
-        {
-            return (new TextListQuestionCloned
-            {
-                PublicKey = questionId,
-                SourceQuestionId = sourceQuestionId
-            });
-        }
-
-        protected static TextListQuestionChanged CreateTextListQuestionChangedEvent(Guid questionId)
-        {
-            return (new TextListQuestionChanged
-            {
-                PublicKey = questionId
-            });
-        }
-        protected static NumericQuestionChanged CreateNumericQuestionChangedEvent(
-            Guid questionId)
-        {
-            return (Create.Event.NumericQuestionChanged
-            (
-                publicKey : questionId
-            ));
-        }
-
-        protected static NumericQuestionCloned CreateNumericQuestionClonedEvent(
-            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null)
-        {
-            return (Create.Event.NumericQuestionCloned
-            (
-                publicKey : questionId,
-                sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
-                groupPublicKey : parentGroupId ?? Guid.NewGuid()
-            ));
-        }
-
-        protected static TextListQuestionCloned TextListQuestionClonedEvent(
-            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxAnswerCount = null)
-        {
-            return (new TextListQuestionCloned
-            {
-                PublicKey = questionId,
-                SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
-                GroupId = parentGroupId ?? Guid.NewGuid(),
-                MaxAnswerCount = maxAnswerCount
-            });
-        }
-
-        protected static TextListQuestionChanged CreateTextListQuestionChangedEvent(
-            Guid questionId, int? maxAnswerCount = null)
-        {
-            return (new TextListQuestionChanged
-            {
-                PublicKey = questionId,
-                MaxAnswerCount = maxAnswerCount
-            });
         }
     }
 }
