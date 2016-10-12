@@ -434,14 +434,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
                 
                 var question = questionnaireItem as IQuestion;
-                if (question?.Answers != null && !(question.IsFilteredCombobox.GetValueOrDefault() || question.CascadeFromQuestionId.HasValue))
+                if (question != null)
                 {
-                    for (int i = 0; i < question.Answers.Count; i++)
+                    if (question.Answers != null && !(question.IsFilteredCombobox.GetValueOrDefault() || question.CascadeFromQuestionId.HasValue))
                     {
-                        if (MatchesSearchTerm(question.Answers[i].AnswerText, searchRegex))
+                        for (int i = 0; i < question.Answers.Count; i++)
                         {
-                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option, i);
+                            if (MatchesSearchTerm(question.Answers[i].AnswerText, searchRegex))
+                            {
+                                yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option, i);
+                            }
                         }
+                    }
+
+                    if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex))
+                    {
+                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
                     }
                 }
 
@@ -586,15 +594,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
 
                 var question = questionnaireItem as IQuestion;
-                if (question?.Answers != null && !(question.IsFilteredCombobox.GetValueOrDefault() || question.CascadeFromQuestionId.HasValue))
+                if (question != null)
                 {
-                    foreach (var questionAnswer in question.Answers)
+                    if (question.Answers != null && !(question.IsFilteredCombobox.GetValueOrDefault() || question.CascadeFromQuestionId.HasValue))
                     {
-                        if (MatchesSearchTerm(questionAnswer.AnswerText, searchRegex))
+                        foreach (var questionAnswer in question.Answers)
                         {
-                            replacedAny = true;
-                            questionAnswer.AnswerText = ReplaceUsingSearchTerm(questionAnswer.AnswerText, searchRegex, command.ReplaceWith);
+                            if (MatchesSearchTerm(questionAnswer.AnswerText, searchRegex))
+                            {
+                                replacedAny = true;
+                                questionAnswer.AnswerText = ReplaceUsingSearchTerm(questionAnswer.AnswerText, searchRegex, command.ReplaceWith);
+                            }
                         }
+                    }
+
+
+                    if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex))
+                    {
+                        replacedAny = true;
+                        question.Properties.OptionsFilterExpression = ReplaceUsingSearchTerm(question.Properties.OptionsFilterExpression, searchRegex, command.ReplaceWith);
                     }
                 }
 
