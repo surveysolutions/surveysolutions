@@ -57,14 +57,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                                     on source.Identity equals changed.Identity
                                     into temp
                                 from changed in temp.DefaultIfEmpty()
-                                select new InterviewTreeNodeDiff() { SourceNode = source, ChangedNode = changed };
+                                select CreateInterviewTreeNodeDiff(source, changed);
 
             var rightOuterJoin = from changed in changedNodes
                                  join source in sourceNodes
                                      on changed.Identity equals source.Identity
                                      into temp
                                  from source in temp.DefaultIfEmpty()
-                                 select new InterviewTreeNodeDiff() { SourceNode = source, ChangedNode = changed };
+                                 select CreateInterviewTreeNodeDiff(source, changed);
 
             var fullOuterJoin = leftOuterJoin.Concat(rightOuterJoin);
 
@@ -74,6 +74,52 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .Where(IsGroupChanged)
                 .Where(IsQuestionChanged)
                 .ToReadOnlyCollection();
+        }
+
+        private static InterviewTreeNodeDiff CreateInterviewTreeNodeDiff(IInterviewTreeNode source, IInterviewTreeNode changed)
+        {
+            if (source is InterviewTreeRoster || changed is InterviewTreeRoster)
+            {
+                return new InterviewTreeRosterDiff()
+                {
+                    SourceNode = source as InterviewTreeRoster,
+                    ChangedNode = changed as InterviewTreeRoster
+                };
+            }
+            else if (source is InterviewTreeGroup || changed is InterviewTreeGroup)
+            {
+                return new InterviewTreeGroupDiff()
+                {
+                    SourceNode = source as InterviewTreeGroup,
+                    ChangedNode = changed as InterviewTreeGroup
+                };
+            }
+            else if (source is InterviewTreeQuestion || changed is InterviewTreeQuestion)
+            {
+                return new InterviewTreeQuestionDiff()
+                {
+                    SourceNode = source as InterviewTreeQuestion,
+                    ChangedNode = changed as InterviewTreeQuestion
+                };
+            }
+            else if (source is InterviewTreeStaticText || changed is InterviewTreeStaticText)
+            {
+                return new InterviewTreeStaticTextDiff()
+                {
+                    SourceNode = source as InterviewTreeStaticText,
+                    ChangedNode = changed as InterviewTreeStaticText
+                };
+            }
+            else if (source is InterviewTreeVariable || changed is InterviewTreeVariable)
+            {
+                return new InterviewTreeVariableDiff()
+                {
+                    SourceNode = source as InterviewTreeVariable,
+                    ChangedNode = changed as InterviewTreeVariable
+                };
+            }
+
+            return new InterviewTreeNodeDiff { SourceNode = source, ChangedNode = changed };
         }
 
         public static bool HasChangesByAnswer(InterviewTreeQuestion sourceQuestion,
@@ -663,6 +709,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeSingleOptionQuestion GetCascadingParentQuestion()
             => this.Tree.GetQuestion(this.cascadingParentQuestionIdentity).AsSingleOption;
+    }
+
+    public class InterviewTreeVariable : InterviewTreeLeafNode
+    {
+        public InterviewTreeVariable(Identity identity, bool isDisabled)
+            : base(identity, isDisabled) { }
+
+        public override string ToString() => $"Variable ({this.Identity})";
     }
 
     public class InterviewTreeStaticText : InterviewTreeLeafNode
