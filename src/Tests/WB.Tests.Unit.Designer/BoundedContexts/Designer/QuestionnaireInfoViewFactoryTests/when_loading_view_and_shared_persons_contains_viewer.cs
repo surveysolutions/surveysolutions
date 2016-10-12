@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -29,8 +30,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(
                 x => x.GetById(Moq.It.IsAny<string>()) == questionnaireSharedPersons);
 
-            var accountDocument = new AccountDocument { Email = userEmail };
-            var accountDocumentRepository = Mock.Of<IReadSideRepositoryReader<AccountDocument>>(
+            var accountDocument = new Account { Email = userEmail };
+            var accountDocumentRepository = Mock.Of<IPlainStorageAccessor<Account>>(
                 x => x.GetById(userId.FormatGuid()) == accountDocument);
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,

@@ -616,7 +616,7 @@ namespace WB.UI.Designer.Controllers
                 Order = sb ?? string.Empty,
             });
 
-            Func<AccountListItem, bool> editAction =
+            Func<IAccountView, bool> editAction =
                 (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
 
             IEnumerable<AccountListViewItemModel> retVal =

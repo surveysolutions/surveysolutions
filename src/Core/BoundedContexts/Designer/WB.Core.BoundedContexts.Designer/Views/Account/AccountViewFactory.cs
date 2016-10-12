@@ -1,25 +1,26 @@
 ﻿using System.Linq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
     public interface IAccountViewFactory
     {
-        AccountView Load(AccountViewInputModel input);
+        IAccountView Load(AccountViewInputModel input);
     }
 
     public class AccountViewFactory : IAccountViewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
+        private readonly IPlainStorageAccessor<Aggregates.Account> accounts;
 
-        public AccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
+        public AccountViewFactory(IPlainStorageAccessor<Aggregates.Account> accounts)
         {
             this.accounts = accounts;
         }
 
-        public AccountView Load(AccountViewInputModel input)
+        public IAccountView Load(AccountViewInputModel input)
         {
-            AccountDocument user = null;
+            Aggregates.Account user = null;
             if (input.ProviderUserKey != null)
             {
                 user = accounts.Query(_ => _.FirstOrDefault((x) => x.ProviderUserKey == input.ProviderUserKey));
@@ -43,38 +44,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                 user = accounts.Query(_ => _.FirstOrDefault((x) => x.PasswordResetToken == input.ResetPasswordToken));
             }
 
-            if (user == null)
-                return null;
-            
-            return new AccountView
-            {
-                ApplicationName = user.ApplicationName,
-                ProviderUserKey = user.ProviderUserKey,
-                UserName = user.UserName,
-                Comment = user.Comment,
-                ConfirmationToken = user.ConfirmationToken,
-                CreatedAt = user.CreatedAt,
-                Email = user.Email,
-                IsConfirmed = user.IsConfirmed,
-                IsLockedOut = user.IsLockedOut,
-                IsOnline = user.IsOnline,
-                LastActivityAt = user.LastActivityAt,
-                LastLockedOutAt = user.LastLockedOutAt,
-                LastLoginAt = user.LastLoginAt,
-                LastPasswordChangeAt = user.LastPasswordChangeAt,
-                Password = user.Password,
-                PasswordSalt = user.PasswordSalt,
-                PasswordQuestion = user.PasswordQuestion,
-                PasswordAnswer = user.PasswordAnswer,
-                PasswordResetToken = user.PasswordResetToken,
-                PasswordResetExpirationDate = user.PasswordResetExpirationDate,
-                SimpleRoles = user.SimpleRoles
-            };
+            return user;
         }
 
-        private string NormalizeStringQueryParameter(string accountName)
-        {
-            return accountName.ToLower();
-        }
+        private static string NormalizeStringQueryParameter(string accountName) => accountName.ToLower();
     }
 }

@@ -80,8 +80,6 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<ICompilerSettings>().ToConstant(this.compilerSettings);
             this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
 
-            DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
-
             this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<ILookupTableService>().To<LookupTableService>();

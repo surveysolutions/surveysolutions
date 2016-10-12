@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.CommandBus;
@@ -19,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
         };
 
         Because of = () =>
-            accountRepository.Register(new AccountView() { ProviderUserKey = validatedUserId });
+            accountRepository.Register(new Account { ProviderUserKey = validatedUserId });
 
         It should_execute_RegisterAccountCommand_with_specified_validatedUserId = () =>
             commandService.Verify(command => command.Execute(Moq.It.Is<RegisterAccountCommand>(cp => cp.AccountId == validatedUserId), Moq.It.IsAny<string>()));
