@@ -19,15 +19,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
             questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, anotherRosterId, responsibleId, isInteger : true);
 
-            questionnaire.AddMultiOptionQuestion(rosterTitleQuestionId,anotherRosterId,responsibleId);
-            questionnaire.AddGroup(groupId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId, groupId){
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles =  null,
-                    RosterTitleQuestionId =rosterTitleQuestionId 
-                });
+            questionnaire.AddMultiOptionQuestion(rosterTitleQuestionId, anotherRosterId, responsibleId);
+
+            questionnaire.AddGroup(groupId, parentGroupId: anotherRosterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+
+            questionnaire.UpdateGroup(anotherRosterId, responsibleId, "rosterTitle", "", rosterSizeQuestionId, "", null, false, true,
+                RosterSizeSourceType.Question, null, rosterTitleQuestionId);
+            
         };
 
         Because of = () =>

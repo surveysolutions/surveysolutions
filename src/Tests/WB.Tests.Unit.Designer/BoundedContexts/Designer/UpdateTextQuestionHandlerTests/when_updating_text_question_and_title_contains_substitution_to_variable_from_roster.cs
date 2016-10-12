@@ -32,14 +32,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 variableName: "old_variable_name",
                 instructions: "old instructions",
                 enablementCondition: "old condition");
-            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
-                RosterSizeQuestionId = rosterSizeQuestionId,
-                RosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitles =  null,
-                RosterTitleQuestionId =null 
-            });
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            
             questionnaire.AddVariableAndMoveIfNeeded(Create.Command.AddVariable(questionnaire.Id, variableFromRosterId, rosterId, responsibleId, substitutionVariableName));
         };
 

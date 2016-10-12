@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
@@ -83,28 +82,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public Guid Id => this.innerDocument.PublicKey;
         
-        internal void AddSharedPersonToQuestionnaire(SharedPersonToQuestionnaireAdded e)
-        {
-            this.sharedPersons.Add(new SharedPerson()
-            {
-                Id = e.PersonId,
-                ShareType = e.ShareType,
-                Email = e.Email,
-            });
-        }
-
-        internal void RemoveSharedPersonFromQuestionnaire(SharedPersonFromQuestionnaireRemoved e)
-        {
-            this.sharedPersons.RemoveAll(sp => sp.Id == e.PersonId);
-        }
-
-        internal void MigrateExpressionsToCSharp(ExpressionsMigratedToCSharp e)
-        {
-            this.wasExpressionsMigrationPerformed = true;
-            this.innerDocument.UsesCSharp = true;
-
-        }
-        
         internal void UpdateGroup(GroupUpdated e)
         {
             this.innerDocument.UpdateGroup(e.GroupPublicKey, 
@@ -156,17 +133,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void MarkGroupAsRoster(GroupBecameARoster e)
         {
             this.innerDocument.UpdateGroup(e.GroupId, group => group.IsRoster = true);
-        }
-
-        internal void ChangeRoster(RosterChanged e)
-        {
-            this.innerDocument.UpdateGroup(e.GroupId, group =>
-            {
-                group.RosterSizeQuestionId = e.RosterSizeQuestionId;
-                group.RosterSizeSource = e.RosterSizeSource;
-                group.FixedRosterTitles = e.FixedRosterTitles;
-                group.RosterTitleQuestionId = e.RosterTitleQuestionId;
-            });
         }
 
         private void RemoveRosterFlagFromGroup(Guid groupId)
@@ -229,48 +195,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
         }
 
-        internal void UpdateMultimediaQuestion(MultimediaQuestionUpdated e)
-        {
-            var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionId);
-            IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.QuestionId,
-                        QuestionType.Multimedia,
-                        e.QuestionScope,
-                        e.Title,
-                        e.VariableName,
-                        e.VariableLabel,
-                        e.EnablementCondition,
-                        e.HideIfDisabled,
-                        Order.AZ,
-                        false,
-                        false,
-                        e.Instructions,
-                        e.Properties,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.ValidationConditions,
-                        null,
-                        false));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.ReplaceEntity(question, newQuestion);
-        }
+        
         
         #endregion
 
@@ -333,10 +258,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     GroupText = "New Section",
                     PublicKey = Guid.NewGuid(),
                     ResponsibleId = createdBy ?? Guid.Empty
-                }
-                );
-
-            this.MigrateExpressionsToCSharp(new ExpressionsMigratedToCSharp());
+                });
         }
 
         public void CloneQuestionnaire(string title, bool isPublic, Guid createdBy, Guid publicKey, IQuestionnaireDocument source)
@@ -379,11 +301,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.innerDocument = clonedDocument;
-
-            if (source.UsesCSharp)
-            {
-                this.MigrateExpressionsToCSharp(new ExpressionsMigratedToCSharp());
-            }
         }
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
@@ -852,12 +769,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isRoster)
             {
                 this.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId));
-                this.ChangeRoster(new RosterChanged(responsibleId, groupId)
+                this.innerDocument.UpdateGroup(groupId, group =>
                 {
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = rosterSizeSource,
-                    FixedRosterTitles = fixedTitles,
-                    RosterTitleQuestionId = rosterTitleQuestionId
+                    group.RosterSizeQuestionId = rosterSizeQuestionId;
+                    group.RosterSizeSource = rosterSizeSource;
+                    group.FixedRosterTitles = fixedTitles;
+                    group.RosterTitleQuestionId = rosterTitleQuestionId;
                 });
             }
             else
@@ -945,13 +862,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isRoster)
             {
                 this.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId));
-                this.ChangeRoster(new RosterChanged(responsibleId, groupId)
-                    {
-                        RosterSizeQuestionId = rosterSizeQuestionId,
-                        RosterSizeSource = rosterSizeSource,
-                        FixedRosterTitles = fixedTitles,
-                        RosterTitleQuestionId = rosterTitleQuestionId
-                    });
+                this.innerDocument.UpdateGroup(groupId, groupToUpdate =>
+                {
+                    groupToUpdate.RosterSizeQuestionId = rosterSizeQuestionId;
+                    groupToUpdate.RosterSizeSource = rosterSizeSource;
+                    groupToUpdate.FixedRosterTitles = fixedTitles;
+                    groupToUpdate.RosterTitleQuestionId = rosterTitleQuestionId;
+                });
             }
             else
             {
@@ -1650,7 +1567,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, QuestionScope scope, QuestionProperties properties)
+        public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, 
+            string instructions, Guid responsibleId, QuestionScope scope, QuestionProperties properties)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1662,19 +1580,43 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.Multimedia, responsibleId, null);
 
-            this.UpdateMultimediaQuestion(new MultimediaQuestionUpdated()
+            var question = this.innerDocument.Find<AbstractQuestion>(questionId);
+            IQuestion newQuestion =
+                this.questionnaireEntityFactory.CreateQuestion(
+                    new QuestionData(
+                        questionId,
+                        QuestionType.Multimedia,
+                        scope,
+                        title,
+                        variableName,
+                        variableLabel,
+                        enablementCondition,
+                        hideIfDisabled,
+                        Order.AZ,
+                        false,
+                        false,
+                        instructions,
+                        properties,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        new List<ValidationCondition>(), 
+                        null,
+                        false));
+
+            if (question != null)
             {
-                QuestionId = questionId,
-                Title = title,
-                VariableName = variableName,
-                VariableLabel = variableLabel,
-                EnablementCondition = enablementCondition,
-                HideIfDisabled = hideIfDisabled,
-                Instructions = instructions,
-                Properties = properties,
-                QuestionScope = scope,
-                ResponsibleId = responsibleId
-            });
+                this.innerDocument.ReplaceEntity(question, newQuestion);
+            }
         }
 
         public void UpdateQRBarcodeQuestion(UpdateQRBarcodeQuestion command)
@@ -1725,14 +1667,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         false));
 
-            if (question == null)
+            if (question != null)
             {
-                return;
+                this.innerDocument.ReplaceEntity(question, newQuestion);
             }
-
-            this.innerDocument.ReplaceEntity(question, newQuestion);
-
-
         }
 
         #region Static text command handlers
@@ -1905,12 +1843,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("User {0} already exist in share list.", email));
             }
 
-            this.AddSharedPersonToQuestionnaire(new SharedPersonToQuestionnaireAdded()
+            this.sharedPersons.Add(new SharedPerson()
             {
-                PersonId = personId,
-                Email = email,
+                Id = personId,
                 ShareType = shareType,
-                ResponsibleId = responsibleId
+                Email = email,
             });
         }
 
@@ -1925,11 +1862,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Couldn't remove user, because it doesn't exist in share list");
             }
 
-            this.RemoveSharedPersonFromQuestionnaire(new SharedPersonFromQuestionnaireRemoved()
-            {
-                PersonId = personId,
-                ResponsibleId = responsibleId
-            });
+            this.sharedPersons.RemoveAll(sp => sp.Id == personId);
+
         }
 
         #endregion

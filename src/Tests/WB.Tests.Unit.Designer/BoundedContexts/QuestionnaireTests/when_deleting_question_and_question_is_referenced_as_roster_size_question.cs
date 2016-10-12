@@ -21,15 +21,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId,chapterId,responsibleId);
             
-            questionnaire.AddGroup(rosterId, title: rosterTitle, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId, rosterId)
-                {
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles = null,
-                    RosterTitleQuestionId = null
-                });
+            questionnaire.AddGroup(rosterId, title: rosterTitle, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
         };
 
         Because of = () =>

@@ -251,13 +251,14 @@ namespace WB.Tests.Unit.Designer
             bool isRoster = false,
             string enablingCondition = null,
             RosterSizeSourceType rosterSourceType = RosterSizeSourceType.FixedTitles,
+            Guid? rosterSizeQuestionId = null, 
             FixedRosterTitleItem[] rosterFixedTitles = null)
         {
              questionnaire.AddGroupAndMoveIfNeeded(groupId ?? Guid.NewGuid(),
                  responsibleId ?? Guid.NewGuid(),
                  title ?? "Title - " + Guid.NewGuid().FormatGuid(),
                  variableName ?? "Variable_" + Guid.NewGuid().FormatGuid().Substring(0, 15),
-                 null,
+                 rosterSizeQuestionId,
                  "Description - " + Guid.NewGuid().FormatGuid(),
                  enablingCondition,
                  false,

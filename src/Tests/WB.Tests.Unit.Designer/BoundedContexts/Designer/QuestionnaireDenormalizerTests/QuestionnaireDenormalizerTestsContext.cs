@@ -192,19 +192,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return (new GroupBecameARoster(Guid.NewGuid(), groupId));
         }
 
-        protected static RosterChanged CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, 
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId)
-        {
-            return
-                (new RosterChanged(Guid.NewGuid(), groupId)
-                {
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = rosterSizeSource,
-                    FixedRosterTitles = rosterFixedTitles,
-                    RosterTitleQuestionId = rosterTitleQuestionId
-                });
-        }
-
         protected static TextListQuestionCloned CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
         {
             return (new TextListQuestionCloned

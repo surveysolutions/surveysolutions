@@ -21,24 +21,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddGroup(rosterGroupWithRosterTitleQuestionId, chapterId, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterGroupWithRosterTitleQuestionId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterGroupWithRosterTitleQuestionId)
-                {
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles = null,
-                    RosterTitleQuestionId = rosterTitleQuestionId
-                });
-            questionnaire.AddTextQuestion(
-                rosterTitleQuestionId,
-                rosterGroupWithRosterTitleQuestionId,
-                responsibleId);
             questionnaire.AddNumericQuestion(
                 rosterSizeQuestionId,
                 chapterId,
                 responsibleId,
-                isInteger : true);
+                isInteger: true);
+            questionnaire.AddGroup(rosterGroupWithRosterTitleQuestionId, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            
+            questionnaire.AddTextQuestion(
+                rosterTitleQuestionId,
+                rosterGroupWithRosterTitleQuestionId,
+                responsibleId);
+
+            //update title
+            /*questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterGroupWithRosterTitleQuestionId)
+            {
+                RosterSizeQuestionId = rosterSizeQuestionId,
+                RosterSizeSource = RosterSizeSourceType.Question,
+                FixedRosterTitles = null,
+                RosterTitleQuestionId = rosterTitleQuestionId
+            });*/
+            
             questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
         };
 

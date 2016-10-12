@@ -21,19 +21,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId,
-                chapterId,responsibleId);
+                chapterId,responsibleId, isInteger:true);
             
-            questionnaire.AddGroup(rosterId, title: rosterTitle, responsibleId: responsibleId);
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId, rosterId){
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles =  null,
-                    RosterTitleQuestionId =rosterTitleQuestionId 
-                });
-            questionnaire.AddTextQuestion(rosterTitleQuestionId,
-                rosterId,
-                responsibleId);
+            questionnaire.AddGroup(rosterId, title: rosterTitle, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+
+            questionnaire.AddTextQuestion(rosterTitleQuestionId,rosterId,responsibleId);
+
+            questionnaire.UpdateGroup(rosterId, responsibleId, rosterTitle, "", rosterSizeQuestionId, "", null,false,true,
+                RosterSizeSourceType.Question,null, rosterTitleQuestionId);
+            
         };
 
         Because of = () =>

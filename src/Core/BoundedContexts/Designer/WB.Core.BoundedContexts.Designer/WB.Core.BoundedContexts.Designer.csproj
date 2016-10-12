@@ -301,8 +301,6 @@
     <Compile Include="Implementation\Repositories\AccountRepository.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\ExpressionsMigratedToCSharp.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\MultimediaQuestionUpdated.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireVariable.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
@@ -571,9 +569,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireDto\NumericQuestionChanged.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\NumericQuestionCloned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireActive.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\RosterChanged.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\SharedPersonToQuestionnaireAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\SharedPersonFromQuestionnaireRemoved.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\FullGroupData.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\FullQuestionData.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupUpdated.cs" />
