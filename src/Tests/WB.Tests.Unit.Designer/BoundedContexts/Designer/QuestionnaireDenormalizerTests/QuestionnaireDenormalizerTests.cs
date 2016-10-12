@@ -9,6 +9,8 @@ using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -37,8 +39,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             // Arrange
             var questionnaireId = Guid.Parse("11111111-1111-1111-1111-111111111111");
             var questionId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var personId = Guid.Parse("22222222-2222-2222-2222-222222222221");
 
-            var innerDocument = CreateQuestionnaireDocument(questionnaireId);
+            var innerDocument = CreateQuestionnaireDocument(questionnaireId, personId);
 
             innerDocument
                 .AddChapter(Guid.NewGuid())
@@ -46,23 +49,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
             var denormalizer = CreateQuestionnaireDenormalizer(innerDocument);
 
-            QuestionChanged evnt = CreateQuestionChangedEvent(questionId);
+            var command = new UpdateTextQuestion(denormalizer.Id, questionId, personId, new CommonQuestionParameters ()
+                {
+                    Title = "What is your name",
+                    Instructions = "Instructuis"
+                },
+                null,QuestionScope.Interviewer, 
+                false,
+                new List<ValidationCondition> { new ValidationCondition("[this]!=''", "Empty names is invalid answer") });
 
             // Act
-            denormalizer.UpdateQuestion(evnt);
+            denormalizer.UpdateTextQuestion(command);
 
             // Assert
             #warning: updated question is a new entity, that's why we should search for it by it's id
             var question = innerDocument.Find<IQuestion>(questionId);
 
-            Assert.That(evnt.QuestionText, Is.EqualTo(question.QuestionText));
-            Assert.That(evnt.QuestionType, Is.EqualTo(question.QuestionType));
-            Assert.That(evnt.Featured, Is.EqualTo(question.Featured));
-            Assert.That(evnt.AnswerOrder, Is.EqualTo(question.AnswerOrder));
-            Assert.That(evnt.ConditionExpression, Is.EqualTo(question.ConditionExpression));
-            Assert.That(evnt.Instructions, Is.EqualTo(question.Instructions));
-            Assert.That(evnt.StataExportCaption, Is.EqualTo(question.StataExportCaption));
-            Assert.That(evnt.ValidationConditions, Is.EqualTo(question.ValidationConditions));
+            Assert.That(command.Title, Is.EqualTo(question.QuestionText));
+            Assert.That(QuestionType.Text, Is.EqualTo(question.QuestionType));
+            Assert.That(command.IsPreFilled, Is.EqualTo(question.Featured));
+            Assert.That(command.EnablementCondition, Is.EqualTo(question.ConditionExpression));
+            Assert.That(command.Instructions, Is.EqualTo(question.Instructions));
+            Assert.That(command.VariableName, Is.EqualTo(question.StataExportCaption));
+            Assert.That(command.ValidationConditions, Is.EqualTo(question.ValidationConditions));
         }
 
         public static Questionnaire CreateQuestionnaireDenormalizer(QuestionnaireDocument document,
@@ -82,12 +91,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return questionnaireAr;
         }
 
-        private static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionnaireId)
+        private static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionnaireId, Guid? createdBy = null)
         {
             var innerDocument = new QuestionnaireDocument
             {
                 Title = string.Format("Questionnaire {0}", questionnaireId),
-                PublicKey = questionnaireId
+                PublicKey = questionnaireId,
+                CreatedBy = createdBy
             };
             return innerDocument;
         }
@@ -95,7 +105,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private static QuestionChanged CreateQuestionChangedEvent(Guid questionId, QuestionType type = QuestionType.Text)
         {
             return CreateQuestionChanged(
-                questionText : "What is your name",
+                    questionText : "What is your name",
                     questionType : type,
                     publicKey : questionId,
                     featured : true,

@@ -95,15 +95,6 @@ namespace WB.Tests.Unit.Designer
                     validationConditions: validationConditions ?? new List<ValidationCondition>());
             }
 
-            public static QuestionChanged QuestionChanged(Guid questionId, string variableName, QuestionType questionType)
-            {
-                return QuestionChanged(
-                    publicKey : questionId,
-                    stataExportCaption : variableName,
-                    questionType : questionType
-                );
-            }
-
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid targetGroupKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
@@ -145,45 +136,6 @@ namespace WB.Tests.Unit.Designer
                 isTimestamp: isTimestamp);
             }
 
-            public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
-                string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
-                QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            QuestionProperties properties = null, bool isTimestamp = false)
-            {
-                return new QuestionChanged(
-                    publicKey: publicKey,
-                    groupPublicKey: groupPublicKey,
-                    questionText: questionText,
-                    stataExportCaption: stataExportCaption,
-                    variableLabel: null,
-                    featured: featured,
-                    questionScope: questionScope,
-                    conditionExpression: conditionExpression,
-                    hideIfDisabled: false,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    properties: properties ?? new QuestionProperties(false, false),
-                    responsibleId: responsibleId ?? Guid.NewGuid(),
-                    capital: capital,
-                    isInteger: isInteger,
-                    questionType: questionType,
-                    answerOrder: answerOrder,
-                    answers: answers,
-                    linkedToQuestionId: null,
-                    linkedToRosterId: null,
-                    areAnswersOrdered: null,
-                    yesNoView: null,
-                    maxAllowedAnswers: null,
-                    mask: null,
-                    isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: cascadeFromQuestionId,
-                    targetGroupKey: Guid.NewGuid(),
-                    validationConditions: new List<ValidationCondition>(),
-                linkedFilterExpression: null,
-                isTimestamp: isTimestamp);
-            }
             
             public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)
             {
@@ -266,20 +218,6 @@ namespace WB.Tests.Unit.Designer
                     ValidationConditions = validationConditions ?? new List<ValidationCondition>()
                 };
             }
-
-            public static QuestionChanged QuestionChangedEvent(string questionId, string parentGroupId = null,
-                string questionVariable = null, string questionTitle = null, QuestionType? questionType = null, string questionConditionExpression = null)
-            {
-                return Event.QuestionChanged(
-                    publicKey: Guid.Parse(questionId),
-                    groupPublicKey: Guid.Parse(parentGroupId ?? Guid.NewGuid().ToString()),
-                    stataExportCaption: questionVariable,
-                    questionText: questionTitle,
-                    questionType: questionType ?? QuestionType.Text,
-                    conditionExpression: questionConditionExpression
-                    );
-            }
-
             
             public static QuestionnaireItemMoved QuestionnaireItemMovedEvent(string itemId,
                 string targetGroupId = null, int? targetIndex = null, string questionnaireId = null)
