@@ -16,9 +16,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            questionnaire.AddTextQuestion(textQuestionId, chapterId, responsibleId);
-            questionnaire.UpdateQuestion(Create.Event.QuestionChanged(publicKey: textQuestionId, groupPublicKey: chapterId,
-                questionType: QuestionType.GpsCoordinates, stataExportCaption: textQuestionVariable));
+            questionnaire.AddGpsQuestion(textQuestionId, chapterId, responsibleId, variableName: textQuestionVariable);
+            
             questionnaire.AddTextQuestion(questionWithSubstitutionId, chapterId, responsibleId);
 
             eventContext = new EventContext();
