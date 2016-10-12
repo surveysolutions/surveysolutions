@@ -145,6 +145,9 @@
                             case 'Option':
                                 focusId = 'option-title-' + $state.params.validationIndex;
                                 break;
+                            case 'OptionsFilter':
+                                focusId = 'optionsFilterExpression';
+                                break;
                             default:
                                 break;
                         }

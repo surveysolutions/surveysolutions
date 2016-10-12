@@ -67,13 +67,16 @@ namespace WB.Tests.Unit.Designer
             Guid? linkedToQuestionId = null,
             bool areAnswersOrdered = false,
             int? maxAllowedAnswers = null,
-            bool yesNoView = false)
+            bool yesNoView = false,
+            string optionsFilterExpression = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
+            var questionProperties = Create.QuestionProperties();
+            questionProperties.OptionsFilterExpression = optionsFilterExpression;
             questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, false, instructions, responsibleId, 
                 options ?? new Option[2] {new Option() {Title = "1", Value = "1"}, new Option() {Title = "2", Value = "2"} },
                 linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, yesNoView, 
-                new List<ValidationCondition>(),linkedFilterExpression: null, properties: Create.QuestionProperties());
+                new List<ValidationCondition>(), linkedFilterExpression: null, properties: questionProperties);
         }
 
         public static void AddSingleOptionQuestion(

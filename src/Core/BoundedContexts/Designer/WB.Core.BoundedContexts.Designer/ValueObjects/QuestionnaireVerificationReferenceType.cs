@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         VariableName = 5,
         Option = 6,
         VariableContent = 7,
-        FixedRosterItem = 8
+        FixedRosterItem = 8,
+        OptionsFilter = 9
     }
 }
