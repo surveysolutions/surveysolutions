@@ -33,16 +33,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
+                Create.Entity.Roster(rosterId: rosterAId, rosterSizeQuestionId:numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
                 {
                     Create.Entity.NumericRealQuestion(id: questionId),
                 }),
-                Create.Entity.Roster(rosterId: rosterBId, rosterTitleQuestionId: questionId),
+                Create.Entity.Roster(rosterId: rosterBId, rosterSizeQuestionId:numericQuestionId, rosterTitleQuestionId: questionId),
             }));
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview.Apply(Create.Event.NumericIntegerQuestionAnswered(numericQuestionId, emptyRosterVector, 1));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, rosterInstanceId, sortIndex: null));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId, sortIndex: null));
 
@@ -88,5 +89,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static decimal[] emptyRosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
+        private static Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");
     }
 }
