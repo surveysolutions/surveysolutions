@@ -2,6 +2,7 @@
 using Main.Core.Documents;
 using Moq;
 using NSubstitute;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -22,12 +23,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
         protected static QuestionnaireInfoViewFactory CreateQuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> repository = null,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedWith = null,
-            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader = null)
+            IPlainStorageAccessor<Account> accountsDocumentReader = null)
         {
             return
                 new QuestionnaireInfoViewFactory(sharedWith ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
                                                 repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
-                                                accountsDocumentReader ?? Mock.Of<IReadSideRepositoryReader<AccountDocument>>(),
+                                                accountsDocumentReader ?? Mock.Of<IPlainStorageAccessor<Account>>(),
                                                 Mock.Of<IAttachmentService>(), Mock.Of<IMembershipUserService>(x=>x.WebUser == Substitute.For<IMembershipWebUser>()));
         }
     }

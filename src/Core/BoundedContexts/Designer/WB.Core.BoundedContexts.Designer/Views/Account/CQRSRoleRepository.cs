@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return accounts.Items.Select(x => x.UserName);
         }
 
-        private AccountView GetUser(string username)
+        private IAccountView GetUser(string username)
         {
             return this.accountViewFactory.Load(new AccountViewInputModel(
                 accountName: username,

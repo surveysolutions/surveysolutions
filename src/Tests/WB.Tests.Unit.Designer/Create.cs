@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -61,8 +62,8 @@ namespace WB.Tests.Unit.Designer
 {
     internal static partial class Create
     {
-        public static AccountDocument AccountDocument(string userName = "", Guid? userId = null)
-            => new AccountDocument
+        public static Account AccountDocument(string userName = "", Guid? userId = null)
+            => new Account
             {
                 ProviderUserKey = userId ?? Guid.NewGuid(),
                 UserName = userName,

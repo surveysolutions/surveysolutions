@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
@@ -35,8 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 .Returns(questionnaire);
 
             var userRepositoryMock =
-                Mock.Of<IReadSideRepositoryReader<AccountDocument>>(
-                    x => x.GetById(userId.FormatGuid()) == new AccountDocument() { Email = ownerEmail });
+                Mock.Of<IPlainStorageAccessor<Account>>(
+                    x => x.GetById(userId.FormatGuid()) == new Account() { Email = ownerEmail });
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object,
                 accountsDocumentReader: userRepositoryMock);
         };

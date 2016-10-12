@@ -142,14 +142,8 @@ namespace WB.UI.Designer.App_Start
                 .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
 
             kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();
-            kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
-            kernel.Bind<ReadSideSettings>().ToConstant(readSideSettings);
-            kernel.Bind<ReadSideService>().ToSelf().InSingletonScope();
-            kernel.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
-            kernel.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
 
             kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
             kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
