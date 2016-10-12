@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
@@ -12,9 +13,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
     public class AccountListViewFactory : IAccountListViewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<AccountDocument> accounts;
+        private readonly IPlainStorageAccessor<Aggregates.Account> accounts;
 
-        public AccountListViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accounts)
+        public AccountListViewFactory(IPlainStorageAccessor<Aggregates.Account> accounts)
         {
             this.accounts = accounts;
         }
@@ -22,39 +23,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         public AccountListView Load(AccountListViewInputModel input)
         {
             var count =
-                this.accounts.Query(_ => this.FilterAccounts(_, input).Count());
+                this.accounts.Query(_ => FilterAccounts(_, input).Count());
 
             var sortOrder = input.Order.IsNullOrEmpty() ? "CreatedAt  Desc" : input.Order;
 
             var result =
                 this.accounts.Query(
                     _ =>
-                        this.FilterAccounts(_, input)
+                        FilterAccounts(_, input)
                             .OrderUsingSortExpression(sortOrder)
                             .Skip((input.Page - 1)*input.PageSize)
                             .Take(input.PageSize)
-                            .Select(x => new AccountListItem()
-                            {
-                                ApplicationName = x.ApplicationName,
-                                ProviderUserKey = x.ProviderUserKey,
-                                UserName = x.UserName,
-                                Comment = x.Comment,
-                                CreatedAt = x.CreatedAt,
-                                Email = x.Email,
-                                IsConfirmed = x.IsConfirmed,
-                                IsLockedOut = x.IsLockedOut,
-                                LastActivityAt = x.LastActivityAt,
-                                LastLockedOutAt = x.LastLockedOutAt,
-                                LastLoginAt = x.LastLoginAt,
-                                LastPasswordChangeAt = x.LastPasswordChangeAt
-                            }).ToArray());
+                            .ToArray());
 
             return new AccountListView(input.Page, input.PageSize, count, result, input.Order);
         }
 
-        private IQueryable<AccountDocument> FilterAccounts(IQueryable<AccountDocument> _, AccountListViewInputModel input)
+        private static IQueryable<Aggregates.Account> FilterAccounts(IQueryable<Aggregates.Account> _, AccountListViewInputModel input)
         {
-            IQueryable<AccountDocument> result = _;
+            IQueryable<Aggregates.Account> result = _;
             bool hasName = !string.IsNullOrEmpty(input.Name);
             bool hasEmail = !string.IsNullOrEmpty(input.Email);
             bool hasRole = input.Role != SimpleRoleEnum.Undefined;

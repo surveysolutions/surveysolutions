@@ -1,14 +1,16 @@
 ﻿using Moq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTests
 {
     internal class AccountViewFactoryTestsContext
     {
-        protected static AccountDocument CreateAccountDocument(string userName)
+        protected static Account CreateAccount(string userName)
         {
-            return new AccountDocument { UserName = userName };
+            return new Account { UserName = userName };
         }
 
         protected static AccountViewInputModel CreateAccountViewInputModel(string accountName)
@@ -16,9 +18,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
             return new AccountViewInputModel(accountName, null, null, null);
         }
 
-        protected static AccountViewFactory CreateAccountViewFactory(IQueryableReadSideRepositoryReader<AccountDocument> accountsRepository = null)
+        protected static AccountViewFactory CreateAccountViewFactory(IPlainStorageAccessor<Account> accountsRepository = null)
         {
-            return new AccountViewFactory(accountsRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<AccountDocument>>());
+            return new AccountViewFactory(accountsRepository ?? Mock.Of<IPlainStorageAccessor<Account>>());
         }
     }
 }

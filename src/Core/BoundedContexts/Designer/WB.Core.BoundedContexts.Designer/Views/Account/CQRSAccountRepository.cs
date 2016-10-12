@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email)
         {
-            var account = new AccountView
+            var account = new Aggregates.Account
                               {
                                   ProviderUserKey = Guid.Parse(providerUserKey.ToString()), 
                                   ApplicationName = applicationName, 
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public bool Delete(string username, bool deleteAllRelatedData)
         {
-            AccountView account = this.GetUser(accountName: username);
+            IAccountView account = this.GetUser(accountName: username);
 
             this.commandService.Execute(new DeleteAccountCommand(account.ProviderUserKey));
 
@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public string GetUserNameByConfirmationToken(string confirmationToken)
         {
-            AccountView account = this.GetUser(confirmationToken: confirmationToken);
+            IAccountView account = this.GetUser(confirmationToken: confirmationToken);
             return account == null ? string.Empty : account.UserName;
         }
 
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                 throw new ArgumentNullException("email");
             }
 
-            AccountView account = this.GetUser(accountEmail: email);
+            IAccountView account = this.GetUser(accountEmail: email);
             return account == null ? string.Empty : account.UserName;
         }
 
@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             }
         }
 
-        private AccountView GetUser(
+        private IAccountView GetUser(
             string accountName = null, 
             string accountEmail = null, 
             string confirmationToken = null, 

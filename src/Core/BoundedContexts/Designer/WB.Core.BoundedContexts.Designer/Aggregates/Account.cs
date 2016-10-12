@@ -1,109 +1,156 @@
 ﻿using System;
-using Ncqrs.Domain;
+using System.Collections.Generic;
+using System.Linq;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    public class Account : IPlainAggregateRoot
+    public class Account : IPlainAggregateRoot, IAccountView
     {
-        private Guid? id;
+        #region Properties
 
-        public Guid Id // TODO: TLK: make plain after Document inline
+        public virtual string ApplicationName { get; set; }
+
+        public virtual string Comment { get; set; }
+
+        public virtual string ConfirmationToken { get; set; }
+
+        public virtual DateTime CreatedAt { get; set; }
+
+        public virtual string Email { get; set; }
+
+        public virtual bool IsConfirmed { get; set; }
+
+        public virtual bool IsLockedOut { get; set; }
+
+        public virtual bool IsOnline { get; set; }
+
+        public virtual DateTime LastActivityAt { get; set; }
+
+        public virtual DateTime LastLockedOutAt { get; set; }
+
+        public virtual DateTime LastLoginAt { get; set; }
+
+        public virtual DateTime LastPasswordChangeAt { get; set; }
+
+        public virtual string Password { get; set; }
+
+        public virtual string PasswordAnswer { get; set; }
+
+        public virtual string PasswordQuestion { get; set; }
+
+        public virtual DateTime PasswordResetExpirationDate { get; set; }
+
+        public virtual string PasswordResetToken { get; set; }
+
+        public virtual string PasswordSalt { get; set; }
+
+        public virtual string UserId { get; set; }
+
+        public virtual Guid ProviderUserKey
         {
-            get { return this.id ?? this.Document.ProviderUserKey; }
-            private set { this.id = value; }
+            get { return providerUserKey; }
+            set
+            {
+                this.UserId = value.FormatGuid();
+                providerUserKey = value;
+            }
         }
 
-        public AccountDocument Document { get; set; }
+        private Guid providerUserKey;
 
-        public void SetId(Guid id) => this.Id = id;
+        public virtual string UserName { get; set; }
+
+        public virtual ISet<SimpleRoleEnum> SimpleRoles { get; set; } = new HashSet<SimpleRoleEnum>();
+
+        #endregion
+
+        public Guid Id => this.ProviderUserKey;
+        public void SetId(Guid id) => this.ProviderUserKey = id;
         private void ApplyEvent(dynamic @event) => ((dynamic) this).Apply(@event);
 
         public void Apply(AccountRegistered @event)
         {
-            this.Document = new AccountDocument
-            {
-                ProviderUserKey = this.Id,
-                UserName = GetNormalizedUserName(@event.UserName),
-                Email = @event.Email,
-                ConfirmationToken = @event.ConfirmationToken,
-                ApplicationName = @event.ApplicationName,
-                CreatedAt = @event.CreatedDate
-            };
-        }
-        public void Apply(AccountConfirmed @event)
-        {
-            this.Document.IsConfirmed = true;
+            this.UserName = GetNormalizedUserName(@event.UserName);
+            this.Email = @event.Email;
+            this.ConfirmationToken = @event.ConfirmationToken;
+            this.ApplicationName = @event.ApplicationName;
+            this.CreatedAt = @event.CreatedDate;
         }
 
-        public void Apply(AccountDeleted @event)
+        public void Apply(AccountConfirmed @event)
         {
-            this.Document = null;
+            this.IsConfirmed = true;
         }
+
+        public void Apply(AccountDeleted @event) {}
+
         public void Apply(AccountLocked @event)
         {
-            this.Document.IsLockedOut = true;
-            this.Document.LastLockedOutAt = @event.LastLockedOutAt;
+            this.IsLockedOut = true;
+            this.LastLockedOutAt = @event.LastLockedOutAt;
         }
 
         public void Apply(AccountOnlineUpdated @event)
         {
-            this.Document.LastActivityAt = @event.LastActivityAt;
+            this.LastActivityAt = @event.LastActivityAt;
         }
 
         public void Apply(AccountPasswordChanged @event)
         {
-            this.Document.Password = @event.Password;
-            this.Document.LastPasswordChangeAt = @event.LastPasswordChangeAt;
+            this.Password = @event.Password;
+            this.LastPasswordChangeAt = @event.LastPasswordChangeAt;
         }
 
         public void Apply(AccountPasswordQuestionAndAnswerChanged @event)
         {
-            this.Document.PasswordAnswer = @event.PasswordAnswer;
-            this.Document.PasswordQuestion = @event.PasswordQuestion;
+            this.PasswordAnswer = @event.PasswordAnswer;
+            this.PasswordQuestion = @event.PasswordQuestion;
         }
 
         public void Apply(AccountPasswordReset @event)
         {
-            this.Document.PasswordSalt = @event.PasswordSalt;
-            this.Document.Password = @event.Password;
+            this.PasswordSalt = @event.PasswordSalt;
+            this.Password = @event.Password;
         }
         public void Apply(AccountUnlocked @event)
         {
-            this.Document.IsLockedOut = false;
+            this.IsLockedOut = false;
         }
 
         public void Apply(AccountUpdated @event)
         {
-            this.Document.Comment = @event.Comment;
-            this.Document.Email = @event.Email;
-            this.Document.PasswordQuestion = @event.PasswordQuestion;
-            this.Document.UserName = GetNormalizedUserName(@event.UserName);
+            this.Comment = @event.Comment;
+            this.Email = @event.Email;
+            this.PasswordQuestion = @event.PasswordQuestion;
+            this.UserName = GetNormalizedUserName(@event.UserName);
         }
 
         public void Apply(UserLoggedIn @event)
         {
-            this.Document.LastLoginAt = @event.LastLoginAt;
+            this.LastLoginAt = @event.LastLoginAt;
         }
 
         public void Apply(AccountRoleAdded @event)
         {
-            this.Document.SimpleRoles.Add(@event.Role);
+            this.SimpleRoles.Add(@event.Role);
         }
 
         public void Apply(AccountRoleRemoved @event)
         {
-            this.Document.SimpleRoles.Remove(@event.Role);
+            this.SimpleRoles.Remove(@event.Role);
         }
         public void Apply(AccountLoginFailed @event) { }
 
         public void Apply(AccountPasswordResetTokenChanged @event)
         {
-            this.Document.PasswordResetToken = @event.PasswordResetToken;
-            this.Document.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
+            this.PasswordResetToken = @event.PasswordResetToken;
+            this.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
         }
 
         public Account()
@@ -210,12 +257,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     UserName = userName
                 });
             
-            if (!this.Document.IsConfirmed && isConfirmed)
+            if (!this.IsConfirmed && isConfirmed)
             {
                 this.ApplyEvent(new AccountConfirmed());
             }
 
-            if (this.Document.IsLockedOut != isLockedOut)
+            if (this.IsLockedOut != isLockedOut)
             {
                 if (isLockedOut)
                 {
@@ -226,6 +273,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     this.ApplyEvent(new AccountUnlocked());
                 }
             }
+        }
+
+        public virtual bool IsInRole(string roleName)
+        {
+            return this.GetRoles().Contains(roleName);
+        }
+
+        public virtual IEnumerable<string> GetRoles()
+        {
+            return this.SimpleRoles.Select(x => Enum.GetName(typeof(SimpleRoleEnum), x));
         }
 
         private static string GetNormalizedUserName(string userName) => userName.ToLower();

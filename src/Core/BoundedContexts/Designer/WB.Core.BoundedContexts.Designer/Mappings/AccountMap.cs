@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Core.BoundedContexts.Designer.Mappings
 {
-    public class AccountDocumentMap : ClassMapping<AccountDocument>
+    public class AccountMap : ClassMapping<Account>
     {
-        public AccountDocumentMap()
+        public AccountMap()
         {
             Id(x => x.UserId, idMap =>
             {
