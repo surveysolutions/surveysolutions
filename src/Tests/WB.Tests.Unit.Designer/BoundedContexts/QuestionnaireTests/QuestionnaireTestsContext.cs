@@ -85,13 +85,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             groupId = groupId ?? Guid.NewGuid();
             questionnaire.AddGroup(groupId.Value,
                 responsibleId: responsibleId,
-                title: "New group"
+                title: "New group", isRoster: isRoster
             );
-
-            if (isRoster)
-            {
-                questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId.Value));
-            }
 
             return questionnaire;
         }
