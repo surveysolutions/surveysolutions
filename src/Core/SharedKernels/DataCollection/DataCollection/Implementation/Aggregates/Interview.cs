@@ -4315,22 +4315,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire, Guid rosterId,
             decimal[] outerRosterVector, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
-            Guid? rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
-
-            if (!rosterSizeQuestionId.HasValue)
+            if (questionnaire.IsFixedRoster(rosterId))
                 return questionnaire.GetFixedRosterTitles(rosterId)
                     .ToDictionary(x => x.Value, x => new Tuple<string, int?>(x.Title, null));
 
-            var rosterSizeQuestionIdentity = new Identity(rosterSizeQuestionId.Value,
-                outerRosterVector.Take(questionnaire.GetRosterLevelForQuestion(rosterSizeQuestionId.Value)).ToArray());
+            Guid rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
+
+            var rosterSizeQuestionIdentity = new Identity(rosterSizeQuestionId,
+                outerRosterVector.Take(questionnaire.GetRosterLevelForQuestion(rosterSizeQuestionId)).ToArray());
 
             var answerOnRosterSizeQuestion = getAnswer(state, rosterSizeQuestionIdentity);
 
-            var questionType = questionnaire.GetQuestionType(rosterSizeQuestionId.Value);
+            var questionType = questionnaire.GetQuestionType(rosterSizeQuestionId);
             switch (questionType)
             {
                 case QuestionType.Numeric:
-                    if (questionnaire.IsQuestionInteger(rosterSizeQuestionId.Value))
+                    if (questionnaire.IsQuestionInteger(rosterSizeQuestionId))
                     {
                         if (answerOnRosterSizeQuestion == null)
                             return new Dictionary<decimal, Tuple<string, int?>>();
@@ -4354,14 +4354,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     break;
                 case QuestionType.MultyOption:
-                    if (questionnaire.IsQuestionYesNo(rosterSizeQuestionId.Value))
+                    if (questionnaire.IsQuestionYesNo(rosterSizeQuestionId))
                     {
                         var yesNoAnswer = answerOnRosterSizeQuestion as AnsweredYesNoOption[];
                         if (yesNoAnswer != null)
                         {
                             return yesNoAnswer.Where(a => a.Yes).Select(a => a.OptionValue).ToDictionary(
                                 x => x,
-                                x => new Tuple<string, int?>(questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId.Value, x), (int?)x));
+                                x => new Tuple<string, int?>(questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, x), (int?)x));
                         }
                     }
                     else
@@ -4371,7 +4371,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         {
                             return multyOptionAnswer.ToDictionary(
                                 x => x,
-                                x => new Tuple<string, int?>(questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId.Value, x), (int?)x));
+                                x => new Tuple<string, int?>(questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, x), (int?)x));
                         }
                     }
                     break;
@@ -4832,6 +4832,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
             bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
             bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionIdentity.Id);
+            bool isLinkedQuestion = questionnaire.IsQuestionLinked(questionIdentity.Id) || questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
 
             Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
             var cascadingParentQuestionIdentity = cascadingParentQuestionId.HasValue
@@ -4848,7 +4849,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 linkedOptions: linkedOptions,
                 cascadingParentQuestionIdentity: cascadingParentQuestionIdentity,
                 isYesNo: isYesNoQuestion,
-                isDecimal: isDecimalQuestion);
+                isDecimal: isDecimalQuestion,
+                isLinkedQuestion: isLinkedQuestion);
         }
 
         private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)

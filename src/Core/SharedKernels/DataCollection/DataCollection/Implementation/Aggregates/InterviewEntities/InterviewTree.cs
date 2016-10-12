@@ -257,7 +257,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
             QuestionType questionType, object answer,
-            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, bool isYesNo, bool isDecimal)
+            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, bool isYesNo, bool isDecimal,
+            bool isLinkedQuestion)
             : base(identity, isDisabled)
         {
             this.Title = title;
@@ -265,17 +266,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (questionType == QuestionType.SingleOption)
             {
-                if (linkedOptions == null)
-                    this.AsSingleOption = new InterviewTreeSingleOptionQuestion(answer);
-                else
+                if (isLinkedQuestion)
                     this.AsSingleLinkedOption = new InterviewTreeSingleLinkedOptionQuestion(linkedOptions, answer);
+                else
+                    this.AsSingleOption = new InterviewTreeSingleOptionQuestion(answer);
             }
 
             if (questionType == QuestionType.MultyOption)
             {
                 if (isYesNo)
                     this.AsYesNo = new InterviewTreeYesNoQuestion(answer);
-                else if (linkedOptions != null)
+                else if (isLinkedQuestion)
                     this.AsMultiLinkedOption = new InterviewTreeMultiLinkedOptionQuestion(linkedOptions, answer);
                 else
                     this.AsMultiOption = new InterviewTreeMultiOptionQuestion(answer);
@@ -324,7 +325,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeYesNoQuestion AsYesNo { get; }
         public InterviewTreeSingleLinkedOptionQuestion AsSingleLinkedOption { get;  }
         public InterviewTreeSingleOptionQuestion AsSingleOption { get; }
-        public InterviewTreeLinkedQuestion AsLinked { get; }
+
+        public InterviewTreeLinkedQuestion AsLinked => this.IsSingleLinkedOption ? (InterviewTreeLinkedQuestion)this.AsSingleLinkedOption : this.AsMultiLinkedOption;
+
         public InterviewTreeCascadingQuestion AsCascading { get; }
 
         public string Title { get; }
@@ -344,7 +347,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsGps => this.AsGps != null;
         public bool IsMultimedia => this.AsMultimedia != null;
 
-        public bool IsLinked => this.AsLinked != null;
+        public bool IsLinked => (this.IsMultiLinkedOption || this.IsSingleLinkedOption);
         public bool IsCascading => this.AsCascading != null;
 
         public bool IsAnswered()
@@ -629,9 +632,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         protected InterviewTreeLinkedQuestion(IEnumerable<RosterVector> linkedOptions)
         {
-            if (linkedOptions == null) throw new ArgumentNullException(nameof(linkedOptions));
+            //Interview state returns null if linked question has no options
+           // if (linkedOptions == null) throw new ArgumentNullException(nameof(linkedOptions));
 
-            this.Options = linkedOptions.ToReadOnlyCollection();
+            this.Options = (linkedOptions ?? new List<RosterVector>()).ToReadOnlyCollection();
         }
 
         public IReadOnlyCollection<RosterVector> Options { get; }
