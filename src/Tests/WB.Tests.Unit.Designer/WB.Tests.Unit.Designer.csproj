@@ -766,9 +766,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\QuestionnaireEntityFactoryTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__AutoPtopagate__.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__QRBarcode__.cs" />
