@@ -82,16 +82,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public Guid Id => this.innerDocument.PublicKey;
         
-        internal void UpdateGroup(GroupUpdated e)
-        {
-            this.innerDocument.UpdateGroup(e.GroupPublicKey, 
-                e.GroupText,
-                e.VariableName, 
-                e.Description, 
-                e.ConditionExpression, 
-                e.HideIfDisabled);
-        }
-
         private void AddGroup(NewGroupAdded e)
         {
             var group = new Group();
@@ -177,14 +167,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, null);
         }
         
-        internal void MoveQuestionnaireItem(QuestionnaireItemMoved e)
+        private void MoveQuestionnaireItem(QuestionnaireItemMoved e)
         {
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
 
             this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
         }
-
-        
         
         #endregion
 
@@ -757,13 +745,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (isRoster)
             {
-                this.innerDocument.UpdateGroup(groupId, group => group.IsRoster = true);
                 this.innerDocument.UpdateGroup(groupId, group =>
                 {
                     group.RosterSizeQuestionId = rosterSizeQuestionId;
                     group.RosterSizeSource = rosterSizeSource;
                     group.FixedRosterTitles = fixedTitles;
                     group.RosterTitleQuestionId = rosterTitleQuestionId;
+                    group.IsRoster = true;
                 });
             }
             else
@@ -837,27 +825,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableName: variableName,
                 parentGroup: @group.GetParent() as IGroup ?? this.innerDocument);
 
-            this.UpdateGroup(new GroupUpdated
-            {
-                GroupPublicKey = groupId,
-                GroupText = title,
-                VariableName = variableName,
-                Description = description,
-                ConditionExpression = condition,
-                HideIfDisabled = hideIfDisabled,
-                ResponsibleId = responsibleId
-            });
+            this.innerDocument.UpdateGroup(groupId,
+                title,
+                variableName,
+                description,
+                condition,
+                hideIfDisabled);
 
             if (isRoster)
             {
-                this.innerDocument.UpdateGroup(groupId, groupToUpdate => groupToUpdate.IsRoster = true);
-                
                 this.innerDocument.UpdateGroup(groupId, groupToUpdate =>
                 {
                     groupToUpdate.RosterSizeQuestionId = rosterSizeQuestionId;
                     groupToUpdate.RosterSizeSource = rosterSizeSource;
                     groupToUpdate.FixedRosterTitles = fixedTitles;
                     groupToUpdate.RosterTitleQuestionId = rosterTitleQuestionId;
+                    groupToUpdate.IsRoster = true;
                 });
             }
             else
