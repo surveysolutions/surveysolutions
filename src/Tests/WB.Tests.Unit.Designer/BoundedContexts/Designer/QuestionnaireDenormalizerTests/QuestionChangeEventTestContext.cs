@@ -1,12 +1,8 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {

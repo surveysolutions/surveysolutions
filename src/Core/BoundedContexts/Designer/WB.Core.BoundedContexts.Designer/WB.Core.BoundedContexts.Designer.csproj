@@ -301,7 +301,6 @@
     <Compile Include="Implementation\Repositories\AccountRepository.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireVariable.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
@@ -570,8 +569,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireItemMoved.cs" />
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Exceptions\DomainExceptionType.cs" />
-    <Compile Include="Implementation\Factories\IQuestionnaireEntityFactory.cs" />
-    <Compile Include="Implementation\Factories\QuestionnaireEntityFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeBaseModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireLevelTemplateModel.cs" />

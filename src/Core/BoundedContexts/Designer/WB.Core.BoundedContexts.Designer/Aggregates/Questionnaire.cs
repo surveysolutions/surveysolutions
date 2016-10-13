@@ -1,7 +1,6 @@
 ﻿using Main.Core.Entities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;
@@ -130,7 +129,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
             IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
+                this.CreateQuestion(
                     new QuestionData(
                         question.PublicKey,
                         e.QuestionType,
@@ -178,7 +177,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Dependencies
 
-        private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
         private readonly ILogger logger;
         private readonly IClock clock;
         private readonly IExpressionProcessor expressionProcessor;
@@ -192,7 +190,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         public Questionnaire(
-            IQuestionnaireEntityFactory questionnaireEntityFactory, 
             ILogger logger, 
             IClock clock, 
             IExpressionProcessor expressionProcessor, 
@@ -202,7 +199,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IAttachmentService attachmentService,
             ITranslationsService translationService)
         {
-            this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
             this.clock = clock;
             this.expressionProcessor = expressionProcessor;
@@ -955,7 +951,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
             }
 
-            IQuestion question =this.questionnaireEntityFactory.CreateQuestion(
+            IQuestion question =this.CreateQuestion(
                     new QuestionData(
                         publicKey: command.QuestionId,
                         questionText: command.Title,
@@ -1070,7 +1066,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                QuestionType.Text, command.ResponsibleId, command.ValidationConditions);
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
-            IQuestion newQuestion = this.questionnaireEntityFactory.CreateQuestion(
+            IQuestion newQuestion = this.CreateQuestion(
                     new QuestionData(
                         command.QuestionId,
                         QuestionType.Text,
@@ -1113,7 +1109,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
+                this.CreateQuestion(
                     new QuestionData(
                         question.PublicKey,
                         QuestionType.GpsCoordinates,
@@ -1449,7 +1445,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfDecimalPlacesValueIsIncorrect(command.CountOfDecimalPlaces);
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
-            IQuestion newQuestion = this.questionnaireEntityFactory.CreateQuestion(
+            IQuestion newQuestion = this.CreateQuestion(
                     new QuestionData(
                         question.PublicKey,
                         QuestionType.Numeric,
@@ -1503,7 +1499,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
+                this.CreateQuestion(
                     new QuestionData(
                         command.QuestionId,
                         QuestionType.TextList,
@@ -1555,7 +1551,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
+                this.CreateQuestion(
                     new QuestionData(
                         questionId,
                         QuestionType.Multimedia,
@@ -1609,7 +1605,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion =
-                this.questionnaireEntityFactory.CreateQuestion(
+                this.CreateQuestion(
                     new QuestionData(
                         command.QuestionId,
                         QuestionType.QRBarcode,
@@ -1657,12 +1653,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: command.EntityId,
-                text: command.Text,
-                attachmentName: null,
+            var staticText = new StaticText(publicKey: command.EntityId,
+                text: System.Web.HttpUtility.HtmlDecode(command.Text),
                 enablementCondition: null,
                 hideIfDisabled: false,
-                validationConditions: null);
+                validationConditions: null,
+                attachmentName: null);
 
             this.innerDocument.Add(c: staticText, parent: command.ParentId, parentPropagationKey: null);
 
@@ -1686,12 +1682,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
 
             var oldStaticText = this.innerDocument.Find<IStaticText>(command.EntityId);
-            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: command.EntityId,
-                text: command.Text,
-                attachmentName: command.AttachmentName,
+            var newStaticText = new StaticText(publicKey: command.EntityId,
+                text: System.Web.HttpUtility.HtmlDecode(command.Text),
                 enablementCondition: command.EnablementCondition,
                 hideIfDisabled: command.HideIfDisabled,
-                validationConditions: command.ValidationConditions);
+                validationConditions: command.ValidationConditions,
+                attachmentName: command.AttachmentName);
 
             this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
         }
@@ -1738,7 +1734,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ConnectChildrenWithParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
-            var variable = this.questionnaireEntityFactory.CreateVariable(new QuestionnaireVariable(command.EntityId, command.ResponsibleId, command.VariableData));
+            var variable = new Variable(command.EntityId, command.VariableData);
+
             this.innerDocument.Add(c: variable, parent: command.ParentId, parentPropagationKey: null);
             
             if (command.Index.HasValue)
@@ -3729,5 +3726,140 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument.PublicKey = id;
         }
+
+        #region factory methods
+        
+        private IQuestion CreateQuestion(QuestionData data)
+        {
+            AbstractQuestion question = CreateQuestion(data.QuestionType, data.PublicKey);
+
+            question.QuestionType = data.QuestionType;
+            question.QuestionScope = data.QuestionScope;
+            question.QuestionText = System.Web.HttpUtility.HtmlDecode(data.QuestionText);
+            question.StataExportCaption = data.StataExportCaption;
+            question.VariableLabel = data.VariableLabel;
+            question.ConditionExpression = data.ConditionExpression;
+            question.HideIfDisabled = data.HideIfDisabled;
+            question.ValidationExpression = data.ValidationExpression;
+            question.ValidationMessage = data.ValidationMessage;
+            question.AnswerOrder = data.AnswerOrder;
+            question.Featured = data.Featured;
+            question.Instructions = data.Instructions;
+            question.Properties = data.Properties ?? new QuestionProperties(false, false);
+            question.Capital = data.Capital;
+            question.LinkedToQuestionId = data.LinkedToQuestionId;
+            question.LinkedToRosterId = data.LinkedToRosterId;
+            question.LinkedFilterExpression = data.LinkedFilterExpression;
+            question.IsFilteredCombobox = data.IsFilteredCombobox;
+            question.CascadeFromQuestionId = data.CascadeFromQuestionId;
+            question.ValidationConditions = data.ValidationConditions;
+
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion != null)
+            {
+                numericQuestion.IsInteger = data.QuestionType == QuestionType.AutoPropagate ? true : data.IsInteger ?? false;
+                numericQuestion.CountOfDecimalPlaces = data.CountOfDecimalPlaces;
+                numericQuestion.QuestionType = QuestionType.Numeric;
+                numericQuestion.UseFormatting = question.Properties?.UseFormatting ?? false;
+            }
+
+            var multioptionQuestion = question as IMultyOptionsQuestion;
+            if (multioptionQuestion != null)
+            {
+                multioptionQuestion.AreAnswersOrdered = data.AreAnswersOrdered ?? false;
+                multioptionQuestion.MaxAllowedAnswers = data.MaxAllowedAnswers;
+                multioptionQuestion.YesNoView = data.YesNoView ?? false;
+            }
+
+            var listQuestion = question as ITextListQuestion;
+            if (listQuestion != null)
+            {
+                listQuestion.MaxAnswerCount = data.MaxAnswerCount;
+            }
+            var textQuestion = question as TextQuestion;
+            if (textQuestion != null)
+            {
+                textQuestion.Mask = data.Mask;
+            }
+
+            var dateTimeQuestion = question as DateTimeQuestion;
+            if (dateTimeQuestion != null)
+            {
+                dateTimeQuestion.IsTimestamp = data.IsTimestamp;
+            }
+
+            UpdateAnswerList(data.Answers, question, data.LinkedToQuestionId);
+
+            return question;
+        }
+
+        private AbstractQuestion CreateQuestion(QuestionType questionType, Guid publicKey)
+        {
+            AbstractQuestion q = CreateQuestion(questionType);
+
+            q.PublicKey = publicKey;
+
+            return q;
+        }
+
+        private AbstractQuestion CreateQuestion(QuestionType type)
+        {
+            switch (type)
+            {
+                case QuestionType.MultyOption:
+                    return new MultyOptionsQuestion();
+
+                case QuestionType.SingleOption:
+                case QuestionType.YesNo:
+                    return new SingleQuestion();
+
+                case QuestionType.Text:
+                    return new TextQuestion();
+
+                case QuestionType.DateTime:
+                    return new DateTimeQuestion();
+
+                case QuestionType.Numeric:
+                    return new NumericQuestion();
+
+                case QuestionType.AutoPropagate:
+                    return new NumericQuestion()
+                    {
+                        IsInteger = true
+                    };
+
+                case QuestionType.GpsCoordinates:
+                    return new GpsCoordinateQuestion();
+
+                case QuestionType.TextList:
+                    return new TextListQuestion();
+
+                case QuestionType.QRBarcode:
+                    return new QRBarcodeQuestion();
+
+                case QuestionType.Multimedia:
+                    return new MultimediaQuestion();
+
+                default:
+                    throw new NotSupportedException(string.Format("Question type is not supported: {0}", type));
+            }
+        }
+
+        private static void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question, Guid? linkedToQuestionId)
+        {
+            if (question.Answers != null)
+            {
+                question.Answers.Clear();
+            }
+
+            if (!linkedToQuestionId.HasValue && answers != null && answers.Any())
+            {
+                foreach (var answer in answers)
+                {
+                    question.AddAnswer(answer);
+                }
+            }
+        }
+        #endregion
     }
 }
