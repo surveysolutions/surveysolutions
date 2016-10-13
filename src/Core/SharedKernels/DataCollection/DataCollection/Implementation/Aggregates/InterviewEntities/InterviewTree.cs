@@ -69,10 +69,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var fullOuterJoin = leftOuterJoin.Concat(rightOuterJoin);
 
             return fullOuterJoin
-                .DistinctBy(x => new { sourceIdentity = x.SourceNode?.Identity, changedIdentity = x.ChangedNode?.Identity })
-                .Where(IsRosterChanged)
-                .Where(IsGroupChanged)
-                .Where(IsQuestionChanged)
+                .DistinctBy(x => new {sourceIdentity = x.SourceNode?.Identity, changedIdentity = x.ChangedNode?.Identity})
+                .Where(diff =>
+                    IsExistingChanged(diff) ||
+                    IsDisabledChanged(diff) ||
+                    IsRosterTitleChanged(diff as InterviewTreeRosterDiff) ||
+                    IsAnswerByQuestionChanged(diff as InterviewTreeQuestionDiff))
                 .ToReadOnlyCollection();
         }
 
@@ -80,46 +82,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (source is InterviewTreeRoster || changed is InterviewTreeRoster)
             {
-                return new InterviewTreeRosterDiff()
-                {
-                    SourceNode = source as InterviewTreeRoster,
-                    ChangedNode = changed as InterviewTreeRoster
-                };
+                return new InterviewTreeRosterDiff(source, changed);
+            }
+            else if (source is InterviewTreeSection || changed is InterviewTreeSection)
+            {
+                return new InterviewTreeGroupDiff(source, changed);
             }
             else if (source is InterviewTreeGroup || changed is InterviewTreeGroup)
             {
-                return new InterviewTreeGroupDiff()
-                {
-                    SourceNode = source as InterviewTreeGroup,
-                    ChangedNode = changed as InterviewTreeGroup
-                };
+                return new InterviewTreeGroupDiff(source, changed);
             }
             else if (source is InterviewTreeQuestion || changed is InterviewTreeQuestion)
             {
-                return new InterviewTreeQuestionDiff()
-                {
-                    SourceNode = source as InterviewTreeQuestion,
-                    ChangedNode = changed as InterviewTreeQuestion
-                };
+                return new InterviewTreeQuestionDiff(source, changed);
             }
             else if (source is InterviewTreeStaticText || changed is InterviewTreeStaticText)
             {
-                return new InterviewTreeStaticTextDiff()
-                {
-                    SourceNode = source as InterviewTreeStaticText,
-                    ChangedNode = changed as InterviewTreeStaticText
-                };
+                return new InterviewTreeStaticTextDiff(source, changed);
             }
             else if (source is InterviewTreeVariable || changed is InterviewTreeVariable)
             {
-                return new InterviewTreeVariableDiff()
-                {
-                    SourceNode = source as InterviewTreeVariable,
-                    ChangedNode = changed as InterviewTreeVariable
-                };
+                return new InterviewTreeVariableDiff(source, changed);
             }
 
-            return new InterviewTreeNodeDiff { SourceNode = source, ChangedNode = changed };
+            return new InterviewTreeNodeDiff(source, changed);
         }
 
         public static bool HasChangesByAnswer(InterviewTreeQuestion sourceQuestion,
@@ -142,41 +128,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return false;
         }
 
-        private bool IsQuestionChanged(InterviewTreeNodeDiff diff)
+        private static bool IsExistingChanged(InterviewTreeNodeDiff diffByNode) => (diffByNode.SourceNode == null && diffByNode.ChangedNode != null) ||
+                                                                            (diffByNode.SourceNode != null && diffByNode.ChangedNode == null);
+
+        private static bool IsDisabledChanged(InterviewTreeNodeDiff diffByNode) => ((diffByNode.SourceNode.IsDisabled() && !diffByNode.ChangedNode.IsDisabled()) ||
+                                                                             (!diffByNode.SourceNode.IsDisabled() && diffByNode.ChangedNode.IsDisabled()));
+
+        private static bool IsAnswerByQuestionChanged(InterviewTreeQuestionDiff diffByQuestion)
         {
-            var sourceQuestion = diff.SourceNode as InterviewTreeQuestion;
-            var changedQuestion = diff.ChangedNode as InterviewTreeQuestion;
+            if (diffByQuestion == null) return false;
 
-            if (sourceQuestion == null || changedQuestion == null) return true;
-
-            if ((sourceQuestion.IsDisabled() && !changedQuestion.IsDisabled()) ||
-                (!sourceQuestion.IsDisabled() && changedQuestion.IsDisabled())) return true;
-
-            if ((sourceQuestion.IsAnswered() && !changedQuestion.IsAnswered()) ||
-                (!sourceQuestion.IsAnswered() && changedQuestion.IsAnswered())) return true;
+            if ((diffByQuestion.SourceNode.IsAnswered() && !diffByQuestion.ChangedNode.IsAnswered()) ||
+                (!diffByQuestion.SourceNode.IsAnswered() && diffByQuestion.ChangedNode.IsAnswered())) return true;
             
-            return HasChangesByAnswer(sourceQuestion, changedQuestion);
+            return HasChangesByAnswer(diffByQuestion.SourceNode, diffByQuestion.ChangedNode);
         }
 
-        private bool IsGroupChanged(InterviewTreeNodeDiff diff)
+        private static bool IsRosterTitleChanged(InterviewTreeRosterDiff diffByRoster)
         {
-            var sourcGroup = diff.SourceNode as InterviewTreeGroup;
-            var changedGroup = diff.ChangedNode as InterviewTreeGroup;
+            if (diffByRoster == null) return false;
 
-            if (sourcGroup == null || changedGroup == null) return true;
-
-            return (sourcGroup.IsDisabled() && !changedGroup.IsDisabled()) ||
-                   (!sourcGroup.IsDisabled() && changedGroup.IsDisabled());
-        }
-
-        private bool IsRosterChanged(InterviewTreeNodeDiff diff)
-        {
-            var sourceRoster = diff.SourceNode as InterviewTreeRoster;
-            var changedRoster = diff.ChangedNode as InterviewTreeRoster;
-
-            if (this.IsGroupChanged(diff)) return true;
-
-            return sourceRoster?.RosterTitle != changedRoster?.RosterTitle;
+            return diffByRoster.ChangedNode != null &&
+                   diffByRoster.SourceNode?.RosterTitle != diffByRoster.ChangedNode.RosterTitle;
         }
 
         public override string ToString()
@@ -656,15 +629,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeMultiLinkedOptionQuestion : InterviewTreeLinkedQuestion
     {
-        private decimal[] answer;
+        private decimal[][] answer;
         public InterviewTreeMultiLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer) : base(linkedOptions)
         {
-            this.answer = answer as decimal[];
+            this.answer = answer as decimal[][];
         }
 
         public bool IsAnswered => this.answer != null;
-        public decimal[] GetAnswer() => this.answer;
-        public void SetAnswer(decimal[] answer) => this.answer = answer;
+        public decimal[][] GetAnswer() => this.answer;
+        public void SetAnswer(decimal[][] answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeMultiLinkedOptionQuestion question)
@@ -672,8 +645,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question?.answer == null && this.answer == null)
                 return true;
 
-            if(question?.answer != null && this.answer != null)
-                return question.answer.SequenceEqual(this.answer);
+            if (question?.answer != null && this.answer != null)
+                return question.answer.SelectMany(x => x).SequenceEqual(this.answer.SelectMany(x => x));
 
             return false; 
         }
