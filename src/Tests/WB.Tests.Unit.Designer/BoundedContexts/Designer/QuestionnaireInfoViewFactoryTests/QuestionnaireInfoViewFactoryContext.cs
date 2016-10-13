@@ -23,12 +23,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
         protected static QuestionnaireInfoViewFactory CreateQuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> repository = null,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedWith = null,
-            IPlainStorageAccessor<Account> accountsDocumentReader = null)
+            IPlainStorageAccessor<User> accountsDocumentReader = null)
         {
             return
                 new QuestionnaireInfoViewFactory(sharedWith ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
                                                 repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
-                                                accountsDocumentReader ?? Mock.Of<IPlainStorageAccessor<Account>>(),
+                                                accountsDocumentReader ?? Mock.Of<IPlainStorageAccessor<User>>(),
                                                 Mock.Of<IAttachmentService>(), Mock.Of<IMembershipUserService>(x=>x.WebUser == Substitute.For<IMembershipWebUser>()));
         }
     }

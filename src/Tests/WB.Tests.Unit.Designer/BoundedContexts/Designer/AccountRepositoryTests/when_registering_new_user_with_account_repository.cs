@@ -20,10 +20,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
         };
 
         Because of = () =>
-            accountRepository.Register(new Account { ProviderUserKey = validatedUserId });
+            accountRepository.Register(new User { ProviderUserKey = validatedUserId });
 
         It should_execute_RegisterAccountCommand_with_specified_validatedUserId = () =>
-            commandService.Verify(command => command.Execute(Moq.It.Is<RegisterAccountCommand>(cp => cp.AccountId == validatedUserId), Moq.It.IsAny<string>()));
+            commandService.Verify(command => command.Execute(Moq.It.Is<RegisterUser>(cp => cp.UserId == validatedUserId), Moq.It.IsAny<string>()));
 
         private static CQRSAccountRepository accountRepository;
         private static Mock<ICommandService> commandService;

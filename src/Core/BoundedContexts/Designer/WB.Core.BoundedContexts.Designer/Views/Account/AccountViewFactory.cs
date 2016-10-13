@@ -11,16 +11,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
     public class AccountViewFactory : IAccountViewFactory
     {
-        private readonly IPlainStorageAccessor<Aggregates.Account> accounts;
+        private readonly IPlainStorageAccessor<Aggregates.User> accounts;
 
-        public AccountViewFactory(IPlainStorageAccessor<Aggregates.Account> accounts)
+        public AccountViewFactory(IPlainStorageAccessor<Aggregates.User> accounts)
         {
             this.accounts = accounts;
         }
 
         public IAccountView Load(AccountViewInputModel input)
         {
-            Aggregates.Account user = null;
+            Aggregates.User user = null;
             if (input.ProviderUserKey != null)
             {
                 user = accounts.Query(_ => _.FirstOrDefault((x) => x.ProviderUserKey == input.ProviderUserKey));

@@ -10,7 +10,7 @@ using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
-    public class Account : IPlainAggregateRoot, IAccountView
+    public class User : IPlainAggregateRoot, IAccountView
     {
         #region Properties
 
@@ -153,11 +153,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
         }
 
-        public Account()
+        public User()
         {
         }
 
-        public virtual void RegisterAccount(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt, bool isConfirmed, string confirmationToken)
+        public virtual void Register(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt, bool isConfirmed, string confirmationToken)
         {
             this.ApplyEvent(
                 new AccountRegistered
@@ -179,11 +179,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public virtual void AddRole(SimpleRoleEnum role)
         {
             this.ApplyEvent(new AccountRoleAdded { Role = role });
-        }
-
-        public virtual void ChangeOnline()
-        {
-            this.ApplyEvent(new AccountOnlineUpdated { LastActivityAt = DateTime.UtcNow });
         }
 
         public virtual void ChangePassword(string password)

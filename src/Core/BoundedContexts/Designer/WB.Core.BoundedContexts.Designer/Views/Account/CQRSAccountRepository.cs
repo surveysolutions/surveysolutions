@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email)
         {
-            var account = new Aggregates.Account
+            var account = new Aggregates.User
                               {
                                   ProviderUserKey = Guid.Parse(providerUserKey.ToString()), 
                                   ApplicationName = applicationName, 
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         {
             IAccountView account = this.GetUser(accountName: username);
 
-            this.commandService.Execute(new DeleteAccountCommand(account.ProviderUserKey));
+            this.commandService.Execute(new DeleteUserAccount(account.ProviderUserKey));
 
             return this.GetUser(accountName: username) == null;
         }
@@ -139,11 +139,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         public MembershipCreateStatus Register(IMembershipAccount account)
         {
             this.commandService.Execute(
-                new RegisterAccountCommand(
+                new RegisterUser(
                     applicationName: account.ApplicationName, 
                     userName: account.UserName, 
                     email: account.Email, 
-                    accountId: account.ProviderUserKey, 
+                    userId: account.ProviderUserKey, 
                     password: account.Password, 
                     passwordSalt: account.PasswordSalt, 
                     isConfirmed: account.IsConfirmed, 
@@ -160,30 +160,30 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             switch (eventType)
             {
                 case MembershipEventType.ConfirmAccount:
-                    command = new ConfirmAccountCommand(accountPublicKey);
+                    command = new ConfirmUserAccount(accountPublicKey);
                     break;
                 case MembershipEventType.ChangePassword:
-                    command = new ChangePasswordAccountCommand(accountId: accountPublicKey, password: account.Password);
+                    command = new ChangeUserPassword(userId: accountPublicKey, password: account.Password);
                     break;
                 case MembershipEventType.ChangePasswordQuestionAndAnswer:
-                    command = new ChangePasswordQuestionAndAnswerAccountCommand(
-                        accountId: accountPublicKey, 
+                    command = new ChangeSecurityQuestion(
+                        userId: accountPublicKey, 
                         passwordQuestion: account.PasswordQuestion, 
                         passwordAnswer: account.PasswordAnswer);
                     break;
                 case MembershipEventType.LockUser:
-                    command = new LockAccountCommand(accountPublicKey);
+                    command = new LockUserAccount(accountPublicKey);
                     break;
                 case MembershipEventType.ResetPassword:
-                    command = new ResetPasswordAccountCommand(
-                        accountId: accountPublicKey, password: account.Password, passwordSalt: account.PasswordSalt);
+                    command = new ResetUserPassword(
+                        userId: accountPublicKey, password: account.Password, passwordSalt: account.PasswordSalt);
                     break;
                 case MembershipEventType.UnlockUser:
-                    command = new UnlockAccountCommand(accountPublicKey);
+                    command = new UnlockUserAccount(accountPublicKey);
                     break;
                 case MembershipEventType.Update:
-                    command = new UpdateAccountCommand(
-                        accountId: accountPublicKey, 
+                    command = new UpdateUserAccount(
+                        userId: accountPublicKey, 
                         userName: account.UserName, 
                         isLockedOut: account.IsLockedOut, 
                         passwordQuestion: account.PasswordQuestion, 
@@ -192,11 +192,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                         comment: account.Comment);
                     break;
                 case MembershipEventType.FailedLogin:
-                    command = new LoginFailedAccountCommand(accountPublicKey);
+                    command = new RegisterFailedLogin(accountPublicKey);
                     break;
                     case MembershipEventType.ChangePasswordResetToken:
-                    command = new ChangePasswordResetTokenCommand(
-                        accountId: accountPublicKey,
+                    command = new SetPasswordResetToken(
+                        userId: accountPublicKey,
                         passwordResetToken: account.PasswordResetToken,
                         passwordResetExpirationDate: account.PasswordResetExpirationDate);
                     break;

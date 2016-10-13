@@ -13,9 +13,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
     public class AccountListViewFactory : IAccountListViewFactory
     {
-        private readonly IPlainStorageAccessor<Aggregates.Account> accounts;
+        private readonly IPlainStorageAccessor<Aggregates.User> accounts;
 
-        public AccountListViewFactory(IPlainStorageAccessor<Aggregates.Account> accounts)
+        public AccountListViewFactory(IPlainStorageAccessor<Aggregates.User> accounts)
         {
             this.accounts = accounts;
         }
@@ -39,9 +39,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return new AccountListView(input.Page, input.PageSize, count, result, input.Order);
         }
 
-        private static IQueryable<Aggregates.Account> FilterAccounts(IQueryable<Aggregates.Account> _, AccountListViewInputModel input)
+        private static IQueryable<Aggregates.User> FilterAccounts(IQueryable<Aggregates.User> _, AccountListViewInputModel input)
         {
-            IQueryable<Aggregates.Account> result = _;
+            IQueryable<Aggregates.User> result = _;
             bool hasName = !string.IsNullOrEmpty(input.Name);
             bool hasEmail = !string.IsNullOrEmpty(input.Email);
             bool hasRole = input.Role != SimpleRoleEnum.Undefined;

@@ -30,8 +30,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(
                 x => x.GetById(Moq.It.IsAny<string>()) == questionnaireSharedPersons);
 
-            var accountDocument = new Account { Email = userEmail };
-            var accountDocumentRepository = Mock.Of<IPlainStorageAccessor<Account>>(
+            var accountDocument = new User { Email = userEmail };
+            var accountDocumentRepository = Mock.Of<IPlainStorageAccessor<User>>(
                 x => x.GetById(userId.FormatGuid()) == accountDocument);
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,

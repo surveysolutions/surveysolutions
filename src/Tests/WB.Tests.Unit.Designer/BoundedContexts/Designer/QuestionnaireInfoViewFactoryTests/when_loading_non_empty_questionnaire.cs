@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 .Returns(questionnaire);
 
             var userRepositoryMock =
-                Mock.Of<IPlainStorageAccessor<Account>>(
-                    x => x.GetById(userId.FormatGuid()) == new Account() { Email = ownerEmail });
+                Mock.Of<IPlainStorageAccessor<User>>(
+                    x => x.GetById(userId.FormatGuid()) == new User() { Email = ownerEmail });
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object,
                 accountsDocumentReader: userRepositoryMock);
         };
