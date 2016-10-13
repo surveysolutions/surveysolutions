@@ -25,7 +25,7 @@ angular.module('designerApp')
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                 callback: function (event) {
 
-                    var printWindow = window.open("../../questionnaire/expressiongeneration/" + $state.params.questionnaireId);
+                    window.open("../../questionnaire/expressiongeneration/" + $state.params.questionnaireId);
                     event.preventDefault();
                 }
             });
@@ -248,14 +248,12 @@ angular.module('designerApp')
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openTranslations", { focusOn: reference.itemId });
                 } else {
-                    
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,
                         itemId: reference.itemId,
                         indexOfEntityInProperty: reference.indexOfEntityInProperty,
                         property: reference.property
                     });
-                    
                 }
             };
             
