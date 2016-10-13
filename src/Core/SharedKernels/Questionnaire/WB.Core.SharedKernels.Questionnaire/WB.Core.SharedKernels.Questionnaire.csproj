@@ -73,7 +73,6 @@
     <Compile Include="Documents\Macro.cs" />
     <Compile Include="Documents\Option.cs" />
     <Compile Include="Documents\Order.cs" />
-    <Compile Include="Documents\QuestionData.cs" />
     <Compile Include="Documents\QuestionIdAndVariableName.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
     <Compile Include="Documents\QuestionProperties.cs" />
