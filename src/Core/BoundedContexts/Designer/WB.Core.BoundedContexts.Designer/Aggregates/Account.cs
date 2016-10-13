@@ -70,11 +70,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
-        public Guid Id => this.ProviderUserKey;
-        public void SetId(Guid id) => this.ProviderUserKey = id;
+        public virtual Guid Id => this.ProviderUserKey;
+        public virtual void SetId(Guid id) => this.ProviderUserKey = id;
         private void ApplyEvent(dynamic @event) => ((dynamic) this).Apply(@event);
 
-        public void Apply(AccountRegistered @event)
+        public virtual void Apply(AccountRegistered @event)
         {
             this.UserName = GetNormalizedUserName(@event.UserName);
             this.Email = @event.Email;
@@ -83,47 +83,47 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.CreatedAt = @event.CreatedDate;
         }
 
-        public void Apply(AccountConfirmed @event)
+        public virtual void Apply(AccountConfirmed @event)
         {
             this.IsConfirmed = true;
         }
 
-        public void Apply(AccountDeleted @event) {}
+        public virtual void Apply(AccountDeleted @event) {}
 
-        public void Apply(AccountLocked @event)
+        public virtual void Apply(AccountLocked @event)
         {
             this.IsLockedOut = true;
             this.LastLockedOutAt = @event.LastLockedOutAt;
         }
 
-        public void Apply(AccountOnlineUpdated @event)
+        public virtual void Apply(AccountOnlineUpdated @event)
         {
             this.LastActivityAt = @event.LastActivityAt;
         }
 
-        public void Apply(AccountPasswordChanged @event)
+        public virtual void Apply(AccountPasswordChanged @event)
         {
             this.Password = @event.Password;
             this.LastPasswordChangeAt = @event.LastPasswordChangeAt;
         }
 
-        public void Apply(AccountPasswordQuestionAndAnswerChanged @event)
+        public virtual void Apply(AccountPasswordQuestionAndAnswerChanged @event)
         {
             this.PasswordAnswer = @event.PasswordAnswer;
             this.PasswordQuestion = @event.PasswordQuestion;
         }
 
-        public void Apply(AccountPasswordReset @event)
+        public virtual void Apply(AccountPasswordReset @event)
         {
             this.PasswordSalt = @event.PasswordSalt;
             this.Password = @event.Password;
         }
-        public void Apply(AccountUnlocked @event)
+        public virtual void Apply(AccountUnlocked @event)
         {
             this.IsLockedOut = false;
         }
 
-        public void Apply(AccountUpdated @event)
+        public virtual void Apply(AccountUpdated @event)
         {
             this.Comment = @event.Comment;
             this.Email = @event.Email;
@@ -131,23 +131,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.UserName = GetNormalizedUserName(@event.UserName);
         }
 
-        public void Apply(UserLoggedIn @event)
+        public virtual void Apply(UserLoggedIn @event)
         {
             this.LastLoginAt = @event.LastLoginAt;
         }
 
-        public void Apply(AccountRoleAdded @event)
+        public virtual void Apply(AccountRoleAdded @event)
         {
             this.SimpleRoles.Add(@event.Role);
         }
 
-        public void Apply(AccountRoleRemoved @event)
+        public virtual void Apply(AccountRoleRemoved @event)
         {
             this.SimpleRoles.Remove(@event.Role);
         }
-        public void Apply(AccountLoginFailed @event) { }
+        public virtual void Apply(AccountLoginFailed @event) { }
 
-        public void Apply(AccountPasswordResetTokenChanged @event)
+        public virtual void Apply(AccountPasswordResetTokenChanged @event)
         {
             this.PasswordResetToken = @event.PasswordResetToken;
             this.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
         }
 
-        public void RegisterAccount(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt, bool isConfirmed, string confirmationToken)
+        public virtual void RegisterAccount(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt, bool isConfirmed, string confirmationToken)
         {
             this.ApplyEvent(
                 new AccountRegistered
@@ -176,22 +176,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        public void AddRole(SimpleRoleEnum role)
+        public virtual void AddRole(SimpleRoleEnum role)
         {
             this.ApplyEvent(new AccountRoleAdded { Role = role });
         }
 
-        public void ChangeOnline()
+        public virtual void ChangeOnline()
         {
             this.ApplyEvent(new AccountOnlineUpdated { LastActivityAt = DateTime.UtcNow });
         }
 
-        public void ChangePassword(string password)
+        public virtual void ChangePassword(string password)
         {
             this.ApplyEvent(new AccountPasswordChanged { Password = password, LastPasswordChangeAt = DateTime.UtcNow });
         }
 
-        public void ChangePasswordQuestionAndAnswer(string passwordQuestion, string passwordAnswer)
+        public virtual void ChangePasswordQuestionAndAnswer(string passwordQuestion, string passwordAnswer)
         {
             this.ApplyEvent(
                 new AccountPasswordQuestionAndAnswerChanged
@@ -201,7 +201,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     });
         }
 
-        public void ChangePasswordResetToken(string passwordResetToken, DateTime passwordResetExpirationDate)
+        public virtual void ChangePasswordResetToken(string passwordResetToken, DateTime passwordResetExpirationDate)
         {
             this.ApplyEvent(
                 new AccountPasswordResetTokenChanged
@@ -211,42 +211,42 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     });
         }
 
-        public void Confirm()
+        public virtual void Confirm()
         {
             this.ApplyEvent(new AccountConfirmed());
         }
 
-        public void Delete()
+        public virtual void Delete()
         {
             this.ApplyEvent(new AccountDeleted());
         }
 
-        public void Lock()
+        public virtual void Lock()
         {
             this.ApplyEvent(new AccountLocked { LastLockedOutAt = DateTime.UtcNow });
         }
 
-        public void Unlock()
+        public virtual void Unlock()
         {
             this.ApplyEvent(new AccountUnlocked());
         }
 
-        public void LoginFailed()
+        public virtual void LoginFailed()
         {
             this.ApplyEvent(new AccountLoginFailed { FailedPasswordWindowStartedAt = DateTime.UtcNow });
         }
         
-        public void RemoveRole(SimpleRoleEnum role)
+        public virtual void RemoveRole(SimpleRoleEnum role)
         {
             this.ApplyEvent(new AccountRoleRemoved { Role = role });
         }
 
-        public void ResetPassword(string password, string passwordSalt)
+        public virtual void ResetPassword(string password, string passwordSalt)
         {
             this.ApplyEvent(new AccountPasswordReset { Password = password, PasswordSalt = passwordSalt });
         }
 
-        public void Update(string userName, bool isLockedOut, string passwordQuestion, string email, bool isConfirmed, string comment)
+        public virtual void Update(string userName, bool isLockedOut, string passwordQuestion, string email, bool isConfirmed, string comment)
         {
             this.ApplyEvent(
                 new AccountUpdated
