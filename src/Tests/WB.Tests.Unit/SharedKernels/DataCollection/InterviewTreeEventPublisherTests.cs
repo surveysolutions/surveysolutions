@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
@@ -18,6 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void When_ApplyRosterEvents_and_2_rosters_removed_Then_RosterInstancesRemoved_event_with_2_roster_instances_should_be_applied()
         {
             //arrange
+            var responsibleId = Guid.Parse("99999999999999999999999999999999");
             var interviewId = Guid.Parse("11111111111111111111111111111111");
             var firstRosterIdentity = Create.Entity.Identity(Guid.Parse("22222222222222222222222222222222"), new[] {0m});
             var secondRosterIdentity = Create.Entity.Identity(Guid.Parse("33333333333333333333333333333333"), new[] {1m});
@@ -38,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree);
+            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
@@ -58,6 +60,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void When_ApplyRosterEvents_and_roster_with_nested_roster_removed_Then_RosterInstancesRemoved_event_with_2_roster_instances_should_be_applied()
         {
             //arrange
+
+            var responsibleId = Guid.Parse("99999999999999999999999999999999");
             var interviewId = Guid.Parse("11111111111111111111111111111111");
             
             var nestedRosterIdentity = Create.Entity.Identity(Guid.Parse("22222222222222222222222222222222"), new[] { 0m, 0m });
@@ -81,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree);
+            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
@@ -101,6 +105,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void When_ApplyRosterEvents_and_2_rosters_added_Then_RosterInstancesAdded_event_with_2_roster_instances_should_be_applied()
         {
             //arrange
+            var responsibleId = Guid.Parse("99999999999999999999999999999999");
             var interviewId = Guid.Parse("11111111111111111111111111111111");
             var firstRosterIdentity = Create.Entity.Identity(Guid.Parse("22222222222222222222222222222222"), new[] { 0m });
             var secondRosterIdentity = Create.Entity.Identity(Guid.Parse("33333333333333333333333333333333"), new[] { 1m });
@@ -121,7 +126,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree);
+            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesAdded>(listOfPublishedEvents[0]);
@@ -141,6 +146,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void When_ApplyRosterEvents_and_roster_with_nested_roster_added_Then_RosterInstancesAdded_event_with_2_roster_instances_should_be_applied()
         {
             //arrange
+            var responsibleId = Guid.Parse("99999999999999999999999999999999");
             var interviewId = Guid.Parse("11111111111111111111111111111111");
 
             var nestedRosterIdentity = Create.Entity.Identity(Guid.Parse("22222222222222222222222222222222"), new[] { 0m, 0m });
@@ -164,7 +170,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree);
+            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesAdded>(listOfPublishedEvents[0]);
@@ -184,6 +190,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void When_ApplyRosterEvents_and_removed_roster_with_question_with_nested_roster_with_question_Then_RosterInstancesRemoved_event_with_2_roster_instances_and_AnswersRemoved_event_with_2_question_identities_should_be_applied()
         {
             //arrange
+            var responsibleId = Guid.Parse("99999999999999999999999999999999");
             var interviewId = Guid.Parse("11111111111111111111111111111111");
 
             var rosterVector = new[] { 0m };
@@ -194,8 +201,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var nestedRosterQuestionIdentity = Create.Entity.Identity(Guid.Parse("66666666666666666666666666666666"),
                 nestedRosterVector);
 
-            var rosterQuestion = Create.Entity.InterviewTreeQuestion(rosterQuestionIdentity);
-            var nestedRosterQuestion = Create.Entity.InterviewTreeQuestion(nestedRosterQuestionIdentity);
+            var rosterQuestion = Create.Entity.InterviewTreeQuestion(rosterQuestionIdentity, questionType: QuestionType.Numeric, answer: 1);
+            var nestedRosterQuestion = Create.Entity.InterviewTreeQuestion(nestedRosterQuestionIdentity, questionType: QuestionType.Numeric, answer: 2);
 
             var nestedRosterIdentity = Create.Entity.Identity(Guid.Parse("22222222222222222222222222222222"), nestedRosterVector);
             var nestedRoster = Create.Entity.InterviewTreeRoster(nestedRosterIdentity, children: new IInterviewTreeNode[] {nestedRosterQuestion});
@@ -219,13 +226,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree);
+            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
             //assert
             Assert.AreEqual(2, listOfPublishedEvents.Count);
-            Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
-            Assert.IsAssignableFrom<AnswersRemoved>(listOfPublishedEvents[1]);
+            Assert.IsAssignableFrom<AnswersRemoved>(listOfPublishedEvents[0]);
+            Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[1]);
 
-            var rosterInstancesRemovedEvent = ((RosterInstancesRemoved)listOfPublishedEvents[0]);
+            var answersRemovedEvent = ((AnswersRemoved)listOfPublishedEvents[0]);
+            Assert.AreEqual(2, answersRemovedEvent.Questions.Length);
+            Assert.AreEqual(rosterQuestionIdentity.Id, answersRemovedEvent.Questions[0].Id);
+            Assert.AreEqual(rosterQuestionIdentity.RosterVector, answersRemovedEvent.Questions[0].RosterVector);
+
+            Assert.AreEqual(nestedRosterQuestionIdentity.Id, answersRemovedEvent.Questions[1].Id);
+            Assert.AreEqual(nestedRosterQuestionIdentity.RosterVector, answersRemovedEvent.Questions[1].RosterVector);
+
+            var rosterInstancesRemovedEvent = ((RosterInstancesRemoved)listOfPublishedEvents[1]);
             Assert.AreEqual(2, rosterInstancesRemovedEvent.Instances.Length);
             Assert.AreEqual(rosterIdentity.Id, rosterInstancesRemovedEvent.Instances[0].GroupId);
             Assert.AreEqual(rosterIdentity.RosterVector.Shrink(), rosterInstancesRemovedEvent.Instances[0].OuterRosterVector);
@@ -234,20 +249,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(nestedRosterIdentity.Id, rosterInstancesRemovedEvent.Instances[1].GroupId);
             Assert.AreEqual(nestedRosterIdentity.RosterVector.Shrink(), rosterInstancesRemovedEvent.Instances[1].OuterRosterVector);
             Assert.AreEqual(nestedRosterIdentity.RosterVector.Last(), rosterInstancesRemovedEvent.Instances[1].RosterInstanceId);
-
-            var answersRemovedEvent = ((AnswersRemoved)listOfPublishedEvents[1]);
-            Assert.AreEqual(2, answersRemovedEvent.Questions.Length);
-            Assert.AreEqual(rosterQuestionIdentity.Id, answersRemovedEvent.Questions[0].Id);
-            Assert.AreEqual(rosterQuestionIdentity.RosterVector, answersRemovedEvent.Questions[0].RosterVector);
-
-            Assert.AreEqual(nestedRosterQuestionIdentity.Id, answersRemovedEvent.Questions[1].Id);
-            Assert.AreEqual(nestedRosterQuestionIdentity.RosterVector, answersRemovedEvent.Questions[1].RosterVector);
         }
 
         [Test]
         public void When_ApplyRosterEvents_and_roster_with_nested_roster_changed_roster_titles_Then_2_RosterInstancesTitleChanged_events_should_be_applied()
         {
             //arrange
+            var responsibleId = Guid.Parse("99999999999999999999999999999999");
             var interviewId = Guid.Parse("11111111111111111111111111111111");
 
             var nestedRosterIdentity = Create.Entity.Identity(Guid.Parse("22222222222222222222222222222222"), new[] { 0m, 0m });
@@ -275,7 +283,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree);
+            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesTitleChanged>(listOfPublishedEvents[0]);
