@@ -84,7 +84,6 @@
                 if (indexOfCurrentReference >= $scope.foundReferences.length) {
                     indexOfCurrentReference = 0;
                 }
-                console.info(indexOfCurrentReference);
                 $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference]);
             };
 
