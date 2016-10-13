@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             }, createdBy: userId);
 
             command = new UpdateQRBarcodeQuestion(questionnaireView.PublicKey,questionId, userId, 
-                new CommonQuestionParameters() {Title = title,EnablementCondition = condition,Instructions = instructions,VariableName = variableName},
+                new CommonQuestionParameters() {Title = title,EnablementCondition = condition,Instructions = instructions, VariableName = variableName},
                 null,null, QuestionScope.Interviewer, new List<ValidationCondition>());
 
             denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView);

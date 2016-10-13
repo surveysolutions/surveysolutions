@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -93,63 +93,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 CreatedBy = createdBy
             };
             return innerDocument;
-        }
-
-        private static QuestionChanged CreateQuestionChangedEvent(Guid questionId, QuestionType type = QuestionType.Text)
-        {
-            return CreateQuestionChanged(
-                    questionText : "What is your name",
-                    questionType : type,
-                    publicKey : questionId,
-                    featured : true,
-                    answerOrder : Order.AsIs,
-                    conditionExpression : string.Empty,
-                    answers : null,
-                    instructions : "Answer this question, please",
-                    stataExportCaption : "name",
-                    validationConditions: new List<ValidationCondition> { new ValidationCondition("[this]!=''", "Empty names is invalid answer") }
-                );
-        }
-
-        public static QuestionChanged CreateQuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
-            string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
-            QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-            QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null,
-            Guid? cascadeFromQuestionId = null, string conditionExpression = null, bool hideIfDisabled = false, Order? answerOrder = null,
-            IList<ValidationCondition> validationConditions = null, bool isTimestamp = false)
-        {
-            return new QuestionChanged(
-                publicKey: publicKey,
-                groupPublicKey: groupPublicKey,
-                questionText: questionText,
-                stataExportCaption: stataExportCaption,
-                variableLabel: null,
-                featured: featured,
-                questionScope: questionScope,
-                conditionExpression: conditionExpression,
-                hideIfDisabled: hideIfDisabled,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
-                instructions: instructions,
-                properties: Create.QuestionProperties(),
-                responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
-                capital: capital,
-                isInteger: isInteger,
-                questionType: questionType,
-                answerOrder: answerOrder,
-                answers: answers,
-                linkedToQuestionId: null,
-                linkedToRosterId: null,
-                areAnswersOrdered: null,
-                yesNoView: null,
-                maxAllowedAnswers: null,
-                mask: null,
-                isFilteredCombobox: isFilteredCombobox,
-                cascadeFromQuestionId: cascadeFromQuestionId,
-                targetGroupKey: Guid.NewGuid(),
-                    validationConditions: validationConditions ?? new List<ValidationCondition>(),
-                linkedFilterExpression: null,
-                isTimestamp: isTimestamp);
         }
     }
 }
