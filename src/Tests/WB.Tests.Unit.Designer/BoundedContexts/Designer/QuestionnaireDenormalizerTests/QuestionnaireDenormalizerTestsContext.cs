@@ -11,7 +11,6 @@ using Moq;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -33,12 +32,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         public static Questionnaire CreateQuestionnaireDenormalizer(QuestionnaireDocument questionnaire,
             IExpressionProcessor expressionProcessor = null,
-            IQuestionnaireEntityFactory questionnaireEntityFactory = null,
             IEnumerable<Guid> sharedPersons = null 
             )
         {
             var questAr = new Questionnaire(
-                questionnaireEntityFactory ?? new QuestionnaireEntityFactory(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),

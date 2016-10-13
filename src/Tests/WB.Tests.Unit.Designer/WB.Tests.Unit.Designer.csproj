@@ -766,11 +766,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\QuestionnaireEntityFactoryTestContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__AutoPtopagate__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__QRBarcode__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__Text__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_static_text.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\QuestionnaireInfoFactoryTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_cascading_question_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view.cs" />
