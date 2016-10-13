@@ -136,6 +136,7 @@ namespace WB.UI.Headquarters
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
+                new EventSourcedInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
@@ -252,7 +253,7 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
-
+                
             //Kernel.RegisterDenormalizer<>() - should be used instead
             var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
             foreach (object handler in enumerable)
