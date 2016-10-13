@@ -20,9 +20,7 @@ namespace WB.UI.Designer.Code
     {
         private ITransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
 
-        private IReadSideStatusService readSideStatusService => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
-
-        private IMembershipUserService userService => ServiceLocator.Current.GetInstance<IMembershipUserService>();
+        private IMembershipUserService UserService => ServiceLocator.Current.GetInstance<IMembershipUserService>();
 
 
         public override void OnAuthorization(HttpActionContext actionContext)
@@ -35,19 +33,13 @@ namespace WB.UI.Designer.Code
                 return;
             }
 
-            if (readSideStatusService.AreViewsBeingRebuiltNow())
-            {
-                actionContext.Response = GetResponseWithErrorMessage(HttpStatusCode.Forbidden, "The application is now rebooting and this may take up to 10 minutes or more. Sorry for the inconvenience.");
-                return;
-            }
-
             bool isInvalidUser = false;
 
             this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
             try
             {
 
-                MembershipUser user = this.userService.WebUser.MembershipUser;
+                MembershipUser user = this.UserService.WebUser.MembershipUser;
 
                 if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
@@ -56,7 +48,7 @@ namespace WB.UI.Designer.Code
 
                 if (isInvalidUser)
                 {
-                    this.userService.Logout();
+                    this.UserService.Logout();
                     actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized);
                 }
             }
