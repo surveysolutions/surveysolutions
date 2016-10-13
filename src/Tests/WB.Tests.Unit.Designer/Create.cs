@@ -62,8 +62,8 @@ namespace WB.Tests.Unit.Designer
 {
     internal static partial class Create
     {
-        public static Account AccountDocument(string userName = "", Guid? userId = null)
-            => new Account
+        public static User AccountDocument(string userName = "", Guid? userId = null)
+            => new User
             {
                 ProviderUserKey = userId ?? Guid.NewGuid(),
                 UserName = userName,

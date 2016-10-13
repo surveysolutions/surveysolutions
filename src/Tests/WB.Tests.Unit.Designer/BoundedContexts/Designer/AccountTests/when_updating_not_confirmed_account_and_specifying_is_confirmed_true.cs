@@ -12,13 +12,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
         {
             var accountId = Guid.Parse("11111111111111111111111111111111");
 
-            account = CreateAccount(accountId);
+            user = CreateAccount(accountId);
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            account.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
+            user.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
                 isConfirmed: true);
 
         Cleanup stuff = () =>
@@ -31,6 +31,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
             eventContext.ShouldContainEvent<AccountConfirmed>();
 
         private static EventContext eventContext;
-        private static Account account;
+        private static User user;
     }
 }

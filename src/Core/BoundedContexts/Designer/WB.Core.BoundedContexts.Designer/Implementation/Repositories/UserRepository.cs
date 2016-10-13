@@ -8,17 +8,17 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 {
-    internal class AccountRepository : IPlainAggregateRootRepository<Account>
+    internal class UserRepository : IPlainAggregateRootRepository<User>
     {
-        private readonly IPlainStorageAccessor<Account> storage;
+        private readonly IPlainStorageAccessor<User> storage;
 
-        public AccountRepository(IPlainStorageAccessor<Account> storage)
+        public UserRepository(IPlainStorageAccessor<User> storage)
         {
             this.storage = storage;
         }
 
-        public Account Get(Guid aggregateId) => this.storage.GetById(aggregateId.FormatGuid());
+        public User Get(Guid aggregateId) => this.storage.GetById(aggregateId.FormatGuid());
 
-        public void Save(Account account) => this.storage.Store(account, account.Id.FormatGuid());
+        public void Save(User user) => this.storage.Store(user, user.Id.FormatGuid());
     }
 }

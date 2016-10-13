@@ -17,10 +17,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
         {
             inputWithFilterByAccountName = CreateAccountViewInputModel(accountName: "ADMIN");
 
-            var accountsRepositoryMock = new Mock<IPlainStorageAccessor<Account>>();
+            var accountsRepositoryMock = new Mock<IPlainStorageAccessor<User>>();
 
             accountsRepositoryMock
-                .Setup(x => x.Query<IAccountView>(it.IsAny<Func<IQueryable<Account>, IAccountView>>()))
+                .Setup(x => x.Query<IAccountView>(it.IsAny<Func<IQueryable<User>, IAccountView>>()))
                 .Returns(CreateAccount(userName: "admin"));
 
             accountFactory = CreateAccountViewFactory(accountsRepository: accountsRepositoryMock.Object);

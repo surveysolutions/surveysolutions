@@ -14,7 +14,7 @@ RAISE NOTICE 'DBLINK intalled';
 
 RAISE NOTICE 'dropping tables';
 
-DROP TABLE IF EXISTS public.accounts, 
+DROP TABLE IF EXISTS public.users, 
 		     public.simpleroles;
 
 RAISE NOTICE 'tables dropped';
@@ -23,11 +23,11 @@ RAISE NOTICE 'tables dropped';
 
 RAISE NOTICE 'creating tables';
 
--- Table: public.accounts
+-- Table: public.users
 
--- DROP TABLE public.accounts;
+-- DROP TABLE public.users;
 
-CREATE TABLE public.accounts
+CREATE TABLE public.users
 (
   id character varying(255) NOT NULL,
   applicationname text,
@@ -50,12 +50,12 @@ CREATE TABLE public.accounts
   passwordsalt text,
   provideruserkey uuid,
   username text,
-  CONSTRAINT "PK_accounts" PRIMARY KEY (id)
+  CONSTRAINT "PK_users" PRIMARY KEY (id)
 )
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE public.accounts
+ALTER TABLE public.users
   OWNER TO postgres;
 
 -- Table: public.simpleroles
@@ -64,10 +64,10 @@ ALTER TABLE public.accounts
 
 CREATE TABLE public.simpleroles
 (
-  accountid character varying(255) NOT NULL,
+  userid character varying(255) NOT NULL,
   simpleroleid integer,
-  CONSTRAINT "FK_simpleroles_accountid_accounts_id" FOREIGN KEY (accountid)
-      REFERENCES public.accounts (id) MATCH SIMPLE
+  CONSTRAINT "FK_simpleroles_userid_users_id" FOREIGN KEY (userid)
+      REFERENCES public.users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
@@ -76,14 +76,14 @@ WITH (
 ALTER TABLE public.simpleroles
   OWNER TO postgres;
 
--- Index: public.simpleroles_accountid_indx
+-- Index: public.simpleroles_userid_indx
 
--- DROP INDEX public.simpleroles_accountid_indx;
+-- DROP INDEX public.simpleroles_userid_indx;
 
-CREATE INDEX simpleroles_accountid_indx
+CREATE INDEX simpleroles_userid_indx
   ON public.simpleroles
   USING btree
-  (accountid COLLATE pg_catalog."default");
+  (userid COLLATE pg_catalog."default");
 
 RAISE NOTICE 'tables created';
 
@@ -96,12 +96,12 @@ RAISE NOTICE 'connected';
 
 --------------------------------------------------------------
 
-RAISE NOTICE 'moving accountdocuments to accounts';
-insert into public.accounts select (rec).* from dblink('views','select t1 from accountdocuments t1') t2 (rec accounts);
+RAISE NOTICE 'moving accountdocuments to users';
+insert into public.users select (rec).* from dblink('views','select t1 from accountdocuments t1') t2 (rec users);
 
-rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from accountdocuments t1') t2 (rec accounts)) as foo);
-pscount := (select count(*) from public.accounts);
-RAISE NOTICE 'accounts moved. read side count: %, plain count: %', rscount, pscount;
+rscount := (select count(*) from (select (rec).* from dblink('views','select t1 from accountdocuments t1') t2 (rec users)) as foo);
+pscount := (select count(*) from public.users);
+RAISE NOTICE 'users moved. read side count: %, plain count: %', rscount, pscount;
 
 --------------------------------------------------------------
 

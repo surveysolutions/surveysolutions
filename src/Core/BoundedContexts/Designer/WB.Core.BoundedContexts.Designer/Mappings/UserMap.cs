@@ -6,9 +6,9 @@ using WB.Core.Infrastructure.PlainStorage;
 namespace WB.Core.BoundedContexts.Designer.Mappings
 {
     [PlainStorage]
-    public class AccountMap : ClassMapping<Account>
+    public class UserMap : ClassMapping<User>
     {
-        public AccountMap()
+        public UserMap()
         {
             Id(x => x.UserId, idMap =>
             {
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
 
             Set(x => x.SimpleRoles, m =>
             {
-                m.Key(km => km.Column("AccountId"));
+                m.Key(km => km.Column("UserId"));
                 m.Table("SimpleRoles");
                 m.Lazy(CollectionLazy.NoLazy);
             },

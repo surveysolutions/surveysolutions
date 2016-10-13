@@ -5,10 +5,10 @@ using WB.UI.Shared.Web.MembershipProvider.Roles;
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    public class RemoveRoleFromAccountCommand : AccountCommandBase
+    public class RemoveUserRole : UserCommand
     {
-        public RemoveRoleFromAccountCommand(Guid accountId, SimpleRoleEnum role)
-            : base(accountId)
+        public RemoveUserRole(Guid userId, SimpleRoleEnum role)
+            : base(userId)
         {
             this.Role = role;
         }

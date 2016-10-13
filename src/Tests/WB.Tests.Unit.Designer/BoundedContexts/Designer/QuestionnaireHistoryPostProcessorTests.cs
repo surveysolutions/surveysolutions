@@ -104,16 +104,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             public FluentSyntax AccountDocumentStorage()
             {
-                var accountDocumentStorage = new TestPlainStorage<Account>();
+                var accountDocumentStorage = new TestPlainStorage<User>();
                 this.Context.AccountDocumentStorage = accountDocumentStorage;
-                Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(accountDocumentStorage);
+                Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountDocumentStorage);
 
                 return this.Fluent;
             }
 
             public FluentSyntax AccountDocument(Guid userId, string userName)
             {
-                TestPlainStorage<Account> accountDocumentStorage = this.Context.AccountDocumentStorage;
+                TestPlainStorage<User> accountDocumentStorage = this.Context.AccountDocumentStorage;
 
                 var accountDocument = Create.AccountDocument(userId: userId, userName: userName);
                 this.Context.AccountDocument = accountDocument;
@@ -187,9 +187,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = questionnaireOwner, UserName = ownerName}, questionnaireOwner.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = questionnaireOwner, UserName = ownerName}, questionnaireOwner.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
@@ -231,9 +231,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
@@ -366,9 +366,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = questionnaireOwnerId, UserName = ownerName }, questionnaireOwnerId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = questionnaireOwnerId, UserName = ownerName }, questionnaireOwnerId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -416,9 +416,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = ownerName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = ownerName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -464,9 +464,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
             
             var command = new UpdateQuestionnaire(questionnaireId, "title", true, responsibleId, false);
 
@@ -504,10 +504,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            usersStorage.Store(new Account { ProviderUserKey = sharedWithId, UserName = sharedWithUserName }, sharedWithId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
+            usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName }, sharedWithId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var command = new AddSharedPersonToQuestionnaire(questionnaireId, sharedWithId, "", ShareType.Edit,
                 responsibleId);
@@ -546,10 +546,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            usersStorage.Store(new Account { ProviderUserKey = sharedWithId, UserName = sharedWithUserName }, sharedWithId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
+            usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName }, sharedWithId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var command = new RemoveSharedPersonFromQuestionnaire(questionnaireId, sharedWithId, "", responsibleId);
 
@@ -587,9 +587,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var command = new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, "");
 
@@ -627,9 +627,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var command = Create.Command.UpdateStaticText(questionnaireId, staticTextId, staticText, "", responsibleId, "");
 
@@ -667,9 +667,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var command = Create.Command.UpdateVariable(questionnaireId, variableId, VariableType.Boolean, variableName, "", responsibleId);
 
@@ -707,9 +707,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -757,9 +757,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -833,9 +833,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
-            var usersStorage = new TestPlainStorage<Account>();
-            usersStorage.Store(new Account { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<Account>>(usersStorage);
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
