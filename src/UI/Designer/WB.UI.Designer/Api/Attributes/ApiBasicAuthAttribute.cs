@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Api.Attributes
     {
         private IMembershipUserService UserHelper => ServiceLocator.Current.GetInstance<IMembershipUserService>();
 
-        private ITransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
+        private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
         private readonly Func<string, string, bool> validateUserCredentials;
 
@@ -41,7 +41,7 @@ namespace WB.UI.Designer.Api.Attributes
                 this.ThrowUnathorizedException(actionContext);
                 return;
             }
-            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            this.TransactionManagerProvider.GetPlainTransactionManager().BeginTransaction();
             try
             {
                 if (!this.Authorize(credentials.Username, credentials.Password))
@@ -75,7 +75,7 @@ namespace WB.UI.Designer.Api.Attributes
             }
             finally
             {
-                this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                this.TransactionManagerProvider.GetPlainTransactionManager().RollbackTransaction();
             }
         }
 
