@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
@@ -51,11 +52,7 @@ namespace WB.UI.Designer.App_Start
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
-        private static NcqrCompatibleEventDispatcher eventDispatcher;
 
-        /// <summary>
-        ///     Starts the application
-        /// </summary>
         public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof (OnePerRequestHttpModule));
@@ -63,18 +60,11 @@ namespace WB.UI.Designer.App_Start
             bootstrapper.Initialize(CreateKernel);
         }
 
-        /// <summary>
-        ///     Stops the application.
-        /// </summary>
         public static void Stop()
         {
             bootstrapper.ShutDown();
         }
 
-        /// <summary>
-        ///     Creates the kernel that will manage your application.
-        /// </summary>
-        /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
             // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
@@ -116,6 +106,7 @@ namespace WB.UI.Designer.App_Start
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
+                new EventFreeInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
@@ -149,40 +140,7 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
             kernel.Bind<QuestionnaireDowngradeService>().ToSelf();
 
-            CreateAndRegisterEventBus(kernel);
-            
             return kernel;
-        }
-
-        private static void CreateAndRegisterEventBus(StandardKernel kernel)
-        {
-            kernel.Bind<IEventBus>().ToMethod(_ => GetEventBus(kernel));
-            kernel.Bind<ILiteEventBus>().ToMethod(_ => GetEventBus(kernel));
-            kernel.Bind<IEventDispatcher>().ToMethod(_ => GetEventBus(kernel));
-        }
-
-        private static NcqrCompatibleEventDispatcher GetEventBus(StandardKernel kernel)
-        {
-            return eventDispatcher ?? (eventDispatcher = CreateEventBus(kernel));
-        }
-
-        private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
-        {
-            var eventBusConfigSection =
-               (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
-
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
-                 eventBusConfigSection.GetSettings(),
-                kernel.Get<ILogger>());
-
-            bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
-
-            foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
-            {
-                bus.Register(handler as IEventHandler);
-            }
-
-            return bus;
         }
     }
 }
