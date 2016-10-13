@@ -19,6 +19,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RemoveAnswersInExpressionState(questionsWithRemovedAnswer, expressionState);
             UpdateRostersInExpressionState(changedRosters, expressionState);
             UpdateEnablementInExpressionState(diff, expressionState);
+            UpdateValidityInExpressionState(diff, expressionState);
+        }
+
+        private static void UpdateValidityInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
+        {
+            var allNotNullableNodes = diff.Where(x => x.SourceNode != null && x.ChangedNode != null).ToList();
+
+            var allChangedQuestionDiffs = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
+            var allChangedStaticTextDiffs = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
+
+            var validQuestionIdentities = allChangedQuestionDiffs.Where(IsValidQuestion).Select(x => x.ChangedNode.Identity).ToArray();
+            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(IsInValidQuestion).Select(x => x.ChangedNode).ToDictionary(x => x.Identity, x => x.FailedValidations);
+
+            var validStaticTextIdentities = allChangedStaticTextDiffs.Where(IsValidStaticText).Select(x => x.ChangedNode.Identity).ToArray();
+            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(IsInvalidStaticText).Select(x => x.ChangedNode).ToDictionary(x => x.Identity, x => x.FailedValidations);
+
+            if (validQuestionIdentities.Any()) expressionState.DeclareAnswersValid(validQuestionIdentities);
+            if (invalidQuestionIdentities.Any()) expressionState.ApplyFailedValidations(invalidQuestionIdentities);
+
+            if (validStaticTextIdentities.Any()) expressionState.DeclareStaticTextValid(validStaticTextIdentities);
+            if (invalidStaticTextIdentities.Any()) expressionState.ApplyStaticTextFailedValidations(invalidStaticTextIdentities);
         }
 
         private static void UpdateEnablementInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)

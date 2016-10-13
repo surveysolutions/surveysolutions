@@ -21,6 +21,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
             this.ApplyRosterEvents(changedRosters);
             this.ApplyEnablementEvents(diff);
+            this.ApplyValidityEvents(diff);
+        }
+
+        private void ApplyValidityEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
+            var allNotNullableNodes = diff.Where(x => x.SourceNode != null && x.ChangedNode != null).ToList();
+
+            var allChangedQuestionDiffs = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
+            var allChangedStaticTextDiffs = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
+
+            var validQuestionIdentities = allChangedQuestionDiffs.Where(IsValidQuestion).Select(x=>x.ChangedNode.Identity).ToArray();
+            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(IsInValidQuestion).Select(x=>x.ChangedNode).ToDictionary(x=>x.Identity, x=>x.FailedValidations);
+
+            var validStaticTextIdentities = allChangedStaticTextDiffs.Where(IsValidStaticText).Select(x => x.ChangedNode.Identity).ToArray();
+            var invalidStaticTextIdentities = allChangedStaticTextDiffs
+                .Where(IsInvalidStaticText)
+                .Select(x => x.ChangedNode)
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedValidations))
+                .ToList();
+
+            if(validQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredValid(validQuestionIdentities));
+            if(invalidQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestionIdentities));
+
+            if(validStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTextIdentities));
+            if(invalidStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTextIdentities));
         }
 
         private void ApplyEnablementEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
@@ -173,6 +198,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (changedRosterTitles.Any())
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
         }
+
+        private static bool IsValidStaticText(InterviewTreeStaticTextDiff diff)
+            => !diff.SourceNode.IsValid && diff.ChangedNode.IsValid;
+
+        private static bool IsInvalidStaticText(InterviewTreeStaticTextDiff diff)
+            => diff.SourceNode.IsValid && !diff.ChangedNode.IsValid;
+
+        private static bool IsValidQuestion(InterviewTreeQuestionDiff diff)
+            => !diff.SourceNode.IsValid && diff.ChangedNode.IsValid;
+
+        private static bool IsInValidQuestion(InterviewTreeQuestionDiff diff)
+            => diff.SourceNode.IsValid && !diff.ChangedNode.IsValid;
 
         private static bool IsDisabledNode(InterviewTreeNodeDiff diff)
             => !diff.SourceNode.IsDisabled() && diff.ChangedNode.IsDisabled();
