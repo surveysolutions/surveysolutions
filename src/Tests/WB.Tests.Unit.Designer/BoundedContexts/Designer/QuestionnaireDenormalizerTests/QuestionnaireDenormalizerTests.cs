@@ -1,26 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
@@ -78,7 +72,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             IExpressionProcessor expressionProcessor = null)
         {
             var questionnaireAr = new Questionnaire(
-                new QuestionnaireEntityFactory(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),

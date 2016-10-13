@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -57,7 +56,6 @@ namespace WB.Core.BoundedContexts.Designer
                 new EventTypeResolver(
                     typeof(DesignerBoundedContextModule).Assembly));
 
-            this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
