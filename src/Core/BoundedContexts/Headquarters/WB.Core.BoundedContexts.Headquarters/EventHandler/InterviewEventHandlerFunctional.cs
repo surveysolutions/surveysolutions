@@ -389,9 +389,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                 foreach (var instance in @event.Payload.Instances)
                 {
-                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId,
-                        questionnarieRosterScopes);
-
+                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId,rosters);
                     this.AddLevelToInterview(state,
                         instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex, scopeOfCurrentGroup);
                 }
@@ -402,9 +400,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<RosterInstancesRemoved> @event)
         {
-            var questionnarie =
-                this.questionnaireStorage.GetQuestionnaireDocument(new QuestionnaireIdentity(state.QuestionnaireId,
-                    state.QuestionnaireVersion));
+            var questionnarie = this.questionnaireStorage.GetQuestionnaireDocument(new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
             if (questionnarie != null)
             {
                 var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
@@ -431,7 +427,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (questionnarie != null)
             {
                 var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
-                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, @event.Payload.GroupId, questionnarieRosterScopes);
+                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, @event.Payload.GroupId, rosters);
                 List<string> keysOfLevelsByScope =
                     this.GetLevelsByScopeFromInterview(interview: state, scopeVector: scopeOfCurrentGroup.ScopeVector);
 
