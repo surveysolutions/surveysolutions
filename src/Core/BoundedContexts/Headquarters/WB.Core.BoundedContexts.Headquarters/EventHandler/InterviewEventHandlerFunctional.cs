@@ -383,14 +383,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnarie =
                 this.questionnaireStorage.GetQuestionnaireDocument(new QuestionnaireIdentity(state.QuestionnaireId,
                     state.QuestionnaireVersion));
-            var rosters =  this.rostrerStructureService.GetRosterScopes(questionnarie);
-
-            foreach (var instance in @event.Payload.Instances)
+            if (questionnarie != null)
             {
-                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId, rosters);
+                var rosters =  this.rostrerStructureService.GetRosterScopes(questionnarie);
 
-                this.AddLevelToInterview(state,
-                    instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex, scopeOfCurrentGroup);
+                foreach (var instance in @event.Payload.Instances)
+                {
+                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId,
+                        questionnarieRosterScopes);
+
+                    this.AddLevelToInterview(state,
+                        instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex, scopeOfCurrentGroup);
+                }
             }
 
             return state;
@@ -401,16 +405,20 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnarie =
                 this.questionnaireStorage.GetQuestionnaireDocument(new QuestionnaireIdentity(state.QuestionnaireId,
                     state.QuestionnaireVersion));
-            var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
-
-            foreach (var instance in @event.Payload.Instances)
+            if (questionnarie != null)
             {
-                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId, rosters);
+                var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
 
-                var rosterVector = this.CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
-                var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
+                foreach (var instance in @event.Payload.Instances)
+                {
+                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId, rosters);
 
-                this.RemoveLevelFromInterview(state, levelKey, new[] { instance.GroupId }, scopeOfCurrentGroup.ScopeVector);
+                    var rosterVector = this.CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
+                    var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
+
+                    this.RemoveLevelFromInterview(state, levelKey, new[] {instance.GroupId},
+                        scopeOfCurrentGroup.ScopeVector);
+                }
             }
             return state;
         }
@@ -420,34 +428,39 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnarie =
                 this.questionnaireStorage.GetQuestionnaireDocument(new QuestionnaireIdentity(state.QuestionnaireId,
                     state.QuestionnaireVersion));
-            var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
-
-            var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, @event.Payload.GroupId, rosters);
-            List<string> keysOfLevelsByScope =
-                this.GetLevelsByScopeFromInterview(interview: state, scopeVector: scopeOfCurrentGroup.ScopeVector);
-
-            int countOfLevelByScope = keysOfLevelsByScope.Count();
-
-            if (@event.Payload.Count == countOfLevelByScope)
+            if (questionnarie != null)
             {
-                return state;
-            }
+                var rosters = this.rostrerStructureService.GetRosterScopes(questionnarie);
+                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, @event.Payload.GroupId, questionnarieRosterScopes);
+                List<string> keysOfLevelsByScope =
+                    this.GetLevelsByScopeFromInterview(interview: state, scopeVector: scopeOfCurrentGroup.ScopeVector);
 
-            if (countOfLevelByScope < @event.Payload.Count)
-            {
-                this.AddNewLevelsToInterview(state, startIndex: countOfLevelByScope,
-                    count: @event.Payload.Count - countOfLevelByScope,
-                    outerVector: @event.Payload.OuterScopeRosterVector, sortIndex: null, scope: scopeOfCurrentGroup);
-            }
-            else
-            {
-                Dictionary<string, Guid[]> keysOfLevelToBeDeleted =
-                    keysOfLevelsByScope.Skip(@event.Payload.Count)
-                        .Take(countOfLevelByScope - @event.Payload.Count)
-                        .ToDictionary(keyOfLevelsByScope => keyOfLevelsByScope, keyOfLevelsByScope => scopeOfCurrentGroup.RosterIdToRosterTitleQuestionIdMap.Keys.ToArray());
+                int countOfLevelByScope = keysOfLevelsByScope.Count();
 
-                this.RemoveLevelsFromInterview(state, keysOfLevelToBeDeleted, scopeOfCurrentGroup.ScopeVector);
+                if (@event.Payload.Count == countOfLevelByScope)
+                {
+                    return state;
+                }
+
+                if (countOfLevelByScope < @event.Payload.Count)
+                {
+                    this.AddNewLevelsToInterview(state, startIndex: countOfLevelByScope,
+                        count: @event.Payload.Count - countOfLevelByScope,
+                        outerVector: @event.Payload.OuterScopeRosterVector, sortIndex: null, scope: scopeOfCurrentGroup);
+                }
+                else
+                {
+                    Dictionary<string, Guid[]> keysOfLevelToBeDeleted =
+                        keysOfLevelsByScope.Skip(@event.Payload.Count)
+                            .Take(countOfLevelByScope - @event.Payload.Count)
+                            .ToDictionary(keyOfLevelsByScope => keyOfLevelsByScope,
+                                keyOfLevelsByScope =>
+                                        scopeOfCurrentGroup.RosterIdToRosterTitleQuestionIdMap.Keys.ToArray());
+
+                    this.RemoveLevelsFromInterview(state, keysOfLevelToBeDeleted, scopeOfCurrentGroup.ScopeVector);
+                }
             }
+            
             return state;
         }
 

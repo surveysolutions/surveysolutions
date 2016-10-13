@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -48,6 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var bigTemplateObject =
                 this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() => this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
+			if (bigTemplateObject == null)
+                throw new Exception("Questionnaire was not found");
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
