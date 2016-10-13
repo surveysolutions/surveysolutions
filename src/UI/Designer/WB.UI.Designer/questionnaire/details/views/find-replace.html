@@ -50,11 +50,11 @@
         
         <div ng-switch-when="confirm">
             <p>Please confirm action.</p>
-            <p>Replace all "<strong ng-bind="searchForm.searchFor"></strong>" with <strong ng-bind="searchForm.replaceWith"></strong></p>
+            <p>Replace all "<strong ng-bind="searchForm.searchFor"></strong>" with "<strong ng-bind="searchForm.replaceWith"></strong>"</p>
             <p>in all {{foundReferences.length}} found entities?</p>
         </div>
         <div ng-switch-when="done">
-            All {{foundReferences.length}} entities has been successfully updated.
+            All "<strong ng-bind="searchForm.searchFor"></strong>" were replaced with "<strong ng-bind="searchForm.replaceWith"></strong>".
         </div>
     </div>
     
