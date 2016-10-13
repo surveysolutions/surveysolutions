@@ -254,6 +254,11 @@
                     $scope.setLinkSource(null,null);
                 }
 
+                if (!$scope.doesQuestionSupportOptionsFilters()) {
+                    $scope.activeQuestion.optionsFilterExpression = '';
+                    $scope.activeQuestion.linkedFilterExpression = '';
+                }
+
                 markFormAsChanged();
             };
 
@@ -430,7 +435,7 @@
                 }
             });
 
-            $scope.$on('verifing', function (scope, params) {
+            $scope.$on('verifing', function () {
                 if ($scope.questionForm.$dirty)
                     $scope.saveQuestion(function() {
                         $scope.questionForm.$setPristine();
@@ -464,6 +469,17 @@
                 return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
+
+            $scope.doesQuestionSupportOptionsFilters = function () {
+                if ($scope.activeQuestion) {
+                    if ($scope.activeQuestion.type === 'MultyOption' || $scope.activeQuestion.type === 'SingleOption') {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
 
             $scope.doesQuestionSupportEnablementConditions = function () {
                 return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Prefilled')
