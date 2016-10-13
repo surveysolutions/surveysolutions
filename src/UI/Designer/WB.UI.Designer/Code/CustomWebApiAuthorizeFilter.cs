@@ -18,7 +18,7 @@ namespace WB.UI.Designer.Code
 {
     public class CustomWebApiAuthorizeFilter : AuthorizationFilterAttribute
     {
-        private ITransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
+        private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
         private IMembershipUserService UserService => ServiceLocator.Current.GetInstance<IMembershipUserService>();
 
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Code
 
             bool isInvalidUser = false;
 
-            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            this.TransactionManagerProvider.GetPlainTransactionManager().BeginTransaction();
             try
             {
 
@@ -54,7 +54,7 @@ namespace WB.UI.Designer.Code
             }
             finally
             {
-                this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                this.TransactionManagerProvider.GetPlainTransactionManager().RollbackTransaction();
             }
         }
 
