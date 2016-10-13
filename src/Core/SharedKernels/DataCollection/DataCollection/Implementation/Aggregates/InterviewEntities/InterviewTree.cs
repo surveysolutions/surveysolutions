@@ -351,6 +351,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string Title { get; }
         public string VariableName { get; }
+
+        public bool IsValid => !this.FailedValidations?.Any() ?? true;
+        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; }
         
         public bool IsDouble => this.AsDouble != null;
         public bool IsInteger => this.AsInteger != null;
@@ -696,6 +699,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeStaticText(Identity identity)
             : base(identity, false) {}
+
+        public bool IsValid => !this.FailedValidations?.Any() ?? true;
+        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; }
 
         public override string ToString() => $"Text ({this.Identity})";
     }
