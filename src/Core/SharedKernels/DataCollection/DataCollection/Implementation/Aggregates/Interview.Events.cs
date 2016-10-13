@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -8,16 +9,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        public void ApplyEvents(InterviewTree sourceInterview, InterviewTree changedInterview)
+        public void ApplyEvents(InterviewTree sourceInterview, InterviewTree changedInterview, Guid responsibleId)
         {
             var diff = sourceInterview.Compare(changedInterview);
 
-            this.ApplyRosterEvents(diff.OfType<InterviewTreeRosterDiff>().ToArray());
-            this.ApplyRemoveAnswerEvents(diff.OfType<InterviewTreeQuestionDiff>().ToArray());
-            this.ApplyDisableEvents(diff);
+            var questionsWithRemovedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Where(IsAnswerRemoved).ToArray();
+            var questionsWithChangedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Except(questionsWithRemovedAnswer).ToArray();
+            var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+
+            this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
+            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
+            this.ApplyRosterEvents(changedRosters);
+            this.ApplyEnablementEvents(diff);
         }
 
-        private void ApplyDisableEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        private void ApplyEnablementEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
         {
             var allNotNullableNodes = diff.Where(x => x.SourceNode != null && x.ChangedNode != null).ToList();
 
@@ -43,12 +49,99 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if(enabledVariables.Any()) this.Apply(new VariablesEnabled(enabledVariables));
         }
 
-        private void ApplyRemoveAnswerEvents(InterviewTreeQuestionDiff[] diff)
+        private void ApplyUpdateAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid responsibleId)
         {
-            var questionIdentittiesWithRemovedAnswer = diff
-                .Where(IsAnswerRemoved)
-                .Select(x => x.SourceNode.Identity)
-                .ToArray();
+            foreach (var diffByQuestion in diffByQuestions)
+            {
+                var changedQuestion = diffByQuestion.ChangedNode;
+
+                if (changedQuestion == null) continue;
+
+                if (changedQuestion.IsText)
+                {
+                    this.ApplyEvent(new TextQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsText.GetAnswer()));
+                }
+
+                if (changedQuestion.IsTextList)
+                {
+                    this.ApplyEvent(new TextListQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsTextList.GetAnswer()));
+                }
+
+                if (changedQuestion.IsDouble)
+                {
+                    this.ApplyEvent(new NumericRealQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, (decimal)changedQuestion.AsDouble.GetAnswer()));
+                }
+
+                if (changedQuestion.IsInteger)
+                {
+                    this.ApplyEvent(new NumericIntegerQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsInteger.GetAnswer()));
+                }
+
+                if (changedQuestion.IsDateTime)
+                {
+                    this.ApplyEvent(new DateTimeQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsDateTime.GetAnswer()));
+                }
+
+                if (changedQuestion.IsGps)
+                {
+                    var gpsAnswer = changedQuestion.AsGps.GetAnswer();
+                    this.ApplyEvent(new GeoLocationQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, gpsAnswer.Latitude, gpsAnswer.Longitude,
+                        gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Timestamp));
+                }
+
+                if (changedQuestion.IsQRBarcode)
+                {
+                    this.ApplyEvent(new QRBarcodeQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsQRBarcode.GetAnswer()));
+                }
+
+                if (changedQuestion.IsMultimedia)
+                {
+                    this.ApplyEvent(new PictureQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultimedia.GetAnswer()));
+                }
+
+                if (changedQuestion.IsYesNo)
+                {
+                    this.ApplyEvent(new YesNoQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsYesNo.GetAnswer()));
+                }
+
+                if (changedQuestion.IsSingleOption)
+                {
+                    this.ApplyEvent(new SingleOptionQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleOption.GetAnswer()));
+                }
+
+                if (changedQuestion.IsMultiOption)
+                {
+                    this.ApplyEvent(new MultipleOptionsQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiOption.GetAnswer()));
+                }
+
+                if (changedQuestion.IsSingleLinkedOption)
+                {
+                    this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleLinkedOption.GetAnswer()));
+                }
+
+                if (changedQuestion.IsMultiLinkedOption)
+                {
+                    this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedOption.GetAnswer()));
+                }
+            }
+        }
+
+        private void ApplyRemoveAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions)
+        {
+            var questionIdentittiesWithRemovedAnswer = diffByQuestions.Select(x => x.SourceNode.Identity).ToArray();
 
             if (questionIdentittiesWithRemovedAnswer.Any())
                 this.ApplyEvent(new AnswersRemoved(questionIdentittiesWithRemovedAnswer));

@@ -11,12 +11,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var diff = sourceInterview.Compare(changedInterview);
 
-            UpdateAnswersInExpressionState(diff, expressionState);
-            UpdateRostersInExpressionState(diff, expressionState);
-            UpdateDisablingInExpressionState(diff, expressionState);
+            var questionsWithRemovedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Where(IsAnswerRemoved).ToArray();
+            var questionsWithChangedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Except(questionsWithRemovedAnswer).ToArray();
+            var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+
+            UpdateAnswersInExpressionState(questionsWithChangedAnswer, expressionState);
+            RemoveAnswersInExpressionState(questionsWithRemovedAnswer, expressionState);
+            UpdateRostersInExpressionState(changedRosters, expressionState);
+            UpdateEnablementInExpressionState(diff, expressionState);
         }
 
-        private void UpdateDisablingInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
+        private static void UpdateEnablementInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
         {
             var allNotNullableNodes = diff.Where(x => x.SourceNode != null && x.ChangedNode != null).ToList();
 
@@ -42,20 +47,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (enabledVariables.Any()) expressionState.EnableVariables(enabledVariables);
         }
 
-        private static void UpdateAnswersInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
+        private static void RemoveAnswersInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diffByQuestions, ILatestInterviewExpressionState expressionState)
         {
-            foreach (var diffByQuestion in diff.OfType<InterviewTreeQuestionDiff>())
+            foreach (var diffByQuestion in diffByQuestions)
             {
-                var sourceQuestion = diffByQuestion.SourceNode;
+                expressionState.RemoveAnswer(diffByQuestion.SourceNode.Identity);
+            }
+        }
+
+        private static void UpdateAnswersInExpressionState(InterviewTreeQuestionDiff[] diffByQuestions, ILatestInterviewExpressionState expressionState)
+        {
+            foreach (var diffByQuestion in diffByQuestions)
+            {
                 var changedQuestion = diffByQuestion.ChangedNode;
-
-                if (sourceQuestion == null) continue;
-
-                if (IsAnswerRemoved(diffByQuestion))
-                {
-                    expressionState.RemoveAnswer(sourceQuestion.Identity);
-                    continue;
-                }
 
                 if (changedQuestion == null) continue;
 
@@ -121,12 +125,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         changedQuestion.Identity.RosterVector, changedQuestion.AsSingleOption.GetAnswer());
                 }
 
-                if (changedQuestion.IsSingleOption)
-                {
-                    expressionState.UpdateSingleOptionAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsSingleOption.GetAnswer());
-                }
-
                 if (changedQuestion.IsMultiOption)
                 {
                     expressionState.UpdateMultiOptionAnswer(changedQuestion.Identity.Id,
@@ -141,22 +139,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 if (changedQuestion.IsMultiLinkedOption)
                 {
-                    expressionState.UpdateLinkedSingleOptionAnswer(changedQuestion.Identity.Id,
+                    expressionState.UpdateLinkedMultiOptionAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, changedQuestion.AsMultiLinkedOption.GetAnswer());
                 }
             }
         }
 
-        private static void UpdateRostersInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
+        private static void UpdateRostersInExpressionState(InterviewTreeRosterDiff[] diff, ILatestInterviewExpressionState expressionState)
         {
             var removedRosters = diff
-                .OfType<InterviewTreeRosterDiff>()
                 .Where(x => x.SourceNode != null && x.ChangedNode == null)
                 .Select(x => x.SourceNode)
                 .ToArray();
 
             var addedRosters = diff
-                .OfType<InterviewTreeRosterDiff>()
                 .Where(x => x.SourceNode == null && x.ChangedNode != null)
                 .Select(x => x.ChangedNode)
                 .ToArray();
