@@ -8,9 +8,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
 {
     internal class AccountViewFactoryTestsContext
     {
-        protected static Account CreateAccount(string userName)
+        protected static User CreateAccount(string userName)
         {
-            return new Account { UserName = userName };
+            return new User { UserName = userName };
         }
 
         protected static AccountViewInputModel CreateAccountViewInputModel(string accountName)
@@ -18,9 +18,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
             return new AccountViewInputModel(accountName, null, null, null);
         }
 
-        protected static AccountViewFactory CreateAccountViewFactory(IPlainStorageAccessor<Account> accountsRepository = null)
+        protected static AccountViewFactory CreateAccountViewFactory(IPlainStorageAccessor<User> accountsRepository = null)
         {
-            return new AccountViewFactory(accountsRepository ?? Mock.Of<IPlainStorageAccessor<Account>>());
+            return new AccountViewFactory(accountsRepository ?? Mock.Of<IPlainStorageAccessor<User>>());
         }
     }
 }

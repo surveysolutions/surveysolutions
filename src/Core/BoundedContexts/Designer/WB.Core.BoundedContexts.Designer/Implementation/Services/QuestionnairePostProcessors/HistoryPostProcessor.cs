@@ -72,8 +72,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
         ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>
     {
-        private IPlainStorageAccessor<Account> accountStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<Account>>();
+        private IPlainStorageAccessor<User> accountStorage
+            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
 
         private IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireChangeRecord>>();

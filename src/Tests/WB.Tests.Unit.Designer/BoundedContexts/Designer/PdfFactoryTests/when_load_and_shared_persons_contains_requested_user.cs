@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
             questionnaireSharedPersons.SharedPersons.Add(Create.SharedPerson(id: userId, email: userEmail));
             var modificationStatisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser {Date = DateTime.Now};
 
-            var accountsDocumentReader = Mock.Of<IPlainStorageAccessor<Account>>(x => x.GetById(userId.FormatGuid()) == accountDocument);
+            var accountsDocumentReader = Mock.Of<IPlainStorageAccessor<User>>(x => x.GetById(userId.FormatGuid()) == accountDocument);
             var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
             var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireSharedPersons);
             var questionnaireChangeHistoryStorage = new InMemoryPlainStorageAccessor<QuestionnaireChangeRecord>();

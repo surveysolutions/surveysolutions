@@ -75,8 +75,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateCascadingComboboxOptions>,
         ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>
     {
-        private IPlainStorageAccessor<Account> accountStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<Account>>();
+        private IPlainStorageAccessor<User> accountStorage
+            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
 
         private IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage
             => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireSharedPersons>>();

@@ -26,14 +26,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainStorageAccessor<Aggregates.Account> accountsDocumentReader;
+        private readonly IPlainStorageAccessor<Aggregates.User> accountsDocumentReader;
         private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly PdfSettings pdfSettings;
 
         public PdfFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
-            IPlainStorageAccessor<Aggregates.Account> accountsDocumentReader,
+            IPlainStorageAccessor<Aggregates.User> accountsDocumentReader,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage, 
             PdfSettings pdfSettings)

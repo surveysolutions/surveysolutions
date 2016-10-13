@@ -4,10 +4,10 @@ using WB.UI.Shared.Web.MembershipProvider.Roles;
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    public class AddRoleToAccountCommand : AccountCommandBase
+    public class AssignUserRole : UserCommand
     {
-        public AddRoleToAccountCommand(Guid accountId, SimpleRoleEnum role)
-            : base(accountId)
+        public AssignUserRole(Guid userId, SimpleRoleEnum role)
+            : base(userId)
         {
             this.Role = role;
         }
