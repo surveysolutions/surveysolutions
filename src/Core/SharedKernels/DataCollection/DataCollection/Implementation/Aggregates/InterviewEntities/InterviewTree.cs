@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         internal InterviewTreeGroup GetGroup(Identity identity) 
             => this
             .GetNodes<InterviewTreeGroup>()
-            .Single(node => node.Identity == identity);
+            .SingleOrDefault(node => node.Identity == identity);
 
         internal InterviewTreeStaticText GetStaticText(Identity identity) 
             => this
@@ -45,10 +45,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .Where(node => node.Identity.Id == questionId)
                 .ToReadOnlyCollection();
 
+        public IReadOnlyCollection<InterviewTreeQuestion> FindQuestions()
+            => this
+                .GetNodes<InterviewTreeQuestion>()
+                .ToReadOnlyCollection();
+
         public IReadOnlyCollection<InterviewTreeRoster> FindRosters()
             => this
                 .GetNodes<InterviewTreeRoster>()
                 .ToReadOnlyCollection();
+
+        public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
+        {
+            return this.GetNodes().Where(x => x.Identity.Id == nodeId);
+        }
 
         private IEnumerable<TNode> GetNodes<TNode>() => this.GetNodes().OfType<TNode>();
 
@@ -298,8 +308,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
             QuestionType questionType, object answer,
-            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, bool isYesNo, bool isDecimal,
-            bool isLinkedQuestion)
+            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, bool isYesNo, bool isDecimal, Guid? linkedSourceId = null, Identity commonParentRosterIdForLinkedQuestion = null)
             : base(identity, isDisabled)
         {
             this.Title = title;
@@ -307,8 +316,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (questionType == QuestionType.SingleOption)
             {
-                if (isLinkedQuestion)
-                    this.AsSingleLinkedOption = new InterviewTreeSingleLinkedOptionQuestion(linkedOptions, answer);
+                if (linkedSourceId.HasValue)
+                {
+                    this.AsSingleLinkedOption = new InterviewTreeSingleLinkedOptionQuestion(linkedOptions, answer, linkedSourceId.Value, commonParentRosterIdForLinkedQuestion);
+                }
                 else
                     this.AsSingleOption = new InterviewTreeSingleOptionQuestion(answer);
             }
@@ -317,8 +328,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 if (isYesNo)
                     this.AsYesNo = new InterviewTreeYesNoQuestion(answer);
-                else if (isLinkedQuestion)
-                    this.AsMultiLinkedOption = new InterviewTreeMultiLinkedOptionQuestion(linkedOptions, answer);
+                else if (linkedSourceId.HasValue)
+                {
+                    this.AsMultiLinkedOption = new InterviewTreeMultiLinkedOptionQuestion(linkedOptions, answer, linkedSourceId.Value, commonParentRosterIdForLinkedQuestion);
+                }
                 else
                     this.AsMultiOption = new InterviewTreeMultiOptionQuestion(answer);
             }
@@ -416,6 +429,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString() => $"Question ({this.Identity}) '{this.Title}'";
+
+        public void UpdateLinkedOptions()
+        {
+            if (!IsLinked) return;
+
+            InterviewTreeLinkedQuestion linkedQuestion = this.AsLinked;
+
+            List<IInterviewTreeNode> sourceNodes = new List<IInterviewTreeNode>();
+            if (linkedQuestion.CommonParentRosterIdForLinkedQuestion == null)
+            {
+                sourceNodes = this.Tree.FindEntity(linkedQuestion.LinkedSourceId).ToList();
+            }
+            else
+            {
+                var parentGroup = this.Tree.GetGroup(linkedQuestion.CommonParentRosterIdForLinkedQuestion);
+                if (parentGroup !=null)
+                    sourceNodes = parentGroup
+                        .TreeToEnumerable<IInterviewTreeNode>(node => node.Children)
+                        .Where(x => x.Identity.Id == linkedQuestion.LinkedSourceId)
+                        .ToList();
+            }
+
+            var options = sourceNodes.Where(x => !x.IsDisabled()).Select(x => x.Identity.RosterVector);
+            linkedQuestion.SetOptions(options);
+
+        }
     }
 
     public class InterviewTreeDateTimeQuestion
@@ -651,7 +690,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeSingleLinkedOptionQuestion : InterviewTreeLinkedQuestion
     {
         private RosterVector answer;
-        public InterviewTreeSingleLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer) : base(linkedOptions)
+        public InterviewTreeSingleLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
+            : base(linkedOptions, linkedSourceId, commonParentRosterIdForLinkedQuestion)
         {
             this.answer = answer as RosterVector;
         }
@@ -667,7 +707,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeMultiLinkedOptionQuestion : InterviewTreeLinkedQuestion
     {
         private decimal[][] answer;
-        public InterviewTreeMultiLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer) : base(linkedOptions)
+        public InterviewTreeMultiLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion) 
+            : base(linkedOptions, linkedSourceId, commonParentRosterIdForLinkedQuestion)
         {
             this.answer = answer as decimal[][];
         }
@@ -691,15 +732,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public abstract class InterviewTreeLinkedQuestion
     {
-        protected InterviewTreeLinkedQuestion(IEnumerable<RosterVector> linkedOptions)
+        public Guid LinkedSourceId { get; private set; }
+        public Identity CommonParentRosterIdForLinkedQuestion { get; private set; }
+
+        protected InterviewTreeLinkedQuestion(IEnumerable<RosterVector> linkedOptions, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
         {
+            this.LinkedSourceId = linkedSourceId;
+            this.CommonParentRosterIdForLinkedQuestion = commonParentRosterIdForLinkedQuestion;
             //Interview state returns null if linked question has no options
             // if (linkedOptions == null) throw new ArgumentNullException(nameof(linkedOptions));
 
-            this.Options = (linkedOptions ?? new List<RosterVector>()).ToReadOnlyCollection();
+            this.Options = linkedOptions?.ToList() ?? new List<RosterVector>();
         }
 
-        public IReadOnlyCollection<RosterVector> Options { get; }
+        public List<RosterVector> Options { get; private set; }
+
+        public void SetOptions(IEnumerable<RosterVector> options)
+        {
+            this.Options = options.ToList();
+        }
     }
 
     public class InterviewTreeCascadingQuestion

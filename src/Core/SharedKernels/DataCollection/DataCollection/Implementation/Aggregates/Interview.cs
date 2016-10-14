@@ -837,20 +837,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.UpdateRosterTitles(changedInterviewTree);
 
-            this.UpdateLinkedQuestions(changedInterviewTree);
-
-            var rostersWithTitles = new Dictionary<Identity, string>();
-
-            var changedLinkedOptions =
-                this.CreateChangedLinkedOptions(expressionProcessorState,
-                    this.interviewState,
-                    questionnaire,
-                    null,
-                    enablementChanges,
-                    null,
-                    rostersWithTitles).ToArray();
-
-            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
+            this.UpdateLinkedQuestions(changedInterviewTree, expressionProcessorState);
 
             VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
 
@@ -892,8 +879,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             tree.FindRosters().Where(x => x.IsList || x.IsNumeric).ForEach(x => x.UpadateTitle());
         }
 
-        private void UpdateLinkedQuestions(InterviewTree tree)
+        private void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState)
         {
+            if (!interviewExpressionState.AreLinkedQuestionsSupported())
+            {
+                var linkedQuestions = tree.FindQuestions().Where(x => x.IsLinked);
+                foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
+                {
+                    linkedQuestion.UpdateLinkedOptions();
+                }
+            }
+            else
+            {
+                var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
+                foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptions)
+                {
+                    tree.FindQuestions(linkedQuestionWithOptions.Key).ForEach(x => x.AsLinked.SetOptions(linkedQuestionWithOptions.Value));
+                }
+                foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
+                {
+                    tree.GetQuestion(linkedQuestionWithOptions.Key).AsLinked.SetOptions(linkedQuestionWithOptions.Value);
+                }
+            }
         }
 
         public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
@@ -4893,8 +4900,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
             bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionIdentity.Id);
             bool isLinkedQuestion = questionnaire.IsQuestionLinked(questionIdentity.Id) || questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
+            var linkedSourceEntityId = isLinkedQuestion ?
+                (questionnaire.IsQuestionLinked(questionIdentity.Id)
+                  ? questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id)
+                  : questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id))
+                  : (Guid?)null;
 
-            Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
+            Guid? commonParentRosterIdForLinkedQuestion = isLinkedQuestion ? questionnaire.GetCommontParentForLinkedQuestionAndItSource(questionIdentity.Id) : null;
+            Identity commonParentIdentity = null;
+            if (isLinkedQuestion && commonParentRosterIdForLinkedQuestion.HasValue)
+            {
+                var level = questionnaire.GetRosterLevelForEntity(commonParentRosterIdForLinkedQuestion.Value);
+                var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
+                commonParentIdentity = new Identity(commonParentRosterIdForLinkedQuestion.Value, commonParentRosterVector);
+            }
+
+            Guid ? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
             var cascadingParentQuestionIdentity = cascadingParentQuestionId.HasValue
                 ? GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(cascadingParentQuestionId.Value, questionIdentity.RosterVector, questionnaire)
                 : null;
@@ -4910,7 +4931,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 cascadingParentQuestionIdentity: cascadingParentQuestionIdentity,
                 isYesNo: isYesNoQuestion,
                 isDecimal: isDecimalQuestion,
-                isLinkedQuestion: isLinkedQuestion);
+                linkedSourceId: linkedSourceEntityId,
+                commonParentRosterIdForLinkedQuestion: commonParentIdentity);
         }
 
         private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
