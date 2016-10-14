@@ -160,7 +160,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
                 this.CreateDirectory(destDir);
 
                 foreach (var file in this.GetFilesInDirectory(sourceDir))
-                    File.Copy(file, this.CombinePath(destDir, this.GetFileName(file)), true);
+                    this.CopyFile(file, this.CombinePath(destDir, this.GetFileName(file)));
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
                     this.CopyFileOrDirectory(directory, destDir);
