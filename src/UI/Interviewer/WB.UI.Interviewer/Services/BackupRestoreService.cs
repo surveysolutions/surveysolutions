@@ -46,9 +46,11 @@ namespace WB.UI.Interviewer.Services
 
             this.BackupSqliteDbs();
 
+
+
             var isLogFolderExists = this.fileSystemAccessor.IsDirectoryExists(this.logDirectoryPath);
             if (isLogFolderExists)
-                this.fileSystemAccessor.CopyFileOrDirectory(this.logDirectoryPath, this.privateStorage);
+                this.fileSystemAccessor.CopyFileOrDirectory(this.logDirectoryPath, backupToFolderPath);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
