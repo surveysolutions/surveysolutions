@@ -218,10 +218,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => diff.SourceNode.IsValid && !diff.ChangedNode.IsValid;
 
         private static bool IsDisabledNode(InterviewTreeNodeDiff diff)
-            => !diff.SourceNode.IsDisabled() && diff.ChangedNode.IsDisabled();
+        {
+            if (diff.SourceNode == null)
+                return diff.ChangedNode.IsDisabled();
+            return !diff.SourceNode.IsDisabled() && diff.ChangedNode.IsDisabled();
+        }
 
         private static bool IsEnabledNode(InterviewTreeNodeDiff diff)
-            => diff.SourceNode.IsDisabled() && !diff.ChangedNode.IsDisabled();
+        {
+            if (diff.SourceNode == null)
+                return false; //node are enable by default
+            return diff.SourceNode.IsDisabled() && !diff.ChangedNode.IsDisabled();
+        }
 
         private static bool IsAnswerRemoved(InterviewTreeQuestionDiff diff) => diff.SourceNode != null &&
                                                                                diff.SourceNode.IsAnswered() && (diff.ChangedNode == null || !diff.ChangedNode.IsAnswered());

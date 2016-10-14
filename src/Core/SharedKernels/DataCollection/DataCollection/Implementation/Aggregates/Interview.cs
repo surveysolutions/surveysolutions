@@ -831,6 +831,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
 
+            this.UpdateTreeWithEnablementChanges(changedInterviewTree, enablementChanges);
+
             this.UpdateTreeWithStructuralChanges(changedInterviewTree, expressionProcessorState.GetStructuralChanges());
 
             this.UpdateRosterTitles(changedInterviewTree);
@@ -869,6 +871,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+        }
+
+        private void UpdateTreeWithEnablementChanges(InterviewTree tree, EnablementChanges enablementChanges)
+        {
+            if (enablementChanges == null) return; // can be in tests only.
+
+            enablementChanges.QuestionsToBeDisabled.ForEach(x => tree.GetQuestion(x).Disable());
+            enablementChanges.QuestionsToBeEnabled.ForEach(x => tree.GetQuestion(x).Enable());
+
+            enablementChanges.GroupsToBeDisabled.ForEach(x => tree.GetGroup(x).Disable());
+            enablementChanges.GroupsToBeEnabled.ForEach(x => tree.GetGroup(x).Enable());
+
+            enablementChanges.StaticTextsToBeDisabled.ForEach(x => tree.GetStaticText(x).Disable());
+            enablementChanges.StaticTextsToBeEnabled.ForEach(x => tree.GetStaticText(x).Enable());
         }
 
         private void UpdateRosterTitles(InterviewTree tree)
@@ -1060,6 +1076,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                                 group.AddChildren(rosterNode);
                                 itemsQueue.Enqueue(rosterNode);
+                            }
+                        }
+                        else if (questionnaire.IsSubSection(childEntityId))
+                        {
+                            var subSectionIdentity = new Identity(childEntityId, parentRosterVector);
+                            if (!group.HasChild(subSectionIdentity))
+                            {
+                                group.AddChildren(new InterviewTreeSubSection(subSectionIdentity, Enumerable.Empty<IInterviewTreeNode>(), false));
                             }
                         }
                         else if (questionnaire.IsStaticText(childEntityId))

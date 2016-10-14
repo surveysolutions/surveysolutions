@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -29,6 +27,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => this
                 .GetNodes<InterviewTreeQuestion>()
                 .Single(node => node.Identity == questionIdentity);
+
+
+        internal InterviewTreeGroup GetGroup(Identity identity) 
+            => this
+            .GetNodes<InterviewTreeGroup>()
+            .Single(node => node.Identity == identity);
+
+        internal InterviewTreeStaticText GetStaticText(Identity identity) 
+            => this
+            .GetNodes<InterviewTreeStaticText>()
+            .Single(node => node.Identity == identity);
 
         public IReadOnlyCollection<InterviewTreeQuestion> FindQuestions(Guid questionId)
             => this
@@ -169,6 +178,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         IReadOnlyCollection<IInterviewTreeNode> Children { get; }
 
         bool IsDisabled();
+
+        void Disable();
+        void Enable();
     }
 
     public interface IInternalInterviewTreeNode
@@ -179,7 +191,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public abstract class InterviewTreeLeafNode : IInterviewTreeNode, IInternalInterviewTreeNode
     {
-        private readonly bool isDisabled;
+        private bool isDisabled;
 
         protected InterviewTreeLeafNode(Identity identity, bool isDisabled)
         {
@@ -196,11 +208,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
+
+        public void Disable() => this.isDisabled = true;
+        public void Enable() => this.isDisabled = false;
     }
 
     public abstract class InterviewTreeGroup : IInterviewTreeNode, IInternalInterviewTreeNode
     {
-        private readonly bool isDisabled;
+        private bool isDisabled;
         private readonly List<IInterviewTreeNode> children;
 
         protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
@@ -255,6 +270,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
+        public void Disable() => this.isDisabled = true;
+        public void Enable() => this.isDisabled = false;
 
         public InterviewTreeQuestion GetQuestionFromThisOrUpperLevel(Guid questionId)
         {

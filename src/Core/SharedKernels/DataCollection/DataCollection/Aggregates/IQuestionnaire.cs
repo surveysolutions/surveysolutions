@@ -234,5 +234,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IReadOnlyCollection<string> GetTranslationLanguages();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
+        bool IsSubSection(Guid groupId);
     }
 }
