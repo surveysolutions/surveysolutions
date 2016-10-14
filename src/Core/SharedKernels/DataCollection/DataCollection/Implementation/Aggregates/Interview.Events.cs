@@ -14,6 +14,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var diff = sourceInterview.Compare(changedInterview);
 
             var questionsWithRemovedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Where(IsAnswerRemoved).ToArray();
+            // Roma: if question nod was created, but there is no answer it doesn't mean that this question should be present in this collection
+            // I thinks it is confusing. I expect to see only questions that were 
+            // 1) not answered, but now are 
+            // 2) questions that were answered still are answered, but value have been changed
             var questionsWithChangedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Except(questionsWithRemovedAnswer).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
 
@@ -81,6 +85,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var changedQuestion = diffByQuestion.ChangedNode;
 
                 if (changedQuestion == null) continue;
+
+                if (!changedQuestion.IsAnswered()) continue;
 
                 if (changedQuestion.IsText)
                 {
