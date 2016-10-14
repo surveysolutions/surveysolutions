@@ -15,9 +15,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionsWithChangedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Except(questionsWithRemovedAnswer).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
 
+            UpdateRostersInExpressionState(changedRosters, expressionState);
             UpdateAnswersInExpressionState(questionsWithChangedAnswer, expressionState);
             RemoveAnswersInExpressionState(questionsWithRemovedAnswer, expressionState);
-            UpdateRostersInExpressionState(changedRosters, expressionState);
             UpdateEnablementInExpressionState(diff, expressionState);
             UpdateValidityInExpressionState(diff, expressionState);
         }
@@ -83,6 +83,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var changedQuestion = diffByQuestion.ChangedNode;
 
                 if (changedQuestion == null) continue;
+
+                if (!changedQuestion.IsAnswered()) continue;
 
                 if (changedQuestion.IsText)
                 {
