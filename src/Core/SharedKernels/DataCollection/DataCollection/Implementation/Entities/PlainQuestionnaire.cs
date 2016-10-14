@@ -691,6 +691,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return IsRosterGroup(@group);
         }
 
+        public bool IsSubSection(Guid groupId)
+        {
+            IGroup @group = this.GetGroup(groupId);
+
+            return @group?.IsRoster == false;
+        }
+
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
 
