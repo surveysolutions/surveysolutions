@@ -862,6 +862,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyValidityChangesEvents(validationChanges);
 
+            if (variableValueChanges?.ChangedVariableValues?.Count > 0)
+            {
+                this.ApplyEvent(new VariablesChanged(variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
+            }
+
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
