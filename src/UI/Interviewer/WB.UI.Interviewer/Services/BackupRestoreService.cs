@@ -48,7 +48,7 @@ namespace WB.UI.Interviewer.Services
 
             var isLogFolderExists = this.fileSystemAccessor.IsDirectoryExists(this.logDirectoryPath);
             if (isLogFolderExists)
-                this.fileSystemAccessor.CopyFileOrDirectory(this.logDirectoryPath, backupToFolderPath);
+                this.fileSystemAccessor.CopyFileOrDirectory(this.logDirectoryPath, this.privateStorage);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
