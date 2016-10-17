@@ -67,17 +67,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var diffByStaticTexts = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
             var diffByVariables = allNotNullableNodes.OfType<InterviewTreeVariableDiff>().ToList();
 
-            var disabledGroups = diffByGroups.Where(x=>x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
-            var enabledGroups = diffByGroups.Where(x=>x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
+            var disabledGroups = diffByGroups.Where(x=>x.IsNodeDisabled).Select(x => x.ChangedNode.Identity).ToArray();
+            var enabledGroups = diffByGroups.Where(x=>x.IsNodeEnabled).Select(x => x.ChangedNode.Identity).ToArray();
 
-            var disabledQuestions = diffByQuestions.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
-            var enabledQuestions = diffByQuestions.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
+            var disabledQuestions = diffByQuestions.Where(x => x.IsNodeDisabled).Select(x => x.ChangedNode.Identity).ToArray();
+            var enabledQuestions = diffByQuestions.Where(x => x.IsNodeEnabled).Select(x => x.ChangedNode.Identity).ToArray();
 
-            var disabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
-            var enabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
+            var disabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeDisabled).Select(x => x.ChangedNode.Identity).ToArray();
+            var enabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeEnabled).Select(x => x.ChangedNode.Identity).ToArray();
 
-            var disabledVariables = diffByVariables.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
-            var enabledVariables = diffByVariables.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
+            var disabledVariables = diffByVariables.Where(x => x.IsNodeDisabled).Select(x => x.ChangedNode.Identity).ToArray();
+            var enabledVariables = diffByVariables.Where(x => x.IsNodeEnabled).Select(x => x.ChangedNode.Identity).ToArray();
 
             if(disabledGroups.Any()) this.ApplyEvent(new GroupsDisabled(disabledGroups));
             if (enabledGroups.Any()) this.ApplyEvent(new GroupsEnabled(enabledGroups));
