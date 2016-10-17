@@ -235,5 +235,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsSubSection(Guid groupId);
 
         Guid? GetCommontParentForLinkedQuestionAndItSource(Guid linkedQuestionId);
+        bool IsVariable(Guid id);
+        IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId);
     }
 }
