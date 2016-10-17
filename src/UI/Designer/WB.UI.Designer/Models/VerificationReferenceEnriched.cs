@@ -10,6 +10,6 @@ namespace WB.UI.Designer.Models
         public string ChapterId { get; set; }
         public string Variable { get; set; }
         public string QuestionType { get; set; }
-        public int? FailedValidationConditionIndex { get; set; }
+        public int? IndexOfEntityInProperty { get; set; }
     }
 }

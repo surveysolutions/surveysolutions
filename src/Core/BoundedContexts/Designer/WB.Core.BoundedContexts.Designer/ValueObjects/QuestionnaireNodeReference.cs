@@ -21,14 +21,14 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public QuestionnaireVerificationReferenceType Type { get; private set; }
         public Guid Id { get; private set; }
         public string ItemId { get; private set; }
-        public int? FailedValidationConditionIndex { get; set; }
+        public int? IndexOfEntityInProperty { get; set; }
         public Guid? ChapterId { get; set; }
         public QuestionnaireVerificationReferenceProperty Property { get; set; }
 
         protected bool Equals(QuestionnaireNodeReference other)
             => this.Id.Equals(other.Id)
             && this.Type == other.Type
-            && this.FailedValidationConditionIndex == other.FailedValidationConditionIndex;
+            && this.IndexOfEntityInProperty == other.IndexOfEntityInProperty;
 
         public override bool Equals(object obj)
         {
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
             result.ChapterId = section.PublicKey;
             result.Property = property;
-            result.FailedValidationConditionIndex = indexOfEntityInProperty;
+            result.IndexOfEntityInProperty = indexOfEntityInProperty;
 
             return result;
         }

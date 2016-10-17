@@ -6,7 +6,6 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
@@ -16,21 +15,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
     {
         Establish context = () =>
         {
-            questionnaireEntityFactory = Setup.QuestionnaireEntityFactoryWithStaticText(entityId, text, null);
 
             questionnaireView = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentId)
             }, creatorId);
 
-            questionnaire = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionnaireEntityFactory.Object);
+            questionnaire = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView);
         };
 
         Because of = () =>
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaireView.PublicKey, entityId, text, creatorId, parentId));
-
-        It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
-            questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text, null, null, false, Moq.It.IsAny<IList<ValidationCondition>>()), Times.Once);
 
         It should__static_text_be_in_questionnaire_document_view = ()=>
             GetExpectedStaticText().ShouldNotBeNull();
@@ -52,7 +47,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return GetEntityById<IStaticText>(document: questionnaireView, entityId: entityId);
         }
 
-        private static Mock<IQuestionnaireEntityFactory> questionnaireEntityFactory;
         private static QuestionnaireDocument questionnaireView;
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

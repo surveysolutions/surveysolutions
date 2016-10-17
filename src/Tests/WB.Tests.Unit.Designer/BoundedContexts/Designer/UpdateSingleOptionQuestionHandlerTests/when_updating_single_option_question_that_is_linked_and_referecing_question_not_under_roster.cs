@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -14,9 +14,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = parentGroupId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
+            questionnaire.AddGroup(rosterId, parentGroupId, responsibleId: responsibleId, isRoster: true);
+           
             questionnaire.AddTextQuestion(linkedToQuestionId,
                 parentGroupId,
                 responsibleId,
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 title: "old title",
                 variableName: "old_variable_name",
                 instructions: "old instructions");
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
+            questionnaire.AddGroup(groupFromRosterId, rosterId, responsibleId: responsibleId);
         };
 
         Because of = () =>
