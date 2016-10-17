@@ -25,28 +25,30 @@
                     }
                 });
 
-            $scope.findAll = function() {
-                return $http({
-                        method: 'GET',
-                        url: baseUrl + '/findAll',
-                        params: {
-                            searchFor: $scope.searchForm.searchFor,
-                            matchCase: $scope.searchForm.matchCase,
-                            matchWholeWord: $scope.searchForm.matchWholeWord,
-                            useRegex: $scope.searchForm.useRegex,
-                            id: $state.params.questionnaireId
-                        }
-                    })
-                    .then(function(response) {
-                        var newParams = $state.params;
-                        newParams.property = null;
-                        $state.go($state.current
-                            .name,
-                            newParams,
-                            { notify: false, reload: false }); // reset state from previous search
-                        $scope.foundReferences = response.data;
-                        indexOfCurrentReference = -1;
-                    });
+            $scope.findAll = function () {
+                if ($scope.searchForm.searchFor.length > 0) {
+                    return $http({
+                            method: 'GET',
+                            url: baseUrl + '/findAll',
+                            params: {
+                                searchFor: $scope.searchForm.searchFor,
+                                matchCase: $scope.searchForm.matchCase,
+                                matchWholeWord: $scope.searchForm.matchWholeWord,
+                                useRegex: $scope.searchForm.useRegex,
+                                id: $state.params.questionnaireId
+                            }
+                        })
+                        .then(function(response) {
+                            var newParams = $state.params;
+                            newParams.property = null;
+                            $state.go($state.current
+                                .name,
+                                newParams,
+                                { notify: false, reload: false }); // reset state from previous search
+                            $scope.foundReferences = response.data;
+                            indexOfCurrentReference = -1;
+                        });
+                }
             }
 
             $scope.confirmReplaceAll = function() {
