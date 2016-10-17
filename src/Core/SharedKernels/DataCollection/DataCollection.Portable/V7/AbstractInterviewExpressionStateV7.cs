@@ -147,6 +147,17 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             }
         }
 
+        public override void SetInterviewProperties(IInterviewProperties properties)
+        {
+            this.InterviewProperties = properties;
+            var scopes = this.InterviewScopes.Values;
+
+            foreach (var scope in scopes)
+            {
+                scope.SetInterviewProperties(properties);
+            }
+        }
+
         #endregion
 
         public virtual LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
