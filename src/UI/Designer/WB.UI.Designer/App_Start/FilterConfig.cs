@@ -11,7 +11,6 @@ namespace WB.UI.Designer.App_Start
             //errors are handled in global.asax Application_Error
             //filters.Add(new HandleErrorAttribute());
 
-            filters.Add(new MaintenanceFilter());
             filters.Add(new ShowNotesToUserFilter());
         }
     }

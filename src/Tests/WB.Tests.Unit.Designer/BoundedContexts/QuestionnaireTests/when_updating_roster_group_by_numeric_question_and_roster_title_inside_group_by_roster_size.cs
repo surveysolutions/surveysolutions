@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -20,22 +20,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterSizeSourceType = RosterSizeSourceType.Question;
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterGroupWithRosterTitleQuestionId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterGroupWithRosterTitleQuestionId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterGroupWithRosterTitleQuestionId){
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles =  null,
-                    RosterTitleQuestionId =null 
-                });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId, isInteger: true);
 
+            questionnaire.AddGroup(rosterGroupWithRosterTitleQuestionId, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            
             questionnaire.AddTextQuestion(rosterTitleQuestionId, rosterGroupWithRosterTitleQuestionId, responsibleId);
             
-            questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId, isInteger:true);
+            
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
+            questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
         };
 
         Because of = () =>

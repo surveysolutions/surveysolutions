@@ -48,7 +48,11 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 new AccountLocked()));
 
             eventStore = new PostgresEventStore(
-                new PostgreConnectionSettings { ConnectionString = connectionStringBuilder.ConnectionString }, 
+                new PostgreConnectionSettings
+                {
+                    ConnectionString = connectionStringBuilder.ConnectionString,
+                    SchemaName = "events"
+                }, 
                 eventTypeResolver);
         };
 

@@ -21,12 +21,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private static readonly object lockObject = new object();
         private readonly IEventTypeResolver eventTypeResolver;
         private static int BatchSize = 4096;
+        private static string tableName;
         
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
             IEventTypeResolver eventTypeResolver)
         {
             this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
+
+            tableName = connectionSettings.SchemaName + ".events";
+
             CreateRelations();
         }
 
@@ -38,7 +42,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 using (connection.BeginTransaction())
                 {
                     var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT * FROM events WHERE eventsourceid=:sourceId AND eventsequence >= {minVersion} ORDER BY eventsequence";
+                    command.CommandText = $"SELECT * FROM {tableName} WHERE eventsourceid=:sourceId AND eventsequence >= {minVersion} ORDER BY eventsequence";
                     command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
 
                     using (IDataReader npgsqlDataReader = command.ExecuteReader())
@@ -65,7 +69,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 using (connection.BeginTransaction())
                 {
                     var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT MAX(eventsequence) as eventsourceid FROM events WHERE eventsourceid=:sourceId";
+                    command.CommandText = $"SELECT MAX(eventsequence) as eventsourceid FROM {tableName} WHERE eventsourceid=:sourceId";
                     command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
                     var executeScalar = command.ExecuteScalar() as int?;
                     return executeScalar;
@@ -89,7 +93,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void CreateRelations()
         {
-            DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString);
+            DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString, this.connectionSettings.SchemaName);
 
             var assembly = Assembly.GetAssembly(typeof(PostgresEventStore));
             var resourceName = typeof(PostgresEventStore).Namespace + ".InitEventStore.sql";
@@ -100,8 +104,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 using (StreamReader reader = new StreamReader(stream))
                 {
+                    var commandText = reader.ReadToEnd();
                     var dbCommand = connection.CreateCommand();
-                    dbCommand.CommandText = reader.ReadToEnd();
+                    dbCommand.CommandText = commandText.Replace("@schemaName", this.connectionSettings.SchemaName);
                     dbCommand.ExecuteNonQuery();
                 }
             }
@@ -112,7 +117,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var result = new List<CommittedEvent>();
             using (var npgsqlTransaction = connection.BeginTransaction())
             {
-                var copyFromCommand = "COPY events(id, origin, timestamp, eventsourceid, globalsequence, value, eventsequence, eventtype) FROM STDIN BINARY;";
+                var copyFromCommand = $"COPY {tableName}(id, origin, timestamp, eventsourceid, globalsequence, value, eventsequence, eventtype) FROM STDIN BINARY;";
                 using (var writer = connection.BeginBinaryImport(copyFromCommand))
                 {
                     foreach (var @event in eventStream)
@@ -154,7 +159,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "select reltuples::bigint from pg_class where relname='events'";
+                command.CommandText = $"select reltuples::bigint from pg_class where relname='{tableName}'";
                 var scalar = command.ExecuteScalar();
 
                 return scalar == null ? 0 : Convert.ToInt32(scalar);
@@ -183,7 +188,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 conn.Open();
 
                 var npgsqlCommand = conn.CreateCommand();
-                npgsqlCommand.CommandText = $"SELECT * FROM events ORDER BY globalsequence LIMIT {BatchSize} OFFSET {processed}";
+                npgsqlCommand.CommandText = $"SELECT * FROM {tableName} ORDER BY globalsequence LIMIT {BatchSize} OFFSET {processed}";
 
                 using (var reader = npgsqlCommand.ExecuteReader())
                 {
@@ -205,7 +210,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 if (position.HasValue)
                 {
                     var lastGlobalSequenceCommand = connection.CreateCommand();
-                    lastGlobalSequenceCommand.CommandText = "SELECT globalsequence FROM events WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
+                    lastGlobalSequenceCommand.CommandText = $"SELECT globalsequence FROM {tableName} WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
                     lastGlobalSequenceCommand.Parameters.AddWithValue("eventSourceId", position.Value.EventSourceIdOfLastEvent);
                     lastGlobalSequenceCommand.Parameters.AddWithValue("sequence", position.Value.SequenceOfLastEvent);
                     globalSequence = (int)lastGlobalSequenceCommand.ExecuteScalar();
@@ -216,7 +221,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 while (processed < eventsCountAfterPosition)
                 {
                     var npgsqlCommand = connection.CreateCommand();
-                    npgsqlCommand.CommandText = $"SELECT * FROM events WHERE globalsequence > {globalSequence} ORDER BY globalsequence LIMIT {BatchSize} OFFSET {processed}";
+                    npgsqlCommand.CommandText = $"SELECT * FROM {tableName} WHERE globalsequence > {globalSequence} ORDER BY globalsequence LIMIT {BatchSize} OFFSET {processed}";
 
                     List<CommittedEvent> events = new List<CommittedEvent>();
 
@@ -247,7 +252,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 connection.Open();
 
                 var npgsqlCommand = connection.CreateCommand();
-                npgsqlCommand.CommandText = "SELECT globalsequence FROM events WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
+                npgsqlCommand.CommandText = $"SELECT globalsequence FROM {tableName} WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
                 var positionValue = position.Value;
                 npgsqlCommand.Parameters.AddWithValue("eventSourceId", positionValue.EventSourceIdOfLastEvent);
                 npgsqlCommand.Parameters.AddWithValue("sequence", positionValue.SequenceOfLastEvent);
@@ -255,7 +260,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 int globalSequence = (int) npgsqlCommand.ExecuteScalar();
 
                 NpgsqlCommand countCommand = connection.CreateCommand();
-                countCommand.CommandText = "SELECT COUNT(*) FROM events WHERE globalsequence > :globalSequence";
+                countCommand.CommandText = $"SELECT COUNT(*) FROM {tableName} WHERE globalsequence > {globalSequence}";
                 countCommand.Parameters.AddWithValue("globalSequence", globalSequence);
 
                 return (long) countCommand.ExecuteScalar();
@@ -313,7 +318,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "select MAX(globalsequence) from events";
+                command.CommandText = $"select MAX(globalsequence) from {tableName}";
 
                 var scalar = command.ExecuteScalar();
                 lastUsedGlobalSequence = scalar is DBNull ? 0 : Convert.ToInt32(scalar);

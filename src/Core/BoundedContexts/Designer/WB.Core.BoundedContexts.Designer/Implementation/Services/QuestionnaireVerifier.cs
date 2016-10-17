@@ -1739,7 +1739,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         : QuestionnaireVerificationReferenceType.Question),
                 entity.PublicKey)
             {
-                FailedValidationConditionIndex = failedValidationIndex
+                IndexOfEntityInProperty = failedValidationIndex
             };
         }
 
@@ -1890,7 +1890,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             switch (expressionLocation.ExpressionType)
             {
                 case ExpressionLocationType.Validation:
-                    reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
+                    reference.IndexOfEntityInProperty = expressionLocation.ExpressionPosition;
                     return QuestionnaireVerificationMessage.Error("WB0002",
                         VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
                 case ExpressionLocationType.Condition:

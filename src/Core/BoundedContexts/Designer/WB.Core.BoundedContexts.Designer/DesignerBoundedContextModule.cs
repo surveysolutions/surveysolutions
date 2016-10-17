@@ -1,6 +1,7 @@
 ﻿using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -12,7 +13,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -31,8 +31,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-
-using AccountAR = WB.Core.BoundedContexts.Designer.Aggregates.AccountAR;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -58,10 +56,10 @@ namespace WB.Core.BoundedContexts.Designer
                 new EventTypeResolver(
                     typeof(DesignerBoundedContextModule).Assembly));
 
-            this.Bind<IQuestionnaireEntityFactory>().To<QuestionnaireEntityFactory>().InSingletonScope();
             this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
 
+            this.Bind<IPlainAggregateRootRepository<User>>().To<UserRepository>();
             this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
             this.Bind<IFindReplaceService>().ToMethod((c) => new FindReplaceService(c.Kernel.Get<IPlainAggregateRootRepository<Questionnaire>>()));
 
@@ -82,8 +80,6 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<ICompilerSettings>().ToConstant(this.compilerSettings);
             this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
 
-            DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
-
             this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
@@ -91,21 +87,22 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));
             
             CommandRegistry
-                .Setup<AccountAR>()
-                .InitializesWith<RegisterAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.RegisterAccount(command.ApplicationName, command.UserName, command.Email, command.AccountId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken))
-                .Handles<AddRoleToAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.AddRole(command.Role))
-                .Handles<ChangeOnlineAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.ChangeOnline())
-                .Handles<ChangePasswordAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.ChangePassword(command.Password))
-                .Handles<ChangePasswordQuestionAndAnswerAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.ChangePasswordQuestionAndAnswer(command.PasswordQuestion, command.PasswordAnswer))
-                .Handles<ChangePasswordResetTokenCommand>(command => command.AccountId, (command, aggregate) => aggregate.ChangePasswordResetToken(command.PasswordResetToken, command.PasswordResetExpirationDate))
-                .Handles<ConfirmAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.Confirm())
-                .Handles<DeleteAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.Delete())
-                .Handles<LockAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.Lock())
-                .Handles<LoginFailedAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.LoginFailed())
-                .Handles<RemoveRoleFromAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.RemoveRole(command.Role))
-                .Handles<ResetPasswordAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.ResetPassword(command.Password, command.PasswordSalt))
-                .Handles<UnlockAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.Unlock())
-                .Handles<UpdateAccountCommand>(command => command.AccountId, (command, aggregate) => aggregate.Update(command.UserName, command.IsLockedOut, command.PasswordQuestion, command.Email, command.IsConfirmed, command.Comment));
+                .Setup<User>()
+                .ResolvesIdFrom<UserCommand>(command => command.UserId)
+                .InitializesWith<RegisterUser>((command, aggregate) => aggregate.Register(command.ApplicationName, command.UserName, command.Email, command.UserId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken))
+                .Handles<AssignUserRole>((command, aggregate) => aggregate.AddRole(command.Role))
+                .Handles<ChangeUserPassword>((command, aggregate) => aggregate.ChangePassword(command.Password))
+                .Handles<ChangeSecurityQuestion>((command, aggregate) => aggregate.ChangePasswordQuestionAndAnswer(command.PasswordQuestion, command.PasswordAnswer))
+                .Handles<SetPasswordResetToken>((command, aggregate) => aggregate.ChangePasswordResetToken(command.PasswordResetToken, command.PasswordResetExpirationDate))
+                .Handles<ConfirmUserAccount>((command, aggregate) => aggregate.Confirm())
+                .Handles<DeleteUserAccount>((command, aggregate) => aggregate.Delete())
+                .Handles<LockUserAccount>((command, aggregate) => aggregate.Lock())
+                .Handles<RegisterFailedLogin>((command, aggregate) => aggregate.LoginFailed())
+                .Handles<RemoveUserRole>((command, aggregate) => aggregate.RemoveRole(command.Role))
+                .Handles<ResetUserPassword>((command, aggregate) => aggregate.ResetPassword(command.Password, command.PasswordSalt))
+                .Handles<UnlockUserAccount>((command, aggregate) => aggregate.Unlock())
+                .Handles<UpdateUserAccount>((command, aggregate) => aggregate.Update(command.UserName, command.IsLockedOut, command.PasswordQuestion, command.Email, command.IsConfirmed, command.Comment));
+
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)

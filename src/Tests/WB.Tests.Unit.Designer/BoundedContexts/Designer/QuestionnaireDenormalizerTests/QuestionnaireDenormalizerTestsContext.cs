@@ -11,16 +11,12 @@ using Moq;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using Group = Main.Core.Entities.SubEntities.Group;
-using TemplateImported = WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto.TemplateImported;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
@@ -36,12 +32,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         public static Questionnaire CreateQuestionnaireDenormalizer(QuestionnaireDocument questionnaire,
             IExpressionProcessor expressionProcessor = null,
-            IQuestionnaireEntityFactory questionnaireEntityFactory = null,
             IEnumerable<Guid> sharedPersons = null 
             )
         {
             var questAr = new Questionnaire(
-                questionnaireEntityFactory ?? new QuestionnaireEntityFactory(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
@@ -156,147 +150,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionType = QuestionType.TextList
             };
-        }
-        
-        protected static NewGroupAdded CreateNewGroupAddedEvent(Guid groupId,
-            string title = "New Group X")
-        {
-            return new NewGroupAdded
-            {
-                PublicKey = groupId,
-                GroupText = title,
-            };
-        }
-
-        protected static GroupCloned CreateGroupClonedEvent(Guid groupId,
-            string title = "New Cloned Group X")
-        {
-            return new GroupCloned
-            {
-                PublicKey = groupId,
-                GroupText = title,
-            };
-        }
-
-        protected static GroupUpdated CreateGroupUpdatedEvent(Guid groupId,
-            string title = "Updated Group Title X")
-        {
-            return new GroupUpdated
-            {
-                GroupPublicKey = groupId,
-                GroupText = title,
-            };
-        }
-
-        protected static QuestionChanged CreateQuestionChangedEvent(Guid questionId, Guid targetGroupId, string title, QuestionType questionType = QuestionType.Numeric)
-        {
-            return (Create.Event.QuestionChanged
-            (
-                publicKey : questionId,
-                questionType : questionType,
-                questionText : title
-            ));
-        }
-
-        protected static QuestionnaireItemMoved CreateQuestionnaireItemMovedEvent(Guid itemId, Guid? targetGroupId)
-        {
-            return (new QuestionnaireItemMoved
-            {
-                PublicKey = itemId,
-                GroupKey = targetGroupId,
-            });
-        }
-
-        protected static GroupBecameARoster CreateGroupBecameARosterEvent(Guid groupId)
-        {
-            return (new GroupBecameARoster(Guid.NewGuid(), groupId));
-        }
-
-        protected static GroupStoppedBeingARoster CreateGroupStoppedBeingARosterEvent(Guid groupId)
-        {
-            return (new GroupStoppedBeingARoster(Guid.NewGuid(), groupId));
-        }
-
-        protected static RosterChanged CreateRosterChangedEvent(Guid groupId, Guid rosterSizeQuestionId, 
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId)
-        {
-            return
-                (new RosterChanged(Guid.NewGuid(), groupId)
-                {
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = rosterSizeSource,
-                    FixedRosterTitles = rosterFixedTitles,
-                    RosterTitleQuestionId = rosterTitleQuestionId
-                });
-        }
-
-        protected static TextListQuestionCloned CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
-        {
-            return (new TextListQuestionCloned
-            {
-                PublicKey = questionId,
-                SourceQuestionId = sourceQuestionId
-            });
-        }
-
-        protected static TextListQuestionChanged CreateTextListQuestionChangedEvent(Guid questionId)
-        {
-            return (new TextListQuestionChanged
-            {
-                PublicKey = questionId
-            });
-        }
-        protected static NumericQuestionChanged CreateNumericQuestionChangedEvent(
-            Guid questionId)
-        {
-            return (Create.Event.NumericQuestionChanged
-            (
-                publicKey : questionId
-            ));
-        }
-
-        protected static NumericQuestionCloned CreateNumericQuestionClonedEvent(
-            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null)
-        {
-            return (Create.Event.NumericQuestionCloned
-            (
-                publicKey : questionId,
-                sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
-                groupPublicKey : parentGroupId ?? Guid.NewGuid()
-            ));
-        }
-
-        protected static QuestionCloned CreateQuestionClonedEvent(
-            Guid questionId, QuestionType questionType = QuestionType.Numeric, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxValue = null)
-        {
-            return (Create.Event.QuestionCloned(
-                publicKey : questionId,
-                questionType : questionType,
-                sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
-                groupPublicKey : parentGroupId ?? Guid.NewGuid()
-            ));
-        }
-
-        protected static TextListQuestionCloned TextListQuestionClonedEvent(
-            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxAnswerCount = null)
-        {
-            return (new TextListQuestionCloned
-            {
-                PublicKey = questionId,
-                SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
-                GroupId = parentGroupId ?? Guid.NewGuid(),
-                MaxAnswerCount = maxAnswerCount
-            });
-        }
-
-        protected static TextListQuestionChanged CreateTextListQuestionChangedEvent(
-            Guid questionId, int? maxAnswerCount = null)
-        {
-            return (new TextListQuestionChanged
-            {
-                PublicKey = questionId,
-                MaxAnswerCount = maxAnswerCount
-            });
         }
     }
 }

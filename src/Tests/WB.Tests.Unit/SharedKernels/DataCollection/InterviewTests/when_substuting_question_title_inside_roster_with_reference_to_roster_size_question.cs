@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 }
             });
 
-            Guid questionnaireId = Guid.NewGuid();
+            Guid questionnaireId = Guid.Parse("ACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));
 

@@ -4,7 +4,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -13,9 +13,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId, VariableName = "valid"});
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(rosterId, chapterId, variableName: "valid", responsibleId: responsibleId, isRoster:true);
         };
 
         Because of = () =>

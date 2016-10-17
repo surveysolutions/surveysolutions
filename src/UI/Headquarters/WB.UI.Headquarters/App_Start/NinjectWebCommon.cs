@@ -118,7 +118,8 @@ namespace WB.UI.Headquarters
             var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
-                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                SchemaName = "plainstore",
                 DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
@@ -136,6 +137,7 @@ namespace WB.UI.Headquarters
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
+                new EventSourcedInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
@@ -147,7 +149,8 @@ namespace WB.UI.Headquarters
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(
-                    WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString,
+                    WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
+                    "readside",
                     new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace), 
                     cacheSettings, 
                     mappingAssemblies)
@@ -252,7 +255,7 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
-
+                
             //Kernel.RegisterDenormalizer<>() - should be used instead
             var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
             foreach (object handler in enumerable)

@@ -291,7 +291,6 @@
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
     <Compile Include="DesignerSettingsProvider.cs" />
     <Compile Include="Code\Implementation\MailNotifier.cs" />
-    <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
     <Compile Include="Implementation\Services\DeskAuthenticationService.cs" />
@@ -363,7 +362,6 @@
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Code\CamelCaseAttribute.cs" />
-    <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -409,6 +407,11 @@
       <DependentUpon>AccountResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\FindReplaceResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\QuestionnaireController.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1746,6 +1749,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FindReplaceResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\NotificationResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -15,9 +15,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionId = Guid.Parse("11111111111111111111111111111111");
             rosterId = Guid.Parse("21111111111111111111111111111111");
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(Guid.NewGuid(), rosterId));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
             questionnaire.AddNumericQuestion(questionId, rosterId,responsibleId,title: questionTitle,variableName: "var");
             eventContext = new EventContext();
         };

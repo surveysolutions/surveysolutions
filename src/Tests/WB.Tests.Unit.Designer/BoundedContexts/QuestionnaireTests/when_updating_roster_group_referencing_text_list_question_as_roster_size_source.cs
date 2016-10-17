@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddTextListQuestion(rosterSizeQuestionId, chapterId, responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
+            questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
         };
 
         Because of = () =>

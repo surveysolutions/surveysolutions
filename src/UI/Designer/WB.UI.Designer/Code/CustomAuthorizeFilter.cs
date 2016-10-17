@@ -1,63 +1,27 @@
 using Microsoft.Practices.ServiceLocation;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.Security;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
+using WB.UI.Designer.Controllers;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer
 {
-    using System.Web.Mvc;
-    using System.Web.Routing;
-    using System.Web.Security;
-    using WB.UI.Designer.Controllers;
-    using WB.UI.Shared.Web.Membership;
 
-    /// <summary>
-    ///     The custom authorize.
-    /// </summary>
     public class CustomAuthorizeFilter : IAuthorizationFilter
     {
-        #region Fields
-
-        /// <summary>
-        /// The _user service.
-        /// </summary>
         private readonly IMembershipUserService userService;
 
-        private ITransactionManagerProvider TransactionManagerProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
-        }
+        private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
-        private IReadSideStatusService readSideStatusService
-        {
-            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
-        }
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomAuthorizeFilter"/> class.
-        /// </summary>
-        /// <param name="userService">
-        /// The user service.
-        /// </param>
         public CustomAuthorizeFilter(IMembershipUserService userService)
         {
             this.userService = userService;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The on authorization.
-        /// </summary>
-        /// <param name="filterContext">
-        /// The filter context.
-        /// </param>
         public void OnAuthorization(AuthorizationContext filterContext)
         {
             bool skipAuthorization = filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true)
@@ -68,22 +32,9 @@ namespace WB.UI.Designer
                 return;
             }
 
-            if (readSideStatusService.AreViewsBeingRebuiltNow())
-            {
-                filterContext.Result =
-                    new RedirectToRouteResult(
-                        new RouteValueDictionary(new
-                        {
-                            controller = "Maintenance",
-                            action = "WaitForReadSideRebuild",
-                            returnUrl = filterContext.RequestContext.HttpContext.Request.Url.ToString()
-                        }));
-                return;
-            }
-
             bool isInvalidUser = false;
 
-            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            this.TransactionManagerProvider.GetPlainTransactionManager().BeginTransaction();
             try
             {
                 MembershipUser user = this.userService.WebUser.MembershipUser;
@@ -133,10 +84,8 @@ namespace WB.UI.Designer
             }
             finally
             {
-                this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                this.TransactionManagerProvider.GetPlainTransactionManager().RollbackTransaction();
             }
         }
-
-        #endregion
     }
 }
