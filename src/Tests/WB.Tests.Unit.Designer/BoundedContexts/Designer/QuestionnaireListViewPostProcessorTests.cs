@@ -153,7 +153,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var accountStorage = new TestPlainStorage<User>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
             
-            accountStorage.Store(questionnaireOwner, questionnaireOwnerId);
+            accountStorage.Store(questionnaireOwner, questionnaireOwnerId.FormatGuid());
 
             var mockOfEmailNotifier = new Mock<IRecipientNotifier>();
             Setup.InstanceToMockedServiceLocator(mockOfEmailNotifier.Object);
@@ -210,7 +210,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var accountStorage = new TestPlainStorage<User>();
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
 
-            accountStorage.Store(questionnaireOwner, questionnaireOwnerId);
+            accountStorage.Store(questionnaireOwner, questionnaireOwnerId.FormatGuid());
 
             var mockOfEmailNotifier = new Mock<IRecipientNotifier>();
             Setup.InstanceToMockedServiceLocator(mockOfEmailNotifier.Object);

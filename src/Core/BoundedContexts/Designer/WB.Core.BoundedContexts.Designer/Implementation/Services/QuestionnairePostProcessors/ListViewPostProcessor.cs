@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.IsDeleted = false;
 
             if (creatorId.HasValue)
-                questionnaireListViewItem.CreatorName = this.accountStorage.GetById(creatorId.Value)?.UserName;
+                questionnaireListViewItem.CreatorName = this.accountStorage.GetById(creatorId.Value.FormatGuid())?.UserName;
 
             if (!shouldPreserveSharedPersons)
                 questionnaireListViewItem.SharedPersons.Clear();
@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 LastEntryDate = DateTime.UtcNow,
                 CreatedBy = command.ResponsibleId,
                 IsPublic = command.IsPublic,
-                CreatorName = this.accountStorage.GetById(command.ResponsibleId)?.UserName
+                CreatorName = this.accountStorage.GetById(command.ResponsibleId.FormatGuid())?.UserName
             };
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireListViewItem.QuestionnaireId);
         }
@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private void SendEmailNotifications(string questionnaireTitle, Guid? questionnaireOwnerId, Guid responsibleId,
             ShareChangeType shareChangeType, string mailTo, string questionnaireId, ShareType shareType)
         {
-            string mailFrom = this.accountStorage.GetById(responsibleId)?.Email;
+            string mailFrom = this.accountStorage.GetById(responsibleId.FormatGuid())?.Email;
             string mailToUserName = this.accountRepository.GetUserNameByEmail(mailTo);
 
             this.emailNotifier.NotifyTargetPersonAboutShareChange(shareChangeType, mailTo, mailToUserName, questionnaireId,
@@ -233,7 +233,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             if (!questionnaireOwnerId.HasValue || questionnaireOwnerId.Value == responsibleId) return;
 
-            var questionnaireOwner = this.accountStorage.GetById(questionnaireOwnerId.Value);
+            var questionnaireOwner = this.accountStorage.GetById(questionnaireOwnerId.Value.FormatGuid());
             if (questionnaireOwner != null)
             {
                 this.emailNotifier.NotifyOwnerAboutShareChange(shareChangeType, questionnaireOwner.Email, questionnaireOwner.UserName,
