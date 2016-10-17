@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     public class InterviewTreeNodeDiff
@@ -102,6 +104,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (SourceNode.IsTextList) return !SourceNode.AsTextList.EqualByAnswer(ChangedNode.AsTextList);
 
                 return false;
+            }
+        }
+
+        public bool IsOptionsChanged
+        {
+            get
+            {
+                if (ChangedNode == null) return false;
+                if (!ChangedNode.IsLinked) return false;
+
+                if (SourceNode?.AsLinked.Options.Count != ChangedNode.AsLinked.Options.Count)
+                    return true;
+
+                return SourceNode.AsLinked.Options.SequenceEqual(ChangedNode.AsLinked.Options);
             }
         }
     }
