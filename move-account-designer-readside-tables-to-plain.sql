@@ -91,7 +91,8 @@ RAISE NOTICE 'tables created';
 
 RAISE NOTICE 'connecting to read side database';
 --PERFORM dblink_connect('views','host=127.0.0.1 port=5432 dbname=Design-Views user=postgres password=Qwerty1234');
-PERFORM dblink_connect('views','host=127.0.0.1 port=5432 dbname=D.Local.ReadSide user=postgres password=Qwerty1234');
+PERFORM dblink_connect('views','host=127.0.0.1 port=5432 dbname=design-dev-Views user=postgres password=Qwerty1234');
+--PERFORM dblink_connect('views','host=127.0.0.1 port=5432 dbname=D.Local.ReadSide user=postgres password=Qwerty1234');
 RAISE NOTICE 'connected';
 
 --------------------------------------------------------------
