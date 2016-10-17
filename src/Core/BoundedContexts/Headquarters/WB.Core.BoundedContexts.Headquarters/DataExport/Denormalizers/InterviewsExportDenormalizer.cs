@@ -66,14 +66,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                         new QuestionnaireIdentity(interviewReference.QuestionnaireId,
                             interviewReference.QuestionnaireVersion));
 
-                InterviewDataExportView interviewDataExportView =
-                    this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, this.interviewDatas.GetById(interviewId));
-
-                var records = interviewDataExportView.GetAsRecords().ToList();
-
-                foreach (var record in records)
+                if (questionnaireExportStructure != null)
                 {
-                    this.exportRecords.Store(record, record.Id);
+                    InterviewDataExportView interviewDataExportView =
+                        this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure,
+                            this.interviewDatas.GetById(interviewId));
+
+                    var records = interviewDataExportView.GetAsRecords().ToList();
+
+                    foreach (var record in records)
+                    {
+                        this.exportRecords.Store(record, record.Id);
+                    }
                 }
             }
         }
