@@ -5,6 +5,7 @@ using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
 {
+    [Ignore("KP-7922 KP-7923")]
     internal class when_updating_account : AccountTestsContext
     {
         Establish context = () =>
@@ -15,13 +16,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
             comment = "some comment";
             passwordQuestion = "secret question";
 
-            account = CreateAccount(accountId);
+            user = CreateAccount(accountId);
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            account.Update(userName: userName, comment: comment, email: userEmail, passwordQuestion: passwordQuestion, isLockedOut: false,
+            user.Update(userName: userName, comment: comment, email: userEmail, passwordQuestion: passwordQuestion, isLockedOut: false,
                 isConfirmed: false);
 
         Cleanup stuff = () =>
@@ -46,7 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
             eventContext.GetSingleEvent<AccountUpdated>().PasswordQuestion.ShouldEqual(passwordQuestion);
 
         private static EventContext eventContext;
-        private static AccountAR account;
+        private static User user;
         private static string userName;
         private static string userEmail;
         private static string comment;

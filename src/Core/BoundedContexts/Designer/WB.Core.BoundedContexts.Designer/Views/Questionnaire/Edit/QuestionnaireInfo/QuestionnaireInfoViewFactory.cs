@@ -17,20 +17,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     {
         private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
+        private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly IAttachmentService attachmentService;
         private readonly IMembershipUserService membershipUserService;
 
         public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
+            IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IAttachmentService attachmentService,
             IMembershipUserService membershipUserService)
         {
             this.sharedPersonsStorage = sharedPersonsStorage;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
-            this.accountsDocumentReader = accountsDocumentReader;
+            this.accountsStorage = accountsStorage;
             this.attachmentService = attachmentService;
             this.membershipUserService = membershipUserService;
         }
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (questionnaireDocument.CreatedBy.HasValue &&
                 sharedPersons.All(x => x.Id != questionnaireDocument.CreatedBy))
             {
-                var owner = accountsDocumentReader.GetById(questionnaireDocument.CreatedBy.Value);
+                var owner = this.accountsStorage.GetById(questionnaireDocument.CreatedBy.Value.FormatGuid());
                 if (owner != null)
                 {
                     sharedPersons.Insert(0, new SharedPerson

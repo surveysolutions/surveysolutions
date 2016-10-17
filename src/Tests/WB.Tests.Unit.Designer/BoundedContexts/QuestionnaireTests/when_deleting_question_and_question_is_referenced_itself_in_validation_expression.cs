@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(Create.Event.AddGroup(groupId: chapterId));
+            questionnaire.AddGroup( chapterId, responsibleId: responsibleId);
             questionnaire.AddTextQuestion(questionId: questionToBeDeleted, parentId: chapterId,responsibleId:responsibleId, variableName:"q", validationExpression:"q!= null");
         };
 

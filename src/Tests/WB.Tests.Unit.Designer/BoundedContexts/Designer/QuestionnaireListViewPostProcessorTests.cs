@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -35,9 +36,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Guid? clonnerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             string userName = "testname";
 
-            var accountStorage = new TestInMemoryWriter<AccountDocument>();
-            accountStorage.Store(new AccountDocument() {UserName = userName}, clonnerId.FormatGuid());
-            Setup.InstanceToMockedServiceLocator<IReadSideRepositoryWriter<AccountDocument>>(accountStorage);
+            var accountStorage = new TestPlainStorage<User>();
+            accountStorage.Store(new User {UserName = userName}, clonnerId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
 
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId);
             questionnaire.CreatedBy = creatorId;
@@ -136,7 +137,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
             Guid questionnaireOwnerId = Guid.Parse("44444444444444444444444444444444");
             Guid sharedWithUserId = Guid.Parse("33333333333333333333333333333333");
-            var questionnaireOwner = new AccountDocument { UserName = "questionnaire owner name", Email = "questionnaire owner email" };
+            var questionnaireOwner = new User { UserName = "questionnaire owner name", Email = "questionnaire owner email" };
             var questionnaireIdFormatted = questionnaireId.FormatGuid();
             var command = new AddSharedPersonToQuestionnaire(questionnaireId, sharedWithUserId, "test@test.com", ShareType.View, responsibleId);
 
@@ -149,10 +150,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var sharedPersonsStorage = new InMemoryKeyValueStorage<QuestionnaireSharedPersons>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(sharedPersonsStorage);
 
-            var accountStorage = new TestInMemoryWriter<AccountDocument>();
-            Setup.InstanceToMockedServiceLocator<IReadSideRepositoryWriter<AccountDocument>>(accountStorage);
+            var accountStorage = new TestPlainStorage<User>();
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
             
-            accountStorage.Store(questionnaireOwner, questionnaireOwnerId);
+            accountStorage.Store(questionnaireOwner, questionnaireOwnerId.FormatGuid());
 
             var mockOfEmailNotifier = new Mock<IRecipientNotifier>();
             Setup.InstanceToMockedServiceLocator(mockOfEmailNotifier.Object);
@@ -192,7 +193,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
             Guid questionnaireOwnerId = Guid.Parse("44444444444444444444444444444444");
             Guid sharedWithUserId = Guid.Parse("33333333333333333333333333333333");
-            var questionnaireOwner = new AccountDocument { UserName = "questionnaire owner name", Email = "questionnaire owner email" };
+            var questionnaireOwner = new User { UserName = "questionnaire owner name", Email = "questionnaire owner email" };
             var questionnaireIdFormatted = questionnaireId.FormatGuid();
             var command = new RemoveSharedPersonFromQuestionnaire(questionnaireId, sharedWithUserId, "test@test.com", responsibleId);
 
@@ -206,10 +207,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             sharedPersonsStorage.Store(new QuestionnaireSharedPersons(questionnaireId) {SharedPersons = { new SharedPerson {Id = sharedWithUserId}}}, questionnaireIdFormatted);
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(sharedPersonsStorage);
 
-            var accountStorage = new TestInMemoryWriter<AccountDocument>();
-            Setup.InstanceToMockedServiceLocator<IReadSideRepositoryWriter<AccountDocument>>(accountStorage);
+            var accountStorage = new TestPlainStorage<User>();
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(accountStorage);
 
-            accountStorage.Store(questionnaireOwner, questionnaireOwnerId);
+            accountStorage.Store(questionnaireOwner, questionnaireOwnerId.FormatGuid());
 
             var mockOfEmailNotifier = new Mock<IRecipientNotifier>();
             Setup.InstanceToMockedServiceLocator(mockOfEmailNotifier.Object);

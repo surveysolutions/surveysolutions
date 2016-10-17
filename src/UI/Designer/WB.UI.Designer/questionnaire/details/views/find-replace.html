@@ -12,7 +12,7 @@
                     Find what:
                 </label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="searchFor" ng-model="searchForm.searchFor" autocomplete="off">
+                    <input type="text" maxlength="500" class="form-control" id="searchFor" ng-model="searchForm.searchFor" on-enter="findAll()" autocomplete="off">
                 </div>
             </div>
             <div class="form-group">
@@ -20,7 +20,7 @@
                     Replace with:
                 </label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="relaceWith" ng-model="searchForm.replaceWith" autocomplete="off">
+                    <input type="text" maxlength="500" class="form-control" id="relaceWith" ng-model="searchForm.replaceWith" autocomplete="off">
                 </div>
             </div>
             <div class="form-group">
@@ -50,11 +50,11 @@
         
         <div ng-switch-when="confirm">
             <p>Please confirm action.</p>
-            <p>Replace all "<strong ng-bind="searchForm.searchFor"></strong>" with <strong ng-bind="searchForm.replaceWith"></strong></p>
+            <p>Replace all "<strong ng-bind="searchForm.searchFor"></strong>" with "<strong ng-bind="searchForm.replaceWith"></strong>"</p>
             <p>in all {{foundReferences.length}} found entities?</p>
         </div>
         <div ng-switch-when="done">
-            All {{foundReferences.length}} entities has been successfully updated.
+            All "<strong ng-bind="searchForm.searchFor"></strong>" were replaced with "<strong ng-bind="searchForm.replaceWith"></strong>".
         </div>
     </div>
     
@@ -79,7 +79,7 @@
             <button type="button" class="btn btn-lg btn-link" ng-click="backToSearch()">Back to search</button>
         </div>
         <div ng-switch-when="done">
-            <button type="button" class="btn btn-lg btn-primary" ng-click="$close()">Done</button>
+            <button type="button" class="btn btn-lg btn-primary" ng-click="onDone()">Done</button>
         </div>
     </div>
 </div>

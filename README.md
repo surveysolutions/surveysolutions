@@ -1,4 +1,9 @@
 5.14
+- Designer update: 
+-- execute 'move-account-designer-readside-tables-to-plain.sql' on plain storage db with actual (updated) connection string at 'PERFORM dblink_connect'
+-- execute 'migrator_3_to_1.ps1' with database name: "migrator_3_to_1.ps1 Design" or "migrator_3_to_1.ps1 SuperHQ"
+   this script avtomaticaly will find databases "*-Plain", "*-Views" and "*-Events" and move to one db with 3 scheams
+   Example: if we execute "migrator_3_to_1.ps1 Design" script will try find "Design-Plain", "Design-Views" and "Design-Events" and then create one db "Design" with 3 schemas
 - Compatible with EventStore 3.9
 - .NET Framework 4.6.2 is required to run HQ/D web sites https://www.microsoft.com/en-us/download/details.aspx?id=53344
 5.13 
