@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -835,7 +836,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.UpdateTreeWithStructuralChanges(changedInterviewTree, expressionProcessorState.GetStructuralChanges());
 
-            this.UpdateRosterTitles(changedInterviewTree);
+            this.UpdateRosterTitles(changedInterviewTree, questionnaire);
 
             this.UpdateLinkedQuestions(changedInterviewTree, expressionProcessorState);
 
@@ -877,9 +878,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             enablementChanges.VariablesToBeEnabled.ForEach(x => tree.GetVariable(x).Enable());
         }
 
-        private void UpdateRosterTitles(InterviewTree tree)
+        private void UpdateRosterTitles(InterviewTree tree, IQuestionnaire questionnaire)
         {
-            tree.FindRosters().Where(x => x.IsList || x.IsNumeric).ForEach(x => x.UpadateTitle());
+            foreach (var roster in tree.FindRosters().Where(x => x.IsList))
+            {
+                var sizeQuestion = roster.AsList.RosterSizeQuestion;
+                roster.SetRosterTitle(sizeQuestion.AsTextList.GetTitleByItemCode(roster.Identity.RosterVector.Last()));
+            }
+
+            foreach (var roster in tree.FindRosters().Where(x => x.IsNumeric))
+            {
+                var titleQuestion = tree.GetQuestion(roster.AsNumeric.RosterTitleQuestionIdentity);
+                if (titleQuestion==null) continue;
+                roster.SetRosterTitle(titleQuestion.IsAnswered() 
+                    ? titleQuestion.GetAnswerAsString(answerOptionValue => questionnaire.GetAnswerOptionTitle(titleQuestion.Identity.Id, answerOptionValue)) 
+                    : string.Empty);
+            }
         }
 
         private void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState)
@@ -1036,27 +1050,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                     case QuestionType.MultyOption:
                                         if (questionnaire.IsQuestionYesNo(sourceQuestionId))
                                         {
-                                            var newYesNoAnswer = rosterSizeQuestion.AsYesNo.GetAnswer();
+                                            var newYesNoAnswer = rosterSizeQuestion.AsYesNo.IsAnswered ? rosterSizeQuestion.AsYesNo.GetAnswer() : new AnsweredYesNoOption[0];
                                             expectedRosterIdentitiesWithTitles = CreateRosterIdentitiesForYesNoQuestion(newYesNoAnswer, rosterId, parentRosterVector, rosterSizeQuestion, questionnaire);
                                         }
                                         else
                                         {
-                                            var newMultiAnswer = rosterSizeQuestion.AsMultiOption.GetAnswer();
+                                            var newMultiAnswer = rosterSizeQuestion.AsMultiOption.IsAnswered ?  rosterSizeQuestion.AsMultiOption.GetAnswer() : new decimal[0];
                                             expectedRosterIdentitiesWithTitles = CreateRosterIdentitiesForMultiQuestion(newMultiAnswer, rosterId, parentRosterVector, rosterSizeQuestion, questionnaire);
                                         }
                                         break;
                                     case QuestionType.Numeric:
                                         var rosterTitleQuestionId = questionnaire.GetRosterTitleQuestionId(rosterId);
-                                        var integerAnswer = rosterSizeQuestion.AsInteger.GetAnswer();
-                                        expectedRosterIdentitiesWithTitles = CreateRosterIdentitiesForNumericQuestion(
-                                            integerAnswer, 
-                                            rosterId, 
-                                            parentRosterVector, 
-                                            rosterSizeQuestion,
-                                            rosterTitleQuestionId);
+                                        var integerAnswer = (rosterSizeQuestion!=null && rosterSizeQuestion.AsInteger.IsAnswered) ? rosterSizeQuestion.AsInteger.GetAnswer() : 0;
+                                        expectedRosterIdentitiesWithTitles = CreateRosterIdentitiesForNumericQuestion
+                                            (
+                                                integerAnswer,
+                                                rosterId,
+                                                parentRosterVector,
+                                                rosterSizeQuestion,
+                                                rosterTitleQuestionId);
+                                        
                                         break;
                                     case QuestionType.TextList:
-                                        var listAnswer = rosterSizeQuestion.AsTextList.GetAnswer();
+                                        var listAnswer = rosterSizeQuestion.AsTextList.IsAnswered ? rosterSizeQuestion.AsTextList.GetAnswer(): new Tuple<decimal, string>[0];
                                         expectedRosterIdentitiesWithTitles = CreateRosterIdentitiesForListQuestion(listAnswer, rosterId, currentItem.Identity.RosterVector, rosterSizeQuestion);
                                         break;
                                 }
@@ -1103,7 +1119,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             var staticTextIdentity = new Identity(childEntityId, parentRosterVector);
                             if (!group.HasChild(staticTextIdentity))
                             {
-                                group.AddChildren(new InterviewTreeStaticText(staticTextIdentity));
+                                group.AddChildren(new InterviewTreeStaticText(staticTextIdentity, false));
                             }
                         }
                         else if (questionnaire.IsQuestion(childEntityId))
@@ -1470,24 +1486,47 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+
             this.CheckNumericIntegerQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion,
                 this.interviewState);
 
-            Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => question == answeredQuestion
-                    ? answer
-                    : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+
+            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
+            changedInterviewTree.GetQuestion(answeredQuestion).AsInteger.SetAnswer(answer); ;
 
             var expressionProcessorState = this.GetClonedExpressionState();
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerNumericIntegerQuestion(expressionProcessorState, this.interviewState, userId,
-                questionId, rosterVector, answerTime, answer, getAnswer, questionnaire);
+            this.UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, changedQuestionIdentities.ToArray());
+
+            this.UpdateExpressionState(sourceInterviewTree, changedInterviewTree, expressionProcessorState);
+
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
+
+            this.UpdateTreeWithEnablementChanges(changedInterviewTree, enablementChanges);
+
+            this.UpdateTreeWithStructuralChanges(changedInterviewTree, expressionProcessorState.GetStructuralChanges());
+
+            this.UpdateRosterTitles(changedInterviewTree, questionnaire);
+
+            this.UpdateLinkedQuestions(changedInterviewTree, expressionProcessorState);
+
+            VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
-            this.ApplyInterviewChanges(interviewChanges);
+            this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
+
             this.ApplyValidityChangesEvents(validationChanges);
+            
+            if (variableValueChanges?.ChangedVariableValues?.Count > 0)
+            {
+                this.ApplyEvent(new VariablesChanged(variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
+            }
         }
         
         #endregion
@@ -4328,12 +4367,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 isYesNo: isYesNoQuestion,
                 isDecimal: isDecimalQuestion,
                 linkedSourceId: linkedSourceEntityId,
-                commonParentRosterIdForLinkedQuestion: commonParentIdentity);
+                commonParentRosterIdForLinkedQuestion: commonParentIdentity,
+                categoricalOptions: categoricalOptions);
         }
 
         private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
-            return new InterviewTreeStaticText(staticTextIdentity);
+            bool isDisabled = interviewState.IsStaticTextDisabled(staticTextIdentity);
+            return new InterviewTreeStaticText(staticTextIdentity, isDisabled);
         }
 
         private static IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
