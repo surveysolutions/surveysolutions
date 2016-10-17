@@ -17,13 +17,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
         {
             inputWithFilterByAccountName = CreateAccountViewInputModel(accountName: "ADMIN");
 
-            var accountsRepositoryMock = new Mock<IPlainStorageAccessor<User>>();
+            var accountsRepository = Stub<IPlainStorageAccessor<User>>.Returning(CreateAccount(userName: "admin"));
 
-            accountsRepositoryMock
-                .Setup(x => x.Query<IAccountView>(it.IsAny<Func<IQueryable<User>, IAccountView>>()))
-                .Returns(CreateAccount(userName: "admin"));
-
-            accountFactory = CreateAccountViewFactory(accountsRepository: accountsRepositoryMock.Object);
+            accountFactory = CreateAccountViewFactory(accountsRepository: accountsRepository);
         };
 
         Because of = () =>
