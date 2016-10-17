@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Mappings
 {
-    public class AccountDocumentMap : ClassMapping<AccountDocument>
+    [PlainStorage]
+    public class UserMap : ClassMapping<User>
     {
-        public AccountDocumentMap()
+        public UserMap()
         {
             Id(x => x.UserId, idMap =>
             {
@@ -61,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
 
             Set(x => x.SimpleRoles, m =>
             {
-                m.Key(km => km.Column("AccountId"));
+                m.Key(km => km.Column("UserId"));
                 m.Table("SimpleRoles");
                 m.Lazy(CollectionLazy.NoLazy);
             },

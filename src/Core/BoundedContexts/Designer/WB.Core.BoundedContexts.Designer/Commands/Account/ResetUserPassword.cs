@@ -3,10 +3,10 @@
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    public class ResetPasswordAccountCommand : AccountCommandBase
+    public class ResetUserPassword : UserCommand
     {
-        public ResetPasswordAccountCommand(Guid accountId, string password, string passwordSalt)
-            : base(accountId)
+        public ResetUserPassword(Guid userId, string password, string passwordSalt)
+            : base(userId)
         {
             this.Password = password;
             this.PasswordSalt = passwordSalt;

@@ -3,11 +3,11 @@
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    public class ChangePasswordQuestionAndAnswerAccountCommand : AccountCommandBase
+    public class ChangeSecurityQuestion : UserCommand
     {
-        public ChangePasswordQuestionAndAnswerAccountCommand(Guid accountId, string passwordQuestion,
+        public ChangeSecurityQuestion(Guid userId, string passwordQuestion,
             string passwordAnswer)
-            : base(accountId)
+            : base(userId)
         {
             this.PasswordQuestion = passwordQuestion;
             this.PasswordAnswer = passwordAnswer;
