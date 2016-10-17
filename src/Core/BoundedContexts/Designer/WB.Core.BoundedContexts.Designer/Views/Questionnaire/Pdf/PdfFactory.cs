@@ -26,21 +26,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainStorageAccessor<Aggregates.User> accountsDocumentReader;
+        private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly PdfSettings pdfSettings;
 
         public PdfFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
-            IPlainStorageAccessor<Aggregates.User> accountsDocumentReader,
+            IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage, 
             PdfSettings pdfSettings)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
-            this.accountsDocumentReader = accountsDocumentReader;
+            this.accountsStorage = accountsStorage;
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
             this.sharedPersonsStorage = sharedPersonsStorage;
             this.pdfSettings = pdfSettings;
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 {
                     UserId = questionnaire.CreatedBy ?? Guid.Empty,
                     Name = questionnaire.CreatedBy.HasValue
-                        ? accountsDocumentReader.GetById(questionnaire.CreatedBy.Value)?.UserName
+                        ? this.accountsStorage.GetById(questionnaire.CreatedBy.Value.FormatGuid())?.UserName
                         : string.Empty,
                     Date = questionnaire.CreationDate
                 },
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 SharedPersons = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
                 {
                     UserId = person.Id,
-                    Name = accountsDocumentReader.GetById(person.Id)?.UserName,
+                    Name = this.accountsStorage.GetById(person.Id.FormatGuid())?.UserName,
                     Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.Id)?.Date
                 }).Where(sharedPerson => sharedPerson.Name != requestedByUserName),
                 AllItems = allItems,

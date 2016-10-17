@@ -634,7 +634,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             if (userId.HasValue)
             {
-                var creator = this.accountStorage.GetById(userId);
+                var creator = this.accountStorage.GetById(userId.Value.FormatGuid());
                 if (creator != null)
                     return creator.UserName;
             }
