@@ -24,15 +24,34 @@ if (!$isExistsPostgres) {
 
 function RunMigrator()
 {
-	GetListDatabasesWithName
+	$dblist = GetListDatabasesWithName
+	$isNeedStop = DoesExistTargetDb $dblist
+	if ($isNeedStop)
+	{
+		Write-Host "$databaseName is exist. Migration will stop"
+		return
+	}
+	
 	CreateNewDatabase
-	MigrateDb ($databaseName + "-Plain") "plainstore"
-	MigrateDb ($databaseName + "-Views") "readside"
-	MigrateDb ($databaseName + "-Evn")   "events"
+	MigrateDb ($databaseName + "-Plain") "plainstore" $dblist
+	MigrateDb ($databaseName + "-Views") "readside"   $dblist
+	MigrateDb ($databaseName + "-Evn")   "events"     $dblist
 }
 
-function MigrateDb([string] $sourceDb, [string] $schemaName)
+function DoesExistTargetDb([string] $dblist)
 {
+	return $dblist -match " $databaseName "
+}
+
+function MigrateDb([string] $sourceDb, [string] $schemaName, [string] $dblist)
+{
+	$doesExistDb = $dblist -match "$sourceDb"
+	if (!$doesExistDb)
+	{
+		Write-Host "$sourceDb don't found. Skiping"
+		return
+	}
+
 	$psqlPath = GetPathToPsql
 	$pgrestorePath = GetPathToPgRestore
 	
@@ -98,7 +117,9 @@ function GetListDatabasesWithName()
 	
 	Write-Host "Get list all db names."
 	$command = """$psqlPath"" -h $postgresHost -p $postgresPort -U $postgresUser -c ""SELECT datname FROM pg_database WHERE datistemplate = false AND datname LIKE '$databaseName%';"""
-	RunCommand $command
+	$result = RunCommand $command
+	Write-Host "$result"
+	return $result
 }
 
 function RunCommand([string] $command)
@@ -106,8 +127,9 @@ function RunCommand([string] $command)
 	Write-Host $command
 
 	Set-Item -path env:PGPASSWORD -value ($password)
-	iex "& $command"
+	$result = iex "& $command"
 	Set-Item -path env:PGPASSWORD -value ("")
+	return $result 
 }
 
 function GetPathToPgDump() {
