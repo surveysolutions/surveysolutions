@@ -105,8 +105,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsQuestionInalid(diff as InterviewTreeQuestionDiff) ||
                     IsStaticTextValid(diff as InterviewTreeStaticTextDiff) ||
                     IsStaticTextInalid(diff as InterviewTreeStaticTextDiff) ||
-                    IsVariableChanged(diff as InterviewTreeVariableDiff))
+                    IsVariableChanged(diff as InterviewTreeVariableDiff) ||
+                    IsOptionsSetChanged(diff as InterviewTreeQuestionDiff))
                 .ToReadOnlyCollection();
+        }
+
+        private bool IsOptionsSetChanged(InterviewTreeQuestionDiff diffByQuestion)
+        {
+            if (diffByQuestion == null || diffByQuestion.IsNodeRemoved) return false;
+
+            return diffByQuestion.IsOptionsChanged;
         }
 
         private static bool IsVariableChanged(InterviewTreeVariableDiff diffByVariable)
