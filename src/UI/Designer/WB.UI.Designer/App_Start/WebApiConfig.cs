@@ -52,9 +52,7 @@ namespace WB.UI.Designer
             if (AppSettings.Instance.IsApiSslVerificationEnabled)
                 config.MessageHandlers.Add(new HttpsVerifier());
 
-            config.Filters.Add(new ApiMaintenanceFilter());
             config.Filters.Add(new CustomWebApiAuthorizeFilter());
-
 
             config.MessageHandlers.Add(new DecompressionHandler());
 

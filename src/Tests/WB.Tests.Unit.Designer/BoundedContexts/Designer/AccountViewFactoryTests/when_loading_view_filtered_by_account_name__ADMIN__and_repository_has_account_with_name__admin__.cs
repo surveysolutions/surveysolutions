@@ -2,7 +2,9 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -15,11 +17,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
         {
             inputWithFilterByAccountName = CreateAccountViewInputModel(accountName: "ADMIN");
 
-            var accountsRepositoryMock = new Mock<IQueryableReadSideRepositoryReader<AccountDocument>>();
+            var accountsRepositoryMock = new Mock<IPlainStorageAccessor<User>>();
 
             accountsRepositoryMock
-                .Setup(x => x.Query<AccountDocument>(it.IsAny<Func<IQueryable<AccountDocument>, AccountDocument>>()))
-                .Returns(CreateAccountDocument(userName: "admin"));
+                .Setup(x => x.Query<IAccountView>(it.IsAny<Func<IQueryable<User>, IAccountView>>()))
+                .Returns(CreateAccount(userName: "admin"));
 
             accountFactory = CreateAccountViewFactory(accountsRepository: accountsRepositoryMock.Object);
         };
@@ -30,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
         It should_find_one_account = () =>
             filteredAccount.ShouldNotBeNull(); 
 
-        private static AccountView filteredAccount;
+        private static IAccountView filteredAccount;
         private static AccountViewInputModel inputWithFilterByAccountName;
         private static AccountViewFactory accountFactory;
     }

@@ -1,4 +1,6 @@
 5.14
+- Designer update: 
+-- execute 'move-account-designer-readside-tables-to-plain.sql' with actual (updated) connection string at 'PERFORM dblink_connect'
 - Compatible with EventStore 3.9
 - .NET Framework 4.6.2 is required to run HQ/D web sites https://www.microsoft.com/en-us/download/details.aspx?id=53344
 5.13 

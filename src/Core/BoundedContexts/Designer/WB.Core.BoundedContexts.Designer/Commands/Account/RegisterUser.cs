@@ -1,20 +1,17 @@
 ﻿using System;
-using Ncqrs.Commanding;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
-    [Serializable]
-    public class RegisterAccountCommand : CommandBase
+    public class RegisterUser : UserCommand
     {
-        public RegisterAccountCommand(string applicationName, string userName, string email,
-            Guid accountId, string password,
+        public RegisterUser(string applicationName, string userName, string email,
+            Guid userId, string password,
             string passwordSalt, bool isConfirmed, string confirmationToken)
-            : base(accountId)
+            : base(userId)
         {
             this.ApplicationName = applicationName;
             this.UserName = userName;
             this.Email = email;
-            this.AccountId = accountId;
             this.Password = password;
             this.PasswordSalt = passwordSalt;
             this.IsConfirmed = isConfirmed;
@@ -24,7 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Account
         public string ApplicationName { private set; get; }
         public string UserName { private set; get; }
         public string Email { private set; get; }
-        public Guid AccountId { private set; get; }
         public string Password { private set; get; }
         public string PasswordSalt { private set; get; }
         public bool IsConfirmed { private set; get; }

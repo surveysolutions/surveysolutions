@@ -348,9 +348,6 @@
     <Compile Include="Applications\CommandInflaterTests\when_PasteIntoCommand_is_inflating_with_shared_non_public_questionnaire.cs" />
     <Compile Include="Applications\CommandInflaterTests\when_PasteIntoCommand_is_inflating.cs" />
     <Compile Include="Applications\CommandInflaterTests\when_PasteAfterCommand_is_inflating.cs" />
-    <Compile Include="Applications\FiltersTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
-    <Compile Include="Applications\FiltersTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
-    <Compile Include="Applications\FiltersTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="Applications\ImportControllerTests\ImportControllerTestContext.cs" />
     <Compile Include="Applications\ImportControllerTests\when_getting_attachment_content.cs" />
     <Compile Include="Applications\ImportControllerTests\when_getting_Questionaire_and_questionnaire_has_warnings_only.cs" />

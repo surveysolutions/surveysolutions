@@ -2,29 +2,26 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using NUnit.Framework;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
 {
+    [TestFixture]
     internal class when_rebuild_selected_views : ReadSideServiceTestContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             readSideRepositoryCleanerMock = new Mock<IReadSideRepositoryCleaner>();
             readSideRepositoryWriterMock = new Mock<ICacheableRepositoryWriter>();
@@ -55,38 +52,45 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
                 eventDispatcher: eventDispatcherMock.Object,
                 streamableEventStore: streamableEventStoreMock.Object,
                 transactionManagerProviderManager: transactionManagerProviderManagerMock.Object);
-        };
 
-        Because of = () =>
-        {
+            // Act
+
             readSideService.RebuildViewsAsync(new[] { HandlerToRebuild }, 0);
             WaitRebuildReadsideFinish(readSideService);
-        };
+        }
 
-        It should_rebuild_all_view = () =>
+        [Test]
+        public void should_rebuild_all_view () =>
             readSideService.AreViewsBeingRebuiltNow().ShouldEqual(false);
 
-        It should_call_clean_method_for_registered_writers_once = () =>
+        [Test]
+        public void should_call_clean_method_for_registered_writers_once() =>
             readSideRepositoryCleanerMock.Verify(x => x.Clear(), Times.Once);
 
-        It should_enable_cache_for_registered_writers_once = () =>
+        [Test]
+        public void should_enable_cache_for_registered_writers_once() =>
             readSideRepositoryWriterMock.Verify(x => x.EnableCache(), Times.Once);
 
-        It should_disable_cache_for_registered_writers_once = () =>
+        [Test]
+        public void should_disable_cache_for_registered_writers_once () =>
            readSideRepositoryWriterMock.Verify(x => x.DisableCache(), Times.Once);
 
-        It should_pin_readside_transaction_manager = () =>
+        [Test]
+        public void should_pin_readside_transaction_manager () =>
             transactionManagerProviderManagerMock.Verify(
                 _ => _.PinRebuildReadSideTransactionManager(), Times.Once);
 
-        It should_unpin_transaction_manager = () =>
+        [Test]
+        public void should_unpin_transaction_manager() =>
             transactionManagerProviderManagerMock.Verify(
                 _ => _.UnpinTransactionManager(), Times.Once);
 
-        It should_publish_one_event_on_event_dispatcher = () =>
+        [Test]
+        public void should_publish_one_event_on_event_dispatcher() =>
             eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<Dictionary<IEventHandler, Stopwatch>>(handlers => handlers.Count() == 1 && handlers.First().Key == eventHandlerMock.Object)), Times.Once);
 
-        It should_return_readble_status = () =>
+        [Test]
+        public void should_return_readble_status () =>
             readSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
 
         private static ReadSideService readSideService;

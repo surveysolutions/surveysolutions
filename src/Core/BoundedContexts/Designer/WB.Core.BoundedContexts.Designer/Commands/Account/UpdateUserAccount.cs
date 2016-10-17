@@ -3,11 +3,11 @@
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    public class UpdateAccountCommand : AccountCommandBase
+    public class UpdateUserAccount : UserCommand
     {
-        public UpdateAccountCommand(Guid accountId, string userName, bool isLockedOut, string passwordQuestion,
+        public UpdateUserAccount(Guid userId, string userName, bool isLockedOut, string passwordQuestion,
             string email, bool isConfirmed, string comment)
-            : base(accountId)
+            : base(userId)
         {
             this.UserName = userName;
             this.IsLockedOut = isLockedOut;

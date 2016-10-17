@@ -38,14 +38,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public void AddUserToRole(string applicationName, string roleName, Guid userid)
         {
-            this.commandService.Execute(new AddRoleToAccountCommand(accountId: userid,
+            this.commandService.Execute(new AssignUserRole(userId: userid,
                                                                 role: this.GetRoleByRoleName(roleName)));
         }
 
         public void RemoveUserFromRole(string applicationName, string roleName, string username)
         {
             var user = this.GetUser(username);
-            this.commandService.Execute(new RemoveRoleFromAccountCommand(accountId: user.ProviderUserKey,
+            this.commandService.Execute(new RemoveUserRole(userId: user.ProviderUserKey,
                                                                      role: this.GetRoleByRoleName(roleName)));
         }
 
@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             return accounts.Items.Select(x => x.UserName);
         }
 
-        private AccountView GetUser(string username)
+        private IAccountView GetUser(string username)
         {
             return this.accountViewFactory.Load(new AccountViewInputModel(
                 accountName: username,

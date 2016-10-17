@@ -218,24 +218,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\Account.cs" />
+    <Compile Include="Aggregates\User.cs" />
+    <Compile Include="Aggregates\IAccountView.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
-    <Compile Include="Commands\Account\AccountCommandBase.cs" />
-    <Compile Include="Commands\Account\AddRoleToAccountCommand.cs" />
-    <Compile Include="Commands\Account\ChangeOnlineAccountCommand.cs" />
-    <Compile Include="Commands\Account\ChangePasswordAccountCommand.cs" />
-    <Compile Include="Commands\Account\ChangePasswordQuestionAndAnswerAccountCommand.cs" />
-    <Compile Include="Commands\Account\ChangePasswordResetTokenCommand.cs" />
-    <Compile Include="Commands\Account\ConfirmAccountCommand.cs" />
-    <Compile Include="Commands\Account\DeleteAccountCommand.cs" />
-    <Compile Include="Commands\Account\LockAccountCommand.cs" />
-    <Compile Include="Commands\Account\LoginFailedAccountCommand.cs" />
-    <Compile Include="Commands\Account\RegisterAccountCommand.cs" />
-    <Compile Include="Commands\Account\RemoveRoleFromAccountCommand.cs" />
-    <Compile Include="Commands\Account\ResetPasswordAccountCommand.cs" />
-    <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
-    <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
+    <Compile Include="Commands\Account\UserCommand.cs" />
+    <Compile Include="Commands\Account\AssignUserRole.cs" />
+    <Compile Include="Commands\Account\ChangeUserPassword.cs" />
+    <Compile Include="Commands\Account\ChangeSecurityQuestion.cs" />
+    <Compile Include="Commands\Account\SetPasswordResetToken.cs" />
+    <Compile Include="Commands\Account\ConfirmUserAccount.cs" />
+    <Compile Include="Commands\Account\DeleteUserAccount.cs" />
+    <Compile Include="Commands\Account\LockUserAccount.cs" />
+    <Compile Include="Commands\Account\RegisterFailedLogin.cs" />
+    <Compile Include="Commands\Account\RegisterUser.cs" />
+    <Compile Include="Commands\Account\RemoveUserRole.cs" />
+    <Compile Include="Commands\Account\ResetUserPassword.cs" />
+    <Compile Include="Commands\Account\UnlockUserAccount.cs" />
+    <Compile Include="Commands\Account\UpdateUserAccount.cs" />
     <Compile Include="Commands\CommandUtils.cs" />
     <Compile Include="Commands\Questionnaire\Attachments\DeleteAttachment.cs" />
     <Compile Include="Commands\Questionnaire\Attachments\AddOrUpdateAttachment.cs" />
@@ -298,7 +298,7 @@
     <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="Implementation\Repositories\AccountRepository.cs" />
+    <Compile Include="Implementation\Repositories\UserRepository.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
@@ -565,7 +565,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\Model\GroupTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireExpressionStateModel.cs" />
-    <Compile Include="Mappings\AccountDocumentMap.cs" />
+    <Compile Include="Mappings\UserMap.cs" />
     <Compile Include="Mappings\QuestionnaireChangeRecordMap.cs" />
     <Compile Include="Mappings\QuestionnaireListViewItemMap.cs" />
     <Compile Include="Resources\VerificationMessages.Designer.cs">
@@ -616,13 +616,9 @@
     <Compile Include="ValueObjects\QuestionnaireNodeReference.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
     <Compile Include="ValueObjects\VerificationMessageLevel.cs" />
-    <Compile Include="Views\Account\AccountDenormalizer.cs" />
-    <Compile Include="Views\Account\AccountDocument.cs" />
-    <Compile Include="Views\Account\AccountListItem.cs" />
     <Compile Include="Views\Account\AccountListView.cs" />
     <Compile Include="Views\Account\AccountListViewFactory.cs" />
     <Compile Include="Views\Account\AccountListViewInputModel.cs" />
-    <Compile Include="Views\Account\AccountView.cs" />
     <Compile Include="Views\Account\AccountViewFactory.cs" />
     <Compile Include="Views\Account\AccountViewInputModel.cs" />
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />
