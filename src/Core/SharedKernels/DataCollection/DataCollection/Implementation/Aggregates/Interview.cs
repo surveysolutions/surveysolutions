@@ -52,8 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (this.expressionProcessorStatePrototype == null)
                 {
-                    var stateProvider = this.expressionProcessorStatePrototypeProvider;
-                    this.expressionProcessorStatePrototype = stateProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion);
+                    this.expressionProcessorStatePrototype = this.expressionProcessorStatePrototypeProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion);
                     this.expressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
                 }
 
@@ -109,11 +108,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
             this.properties.Status = @event.InterviewData.Status;
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
-            this.ExpressionProcessorStatePrototype =
-                this.expressionProcessorStatePrototypeProvider.GetExpressionState(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
-
-            this.ExpressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
-
+            
             this.interviewState.AnswersSupportedInExpressions = @event.InterviewData.Answers == null
                 ? new ConcurrentDictionary<string, object>()
                 : @event.InterviewData.Answers
