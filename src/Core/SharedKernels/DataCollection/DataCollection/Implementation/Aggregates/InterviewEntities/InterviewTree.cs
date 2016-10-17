@@ -81,100 +81,50 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                                     on source.Identity equals changed.Identity
                                     into temp
                                 from changed in temp.DefaultIfEmpty()
-                                select CreateInterviewTreeNodeDiff(source, changed);
+                                select InterviewTreeNodeDiff.Create(source, changed);
 
             var rightOuterJoin = from changed in changedNodes
                                  join source in sourceNodes
                                      on changed.Identity equals source.Identity
                                      into temp
                                  from source in temp.DefaultIfEmpty()
-                                 select CreateInterviewTreeNodeDiff(source, changed);
+                                 select InterviewTreeNodeDiff.Create(source, changed);
 
             var fullOuterJoin = leftOuterJoin.Concat(rightOuterJoin);
 
             return fullOuterJoin
                 .DistinctBy(x => new {sourceIdentity = x.SourceNode?.Identity, changedIdentity = x.ChangedNode?.Identity})
                 .Where(diff =>
-                    IsExistingChanged(diff) ||
-                    IsDisabledChanged(diff) ||
+                    diff.IsNodeAdded ||
+                    diff.IsNodeRemoved ||
+                    diff.IsNodeDisabled ||
+                    diff.IsNodeEnabled ||
                     IsRosterTitleChanged(diff as InterviewTreeRosterDiff) ||
-                    IsAnswerByQuestionChanged(diff as InterviewTreeQuestionDiff))
+                    IsAnswerByQuestionChanged(diff as InterviewTreeQuestionDiff) ||
+                    IsQuestionValid(diff as InterviewTreeQuestionDiff) ||
+                    IsQuestionInalid(diff as InterviewTreeQuestionDiff) ||
+                    IsStaticTextValid(diff as InterviewTreeStaticTextDiff) ||
+                    IsStaticTextInalid(diff as InterviewTreeStaticTextDiff))
                 .ToReadOnlyCollection();
         }
 
-        private static InterviewTreeNodeDiff CreateInterviewTreeNodeDiff(IInterviewTreeNode source, IInterviewTreeNode changed)
-        {
-            if (source is InterviewTreeRoster || changed is InterviewTreeRoster)
-            {
-                return new InterviewTreeRosterDiff(source, changed);
-            }
-            else if (source is InterviewTreeSection || changed is InterviewTreeSection)
-            {
-                return new InterviewTreeGroupDiff(source, changed);
-            }
-            else if (source is InterviewTreeGroup || changed is InterviewTreeGroup)
-            {
-                return new InterviewTreeGroupDiff(source, changed);
-            }
-            else if (source is InterviewTreeQuestion || changed is InterviewTreeQuestion)
-            {
-                return new InterviewTreeQuestionDiff(source, changed);
-            }
-            else if (source is InterviewTreeStaticText || changed is InterviewTreeStaticText)
-            {
-                return new InterviewTreeStaticTextDiff(source, changed);
-            }
-            else if (source is InterviewTreeVariable || changed is InterviewTreeVariable)
-            {
-                return new InterviewTreeVariableDiff(source, changed);
-            }
+        private static bool IsQuestionValid(InterviewTreeQuestionDiff diffByQuestion)
+            => diffByQuestion != null && diffByQuestion.IsValid;
 
-            return new InterviewTreeNodeDiff(source, changed);
-        }
+        private static bool IsQuestionInalid(InterviewTreeQuestionDiff diffByQuestion)
+            => diffByQuestion != null && diffByQuestion.IsInvalid;
 
-        public static bool HasChangesByAnswer(InterviewTreeQuestion sourceQuestion,
-            InterviewTreeQuestion changedQuestion)
-        {
-            if (sourceQuestion.IsText) return !sourceQuestion.AsText.EqualByAnswer(changedQuestion.AsText);
-            if (sourceQuestion.IsInteger) return !sourceQuestion.AsInteger.EqualByAnswer(changedQuestion.AsInteger);
-            if (sourceQuestion.IsDouble) return !sourceQuestion.AsDouble.EqualByAnswer(changedQuestion.AsDouble);
-            if (sourceQuestion.IsDateTime) return !sourceQuestion.AsDateTime.EqualByAnswer(changedQuestion.AsDateTime);
-            if (sourceQuestion.IsMultimedia) return !sourceQuestion.AsMultimedia.EqualByAnswer(changedQuestion.AsMultimedia);
-            if (sourceQuestion.IsQRBarcode) return !sourceQuestion.AsQRBarcode.EqualByAnswer(changedQuestion.AsQRBarcode);
-            if (sourceQuestion.IsGps) return !sourceQuestion.AsGps.EqualByAnswer(changedQuestion.AsGps);
-            if (sourceQuestion.IsSingleOption) return !sourceQuestion.AsSingleOption.EqualByAnswer(changedQuestion.AsSingleOption);
-            if (sourceQuestion.IsSingleLinkedOption) return !sourceQuestion.AsSingleLinkedOption.EqualByAnswer(changedQuestion.AsSingleLinkedOption);
-            if (sourceQuestion.IsMultiOption) return !sourceQuestion.AsMultiOption.EqualByAnswer(changedQuestion.AsMultiOption);
-            if (sourceQuestion.IsMultiLinkedOption) return !sourceQuestion.AsMultiLinkedOption.EqualByAnswer(changedQuestion.AsMultiLinkedOption);
-            if (sourceQuestion.IsYesNo) return !sourceQuestion.AsYesNo.EqualByAnswer(changedQuestion.AsYesNo);
-            if (sourceQuestion.IsTextList) return !sourceQuestion.AsTextList.EqualByAnswer(changedQuestion.AsTextList);
+        private static bool IsStaticTextValid(InterviewTreeStaticTextDiff diffByQuestion)
+            => diffByQuestion != null && diffByQuestion.IsValid;
 
-            return false;
-        }
-
-        private static bool IsExistingChanged(InterviewTreeNodeDiff diffByNode) => (diffByNode.SourceNode == null && diffByNode.ChangedNode != null) ||
-                                                                            (diffByNode.SourceNode != null && diffByNode.ChangedNode == null);
-
-        private static bool IsDisabledChanged(InterviewTreeNodeDiff diffByNode) => ((diffByNode.SourceNode.IsDisabled() && !diffByNode.ChangedNode.IsDisabled()) ||
-                                                                             (!diffByNode.SourceNode.IsDisabled() && diffByNode.ChangedNode.IsDisabled()));
+        private static bool IsStaticTextInalid(InterviewTreeStaticTextDiff diffByQuestion)
+            => diffByQuestion != null && diffByQuestion.IsInvalid;
 
         private static bool IsAnswerByQuestionChanged(InterviewTreeQuestionDiff diffByQuestion)
-        {
-            if (diffByQuestion == null) return false;
-
-            if ((diffByQuestion.SourceNode.IsAnswered() && !diffByQuestion.ChangedNode.IsAnswered()) ||
-                (!diffByQuestion.SourceNode.IsAnswered() && diffByQuestion.ChangedNode.IsAnswered())) return true;
-            
-            return HasChangesByAnswer(diffByQuestion.SourceNode, diffByQuestion.ChangedNode);
-        }
+            => diffByQuestion != null && diffByQuestion.IsAnswerChanged;
 
         private static bool IsRosterTitleChanged(InterviewTreeRosterDiff diffByRoster)
-        {
-            if (diffByRoster == null) return false;
-
-            return diffByRoster.ChangedNode != null &&
-                   diffByRoster.SourceNode?.RosterTitle != diffByRoster.ChangedNode.RosterTitle;
-        }
+            => diffByRoster != null && diffByRoster.IsRosterTitleChanged;
 
         public override string ToString()
             => $"Tree ({this.InterviewId})" + Environment.NewLine

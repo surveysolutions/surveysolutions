@@ -11,8 +11,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var diff = sourceInterview.Compare(changedInterview);
 
-            var questionsWithRemovedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Where(IsAnswerRemoved).ToArray();
-            var questionsWithChangedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Except(questionsWithRemovedAnswer).ToArray();
+            var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
+            var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
+            var questionsWithChangedAnswer = diffByQuestions.Except(questionsWithRemovedAnswer).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
 
             UpdateRostersInExpressionState(changedRosters, expressionState);
@@ -24,16 +25,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static void UpdateValidityInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
         {
-            var allNotNullableNodes = diff.Where(x => x.SourceNode != null && x.ChangedNode != null).ToList();
+            var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
 
             var allChangedQuestionDiffs = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
             var allChangedStaticTextDiffs = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
 
-            var validQuestionIdentities = allChangedQuestionDiffs.Where(IsValidQuestion).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(IsInValidQuestion).Select(x => x.ChangedNode).ToDictionary(x => x.Identity, x => x.FailedValidations);
+            var validQuestionIdentities = allChangedQuestionDiffs.Where(x => x.IsValid).Select(x => x.ChangedNode.Identity).ToArray();
+            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.IsInvalid).Select(x => x.ChangedNode)
+                .ToDictionary(x => x.Identity, x => x.FailedValidations);
 
-            var validStaticTextIdentities = allChangedStaticTextDiffs.Where(IsValidStaticText).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(IsInvalidStaticText).Select(x => x.ChangedNode).ToDictionary(x => x.Identity, x => x.FailedValidations);
+            var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.IsValid).Select(x => x.ChangedNode.Identity).ToArray();
+            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.IsInvalid).Select(x => x.ChangedNode)
+                .ToDictionary(x => x.Identity, x => x.FailedValidations);
 
             if (validQuestionIdentities.Any()) expressionState.DeclareAnswersValid(validQuestionIdentities);
             if (invalidQuestionIdentities.Any()) expressionState.ApplyFailedValidations(invalidQuestionIdentities);
@@ -44,19 +47,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static void UpdateEnablementInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
         {
-            var allNotNullableNodes = diff.Where(x => x.SourceNode != null && x.ChangedNode != null).ToList();
+            var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
 
-            var disabledGroups = allNotNullableNodes.OfType<InterviewTreeGroupDiff>().Where(IsDisabledNode).Select(x => x.SourceNode.Identity).ToArray();
-            var enabledGroups = allNotNullableNodes.OfType<InterviewTreeGroupDiff>().Where(IsEnabledNode).Select(x => x.SourceNode.Identity).ToArray();
+            var diffByGroups = allNotNullableNodes.OfType<InterviewTreeGroupDiff>().ToList();
+            var diffByQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
+            var diffByStaticTexts = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
+            var diffByVariables = allNotNullableNodes.OfType<InterviewTreeVariableDiff>().ToList();
 
-            var disabledQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().Where(IsDisabledNode).Select(x => x.SourceNode.Identity).ToArray();
-            var enabledQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().Where(IsEnabledNode).Select(x => x.SourceNode.Identity).ToArray();
+            var disabledGroups = diffByGroups.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
+            var enabledGroups = diffByGroups.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
 
-            var disabledStaticTexts = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().Where(IsDisabledNode).Select(x => x.SourceNode.Identity).ToArray();
-            var enabledStaticTexts = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().Where(IsEnabledNode).Select(x => x.SourceNode.Identity).ToArray();
+            var disabledQuestions = diffByQuestions.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
+            var enabledQuestions = diffByQuestions.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
 
-            var disabledVariables = allNotNullableNodes.OfType<InterviewTreeVariableDiff>().Where(IsDisabledNode).Select(x => x.SourceNode.Identity).ToArray();
-            var enabledVariables = allNotNullableNodes.OfType<InterviewTreeVariableDiff>().Where(IsEnabledNode).Select(x => x.SourceNode.Identity).ToArray();
+            var disabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
+            var enabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
+
+            var disabledVariables = diffByVariables.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
+            var enabledVariables = diffByVariables.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
 
             if (disabledGroups.Any()) expressionState.DisableGroups(disabledGroups);
             if (enabledGroups.Any()) expressionState.EnableGroups(enabledGroups);
@@ -170,15 +178,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static void UpdateRostersInExpressionState(InterviewTreeRosterDiff[] diff, ILatestInterviewExpressionState expressionState)
         {
-            var removedRosters = diff
-                .Where(x => x.SourceNode != null && x.ChangedNode == null)
-                .Select(x => x.SourceNode)
-                .ToArray();
-
-            var addedRosters = diff
-                .Where(x => x.SourceNode == null && x.ChangedNode != null)
-                .Select(x => x.ChangedNode)
-                .ToArray();
+            var removedRosters = diff.Where(x => x.IsNodeRemoved).Select(x => x.SourceNode).ToArray();
+            var addedRosters = diff.Where(x => x.IsNodeAdded).Select(x => x.ChangedNode).ToArray();
 
             foreach (var removedRosterIdentity in removedRosters.Select(ToRosterInstance))
             {
