@@ -872,6 +872,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             enablementChanges.StaticTextsToBeDisabled.ForEach(x => tree.GetStaticText(x).Disable());
             enablementChanges.StaticTextsToBeEnabled.ForEach(x => tree.GetStaticText(x).Enable());
+
+            enablementChanges.VariablesToBeDisabled.ForEach(x => tree.GetVariable(x).Disable());
+            enablementChanges.VariablesToBeEnabled.ForEach(x => tree.GetVariable(x).Enable());
         }
 
         private void UpdateRosterTitles(InterviewTree tree)
@@ -1109,6 +1112,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             if (!group.HasChild(questionIdentity))
                             {
                                 group.AddChildren(BuildInterviewTreeQuestion(questionIdentity, null, false, new RosterVector[0], questionnaire));
+                            }
+                        } else if (questionnaire.IsVariable(childEntityId))
+                        {
+                            var variableIdentity = new Identity(childEntityId, parentRosterVector);
+                            if (!group.HasChild(variableIdentity))
+                            {
+                                group.AddChildren(new InterviewTreeVariable(variableIdentity, false, null));
                             }
                         }
                     }

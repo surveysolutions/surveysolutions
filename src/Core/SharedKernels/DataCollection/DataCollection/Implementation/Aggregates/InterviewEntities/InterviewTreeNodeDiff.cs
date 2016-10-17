@@ -141,7 +141,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeVariableDiff : InterviewTreeNodeDiff
     {
         public new InterviewTreeVariable SourceNode => base.SourceNode as InterviewTreeVariable;
-        public new InterviewTreeVariable ChangedNode => base.SourceNode as InterviewTreeVariable;
+        public new InterviewTreeVariable ChangedNode => base.ChangedNode as InterviewTreeVariable;
 
         public bool IsValueChanged => this.SourceNode == null
             ? this.ChangedNode.HasValue
