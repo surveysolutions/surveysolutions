@@ -63,9 +63,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Select(instance => instance.RosterInstanceId).ToArray()
                 .ShouldContainOnly(0, 1, 2);
 
-        It should_set_null_in_sort_index_to_all_instances_in_RosterInstancesAdded_event = () =>
+        It should_set_sort_0_1_2_as_index_to_all_instances_in_RosterInstancesAdded_event = () =>
              eventContext.GetEvent<RosterInstancesAdded>().Instances
-                .ShouldEachConformTo(instance => instance.SortIndex == null);
+                .Select(x => x.SortIndex)
+                .ShouldContainOnly(0, 1, 2);
 
         It should_raise_1_RosterRowsTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
