@@ -35,7 +35,7 @@ namespace WB.Core.Infrastructure.FileSystem
         byte[] ReadAllBytes(string pathToFile);
         string ReadAllText(string pathToFile);
 
-        void CopyFileOrDirectory(string sourceDir, string targetDir);
+        void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll);
 
         void MarkFileAsReadonly(string pathToFile);
 
