@@ -22,7 +22,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.connectionString = connectionString;
             this.logger = logger;
 
-            tableName = schemaName + "." + typeof(TEntity).Name.Pluralize();
+            tableName = typeof(TEntity).Name.Pluralize();
+            if (!string.IsNullOrWhiteSpace(schemaName))
+                tableName = schemaName + "." + tableName;
 
             this.EnshureTableExists();
         }
