@@ -17,12 +17,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
             var questionsWithChangedAnswer = diffByQuestions.Except(questionsWithRemovedAnswer).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+            var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
             this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
             this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
             this.ApplyRosterEvents(changedRosters);
             this.ApplyEnablementEvents(diff);
             this.ApplyValidityEvents(diff);
+            this.ApplyVariableEvents(changedVariables);
+        }
+
+        private void ApplyVariableEvents(InterviewTreeVariableDiff[] diffsByChangedVariables)
+        {
+            var changedVariables = diffsByChangedVariables.Where(x => x.ChangedNode != null && x.IsValueChanged).Select(ToChangedVariable).ToArray();
+
+            if (changedVariables.Any())
+                this.ApplyEvent(new VariablesChanged(changedVariables));
         }
 
         private void ApplyValidityEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
@@ -203,5 +213,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static RosterInstance ToRosterInstance(IInterviewTreeNode rosterNode)
             => new RosterInstance(rosterNode.Identity.Id, rosterNode.Identity.RosterVector.Shrink(), rosterNode.Identity.RosterVector.Last());
+
+        private static ChangedVariable ToChangedVariable(InterviewTreeVariableDiff variable)
+            => new ChangedVariable(variable.ChangedNode.Identity, variable.ChangedNode.Value);
     }
 }

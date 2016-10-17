@@ -15,12 +15,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
             var questionsWithChangedAnswer = diffByQuestions.Except(questionsWithRemovedAnswer).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+            var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
             UpdateRostersInExpressionState(changedRosters, expressionState);
             UpdateAnswersInExpressionState(questionsWithChangedAnswer, expressionState);
             RemoveAnswersInExpressionState(questionsWithRemovedAnswer, expressionState);
             UpdateEnablementInExpressionState(diff, expressionState);
             UpdateValidityInExpressionState(diff, expressionState);
+            UpdateVariablesInExpressionState(changedVariables, expressionState);
+        }
+
+        private void UpdateVariablesInExpressionState(InterviewTreeVariableDiff[] diffsByChangedVariables, ILatestInterviewExpressionState expressionState)
+        {
+            var changedVariables = diffsByChangedVariables.Where(x => x.ChangedNode != null && x.IsValueChanged)
+                    .Select(x => x.ChangedNode)
+                    .ToArray();
+
+            foreach (var changedVariable in changedVariables)
+            {
+                expressionState.UpdateVariableValue(changedVariable.Identity, changedVariable.Value);
+            }
         }
 
         private static void UpdateValidityInExpressionState(IReadOnlyCollection<InterviewTreeNodeDiff> diff, ILatestInterviewExpressionState expressionState)
