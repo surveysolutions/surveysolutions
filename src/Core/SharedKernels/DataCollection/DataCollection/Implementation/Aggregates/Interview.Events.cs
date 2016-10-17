@@ -13,12 +13,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var diff = sourceInterview.Compare(changedInterview);
 
-            var questionsWithRemovedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Where(IsAnswerRemoved).ToArray();
-            // Roma: if question nod was created, but there is no answer it doesn't mean that this question should be present in this collection
-            // I thinks it is confusing. I expect to see only questions that were 
-            // 1) not answered, but now are 
-            // 2) questions that were answered still are answered, but value have been changed
-            var questionsWithChangedAnswer = diff.OfType<InterviewTreeQuestionDiff>().Except(questionsWithRemovedAnswer).ToArray();
+            var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
+            var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
+            var questionsWithChangedAnswer = diffByQuestions.Except(questionsWithRemovedAnswer).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
 
             this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
@@ -30,18 +27,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyValidityEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
         {
-            var allNotNullableNodes = diff.Where(x => x.SourceNode != null && x.ChangedNode != null).ToList();
+            var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
 
             var allChangedQuestionDiffs = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
             var allChangedStaticTextDiffs = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
 
-            var validQuestionIdentities = allChangedQuestionDiffs.Where(IsValidQuestion).Select(x=>x.ChangedNode.Identity).ToArray();
-            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(IsInValidQuestion).Select(x=>x.ChangedNode).ToDictionary(x=>x.Identity, x=>x.FailedValidations);
+            var validQuestionIdentities = allChangedQuestionDiffs.Where(x => x.IsValid).Select(x => x.ChangedNode.Identity).ToArray();
+            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.IsInvalid).Select(x => x.ChangedNode)
+                .ToDictionary(x => x.Identity, x => x.FailedValidations);
 
-            var validStaticTextIdentities = allChangedStaticTextDiffs.Where(IsValidStaticText).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidStaticTextIdentities = allChangedStaticTextDiffs
-                .Where(IsInvalidStaticText)
-                .Select(x => x.ChangedNode)
+            var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.IsValid).Select(x => x.ChangedNode.Identity).ToArray();
+            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.IsInvalid).Select(x => x.ChangedNode)
                 .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedValidations))
                 .ToList();
 
@@ -56,17 +52,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var allNotNullableNodes = diff.Where(x => x.ChangedNode != null).ToList();
 
-            var disabledGroups = allNotNullableNodes.OfType<InterviewTreeGroupDiff>().Where(IsDisabledNode).Select(x => x.ChangedNode.Identity).ToArray();
-            var enabledGroups = allNotNullableNodes.OfType<InterviewTreeGroupDiff>().Where(IsEnabledNode).Select(x => x.ChangedNode.Identity).ToArray();
+            var diffByGroups = allNotNullableNodes.OfType<InterviewTreeGroupDiff>().ToList();
+            var diffByQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
+            var diffByStaticTexts = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
+            var diffByVariables = allNotNullableNodes.OfType<InterviewTreeVariableDiff>().ToList();
 
-            var disabledQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().Where(IsDisabledNode).Select(x => x.ChangedNode.Identity).ToArray();
-            var enabledQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().Where(IsEnabledNode).Select(x => x.ChangedNode.Identity).ToArray();
+            var disabledGroups = diffByGroups.Where(x=>x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
+            var enabledGroups = diffByGroups.Where(x=>x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
 
-            var disabledStaticTexts = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().Where(IsDisabledNode).Select(x => x.ChangedNode.Identity).ToArray();
-            var enabledStaticTexts = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().Where(IsEnabledNode).Select(x => x.ChangedNode.Identity).ToArray();
+            var disabledQuestions = diffByQuestions.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
+            var enabledQuestions = diffByQuestions.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
 
-            var disabledVariables = allNotNullableNodes.OfType<InterviewTreeVariableDiff>().Where(IsDisabledNode).Select(x => x.ChangedNode.Identity).ToArray();
-            var enabledVariables = allNotNullableNodes.OfType<InterviewTreeVariableDiff>().Where(IsEnabledNode).Select(x => x.ChangedNode.Identity).ToArray();
+            var disabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
+            var enabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
+
+            var disabledVariables = diffByVariables.Where(x => x.IsNodeDisabled).Select(x => x.SourceNode.Identity).ToArray();
+            var enabledVariables = diffByVariables.Where(x => x.IsNodeEnabled).Select(x => x.SourceNode.Identity).ToArray();
 
             if(disabledGroups.Any()) this.ApplyEvent(new GroupsDisabled(disabledGroups));
             if (enabledGroups.Any()) this.ApplyEvent(new GroupsEnabled(enabledGroups));
@@ -180,20 +181,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplyRosterEvents(InterviewTreeRosterDiff[] diff)
         {
-            var removedRosters = diff
-                .Where(x => x.SourceNode != null && x.ChangedNode == null)
-                .Select(x => x.SourceNode)
-                .ToArray();
-
-            var addedRosters = diff
-                .Where(x => x.SourceNode == null && x.ChangedNode != null)
-                .Select(x => x.ChangedNode)
-                .ToArray();
-
-            var changedRosterTitles = diff
-                .Where(x => x.ChangedNode != null && x.SourceNode?.RosterTitle != x.ChangedNode.RosterTitle)
-                .Select(x => x.ChangedNode)
-                .ToArray();
+            var removedRosters = diff.Where(x => x.IsNodeRemoved).Select(x => x.SourceNode).ToArray();
+            var addedRosters = diff.Where(x => x.IsNodeAdded).Select(x => x.ChangedNode).ToArray();
+            var changedRosterTitles = diff.Where(x => x.IsRosterTitleChanged).Select(x => x.ChangedNode).ToArray();
 
             if (removedRosters.Any())
                 this.ApplyEvent(new RosterInstancesRemoved(removedRosters.Select(ToRosterInstance).ToArray()));
@@ -204,35 +194,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (changedRosterTitles.Any())
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
         }
-
-        private static bool IsValidStaticText(InterviewTreeStaticTextDiff diff)
-            => !diff.SourceNode.IsValid && diff.ChangedNode.IsValid;
-
-        private static bool IsInvalidStaticText(InterviewTreeStaticTextDiff diff)
-            => diff.SourceNode.IsValid && !diff.ChangedNode.IsValid;
-
-        private static bool IsValidQuestion(InterviewTreeQuestionDiff diff)
-            => !diff.SourceNode.IsValid && diff.ChangedNode.IsValid;
-
-        private static bool IsInValidQuestion(InterviewTreeQuestionDiff diff)
-            => diff.SourceNode.IsValid && !diff.ChangedNode.IsValid;
-
-        private static bool IsDisabledNode(InterviewTreeNodeDiff diff)
-        {
-            if (diff.SourceNode == null)
-                return diff.ChangedNode.IsDisabled();
-            return !diff.SourceNode.IsDisabled() && diff.ChangedNode.IsDisabled();
-        }
-
-        private static bool IsEnabledNode(InterviewTreeNodeDiff diff)
-        {
-            if (diff.SourceNode == null)
-                return false; //node are enable by default
-            return diff.SourceNode.IsDisabled() && !diff.ChangedNode.IsDisabled();
-        }
-
-        private static bool IsAnswerRemoved(InterviewTreeQuestionDiff diff) => diff.SourceNode != null &&
-                                                                               diff.SourceNode.IsAnswered() && (diff.ChangedNode == null || !diff.ChangedNode.IsAnswered());
 
         private static ChangedRosterInstanceTitleDto ToChangedRosterInstanceTitleDto(InterviewTreeRoster roster)
             => new ChangedRosterInstanceTitleDto(ToRosterInstance(roster), roster.RosterTitle);
