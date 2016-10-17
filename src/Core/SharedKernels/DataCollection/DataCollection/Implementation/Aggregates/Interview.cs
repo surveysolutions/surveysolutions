@@ -892,7 +892,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (titleQuestion==null) continue;
                 roster.SetRosterTitle(titleQuestion.IsAnswered() 
                     ? titleQuestion.GetAnswerAsString(answerOptionValue => questionnaire.GetAnswerOptionTitle(titleQuestion.Identity.Id, answerOptionValue)) 
-                    : string.Empty);
+                    : null);
             }
         }
 
@@ -1040,9 +1040,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             else
                             {
                                 Guid sourceQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
-
-                                if (changedQuestions.All(x => x.Id != sourceQuestionId))
-                                    continue;
                                 var questionaType = questionnaire.GetQuestionType(sourceQuestionId);
                                 var rosterSizeQuestion = group.GetQuestionFromThisOrUpperLevel(sourceQuestionId);
                                 switch (questionaType)
@@ -1158,7 +1155,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 Identity = new RosterIdentity(rosterId, parentRosterVector, optionValue, index).ToIdentity(),
                 Title = questionnaire.GetAnswerOptionTitle(rosterSizeQuestion.Identity.Id, optionValue),
-                Type = RosterType.List,
+                Type = RosterType.Multi,
                 SizeQuestion = rosterSizeQuestion
             }).ToList();
         }
@@ -4367,8 +4364,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 isYesNo: isYesNoQuestion,
                 isDecimal: isDecimalQuestion,
                 linkedSourceId: linkedSourceEntityId,
-                commonParentRosterIdForLinkedQuestion: commonParentIdentity,
-                categoricalOptions: categoricalOptions);
+                commonParentRosterIdForLinkedQuestion: commonParentIdentity);
         }
 
         private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
