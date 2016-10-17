@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -20,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             {
                 new CategoricalOption() {Value = 1, Title = "1"},
                 new CategoricalOption() {Value = 1, Title = "2"}
-            };
+            }.ToReadOnlyCollection();
 
             IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
                 _ => _.GetOptionsForQuestion(questionId, null, String.Empty) == options);
@@ -47,13 +49,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             categoricalOptions.Count().ShouldEqual(2);
 
         It should_question_options = () =>
-            categoricalOptions.ShouldEqual(options);
+            categoricalOptions.ShouldEqual(options.ToList());
 
         static StatefulInterview statefulInterview;
 
         static readonly Guid questionId = Guid.Parse("11111111111111111111111111111113");
         static readonly Identity questionIdentity = new Identity(questionId, new decimal[0]);
-        static List<CategoricalOption> options;
+        static ReadOnlyCollection<CategoricalOption> options;
 
         static List<CategoricalOption> categoricalOptions;
         static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111112");

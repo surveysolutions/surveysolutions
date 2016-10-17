@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (SourceNode?.AsLinked.Options.Count != ChangedNode.AsLinked.Options.Count)
                     return true;
 
-                return SourceNode.AsLinked.Options.SequenceEqual(ChangedNode.AsLinked.Options);
+                return !SourceNode.AsLinked.Options.SequenceEqual(ChangedNode.AsLinked.Options);
             }
         }
     }
