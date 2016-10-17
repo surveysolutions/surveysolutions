@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 using It = Machine.Specifications.It;
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                 => processor.GetIdentifiersUsedInExpression(conditionExpression) == new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, existingQuestionId, "title", responsibleId, chapterId));
 
             questionnaire.AddQRBarcodeQuestion(

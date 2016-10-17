@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerTests
@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId, isInteger: true, variableName: "roster_size_question");
 
             questionnaire.AddQRBarcodeQuestion(
@@ -27,15 +27,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                 instructions: "old instructions",
                 enablementCondition: "old condition");
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId)
-            {
-                RosterSizeQuestionId = rosterSizeQuestionId,
-                RosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitles = null,
-                RosterTitleQuestionId = null
-            });
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
             questionnaire.AddNumericQuestion(questionFromRosterId, rosterId, responsibleId, isInteger: true, variableName: substitutionVariableName);
         };
 

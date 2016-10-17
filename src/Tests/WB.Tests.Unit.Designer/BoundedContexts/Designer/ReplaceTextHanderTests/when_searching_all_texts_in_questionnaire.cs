@@ -70,11 +70,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 variableExpression: $"expression {searchFor}",
                 parentId: chapterId);
 
-            questionnaire.AddGroup(Create.Event.NewGroupAddedEvent(groupId.FormatGuid(),
-                parentGroupId: chapterId.FormatGuid(),
-                groupTitle: $"group title with {searchFor}",
-                enablementCondition: $"group enablement {searchFor}"
-                ));
+            questionnaire.AddGroup(groupId,
+                chapterId,
+                title: $"group title with {searchFor}",
+                enablingCondition: $"group enablement {searchFor}", responsibleId: responsibleId);
 
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaire.Id, macroId, responsibleId));
 
@@ -126,7 +125,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         It should_find_question_by_option_text = () => 
             foundReferences.ShouldContain(x => x.Id == questionId2 && 
                                                x.Property == QuestionnaireVerificationReferenceProperty.Option &&
-                                               x.FailedValidationConditionIndex == 1);
+                                               x.IndexOfEntityInProperty == 1);
 
         It should_not_include_references_to_filtered_combobox_options = () => 
             foundReferences.ShouldNotContain(x => x.Id == filteredQuestionId);

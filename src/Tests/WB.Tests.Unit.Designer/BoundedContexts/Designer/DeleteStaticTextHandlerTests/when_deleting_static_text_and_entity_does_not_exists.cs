@@ -3,7 +3,7 @@ using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteStaticTextHandlerTests
@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteStaticTextHandle
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId));
         };
 

@@ -2,8 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -12,29 +11,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            var rosterFixedTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") };
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            var rosterFixedTitles = new[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2") };
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parentRosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: parentRosterId){
-                    RosterSizeQuestionId = null,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    FixedRosterTitles = rosterFixedTitles,
-                    RosterTitleQuestionId = null
-                });
+            questionnaire.AddGroup(parentRosterId, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.FixedTitles,
+                rosterSizeQuestionId: null, rosterFixedTitles: rosterFixedTitles);
 
-
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupToUpdateId, ParentGroupPublicKey = parentRosterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupToUpdateId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: groupToUpdateId)
-            {
-                RosterSizeQuestionId = null,
-                RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                FixedRosterTitles = rosterFixedTitles,
-                RosterTitleQuestionId = null
-            });
-
+            questionnaire.AddGroup(groupToUpdateId,  parentRosterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.FixedTitles,
+                rosterSizeQuestionId: null, rosterFixedTitles: rosterFixedTitles);
 
             questionnaire.AddNumericQuestion(questionUsedAsLinkId, groupToUpdateId, responsibleId, isInteger : true);
 
@@ -46,10 +30,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 linkedToQuestionId : questionUsedAsLinkId);
         };
 
-
-        Because of =
-            () =>
-                questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, false, RosterSizeSourceType.Question, null, null);
+        Because of =() =>
+            questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, false, RosterSizeSourceType.Question, null, null);
 
         private It should_contains_group_with_groupToUpdateId_specified = () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).ShouldNotBeNull();

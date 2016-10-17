@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -11,14 +12,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     {
         Establish context = () =>
         {
-            var questionnaireDocument = new QuestionnaireDocument();
-            var version = 0;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.SingleQuestion(id: questionId,
+                        options: new[] { new Answer { AnswerValue = "1", ParentValue = "A" },
+                                         new Answer { AnswerValue = "2", ParentValue = "2" } }.ToList()),
+                });
+            
 
-            var childQuestion = CreateSingleOptionQuestion(questionId, new[] { new Answer { AnswerValue = "1", ParentValue = "A" } });
-
-            questionnaireDocument.Add(childQuestion, null, null);
-
-            plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, version);
+            plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
         };
 
         Because of = () =>

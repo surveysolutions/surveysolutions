@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 using It = Machine.Specifications.It;
 
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 => processor.GetIdentifiersUsedInExpression(validationExpression) == new[] { existingQuestionId.ToString(), notExistingQuestionId.ToString() });
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddNumericQuestion(existingQuestionId, chapterId, responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId, chapterId,responsibleId,
                 title: "old title", variableName: "old_variable_name",instructions: "old instructions",enablementCondition: "old condition");

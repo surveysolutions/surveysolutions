@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -83,17 +83,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId, expressionProcessor: expressionProcessor);
 
             groupId = groupId ?? Guid.NewGuid();
-            questionnaire.AddGroup(new NewGroupAdded
-            {
-                PublicKey = groupId.Value,
-                ResponsibleId = responsibleId,
-                GroupText = "New group"
-            });
-
-            if (isRoster)
-            {
-                questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId.Value));
-            }
+            questionnaire.AddGroup(groupId.Value,
+                responsibleId: responsibleId,
+                title: "New group", isRoster: isRoster
+            );
 
             return questionnaire;
         }
@@ -103,7 +96,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
 
             Guid chapterId = mainChapterId ?? Guid.NewGuid();
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId, ResponsibleId = responsibleId, GroupText = "New section" });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId, title:"New section" );
             AddQuestion(questionnaire, rosterSizeQuestionId, chapterId, responsibleId, QuestionType.MultyOption, "rosterSizeQuestion",
                 new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") });
             AddGroup(questionnaire, rosterGroupId, chapterId, "", responsibleId, rosterSizeQuestionId, isRoster: true);
@@ -325,12 +318,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             if (depth > 0)
             {
                 Guid parentId = depth == 1 ? dippestGroupId : Guid.NewGuid();
-                questionnaire.AddGroup(new NewGroupAdded
-                {
-                    PublicKey = parentId,
-                    ResponsibleId = responsibleId,
-                    GroupText = "New section"
-                });
+                questionnaire.AddGroup(parentId, responsibleId: responsibleId, title: "New section");
 
                 for (int i = 0; i < depth - 1; i++)
                 {
