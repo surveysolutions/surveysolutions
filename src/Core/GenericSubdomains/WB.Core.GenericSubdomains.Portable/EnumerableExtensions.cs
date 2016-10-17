@@ -7,33 +7,33 @@ namespace WB.Core.GenericSubdomains.Portable
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<T> DistinctBy<T, TIdentity>(this IEnumerable<T> source, Func<T, TIdentity> identitySelector)
+        public static IEnumerable<T> DistinctBy<T, TIdentity>(this IEnumerable<T> source, Func<T, TIdentity> keySelector)
         {
-            return source.Distinct(By(identitySelector));
+            return source.Distinct(By(keySelector));
         }
 
-        public static IEqualityComparer<TSource> By<TSource, TIdentity>(Func<TSource, TIdentity> identitySelector)
+        private static IEqualityComparer<TSource> By<TSource, TIdentity>(Func<TSource, TIdentity> keySelector)
         {
-            return new DelegateComparer<TSource, TIdentity>(identitySelector);
+            return new DelegateComparer<TSource, TIdentity>(keySelector);
         }
 
         private class DelegateComparer<T, TIdentity> : IEqualityComparer<T>
         {
-            private readonly Func<T, TIdentity> identitySelector;
+            private readonly Func<T, TIdentity> keySelector;
 
-            public DelegateComparer(Func<T, TIdentity> identitySelector)
+            public DelegateComparer(Func<T, TIdentity> keySelector)
             {
-                this.identitySelector = identitySelector;
+                this.keySelector = keySelector;
             }
 
             public bool Equals(T x, T y)
             {
-                return Equals(this.identitySelector(x), this.identitySelector(y));
+                return Equals(this.keySelector(x), this.keySelector(y));
             }
 
             public int GetHashCode(T obj)
             {
-                return this.identitySelector(obj).GetHashCode();
+                return this.keySelector(obj).GetHashCode();
             }
         }
 
