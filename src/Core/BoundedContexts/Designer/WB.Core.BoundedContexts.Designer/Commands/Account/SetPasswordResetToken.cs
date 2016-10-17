@@ -3,11 +3,11 @@
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    public class ChangePasswordResetTokenCommand : AccountCommandBase
+    public class SetPasswordResetToken : UserCommand
     {
-        public ChangePasswordResetTokenCommand(
-            Guid accountId, string passwordResetToken, DateTime passwordResetExpirationDate)
-            : base(accountId)
+        public SetPasswordResetToken(
+            Guid userId, string passwordResetToken, DateTime passwordResetExpirationDate)
+            : base(userId)
         {
             this.PasswordResetToken = passwordResetToken;
             this.PasswordResetExpirationDate = passwordResetExpirationDate;

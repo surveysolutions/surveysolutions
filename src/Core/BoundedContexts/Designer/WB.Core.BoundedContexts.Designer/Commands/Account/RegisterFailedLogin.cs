@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 namespace WB.Core.BoundedContexts.Designer.Commands.Account
 {
     [Serializable]
-    public class LoginFailedAccountCommand : AccountCommandBase
+    public class RegisterFailedLogin : UserCommand
     {
-        public LoginFailedAccountCommand(Guid accountId)
-            : base(accountId) {}
+        public RegisterFailedLogin(Guid userId)
+            : base(userId) {}
     }
 }
