@@ -1068,20 +1068,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 group.RemoveChildren(actualRosterIdentity);
                             }
 
-                            foreach (var rosterIdentityWithTitle in expectedRosterIdentitiesWithTitles)
+                            for (int index = 0; index < expectedRosterIdentitiesWithTitles.Count; index++)
                             {
-                                if (group.HasChild(rosterIdentityWithTitle.Identity))
+                                var rosterIdentityWithTitle = expectedRosterIdentitiesWithTitles[index];
+                                if (@group.HasChild(rosterIdentityWithTitle.Identity))
                                     continue;
                                 var rosterNode = new InterviewTreeRoster(
-                                    rosterIdentityWithTitle.Identity, 
-                                    Enumerable.Empty<IInterviewTreeNode>(), 
-                                    isDisabled: false, 
+                                    rosterIdentityWithTitle.Identity,
+                                    Enumerable.Empty<IInterviewTreeNode>(),
+                                    isDisabled: false,
+                                    sortIndex: index,
                                     rosterTitle: rosterIdentityWithTitle.Title,
                                     rosterType: rosterIdentityWithTitle.Type,
                                     rosterSizeQuestion: rosterIdentityWithTitle.SizeQuestion,
                                     rosterTitleQuestionIdentity: rosterIdentityWithTitle.RosterTitleQuestionIdentity);
 
-                                group.AddChildren(rosterNode);
+                                @group.AddChildren(rosterNode);
                                 itemsQueue.Enqueue(rosterNode);
                             }
                         }
