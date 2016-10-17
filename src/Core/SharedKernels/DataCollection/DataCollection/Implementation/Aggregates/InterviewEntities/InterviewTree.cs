@@ -104,9 +104,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsQuestionValid(diff as InterviewTreeQuestionDiff) ||
                     IsQuestionInalid(diff as InterviewTreeQuestionDiff) ||
                     IsStaticTextValid(diff as InterviewTreeStaticTextDiff) ||
-                    IsStaticTextInalid(diff as InterviewTreeStaticTextDiff))
+                    IsStaticTextInalid(diff as InterviewTreeStaticTextDiff) ||
+                    IsVariableChanged(diff as InterviewTreeVariableDiff))
                 .ToReadOnlyCollection();
         }
+
+        private static bool IsVariableChanged(InterviewTreeVariableDiff diffByVariable)
+            => diffByVariable != null && diffByVariable.IsValueChanged;
 
         private static bool IsQuestionValid(InterviewTreeQuestionDiff diffByQuestion)
             => diffByQuestion != null && diffByQuestion.IsValid;
@@ -724,10 +728,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeVariable : InterviewTreeLeafNode
     {
-        public InterviewTreeVariable(Identity identity, bool isDisabled)
-            : base(identity, isDisabled) { }
+        public object Value { get; private set; }
+        public bool HasValue => this.Value != null;
+
+        public InterviewTreeVariable(Identity identity, bool isDisabled, object value)
+            : base(identity, isDisabled)
+        {
+            this.SetValue(value);
+        }
 
         public override string ToString() => $"Variable ({this.Identity})";
+
+        public void SetValue(object value) => this.Value = value;
     }
 
     public class InterviewTreeStaticText : InterviewTreeLeafNode
