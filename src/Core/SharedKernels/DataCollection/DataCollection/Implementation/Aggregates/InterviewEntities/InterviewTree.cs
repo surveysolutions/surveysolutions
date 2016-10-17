@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -26,7 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeQuestion GetQuestion(Identity questionIdentity)
             => this
                 .GetNodes<InterviewTreeQuestion>()
-                .Single(node => node.Identity == questionIdentity);
+                .SingleOrDefault(node => node.Identity == questionIdentity);
 
 
         internal InterviewTreeGroup GetGroup(Identity identity) 
@@ -252,17 +254,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeQuestion GetQuestionFromThisOrUpperLevel(Guid questionId)
         {
-            InterviewTreeQuestion question = null;
-            IInterviewTreeNode group = this;
-            while (question == null)
+            for (int i = this.Identity.RosterVector.Length; i >= 0; i--)
             {
-                question = group.Children.FirstOrDefault(x => x.Identity.Id == questionId) as InterviewTreeQuestion;
-                if (group is InterviewTreeSection)
-                    break;
-                group = group.Parent;
+                var questionIdentity = new Identity(questionId, this.Identity.RosterVector.Take(i).ToArray());
+                var question = this.Tree.GetQuestion(questionIdentity);
+                if (question != null)
+                    return question;
             }
 
-            return question;
+            return null;
+            //InterviewTreeQuestion question = null;
+            //IInterviewTreeNode group = this;
+            //while (question == null)
+            //{
+            //    question = group.Children.FirstOrDefault(x => x.Identity.Id == questionId) as InterviewTreeQuestion;
+            //    if (group is InterviewTreeSection)
+            //        break;
+            //    group = group.Parent;
+            //}
+
+            //return question;
         }
 
         public bool HasChild(Identity identity)
@@ -275,7 +286,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
             QuestionType questionType, object answer,
-            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, bool isYesNo, bool isDecimal, Guid? linkedSourceId = null, Identity commonParentRosterIdForLinkedQuestion = null)
+            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, bool isYesNo, bool isDecimal, Guid? linkedSourceId = null, 
+            Identity commonParentRosterIdForLinkedQuestion = null)
             : base(identity, isDisabled)
         {
             this.Title = title;
@@ -421,6 +433,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var options = sourceNodes.Where(x => !x.IsDisabled()).Select(x => x.Identity.RosterVector);
             linkedQuestion.SetOptions(options);
 
+        }
+
+        public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null)
+        {
+            if (this.IsText) return this.AsText.GetAnswer();
+            if (this.IsMultimedia) return this.AsMultimedia.GetAnswer();
+            if (this.IsQRBarcode) return this.AsQRBarcode.GetAnswer();
+            if (this.IsInteger) return AnswerUtils.AnswerToString(this.AsInteger.GetAnswer());
+            if (this.IsDouble) return AnswerUtils.AnswerToString(this.AsDouble.GetAnswer());
+            if (this.IsDateTime) return AnswerUtils.AnswerToString(this.AsDateTime.GetAnswer());
+            if (this.IsGps) return AnswerUtils.AnswerToString(this.AsGps.GetAnswer());
+            if (this.IsTextList) return AnswerUtils.AnswerToString(this.AsTextList.GetAnswer());
+
+            if (this.IsSingleLinkedOption) return AnswerUtils.AnswerToString(this.AsSingleLinkedOption.GetAnswer());
+            if (this.IsMultiLinkedOption) return AnswerUtils.AnswerToString(this.AsMultiLinkedOption.GetAnswer());
+
+            if (this.IsSingleOption) return AnswerUtils.AnswerToString(this.AsSingleOption.GetAnswer(), getCategoricalAnswerOptionText);
+            if (this.IsMultiOption) return AnswerUtils.AnswerToString(this.AsMultiOption.GetAnswer(), getCategoricalAnswerOptionText);
+            if (this.IsYesNo) return AnswerUtils.AnswerToString(this.AsYesNo.GetAnswer(), getCategoricalAnswerOptionText);
+            return string.Empty;
         }
     }
 
@@ -617,6 +649,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsAnswered => this.answer != null;
 
         public int GetAnswer() => this.answer.Value;
+
         public void SetAnswer(int answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
@@ -757,8 +790,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeStaticText : InterviewTreeLeafNode
     {
-        public InterviewTreeStaticText(Identity identity)
-            : base(identity, false) { }
+        public InterviewTreeStaticText(Identity identity, bool disabled)
+            : base(identity, disabled) { }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; }
@@ -851,21 +884,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => $"Roster ({this.Identity}) [{RosterTitle}]" + Environment.NewLine
             + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
 
-        public void UpadateTitle()
+        public void SetRosterTitle(string rosterTitle)
         {
-            if (IsNumeric)
-            {
-                if (AsNumeric.HasTitleQuestion)
-                {
-                    var titleQuestion = Tree.GetQuestion(AsNumeric.RosterTitleQuestionIdentity);
-                    // get answer and format is as string and set as RosterTitle
-                }
-            }
-            else if (IsList)
-            {
-                var sizeQuestion = AsList.RosterSizeQuestion;
-                this.RosterTitle = sizeQuestion.AsTextList.GetTitleByItemCode(Identity.RosterVector.Last());
-            }
+            RosterTitle = rosterTitle;
         }
     }
 

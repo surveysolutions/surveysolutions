@@ -29,6 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             public bool IsGroupDisabled(Identity @group) => this.actualState.IsGroupDisabled(@group);
 
+            public bool IsStaticTextDisabled(Identity @group) => this.actualState.IsStaticTextDisabled(@group);
+
             public bool IsQuestionDisabled(Identity question) => this.actualState.IsQuestionDisabled(question);
 
             public bool WasQuestionAnswered(Identity question) => this.actualState.WasQuestionAnswered(question);
@@ -362,6 +364,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new AmendingWrapper(this, getRosterInstanceIds);
         }
 
+        public bool IsStaticTextDisabled(Identity staticText)
+        {
+            return this.DisabledStaticTexts.Contains(staticText);
+        }
 
         public bool IsGroupDisabled(Identity group)
         {
