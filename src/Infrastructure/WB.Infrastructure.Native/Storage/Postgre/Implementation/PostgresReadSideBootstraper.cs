@@ -28,7 +28,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 dbCommand.ExecuteNonQuery();
             }
 
-            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString, this.dbUpgradeSettings);
+            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString, this.connectionSettings.SchemaName, this.dbUpgradeSettings);
         }
 
         public bool CheckDatabaseConnection()

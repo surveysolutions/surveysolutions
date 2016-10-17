@@ -7,7 +7,6 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
@@ -17,8 +16,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
     {
         Establish context = () =>
         {
-            questionnaireEntityFactory = Setup.QuestionnaireEntityFactoryWithStaticText(entityId, text, attachment);
-
             questionnaireView = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentId,
@@ -28,15 +25,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     })
             }, creatorId);
 
-            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionnaireEntityFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView);
         };
 
         Because of = () =>
             denormalizer.UpdateStaticText(new UpdateStaticText(questionnaireView.PublicKey, entityId, text, attachment, creatorId, null, false, new List<ValidationCondition>()));
-
-        It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
-            questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text, attachment, null, false, Moq.It.IsAny<List<ValidationCondition>>()), Times.Once);
-
+        
         It should__static_text_be_in_questionnaire_document_view = () =>
             GetExpectedStaticText().ShouldNotBeNull();
 
@@ -60,7 +54,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return GetEntityById<IStaticText>(document: questionnaireView, entityId: entityId);
         }
 
-        private static Mock<IQuestionnaireEntityFactory> questionnaireEntityFactory;
         private static QuestionnaireDocument questionnaireView;
         private static Questionnaire denormalizer;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

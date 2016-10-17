@@ -48,7 +48,7 @@
                 url: "/question/{itemId}",
                 params: {
                     property: 'None',
-                    validationIndex: null
+                    indexOfEntityInProperty: null
                 },
                 views: {
                     '': {
@@ -58,6 +58,10 @@
                 }
             }).state('questionnaire.chapter.group', {
                 url: "/group/{itemId}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/group.html',
@@ -66,6 +70,10 @@
                 }
             }).state('questionnaire.chapter.variable', {
                 url: "/variable/{itemId}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/variable.html',
@@ -74,6 +82,10 @@
                 }
             }).state('questionnaire.chapter.roster', {
                 url: "/roster/{itemId}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/roster.html',
@@ -82,14 +94,10 @@
                 }
             }).state('questionnaire.chapter.statictext', {
                 url: "/static-text/{itemId}",
-                views: {
-                    '': {
-                        templateUrl: 'views/static-text.v1.html',
-                        controller: 'StaticTextCtrl'
-                    }
-                }
-            }).state('questionnaire.chapter.statictext.validation', {
-                url: "/val+{validationIndex}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/static-text.v1.html',

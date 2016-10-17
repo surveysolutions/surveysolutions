@@ -40,9 +40,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 responsibleId,
                 options: new []
                 {
-                    new Option(Guid.NewGuid(),"2", $"answer with {searchFor}"),
-                    new Option(Guid.NewGuid(),"1", $"1")
+                    new Option(Guid.NewGuid(),"1", $"1"),
+                    new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
                 });
+
+            questionnaire.AddSingleOptionQuestion(filteredQuestionId,
+                chapterId,
+                responsibleId,
+                isFilteredCombobox: true,
+                options: new[]
+                {
+                                new Option(Guid.NewGuid(),"1", $"1"),
+                                new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
+                });
+            
+            questionnaire.AddSingleOptionQuestion(cascadingQuestionId,
+             chapterId,
+             responsibleId,
+             cascadeFromQuestionId: filteredQuestionId,
+             options: new[]
+             {
+                                new Option(Guid.NewGuid(),"1", $"1"),
+                                new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
+             });
 
             questionnaire.AddVariable(
                 variableId,
@@ -50,11 +70,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 variableExpression: $"expression {searchFor}",
                 parentId: chapterId);
 
-            questionnaire.AddGroup(Create.Event.NewGroupAddedEvent(groupId.FormatGuid(),
-                parentGroupId: chapterId.FormatGuid(),
-                groupTitle: $"group title with {searchFor}",
-                enablementCondition: $"group enablement {searchFor}"
-                ));
+            questionnaire.AddGroup(groupId,
+                chapterId,
+                title: $"group title with {searchFor}",
+                enablingCondition: $"group enablement {searchFor}", responsibleId: responsibleId);
 
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaire.Id, macroId, responsibleId));
 
@@ -104,7 +123,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                                                x.Property == QuestionnaireVerificationReferenceProperty.VariableContent);
 
         It should_find_question_by_option_text = () => 
-            foundReferences.ShouldContain(x => x.Id == questionId2 && x.Property == QuestionnaireVerificationReferenceProperty.Option);
+            foundReferences.ShouldContain(x => x.Id == questionId2 && 
+                                               x.Property == QuestionnaireVerificationReferenceProperty.Option &&
+                                               x.IndexOfEntityInProperty == 1);
+
+        It should_not_include_references_to_filtered_combobox_options = () => 
+            foundReferences.ShouldNotContain(x => x.Id == filteredQuestionId);
+
+        It should_not_include_references_to_cascading_combobox_options = () =>
+            foundReferences.ShouldNotContain(x => x.Id == cascadingQuestionId);
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
@@ -113,6 +140,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         static readonly Guid questionId1 = Guid.Parse("11111111111111111111111111111111");
         static readonly Guid questionId2 = Guid.Parse("33333333333333333333333333333333");
+        static readonly Guid filteredQuestionId = Guid.Parse("44444444444444444444444444444444");
+        static readonly Guid cascadingQuestionId = Guid.Parse("55555555555555555555555555555555");
         static readonly Guid variableId = Guid.Parse("22222222222222222222222222222222");
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");

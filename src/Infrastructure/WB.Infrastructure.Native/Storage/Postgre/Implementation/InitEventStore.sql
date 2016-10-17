@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS events
+CREATE TABLE IF NOT EXISTS @schemaName.events
 (
   id uuid NOT NULL,
   origin text,
@@ -15,11 +15,11 @@ WITH (
 );
 
 CREATE INDEX IF NOT EXISTS event_source_indx
-  ON events
+  ON @schemaName.events
   USING btree
   (eventsourceid);
 
 CREATE INDEX IF NOT EXISTS globalsequence_indx
-  ON events
+  ON @schemaName.events
   USING btree
   (globalsequence);

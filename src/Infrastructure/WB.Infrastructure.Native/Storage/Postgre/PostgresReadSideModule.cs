@@ -12,6 +12,7 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Planning.Targets;
@@ -31,16 +32,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
+        private readonly string schemaName;
         private readonly DbUpgradeSettings dbUpgradeSettings;
         private readonly IEnumerable<Assembly> mappingAssemblies;
 
-        public PostgresReadSideModule(string connectionString,
+        public PostgresReadSideModule(string connectionString, 
+            string schemaName,
             DbUpgradeSettings dbUpgradeSettings,
             ReadSideCacheSettings cacheSettings,
             IEnumerable<Assembly> mappingAssemblies)
             : base(cacheSettings)
         {
             this.connectionString = connectionString;
+            this.schemaName = schemaName;
             this.dbUpgradeSettings = dbUpgradeSettings;
             this.mappingAssemblies = mappingAssemblies;
         }
@@ -54,7 +58,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             try
             {
-                DatabaseManagement.InitDatabase(this.connectionString);
+                DatabaseManagement.InitDatabase(this.connectionString, this.schemaName);
             }
             catch (Exception exc)
             {
@@ -64,7 +68,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings
             {
-                ConnectionString = this.connectionString
+                ConnectionString = this.connectionString,
+                SchemaName = "readside",
             });
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>()
@@ -108,7 +113,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             
-             DbMigrationsRunner.MigrateToLatest(this.connectionString, this.dbUpgradeSettings);
+             DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
         }
 
         private object GetEntityIdentifierColumnName(IContext context, ITarget target)
@@ -179,7 +184,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 var tableName = type.Name.Pluralize();
                 customizer.Table(tableName);
+                customizer.Schema(this.schemaName);
             };
+
+            mapper.BeforeMapSet += (inspector, member, customizer) => customizer.Schema(this.schemaName);
+            mapper.BeforeMapBag += (inspector, member, customizer) => customizer.Schema(this.schemaName);
+            mapper.BeforeMapList += (inspector, member, customizer) => customizer.Schema(this.schemaName);
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }

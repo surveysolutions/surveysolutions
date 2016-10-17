@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 using It = Machine.Specifications.It;
@@ -20,11 +21,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 => processor.GetIdentifiersUsedInExpression("absentRoster.Max(x => x.age) > maxAge") == new[] { "absentRoster", "age", "maxAge" });
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
-            questionnaire.AddGroup(Create.Event.AddGroup(chapterId));
-            questionnaire.AddGroup(Create.Event.AddGroup(rosterId, parentId: chapterId, variableName: "roster"));
-            questionnaire.MarkGroupAsRoster(Create.Event.GroupBecameRoster(rosterId));
-            questionnaire.ChangeRoster(Create.Event.RosterChanged(rosterId,  rosterType: RosterSizeSourceType.FixedTitles,
-                titles: new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") }));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(rosterId, parentGroupId: chapterId, variableName: "roster1", isRoster:true, rosterSourceType: RosterSizeSourceType.FixedTitles,
+                rosterFixedTitles: new FixedRosterTitleItem[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2") });
 
             questionnaire.AddNumericQuestion(rosterQuestionId, parentId: rosterId,responsibleId:responsibleId, variableName:"age");
             

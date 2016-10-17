@@ -5,7 +5,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 using It = Machine.Specifications.It;
 
@@ -16,21 +16,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         Establish context = () =>
         {
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression("roster.Max(x => x.age) > maxAge") == new[] { "roster", "age", "maxAge" });
+                => processor.GetIdentifiersUsedInExpression("roster1.Max(x => x.age) > maxAge") == new[] { "roster", "age", "maxAge" });
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
-            questionnaire.AddGroup(Create.Event.AddGroup(chapterId));
-            questionnaire.AddGroup(Create.Event.AddGroup(rosterId, variableName: "roster", parentId: chapterId));
-            questionnaire.MarkGroupAsRoster(Create.Event.GroupBecameRoster(rosterId));
-            questionnaire.ChangeRoster(Create.Event.RosterChanged(rosterId, rosterType: RosterSizeSourceType.FixedTitles,
-                titles: new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2") }));
 
+            questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
+            questionnaire.AddGroup(rosterId, variableName: "roster1", parentGroupId: chapterId, responsibleId: responsibleId,
+                isRoster:true, rosterSourceType: RosterSizeSourceType.FixedTitles, rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2") });
 
             questionnaire.AddNumericQuestion(rosterQuestionId, rosterId, responsibleId, variableName: "age");
             questionnaire.AddNumericQuestion(existingQuestionId, chapterId, responsibleId, variableName: "maxAge");
-            
         };
-
 
         Because of = () =>
             questionnaire.AddTextQuestion(
@@ -51,7 +47,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 
         It should_contains_TextQuestion_with_questionId = () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId).ShouldNotBeNull();
-
 
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

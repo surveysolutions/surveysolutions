@@ -145,7 +145,7 @@ namespace WB.UI.Designer.Code
                         Type = reference.Type,
                         Title = string.IsNullOrEmpty(staticText.Text) ? "static text" : staticText.Text,
                         ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid()),
-                        FailedValidationConditionIndex = reference.FailedValidationConditionIndex
+                        IndexOfEntityInProperty = reference.IndexOfEntityInProperty
                     };
                 }
                 else if (reference.Type == QuestionnaireVerificationReferenceType.Variable)
@@ -171,7 +171,7 @@ namespace WB.UI.Designer.Code
                         QuestionType = "icon-" + question.QuestionType.ToString().ToLower(),
                         Title = question.QuestionText,
                         ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid()),
-                        FailedValidationConditionIndex = reference.FailedValidationConditionIndex
+                        IndexOfEntityInProperty = reference.IndexOfEntityInProperty
                     };
                 }
             }

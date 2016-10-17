@@ -15,5 +15,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public DbUpgradeSettings DbUpgradeSettings { get; set; }
 
         public List<Assembly> MappingAssemblies { get; set; }
+        public string SchemaName { get; set; }
     }
 }

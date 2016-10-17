@@ -60,19 +60,25 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             result.Version = id.Version;
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(id);
+            if (questionnaire == null)
+                return null;
+
             questionnaire.ConnectChildrenWithParent();
 
             var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
 
-            var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaire);
+            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id);
+            questionnaireDocument.ConnectChildrenWithParent();
+
+            var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaireDocument);
 
             result.HeaderToLevelMap.Add(new ValueVector<Guid>(),
-                this.BuildHeaderByTemplate(questionnaire, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
+                this.BuildHeaderByTemplate(questionnaireDocument, new ValueVector<Guid>(), rosterScopes, maxValuesForRosterSizeQuestions));
 
             foreach (var rosterScopeDescription in rosterScopes)
             {
                 result.HeaderToLevelMap.Add(rosterScopeDescription.Key,
-                    this.BuildHeaderByTemplate(questionnaire, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
+                    this.BuildHeaderByTemplate(questionnaireDocument, rosterScopeDescription.Key, rosterScopes, maxValuesForRosterSizeQuestions));
             }
 
             return result;

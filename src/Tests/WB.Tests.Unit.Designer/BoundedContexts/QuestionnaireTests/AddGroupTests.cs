@@ -5,7 +5,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -94,13 +94,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         public void NewAddGroup_When_User_In_Readonly_mode_Questionnaire_Then_DomainException_should_be_thrown()
         {
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
+            var responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             var readOnlyUser = Guid.NewGuid();
-            questionnaire.AddSharedPersonToQuestionnaire(new SharedPersonToQuestionnaireAdded()
-            {
-                PersonId = readOnlyUser,
-                ShareType = ShareType.View
-            });
+            questionnaire.AddSharedPerson(readOnlyUser, null, ShareType.View, responsibleId);
             // act
             TestDelegate act =
                 () =>

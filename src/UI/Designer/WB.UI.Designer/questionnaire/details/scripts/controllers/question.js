@@ -122,41 +122,37 @@
                     .success(function (result) {
                         $scope.initialQuestion = angular.copy(result);
                         dataBind(result);
-                        utilityService.scrollToValidationCondition($state.params.validationIndex);
+                        utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
 
 
-                        $timeout(function () {
-                            var elementToPutFocusIn = null;
-                            switch ($state.params.property) {
-                                case 'Title':
-                                    elementToPutFocusIn = angular.element('#edit-question-title');
-                                    break;
-                                case 'VariableName':
-                                    elementToPutFocusIn = angular.element('#edit-question-variable-name');
-                                    break;
-                                case 'EnablingCondition':
-                                    elementToPutFocusIn = angular.element('#edit-question-enablement-condition');
-                                    break;
-                                case 'ValidationExpression':
-                                    elementToPutFocusIn = angular.element('#validation-expression-' + $state.params.validationIndex);
-                                    break;
-                                case 'ValidationMessage':
-                                    elementToPutFocusIn = angular.element('#validationMessage' + $state.params.validationIndex);
-                                    break;
-                                default:
-                                    break;
-                            }
+                        var focusId = null;
+                        switch ($state.params.property) {
+                            case 'Title':
+                                focusId = 'edit-question-title';
+                                break;
+                            case 'VariableName':
+                                focusId = 'edit-question-variable-name';
+                                break;
+                            case 'EnablingCondition':
+                                focusId = "edit-question-enablement-condition";
+                                break;
+                            case 'ValidationExpression':
+                                focusId = 'validation-expression-' + $state.params.indexOfEntityInProperty;
+                                break;
+                            case 'ValidationMessage':
+                                focusId = 'validationMessage' + $state.params.indexOfEntityInProperty;
+                                break;
+                            case 'Option':
+                                focusId = 'option-title-' + $state.params.indexOfEntityInProperty;
+                                break;
+                            case 'OptionsFilter':
+                                focusId = 'optionsFilterExpression';
+                                break;
+                            default:
+                                break;
+                        }
 
-                            if (elementToPutFocusIn !== null) {
-                                if (elementToPutFocusIn.attr('ui-ace')) {
-                                    var edit = ace.edit(elementToPutFocusIn.attr('id'));
-                                    edit.focus();
-                                    edit.navigateFileEnd();
-                                } else {
-                                    elementToPutFocusIn.focus();
-                                }
-                            }
-                        }, 300);
+                        utilityService.setFocusIn(focusId);
                     });
             };
 
@@ -256,6 +252,11 @@
 
                 if (type !== "SingleOption" && type !== "MultyOption") {
                     $scope.setLinkSource(null,null);
+                }
+
+                if (!$scope.doesQuestionSupportOptionsFilters()) {
+                    $scope.activeQuestion.optionsFilterExpression = '';
+                    $scope.activeQuestion.linkedFilterExpression = '';
                 }
 
                 markFormAsChanged();
@@ -434,7 +435,7 @@
                 }
             });
 
-            $scope.$on('verifing', function (scope, params) {
+            $scope.$on('verifing', function () {
                 if ($scope.questionForm.$dirty)
                     $scope.saveQuestion(function() {
                         $scope.questionForm.$setPristine();
@@ -468,6 +469,17 @@
                 return $scope.activeQuestion && !_.contains(questionTypesDoesNotSupportValidations, $scope.activeQuestion.type)
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
+
+            $scope.doesQuestionSupportOptionsFilters = function () {
+                if ($scope.activeQuestion) {
+                    if ($scope.activeQuestion.type === 'MultyOption' || $scope.activeQuestion.type === 'SingleOption') {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
 
             $scope.doesQuestionSupportEnablementConditions = function () {
                 return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Prefilled')

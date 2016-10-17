@@ -55,11 +55,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 variableExpression: $"var expression {searchFor}",
                 parentId: chapterId);
 
-            questionnaire.AddGroup(Create.Event.NewGroupAddedEvent(groupId.FormatGuid(), 
-                parentGroupId: chapterId.FormatGuid(), 
-                groupTitle: $"group title with {searchFor}",
-                enablementCondition: $"group enablement {searchFor}"
-                ));
+            questionnaire.AddGroup(groupId, chapterId, 
+                title: $"group title with {searchFor}",
+                enablingCondition: $"group enablement {searchFor}", responsibleId: responsibleId);
 
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaire.Id, macroId, responsibleId));
 

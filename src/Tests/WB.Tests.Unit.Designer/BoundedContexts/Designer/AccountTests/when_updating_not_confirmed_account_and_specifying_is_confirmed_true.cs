@@ -5,19 +5,20 @@ using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
 {
+    [Ignore("KP-7922 KP-7923")]
     internal class when_updating_not_confirmed_account_and_specifying_is_confirmed_true : AccountTestsContext
     {
         Establish context = () =>
         {
             var accountId = Guid.Parse("11111111111111111111111111111111");
 
-            account = CreateAccount(accountId);
+            user = CreateAccount(accountId);
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            account.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
+            user.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
                 isConfirmed: true);
 
         Cleanup stuff = () =>
@@ -30,6 +31,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
             eventContext.ShouldContainEvent<AccountConfirmed>();
 
         private static EventContext eventContext;
-        private static AccountAR account;
+        private static User user;
     }
 }

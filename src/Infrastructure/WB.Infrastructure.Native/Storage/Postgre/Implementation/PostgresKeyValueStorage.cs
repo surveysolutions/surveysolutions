@@ -14,13 +14,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         where TEntity: class
     {
         protected readonly string connectionString;
-        protected readonly string tableName = typeof(TEntity).Name.Pluralize();
+        protected readonly string tableName;
         private readonly ILogger logger;
 
-        public PostgresKeyValueStorage(string connectionString, ILogger logger)
+        public PostgresKeyValueStorage(string connectionString, string schemaName, ILogger logger)
         {
             this.connectionString = connectionString;
             this.logger = logger;
+
+            tableName = typeof(TEntity).Name.Pluralize();
+            if (!string.IsNullOrWhiteSpace(schemaName))
+                tableName = schemaName + "." + tableName;
+
             this.EnshureTableExists();
         }
 
