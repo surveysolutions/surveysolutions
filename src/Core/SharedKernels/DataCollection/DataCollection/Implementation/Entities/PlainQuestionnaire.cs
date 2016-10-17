@@ -711,6 +711,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return commonPart.Any() ? commonPart.LastOrDefault() : (Guid?)null;
         }
 
+        public bool IsVariable(Guid id) 
+            => this.AllVariables.Any(x => x.PublicKey == id);
+
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
 
@@ -763,12 +766,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 this.cacheOfChildEntities[groupId] =
                     this.GetGroupOrThrow(groupId)
                         .Children
-                        .Where(entity => !(entity is IVariable))
+                        //.Where(entity => !(entity is IVariable))
                         .Select(entity => entity.PublicKey)
                         .ToReadOnlyCollection();
             }
 
             return this.cacheOfChildEntities[groupId];
+        }
+
+        public IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId)
+        {
+            return this.GetGroupOrThrow(groupId)
+                .Children
+                .Select(entity => entity.PublicKey)
+                .ToReadOnlyCollection();
         }
 
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)

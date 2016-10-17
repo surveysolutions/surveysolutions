@@ -39,6 +39,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             .GetNodes<InterviewTreeStaticText>()
             .Single(node => node.Identity == identity);
 
+        public InterviewTreeVariable GetVariable(Identity identity)
+            => this
+            .GetNodes<InterviewTreeVariable>()
+            .Single(node => node.Identity == identity);
+
         public IReadOnlyCollection<InterviewTreeQuestion> FindQuestions(Guid questionId)
             => this
                 .GetNodes<InterviewTreeQuestion>()
