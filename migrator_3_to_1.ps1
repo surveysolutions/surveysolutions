@@ -33,9 +33,9 @@ function RunMigrator()
 	}
 	
 	CreateNewDatabase
-	MigrateDb ($databaseName + "-Plain") "plainstore" $dblist
-	MigrateDb ($databaseName + "-Views") "readside"   $dblist
-	MigrateDb ($databaseName + "-Evn")   "events"     $dblist
+	MigrateDb ($databaseName + "-Plain")  "plainstore" $dblist
+	MigrateDb ($databaseName + "-Views")  "readside"   $dblist
+	MigrateDb ($databaseName + "-Events") "events"     $dblist
 }
 
 function DoesExistTargetDb([string] $dblist)
