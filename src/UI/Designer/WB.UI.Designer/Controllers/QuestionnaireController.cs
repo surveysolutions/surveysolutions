@@ -180,6 +180,7 @@ namespace WB.UI.Designer.Controllers
             return this.Redirect(this.Request.UrlReferrer.ToString());
         }
 
+        [AllowAnonymous]
         public ActionResult ExpressionGeneration(Guid? id)
         {
             ViewBag.QuestionnaireId = id ?? Guid.Empty;
