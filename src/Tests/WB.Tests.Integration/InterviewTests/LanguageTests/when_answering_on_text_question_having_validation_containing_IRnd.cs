@@ -1,10 +1,11 @@
 using System;
-
+using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
@@ -15,7 +16,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             appDomainContext = AppDomainContext.Create();
         };
 
-        Because of = () =>
+        private Because of = () =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -26,19 +27,24 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     Create.Chapter(children: new IComposite[]
                     {
-                        Create.TextQuestion(variable: "test", id :questionId, validationExpression: "Quest.IRnd() > 0.5"),
+                        Create.TextQuestion(variable: "test", id :questionId, validationExpression: "Quest.IRnd() < 0.5"),
+                        Create.Variable(id:variableId, type:VariableType.Double, variableName:"v1", expression:"Quest.IRnd()")
                     }),
                 });
 
-                var interview = SetupInterview(questionnaireDocument);
+                var userId = Guid.NewGuid();
+                var interview = CreateEmptyInterview(questionnaireDocument);
+                interview.ApplyEvent(new InterviewCreated(userId, id, 1));
+
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerTextQuestion(Guid.NewGuid(), questionId, Empty.RosterVector, DateTime.Now, "test");
+                    interview.AnswerTextQuestion(userId, questionId, Empty.RosterVector, DateTime.Now, "test");
 
                     return new InvokeResult
                     {
-                        AnswerDeclaredInvalidEventCount = eventContext.Count<AnswersDeclaredInvalid>()
+                        AnswerDeclaredInvalidEventCount = eventContext.Count<AnswersDeclaredInvalid>(),
+                        IRndValue = GetFirstEventByType<VariablesChanged>(eventContext.Events).ChangedVariables.First().NewValue
                     };
                 }
             });
@@ -50,16 +56,21 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         };
         
         It should_raise_AnswerDeclaredInvalidEvent_event = () =>
-            result.AnswerDeclaredInvalidEventCount.ShouldEqual(0);
+            result.AnswerDeclaredInvalidEventCount.ShouldEqual(1);
+
+        It should_raise_VariablesChanged_event = () =>
+            result.IRndValue.ShouldNotBeNull();
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid variableId = Guid.Parse("21111111111111111111111111111111");
 
         [Serializable]
         private class InvokeResult
         {
             public int AnswerDeclaredInvalidEventCount { get; set; }
+            public object IRndValue { get; set; }
         }
     }
 }
