@@ -13,7 +13,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
             var accountId = Guid.Parse("11111111111111111111111111111111");
 
             user = CreateAccount(accountId);
-            user.Apply(new AccountLocked());
+            user.IsLockedOut = true;
+            user.LastLockedOutAt = new AccountLocked().LastLockedOutAt;
 
             eventContext = new EventContext();
         };
