@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -20,27 +16,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
-            var tree = this.BuildInterviewTree(questionnaire);
-            var treeInvariants = new InterviewTreeInvariants(tree);
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
+            var treeInvariants = new InterviewTreeInvariants(sourceInterviewTree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
             treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
-            var expressionProcessorState = this.GetClonedExpressionState();
+            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
 
-            this.CalculateInterviewChangesOnAnswerPictureQuestion(expressionProcessorState, userId, questionId, rosterVector, answerTime, pictureFileName, questionnaire);
-        }
-        private void CalculateInterviewChangesOnAnswerPictureQuestion(ILatestInterviewExpressionState expressionProcessorState, Guid userId, Guid questionId, RosterVector rosterVector,
-            DateTime answerTime, string pictureFileName, IQuestionnaire questionnaire)
-        {
-            expressionProcessorState.UpdateMediaAnswer(questionId, rosterVector, pictureFileName);
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, pictureFileName,
-                AnswerChangeType.Picture, answerTime, questionnaire, expressionProcessorState);
+            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
+            changedInterviewTree.GetQuestion(answeredQuestion).AsMultimedia.SetAnswer(pictureFileName);
 
-            this.ApplyInterviewChanges(interviewChanges);
+            ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
     }
 }
