@@ -30,9 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(Create.Event.NumericIntegerQuestionAnswered(numericQuestionId, emptyRosterVector, 1));
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, rosterInstanceId));
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId));
+            interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(interview.EventSourceId, userId, numericQuestionId, 1));
 
             eventContext = new EventContext();
         };
@@ -76,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid rosterAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        private static decimal rosterInstanceId = (decimal)22.5;
+        private static decimal rosterInstanceId = (decimal)0;
         private static decimal[] emptyRosterVector = new decimal[] { };
         private static decimal[] rosterVector = emptyRosterVector.Concat(new[] { rosterInstanceId }).ToArray();
         private static string answer = "some answer here";
