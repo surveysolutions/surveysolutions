@@ -33,11 +33,10 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     Create.Roster(rosterId, 
                         rosterSizeQuestionId: multiOptionQuestionId,
                         rosterSizeSourceType: RosterSizeSourceType.Question,
-                        enablementCondition: "!q1.Contains(2)",
-                        children: new[]
-                                  {
-                                      Create.Question(idOfQuestionInRoster, variable:"q2")
-                                  })
+                        enablementCondition: "!q1.Contains(2)",children: new[]
+                        {
+                            Create.TextQuestion(idOfQuestionInRoster, variable:"q2")
+                        })
                     );
 
                 var emptyVector = new decimal[] {};

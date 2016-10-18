@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
@@ -33,11 +28,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             {
                 Create.Entity.MultipleOptionsQuestion(questionId: questionId, textAnswers: new []
                 {
-                    Create.Entity.Answer("option 1", 14.7m),
-                    Create.Entity.Answer(option2Title, option2 = 18.4m),
+                    Create.Entity.Answer("option 1", 147m),
+                    Create.Entity.Answer(option2Title, option2 = 184m),
                     Create.Entity.Answer("option 3", 3),
-                    Create.Entity.Answer(option4Title, option4 = -1),
-                    Create.Entity.Answer("option 5", 256.128m),
+                    Create.Entity.Answer(option4Title, option4 = 1),
+                    Create.Entity.Answer("option 5", 256128m),
                 }),
 
                 Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: questionId),
@@ -82,11 +77,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_set_sort_index_to_1_in_RosterInstancesAdded_instance_with_roster_instance_id_equal_to_2nd_option = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Single(instance => instance.RosterInstanceId == option2)
-                .SortIndex.ShouldEqual(1);
+                .SortIndex.ShouldEqual(0);
 
         It should_set_sort_index_to_3_in_RosterInstancesAdded_instance_with_roster_instance_id_equal_to_4th_option = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Single(instance => instance.RosterInstanceId == option4)
-                .SortIndex.ShouldEqual(3);
+                .SortIndex.ShouldEqual(1);
 
         It should_raise_1_RosterRowsTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
