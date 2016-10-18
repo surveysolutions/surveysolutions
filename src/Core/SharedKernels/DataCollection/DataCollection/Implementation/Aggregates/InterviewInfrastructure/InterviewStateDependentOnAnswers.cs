@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DisabledQuestions = new ConcurrentHashSet<string>();
             this.RosterGroupInstanceIds = new ConcurrentDictionary<string, ConcurrentDistinctList<decimal>>();
             this.ValidAnsweredQuestions = new ConcurrentHashSet<Identity>();
-            this.InvalidAnsweredQuestions = new ConcurrentHashSet<Identity>();
+            this.InvalidAnsweredQuestions = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
             this.AnswerComments = new ConcurrentBag<AnswerComment>();
             this.RosterTitles = new ConcurrentDictionary<string, string>();
             this.DisabledStaticTexts = new ConcurrentHashSet<Identity>();
@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> RosterGroupInstanceIds { set; get; }
         public ConcurrentDictionary<string, string> RosterTitles { set; get; }
         public ConcurrentHashSet<Identity> ValidAnsweredQuestions { set; get; }
-        public ConcurrentHashSet<Identity> InvalidAnsweredQuestions { set; get; }
+        public IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
 
         public ConcurrentHashSet<Identity> ValidStaticTexts { set; get; }
@@ -114,7 +114,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 DisabledQuestions = new ConcurrentHashSet<string>(this.DisabledQuestions),
                 RosterGroupInstanceIds = this.RosterGroupInstanceIds.ToConcurrentDictionary(x => x.Key, x => new ConcurrentDistinctList<decimal>(x.Value)),
                 ValidAnsweredQuestions = new ConcurrentHashSet<Identity>(this.ValidAnsweredQuestions),
-                InvalidAnsweredQuestions = new ConcurrentHashSet<Identity>(this.InvalidAnsweredQuestions),
+                InvalidAnsweredQuestions = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>(this.InvalidAnsweredQuestions),
                 AnswerComments = new ConcurrentBag<AnswerComment>(this.AnswerComments),
                 RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value),
 
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changes.ValidityChanges != null)
             {
-                this.DeclareAnswersInvalid(changes.ValidityChanges.AnswersDeclaredInvalid);
+                this.DeclareAnswersInvalid(changes.ValidityChanges.FailedValidationConditions.ToDictionary());
             }
 
             if (changes.RosterCalculationData != null)
@@ -307,12 +307,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void DeclareAnswersInvalid(IEnumerable<Identity> questions)
+        public void DeclareAnswersInvalid(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> questions)
         {
             foreach (var questionKey in questions)
             {
-                this.ValidAnsweredQuestions.Remove(questionKey);
-                this.InvalidAnsweredQuestions.Add(questionKey);
+                this.InvalidAnsweredQuestions[questionKey.Key] = questionKey.Value;
+                this.ValidAnsweredQuestions.Remove(questionKey.Key);
             }
         }
 
