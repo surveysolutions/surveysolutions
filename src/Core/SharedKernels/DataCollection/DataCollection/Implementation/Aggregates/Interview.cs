@@ -247,7 +247,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.DisabledQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledQuestions);
             this.interviewState.RosterGroupInstanceIds = BuildRosterInstanceIdsFromSynchronizationDto(@event.InterviewData);
             this.interviewState.ValidAnsweredQuestions = new ConcurrentHashSet<Identity>(@event.InterviewData.ValidAnsweredQuestions.Select(x => new Identity(x.Id, x.InterviewItemRosterVector)));
-            this.interviewState.InvalidAnsweredQuestions = new ConcurrentHashSet<Identity>(@event.InterviewData.InvalidAnsweredQuestions.Select(x => new Identity(x.Id, x.InterviewItemRosterVector)));
+            this.interviewState.InvalidAnsweredQuestions = @event.InterviewData.FailedValidationConditions?.ToDictionary(x => x.Key,
+                x => (IReadOnlyList<FailedValidationCondition>)x.Value) ??
+                                                     new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
 
             this.interviewState.DisabledStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData?.DisabledStaticTexts ?? new List<Identity>());
             this.interviewState.ValidStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData?.ValidStaticTexts ?? new List<Identity>());
@@ -441,7 +443,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(AnswersDeclaredInvalid @event)
         {
-            this.interviewState.DeclareAnswersInvalid(@event.FailedValidationConditions.Keys);
+            this.interviewState.DeclareAnswersInvalid(@event.FailedValidationConditions);
 
             if (@event.FailedValidationConditions.Count > 0)
             {
@@ -838,14 +840,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+            this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
-
-            this.ApplyValidityChangesEvents(validationChanges);
 
             if (variableValueChanges?.ChangedVariableValues?.Count > 0)
             {
@@ -854,6 +855,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+        }
+
+        private void UpdateTreeWithValidationChanges(InterviewTree tree, ValidityChanges validationChanges)
+        {
+            if (validationChanges == null) return; // can be in tests only.
+
+            validationChanges.AnswersDeclaredValid.ForEach(x => tree.GetQuestion(x).SetFailedValidations(null));
+            validationChanges.FailedValidationConditionsForQuestions.ForEach(x => tree.GetQuestion(x.Key).SetFailedValidations(x.Value));
+
+            validationChanges.StaticTextsDeclaredValid.ForEach(x => tree.GetStaticText(x).SetFailedValidations(null));
+            validationChanges.FailedValidationConditionsForStaticTexts.ForEach(x => tree.GetStaticText(x.Key).SetFailedValidations(x.Value));
         }
 
         private void UpdateTreeWithEnablementChanges(InterviewTree tree, EnablementChanges enablementChanges)
@@ -1526,10 +1538,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+            this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
-
-            this.ApplyValidityChangesEvents(validationChanges);
 
             if (variableValueChanges?.ChangedVariableValues?.Count > 0)
             {
@@ -2508,7 +2519,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal answer,
            IQuestionnaire questionnaire,
-           Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+           Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
@@ -2525,7 +2536,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckDateTimeQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
@@ -2540,7 +2551,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal selectedValue,
-            IQuestionnaire questionnaire, Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState,
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
@@ -2558,7 +2569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckMultipleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedValues,
-            IQuestionnaire questionnaire, Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState,
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
@@ -2591,7 +2602,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckYesNoQuestionInvariants(Identity question, AnsweredYesNoOption[] answeredOptions, IQuestionnaire questionnaire,
-            IReadOnlyInterviewStateDependentOnAnswers state)
+            InterviewStateDependentOnAnswers state)
         {
             decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.OptionValue).ToArray();
             var yesAnswersCount = answeredOptions.Count(answeredOption => answeredOption.Yes);
@@ -2618,7 +2629,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckTextQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
@@ -2633,7 +2644,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, RosterVector rosterVector, int answer, IQuestionnaire questionnaire,
-            Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
@@ -2659,7 +2670,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckTextListInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
-            IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
+            InterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
@@ -2688,7 +2699,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckGpsCoordinatesInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
-            IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+            InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
@@ -2703,7 +2714,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckQRBarcodeInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-         Identity answeredQuestion, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+         Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
@@ -3907,7 +3918,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
-            RosterVector rosterVector = null, IReadOnlyInterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
+            RosterVector rosterVector = null, InterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
         {
             var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
@@ -4279,7 +4290,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 return filteredOption;
         }
 
-        protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any(x => !this.interviewState.DisabledQuestions.Contains(ConversionHelper.ConvertIdentityToString(x)));
+        protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any(x => !this.interviewState.DisabledQuestions.Contains(ConversionHelper.ConvertIdentityToString(x.Key)));
         protected bool HasInvalidStaticTexts => this.interviewState.InvalidStaticTexts.Any(x => !this.interviewState.DisabledStaticTexts.Contains(x.Key));
 
         private static AnsweredYesNoOption[] ConvertToAnsweredYesNoOptionArray(YesNoAnswersOnly answeredOptions)
@@ -4290,14 +4301,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToArray();
         }
 
-        protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState = null)
+        protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire, InterviewStateDependentOnAnswers interviewState = null)
         {
             var sections = this.BuildInterviewTreeSections(questionnaire, interviewState).ToList();
 
             return new InterviewTree(this.EventSourceId, sections);
         }
 
-        private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(IQuestionnaire questionnaire, InterviewStateDependentOnAnswers interviewState)
         {
             var sectionIds = questionnaire.GetAllSections();
 
@@ -4310,7 +4321,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private InterviewTreeSection BuildInterviewTreeSection(Identity sectionIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private InterviewTreeSection BuildInterviewTreeSection(Identity sectionIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers interviewState)
         {
             interviewState = interviewState ?? this.interviewState;
 
@@ -4320,7 +4331,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new InterviewTreeSection(sectionIdentity, children, isDisabled: isDisabled);
         }
 
-        private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers interviewState)
         {
             var children = BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, interviewState).ToList();
             bool isDisabled = interviewState.IsGroupDisabled(groupIdentity);
@@ -4328,7 +4339,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new InterviewTreeSubSection(groupIdentity, children, isDisabled: isDisabled);
         }
 
-        private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers interviewState)
         {
             var children = BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire, interviewState).ToList();
             bool isDisabled = interviewState.IsGroupDisabled(rosterIdentity);
@@ -4413,13 +4424,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 commonParentRosterIdForLinkedQuestion: commonParentIdentity);
         }
 
-        private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private static InterviewTreeStaticText BuildInterviewTreeStaticText(Identity staticTextIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers interviewState)
         {
             bool isDisabled = interviewState.IsStaticTextDisabled(staticTextIdentity);
-            return new InterviewTreeStaticText(staticTextIdentity, isDisabled);
+
+            var interviewStaticText =  new InterviewTreeStaticText(staticTextIdentity, isDisabled);
+            var failedValidationConditions = interviewState.InvalidStaticTexts.Where(x => x.Key.Equals(staticTextIdentity)).ToList();
+            if (failedValidationConditions.Any())
+                interviewStaticText.SetFailedValidations(failedValidationConditions[0].Value);
+            return interviewStaticText;
         }
 
-        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers interviewState)
         {
             var childIds = questionnaire.GetChildEntityIds(groupIdentity.Id);
 
@@ -4447,7 +4463,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
                     var answer = interviewState.GetAnswer(childQuestionIdentity); 
-                    yield return BuildInterviewTreeQuestion(childQuestionIdentity, answer, interviewState.IsQuestionDisabled(childQuestionIdentity), interviewState.GetOptionsForLinkedQuestion(childQuestionIdentity), questionnaire);
+                    var interviewTreeQuestion = BuildInterviewTreeQuestion(childQuestionIdentity, answer, interviewState.IsQuestionDisabled(childQuestionIdentity), interviewState.GetOptionsForLinkedQuestion(childQuestionIdentity), questionnaire);
+                    var failedValidationConditions = interviewState.InvalidAnsweredQuestions.Where(x => x.Key.Equals(childQuestionIdentity)).ToList();
+                    if (failedValidationConditions.Any())
+                        interviewTreeQuestion.SetFailedValidations(failedValidationConditions[0].Value);
+                    yield return interviewTreeQuestion;
                 }
                 else if (questionnaire.IsStaticText(childId))
                 {
