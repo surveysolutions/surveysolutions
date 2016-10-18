@@ -113,7 +113,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             
-             DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
+            DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
         }
 
         private object GetEntityIdentifierColumnName(IContext context, ITarget target)
