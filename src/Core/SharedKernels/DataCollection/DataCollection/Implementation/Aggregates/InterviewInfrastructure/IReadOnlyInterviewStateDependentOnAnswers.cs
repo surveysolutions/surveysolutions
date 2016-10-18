@@ -23,5 +23,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire);
 
         IReadOnlyCollection<RosterVector> GetOptionsForLinkedQuestion(Identity linkedQuestionIdentity);
+        object GetAnswer(Identity identity);
     }
 }
