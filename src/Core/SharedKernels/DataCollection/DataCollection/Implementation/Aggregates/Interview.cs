@@ -2504,14 +2504,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region CheckInvariants
 
         private void CheckLinkedMultiOptionQuestionInvariants(Guid questionId, RosterVector rosterVector,
-            decimal[][] linkedQuestionSelectedOptions, IQuestionnaire questionnaire, Identity answeredQuestion)
+            decimal[][] linkedQuestionSelectedOptions, IQuestionnaire questionnaire, Identity answeredQuestion, 
+            InterviewTree tree)
         {
-            var tree = this.BuildInterviewTree(questionnaire);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
+            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
             if (!linkedQuestionSelectedOptions.Any())
@@ -2524,7 +2524,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionIdentity, selectedRosterVector);
             }
 
-            ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, linkedQuestionSelectedOptions.Length, questionnaire);
+            this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, linkedQuestionSelectedOptions.Length, questionnaire);
         }
 
         private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire, Identity answeredQuestion)
