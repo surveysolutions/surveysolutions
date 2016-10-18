@@ -419,7 +419,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             InterviewTreeLinkedQuestion linkedQuestion = this.AsLinked;
 
             List<IInterviewTreeNode> sourceNodes = new List<IInterviewTreeNode>();
-            if (linkedQuestion.CommonParentRosterIdForLinkedQuestion == null)
+            var isQuestionOnTopLeveOrInDifferentRosterBranch = linkedQuestion.CommonParentRosterIdForLinkedQuestion == null;
+            if (isQuestionOnTopLeveOrInDifferentRosterBranch)
             {
                 sourceNodes = this.Tree.FindEntity(linkedQuestion.LinkedSourceId).ToList();
             }
@@ -433,9 +434,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         .ToList();
             }
 
-            var options = sourceNodes.Where(x => !x.IsDisabled()).Select(x => x.Identity.RosterVector);
+            var options = sourceNodes.Where(x => !x.IsDisabled()).Select(x => x.Identity.RosterVector).ToList();
+            List<RosterVector> previousOptions = linkedQuestion.Options;
             linkedQuestion.SetOptions(options);
 
+            if (!previousOptions.SequenceEqual(options))
+            {
+                if (IsMultiLinkedOption)
+                    AsMultiLinkedOption.RemoveAnswer();
+                else
+                    AsSingleLinkedOption.RemoveAnswer();
+            }
         }
 
         public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null)
@@ -842,13 +851,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             string rosterTitle = null,
             int sortIndex = 0,
             RosterType rosterType = RosterType.Fixed,
-            InterviewTreeQuestion rosterSizeQuestion = null,
+            Guid? rosterSizeQuestion = null,
             Identity rosterTitleQuestionIdentity = null)
             : base(identity, children, isDisabled)
         {
             RosterTitle = rosterTitle;
             SortIndex = sortIndex;
-            this.RosterSizeQuestion = rosterSizeQuestion;
 
             switch (rosterType)
             {
@@ -856,23 +864,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     AsFixed = new InterviewTreeFixedRoster();
                     break;
                 case RosterType.Numeric:
-                    AsNumeric = new InterviewTreeNumericRoster(rosterSizeQuestion, rosterTitleQuestionIdentity);
+                    AsNumeric = new InterviewTreeNumericRoster(rosterSizeQuestion.Value, rosterTitleQuestionIdentity);
                     break;
                 case RosterType.YesNo:
-                    AsYesNo = new InterviewTreeYesNoRoster(rosterSizeQuestion);
+                    AsYesNo = new InterviewTreeYesNoRoster(rosterSizeQuestion.Value);
                     break;
                 case RosterType.Multi:
-                    AsMulti = new InterviewTreeMultiRoster(rosterSizeQuestion);
+                    AsMulti = new InterviewTreeMultiRoster(rosterSizeQuestion.Value);
                     break;
                 case RosterType.List:
-                    AsList = new InterviewTreeListRoster(rosterSizeQuestion);
+                    AsList = new InterviewTreeListRoster(rosterSizeQuestion.Value);
                     break;
             }
         }
 
         public string RosterTitle { get; set; }
         public int SortIndex { get; set; } = 0;
-        public InterviewTreeQuestion RosterSizeQuestion { get; private set; }
 
         public InterviewTreeNumericRoster AsNumeric { get; }
         public InterviewTreeListRoster AsList { get; }
@@ -902,9 +909,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeMultiRoster
     {
-        public InterviewTreeQuestion RosterSizeQuestion { get; set; }
+        public Guid RosterSizeQuestion { get; set; }
 
-        public InterviewTreeMultiRoster(InterviewTreeQuestion rosterSizeQuestion)
+        public InterviewTreeMultiRoster(Guid rosterSizeQuestion)
         {
             this.RosterSizeQuestion = rosterSizeQuestion;
         }
@@ -912,9 +919,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeYesNoRoster
     {
-        public InterviewTreeQuestion RosterSizeQuestion { get; set; }
+        public Guid RosterSizeQuestion { get; set; }
 
-        public InterviewTreeYesNoRoster(InterviewTreeQuestion rosterSizeQuestion)
+        public InterviewTreeYesNoRoster(Guid rosterSizeQuestion)
         {
             this.RosterSizeQuestion = rosterSizeQuestion;
         }
@@ -922,11 +929,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeNumericRoster
     {
-        public InterviewTreeQuestion RosterSizeQuestion { get; set; }
+        public Guid RosterSizeQuestion { get; set; }
         public Identity RosterTitleQuestionIdentity { get; set; }
         public bool HasTitleQuestion => RosterTitleQuestionIdentity != null;
 
-        public InterviewTreeNumericRoster(InterviewTreeQuestion rosterSizeQuestion, Identity rosterTitleQuestionIdentity)
+        public InterviewTreeNumericRoster(Guid rosterSizeQuestion, Identity rosterTitleQuestionIdentity)
         {
             this.RosterSizeQuestion = rosterSizeQuestion;
             this.RosterTitleQuestionIdentity = rosterTitleQuestionIdentity;
@@ -935,9 +942,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeListRoster
     {
-        public InterviewTreeQuestion RosterSizeQuestion { get; set; }
+        public Guid RosterSizeQuestion { get; set; }
 
-        public InterviewTreeListRoster(InterviewTreeQuestion rosterSizeQuestion)
+        public InterviewTreeListRoster(Guid rosterSizeQuestion)
         {
             this.RosterSizeQuestion = rosterSizeQuestion;
         }
