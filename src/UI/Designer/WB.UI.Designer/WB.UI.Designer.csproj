@@ -302,8 +302,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M006_AddTablesNeededForStoreQuestionnaireInPlainStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M005_AddNhibernateKeyIfMissing.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M008_AddFindReplaceToHistory.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M001_Init.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M002_AddRolesIndex.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M009_Users.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
@@ -337,7 +336,6 @@
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
-    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BootstrapSupport\ControlGroupExtensions.cs" />
@@ -376,8 +374,6 @@
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
-    <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
-    <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\VerificationMessage.cs" />
     <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
@@ -505,7 +501,6 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
-    <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\pages\login.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
@@ -1577,7 +1572,6 @@
     <Content Include="Views\SystemMailer\TargetPersonStopShareNotification.cshtml" />
     <Content Include="Views\SystemMailer\OwnerShareNotification.cshtml" />
     <Content Include="Views\SystemMailer\OwnerStopShareNotification.cshtml" />
-    <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
     <Content Include="questionnaire\vendor\ng-file-upload\.bower.json" />
     <Content Include="questionnaire\vendor\ng-file-upload\.versions" />
     <Content Include="questionnaire\vendor\ng-file-upload\bower.json" />
@@ -1661,7 +1655,6 @@
     <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
     <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
-    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="questionnaire\content\css-reset.css.less" />
     <Content Include="questionnaire\content\designer-editor\wb-context-menu.css.less" />
@@ -1694,7 +1687,6 @@
     <Content Include="questionnaire\content\dropdown.css.less" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
-    <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <Content Include="questionnaire\fonts\OpenSans300.woff" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />

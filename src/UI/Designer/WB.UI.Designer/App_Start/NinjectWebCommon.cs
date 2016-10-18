@@ -7,24 +7,13 @@ using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
@@ -34,9 +23,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
-using WB.UI.Designer.Migrations.ReadSide;
 using WB.UI.Designer.Services;
-using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
@@ -84,11 +71,6 @@ namespace WB.UI.Designer.App_Start
                 cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
                 storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
-            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly };
-
-            var readSideSettings = new ReadSideSettings(
-                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
-
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
@@ -114,12 +96,6 @@ namespace WB.UI.Designer.App_Start
                 new NLogLoggingModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-                new PostgresReadSideModule(
-                    WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString,
-                    "readside",
-                    new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
-                    cacheSettings, 
-                    mappingAssemblies),
                 new DesignerRegistry(pdfSettings, deskSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
