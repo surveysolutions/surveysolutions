@@ -4,6 +4,7 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -33,7 +34,14 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>()
                 {
-                    Create.Event.AnswersDeclaredInvalid(Create.Identity(dependentOnAnsweredQuestionId)),
+                    Create.Event.AnswersDeclaredInvalid(
+                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                            {
+                                {
+                                    Create.Identity(dependentOnAnsweredQuestionId),
+                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                                }
+                            }),
                     Create.Event.NumericIntegerQuestionAnswered(dependentOnAnsweredQuestionId, 1)
                 });
 

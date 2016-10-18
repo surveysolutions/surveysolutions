@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -36,11 +38,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
                         Create.Event.NumericIntegerQuestionAnswered(questionId: questionB, answer: -2),
-                        Create.Event.AnswersDeclaredInvalid(new[]
-                        {
-                            Create.Identity(questionA),
-                            Create.Identity(questionB),
-                        }),
+                        Create.Event.AnswersDeclaredInvalid(
+                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                            {
+                                {
+                                    Create.Identity(questionA),
+                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                                }
+                            }),
+
+                        Create.Event.AnswersDeclaredInvalid(
+                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
+                            {
+                                {
+                                    Create.Identity(questionB),
+                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                                }
+                            })
                     });
 
                 using (var eventContext = new EventContext())
@@ -63,7 +77,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         };
 
         It should_not_AnswersDeclaredInvalid_event = () =>
-            result.AnswersDeclaredInvalidEventCount.ShouldEqual(1);
+            result.AnswersDeclaredInvalidEventCount.ShouldEqual(0);
 
         It should_raise_AnswersDeclaredValid_event = () =>
             result.AnswersDeclaredValidEventCount.ShouldEqual(1);

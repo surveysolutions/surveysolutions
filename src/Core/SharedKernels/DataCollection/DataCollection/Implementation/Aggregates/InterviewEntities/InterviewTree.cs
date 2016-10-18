@@ -367,7 +367,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string VariableName { get; }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
-        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; }
+        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
+
+        public void SetFailedValidations(IReadOnlyList<FailedValidationCondition> failedValidations)
+            => this.FailedValidations = failedValidations;
         
         public bool IsDouble => this.AsDouble != null;
         public bool IsInteger => this.AsInteger != null;
@@ -795,7 +798,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             : base(identity, disabled) { }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
-        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; }
+        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
+        public void SetFailedValidations(IReadOnlyList<FailedValidationCondition> failedValidations)
+            => this.FailedValidations = failedValidations;
 
         public override string ToString() => $"Text ({this.Identity})";
     }
