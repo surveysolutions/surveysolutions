@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -21,21 +18,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+
             CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState, answers);
 
-            Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer = (currentState, question) => question == answeredQuestion ?
-                answers :
-                this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            var expressionProcessorState = this.GetClonedExpressionState();
+            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
+            changedInterviewTree.GetQuestion(answeredQuestion).AsTextList.SetAnswer(answers);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerTextListQuestion(expressionProcessorState, this.interviewState, userId, questionId,
-                rosterVector, answerTime, answers, getAnswer, questionnaire);
-
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-
-            this.ApplyInterviewChanges(interviewChanges);
-            this.ApplyValidityChangesEvents(validationChanges);
+            this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerTextListQuestion(ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state,

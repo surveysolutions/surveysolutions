@@ -889,8 +889,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var roster in tree.FindRosters().Where(x => x.IsList))
             {
-                var sizeQuestion = roster.AsList.RosterSizeQuestion;
-                roster.SetRosterTitle(sizeQuestion.AsTextList.GetTitleByItemCode(roster.Identity.RosterVector.Last()));
+                var sizeQuestionId = roster.AsList.RosterSizeQuestion;
+                var rosterSizeQuestion = roster.GetQuestionFromThisOrUpperLevel(sizeQuestionId);
+                roster.SetRosterTitle(rosterSizeQuestion.AsTextList.GetTitleByItemCode(roster.Identity.RosterVector.Last()));
             }
 
             foreach (var roster in tree.FindRosters().Where(x => x.IsNumeric))
@@ -1113,7 +1114,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                     sortIndex: index,
                                     rosterTitle: rosterIdentityWithTitle.Title,
                                     rosterType: rosterIdentityWithTitle.Type,
-                                    rosterSizeQuestion: rosterIdentityWithTitle.SizeQuestion,
+                                    rosterSizeQuestion: rosterIdentityWithTitle.SizeQuestion?.Identity.Id,
                                     rosterTitleQuestionIdentity: rosterIdentityWithTitle.RosterTitleQuestionIdentity);
 
                                 @group.AddChildren(rosterNode);
@@ -2626,12 +2627,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckYesNoQuestionInvariants(Identity question, AnsweredYesNoOption[] answeredOptions, IQuestionnaire questionnaire,
-            InterviewStateDependentOnAnswers state)
+            InterviewStateDependentOnAnswers state, InterviewTree tree)
         {
             decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.OptionValue).ToArray();
             var yesAnswersCount = answeredOptions.Count(answeredOption => answeredOption.Yes);
 
-            var tree = this.BuildInterviewTree(questionnaire, state);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(question.Id, questionnaire);
@@ -3985,7 +3985,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
                         {
-                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (AnsweredYesNoOption[])answer, questionnaire, currentInterviewState);
+                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (AnsweredYesNoOption[])answer, questionnaire, currentInterviewState, this.BuildInterviewTree(questionnaire, currentInterviewState));
                         }
                         else
                         {
@@ -4375,16 +4375,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (rosterTitleQuestionId.HasValue)
                 rosterTitleQuestionIdentity = new Identity(rosterTitleQuestionId.Value, rosterIdentity.RosterVector);
             RosterType rosterType = RosterType.Fixed;
+            Guid? sourceQuestionId = null;
             if (questionnaire.IsFixedRoster(rosterIdentity.Id))
                 rosterType = RosterType.Fixed;
             else
             {
-                Guid sourceQuestionId = questionnaire.GetRosterSizeQuestion(rosterIdentity.Id);
-                var questionaType = questionnaire.GetQuestionType(sourceQuestionId);
+                sourceQuestionId = questionnaire.GetRosterSizeQuestion(rosterIdentity.Id);
+                var questionaType = questionnaire.GetQuestionType(sourceQuestionId.Value);
                 switch (questionaType)
                 {
                     case QuestionType.MultyOption:
-                        rosterType = questionnaire.IsQuestionYesNo(sourceQuestionId) ? RosterType.YesNo : RosterType.Multi;
+                        rosterType = questionnaire.IsQuestionYesNo(sourceQuestionId.Value) ? RosterType.YesNo : RosterType.Multi;
                         break;
                     case QuestionType.Numeric:
                         rosterType = RosterType.Numeric;
@@ -4399,7 +4400,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterType: rosterType, 
                 isDisabled: isDisabled, 
                 rosterTitle: rosterTitle,
-                rosterTitleQuestionIdentity: rosterTitleQuestionIdentity);
+                rosterTitleQuestionIdentity: rosterTitleQuestionIdentity,
+                rosterSizeQuestion: sourceQuestionId);
         }
 
         private static InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, object answer, bool isQuestionDisabled, IReadOnlyCollection<RosterVector> linkedOptions, IQuestionnaire questionnaire)

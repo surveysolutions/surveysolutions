@@ -479,6 +479,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (LinkedMultipleOptionsAnswers.ContainsKey(questionKey))
                 return this.LinkedMultipleOptionsAnswers[questionKey].Item2;
 
+            if (LinkedSingleOptionAnswersBuggy.ContainsKey(questionKey))
+                return this.LinkedSingleOptionAnswersBuggy[questionKey].Item2;
+
             return null;
         }
 
