@@ -86,6 +86,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             get
             {
+                if (SourceNode == null || ChangedNode == null) return false;
+
                 if ((SourceNode.IsAnswered() && !ChangedNode.IsAnswered()) ||
                     (!SourceNode.IsAnswered() && ChangedNode.IsAnswered())) return true;
 
