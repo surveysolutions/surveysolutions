@@ -15,12 +15,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsNodeAdded => this.SourceNode == null && this.ChangedNode != null;
         public bool IsNodeRemoved => this.SourceNode != null && this.ChangedNode == null;
 
-        public bool IsNodeDisabled => this.SourceNode == null
-            ? this.ChangedNode.IsDisabled()
-            : !this.SourceNode.IsDisabled() && this.ChangedNode.IsDisabled();
+        public bool IsNodeDisabled
+        {
+            get
+            {
+                var newNodeIsDisabled = this.SourceNode == null && this.ChangedNode!=null && this.ChangedNode.IsDisabled();
+                var existingNodeWasEnadledAndWasDisabled = this.SourceNode != null && this.ChangedNode != null && !this.SourceNode.IsDisabled() && this.ChangedNode.IsDisabled();
+                return newNodeIsDisabled || existingNodeWasEnadledAndWasDisabled;
+            }
+        }
 
         public bool IsNodeEnabled
-            => this.SourceNode != null && this.SourceNode.IsDisabled() && !this.ChangedNode.IsDisabled();
+        {
+            get
+            {
+                var nodeIsRemovedAndWasDisabled = this.ChangedNode == null && this.SourceNode != null && this.SourceNode.IsDisabled();
+                var existingNodeWasEnabledAndNowIsDisabled = this.SourceNode != null && this.ChangedNode !=null && this.SourceNode.IsDisabled() && !this.ChangedNode.IsDisabled();
+                return existingNodeWasEnabledAndNowIsDisabled || nodeIsRemovedAndWasDisabled;
+            }
+        }
 
         public static InterviewTreeNodeDiff Create(IInterviewTreeNode source, IInterviewTreeNode changed)
         {
