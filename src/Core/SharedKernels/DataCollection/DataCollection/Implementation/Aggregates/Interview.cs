@@ -4429,9 +4429,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool isDisabled = interviewState.IsStaticTextDisabled(staticTextIdentity);
 
             var interviewStaticText =  new InterviewTreeStaticText(staticTextIdentity, isDisabled);
-            var failedValidationConditions = interviewState.InvalidStaticTexts.Where(x => x.Key.Equals(staticTextIdentity)).ToList();
-            if (failedValidationConditions.Any())
-                interviewStaticText.SetFailedValidations(failedValidationConditions[0].Value);
+            if (interviewState.InvalidStaticTexts.ContainsKey(staticTextIdentity))
+                interviewStaticText.SetFailedValidations(interviewState.InvalidStaticTexts[staticTextIdentity]);
             return interviewStaticText;
         }
 
@@ -4462,11 +4461,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 else if (questionnaire.HasQuestion(childId))
                 {
                     var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    var answer = interviewState.GetAnswer(childQuestionIdentity); 
-                    var interviewTreeQuestion = BuildInterviewTreeQuestion(childQuestionIdentity, answer, interviewState.IsQuestionDisabled(childQuestionIdentity), interviewState.GetOptionsForLinkedQuestion(childQuestionIdentity), questionnaire);
-                    var failedValidationConditions = interviewState.InvalidAnsweredQuestions.Where(x => x.Key.Equals(childQuestionIdentity)).ToList();
-                    if (failedValidationConditions.Any())
-                        interviewTreeQuestion.SetFailedValidations(failedValidationConditions[0].Value);
+                    var answer = interviewState.GetAnswer(childQuestionIdentity);
+
+                    var interviewTreeQuestion = BuildInterviewTreeQuestion(childQuestionIdentity, answer,
+                        interviewState.IsQuestionDisabled(childQuestionIdentity),
+                        interviewState.GetOptionsForLinkedQuestion(childQuestionIdentity), questionnaire);
+
+                    if (interviewState.InvalidAnsweredQuestions.ContainsKey(childQuestionIdentity))
+                        interviewTreeQuestion.SetFailedValidations(interviewState.InvalidAnsweredQuestions[childQuestionIdentity]);
+
                     yield return interviewTreeQuestion;
                 }
                 else if (questionnaire.IsStaticText(childId))
