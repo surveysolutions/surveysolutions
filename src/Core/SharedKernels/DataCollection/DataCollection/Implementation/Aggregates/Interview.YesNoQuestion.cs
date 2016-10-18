@@ -17,25 +17,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
+            var answeredQuestion = new Identity(command.QuestionId, command.RosterVector);
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+
             this.CheckYesNoQuestionInvariants(command.Question, command.AnsweredOptions, questionnaire, this.interviewState);
 
-            AnsweredYesNoOption[] answer = command.AnsweredOptions.ToArray();
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => question == command.Question
-                    ? answer
-                    : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
+            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
+            changedInterviewTree.GetQuestion(answeredQuestion).AsYesNo.SetAnswer(command.AnsweredOptions);
 
-            var expressionProcessorState = this.GetClonedExpressionState();
-
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnYesNoQuestionAnswer(
-                command.Question.Id, command.Question.RosterVector, answer, command.AnswerTime, command.UserId, questionnaire, expressionProcessorState, this.interviewState, getAnswer);
-
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-
-            this.ApplyInterviewChanges(interviewChanges);
-            this.ApplyValidityChangesEvents(validationChanges);
+            this.ApplyQuestionAnswer(command.UserId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
 
         private InterviewChanges CalculateInterviewChangesOnYesNoQuestionAnswer(Guid questionId, RosterVector rosterVector, AnsweredYesNoOption[] answer, DateTime answerTime, Guid userId, IQuestionnaire questionnaire,
