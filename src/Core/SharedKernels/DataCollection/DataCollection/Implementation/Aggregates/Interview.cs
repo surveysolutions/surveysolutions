@@ -916,7 +916,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
                 foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
                 {
-                    tree.GetQuestion(linkedQuestionWithOptions.Key).AsLinked.SetOptions(linkedQuestionWithOptions.Value);
+                    var linkedQuestion = tree.GetQuestion(linkedQuestionWithOptions.Key);
+                    var previousOptions = linkedQuestion.AsLinked.Options;
+                    linkedQuestion.AsLinked.SetOptions(linkedQuestionWithOptions.Value);
+                    if (previousOptions.SequenceEqual(linkedQuestionWithOptions.Value))
+                        continue;
+
+                    if (linkedQuestion.IsMultiLinkedOption)
+                        linkedQuestion.AsMultiLinkedOption.RemoveAnswer();
+                    else
+                        linkedQuestion.AsSingleLinkedOption.RemoveAnswer();
                 }
             }
         }
@@ -4434,9 +4443,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 else if (questionnaire.HasQuestion(childId))
                 {
                     var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    var answer = interviewState.GetAnswerSupportedInExpressions(childQuestionIdentity) 
-                        ?? (object)interviewState.GetTextListAnswer(childQuestionIdentity);
-
+                    var answer = interviewState.GetAnswer(childQuestionIdentity); 
                     yield return BuildInterviewTreeQuestion(childQuestionIdentity, answer, interviewState.IsQuestionDisabled(childQuestionIdentity), interviewState.GetOptionsForLinkedQuestion(childQuestionIdentity), questionnaire);
                 }
                 else if (questionnaire.IsStaticText(childId))

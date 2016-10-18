@@ -51,6 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedToRosterSingleOptionAnswers(questionnaire);
             public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedToRosterMultipleOptionsAnswers(questionnaire);
             public IReadOnlyCollection<RosterVector> GetOptionsForLinkedQuestion(Identity linkedQuestionIdentity) => this.actualState.GetOptionsForLinkedQuestion(linkedQuestionIdentity);
+            public object GetAnswer(Identity identity) => this.actualState.GetAnswer(identity);
         }
 
 
@@ -455,6 +456,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IReadOnlyCollection<RosterVector> GetOptionsForLinkedQuestion(Identity linkedQuestionIdentity)
             => this.LinkedQuestionOptions.GetOrNull(linkedQuestionIdentity);
+
+        public object GetAnswer(Identity identity)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(identity);
+
+            if (this.AnswersSupportedInExpressions.ContainsKey(questionKey))
+                return this.AnswersSupportedInExpressions[questionKey];
+
+            if (this.TextListAnswers.ContainsKey(questionKey))
+                return this.TextListAnswers[questionKey];
+
+            if (LinkedMultipleOptionsAnswers.ContainsKey(questionKey))
+                return this.LinkedMultipleOptionsAnswers[questionKey].Item2;
+
+            return null;
+        }
 
         public void ChangeVariables(ChangedVariable[] changedVariables)
         {
