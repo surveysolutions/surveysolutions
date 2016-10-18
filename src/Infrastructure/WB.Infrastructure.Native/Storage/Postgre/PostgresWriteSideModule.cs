@@ -3,6 +3,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using WB.Infrastructure.Native.Storage.EventStore;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
@@ -10,10 +11,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     public class PostgresWriteSideModule : NinjectModule
     {
         private readonly PostgreConnectionSettings eventStoreSettings;
+        private readonly DbUpgradeSettings dbUpgradeSettings;
 
-        public PostgresWriteSideModule(PostgreConnectionSettings eventStoreSettings)
+        public PostgresWriteSideModule(PostgreConnectionSettings eventStoreSettings, DbUpgradeSettings dbUpgradeSettings)
         {
             this.eventStoreSettings = eventStoreSettings;
+            this.dbUpgradeSettings = dbUpgradeSettings;
         }
 
         public override void Load()
@@ -25,7 +28,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         private IStreamableEventStore GetEventStore()
         {
-            return new PostgresEventStore(this.eventStoreSettings, this.Kernel.Get<IEventTypeResolver>());
+            var eventStore = new PostgresEventStore(this.eventStoreSettings, this.Kernel.Get<IEventTypeResolver>());
+
+            DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
+
+            return eventStore;
         }
 
         class NullIEventStoreApiService : IEventStoreApiService
