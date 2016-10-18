@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
@@ -64,13 +62,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         It should_raise_NumericIntegerQuestionAnswered_event = () =>
             results.WasIntegerQuestionAnswered.ShouldBeTrue();
 
-        private static EventContext eventContext;
-        private static Interview interview;
         private static Guid userId;
         private static Guid multyOptionRosterSizeId;
         private static Guid numericQuestionInsideRoster;
         private static Guid rosterGroupId;
-        private static Mock<ILatestInterviewExpressionState> interviewExpressionState;
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
