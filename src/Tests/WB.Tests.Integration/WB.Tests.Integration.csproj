@@ -394,6 +394,7 @@
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_which_is_part_of_condition_expression_in_another_question.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_on_text_question_having_validation_containing_IRnd.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_disabled_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_enabled_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
