@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
             this.CheckNumericIntegerQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion,
-                this.interviewState);
+                this.interviewState, sourceInterviewTree);
 
             var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 

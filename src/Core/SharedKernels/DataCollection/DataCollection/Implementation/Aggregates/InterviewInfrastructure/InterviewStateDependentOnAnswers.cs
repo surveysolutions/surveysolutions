@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             public bool IsStaticTextDisabled(Identity @group) => this.actualState.IsStaticTextDisabled(@group);
 
             public bool IsQuestionDisabled(Identity question) => this.actualState.IsQuestionDisabled(question);
+            public bool IsVariableDisabled(Identity variable) => this.actualState.IsVariableDisabled(variable);
 
             public bool WasQuestionAnswered(Identity question) => this.actualState.WasQuestionAnswered(question);
 
@@ -77,6 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
 
             this.VariableValues = new ConcurrentDictionary<Identity, object>();
+            this.DisabledVariables = new ConcurrentHashSet<Identity>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -97,6 +99,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<Identity> ValidStaticTexts { set; get; }
         public IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> InvalidStaticTexts { set; get; }
         public ConcurrentDictionary<Identity, object> VariableValues { set; get; }
+        public ConcurrentHashSet<Identity> DisabledVariables { set; get; }
         public bool IsValid { get; set; }
 
         public InterviewStateDependentOnAnswers Clone()
@@ -385,6 +388,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.DisabledQuestions.Contains(questionKey);
         }
 
+        public bool IsVariableDisabled(Identity variable)
+        {
+            return this.DisabledVariables.Contains(variable);
+        }
+
         public bool WasQuestionAnswered(Identity question)
         {
             string questionKey = ConversionHelper.ConvertIdentityToString(question);
@@ -477,6 +485,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void ChangeVariables(ChangedVariable[] changedVariables)
         {
             changedVariables.ForEach(variable => this.VariableValues[variable.Identity] = variable.NewValue);
+        }
+
+        public void EnableVariables(Identity[] variables)
+        {
+            variables.ForEach(x => this.DisabledVariables.Remove(x));
+        }
+
+        public void DisableVariables(Identity[] variables)
+        {
+            variables.ForEach(x => this.DisabledVariables.Add(x));
         }
     }
 }

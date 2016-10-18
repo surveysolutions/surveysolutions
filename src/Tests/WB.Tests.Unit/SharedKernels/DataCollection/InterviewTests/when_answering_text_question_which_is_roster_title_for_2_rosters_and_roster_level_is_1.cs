@@ -3,15 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -24,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             emptyRosterVector = new decimal[] { };
-            var rosterInstanceId = (decimal) 22.5;
+            var rosterInstanceId = 0m;
             rosterVector = emptyRosterVector.Concat(new[] { rosterInstanceId }).ToArray();
 
             questionId = Guid.Parse("11111111111111111111111111111111");
