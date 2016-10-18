@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -24,7 +22,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -1492,29 +1489,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region AnsweringQuestions
       
-        public void AnswerNumericIntegerQuestion(AnswerNumericIntegerQuestionCommand command)
-            => AnswerNumericIntegerQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer);
-
-        internal void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer)
-        {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
-
-            var answeredQuestion = new Identity(questionId, rosterVector);
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
-
-            this.CheckNumericIntegerQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion,
-                this.interviewState);
-
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
-
-            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
-            changedInterviewTree.GetQuestion(answeredQuestion).AsInteger.SetAnswer(answer);
-
-            this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
-        }
 
         private void ApplyQuestionAnswer(Guid userId, InterviewTree changedInterviewTree, IQuestionnaire questionnaire,
             List<Identity> changedQuestionIdentities, InterviewTree sourceInterviewTree)
