@@ -61,11 +61,11 @@ namespace WB.Tests.Unit.TestFactories
                 answerTime: DateTime.UtcNow,
                 selectedValues: answer);
 
-        public AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestionCommand(Guid interviewId, Guid userId, int answer = 0)
+        public AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestionCommand(Guid interviewId, Guid userId, Guid? questionId = null, int answer = 0)
             => new AnswerNumericIntegerQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,
-                questionId: Guid.NewGuid(),
+                questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
                 answerTime: DateTime.UtcNow,
                 answer: answer);
