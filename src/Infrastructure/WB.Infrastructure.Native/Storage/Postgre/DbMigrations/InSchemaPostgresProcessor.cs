@@ -130,54 +130,39 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 
         public override void Process(AlterSchemaExpression expression)
         {
-            this.Process(this.Generator.Generate(expression));
+            expression.SourceSchemaName = this.SchemaName;
+            base.Process(expression);
         }
 
         public override void Process(CreateSequenceExpression expression)
         {
-            this.Process(this.Generator.Generate(expression));
+            expression.Sequence.SchemaName = this.SchemaName;
+            base.Process(expression);
         }
 
         public override void Process(DeleteSequenceExpression expression)
         {
-            this.Process(this.Generator.Generate(expression));
+            expression.SchemaName = this.SchemaName;
+            base.Process(expression);
         }
 
         public override void Process(CreateConstraintExpression expression)
         {
-            this.Process(this.Generator.Generate(expression));
+            expression.Constraint.SchemaName = this.SchemaName;
+            base.Process(expression);
         }
 
         public override void Process(DeleteConstraintExpression expression)
         {
-            this.Process(this.Generator.Generate(expression));
+            expression.Constraint.SchemaName = this.SchemaName;
+            base.Process(expression);
         }
 
         public override void Process(DeleteDefaultConstraintExpression expression)
         {
-            this.Process(this.Generator.Generate(expression));
+            expression.SchemaName = this.SchemaName;
+            base.Process(expression);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         public override DataSet ReadTableData(string schemaName, string tableName)
         {
