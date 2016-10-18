@@ -1525,9 +1525,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (variableValueChanges?.ChangedVariableValues?.Count > 0)
             {
-                this.ApplyEvent(
-                    new VariablesChanged(
-                        variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
+                this.ApplyEvent(new VariablesChanged(variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
             }
         }
 
@@ -2593,10 +2591,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckMultipleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedValues,
-            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState,
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree,
             bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -3992,7 +3989,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         else
                         {
                             this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, (decimal[])answer, questionnaire, answeredQuestion,
-                                currentInterviewState, applyStrongChecks);
+                                currentInterviewState, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
                         }
                         break;
                     case QuestionType.QRBarcode:

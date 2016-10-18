@@ -176,6 +176,8 @@ namespace WB.Tests.Unit.TestFactories
                 questionsToBeDisabled ?? new List<Identity>(),
                 questionsToBeEnabled ?? new List<Identity>(),
                 new List<Identity>(),
+                new List<Identity>(),
+                new List<Identity>(),
                 new List<Identity>());
 
         public ValidityChanges ValidityChanges()

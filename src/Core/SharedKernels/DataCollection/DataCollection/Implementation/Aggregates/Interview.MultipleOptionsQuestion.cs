@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -19,23 +16,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion,
-                this.interviewState);
 
-            Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => question == answeredQuestion
-                    ? selectedValues
-                    : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            var expressionProcessorState = this.GetClonedExpressionState();
+            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, 
+                        selectedValues, questionnaire, answeredQuestion,
+                         this.interviewState, sourceInterviewTree);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(expressionProcessorState, this.interviewState, userId,
-                questionId, rosterVector, answerTime, selectedValues, getAnswer, questionnaire);
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
+            changedInterviewTree.GetQuestion(answeredQuestion).AsMultiOption.SetAnswer(selectedValues);
 
-            this.ApplyInterviewChanges(interviewChanges);
-            this.ApplyValidityChangesEvents(validationChanges);
+            this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(ILatestInterviewExpressionState expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state,

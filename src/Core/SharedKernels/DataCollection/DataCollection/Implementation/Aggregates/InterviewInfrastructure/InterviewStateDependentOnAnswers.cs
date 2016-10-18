@@ -254,6 +254,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? this.RosterGroupInstanceIds[rosterGroupKey]
                     : new ConcurrentDistinctList<decimal>();
                 rosterRowInstances.Remove(instance.RosterInstanceId);
+                this.DisabledGroups.Remove(rosterGroupKey);
 
                 this.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
             }
