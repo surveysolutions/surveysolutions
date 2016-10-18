@@ -82,10 +82,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var diffByVariables = allNotNullableNodes.OfType<InterviewTreeVariableDiff>().ToList();
 
             var disabledGroups = diffByGroups.Where(x=>x.IsNodeDisabled).Select(x => x.ChangedNode.Identity).ToArray();
-            var enabledGroups = diffByGroups.Where(x=>x.IsNodeEnabled).Select(x => x.ChangedNode.Identity).ToArray();
+            var enabledGroups = diff.OfType<InterviewTreeGroupDiff>().Where(x => x.IsNodeEnabled).Select(x => (x.ChangedNode ?? x.SourceNode).Identity).ToArray();
 
             var disabledQuestions = diffByQuestions.Where(x => x.IsNodeDisabled).Select(x => x.ChangedNode.Identity).ToArray();
-            var enabledQuestions = diffByQuestions.Where(x => x.IsNodeEnabled).Select(x => x.ChangedNode.Identity).ToArray();
+            var enabledQuestions = diff.OfType<InterviewTreeQuestionDiff>().Where(x => x.IsNodeEnabled).Select(x => (x.ChangedNode ?? x.SourceNode).Identity).ToArray();
 
             var disabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeDisabled).Select(x => x.ChangedNode.Identity).ToArray();
             var enabledStaticTexts = diffByStaticTexts.Where(x => x.IsNodeEnabled).Select(x => x.ChangedNode.Identity).ToArray();
