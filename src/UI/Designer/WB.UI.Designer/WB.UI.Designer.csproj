@@ -303,6 +303,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M005_AddNhibernateKeyIfMissing.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M008_AddFindReplaceToHistory.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M009_Users.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M010_Users_indexes.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
