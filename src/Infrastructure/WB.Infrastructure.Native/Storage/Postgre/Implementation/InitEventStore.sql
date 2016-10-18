@@ -24,7 +24,7 @@ CREATE INDEX IF NOT EXISTS globalsequence_indx
   USING btree
   (globalsequence);
 
-CREATE UNIQUE INDEX IF NOT EXISTS event_source_globalsequence_indx
+CREATE UNIQUE INDEX IF NOT EXISTS event_source_eventsequence_indx
   ON @schemaName.events
   USING btree
-  (eventsourceid, globalsequence);
+  (eventsourceid, eventsequence);
