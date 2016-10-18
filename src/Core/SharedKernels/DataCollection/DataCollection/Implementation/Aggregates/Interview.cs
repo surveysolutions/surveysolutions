@@ -488,11 +488,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(VariablesDisabled @event)
         {
             this.ExpressionProcessorStatePrototype.DisableVariables(@event.Variables);
+            this.interviewState.DisableVariables(@event.Variables);
         }
 
         public virtual void Apply(VariablesEnabled @event)
         {
             this.ExpressionProcessorStatePrototype.EnableVariables(@event.Variables);
+            this.interviewState.EnableVariables(@event.Variables);
         }
 
         public virtual void Apply(VariablesChanged @event)
@@ -859,6 +861,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (validationChanges == null) return; // can be in tests only.
 
             validationChanges.AnswersDeclaredValid.ForEach(x => tree.GetQuestion(x).SetFailedValidations(null));
+            validationChanges.AnswersDeclaredInvalid.ForEach(x => tree.GetQuestion(x).SetFailedValidations(new FailedValidationCondition(0).ToEnumerable()));
             validationChanges.FailedValidationConditionsForQuestions.ForEach(x => tree.GetQuestion(x.Key).SetFailedValidations(x.Value));
 
             validationChanges.StaticTextsDeclaredValid.ForEach(x => tree.GetStaticText(x).SetFailedValidations(null));
@@ -2650,9 +2653,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckTextQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2665,9 +2667,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckNumericIntegerQuestionInvariants(Guid questionId, RosterVector rosterVector, int answer, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
+            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree, bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -3955,17 +3956,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     case QuestionType.Text:
                         this.CheckTextQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion,
-                            currentInterviewState, applyStrongChecks);
+                            currentInterviewState, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
                         break;
 
                     case QuestionType.AutoPropagate:
                         this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
-                            answeredQuestion, currentInterviewState, applyStrongChecks);
+                            answeredQuestion, currentInterviewState, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
                         break;
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
                             this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
-                                answeredQuestion, currentInterviewState, applyStrongChecks);
+                                answeredQuestion, currentInterviewState, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
                         else
                             this.CheckNumericRealQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
                                 answeredQuestion, currentInterviewState, applyStrongChecks);
@@ -4497,6 +4498,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var childStaticTextIdentity = new Identity(childId, groupIdentity.RosterVector);
                     yield return BuildInterviewTreeStaticText(childStaticTextIdentity, questionnaire, interviewState);
+                }
+                else if (questionnaire.IsVariable(childId))
+                {
+                    var childVariableIdentity = new Identity(childId, groupIdentity.RosterVector);
+                    bool isDisabled = interviewState.IsVariableDisabled(childVariableIdentity);
+                    yield return new InterviewTreeVariable(childVariableIdentity, isDisabled, null);
                 }
             }
         }

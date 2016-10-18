@@ -24,5 +24,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         IReadOnlyCollection<RosterVector> GetOptionsForLinkedQuestion(Identity linkedQuestionIdentity);
         object GetAnswer(Identity identity);
+        bool IsVariableDisabled(Identity variable);
     }
 }
