@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Pdf;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
@@ -74,6 +73,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [LocalOrDevelopmentAccessOnly]
+        [System.Web.Mvc.AllowAnonymous]
         public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
             var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName);
@@ -81,6 +81,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [LocalOrDevelopmentAccessOnly]
+        [System.Web.Mvc.AllowAnonymous]
         public ActionResult RenderQuestionnaireFooter(Guid id)
         {
             return this.View("RenderQuestionnaireFooter");
