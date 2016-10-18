@@ -1503,7 +1503,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.UpdateTreeWithEnablementChanges(changedInterviewTree, enablementChanges);
 
-            this.UpdateTreeWithStructuralChanges(changedInterviewTree, expressionProcessorState.GetStructuralChanges());
+            var structuralChanges = expressionProcessorState.GetStructuralChanges();
+            this.UpdateTreeWithStructuralChanges(changedInterviewTree, structuralChanges);
+
+            changedQuestionIdentities.AddRange(structuralChanges.ChangedMultiQuestions.Keys);
+            changedQuestionIdentities.AddRange(structuralChanges.ChangedSingleQuestions.Keys);
+            changedQuestionIdentities.AddRange(structuralChanges.ChangedYesNoQuestions.Keys);
 
             this.UpdateRosterTitles(changedInterviewTree, questionnaire);
 
@@ -1514,6 +1519,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
+            this.ApplySubstitutionEvents(changedInterviewTree, questionnaire, changedQuestionIdentities);
+
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
 
             if (variableValueChanges?.ChangedVariableValues?.Count > 0)
@@ -1521,6 +1528,49 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(
                     new VariablesChanged(
                         variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
+            }
+        }
+
+        private void ApplySubstitutionEvents(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        {
+            var changedQuestionTitles = new List<Identity>();
+            var changedStaticTextTitles = new List<Identity>();
+            var changedGroupTitles = new List<Identity>();
+            foreach (var questionIdentity in changedQuestionIdentities)
+            {
+                var rosterLevel = questionIdentity.RosterVector.Length;
+
+                var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionIdentity.Id);
+                foreach (var substitutedQuestionId in substitutedQuestionIds)
+                {
+                    changedQuestionTitles.AddRange(tree.FindEntity(substitutedQuestionId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+
+                var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionIdentity.Id);
+                foreach (var substitutedStaticTextId in substitutedStaticTextIds)
+                {
+                    changedStaticTextTitles.AddRange(tree.FindEntity(substitutedStaticTextId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+             
+                var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionIdentity.Id);
+                foreach (var substitutedGroupId in substitutedGroupIds)
+                {
+                    changedGroupTitles.AddRange(tree.FindEntity(substitutedGroupId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+            }
+
+            if (changedQuestionTitles.Any() || changedStaticTextTitles.Any() || changedGroupTitles.Any())
+            {
+                this.ApplyEvent(new SubstitutionTitlesChanged(
+                    changedQuestionTitles.ToArray(),
+                    changedStaticTextTitles.ToArray(),
+                    changedGroupTitles.ToArray()));
             }
         }
 
