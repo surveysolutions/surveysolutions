@@ -12,6 +12,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -133,6 +134,28 @@ namespace WB.Tests.Integration.InterviewTests
                 expressionProcessorStatePrototypeProvider: statePrototypeProvider);
 
             ApplyAllEvents(interview, events);
+
+            return interview;
+        }
+
+        protected static Interview CreateEmptyInterview(
+            QuestionnaireDocument questionnaireDocument,
+            IEnumerable<object> events = null,
+            ILatestInterviewExpressionState precompiledState = null)
+        {
+            Guid questionnaireId = questionnaireDocument.PublicKey;
+
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
+
+            var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
+
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
+
+            var interview = new Interview(
+                Mock.Of<ILogger>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             return interview;
         }
