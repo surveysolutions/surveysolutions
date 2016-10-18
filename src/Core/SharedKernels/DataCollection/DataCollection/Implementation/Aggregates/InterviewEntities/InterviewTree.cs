@@ -710,7 +710,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeMultiLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion) 
             : base(linkedOptions, linkedSourceId, commonParentRosterIdForLinkedQuestion)
         {
-            this.answer = answer as decimal[][];
+            if (answer!=null && answer is RosterVector[])
+                this.answer = (answer as RosterVector[]).Select(x => x.Coordinates.ToArray()).ToArray();
         }
 
         public bool IsAnswered => this.answer != null;
