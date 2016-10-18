@@ -890,9 +890,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var titleQuestion = tree.GetQuestion(roster.AsNumeric.RosterTitleQuestionIdentity);
                 if (titleQuestion==null) continue;
-                roster.SetRosterTitle(titleQuestion.IsAnswered() 
+                var rosterTitle = titleQuestion.IsAnswered() 
                     ? titleQuestion.GetAnswerAsString(answerOptionValue => questionnaire.GetAnswerOptionTitle(titleQuestion.Identity.Id, answerOptionValue)) 
-                    : null);
+                    : null;
+                roster.SetRosterTitle(rosterTitle);
             }
         }
 
@@ -1494,7 +1495,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
-            changedInterviewTree.GetQuestion(answeredQuestion).AsInteger.SetAnswer(answer); ;
+            changedInterviewTree.GetQuestion(answeredQuestion).AsInteger.SetAnswer(answer);
 
             var expressionProcessorState = this.GetClonedExpressionState();
 
@@ -4307,7 +4308,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new InterviewTreeSection(sectionIdentity, children, isDisabled: isDisabled);
         }
 
-        private static InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             var children = BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, interviewState).ToList();
             bool isDisabled = interviewState.IsGroupDisabled(groupIdentity);
@@ -4315,12 +4316,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new InterviewTreeSubSection(groupIdentity, children, isDisabled: isDisabled);
         }
 
-        private static InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             var children = BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire, interviewState).ToList();
             bool isDisabled = interviewState.IsGroupDisabled(rosterIdentity);
+            string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterIdentity.Id, rosterIdentity.RosterVector);
+            string rosterTitle = this.interviewState.RosterTitles.ContainsKey(rosterGroupKey) 
+                ? this.interviewState.RosterTitles[rosterGroupKey]
+                : null;
 
-            return new InterviewTreeRoster(rosterIdentity, children, isDisabled: isDisabled);
+            var rosterTitleQuestionId = questionnaire.GetRosterTitleQuestionId(rosterIdentity.Id);
+            Identity rosterTitleQuestionIdentity = null;
+            if (rosterTitleQuestionId.HasValue)
+                rosterTitleQuestionIdentity = new Identity(rosterTitleQuestionId.Value, rosterIdentity.RosterVector);
+            RosterType rosterType = RosterType.Fixed;
+            if (questionnaire.IsFixedRoster(rosterIdentity.Id))
+                rosterType = RosterType.Fixed;
+            else
+            {
+                Guid sourceQuestionId = questionnaire.GetRosterSizeQuestion(rosterIdentity.Id);
+                var questionaType = questionnaire.GetQuestionType(sourceQuestionId);
+                switch (questionaType)
+                {
+                    case QuestionType.MultyOption:
+                        rosterType = questionnaire.IsQuestionYesNo(sourceQuestionId) ? RosterType.YesNo : RosterType.Multi;
+                        break;
+                    case QuestionType.Numeric:
+                        rosterType = RosterType.Numeric;
+                        break;
+                    case QuestionType.TextList:
+                        rosterType = RosterType.List;
+                        break;
+                }
+            }
+
+            return new InterviewTreeRoster(rosterIdentity, children,
+                rosterType: rosterType, 
+                isDisabled: isDisabled, 
+                rosterTitle: rosterTitle,
+                rosterTitleQuestionIdentity: rosterTitleQuestionIdentity);
         }
 
         private static InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, object answer, bool isQuestionDisabled, IReadOnlyCollection<RosterVector> linkedOptions, IQuestionnaire questionnaire)
@@ -4373,7 +4407,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new InterviewTreeStaticText(staticTextIdentity, isDisabled);
         }
 
-        private static IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
+        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, IReadOnlyInterviewStateDependentOnAnswers interviewState)
         {
             var childIds = questionnaire.GetChildEntityIds(groupIdentity.Id);
 
@@ -4400,7 +4434,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 else if (questionnaire.HasQuestion(childId))
                 {
                     var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return BuildInterviewTreeQuestion(childQuestionIdentity, interviewState.GetAnswerSupportedInExpressions(childQuestionIdentity), interviewState.IsQuestionDisabled(childQuestionIdentity), interviewState.GetOptionsForLinkedQuestion(childQuestionIdentity), questionnaire);
+                    var answer = interviewState.GetAnswerSupportedInExpressions(childQuestionIdentity) 
+                        ?? (object)interviewState.GetTextListAnswer(childQuestionIdentity);
+
+                    yield return BuildInterviewTreeQuestion(childQuestionIdentity, answer, interviewState.IsQuestionDisabled(childQuestionIdentity), interviewState.GetOptionsForLinkedQuestion(childQuestionIdentity), questionnaire);
                 }
                 else if (questionnaire.IsStaticText(childId))
                 {
