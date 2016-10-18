@@ -1261,7 +1261,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_absent.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_and_answer_has_3_values.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_and_previous_answer_has_3_values_and_new_answer_is_empty.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_without_previous_answer_and_new_answer_is_the_same.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_has_only_changed_values.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_is_not_the_same.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
