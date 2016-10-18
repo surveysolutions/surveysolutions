@@ -381,6 +381,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Implementation\Aggregates\Interview.NumericIntegerQuestion.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
