@@ -57,9 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             }
             if (answer is GeoPosition)
             {
-                var geoAnswer = answer as GeoPosition;
-                return string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", geoAnswer.Latitude, geoAnswer.Longitude);
-                //return ((GeoPosition) answer).ToString();
+                return ((GeoPosition) answer).ToString();
             }
 
             if (answer is GeoLocationPoint)

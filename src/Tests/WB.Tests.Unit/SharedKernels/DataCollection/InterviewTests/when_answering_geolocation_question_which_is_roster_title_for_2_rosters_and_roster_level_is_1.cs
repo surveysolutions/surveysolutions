@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_set_title_to_latitude_and_longitude_divided_by_semicolon_in_square_brackets_in_all_RosterRowTitleChanged_events = () =>
         {
             var titles = eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(x => x.ChangedInstances.Select(t => t.Title));
-            titles.ShouldEachConformTo(title => title == "[-1.234; 1.00025]");
+            titles.ShouldEachConformTo(title => title == "-1.234,1.00025[10]34");
         };
 
         private static EventContext eventContext;
