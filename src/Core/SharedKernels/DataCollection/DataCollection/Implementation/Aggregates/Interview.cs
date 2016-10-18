@@ -1501,6 +1501,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsInteger.SetAnswer(answer);
 
+            this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+        }
+
+        private void ApplyQuestionAnswer(Guid userId, InterviewTree changedInterviewTree, IQuestionnaire questionnaire,
+            List<Identity> changedQuestionIdentities, InterviewTree sourceInterviewTree)
+        {
             var expressionProcessorState = this.GetClonedExpressionState();
 
             this.UpdateTreeWithNewAnswers(changedInterviewTree, questionnaire, changedQuestionIdentities.ToArray());
@@ -1524,13 +1530,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
 
             this.ApplyValidityChangesEvents(validationChanges);
-            
+
             if (variableValueChanges?.ChangedVariableValues?.Count > 0)
             {
-                this.ApplyEvent(new VariablesChanged(variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
+                this.ApplyEvent(
+                    new VariablesChanged(
+                        variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
             }
         }
-        
+
         #endregion
 
         
