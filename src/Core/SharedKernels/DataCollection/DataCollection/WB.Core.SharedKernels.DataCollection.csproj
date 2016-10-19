@@ -122,7 +122,6 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.AnswerQuestion.cs" />
     <Compile Include="Implementation\Aggregates\Interview.DateTimeQuestion.cs" />
     <Compile Include="Implementation\Aggregates\Interview.MultipleOptionsQuestion.cs" />
     <Compile Include="Implementation\Aggregates\Interview.RemoveAnswer.cs" />
