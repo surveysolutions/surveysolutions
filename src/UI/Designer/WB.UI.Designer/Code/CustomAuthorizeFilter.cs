@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Membership;

@@ -1530,7 +1530,9 @@ li.chapter-panel-item {
             background-color: @questionnarie-question-list-item-bg-color;
             .questionnarie-question-list-item-qname-fontstyle();
             text-transform: none;
-
+            max-width: 240px;
+            overflow: hidden; 
+            text-overflow: ellipsis; 
             &:before {
                 @w: 75px;
                 display: block;
