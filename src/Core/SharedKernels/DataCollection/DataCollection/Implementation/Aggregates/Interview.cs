@@ -833,6 +833,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UpdateLinkedQuestions(changedInterviewTree, expressionProcessorState);
 
             VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
+            this.UpdateTreeWithVariableChanges(changedInterviewTree, variableValueChanges);
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
@@ -843,14 +844,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
 
-            if (variableValueChanges?.ChangedVariableValues?.Count > 0)
-            {
-                this.ApplyEvent(new VariablesChanged(variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
-            }
-
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
+
+        private void UpdateTreeWithVariableChanges(InterviewTree tree, VariableValueChanges variableValueChanges)
+            => variableValueChanges?.ChangedVariableValues.ForEach(x => tree.GetVariable(x.Key).SetValue(x.Value));
 
         private void UpdateTreeWithValidationChanges(InterviewTree tree, ValidityChanges validationChanges)
         {
@@ -1140,7 +1139,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             {
                                 group.AddChildren(BuildInterviewTreeQuestion(questionIdentity, null, false, new RosterVector[0], questionnaire));
                             }
-                        } else if (questionnaire.IsVariable(childEntityId))
+                        }
+                        else if (questionnaire.IsVariable(childEntityId))
                         {
                             var variableIdentity = new Identity(childEntityId, parentRosterVector);
                             if (!group.HasChild(variableIdentity))
@@ -1515,6 +1515,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UpdateLinkedQuestions(changedInterviewTree, expressionProcessorState);
 
             VariableValueChanges variableValueChanges = expressionProcessorState.ProcessVariables();
+            this.UpdateTreeWithVariableChanges(changedInterviewTree, variableValueChanges);
 
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
@@ -1522,11 +1523,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplySubstitutionEvents(changedInterviewTree, questionnaire, changedQuestionIdentities);
 
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
-
-            if (variableValueChanges?.ChangedVariableValues?.Count > 0)
-            {
-                this.ApplyEvent(new VariablesChanged(variableValueChanges.ChangedVariableValues.Select(c => new ChangedVariable(c.Key, c.Value)).ToArray()));
-            }
         }
 
         private void ApplySubstitutionEvents(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
