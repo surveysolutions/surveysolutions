@@ -21,7 +21,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             {
                 connection.Open();
                 NpgsqlConnectionStringBuilder connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString);
-                string schemaName = connectionStringBuilder.SearchPath ?? "public";
+                string schemaName = connectionStringBuilder.SearchPath ?? this.connectionSettings.SchemaName;
 
                 var dbCommand = connection.CreateCommand();
                 dbCommand.CommandText = $"drop schema {schemaName} cascade;create schema {schemaName};";

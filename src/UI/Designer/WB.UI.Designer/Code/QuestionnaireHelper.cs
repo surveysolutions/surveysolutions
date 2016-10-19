@@ -2,10 +2,8 @@
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Models;
-using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Code
 {

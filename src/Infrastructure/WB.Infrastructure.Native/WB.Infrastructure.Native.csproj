@@ -213,6 +213,7 @@
     <Compile Include="Storage\Postgre\DbMigrations\InSchemaPostgresProcessorFactory.cs" />
     <Compile Include="Storage\Postgre\DbUpgradeSettings.cs" />
     <Compile Include="Storage\Postgre\Implementation\IPlainPostgresTransactionManager.cs" />
+    <Compile Include="Storage\Postgre\Implementation\Migrations\M001_AddEventSequenceIndex.cs" />
     <Compile Include="Storage\Postgre\Implementation\NoTransactionPlainPostgresTransactionManager.cs" />
     <Compile Include="Storage\Postgre\Implementation\PlainTransactionManagerProvider.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
@@ -279,7 +280,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Storage\Postgre\Implementation\InitEventStore.sql" />
+    <EmbeddedResource Include="Storage\Postgre\Implementation\Migrations\InitEventStore.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

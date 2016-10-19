@@ -322,7 +322,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var orderedOptions = @event.AnsweredOptions.Select(ao => ao.OptionValue).ToList();
             var orderedYesOptions = @event.AnsweredOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToList();
 
-            foreach (var option in this.Options)
+            foreach (var option in this.Options.ToList())
             {
                 var selectedOptionIndex = orderedOptions.IndexOf(option.Value);
 

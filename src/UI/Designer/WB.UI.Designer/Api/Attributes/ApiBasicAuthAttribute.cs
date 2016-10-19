@@ -9,7 +9,6 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
