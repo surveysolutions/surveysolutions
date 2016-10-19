@@ -3,7 +3,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -21,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             emptyRosterVector = new decimal[] { };
-            var rosterInstanceId = (decimal)22.5;
+            var rosterInstanceId = 0m;
             rosterVector = emptyRosterVector.Concat(new[] { rosterInstanceId }).ToArray();
 
             questionId = Guid.Parse("11111111111111111111111111111111");
@@ -48,9 +47,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         Create.MultyOptionsQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
                             variable: "link_multi")
                     }),
-                Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question,
-                    rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
-                Create.Roster(id: linkedToRosterId, variable: "ros3",
+                Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
+                Create.Roster(id: linkedToRosterId, variable: "ros3", fixedRosterTitles: new [] { Create.FixedRosterTitle(0), Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)},
                     children: new IComposite[]
                     {
                         Create.TextQuestion(id: linkedToQuestionId, variable: "link_source"),
@@ -58,14 +56,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             });
 
             interview = SetupInterview(questionnaireDocument: questionnaireDocument);
-            interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption1Vector[0], sortIndex: null));
-            interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption2Vector[0], sortIndex: null));
-            interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption3Vector[0], sortIndex: null));
-            interview.Apply(new TextQuestionAnswered(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Text));
-            interview.Apply(new TextQuestionAnswered(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Text));
-            interview.Apply(new TextQuestionAnswered(userId, linkedToQuestionId, linkedOption3Vector, DateTime.Now, linkedOption3Text));
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, rosterInstanceId, sortIndex: null));
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId, sortIndex: null));
+
+            interview.AnswerTextQuestion(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Text);
+            interview.AnswerTextQuestion(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Text);
+            interview.AnswerTextQuestion(userId, linkedToQuestionId, linkedOption3Vector, DateTime.Now, linkedOption3Text);
+            interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, 1);
 
             interview.Apply(new LinkedOptionsChanged(new[]
             {
@@ -79,8 +74,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         };
 
         Because of = () =>
-            interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, rosterVector, DateTime.Now,
-                new [] { linkedOption3Vector, linkedOption2Vector });
+            interview.AnswerMultipleOptionsLinkedQuestion(userId, questionId, rosterVector, DateTime.Now, new [] { linkedOption3Vector, linkedOption2Vector });
 
         Cleanup stuff = () =>
         {
