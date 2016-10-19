@@ -262,17 +262,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             return null;
-            //InterviewTreeQuestion question = null;
-            //IInterviewTreeNode group = this;
-            //while (question == null)
-            //{
-            //    question = group.Children.FirstOrDefault(x => x.Identity.Id == questionId) as InterviewTreeQuestion;
-            //    if (group is InterviewTreeSection)
-            //        break;
-            //    group = group.Parent;
-            //}
-
-            //return question;
         }
 
         public bool HasChild(Identity identity)
@@ -470,7 +459,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return string.Join(", ", formattedAnswers);
             }
 
-            if (this.IsSingleOption) return AnswerUtils.AnswerToString(this.AsSingleOption.GetAnswer(), getCategoricalAnswerOptionText);
+            if (this.IsSingleOption) return AnswerUtils.AnswerToString(Convert.ToDecimal(this.AsSingleOption.GetAnswer()), getCategoricalAnswerOptionText);
             if (this.IsMultiOption) return AnswerUtils.AnswerToString(this.AsMultiOption.GetAnswer(), getCategoricalAnswerOptionText);
             if (this.IsYesNo) return AnswerUtils.AnswerToString(this.AsYesNo.GetAnswer(), getCategoricalAnswerOptionText);
             return string.Empty;
