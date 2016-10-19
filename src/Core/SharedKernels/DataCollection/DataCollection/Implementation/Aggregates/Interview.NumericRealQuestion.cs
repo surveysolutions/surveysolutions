@@ -22,14 +22,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
-
-        private InterviewChanges CalculateInterviewChangesOnAnswerNumericRealQuestion(ILatestInterviewExpressionState expressionProcessorState, Guid userId,
-           Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal answer, IQuestionnaire questionnaire)
-        {
-            expressionProcessorState.UpdateNumericRealAnswer(questionId, rosterVector, (double)answer);
-
-            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, answer, AnswerChangeType.NumericReal,
-                answerTime, questionnaire, expressionProcessorState);
-        }
     }
 }

@@ -7,15 +7,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(ILatestInterviewExpressionState expressionProcessorState, Guid userId,
-            Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer, IQuestionnaire questionnaire)
-        {
-            expressionProcessorState.UpdateDateAnswer(questionId, rosterVector, answer);
-
-            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, answer, AnswerChangeType.DateTime,
-                answerTime, questionnaire, expressionProcessorState);
-        }
-
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer)
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
