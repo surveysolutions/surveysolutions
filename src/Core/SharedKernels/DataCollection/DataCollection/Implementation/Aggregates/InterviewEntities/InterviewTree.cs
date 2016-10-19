@@ -458,8 +458,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsGps) return AnswerUtils.AnswerToString(this.AsGps.GetAnswer());
             if (this.IsTextList) return AnswerUtils.AnswerToString(this.AsTextList.GetAnswer());
 
-            if (this.IsSingleLinkedOption) return AnswerUtils.AnswerToString(this.AsSingleLinkedOption.GetAnswer());
-            if (this.IsMultiLinkedOption) return AnswerUtils.AnswerToString(this.AsMultiLinkedOption.GetAnswer());
+            if (this.IsSingleLinkedOption)
+            {
+                var linkedQuestion = new Identity(AsSingleLinkedOption.LinkedSourceId, this.AsSingleLinkedOption.GetAnswer());
+                return Tree.GetQuestion(linkedQuestion).GetAnswerAsString(getCategoricalAnswerOptionText);
+            }
+            if (this.IsMultiLinkedOption)
+            {
+                var formattedAnswers = this.AsMultiLinkedOption.GetAnswer()
+                    .Select(x => new Identity(AsMultiLinkedOption.LinkedSourceId, x))
+                    .Select(x => Tree.GetQuestion(x).GetAnswerAsString(getCategoricalAnswerOptionText));
+                return string.Join(", ", formattedAnswers);
+            }
 
             if (this.IsSingleOption) return AnswerUtils.AnswerToString(this.AsSingleOption.GetAnswer(), getCategoricalAnswerOptionText);
             if (this.IsMultiOption) return AnswerUtils.AnswerToString(this.AsMultiOption.GetAnswer(), getCategoricalAnswerOptionText);
