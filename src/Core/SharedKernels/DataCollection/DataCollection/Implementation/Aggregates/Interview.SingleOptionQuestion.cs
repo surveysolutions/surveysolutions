@@ -1,6 +1,5 @@
 using System;
-using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
+using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
@@ -15,42 +14,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
-                this.interviewState);
 
-            var expressionProcessorState = this.GetClonedExpressionState();
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(expressionProcessorState, this.interviewState, userId,
-                questionId, rosterVector, answerTime, selectedValue, questionnaire);
+            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion, this.interviewState, sourceInterviewTree);
 
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            this.ApplyInterviewChanges(interviewChanges);
-            this.ApplyValidityChangesEvents(validationChanges);
-        }
+            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
+            var question = changedInterviewTree.GetQuestion(answeredQuestion).AsSingleOption;
+            var questionWasAnsweredAndAnswerChanged = question.IsAnswered && question.GetAnswer() != selectedValue;
+            question.SetAnswer(Convert.ToInt32(selectedValue));
+            
+            if (questionWasAnsweredAndAnswerChanged)
+            {
+                RemoveAnswersForDependendCascadingQuestions(answeredQuestion, changedInterviewTree, questionnaire, changedQuestionIdentities);
+            }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(ILatestInterviewExpressionState expressionProcessorState,
-            IReadOnlyInterviewStateDependentOnAnswers state, Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue,
-            IQuestionnaire questionnaire)
-        {
-            var questionIdentity = new Identity(questionId, rosterVector);
-            var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity, questionnaire);
-            bool answerChanged = state.WasQuestionAnswered(questionIdentity) && (decimal?)previsousAnswer != (decimal?)selectedValue;
-
-            var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
-            var cascadingQuestionsToDisable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId)
-                .Where(question => !questionnaire.DoesCascadingQuestionHaveOptionsForParentValue(question, selectedValue)).ToList();
-            var cascadingQuestionsToDisableIdentities = this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, cascadingQuestionsToDisable, rosterVector, questionnaire);
-
-            expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
-            answersToRemoveByCascading.ToList().ForEach(x => expressionProcessorState.UpdateSingleOptionAnswer(x.Id, x.RosterVector, (decimal?)null));
-            expressionProcessorState.DisableQuestions(cascadingQuestionsToDisableIdentities);
-
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, selectedValue,
-                AnswerChangeType.SingleOption, answerTime, questionnaire, expressionProcessorState);
-
-            interviewChanges.AnswersToRemove.AddRange(answersToRemoveByCascading);
-            return interviewChanges;
+            this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
     }
 }
