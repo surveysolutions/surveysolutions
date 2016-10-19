@@ -1,17 +1,34 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
+        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
+        {
+            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
+
+            var answeredQuestion = new Identity(questionId, rosterVector);
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
+                this.interviewState);
+
+            var expressionProcessorState = this.GetClonedExpressionState();
+
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(expressionProcessorState, this.interviewState, userId,
+                questionId, rosterVector, answerTime, selectedValue, questionnaire);
+
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+
+            this.ApplyInterviewChanges(interviewChanges);
+            this.ApplyValidityChangesEvents(validationChanges);
+        }
+
         private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(ILatestInterviewExpressionState expressionProcessorState,
             IReadOnlyInterviewStateDependentOnAnswers state, Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue,
             IQuestionnaire questionnaire)
@@ -34,27 +51,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             interviewChanges.AnswersToRemove.AddRange(answersToRemoveByCascading);
             return interviewChanges;
-        }
-
-        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
-        {
-            new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
-
-            var answeredQuestion = new Identity(questionId, rosterVector);
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
-                this.interviewState);
-
-            var expressionProcessorState = this.GetClonedExpressionState();
-
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerSingleOptionQuestion(expressionProcessorState, this.interviewState, userId,
-                questionId, rosterVector, answerTime, selectedValue, questionnaire);
-
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-
-            this.ApplyInterviewChanges(interviewChanges);
-            this.ApplyValidityChangesEvents(validationChanges);
         }
     }
 }
