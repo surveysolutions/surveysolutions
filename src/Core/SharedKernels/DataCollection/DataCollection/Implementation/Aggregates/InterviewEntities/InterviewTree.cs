@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -619,6 +618,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsAnswered => this.answer != null;
         public AnsweredYesNoOption[] GetAnswer() => this.answer;
         public void SetAnswer(AnsweredYesNoOption[] answer) => this.answer = answer;
+
+        public void SetAnswer(YesNoAnswersOnly yesNoAnswersOnly)
+        {
+            var yesNoOptionsList = new List<AnsweredYesNoOption>();
+            yesNoOptionsList.AddRange(yesNoAnswersOnly.Yes.Select(yesOption => new AnsweredYesNoOption(yesOption, true)));
+            yesNoOptionsList.AddRange(yesNoAnswersOnly.No.Select(noOption => new AnsweredYesNoOption(noOption, false)));
+            this.answer = yesNoOptionsList.ToArray();
+        }
+
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeYesNoQuestion question)
@@ -927,6 +935,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetRosterTitle(string rosterTitle)
         {
             RosterTitle = rosterTitle;
+        }
+
+        public void UpdateRosterTitle(Func<decimal, string> getCategoricalAnswerOptionText = null)
+        {
+            if (!this.IsList && !this.IsNumeric) return;
+
+            if (this.IsList)
+            {
+                var sizeQuestionId = this.AsList.RosterSizeQuestion;
+                var rosterSizeQuestion = this.GetQuestionFromThisOrUpperLevel(sizeQuestionId);
+                this.SetRosterTitle(rosterSizeQuestion.AsTextList.GetTitleByItemCode(this.Identity.RosterVector.Last()));
+            }
+
+            if (this.IsNumeric)
+            {
+                var titleQuestion = Tree.GetQuestion(AsNumeric.RosterTitleQuestionIdentity);
+                if (titleQuestion == null) return;
+                var rosterTitle = titleQuestion.IsAnswered()
+                    ? titleQuestion.GetAnswerAsString(getCategoricalAnswerOptionText)
+                    : null;
+                SetRosterTitle(rosterTitle);
+            }
         }
     }
 

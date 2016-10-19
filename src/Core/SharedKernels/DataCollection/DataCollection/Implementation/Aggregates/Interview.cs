@@ -2315,61 +2315,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region Calculations
 
         // triggers roster
-        private InterviewChanges CalculateInterviewChangesOnAnswerNumericIntegerQuestion(ILatestInterviewExpressionState expressionProcessorState,
-            IReadOnlyInterviewStateDependentOnAnswers state, Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer,
-            Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
-        {
-            List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
-            int rosterSize = rosterIds.Any() ? ToRosterSize(answer) : 0;
-
-            Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterScopeRosterVector)
-                => rosterIds.Contains(groupId)
-                    && AreEqualRosterVectors(groupOuterScopeRosterVector, rosterVector);
-
-            IEnumerable<decimal> rosterInstanceIds = Enumerable.Range(0, rosterSize).Select(index => (decimal)index).ToList();
-
-            var rostersWithoutRosterTitleQuestions = rosterIds
-                .Where(rosterId => !questionnaire.IsRosterTitleQuestionAvailable(rosterId));
-
-            Dictionary<decimal, string> numericRosterTitles = null;
-
-            if (rostersWithoutRosterTitleQuestions.Any())
-            {
-                numericRosterTitles = Enumerable.Range(0, rosterSize).ToDictionary(
-                    index => (decimal)index,
-                    index => (index + 1).ToString(CultureInfo.InvariantCulture));
-            }
-
-            //Update State
-            expressionProcessorState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
-
-            var interviewByAnswerChange = new List<AnswerChange>
-            {
-                new AnswerChange(AnswerChangeType.NumericInteger, userId, questionId, rosterVector, answerTime, answer)
-            };
-
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector, rosterInstanceIds, numericRosterTitles, questionnaire, getAnswer);
-
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
-
-            var rosterInstancesToRemove = this.GetOrderedUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
-                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
-
-
-            rosterInstancesToAdd.ForEach(rosterIdentityToAdd => expressionProcessorState.AddRoster(rosterIdentityToAdd.Key.GroupId, rosterIdentityToAdd.Key.OuterRosterVector,
-                    rosterIdentityToAdd.Key.RosterInstanceId, rosterIdentityToAdd.Key.SortIndex));
-
-            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
-
-            IReadOnlyInterviewStateDependentOnAnswers alteredState = state.Amend(getRosterInstanceIds: (groupId, groupOuterRosterVector)
-                => isRoster(groupId, groupOuterRosterVector)
-                    ? rosterInstanceIds
-                    : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
-
-            return this.CalculateInterviewStructuralChanges(questionId, rosterVector, answerTime, userId, questionnaire, expressionProcessorState,
-                interviewByAnswerChange, rosterCalculationData, alteredState);
-
-        }
 
         private InterviewChanges EmitInterviewStructuralChangesByExpressionStateRosterTitlesAndLinked(ILatestInterviewExpressionState expressionProcessorState,
             RosterCalculationData rosterCalculationData,
@@ -2805,49 +2750,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-
-        private RosterCalculationData CalculateRosterDataWithRosterTitlesFromTextListQuestions(IReadOnlyInterviewStateDependentOnAnswers state,
-            RosterVector rosterVector,
-            List<Guid> rosterIds, Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes,
-            IQuestionnaire questionnaire,
-            Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer,
-            Tuple<decimal, string>[] answers, Tuple<decimal, string>[] changedAnswers)
-        {
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds,
-                rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
-
-            var titlesForRosterInstances = rosterCalculationData
-                .RosterInstancesToAdd
-                .Select(rosterInstance => rosterInstance.RosterInstanceId)
-                .Distinct()
-                .ToDictionary(
-                    rosterInstanceId => rosterInstanceId,
-                    rosterInstanceId => answers.Single(x => x.Item1 == rosterInstanceId).Item2);
-
-            foreach (var changedAnswer in changedAnswers)
-            {
-                titlesForRosterInstances.Add(changedAnswer.Item1, changedAnswer.Item2);
-                foreach (var rosterId in rosterIds)
-                {
-                    int rosterRosterLevel = questionnaire.GetRosterLevelForGroup(rosterId);
-                    int rosterOuterRosterLevel = rosterRosterLevel - 1;
-                    IEnumerable<Guid> rosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId);
-                    IEnumerable<RosterVector> rosterOuterRosterVectors = ExtendRosterVector(state,
-                        rosterVector,
-                        rosterOuterRosterLevel,
-                        rosterGroupsStartingFromTop.WithoutLast().ToArray());
-
-                    foreach (var rosterOuterRosterVector in rosterOuterRosterVectors)
-                    {
-                        rosterCalculationData.RosterInstancesToChange.Add(new RosterIdentity(rosterId, rosterOuterRosterVector, changedAnswer.Item1, null));
-                    }
-                }
-            }
-
-            rosterCalculationData.SetTitlesForRosterInstances(titlesForRosterInstances);
-
-            return rosterCalculationData;
-        }
 
         private RosterCalculationData CalculateRosterDataWithRosterTitlesFromYesNoQuestions(Guid questionId, RosterVector rosterVector, List<Guid> rosterIds,
              Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
@@ -3536,73 +3438,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .IndexOf(rosterId);
         }
 
-        private void UpdateExpressionProcessorStateWithAnswerChange(AnswerChange answerChange,
-            ILatestInterviewExpressionState expressionProcessorState)
-        {
-            switch (answerChange.InterviewChangeType)
-            {
-                case AnswerChangeType.RemoveAnswer:
-                    RemoveAnswerFromExpressionProcessorState(expressionProcessorState, answerChange.QuestionId,
-                        answerChange.RosterVector);
-                    break;
-                case AnswerChangeType.Text:
-                    expressionProcessorState.UpdateTextAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (string)answerChange.Answer);
-                    break;
-                case AnswerChangeType.DateTime:
-                    expressionProcessorState.UpdateDateAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (DateTime)answerChange.Answer);
-                    break;
-                case AnswerChangeType.TextList:
-                    expressionProcessorState.UpdateTextListAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (Tuple<decimal, string>[])answerChange.Answer);
-                    break;
-                case AnswerChangeType.GeoLocation:
-                    {
-                        var answer = answerChange.Answer as GeoLocationPoint;
-                        expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                            answer.Latitude,
-                            answer.Longitude,
-                            answer.Accuracy,
-                            answer.Altitude);
-                    }
-                    break;
-                case AnswerChangeType.QRBarcode:
-                    expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (string)answerChange.Answer);
-                    break;
-                case AnswerChangeType.NumericInteger:
-                    expressionProcessorState.UpdateNumericIntegerAnswer(answerChange.QuestionId,
-                        answerChange.RosterVector, (int)answerChange.Answer);
-                    break;
-                case AnswerChangeType.NumericReal:
-                    expressionProcessorState.UpdateNumericRealAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        Convert.ToDouble(answerChange.Answer));
-                    break;
-                case AnswerChangeType.SingleOptionLinked:
-                    expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId,
-                        answerChange.RosterVector,
-                        (decimal[])answerChange.Answer);
-                    break;
-                case AnswerChangeType.SingleOption:
-                    expressionProcessorState.UpdateSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal)answerChange.Answer);
-                    break;
-                case AnswerChangeType.MultipleOptionsLinked:
-                    expressionProcessorState.UpdateLinkedMultiOptionAnswer(answerChange.QuestionId,
-                        answerChange.RosterVector,
-                        (decimal[][])answerChange.Answer);
-                    break;
-                case AnswerChangeType.MultipleOptions:
-                    expressionProcessorState.UpdateMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal[])answerChange.Answer);
-                    break;
-                case AnswerChangeType.YesNo:
-                    expressionProcessorState.UpdateYesNoAnswer(answerChange.QuestionId, answerChange.RosterVector, ConvertToYesNoAnswersOnly((AnsweredYesNoOption[])answerChange.Answer));
-                    break;
-            }
-        }
-
         public virtual IEnumerable<CategoricalOption> GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
@@ -3869,9 +3704,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var roster in tree.FindRosters().Where(x => x.IsList))
             {
-                var sizeQuestionId = roster.AsList.RosterSizeQuestion;
-                var rosterSizeQuestion = roster.GetQuestionFromThisOrUpperLevel(sizeQuestionId);
-                roster.SetRosterTitle(rosterSizeQuestion.AsTextList.GetTitleByItemCode(roster.Identity.RosterVector.Last()));
+                roster.UpdateRosterTitle();
             }
 
             foreach (var roster in tree.FindRosters().Where(x => x.IsNumeric))
@@ -3879,9 +3712,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var titleQuestion = tree.GetQuestion(roster.AsNumeric.RosterTitleQuestionIdentity);
                 if (titleQuestion == null) continue;
                 var rosterTitle = titleQuestion.IsAnswered()
-                    ? titleQuestion.GetAnswerAsString(answerOptionValue => this.GetOptionForQuestionWithoutFilter(titleQuestion.Identity, Convert.ToInt32(answerOptionValue), null).Title)
+                    ? titleQuestion.GetAnswerAsString(answerOptionValue => questionnaire.GetOptionsForQuestion(titleQuestion.Identity.Id, null, string.Empty).FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue)).Title)
                     : null;
                 roster.SetRosterTitle(rosterTitle);
+
+                roster.UpdateRosterTitle(answerOptionValue => questionnaire.GetOptionsForQuestion(titleQuestion.Identity.Id, null, string.Empty).FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue)).Title);
             }
         }
 
@@ -3928,11 +3763,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var changedYesNoQuestion in structuralChanges.ChangedYesNoQuestions)
             {
-                YesNoAnswersOnly yesNoAnswersOnly = changedYesNoQuestion.Value;
-                var yesNoOptionsList = new List<AnsweredYesNoOption>();
-                yesNoOptionsList.AddRange(yesNoAnswersOnly.Yes.Select(yesOption => new AnsweredYesNoOption(yesOption, true)));
-                yesNoOptionsList.AddRange(yesNoAnswersOnly.No.Select(noOption => new AnsweredYesNoOption(noOption, false)));
-                tree.GetQuestion(changedYesNoQuestion.Key).AsYesNo.SetAnswer(yesNoOptionsList.ToArray());
+                tree.GetQuestion(changedYesNoQuestion.Key).AsYesNo.SetAnswer(changedYesNoQuestion.Value);
             }
 
             foreach (var removedRosterIdentity in structuralChanges.RemovedRosters)
@@ -3951,8 +3782,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 if (currentItem is InterviewTreeGroup)
                 {
-                    var group = currentItem as InterviewTreeGroup;
-                    var parentRosterVector = group.Identity.RosterVector;
+                    var currentGroup = currentItem as InterviewTreeGroup;
+                    var parentRosterVector = currentGroup.Identity.RosterVector;
                     var childEntityIds = questionnaire.GetChildEntityIds(currentItem.Identity.Id);
 
                     foreach (var childEntityId in childEntityIds)
@@ -3978,7 +3809,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             {
                                 Guid sourceQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
                                 var questionaType = questionnaire.GetQuestionType(sourceQuestionId);
-                                var rosterSizeQuestion = group.GetQuestionFromThisOrUpperLevel(sourceQuestionId);
+                                var rosterSizeQuestion = currentGroup.GetQuestionFromThisOrUpperLevel(sourceQuestionId);
                                 switch (questionaType)
                                 {
                                     case QuestionType.MultyOption:
@@ -4012,19 +3843,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 }
                             }
 
-                            var actualRosterIdentities = group.Children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
+                            var actualRosterIdentities = currentGroup.Children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
 
                             foreach (var actualRosterIdentity in actualRosterIdentities)
                             {
                                 if (expectedRosterIdentitiesWithTitles.Any(x => x.Identity.Equals(actualRosterIdentity)))
                                     continue;
-                                group.RemoveChildren(actualRosterIdentity);
+                                currentGroup.RemoveChildren(actualRosterIdentity);
                             }
 
                             for (int index = 0; index < expectedRosterIdentitiesWithTitles.Count; index++)
                             {
                                 var rosterIdentityWithTitle = expectedRosterIdentitiesWithTitles[index];
-                                if (@group.HasChild(rosterIdentityWithTitle.Identity))
+                                if (currentGroup.HasChild(rosterIdentityWithTitle.Identity))
                                     continue;
                                 var rosterNode = new InterviewTreeRoster(
                                     rosterIdentityWithTitle.Identity,
@@ -4036,40 +3867,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                     rosterSizeQuestion: rosterIdentityWithTitle.SizeQuestion?.Identity.Id,
                                     rosterTitleQuestionIdentity: rosterIdentityWithTitle.RosterTitleQuestionIdentity);
 
-                                @group.AddChildren(rosterNode);
+                                currentGroup.AddChildren(rosterNode);
                                 itemsQueue.Enqueue(rosterNode);
                             }
                         }
                         else if (questionnaire.IsSubSection(childEntityId))
                         {
                             var subSectionIdentity = new Identity(childEntityId, parentRosterVector);
-                            if (!group.HasChild(subSectionIdentity))
+                            if (!currentGroup.HasChild(subSectionIdentity))
                             {
-                                group.AddChildren(new InterviewTreeSubSection(subSectionIdentity, Enumerable.Empty<IInterviewTreeNode>(), false));
+                                currentGroup.AddChildren(new InterviewTreeSubSection(subSectionIdentity, Enumerable.Empty<IInterviewTreeNode>(), false));
                             }
                         }
                         else if (questionnaire.IsStaticText(childEntityId))
                         {
                             var staticTextIdentity = new Identity(childEntityId, parentRosterVector);
-                            if (!group.HasChild(staticTextIdentity))
+                            if (!currentGroup.HasChild(staticTextIdentity))
                             {
-                                group.AddChildren(new InterviewTreeStaticText(staticTextIdentity, false));
+                                currentGroup.AddChildren(new InterviewTreeStaticText(staticTextIdentity, false));
                             }
                         }
                         else if (questionnaire.IsQuestion(childEntityId))
                         {
                             var questionIdentity = new Identity(childEntityId, parentRosterVector);
-                            if (!group.HasChild(questionIdentity))
+                            if (!currentGroup.HasChild(questionIdentity))
                             {
-                                group.AddChildren(BuildInterviewTreeQuestion(questionIdentity, null, false, new RosterVector[0], questionnaire));
+                                currentGroup.AddChildren(BuildInterviewTreeQuestion(questionIdentity, null, false, new RosterVector[0], questionnaire));
                             }
                         }
                         else if (questionnaire.IsVariable(childEntityId))
                         {
                             var variableIdentity = new Identity(childEntityId, parentRosterVector);
-                            if (!group.HasChild(variableIdentity))
+                            if (!currentGroup.HasChild(variableIdentity))
                             {
-                                group.AddChildren(new InterviewTreeVariable(variableIdentity, false, null));
+                                currentGroup.AddChildren(new InterviewTreeVariable(variableIdentity, false, null));
                             }
                         }
                     }
