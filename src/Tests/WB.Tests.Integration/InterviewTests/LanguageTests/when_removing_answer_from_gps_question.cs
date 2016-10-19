@@ -1,7 +1,6 @@
 ﻿using System;
 using AppDomainToolkit;
 using Machine.Specifications;
-using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -22,23 +21,11 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new[]
                 {
-                    Create.Chapter(children: new IComposite[]
-                    {
-                        Create.GpsCoordinateQuestion(variable: "gps", 
-                        validationExpression: "false",
-                        id: questionId),
-                    }),
+                    Create.GpsCoordinateQuestion(variable: "gps", validationExpression: "false", id: questionId),
                 });
 
-                var interview = SetupInterview(questionnaireDocument,
-                    events: new object[]
-                    {
-                        Create.Event.GeoLocationQuestionAnswered(Create.Identity(questionId), 1, 1),
-                        Create.Event.AnswersDeclaredInvalid(new[]
-                        {
-                            Create.Identity(questionId)
-                        }),
-                    });
+                var interview = SetupInterview(questionnaireDocument);
+                interview.AnswerGeoLocationQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, 1, 1, 1, 1, DateTimeOffset.Now);
 
                 using (var eventContext = new EventContext())
                 {
