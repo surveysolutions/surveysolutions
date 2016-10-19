@@ -189,7 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                foreach (var option in this.Options.Where(option => option.Selected))
+                foreach (var option in this.Options.Where(option => option.Selected).ToList())
                 {
                     option.Selected = false;
                 }
