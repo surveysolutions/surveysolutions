@@ -369,9 +369,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
 
-        public void SetFailedValidations(IEnumerable<FailedValidationCondition> failedValidations)
-            => this.FailedValidations = failedValidations?.ToReadOnlyCollection();
-        
+        public void MarkAsInvalid(IEnumerable<FailedValidationCondition> failedValidations)
+        {
+            if(failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedValidations = failedValidations.ToReadOnlyCollection();
+        }
+
+        public void MarkAsValid()
+            => this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
+
         public bool IsDouble => this.AsDouble != null;
         public bool IsInteger => this.AsInteger != null;
         public bool IsSingleOption => this.AsSingleOption != null;
@@ -818,8 +824,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
-        public void SetFailedValidations(IReadOnlyList<FailedValidationCondition> failedValidations)
-            => this.FailedValidations = failedValidations;
+        public void MarkAsInvalid(IEnumerable<FailedValidationCondition> failedValidations)
+        {
+            if (failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedValidations = failedValidations.ToReadOnlyCollection();
+        }
+        public void MarkAsValid()
+            => this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
 
         public override string ToString() => $"Text ({this.Identity})";
     }

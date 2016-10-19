@@ -75,5 +75,11 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             return new ConcurrentDictionary<TKey, TElement>(source.ToDictionary(keySelector, elementSelector));
         }
+
+        public static IDictionary<TKey, IReadOnlyList<TValue>> ToDictionary<TKey, TValue>(this IList<KeyValuePair<TKey, IList<TValue>>> source)
+            => source?.ToDictionary(x => x.Key, x => (IReadOnlyList<TValue>) x.Value) ?? new Dictionary<TKey, IReadOnlyList<TValue>>();
+
+        public static IDictionary<TKey, IReadOnlyList<TValue>> ToDictionary<TKey, TValue>(this IList<KeyValuePair<TKey, List<TValue>>> source)
+            => source?.ToDictionary(x => x.Key, x => (IReadOnlyList<TValue>)x.Value) ?? new Dictionary<TKey, IReadOnlyList<TValue>>();
     }
 }
