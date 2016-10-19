@@ -418,7 +418,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override string ToString() => $"Question ({this.Identity}) '{this.Title}'";
 
-        public void UpdateLinkedOptions()
+        public void CalculateLinkedOptions()
         {
             if (!IsLinked) return;
 
@@ -440,17 +440,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         .ToList();
             }
 
-            var options = sourceNodes.Where(x => !x.IsDisabled()).Select(x => x.Identity.RosterVector).ToList();
-            List<RosterVector> previousOptions = linkedQuestion.Options;
-            linkedQuestion.SetOptions(options);
-
-            if (!previousOptions.SequenceEqual(options))
-            {
-                if (IsMultiLinkedOption)
-                    AsMultiLinkedOption.RemoveAnswer();
-                else
-                    AsSingleLinkedOption.RemoveAnswer();
-            }
+            var options = sourceNodes.Where(x => !x.IsDisabled()).Select(x => x.Identity.RosterVector).ToArray();
+            UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
 
         public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null)
@@ -481,6 +472,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiOption) return AnswerUtils.AnswerToString(this.AsMultiOption.GetAnswer(), getCategoricalAnswerOptionText);
             if (this.IsYesNo) return AnswerUtils.AnswerToString(this.AsYesNo.GetAnswer(), getCategoricalAnswerOptionText);
             return string.Empty;
+        }
+
+        public void UpdateLinkedOptionsAndResetAnswerIfNeeded(RosterVector[] options)
+        {
+            if (!IsLinked) return;
+            var previousOptions = AsLinked.Options;
+            AsLinked.SetOptions(options);
+
+            var optionsAreIdentical = previousOptions.SequenceEqual(options);
+            if (optionsAreIdentical) return;
+
+            if (IsMultiLinkedOption)
+                AsMultiLinkedOption.RemoveAnswer();
+            else
+                AsSingleLinkedOption.RemoveAnswer();
         }
     }
 
