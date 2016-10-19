@@ -30,18 +30,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(id: questionnaireId,
-                children: new IComposite[]
-                {
-
-                    Create.Entity.Variable(id:variableId, type: VariableType.Boolean, expression: "true")
-                });
-
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                 new PlainQuestionnaire(questionnaire, 18));
-
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
+                Create.Entity.PlainQuestionnaire(
+                    CreateQuestionnaireDocumentWithOneChapter(Create.Entity.Variable(id: variableId,
+                        type: VariableType.Boolean, expression: "true")), questionnaireVersion),
+                questionnaireVersion);
             
-
             var expressionState = Substitute.For<ILatestInterviewExpressionState>();
             expressionState.Clone().Returns(expressionState);
             var structuralChanges = new StructuralChanges();

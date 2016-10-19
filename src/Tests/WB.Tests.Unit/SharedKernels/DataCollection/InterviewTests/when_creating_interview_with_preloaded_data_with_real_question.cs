@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_raise_valid_TextQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<NumericRealQuestionAnswered>(@event
-                => @event.Answer == prefilledQuestionAnswer && @event.QuestionId == prefilledQuestionId);
+                => @event.Answer == (decimal)prefilledQuestionAnswer && @event.QuestionId == prefilledQuestionId);
 
 
         private static EventContext eventContext;
@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static DateTime answersTime;
         private static Guid supervisorId;
         private static Guid prefilledQuestionId;
-        private static decimal prefilledQuestionAnswer;
+        private static double prefilledQuestionAnswer;
         private static Interview interview;
     }
 }
