@@ -30,8 +30,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.eventTypeResolver = eventTypeResolver;
 
             tableName = connectionSettings.SchemaName + ".events";
-
-            CreateRelations();
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
@@ -89,27 +87,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
 
             return new CommittedEventStream(eventStream.SourceId);
-        }
-
-        private void CreateRelations()
-        {
-            DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString, this.connectionSettings.SchemaName);
-
-            var assembly = Assembly.GetAssembly(typeof(PostgresEventStore));
-            var resourceName = typeof(PostgresEventStore).Namespace + ".Migrations.InitEventStore.sql";
-
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    var commandText = reader.ReadToEnd();
-                    var dbCommand = connection.CreateCommand();
-                    dbCommand.CommandText = commandText.Replace("@schemaName", this.connectionSettings.SchemaName);
-                    dbCommand.ExecuteNonQuery();
-                }
-            }
         }
 
         private List<CommittedEvent> Store(UncommittedEventStream eventStream, NpgsqlConnection connection)
