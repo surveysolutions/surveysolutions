@@ -26,16 +26,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changedInterviewTree.GetQuestion(answeredQuestion).AsGps.SetAnswer(answer);
             ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
-
-        private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(ILatestInterviewExpressionState expressionProcessorState, Guid userId,
-            Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp,
-            IQuestionnaire questionnaire)
-        {
-            expressionProcessorState.UpdateGeoLocationAnswer(questionId, rosterVector, latitude, longitude, accuracy, altitude);
-
-            return this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector,
-                new GeoLocationPoint(latitude, longitude, accuracy, altitude, timestamp),
-                AnswerChangeType.GeoLocation, answerTime, questionnaire, expressionProcessorState);
-        }
     }
 }
