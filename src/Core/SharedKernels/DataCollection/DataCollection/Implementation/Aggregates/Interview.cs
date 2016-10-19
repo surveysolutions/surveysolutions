@@ -3879,7 +3879,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var titleQuestion = tree.GetQuestion(roster.AsNumeric.RosterTitleQuestionIdentity);
                 if (titleQuestion == null) continue;
                 var rosterTitle = titleQuestion.IsAnswered()
-                    ? titleQuestion.GetAnswerAsString(answerOptionValue => questionnaire.GetAnswerOptionTitle(titleQuestion.Identity.Id, answerOptionValue))
+                    ? titleQuestion.GetAnswerAsString(answerOptionValue => this.GetOptionForQuestionWithoutFilter(titleQuestion.Identity, Convert.ToInt32(answerOptionValue), null).Title)
                     : null;
                 roster.SetRosterTitle(rosterTitle);
             }
@@ -3892,7 +3892,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var linkedQuestions = tree.FindQuestions().Where(x => x.IsLinked);
                 foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
                 {
-                    linkedQuestion.UpdateLinkedOptions();
+                    linkedQuestion.CalculateLinkedOptions();
                 }
             }
             else
@@ -3905,15 +3905,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
                 {
                     var linkedQuestion = tree.GetQuestion(linkedQuestionWithOptions.Key);
-                    var previousOptions = linkedQuestion.AsLinked.Options;
-                    linkedQuestion.AsLinked.SetOptions(linkedQuestionWithOptions.Value);
-                    if (previousOptions.SequenceEqual(linkedQuestionWithOptions.Value))
-                        continue;
-
-                    if (linkedQuestion.IsMultiLinkedOption)
-                        linkedQuestion.AsMultiLinkedOption.RemoveAnswer();
-                    else
-                        linkedQuestion.AsSingleLinkedOption.RemoveAnswer();
+                    linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value);
                 }
             }
         }
