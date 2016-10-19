@@ -2087,16 +2087,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal selectedValue,
-            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState,
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree,
             bool applyStrongChecks = true)
         {
-            var tree = this.BuildInterviewTree(questionnaire, currentInterviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-            ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
-            ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
+            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
+            this.ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
             treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(answeredQuestion, selectedValue, questionnaire);
             if (applyStrongChecks)
             {
@@ -3235,7 +3234,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     case QuestionType.SingleOption:
                         this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
-                            answeredQuestion, currentInterviewState, applyStrongChecks);
+                            answeredQuestion, currentInterviewState, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
                         break;
 
                     case QuestionType.MultyOption:
@@ -3627,8 +3626,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? titleQuestion.GetAnswerAsString(answerOptionValue => questionnaire.GetOptionsForQuestion(titleQuestion.Identity.Id, null, string.Empty).FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue)).Title)
                     : null;
                 roster.SetRosterTitle(rosterTitle);
-
-                roster.UpdateRosterTitle(answerOptionValue => questionnaire.GetOptionsForQuestion(titleQuestion.Identity.Id, null, string.Empty).FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue)).Title);
+                //roster.UpdateRosterTitle(answerOptionValue => questionnaire.GetOptionsForQuestion(titleQuestion.Identity.Id, null, string.Empty).FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue)).Title);
             }
         }
 
