@@ -22,7 +22,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IEventTypeResolver eventTypeResolver;
         private static int BatchSize = 4096;
         private static string tableName;
-        
+
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
             IEventTypeResolver eventTypeResolver)
         {
@@ -96,7 +96,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString, this.connectionSettings.SchemaName);
 
             var assembly = Assembly.GetAssembly(typeof(PostgresEventStore));
-            var resourceName = typeof(PostgresEventStore).Namespace + ".InitEventStore.sql";
+            var resourceName = typeof(PostgresEventStore).Namespace + ".Migrations.InitEventStore.sql";
 
             using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {

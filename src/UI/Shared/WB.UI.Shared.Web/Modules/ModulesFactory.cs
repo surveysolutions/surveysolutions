@@ -3,6 +3,7 @@ using System.Web.Configuration;
 using Ninject.Modules;
 using WB.Infrastructure.Native.Storage.EventStore;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Modules
@@ -31,7 +32,9 @@ namespace WB.UI.Shared.Web.Modules
                 var eventStoreSettings = new PostgreConnectionSettings();
                 eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["Postgres"].ConnectionString;
                 eventStoreSettings.SchemaName = "events";
-                return new PostgresWriteSideModule(eventStoreSettings);
+                
+                return new PostgresWriteSideModule(eventStoreSettings,
+                    new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
             }
 
             return null;

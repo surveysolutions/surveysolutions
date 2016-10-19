@@ -23,3 +23,4 @@ CREATE INDEX IF NOT EXISTS globalsequence_indx
   ON @schemaName.events
   USING btree
   (globalsequence);
+
