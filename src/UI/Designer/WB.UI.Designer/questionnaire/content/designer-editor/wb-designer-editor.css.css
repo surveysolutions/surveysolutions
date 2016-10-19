@@ -1425,6 +1425,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   font-size: 12px;
   color: #3da802;
   text-transform: none;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .item .item-body .qname-block:before {
   display: block;
