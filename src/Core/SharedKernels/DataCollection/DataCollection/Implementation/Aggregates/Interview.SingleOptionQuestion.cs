@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion, this.interviewState, sourceInterviewTree);
+            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion, sourceInterviewTree);
 
             var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
