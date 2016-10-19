@@ -34,14 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>()
                 {
-                    Create.Event.AnswersDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
-                            {
-                                {
-                                    Create.Identity(dependentOnAnsweredQuestionId),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            }),
+                    Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(dependentOnAnsweredQuestionId))),
                     Create.Event.NumericIntegerQuestionAnswered(dependentOnAnsweredQuestionId, 1)
                 });
 
