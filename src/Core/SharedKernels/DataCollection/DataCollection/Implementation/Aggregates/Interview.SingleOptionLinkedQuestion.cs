@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -19,16 +15,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+
             this.CheckLinkedSingleOptionQuestionInvariants(questionId, rosterVector, selectedRosterVector, questionnaire, answeredQuestion);
 
-            ILatestInterviewExpressionState expressionProcessorState = this.GetClonedExpressionState();
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            expressionProcessorState.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, selectedRosterVector);
+            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
+            changedInterviewTree.GetQuestion(answeredQuestion).AsSingleLinkedOption.SetAnswer(selectedRosterVector);
 
-            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerQuestion(userId, questionId, rosterVector, selectedRosterVector,
-                AnswerChangeType.SingleOptionLinked, answerTime, questionnaire, expressionProcessorState);
-
-            this.ApplyInterviewChanges(interviewChanges);
+            this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
     }
 }
