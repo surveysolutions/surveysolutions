@@ -439,7 +439,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         .ToList();
             }
 
-            var options = sourceNodes.Where(x => !x.IsDisabled()).Select(x => x.Identity.RosterVector).ToArray();
+            var options = sourceNodes
+                .Where(x => !x.IsDisabled())
+                .Where(x => ((x as InterviewTreeQuestion)?.IsAnswered() ?? true))
+                .Select(x => x.Identity.RosterVector).ToArray();
             UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
 
@@ -486,6 +489,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 AsMultiLinkedOption.RemoveAnswer();
             else
                 AsSingleLinkedOption.RemoveAnswer();
+        }
+
+        public void RemoveAnswer()
+        {
+            if (this.IsText) this.AsText.RemoveAnswer();
+            if (this.IsInteger) this.AsInteger.RemoveAnswer();
+            if (this.IsDouble) this.AsDouble.RemoveAnswer();
+            if (this.IsDateTime) this.AsDateTime.RemoveAnswer();
+            if (this.IsMultimedia) this.AsMultimedia.RemoveAnswer();
+            if (this.IsQRBarcode) this.AsQRBarcode.RemoveAnswer();
+            if (this.IsGps) this.AsGps.RemoveAnswer();
+            if (this.IsSingleOption) this.AsSingleOption.RemoveAnswer();
+            if (this.IsSingleLinkedOption) this.AsSingleLinkedOption.RemoveAnswer();
+            if (this.IsMultiOption)  this.AsMultiOption.RemoveAnswer();
+            if (this.IsMultiLinkedOption) this.AsMultiLinkedOption.RemoveAnswer();
+            if (this.IsYesNo) this.AsYesNo.RemoveAnswer();
+            if (this.IsTextList)  this.AsTextList.RemoveAnswer();
+        }
+
+        public bool IsOnTheSameOrDeeperLevel(Identity questionIdentity)
+        {
+            var rosterLevel = questionIdentity.RosterVector.Length;
+            return this.Identity.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector);
         }
     }
 
