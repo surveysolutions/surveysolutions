@@ -1092,6 +1092,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
         }
+        private static void RemoveAnswersForDependendCascadingQuestions(Identity questionIdentity, InterviewTree changedInterviewTree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        {
+            IEnumerable<Guid> dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionIdentity.Id);
+            foreach (var dependentQuestionId in dependentQuestionIds)
+            {
+                var cascadingAnsweredQuestionsToRemoveAnswer = changedInterviewTree.FindQuestions(dependentQuestionId)
+                    .Where(x => x.IsCascading && x.IsAnswered())
+                    .Where(x => x.IsOnTheSameOrDeeperLevel(questionIdentity));
+
+                foreach (var cascadingQuestion in cascadingAnsweredQuestionsToRemoveAnswer)
+                {
+                    cascadingQuestion.RemoveAnswer();
+                    changedQuestionIdentities.Add(cascadingQuestion.Identity);
+                }
+            }
+        }
 
         private void ApplySubstitutionEvents(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
         {
@@ -1747,42 +1763,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ApplyInterviewChanges(IEnumerable<InterviewChanges> interviewChangesItems)
-        {
-            var eneblementChanges = new List<EnablementChanges>();
-            var validityChanges = new List<ValidityChanges>();
-
-            foreach (var interviewChanges in interviewChangesItems)
-            {
-                if (interviewChanges.InterviewByAnswerChanges != null)
-                    this.ApplyAnswersEvents(interviewChanges.InterviewByAnswerChanges);
-
-                if (interviewChanges.RosterCalculationData != null)
-                    this.ApplyRostersEvents(interviewChanges.RosterCalculationData);
-
-                if (interviewChanges.AnswersToRemove != null)
-                    this.ApplyAnswersRemovanceEvents(interviewChanges.AnswersToRemove);
-
-                if (interviewChanges.RosterInstancesWithAffectedTitles != null)
-                    this.ApplyRosterRowsTitleChangedEvents(interviewChanges.RosterInstancesWithAffectedTitles);
-
-                if (interviewChanges.VariableValueChanges != null)
-                    this.ApplyVariableValueChangesEvents(interviewChanges.VariableValueChanges);
-
-                if (interviewChanges.ValidityChanges != null)
-                    validityChanges.Add(interviewChanges.ValidityChanges);
-
-                if (interviewChanges.EnablementChanges != null)
-                    eneblementChanges.Add(interviewChanges.EnablementChanges);
-            }
-
-            this.ApplyEnablementChangesEvents(EnablementChanges.Union(eneblementChanges));
-
-            //merge changes, saving only last state - valid or invalid  
-            validityChanges.ForEach(this.ApplyValidityChangesEvents);
-
-        }
-
         private void ApplyEnablementChangesEvents(EnablementChanges enablementChanges)
         {
             //should be removed. bad tests setup
@@ -1965,36 +1945,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             return result.ToList();
-        }
-
-        private Dictionary<RosterIdentity, string> GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(
-            params RosterCalculationData[] datas)
-        {
-            var result = new Dictionary<RosterIdentity, string>(new RosterIdentityComparer());
-            foreach (var data in datas)
-            {
-                var rosterInstancesToAdd = data.RosterInstancesToAdd;
-                if (rosterInstancesToAdd != null)
-                {
-                    foreach (var rosterIdentity in rosterInstancesToAdd)
-                    {
-                        result[rosterIdentity] = data.GetRosterInstanceTitle(rosterIdentity.GroupId, rosterIdentity.RosterInstanceId);
-                    }
-                }
-
-                foreach (var rosterInstantiatesFromNestedLevel in data.RosterInstantiatesFromNestedLevels)
-                {
-                    var nestedRosterInstancesToAdd =
-                        GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(
-                            rosterInstantiatesFromNestedLevel);
-                    foreach (var nestedRosterInstanceToAdd in nestedRosterInstancesToAdd)
-                    {
-                        result[nestedRosterInstanceToAdd.Key] = nestedRosterInstanceToAdd.Value;
-                    }
-                }
-            }
-
-            return result;
         }
 
         private void ApplyAnswersEvents(IEnumerable<AnswerChange> interviewByAnswerChanges)
@@ -2750,44 +2700,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-
-        private RosterCalculationData CalculateRosterDataWithRosterTitlesFromYesNoQuestions(Guid questionId, RosterVector rosterVector, List<Guid> rosterIds,
-             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
-             IReadOnlyInterviewStateDependentOnAnswers state, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
-        {
-            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds,
-                rosterVector, rosterInstanceIdsWithSortIndexes, null, questionnaire, getAnswer);
-
-            var titlesForRosterInstances = rosterCalculationData
-                .RosterInstancesToAdd
-                .Select(rosterInstance => rosterInstance.RosterInstanceId)
-                .Distinct()
-                .ToDictionary(
-                    rosterInstanceId => rosterInstanceId,
-                    rosterInstanceId => questionnaire.GetAnswerOptionTitle(questionId, rosterInstanceId));
-
-            rosterCalculationData.SetTitlesForRosterInstances(titlesForRosterInstances);
-
-            return rosterCalculationData;
-        }
-
-        private static Dictionary<Guid, Dictionary<decimal, string>> CalculateFixedRosterData(IEnumerable<Guid> fixedRosterIds,
-            IQuestionnaire questionnaire)
-        {
-            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = fixedRosterIds
-                .Select(fixedRosterId =>
-                    new
-                    {
-                        FixedRosterId = fixedRosterId,
-                        TitlesWithIds = questionnaire.GetFixedRosterTitles(fixedRosterId)
-                        .Select(title => new
-                        {
-                            Title = title.Title,
-                            RosterInstanceId = title.Value
-                        }).ToDictionary(x => x.RosterInstanceId, x => x.Title)
-                    }).ToDictionary(x => x.FixedRosterId, x => x.TitlesWithIds);
-            return rosterTitlesGroupedByRosterId;
-        }
 
         protected decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
             Guid linkedToEntityId, Identity linkedQuestion, IQuestionnaire questionnaire)

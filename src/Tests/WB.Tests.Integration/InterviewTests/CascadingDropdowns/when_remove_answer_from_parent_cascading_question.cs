@@ -7,9 +7,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
@@ -46,25 +46,20 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     });
 
                 interview = SetupInterview(questionnaire);
-                interview.AnswerSingleOptionQuestion(userId, parentCascadingQuestion, new decimal[0],
-                    DateTime.Now, 2);
+                interview.AnswerSingleOptionQuestion(userId, parentCascadingQuestion, RosterVector.Empty, DateTime.Now, 2);
+                interview.AnswerSingleOptionQuestion(userId, childCascadingQuestionId, RosterVector.Empty, DateTime.Now, 21);
+                interview.AnswerSingleOptionQuestion(userId, childOfChildCascadingQuestionId, RosterVector.Empty, DateTime.Now, 211);
 
-                interview.AnswerSingleOptionQuestion(userId, childCascadingQuestionId, new decimal[0],
-                    DateTime.Now, 21);
-
-                interview.AnswerSingleOptionQuestion(userId, childOfChildCascadingQuestionId, new decimal[0],
-                 DateTime.Now, 211);
                 using (var eventContext = new EventContext())
                 {
-
-                    interview.RemoveAnswer(parentCascadingQuestion, new decimal[0], userId, DateTime.Now);
-                    return new InvokeResults()
+                    interview.RemoveAnswer(parentCascadingQuestion, RosterVector.Empty, userId, DateTime.Now);
+                    return new InvokeResults
                     {
-                        WasAnswerOnParentQuestionRemoved = eventContext.AnyEvent<AnswerRemoved>(e=> e.QuestionId == parentCascadingQuestion && !e.RosterVector.Any()),
-                        WasAnswerOnChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0),
-                        WasAnswerOnChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0),
-                        WasAnswerOnChildOfChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childOfChildCascadingQuestionId && !q.RosterVector.Any()) == 1),
-                        WasAnswerOnChildOfChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) == 1)
+                        WasAnswerOnParentQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e=> e.Questions.Count(q => q.Id == parentCascadingQuestion) > 0),
+                        WasAnswerOnChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childCascadingQuestionId) > 0),
+                        WasAnswerOnChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId) > 0),
+                        WasAnswerOnChildOfChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childOfChildCascadingQuestionId) == 1),
+                        WasAnswerOnChildOfChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId) == 1)
                     };
                 }
             });
