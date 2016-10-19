@@ -244,15 +244,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.DisabledQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledQuestions);
             this.interviewState.RosterGroupInstanceIds = BuildRosterInstanceIdsFromSynchronizationDto(@event.InterviewData);
             this.interviewState.ValidAnsweredQuestions = new ConcurrentHashSet<Identity>(@event.InterviewData.ValidAnsweredQuestions.Select(x => new Identity(x.Id, x.InterviewItemRosterVector)));
-            this.interviewState.InvalidAnsweredQuestions = @event.InterviewData.FailedValidationConditions?.ToDictionary(x => x.Key,
-                x => (IReadOnlyList<FailedValidationCondition>)x.Value) ??
-                                                     new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+            this.interviewState.InvalidAnsweredQuestions = @event.InterviewData.FailedValidationConditions.ToDictionary();
 
             this.interviewState.DisabledStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData?.DisabledStaticTexts ?? new List<Identity>());
             this.interviewState.ValidStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData?.ValidStaticTexts ?? new List<Identity>());
-            this.interviewState.InvalidStaticTexts = @event.InterviewData.InvalidStaticTexts?.ToDictionary(x => x.Key,
-                x => (IReadOnlyList<FailedValidationCondition>)x.Value) ??
-                                                     new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+            this.interviewState.InvalidStaticTexts = @event.InterviewData.InvalidStaticTexts.ToDictionary();
 
             this.interviewState.RosterTitles.Clear();
             var changedRosterTitles =
@@ -860,12 +856,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (validationChanges == null) return; // can be in tests only.
 
-            validationChanges.AnswersDeclaredValid.ForEach(x => tree.GetQuestion(x).SetFailedValidations(null));
-            validationChanges.AnswersDeclaredInvalid.ForEach(x => tree.GetQuestion(x).SetFailedValidations(new FailedValidationCondition(0).ToEnumerable()));
-            validationChanges.FailedValidationConditionsForQuestions.ForEach(x => tree.GetQuestion(x.Key).SetFailedValidations(x.Value));
+            validationChanges.AnswersDeclaredValid.ForEach(x => tree.GetQuestion(x).MarkAsValid());
+            validationChanges.AnswersDeclaredInvalid.ForEach(x => tree.GetQuestion(x).MarkAsInvalid(new FailedValidationCondition(0).ToEnumerable()));
+            validationChanges.FailedValidationConditionsForQuestions.ForEach(x => tree.GetQuestion(x.Key).MarkAsInvalid(x.Value));
 
-            validationChanges.StaticTextsDeclaredValid.ForEach(x => tree.GetStaticText(x).SetFailedValidations(null));
-            validationChanges.FailedValidationConditionsForStaticTexts.ForEach(x => tree.GetStaticText(x.Key).SetFailedValidations(x.Value));
+            validationChanges.StaticTextsDeclaredValid.ForEach(x => tree.GetStaticText(x).MarkAsValid());
+            validationChanges.FailedValidationConditionsForStaticTexts.ForEach(x => tree.GetStaticText(x.Key).MarkAsInvalid(x.Value));
         }
 
         private void UpdateTreeWithEnablementChanges(InterviewTree tree, EnablementChanges enablementChanges)
@@ -4454,7 +4450,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var interviewStaticText =  new InterviewTreeStaticText(staticTextIdentity, isDisabled);
             if (interviewState.InvalidStaticTexts.ContainsKey(staticTextIdentity))
-                interviewStaticText.SetFailedValidations(interviewState.InvalidStaticTexts[staticTextIdentity]);
+                interviewStaticText.MarkAsInvalid(interviewState.InvalidStaticTexts[staticTextIdentity]);
             return interviewStaticText;
         }
 
@@ -4492,7 +4488,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         interviewState.GetOptionsForLinkedQuestion(childQuestionIdentity), questionnaire);
 
                     if (interviewState.InvalidAnsweredQuestions.ContainsKey(childQuestionIdentity))
-                        interviewTreeQuestion.SetFailedValidations(interviewState.InvalidAnsweredQuestions[childQuestionIdentity]);
+                        interviewTreeQuestion.MarkAsInvalid(interviewState.InvalidAnsweredQuestions[childQuestionIdentity]);
 
                     yield return interviewTreeQuestion;
                 }

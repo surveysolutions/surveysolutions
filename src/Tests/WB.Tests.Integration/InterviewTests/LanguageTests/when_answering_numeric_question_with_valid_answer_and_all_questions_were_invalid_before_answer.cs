@@ -38,23 +38,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
                         Create.Event.NumericIntegerQuestionAnswered(questionId: questionB, answer: -2),
-                        Create.Event.AnswersDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
-                            {
-                                {
-                                    Create.Identity(questionA),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            }),
-
-                        Create.Event.AnswersDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
-                            {
-                                {
-                                    Create.Identity(questionB),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            })
+                        Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionA))),
+                        Create.Event.AnswersDeclaredInvalid(Create.FailedValidationCondition(Create.Identity(questionB))),
                     });
 
                 using (var eventContext = new EventContext())

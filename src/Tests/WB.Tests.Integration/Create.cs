@@ -917,5 +917,14 @@ namespace WB.Tests.Integration
                 ParentValue = parentValue
             };
         }
+
+        public static IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationCondition(Identity questionIdentity)
+            => new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
+            {
+                {
+                    questionIdentity,
+                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                }
+            };
     }
 }
