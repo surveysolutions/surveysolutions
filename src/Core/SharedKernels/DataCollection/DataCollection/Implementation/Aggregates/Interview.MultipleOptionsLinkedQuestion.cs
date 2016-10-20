@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.CheckLinkedMultiOptionQuestionInvariants(questionId, rosterVector, selectedRosterVectors, questionnaire, answeredQuestion, sourceInterviewTree);
 
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsMultiLinkedOption.SetAnswer(selectedRosterVectors);
