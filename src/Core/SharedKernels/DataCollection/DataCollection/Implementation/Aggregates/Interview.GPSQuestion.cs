@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+            var changedInterviewTree = sourceInterviewTree.Clone();
 
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp);

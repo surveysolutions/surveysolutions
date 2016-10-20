@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var state = new InterviewStateDependentOnAnswers();
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, state);
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, state);
+            var changedInterviewTree = sourceInterviewTree.Clone();
             
             var orderedData = command.PreloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
             var changedQuestionIdentities = orderedData.SelectMany(x => x.Answers.Select(y => new Identity(y.Key, x.RosterVector))).ToList();
@@ -159,7 +159,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, RosterVector.Empty, state);
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, state);
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, state);
+            var changedInterviewTree = sourceInterviewTree.Clone();
 
             var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
             this.UpdateTreeWithAnswersOnPrefilledQuestions(prefilledQuestionsWithAnswers, changedInterviewTree, questionnaire);
@@ -184,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var state = new InterviewStateDependentOnAnswers();
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, state);
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, state);
+            var changedInterviewTree = sourceInterviewTree.Clone();
 
             //apply events
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
