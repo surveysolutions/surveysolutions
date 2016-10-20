@@ -378,18 +378,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public ReadOnlyCollection<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, 
-                    questionId, parentQuestionValue, filter, this.translationId).ToReadOnlyCollection();
+                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this,
+                    questionId, parentQuestionValue, filter, this.translationId);
             }
 
-            return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter).ToReadOnlyCollection();
+            return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText)
