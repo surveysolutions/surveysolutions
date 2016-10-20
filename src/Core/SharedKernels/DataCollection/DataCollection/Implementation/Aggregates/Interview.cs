@@ -67,8 +67,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
-        #region Dependencies
-
         /// <remarks>
         /// Repository operations are time-consuming.
         /// So this repository may be used only in command handlers.
@@ -78,7 +76,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
 
-        #endregion
 
         public Interview(IQuestionnaireStorage questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
         {
