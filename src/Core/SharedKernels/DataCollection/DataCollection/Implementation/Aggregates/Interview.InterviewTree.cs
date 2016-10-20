@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var sections = this.BuildInterviewTreeSections(questionnaire, interviewState).ToList();
 
-            return new InterviewTree(this.EventSourceId, sections);
+            return new InterviewTree(this.EventSourceId, questionnaire, sections);
         }
 
         private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(IQuestionnaire questionnaire, InterviewStateDependentOnAnswers interviewState)

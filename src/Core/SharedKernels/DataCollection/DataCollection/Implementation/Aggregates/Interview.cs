@@ -282,7 +282,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, preloadedLevel.RosterVector),
                     answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
 
-                this.UpdateTreeWithAnswersOnPrefilledQuestions(prefilledQuestionsWithAnswers, changedInterviewTree, questionnaire);
+                this.UpdateTreeWithAnswersOnPrefilledQuestions(prefilledQuestionsWithAnswers, changedInterviewTree);
                 this.UpdateTree(changedInterviewTree, questionnaire);
             }
 
@@ -318,7 +318,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = sourceInterviewTree.Clone();
 
             var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
-            this.UpdateTreeWithAnswersOnPrefilledQuestions(prefilledQuestionsWithAnswers, changedInterviewTree, questionnaire);
+            this.UpdateTreeWithAnswersOnPrefilledQuestions(prefilledQuestionsWithAnswers, changedInterviewTree);
 
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
@@ -1184,51 +1184,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void UpdateTreeWithAnswersOnPrefilledQuestions(Dictionary<Identity, object> answersToPrefilledQuestions,
-            InterviewTree changedInterviewTree, IQuestionnaire questionnaire)
+            InterviewTree changedInterviewTree)
         {
             foreach (var newAnswer in answersToPrefilledQuestions)
             {
-                var questionId = newAnswer.Key.Id;
                 var question = changedInterviewTree.GetQuestion(newAnswer.Key);
-                var answer = newAnswer.Value;
-
-                QuestionType questionType = questionnaire.GetQuestionType(questionId);
-                switch (questionType)
-                {
-                    case QuestionType.Text:
-                        question.AsText.SetAnswer(answer as string);
-                        break;
-                    case QuestionType.Numeric:
-                        if (questionnaire.IsQuestionInteger(questionId))
-                            question.AsInteger.SetAnswer((int)answer);
-                        else
-                            question.AsDouble.SetAnswer(Convert.ToDouble(answer));
-                        break;
-                    case QuestionType.DateTime:
-                        question.AsDateTime.SetAnswer((DateTime)answer);
-                        break;
-                    case QuestionType.SingleOption:
-                        question.AsSingleOption.SetAnswer((int)answer);
-                        break;
-
-                    case QuestionType.MultyOption:
-                        question.AsMultiOption.SetAnswer((decimal[])answer);
-                        break;
-                    case QuestionType.QRBarcode:
-                        question.AsQRBarcode.SetAnswer(answer as string);
-                        break;
-                    case QuestionType.GpsCoordinates:
-                        question.AsGps.SetAnswer((GeoPosition)answer);
-                        break;
-                    case QuestionType.TextList:
-                        question.AsTextList.SetAnswer((Tuple<decimal, string>[])answer);
-                        break;
-
-                    default:
-                        throw new InterviewException(string.Format(
-                            "Question {0} has type {1} which is not supported as initial pre-filled question. InterviewId: {2}",
-                            questionId, questionType, this.EventSourceId));
-                }
+                question.SetAnswer(newAnswer.Value);
             }
         }
 

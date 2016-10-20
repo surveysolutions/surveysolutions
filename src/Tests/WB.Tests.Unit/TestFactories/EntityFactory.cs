@@ -1179,6 +1179,7 @@ namespace WB.Tests.Unit.TestFactories
             bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
             => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null, false, false);
 
-        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections) => new InterviewTree(interviewId, sections);
+        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections) 
+            => new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), sections);
     }
 }

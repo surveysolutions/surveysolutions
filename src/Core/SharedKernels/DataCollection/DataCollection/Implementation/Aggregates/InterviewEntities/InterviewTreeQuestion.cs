@@ -173,6 +173,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
 
+        public void SetAnswer(object answer)
+        {
+            if (this.IsText) { this.AsText.SetAnswer(answer as string); return; }
+            if (this.IsInteger) { this.AsInteger.SetAnswer(Convert.ToInt32(answer)); return; }
+            if (this.IsDouble) { this.AsDouble.SetAnswer(Convert.ToDouble(answer)); return; }
+            if (this.IsDateTime) { this.AsDateTime.SetAnswer((DateTime)answer); return; }
+            if (this.IsMultimedia) { this.AsMultimedia.SetAnswer(answer as string); return; }
+            if (this.IsQRBarcode) { this.AsQRBarcode.SetAnswer(answer as string); return; }
+            if (this.IsGps) { this.AsGps.SetAnswer((GeoPosition)answer); return; }
+            if (this.IsSingleOption) { this.AsSingleOption.SetAnswer(Convert.ToInt32(answer)); return; }
+            if (this.IsMultiOption) { this.AsMultiOption.SetAnswer((decimal[])answer); return; }
+            if (this.IsSingleLinkedOption) { this.AsSingleLinkedOption.SetAnswer((RosterVector)answer); return; }
+            if (this.IsMultiLinkedOption) { this.AsMultiLinkedOption.SetAnswer((decimal[][])answer); return; }
+            if (this.IsYesNo) { this.AsYesNo.SetAnswer((AnsweredYesNoOption[])answer); return; }
+            if (this.IsTextList) { this.AsTextList.SetAnswer((Tuple<decimal, string>[])answer); return; }
+        }
+
         public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null)
         {
             if (this.IsText) return this.AsText.GetAnswer();
