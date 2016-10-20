@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             treeInvariants.RequireQuestionIsEnabled(questionIdentity);
 
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+            var changedInterviewTree = sourceInterviewTree.Clone();
 
             var changedQuestionIdentities = new List<Identity> { questionIdentity };
             changedInterviewTree.GetQuestion(questionIdentity).RemoveAnswer();
