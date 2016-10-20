@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Disable() => this.isDisabled = true;
         public void Enable() => this.isDisabled = false;
 
-        public IInterviewTreeNode Clone()
+        public virtual IInterviewTreeNode Clone()
         {
             return (IInterviewTreeNode)this.MemberwiseClone();
         }
@@ -365,23 +365,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionIdentity);
         }
 
-        public InterviewTreeDoubleQuestion AsDouble { get; }
-        public InterviewTreeTextListQuestion AsTextList { get; }
-        public InterviewTreeTextQuestion AsText { get; }
-        public InterviewTreeQRBarcodeQuestion AsQRBarcode { get; }
-        public InterviewTreeIntegerQuestion AsInteger { get; }
-        public InterviewTreeMultimediaQuestion AsMultimedia { get; }
-        public InterviewTreeGpsQuestion AsGps { get; }
-        public InterviewTreeDateTimeQuestion AsDateTime { get; }
-        public InterviewTreeMultiOptionQuestion AsMultiOption { get; }
-        public InterviewTreeMultiLinkedOptionQuestion AsMultiLinkedOption { get; }
-        public InterviewTreeYesNoQuestion AsYesNo { get; }
-        public InterviewTreeSingleLinkedOptionQuestion AsSingleLinkedOption { get; }
-        public InterviewTreeSingleOptionQuestion AsSingleOption { get; }
+        public InterviewTreeDoubleQuestion AsDouble { get; private set; }
+        public InterviewTreeTextListQuestion AsTextList { get; private set; }
+        public InterviewTreeTextQuestion AsText { get; private set; }
+        public InterviewTreeQRBarcodeQuestion AsQRBarcode { get; private set; }
+        public InterviewTreeIntegerQuestion AsInteger { get; private set; }
+        public InterviewTreeMultimediaQuestion AsMultimedia { get; private set; }
+        public InterviewTreeGpsQuestion AsGps { get; private set; }
+        public InterviewTreeDateTimeQuestion AsDateTime { get; private set; }
+        public InterviewTreeMultiOptionQuestion AsMultiOption { get; private set; }
+        public InterviewTreeMultiLinkedOptionQuestion AsMultiLinkedOption { get; private set; }
+        public InterviewTreeYesNoQuestion AsYesNo { get; private set; }
+        public InterviewTreeSingleLinkedOptionQuestion AsSingleLinkedOption { get; private set; }
+        public InterviewTreeSingleOptionQuestion AsSingleOption { get; private set; }
 
         public InterviewTreeLinkedQuestion AsLinked => this.IsSingleLinkedOption ? (InterviewTreeLinkedQuestion)this.AsSingleLinkedOption : this.AsMultiLinkedOption;
 
-        public InterviewTreeCascadingQuestion AsCascading { get; }
+        public InterviewTreeCascadingQuestion AsCascading { get; private set; }
 
         public string Title { get; }
         public string VariableName { get; }
@@ -445,8 +445,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             InterviewTreeLinkedQuestion linkedQuestion = this.AsLinked;
 
             List<IInterviewTreeNode> sourceNodes = new List<IInterviewTreeNode>();
-            var isQuestionOnTopLeveOrInDifferentRosterBranch = linkedQuestion.CommonParentRosterIdForLinkedQuestion == null;
-            if (isQuestionOnTopLeveOrInDifferentRosterBranch)
+            var isQuestionOnTopLevelOrInDifferentRosterBranch = linkedQuestion.CommonParentRosterIdForLinkedQuestion == null;
+            if (isQuestionOnTopLevelOrInDifferentRosterBranch)
             {
                 sourceNodes = this.Tree.FindEntity(linkedQuestion.LinkedSourceId).ToList();
             }
@@ -533,6 +533,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             var rosterLevel = questionIdentity.RosterVector.Length;
             return this.Identity.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector);
+        }
+
+        public override IInterviewTreeNode Clone()
+        {
+            var clonedQuestion = (InterviewTreeQuestion) this.MemberwiseClone();
+            if (this.IsDateTime) clonedQuestion.AsDateTime = new InterviewTreeDateTimeQuestion(this.AsDateTime.IsAnswered ? this.AsDateTime.GetAnswer() : (object) null);
+            if (this.IsDouble) clonedQuestion.AsDouble = new InterviewTreeDoubleQuestion(this.AsDouble.IsAnswered ? this.AsDouble.GetAnswer() : (object)null);
+            if (this.IsGps) clonedQuestion.AsGps = new InterviewTreeGpsQuestion(this.AsGps.IsAnswered ? this.AsGps.GetAnswer() : (object)null);
+            if (this.IsMultiOption) clonedQuestion.AsMultiOption = new InterviewTreeMultiOptionQuestion(this.AsMultiOption.IsAnswered ? this.AsMultiOption.GetAnswer() : (object)null);
+            if (this.IsMultimedia) clonedQuestion.AsMultimedia = new InterviewTreeMultimediaQuestion(this.AsMultimedia.IsAnswered ? this.AsMultimedia.GetAnswer() : (object)null);
+            if (this.IsQRBarcode) clonedQuestion.AsQRBarcode = new InterviewTreeQRBarcodeQuestion(this.AsQRBarcode.IsAnswered ? this.AsQRBarcode.GetAnswer() : (object)null);
+            if (this.IsSingleOption) clonedQuestion.AsSingleOption = new InterviewTreeSingleOptionQuestion(this.AsSingleOption.IsAnswered ? this.AsSingleOption.GetAnswer() : (object)null);
+            if (this.IsText) clonedQuestion.AsText = new InterviewTreeTextQuestion(this.AsText.IsAnswered ? this.AsText.GetAnswer() : (object)null);
+            if (this.IsTextList) clonedQuestion.AsTextList = new InterviewTreeTextListQuestion(this.AsTextList.IsAnswered ? this.AsTextList.GetAnswer() : (object)null);
+            if (this.IsYesNo) clonedQuestion.AsYesNo = new InterviewTreeYesNoQuestion(this.AsYesNo.IsAnswered ? this.AsYesNo.GetAnswer() : (object)null);
+            if (this.IsInteger) clonedQuestion.AsInteger = new InterviewTreeIntegerQuestion(this.AsInteger.IsAnswered ? this.AsInteger.GetAnswer() : (object)null);
+
+            if (this.IsMultiLinkedOption) clonedQuestion.AsMultiLinkedOption = new InterviewTreeMultiLinkedOptionQuestion(
+                this.AsMultiLinkedOption.Options,
+                this.AsMultiLinkedOption.GetAnswer(),
+                this.AsMultiLinkedOption.LinkedSourceId,
+                this.AsMultiLinkedOption.CommonParentRosterIdForLinkedQuestion);
+            if (this.IsSingleLinkedOption) clonedQuestion.AsSingleLinkedOption = new InterviewTreeSingleLinkedOptionQuestion(
+                this.AsSingleLinkedOption.Options,
+                this.AsSingleLinkedOption.GetAnswer(),
+                this.AsSingleLinkedOption.LinkedSourceId,
+                this.AsSingleLinkedOption.CommonParentRosterIdForLinkedQuestion);
+            if (this.IsCascading) clonedQuestion.AsCascading = new InterviewTreeCascadingQuestion(
+                clonedQuestion, 
+                this.AsCascading.CascadingParentQuestionIdentity);
+
+            clonedQuestion.FailedValidations = this.FailedValidations?
+                .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
+                .ToReadOnlyCollection();
+
+            return clonedQuestion;
         }
     }
 
@@ -860,6 +896,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeSingleOptionQuestion GetCascadingParentQuestion()
             => this.Tree.GetQuestion(this.cascadingParentQuestionIdentity).AsSingleOption;
+
+        public Identity CascadingParentQuestionIdentity => this.cascadingParentQuestionIdentity;
     }
 
     public class InterviewTreeVariable : InterviewTreeLeafNode
