@@ -216,7 +216,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             => CreateSimpleTree(interviewId, Create.Entity.InterviewTreeSection(sectionIdentity, children: question));
 
         private static InterviewTree CreateSimpleTree(Guid interviewId, InterviewTreeSection section)
-            => new InterviewTree(interviewId, new[] { section });
+            => Create.Entity.InterviewTree(interviewId, new[] { section });
 
         private static InterviewTree CreateTreeForClone()
         {

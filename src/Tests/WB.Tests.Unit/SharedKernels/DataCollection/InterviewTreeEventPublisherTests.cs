@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var mainSectionInChangedTree = Create.Entity.InterviewTreeSection(
                     sectionIdentity: sectionIdentity);
 
-            var sourceTree = new InterviewTree(interviewId, new[] {mainSectionInSourceTree});
-            var changedTree = new InterviewTree(interviewId, new[] {mainSectionInChangedTree});
+            var sourceTree = Create.Entity.InterviewTree(interviewId, new[] {mainSectionInSourceTree});
+            var changedTree = Create.Entity.InterviewTree(interviewId, new[] {mainSectionInChangedTree});
             
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
@@ -79,8 +79,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var mainSectionInChangedTree = Create.Entity.InterviewTreeSection(
                     sectionIdentity: sectionIdentity);
 
-            var sourceTree = new InterviewTree(interviewId, new[] { mainSectionInSourceTree });
-            var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
+            var sourceTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInSourceTree });
+            var changedTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
@@ -120,8 +120,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                     sectionIdentity: sectionIdentity,
                     children: new IInterviewTreeNode[] { firstRoster, secondRoster });
 
-            var sourceTree = new InterviewTree(interviewId, new[] { mainSectionInSourceTree });
-            var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
+            var sourceTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInSourceTree });
+            var changedTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
@@ -164,8 +164,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 sectionIdentity: sectionIdentity,
                 children: new IInterviewTreeNode[] {roster});
 
-            var sourceTree = new InterviewTree(interviewId, new[] { mainSectionInSourceTree });
-            var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
+            var sourceTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInSourceTree });
+            var changedTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
@@ -220,8 +220,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var mainSectionInChangedTree = Create.Entity.InterviewTreeSection(
                     sectionIdentity: sectionIdentity);
 
-            var sourceTree = new InterviewTree(interviewId, new[] { mainSectionInSourceTree });
-            var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
+            var sourceTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInSourceTree });
+            var changedTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
@@ -277,8 +277,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 sectionIdentity: sectionIdentity,
                 children: new IInterviewTreeNode[] { changedRoster });
 
-            var sourceTree = new InterviewTree(interviewId, new[] { mainSectionInSourceTree });
-            var changedTree = new InterviewTree(interviewId, new[] { mainSectionInChangedTree });
+            var sourceTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInSourceTree });
+            var changedTree = Create.Entity.InterviewTree(interviewId, new[] { mainSectionInChangedTree });
 
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
