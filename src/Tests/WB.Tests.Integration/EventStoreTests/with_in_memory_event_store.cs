@@ -10,12 +10,24 @@ using EventStore.Core.Messages;
 using Machine.Specifications;
 using Moq;
 using Ncqrs;
+using WB.Core.Infrastructure.EventBus;
 using WB.Infrastructure.Native.Storage.EventStore;
 
 namespace WB.Tests.Integration.EventStoreTests
 {
     public class with_in_memory_event_store
     {
+        protected class AccountRegistered : IEvent
+        {
+            public string ApplicationName { get; set; }
+            public string ConfirmationToken { get; set; }
+            public string Email { get; set; }
+        }
+
+        protected class AccountConfirmed : IEvent { }
+
+        protected class AccountLocked : IEvent { }
+
         protected static IEventStoreConnectionProvider ConnectionProvider;
         private static ClusterVNode node;
 
