@@ -142,7 +142,12 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTree.cs" />
     <Compile Include="Implementation\Aggregates\Interview.Events.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeGroup.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeNodeDiff.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeRoster.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticText.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariable.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\Latest\InterviewExpressionStateV10ToLatestAdapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V10\InterviewExpressionStateV9ToV10Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V2\InterviewExpressionStateV1ToV2Adapter.cs" />
