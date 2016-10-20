@@ -594,12 +594,10 @@
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_group_is_not_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_undefined_substitution.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_messagr_contains_substitution_to_variable_from_roster.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_self.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_illegal_question_type.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_variable_from_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_self.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_illegal_question_type.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_undefined_substitution.cs" />
     <Compile Include="EventContext.cs" />
