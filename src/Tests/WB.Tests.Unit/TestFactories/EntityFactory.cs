@@ -1156,6 +1156,10 @@ namespace WB.Tests.Unit.TestFactories
             params IInterviewTreeNode[] children)
             => new InterviewTreeRoster(rosterIdentity, children, isDisabled) {RosterTitle = rosterTitle};
 
+        public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
+            params IInterviewTreeNode[] children)
+            => new InterviewTreeSubSection(groupIdentity, children, isDisabled);
+
         public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
             => new InterviewTreeSection(sectionIdentity, children, isDisabled);
 
@@ -1164,6 +1168,12 @@ namespace WB.Tests.Unit.TestFactories
             Identity cascadingParentQuestionIdentity = null, bool isYesNo = false, bool isDecimal = false, bool isLinked = false)
             => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, questionType, answer,
                 linkedOptions, cascadingParentQuestionIdentity, isYesNo, isDecimal);
+
+        public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
+            => new InterviewTreeStaticText(staticTextIdentity, isDisabled);
+
+        public InterviewTreeVariable InterviewTreeVariable(Identity variableIdentity, bool isDisabled = false, object value = null)
+            => new InterviewTreeVariable(variableIdentity, isDisabled, value);
 
         public InterviewTreeQuestion InterviewTreeQuestion_SingleOption(Identity questionIdentity,
             bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
