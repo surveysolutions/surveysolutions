@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        public void ApplyEvents(InterviewTree sourceInterview, InterviewTree changedInterview, Guid responsibleId)
+        public void ApplyEvents(InterviewTree sourceInterview, InterviewTree changedInterview, Guid? responsibleId = null)
         {
             var diff = sourceInterview.Compare(changedInterview);
 
@@ -20,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
             var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
-            this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
+            this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
             this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
             this.ApplyRosterEvents(changedRosters);
             this.ApplyEnablementEvents(diff);
@@ -217,6 +220,100 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changedRosterTitles.Any())
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
+        }
+
+        private void ApplySubstitutionEvents(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        {
+            var changedQuestionTitles = new List<Identity>();
+            var changedStaticTextTitles = new List<Identity>();
+            var changedGroupTitles = new List<Identity>();
+            foreach (var questionIdentity in changedQuestionIdentities)
+            {
+                var rosterLevel = questionIdentity.RosterVector.Length;
+
+                var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionIdentity.Id);
+                foreach (var substitutedQuestionId in substitutedQuestionIds)
+                {
+                    changedQuestionTitles.AddRange(tree.FindEntity(substitutedQuestionId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+
+                var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionIdentity.Id);
+                foreach (var substitutedStaticTextId in substitutedStaticTextIds)
+                {
+                    changedStaticTextTitles.AddRange(tree.FindEntity(substitutedStaticTextId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+
+                var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionIdentity.Id);
+                foreach (var substitutedGroupId in substitutedGroupIds)
+                {
+                    changedGroupTitles.AddRange(tree.FindEntity(substitutedGroupId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+            }
+
+            if (changedQuestionTitles.Any() || changedStaticTextTitles.Any() || changedGroupTitles.Any())
+            {
+                this.ApplyEvent(new SubstitutionTitlesChanged(
+                    changedQuestionTitles.ToArray(),
+                    changedStaticTextTitles.ToArray(),
+                    changedGroupTitles.ToArray()));
+            }
+        }
+        
+        protected void ApplyRosterTitleChanges(IQuestionnaire targetQuestionnaire)
+        {
+            var rosterInstances =
+                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                    targetQuestionnaire.GetRostersWithTitlesToChange(), RosterVector.Empty,
+                    targetQuestionnaire).ToArray();
+
+            var changedTitles = rosterInstances.Select(
+                rosterInstance =>
+                    new ChangedRosterInstanceTitleDto(
+                        RosterInstance.CreateFromIdentity(rosterInstance),
+                        this.GetRosterTitle(targetQuestionnaire, rosterInstance)))
+                .ToArray();
+
+            if (changedTitles.Any())
+            {
+                this.ApplyEvent(new RosterInstancesTitleChanged(changedTitles));
+            }
+        }
+
+        private string GetRosterTitle(IQuestionnaire targetQuestionnaire, Identity rosterInstance)
+        {
+            if (targetQuestionnaire.IsFixedRoster(rosterInstance.Id))
+            {
+                return targetQuestionnaire.GetFixedRosterTitle(rosterInstance.Id,
+                    rosterInstance.RosterVector.Coordinates.Last());
+            }
+            else if (targetQuestionnaire.IsNumericRoster(rosterInstance.Id))
+            {
+                var questionId = targetQuestionnaire.GetRosterTitleQuestionId(rosterInstance.Id);
+                Identity rosterTitleQuestionIdentity = new Identity(questionId.Value, rosterInstance.RosterVector);
+                var questionType = targetQuestionnaire.GetQuestionType(questionId.Value);
+                var questionValue = this.interviewState.GetAnswerSupportedInExpressions(rosterTitleQuestionIdentity);
+
+                switch (questionType)
+                {
+                    case QuestionType.SingleOption:
+                    case QuestionType.MultyOption:
+                        return AnswerUtils.AnswerToString(questionValue, x => targetQuestionnaire.GetAnswerOptionTitle(questionId.Value, x));
+                    default:
+                        return AnswerUtils.AnswerToString(questionValue);
+                }
+            }
+            else
+            {
+                return targetQuestionnaire.GetAnswerOptionTitle(
+                    targetQuestionnaire.GetRosterSizeQuestion(rosterInstance.Id),
+                    rosterInstance.RosterVector.Last());
+            }
         }
 
         private static ChangedRosterInstanceTitleDto ToChangedRosterInstanceTitleDto(InterviewTreeRoster roster)

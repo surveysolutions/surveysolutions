@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsYesNo.SetAnswer(command.AnsweredOptions);
 
-            this.ApplyQuestionAnswer(command.UserId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.ApplyTreeDiffChanges(command.UserId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
     }
 }

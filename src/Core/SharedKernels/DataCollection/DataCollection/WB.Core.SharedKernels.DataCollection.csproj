@@ -122,6 +122,8 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.Questionnaire.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.InterviewTree.cs" />
     <Compile Include="Implementation\Aggregates\Interview.Invariants.cs" />
     <Compile Include="Implementation\Aggregates\Interview.DateTimeQuestion.cs" />
     <Compile Include="Implementation\Aggregates\Interview.MultipleOptionsQuestion.cs" />
@@ -163,19 +165,14 @@
     <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerQRBarcodeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs" />
-    <Compile Include="Commands\Interview\CreateInterviewCreatedOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
     <Compile Include="Commands\Interview\HardDeleteInterview.cs" />
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
     <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
-    <Compile Include="Commands\Interview\MarkInterviewAsSentToHeadquarters.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserBySupervisorCommand.cs" />

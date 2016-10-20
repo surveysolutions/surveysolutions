@@ -584,14 +584,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var identity in @event.Questions)
             {
-                RemoveAnswerFromExpressionProcessorState(this.ExpressionProcessorStatePrototype, identity.Id, identity.RosterVector);
+                this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(identity.Id, identity.RosterVector));
             }
         }
 
         public virtual void Apply(AnswerRemoved @event)
         {
             this.interviewState.RemoveAnswers(new[] { new Identity(@event.QuestionId, @event.RosterVector) });
-            RemoveAnswerFromExpressionProcessorState(this.ExpressionProcessorStatePrototype, @event.QuestionId, @event.RosterVector);
+            this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(@event.QuestionId, @event.RosterVector));
         }
     }
 }
