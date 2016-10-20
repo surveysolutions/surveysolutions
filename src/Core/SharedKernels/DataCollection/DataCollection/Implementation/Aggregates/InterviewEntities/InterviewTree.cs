@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public string InterviewId { get; }
-        public IReadOnlyCollection<InterviewTreeSection> Sections { get; }
+        public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
 
         public InterviewTreeQuestion GetQuestion(Identity questionIdentity)
             => this
@@ -147,6 +147,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override string ToString()
             => $"Tree ({this.InterviewId})" + Environment.NewLine
             + string.Join(Environment.NewLine, this.Sections.Select(section => section.ToString().PrefixEachLine("  ")));
+
+        public InterviewTree Clone()
+        {
+            var clonedInterviewTree = (InterviewTree)this.MemberwiseClone();
+            clonedInterviewTree.Sections = this.Sections.Select(s =>
+            {
+                var interviewTreeSection = (InterviewTreeSection)s.Clone();
+                ((IInternalInterviewTreeNode) interviewTreeSection).SetTree(clonedInterviewTree);
+                return interviewTreeSection;
+            }).ToReadOnlyCollection();
+
+            return clonedInterviewTree;
+        }
     }
 
     public interface IInterviewTreeNode
@@ -159,6 +172,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         void Disable();
         void Enable();
+
+        IInterviewTreeNode Clone();
     }
 
     public interface IInternalInterviewTreeNode
@@ -189,12 +204,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void Disable() => this.isDisabled = true;
         public void Enable() => this.isDisabled = false;
+
+        public IInterviewTreeNode Clone()
+        {
+            return (IInterviewTreeNode)this.MemberwiseClone();
+        }
     }
 
     public abstract class InterviewTreeGroup : IInterviewTreeNode, IInternalInterviewTreeNode
     {
         private bool isDisabled;
-        private readonly List<IInterviewTreeNode> children;
+        private List<IInterviewTreeNode> children;
 
         protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
         {
@@ -267,6 +287,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool HasChild(Identity identity)
         {
             return this.Children.Any(x => x.Identity.Equals(identity));
+        }
+
+        public IInterviewTreeNode Clone()
+        {
+            var clonedInterviewTreeGroup = (InterviewTreeGroup)this.MemberwiseClone();
+            clonedInterviewTreeGroup.children = this.Children.Select(n =>
+            {
+                var interviewTreeNode = n.Clone();
+                ((IInternalInterviewTreeNode)interviewTreeNode).SetParent(clonedInterviewTreeGroup);
+                return interviewTreeNode;
+            }).ToList();
+            return clonedInterviewTreeGroup;
         }
     }
 
