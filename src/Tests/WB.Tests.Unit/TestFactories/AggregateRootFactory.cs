@@ -26,9 +26,7 @@ namespace WB.Tests.Unit.TestFactories
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             QuestionnaireIdentity questionnaireId = null)
         {
-            var interview = new Interview(
-                Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+            var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
