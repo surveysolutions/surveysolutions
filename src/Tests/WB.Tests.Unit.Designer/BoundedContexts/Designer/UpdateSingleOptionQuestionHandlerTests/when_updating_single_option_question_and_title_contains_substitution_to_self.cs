@@ -43,14 +43,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     cascadeFromQuestionId: ñascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        It should_throw_exception_with_message_containting__title__contains__self__ = () =>
-            new[] { "text", "contains", "self" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
-
+        It should_not_throw_QuestionnaireException = () =>
+            exception.ShouldBeNull();
+        
         private static Questionnaire questionnaire;
         private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

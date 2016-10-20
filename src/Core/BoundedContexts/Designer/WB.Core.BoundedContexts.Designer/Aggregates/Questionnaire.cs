@@ -2595,17 +2595,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (substitutionReferences.Length == 0)
                 return;
 
-            if (substitutionReferences.Contains(variableName))
-            {
-                throw new QuestionnaireException(DomainExceptionType.TextContainsSubstitutionReferenceToSelf,
-                    "Text contains illegal substitution references to self");
-            }
-
             List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope;
 
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
-            this.ValidateSubstitutionReferences(entityId, parentGroup, substitutionReferences,
+            this.ValidateSubstitutionReferences(entityId, variableName, parentGroup, substitutionReferences,
                 out unknownReferences,
                 out questionsIncorrectTypeOfReferenced,
                 out questionsIllegalPropagationScope,
@@ -3015,7 +3009,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             title = title?.Trim();
         }
 
-        private void ValidateSubstitutionReferences(Guid entityId, IGroup parentGroup, string[] substitutionReferences,
+        private void ValidateSubstitutionReferences(Guid entityId, string variableName, IGroup parentGroup, string[] substitutionReferences,
             out List<string> unknownReferences, 
             out List<string> questionsIncorrectTypeOfReferenced,
             out List<string> questionsIllegalPropagationScope,
@@ -3056,8 +3050,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 bool isQuestionReference = questions.ContainsKey(substitutionReference);
                 bool isVariableReference = variables.ContainsKey(substitutionReference);
+                bool isSelfReference = string.Compare(substitutionReference, variableName, StringComparison.OrdinalIgnoreCase) == 0;
 
-                if (!isQuestionReference && !isVariableReference)
+                if (!isQuestionReference && !isVariableReference && !isSelfReference)
                 {
                     unknownReferences.Add(substitutionReference);
                 }
