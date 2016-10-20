@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -29,7 +31,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             RemoveAnswersForDependendCascadingQuestions(questionIdentity, changedInterviewTree, questionnaire, changedQuestionIdentities);
 
-            this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+        }
+
+        private static void RemoveAnswersForDependendCascadingQuestions(Identity questionIdentity, InterviewTree changedInterviewTree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        {
+            IEnumerable<Guid> dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionIdentity.Id);
+            foreach (var dependentQuestionId in dependentQuestionIds)
+            {
+                var cascadingAnsweredQuestionsToRemoveAnswer = changedInterviewTree.FindQuestions(dependentQuestionId)
+                    .Where(x => x.IsCascading && x.IsAnswered())
+                    .Where(x => x.IsOnTheSameOrDeeperLevel(questionIdentity));
+
+                foreach (var cascadingQuestion in cascadingAnsweredQuestionsToRemoveAnswer)
+                {
+                    cascadingQuestion.RemoveAnswer();
+                    changedQuestionIdentities.Add(cascadingQuestion.Identity);
+                }
+            }
         }
     }
 }

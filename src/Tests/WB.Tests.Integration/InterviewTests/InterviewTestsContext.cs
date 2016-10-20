@@ -12,7 +12,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -158,9 +157,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
-            var interview = new Interview(
-                Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+            var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             return interview;

@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsQRBarcode.SetAnswer(answer);
 
-            this.ApplyQuestionAnswer(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
             
         }
     }

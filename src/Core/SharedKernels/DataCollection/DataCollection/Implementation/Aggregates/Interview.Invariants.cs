@@ -12,6 +12,77 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
+        private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
+            RosterVector rosterVector = null, InterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
+        {
+            var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
+            foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
+            {
+                Guid questionId = answerToFeaturedQuestion.Key;
+                object answer = answerToFeaturedQuestion.Value;
+
+                var answeredQuestion = new Identity(questionId, currentRosterVector);
+
+                QuestionType questionType = questionnaire.GetQuestionType(questionId);
+
+                switch (questionType)
+                {
+                    case QuestionType.Text:
+                        this.CheckTextQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
+                        break;
+
+                    case QuestionType.AutoPropagate:
+                        this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
+                            answeredQuestion, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
+                        break;
+                    case QuestionType.Numeric:
+                        if (questionnaire.IsQuestionInteger(questionId))
+                            this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
+                                answeredQuestion, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
+                        else
+                            this.CheckNumericRealQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
+                                answeredQuestion, currentInterviewState, applyStrongChecks);
+                        break;
+
+                    case QuestionType.DateTime:
+                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion,
+                            currentInterviewState, applyStrongChecks);
+                        break;
+
+                    case QuestionType.SingleOption:
+                        this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
+                            answeredQuestion, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
+                        break;
+
+                    case QuestionType.MultyOption:
+                        if (questionnaire.IsQuestionYesNo(questionId))
+                        {
+                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (AnsweredYesNoOption[])answer, questionnaire, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
+                        }
+                        else
+                        {
+                            this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, (decimal[])answer, questionnaire, answeredQuestion, this.BuildInterviewTree(questionnaire, currentInterviewState), applyStrongChecks);
+                        }
+                        break;
+                    case QuestionType.QRBarcode:
+                        this.CheckQRBarcodeInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
+                        break;
+                    case QuestionType.GpsCoordinates:
+                        this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, applyStrongChecks);
+                        break;
+                    case QuestionType.TextList:
+                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState,
+                            (Tuple<decimal, string>[])answer, applyStrongChecks);
+                        break;
+
+                    default:
+                        throw new InterviewException(string.Format(
+                            "Question {0} has type {1} which is not supported as initial pre-filled question. InterviewId: {2}",
+                            questionId, questionType, this.EventSourceId));
+                }
+            }
+        }
+
         private void CheckLinkedMultiOptionQuestionInvariants(Guid questionId, RosterVector rosterVector,
             decimal[][] linkedQuestionSelectedOptions, IQuestionnaire questionnaire, Identity answeredQuestion,
             InterviewTree tree, bool applyStrongChecks = true)

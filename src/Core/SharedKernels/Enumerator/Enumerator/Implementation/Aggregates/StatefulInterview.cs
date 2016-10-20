@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Dynamic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,7 +27,6 @@ using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
 
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
-using InterviewProperties = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.InterviewProperties;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 {
@@ -68,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public StatefulInterview(ILogger logger,
                                  IQuestionnaireStorage questionnaireRepository,
                                  IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
-            : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
+            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {
             this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
             this.groups = new ConcurrentDictionary<string, InterviewEnablementState>();
