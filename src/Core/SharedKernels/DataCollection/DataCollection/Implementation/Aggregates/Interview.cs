@@ -1114,7 +1114,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             {
                                 if (expectedRosterIdentitiesWithTitles.Any(x => x.Identity.Equals(actualRosterIdentity)))
                                     continue;
-                                currentGroup.RemoveChildren(actualRosterIdentity);
+                                currentGroup.RemoveChild(actualRosterIdentity);
                             }
 
                             for (int index = 0; index < expectedRosterIdentitiesWithTitles.Count; index++)
@@ -1132,7 +1132,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                     rosterSizeQuestion: rosterIdentityWithTitle.SizeQuestion?.Identity.Id,
                                     rosterTitleQuestionIdentity: rosterIdentityWithTitle.RosterTitleQuestionIdentity);
 
-                                currentGroup.AddChildren(rosterNode);
+                                currentGroup.AddChild(rosterNode);
                                 itemsQueue.Enqueue(rosterNode);
                             }
                         }
@@ -1141,7 +1141,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             var subSectionIdentity = new Identity(childEntityId, parentRosterVector);
                             if (!currentGroup.HasChild(subSectionIdentity))
                             {
-                                currentGroup.AddChildren(new InterviewTreeSubSection(subSectionIdentity, Enumerable.Empty<IInterviewTreeNode>(), false));
+                                currentGroup.AddChild(new InterviewTreeSubSection(subSectionIdentity, Enumerable.Empty<IInterviewTreeNode>(), false));
                             }
                         }
                         else if (questionnaire.IsStaticText(childEntityId))
@@ -1149,7 +1149,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             var staticTextIdentity = new Identity(childEntityId, parentRosterVector);
                             if (!currentGroup.HasChild(staticTextIdentity))
                             {
-                                currentGroup.AddChildren(new InterviewTreeStaticText(staticTextIdentity, false));
+                                currentGroup.AddChild(new InterviewTreeStaticText(staticTextIdentity, false));
                             }
                         }
                         else if (questionnaire.IsQuestion(childEntityId))
@@ -1157,7 +1157,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             var questionIdentity = new Identity(childEntityId, parentRosterVector);
                             if (!currentGroup.HasChild(questionIdentity))
                             {
-                                currentGroup.AddChildren(BuildInterviewTreeQuestion(questionIdentity, null, false, new RosterVector[0], questionnaire));
+                                currentGroup.AddChild(BuildInterviewTreeQuestion(questionIdentity, null, false, new RosterVector[0], questionnaire));
                             }
                         }
                         else if (questionnaire.IsVariable(childEntityId))
@@ -1165,7 +1165,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             var variableIdentity = new Identity(childEntityId, parentRosterVector);
                             if (!currentGroup.HasChild(variableIdentity))
                             {
-                                currentGroup.AddChildren(new InterviewTreeVariable(variableIdentity, false, null));
+                                currentGroup.AddChild(new InterviewTreeVariable(variableIdentity, false, null));
                             }
                         }
                     }

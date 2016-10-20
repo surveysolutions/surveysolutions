@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -17,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.InterviewId = interviewId.FormatGuid();
             this.questionnaire = questionnaire;
+
             this.Sections = sections.ToList();
 
             foreach (var section in this.Sections)
@@ -75,16 +74,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private IEnumerable<IInterviewTreeNode> GetNodes()
             => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(node => node.Children);
      
-
-
-        public void UpdateTree()
+        public void ActualizeTree()
         {
+            var itemsQueue = new Queue<IInterviewTreeNode>(Sections);
+
+            while (itemsQueue.Count > 0)
+            {
+                var currentItem = itemsQueue.Dequeue();
+                if (!(currentItem is InterviewTreeGroup))
+                    continue;
+                var currentGroup = currentItem as InterviewTreeGroup;
+                currentGroup.ActualizeChildren();
+
+                foreach (var childItem in currentGroup.Children)
+                {
+                    itemsQueue.Enqueue(childItem);
+                }
+            }
         }
 
         public void RemoveNode(Identity identity)
         {
             foreach (var node in this.GetNodes().Where(x => x.Identity.Equals(identity)))
-                ((InterviewTreeGroup)node.Parent)?.RemoveChildren(node.Identity);
+                ((InterviewTreeGroup)node.Parent)?.RemoveChild(node.Identity);
         }
 
         public IReadOnlyCollection<InterviewTreeNodeDiff> Compare(InterviewTree changedTree)
@@ -170,6 +182,98 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return clonedInterviewTree;
         }
+
+        public IInterviewTreeNode CreateNode(QuestionnaireReferenceType type, Identity identity)
+        {
+            switch (type)
+            {
+                case QuestionnaireReferenceType.SubSection: return CreateSubSection(identity);
+                case QuestionnaireReferenceType.StaticText: return CreateStaticText(identity);
+                case QuestionnaireReferenceType.Variable: return CreateVariable(identity);
+                case QuestionnaireReferenceType.Question: return CreateQuestion(identity);
+                case QuestionnaireReferenceType.Roster: throw new ArgumentException("Use roster manager to create rosters");
+            }
+            return null;
+        }
+
+        public InterviewTreeQuestion CreateQuestion(Identity questionIdentity)
+        {
+            return CreateQuestion(this.questionnaire, questionIdentity);
+        }
+
+        public static InterviewTreeQuestion CreateQuestion(IQuestionnaire questionnaire, Identity questionIdentity)
+        {
+            QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
+            string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
+            string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
+            bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
+            bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionIdentity.Id);
+            bool isLinkedQuestion = questionnaire.IsQuestionLinked(questionIdentity.Id) || questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
+            var linkedSourceEntityId = isLinkedQuestion ? (questionnaire.IsQuestionLinked(questionIdentity.Id) ? questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id) : questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id)) : (Guid?) null;
+
+            Guid? commonParentRosterIdForLinkedQuestion = isLinkedQuestion ? questionnaire.GetCommontParentForLinkedQuestionAndItSource(questionIdentity.Id) : null;
+            Identity commonParentIdentity = null;
+            if (isLinkedQuestion && commonParentRosterIdForLinkedQuestion.HasValue)
+            {
+                var level = questionnaire.GetRosterLevelForEntity(commonParentRosterIdForLinkedQuestion.Value);
+                var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
+                commonParentIdentity = new Identity(commonParentRosterIdForLinkedQuestion.Value, commonParentRosterVector);
+            }
+
+            Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
+            return new InterviewTreeQuestion(questionIdentity, questionType: questionType, isDisabled: false, title: title, variableName: variableName, answer: null, linkedOptions: null, cascadingParentQuestionId: cascadingParentQuestionId, isYesNo: isYesNoQuestion, isDecimal: isDecimalQuestion, linkedSourceId: linkedSourceEntityId, commonParentRosterIdForLinkedQuestion: commonParentIdentity);
+        }
+
+        public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
+        {
+            return new InterviewTreeVariable(variableIdentity);
+        }
+
+        public static InterviewTreeSubSection CreateSubSection(Identity subSectionIdentity)
+        {
+            return new InterviewTreeSubSection(subSectionIdentity);
+        }
+
+        public static InterviewTreeStaticText CreateStaticText(Identity staticTextIdentity)
+        {
+            return new InterviewTreeStaticText(staticTextIdentity);
+        }
+
+        public InterviewTreeRoster CreateRoster(Identity parentIdentity, Identity rosterIdentity, int index)
+        {
+            return GetRosterManager(rosterIdentity.Id).CreateRoster(parentIdentity, rosterIdentity, index);
+        }
+
+        public RosterManager GetRosterManager(Guid rosterId)
+        {
+            if (questionnaire.IsFixedRoster(rosterId))
+            {
+                return new FixedRosterManager(this, this.questionnaire, rosterId);
+            }
+
+            Guid sourceQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
+            var questionaType = questionnaire.GetQuestionType(sourceQuestionId);
+            if (questionaType == QuestionType.MultyOption)
+            {
+                if (this.questionnaire.IsQuestionYesNo(sourceQuestionId))
+                {
+                    return new YesNoRosterManager(this, this.questionnaire, rosterId);
+                }
+                return new MultiRosterManager(this, this.questionnaire, rosterId);
+            }
+
+            if (questionaType == QuestionType.Numeric)
+            {
+                return new NumericRosterManager(this, this.questionnaire, rosterId);
+            }
+
+            if (questionaType == QuestionType.TextList)
+            {
+                return new ListRosterManager(this, this.questionnaire, rosterId);
+            }
+
+            throw new ArgumentException("Unknown roster type");
+        }
     }
 
     public interface IInterviewTreeNode
@@ -217,8 +321,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public virtual IInterviewTreeNode Clone()
         {
-            return (IInterviewTreeNode)this.MemberwiseClone();
+            return (IInterviewTreeNode) this.MemberwiseClone();
         }
+    }
+
+    public enum QuestionnaireReferenceType
+    {
+        SubSection = 1,
+        Roster = 2,
+        StaticText = 10,
+        Variable = 20,
+        Question = 30,
+    }
+
+    public class QuestionnaireItemReference
+    {
+        public QuestionnaireItemReference(QuestionnaireReferenceType type, Guid id)
+        {
+            this.Type = type;
+            this.Id = id;
+        }
+
+        public Guid Id { get; set; }
+
+        public QuestionnaireReferenceType Type { get; set; }
     }
 
     public class RosterNodeDescriptor

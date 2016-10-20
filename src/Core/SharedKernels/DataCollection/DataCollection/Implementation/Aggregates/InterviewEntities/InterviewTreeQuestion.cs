@@ -10,9 +10,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
-        public InterviewTreeQuestion(Identity identity, bool isDisabled, string title, string variableName,
-            QuestionType questionType, object answer,
-            IEnumerable<RosterVector> linkedOptions, Identity cascadingParentQuestionIdentity, bool isYesNo, bool isDecimal, Guid? linkedSourceId = null, 
+        public InterviewTreeQuestion(Identity identity, 
+            bool isDisabled, 
+            string title, 
+            string variableName,
+            QuestionType questionType, 
+            object answer,
+            IEnumerable<RosterVector> linkedOptions, 
+            Guid? cascadingParentQuestionId, 
+            bool isYesNo, 
+            bool isDecimal, 
+            Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null)
             : base(identity, isDisabled)
         {
@@ -67,8 +75,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (questionType == QuestionType.TextList)
                 this.AsTextList = new InterviewTreeTextListQuestion(answer);
 
-            if (cascadingParentQuestionIdentity != null)
-                this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionIdentity);
+            if (cascadingParentQuestionId.HasValue)
+                this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionId.Value);
+        }
+
+        public InterviewTreeQuestion(Identity questionIdentity) : base(questionIdentity, false)
+        {
+            
         }
 
         public InterviewTreeDoubleQuestion AsDouble { get; private set; }
@@ -183,9 +196,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsQRBarcode) { this.AsQRBarcode.SetAnswer(answer as string); return; }
             if (this.IsGps) { this.AsGps.SetAnswer((GeoPosition)answer); return; }
             if (this.IsSingleOption) { this.AsSingleOption.SetAnswer(Convert.ToInt32(answer)); return; }
-            if (this.IsMultiOption) { this.AsMultiOption.SetAnswer((decimal[])answer); return; }
+            if (this.IsMultiOption)
+            {
+                if (answer is RosterVector)
+                    this.AsMultiOption.SetAnswer(answer as RosterVector);
+                else if (answer is decimal[])
+                    this.AsMultiOption.SetAnswer(answer as decimal[]);
+                return;
+            }
             if (this.IsSingleLinkedOption) { this.AsSingleLinkedOption.SetAnswer((RosterVector)answer); return; }
-            if (this.IsMultiLinkedOption) { this.AsMultiLinkedOption.SetAnswer((decimal[][])answer); return; }
+            if (this.IsMultiLinkedOption)
+            {
+                if (answer is RosterVector[])
+                    this.AsMultiLinkedOption.SetAnswer((RosterVector[])answer);
+                else if (answer is decimal[][])
+                    this.AsMultiLinkedOption.SetAnswer((decimal[][])answer);
+                return;
+            }
             if (this.IsYesNo) { this.AsYesNo.SetAnswer((AnsweredYesNoOption[])answer); return; }
             if (this.IsTextList) { this.AsTextList.SetAnswer((Tuple<decimal, string>[])answer); return; }
         }
@@ -285,7 +312,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.AsSingleLinkedOption.CommonParentRosterIdForLinkedQuestion);
             if (this.IsCascading) clonedQuestion.AsCascading = new InterviewTreeCascadingQuestion(
                 clonedQuestion, 
-                this.AsCascading.CascadingParentQuestionIdentity);
+                this.AsCascading.CascadingParentQuestionId);
 
             clonedQuestion.FailedValidations = this.FailedValidations?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
@@ -566,6 +593,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsAnswered => this.answer != null;
         public decimal[][] GetAnswer() => this.answer;
         public void SetAnswer(decimal[][] answer) => this.answer = answer;
+        public void SetAnswer(RosterVector[] answer)
+        {
+            this.answer = answer.Select(x => x.ToArray()).ToArray();
+        }
+
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeMultiLinkedOptionQuestion question)
@@ -606,22 +638,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeCascadingQuestion
     {
         private readonly InterviewTreeQuestion question;
-        private readonly Identity cascadingParentQuestionIdentity;
+        private readonly Guid cascadingParentQuestionId;
 
-        public InterviewTreeCascadingQuestion(InterviewTreeQuestion question, Identity cascadingParentQuestionIdentity)
+        public InterviewTreeCascadingQuestion(InterviewTreeQuestion question, Guid cascadingParentQuestionId)
         {
-            if (cascadingParentQuestionIdentity == null) throw new ArgumentNullException(nameof(cascadingParentQuestionIdentity));
-
             this.question = question;
-            this.cascadingParentQuestionIdentity = cascadingParentQuestionIdentity;
+            this.cascadingParentQuestionId = cascadingParentQuestionId;
         }
 
-        private InterviewTree Tree => this.question.Tree;
-
         public InterviewTreeSingleOptionQuestion GetCascadingParentQuestion()
-            => this.Tree.GetQuestion(this.cascadingParentQuestionIdentity).AsSingleOption;
+        {
+            return (this.question.Parent as InterviewTreeGroup)
+                ?.GetQuestionFromThisOrUpperLevel(this.cascadingParentQuestionId)
+                .AsSingleOption;
+        }
 
-        public Identity CascadingParentQuestionIdentity => this.cascadingParentQuestionIdentity;
+        public Guid CascadingParentQuestionId => this.cascadingParentQuestionId;
     }
 
 }
