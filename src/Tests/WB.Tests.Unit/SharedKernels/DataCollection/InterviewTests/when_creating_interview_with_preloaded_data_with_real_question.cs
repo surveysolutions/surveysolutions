@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static DateTime answersTime;
         private static Guid supervisorId;
         private static Guid prefilledQuestionId;
-        private static double prefilledQuestionAnswer;
+        private static decimal prefilledQuestionAnswer;
         private static Interview interview;
     }
 }

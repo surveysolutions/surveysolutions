@@ -122,6 +122,7 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.Invariants.cs" />
     <Compile Include="Implementation\Aggregates\Interview.DateTimeQuestion.cs" />
     <Compile Include="Implementation\Aggregates\Interview.MultipleOptionsQuestion.cs" />
     <Compile Include="Implementation\Aggregates\Interview.RemoveAnswer.cs" />
@@ -379,7 +380,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <Compile Include="Implementation\Aggregates\Interview.NumericIntegerQuestion.cs" />
-    <Compile Include="Implementation\Aggregates\Interview.Appy.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.Apply.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
