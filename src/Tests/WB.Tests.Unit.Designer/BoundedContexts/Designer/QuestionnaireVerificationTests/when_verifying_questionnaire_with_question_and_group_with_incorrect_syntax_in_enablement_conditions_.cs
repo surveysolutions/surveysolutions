@@ -41,17 +41,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_each_error_with_single_reference = () =>
             verificationMessages.ShouldEachConformTo(error=> error.References.Count() == 1);
 
-        It should_return_first_error_referencing_with_type_of_question = () =>
-            verificationMessages.ElementAt(0).References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_one_error_referencing_with_type_of_question = () =>
+            verificationMessages.Single(x => x.References.Single().Id == questionId)
+                .References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_referencing_with_type_of_group = () =>
-            verificationMessages.ElementAt(1).References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
-
-        It should_return_first_error_referencing_with_specified_question_id = () =>
-            verificationMessages.ElementAt(0).References.Single().Id.ShouldEqual(questionId);
-
-        It should_return_second_error_referencing_with_specified_question_id = () =>
-            verificationMessages.ElementAt(1).References.Single().Id.ShouldEqual(groupId);
+        It should_return_second_one_referencing_with_type_of_group = () =>
+            verificationMessages.Single(x => x.References.Single().Id == groupId).
+                References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
