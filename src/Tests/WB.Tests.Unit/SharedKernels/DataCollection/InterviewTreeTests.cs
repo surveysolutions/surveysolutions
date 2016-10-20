@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
@@ -131,6 +132,83 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(diff[0].ChangedNode, Is.EqualTo(section2));
         }
 
+
+        [Test]
+        public void When_Clone_tree_has_alot_of_nodes_Then_should_return_copy_of_source_tree_with_dif_references()
+        {
+            //arrange
+            var sourceTree = CreateTreeForClone();
+
+            //act
+            var clonedTree = sourceTree.Clone();
+
+            //assert
+            Assert.That(ReferenceEquals(clonedTree, sourceTree), Is.False);
+            Assert.That(ReferenceEquals(clonedTree.Sections, sourceTree.Sections), Is.False);
+            Assert.That(ReferenceEquals(clonedTree.Sections.First(), sourceTree.Sections.First()), Is.False);
+            Assert.That(ReferenceEquals(clonedTree.Sections.First().Children.First(), sourceTree.Sections.First().Children.First()), Is.False);
+            Assert.That(ReferenceEquals(clonedTree.Sections.First().Children.Second(), sourceTree.Sections.First().Children.Second()), Is.False);
+
+            var sourceInterviewTreeNodes = sourceTree.Sections.Cast<IInterviewTreeNode>().Single().TreeToEnumerable(s => s.Children).ToList();
+            var clonedInterviewTreeNodes = clonedTree.Sections.Cast<IInterviewTreeNode>().Single().TreeToEnumerable(s => s.Children).ToList();
+            CollectionAssert.AreNotEqual(clonedInterviewTreeNodes, sourceInterviewTreeNodes);
+        }
+
+        [Test]
+        public void When_Clone_tree_has_alot_of_nodes_Then_should_return_copy_of_source_tree_with_correct_identity()
+        {
+            //arrange
+            var sourceTree = CreateTreeForClone();
+
+            //act
+            var clonedTree = sourceTree.Clone();
+
+            //assert
+            Assert.AreEqual(clonedTree.InterviewId, sourceTree.InterviewId);
+            Assert.AreEqual(clonedTree.Sections.First().Identity, sourceTree.Sections.First().Identity);
+            Assert.AreEqual(clonedTree.Sections.First().Children.First().Identity, sourceTree.Sections.First().Children.First().Identity);
+            Assert.AreEqual(clonedTree.Sections.First().Children.Second().Identity, sourceTree.Sections.First().Children.Second().Identity);
+
+            var sourceInterviewTreeNodes = sourceTree.Sections.Cast<IInterviewTreeNode>().Single().TreeToEnumerable(s => s.Children).ToList();
+            var clonedInterviewTreeNodes = clonedTree.Sections.Cast<IInterviewTreeNode>().Single().TreeToEnumerable(s => s.Children).ToList();
+            CollectionAssert.AreEqual(clonedInterviewTreeNodes.Select(n => n.Identity), sourceInterviewTreeNodes.Select(n => n.Identity));
+        }
+
+        [Test]
+        public void When_Clone_tree_has_alot_of_nodes_Then_should_return_copy_of_source_tree_with_parent_property_to_new_nodes()
+        {
+            //arrange
+            var sourceTree = CreateTreeForClone();
+
+            //act
+            var clonedTree = sourceTree.Clone();
+
+            //assert
+            clonedTree.Sections.Cast<IInterviewTreeNode>().Single().ForEachTreeElement(s => s.Children,
+                (parent, children) => Assert.AreEqual(children.Parent, parent));
+        }
+
+        [Test]
+        public void When_Clone_tree_has_alot_of_nodes_Then_should_return_copy_of_source_tree_with_correct_tree_ref_to_new_tree()
+        {
+            //arrange
+            var sourceTree = CreateTreeForClone();
+
+            //act
+            var clonedTree = sourceTree.Clone();
+
+            //assert
+            var clonedInterviewTreeNodes = clonedTree.Sections.Cast<IInterviewTreeNode>().Single().TreeToEnumerable(s => s.Children).ToList();
+            clonedInterviewTreeNodes.ForEach(n =>
+            {
+                if (n is InterviewTreeQuestion)
+                    Assert.AreEqual(((InterviewTreeQuestion)n).Tree, clonedTree);
+                if (n is InterviewTreeGroup)
+                    Assert.AreEqual(((InterviewTreeGroup)n).Tree, clonedTree);
+            });
+        }
+
+
         private static InterviewTree CreateSimpleTree(Guid interviewId, Identity sectionIdentity, Identity questionIdentity)
             => CreateSimpleTree(interviewId, sectionIdentity, Create.Entity.InterviewTreeQuestion(questionIdentity));
 
@@ -139,5 +217,27 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
         private static InterviewTree CreateSimpleTree(Guid interviewId, InterviewTreeSection section)
             => new InterviewTree(interviewId, new[] { section });
+
+        private static InterviewTree CreateTreeForClone()
+        {
+            var interviewId = Guid.Parse("11111111111111111111111111111111");
+            var sectionIdentity = Create.Entity.Identity(Guid.Parse("22222222222222222222222222222222"));
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(sectionIdentity, children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("33333333333333333333333333333333"))),
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("44444444444444444444444444444444")), children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("55555555555555555555555555555555"))),
+                    Create.Entity.InterviewTreeStaticText(Create.Entity.Identity(Guid.Parse("66666666666666666666666666666666"))),
+                    Create.Entity.InterviewTreeVariable(Create.Entity.Identity(Guid.Parse("77777777777777777777777777777777"))),
+                    Create.Entity.InterviewTreeSubSection(Create.Entity.Identity(Guid.Parse("88888888888888888888888888888888")), children: new IInterviewTreeNode[]
+                    {
+                        Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("99999999999999999999999999999999"))),
+                    }),
+                })
+            });
+            var sourceTree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
+            return sourceTree;
+        }
     }
 }
