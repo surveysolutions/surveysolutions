@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     public class InterviewTree
     {
-        public InterviewTree(Guid interviewId, IEnumerable<InterviewTreeSection> sections)
+        private readonly IQuestionnaire questionnaire;
+
+        public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, IEnumerable<InterviewTreeSection> sections)
         {
             this.InterviewId = interviewId.FormatGuid();
+            this.questionnaire = questionnaire;
             this.Sections = sections.ToList();
 
             foreach (var section in this.Sections)
@@ -20,7 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string InterviewId { get; }
         public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
-
+        
         public InterviewTreeQuestion GetQuestion(Identity questionIdentity)
             => this
                 .GetNodes<InterviewTreeQuestion>()
@@ -67,6 +74,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private IEnumerable<IInterviewTreeNode> GetNodes()
             => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(node => node.Children);
+     
+
+
+        public void UpdateTree()
+        {
+        }
 
         public void RemoveNode(Identity identity)
         {
@@ -208,4 +221,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
     }
 
+    public class RosterNodeDescriptor
+    {
+        public Identity Identity { get; set; }
+        public string Title { get; set; }
+
+        public RosterType Type { get; set; }
+
+        public InterviewTreeQuestion SizeQuestion { get; set; }
+        public Identity RosterTitleQuestionIdentity { get; set; }
+    }
 }
