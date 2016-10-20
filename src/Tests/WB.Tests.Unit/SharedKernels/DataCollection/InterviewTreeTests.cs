@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var sourceTreeMainSection = Create.Entity.InterviewTreeSection(sectionIdentity);
             var changedTreeMainSection = Create.Entity.InterviewTreeSection(sectionIdentity);
 
-            changedTreeMainSection.AddChildren(Create.Entity.InterviewTreeQuestion(addedQuestionIdentity));
-            changedTreeMainSection.AddChildren(Create.Entity.InterviewTreeRoster(addedRosterIdentity));
+            changedTreeMainSection.AddChild(Create.Entity.InterviewTreeQuestion(addedQuestionIdentity));
+            changedTreeMainSection.AddChild(Create.Entity.InterviewTreeRoster(addedRosterIdentity));
 
             var sourceTree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
             var changedTree = Create.Entity.InterviewTree(interviewId, changedTreeMainSection);
@@ -51,8 +51,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var sourceTreeMainSection = Create.Entity.InterviewTreeSection(sectionIdentity);
             var changedTreeMainSection = Create.Entity.InterviewTreeSection(sectionIdentity);
 
-            sourceTreeMainSection.AddChildren(Create.Entity.InterviewTreeQuestion(addedQuestionIdentity));
-            sourceTreeMainSection.AddChildren(Create.Entity.InterviewTreeRoster(addedRosterIdentity));
+            sourceTreeMainSection.AddChild(Create.Entity.InterviewTreeQuestion(addedQuestionIdentity));
+            sourceTreeMainSection.AddChild(Create.Entity.InterviewTreeRoster(addedRosterIdentity));
 
             var sourceTree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
             var changedTree = Create.Entity.InterviewTree(interviewId, changedTreeMainSection);
