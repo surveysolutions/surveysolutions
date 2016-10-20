@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+            var changedInterviewTree = sourceInterviewTree.Clone();
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsDateTime.SetAnswer(answer);
 

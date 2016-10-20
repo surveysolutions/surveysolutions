@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState, answers);
 
-            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+            var changedInterviewTree = sourceInterviewTree.Clone();
 
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsTextList.SetAnswer(answers);
