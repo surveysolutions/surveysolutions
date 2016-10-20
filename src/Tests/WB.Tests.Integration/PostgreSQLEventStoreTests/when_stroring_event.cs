@@ -8,7 +8,6 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
-using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests

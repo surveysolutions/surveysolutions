@@ -4,8 +4,6 @@ using System.Linq;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
-using WB.UI.Designer.Providers.CQRS.Accounts.Events;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
@@ -75,19 +73,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public virtual void Register(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt, bool isConfirmed, string confirmationToken)
         {
-            AccountRegistered @event = new AccountRegistered
-            {
-                ApplicationName = applicationName,
-                Email = email,
-                UserName = userName,
-                ConfirmationToken = confirmationToken,
-                CreatedDate = DateTime.UtcNow
-            };
-            this.UserName = GetNormalizedUserName(@event.UserName);
-            this.Email = @event.Email;
-            this.ConfirmationToken = @event.ConfirmationToken;
-            this.ApplicationName = @event.ApplicationName;
-            this.CreatedAt = @event.CreatedDate;
+            this.UserName = GetNormalizedUserName(userName);
+            this.Email = email;
+            this.ConfirmationToken = confirmationToken;
+            this.ApplicationName = applicationName;
+            this.CreatedAt = DateTime.UtcNow;
 
             this.ResetPassword(password: password, passwordSalt: passwordSalt);
             if (isConfirmed)
@@ -98,95 +88,71 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public virtual void AddRole(SimpleRoleEnum role)
         {
-            this.SimpleRoles.Add(new AccountRoleAdded { Role = role }.Role);
+            this.SimpleRoles.Add(role);
         }
 
         public virtual void ChangePassword(string password)
         {
-            AccountPasswordChanged @event = new AccountPasswordChanged { Password = password, LastPasswordChangeAt = DateTime.UtcNow };
-            this.Password = @event.Password;
-            this.LastPasswordChangeAt = @event.LastPasswordChangeAt;
+            this.Password = password;
+            this.LastPasswordChangeAt = DateTime.UtcNow;
         }
 
         public virtual void ChangePasswordQuestionAndAnswer(string passwordQuestion, string passwordAnswer)
         {
-            AccountPasswordQuestionAndAnswerChanged @event = new AccountPasswordQuestionAndAnswerChanged
-            {
-                PasswordAnswer = passwordAnswer, 
-                PasswordQuestion = passwordQuestion
-            };
-            this.PasswordAnswer = @event.PasswordAnswer;
-            this.PasswordQuestion = @event.PasswordQuestion;
+            this.PasswordAnswer = passwordAnswer;
+            this.PasswordQuestion = passwordQuestion;
         }
 
         public virtual void ChangePasswordResetToken(string passwordResetToken, DateTime passwordResetExpirationDate)
         {
-            AccountPasswordResetTokenChanged @event = new AccountPasswordResetTokenChanged
-            {
-                PasswordResetToken = passwordResetToken, 
-                PasswordResetExpirationDate = passwordResetExpirationDate
-            };
-            this.PasswordResetToken = @event.PasswordResetToken;
-            this.PasswordResetExpirationDate = @event.PasswordResetExpirationDate;
+            this.PasswordResetToken = passwordResetToken;
+            this.PasswordResetExpirationDate = passwordResetExpirationDate;
         }
 
         public virtual void Confirm()
         {
-            AccountConfirmed @event = new AccountConfirmed();
             this.IsConfirmed = true;
         }
 
         public virtual void Delete()
         {
-            AccountDeleted @event = new AccountDeleted();
         }
 
         public virtual void Lock()
         {
             this.IsLockedOut = true;
-            this.LastLockedOutAt = new AccountLocked { LastLockedOutAt = DateTime.UtcNow }.LastLockedOutAt;
+            this.LastLockedOutAt = DateTime.UtcNow;
         }
 
         public virtual void Unlock()
         {
-            AccountUnlocked @event = new AccountUnlocked();
             this.IsLockedOut = false;
         }
 
         public virtual void LoginFailed()
         {
-            AccountLoginFailed @event = new AccountLoginFailed { FailedPasswordWindowStartedAt = DateTime.UtcNow };
         }
         
         public virtual void RemoveRole(SimpleRoleEnum role)
         {
-            this.SimpleRoles.Remove(new AccountRoleRemoved { Role = role }.Role);
+            this.SimpleRoles.Remove(role);
         }
 
         public virtual void ResetPassword(string password, string passwordSalt)
         {
-            AccountPasswordReset @event = new AccountPasswordReset { Password = password, PasswordSalt = passwordSalt };
-            this.PasswordSalt = @event.PasswordSalt;
-            this.Password = @event.Password;
+            this.PasswordSalt = passwordSalt;
+            this.Password = password;
         }
 
         public virtual void Update(string userName, bool isLockedOut, string passwordQuestion, string email, bool isConfirmed, string comment)
         {
-            AccountUpdated event1 = new AccountUpdated
-            {
-                Comment = comment,
-                Email = email,
-                PasswordQuestion = passwordQuestion,
-                UserName = userName
-            };
-            this.Comment = event1.Comment;
-            this.Email = event1.Email;
-            this.PasswordQuestion = event1.PasswordQuestion;
-            this.UserName = GetNormalizedUserName(event1.UserName);
+            this.Comment = comment;
+            this.Email = email;
+            this.PasswordQuestion = passwordQuestion;
+            this.UserName = GetNormalizedUserName(userName);
 
             if (!this.IsConfirmed && isConfirmed)
             {
-                AccountConfirmed @event = new AccountConfirmed();
                 this.IsConfirmed = true;
             }
 
@@ -195,11 +161,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (isLockedOut)
                 {
                     this.IsLockedOut = true;
-                    this.LastLockedOutAt = new AccountLocked().LastLockedOutAt;
+                    this.LastLockedOutAt = DateTime.UtcNow;
                 }
                 else
                 {
-                    AccountUnlocked @event = new AccountUnlocked();
                     this.IsLockedOut = false;
                 }
             }
