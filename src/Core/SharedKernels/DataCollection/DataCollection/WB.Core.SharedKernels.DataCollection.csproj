@@ -139,6 +139,7 @@
     <Compile Include="Implementation\Aggregates\Interview.GPSQuestion.cs" />
     <Compile Include="Implementation\Aggregates\Interview.ExpressionState.cs" />
     <Compile Include="Implementation\Aggregates\Interview.TextQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\Answers.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTree.cs" />
     <Compile Include="Implementation\Aggregates\Interview.Events.cs" />
