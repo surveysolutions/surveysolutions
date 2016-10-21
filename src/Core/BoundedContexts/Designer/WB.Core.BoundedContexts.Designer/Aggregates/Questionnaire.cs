@@ -761,7 +761,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
             this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
-            
+
+            if (this.QuestionnaireDocument.Children.Count == 1 &&
+                this.QuestionnaireDocument.Children[0].PublicKey == groupId)
+            {
+                throw new QuestionnaireException(DomainExceptionType.Undefined, "Last existing section can not be removed from questionnaire");
+            }
+
             var group = this.GetGroupById(groupId);
 
             this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
@@ -809,7 +815,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
                 {
-                    throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}", MaxGroupDepth));
+                    throw new QuestionnaireException($"Sub-section or roster depth cannot be higher than {MaxGroupDepth}");
                 }
                 
             }

@@ -568,6 +568,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTests\Translations\when_deleting_translation_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Translations\when_updating_translation.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_cloning_question_with_calidation_conditions.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_deleting_last_group.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_sending_command_with_HideIfDisabled_flag.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_categorical_question_has_more_than_30_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_linked_question_that_has_filter_expression_referencing_to_single_linked.cs" />
