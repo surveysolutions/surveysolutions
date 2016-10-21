@@ -136,9 +136,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 db.ConnectionString = this.connectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                
             });
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
             cfg.AddDeserializedMapping(this.GetMappings(), "Main");
+
+            cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, this.schemaName);
 
             return cfg.BuildSessionFactory();
         }
