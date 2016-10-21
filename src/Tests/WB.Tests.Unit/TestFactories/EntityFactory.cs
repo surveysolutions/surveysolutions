@@ -1154,14 +1154,23 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
             params IInterviewTreeNode[] children)
-            => new InterviewTreeRoster(rosterIdentity, children, isDisabled) {RosterTitle = rosterTitle};
+            => new InterviewTreeRoster(rosterIdentity, children, childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
 
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
             params IInterviewTreeNode[] children)
-            => new InterviewTreeSubSection(groupIdentity, children, isDisabled);
+        {
+            var interviewTreeSubSection = new InterviewTreeSubSection(groupIdentity, children, Enumerable.Empty<QuestionnaireItemReference>());
+            if (isDisabled) interviewTreeSubSection.Disable();
+            return interviewTreeSubSection;
+        }
 
         public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
-            => new InterviewTreeSection(sectionIdentity, children, isDisabled);
+        {
+            var interviewTreeSection = new InterviewTreeSection(sectionIdentity, children, Enumerable.Empty<QuestionnaireItemReference>());
+            if (isDisabled)
+                interviewTreeSection.Disable();
+            return interviewTreeSection;
+        }
 
         public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
             string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,

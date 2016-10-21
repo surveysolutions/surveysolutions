@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -237,5 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid? GetCommontParentForLinkedQuestionAndItSource(Guid linkedQuestionId);
         bool IsVariable(Guid id);
         IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId);
+
+        IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId);
     }
 }
