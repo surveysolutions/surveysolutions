@@ -736,13 +736,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewHardDeleted();
 
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+
             var answerDtos = synchronizedInterview
                 .Answers
                 .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, questionnaire.GetAnswerType(answerDto.Id), answerDto.Answer))
                 .ToArray();
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
             this.ApplyEvent(new InterviewAnswersFromSyncPackageRestored(answerDtos, synchronizedInterview.UserId));
-            base.ApplyRosterTitleChanges(questionnaire);
+            
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+            
+            base.UpdateRosterTitles(changedInterviewTree, questionnaire);
+
+            this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
         }
 
         public bool HasGroup(Identity group)
