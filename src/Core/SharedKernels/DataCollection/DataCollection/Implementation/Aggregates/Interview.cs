@@ -409,9 +409,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
-
+            
             this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
-            this.ApplyRosterTitleChanges(targetQuestionnaire);
+
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, new InterviewStateDependentOnAnswers());
+            var changedInterviewTree = this.BuildInterviewTree(targetQuestionnaire, this.interviewState);
+
+            this.UpdateRosterTitles(changedInterviewTree, targetQuestionnaire);
+
+            this.ApplyEvents(sourceInterviewTree, changedInterviewTree, command.UserId);
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
@@ -420,7 +426,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, this.interviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -435,7 +441,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, this.interviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -450,7 +456,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
-            var tree = this.BuildInterviewTree(questionnaire);
+            var tree = this.BuildInterviewTree(questionnaire, this.interviewState);
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -966,22 +972,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             enablementChanges.VariablesToBeEnabled.ForEach(x => tree.GetVariable(x).Enable());
         }
 
-        private void UpdateRosterTitles(InterviewTree tree, IQuestionnaire questionnaire)
+        protected void UpdateRosterTitles(InterviewTree tree, IQuestionnaire questionnaire)
         {
-            foreach (var roster in tree.FindRosters().Where(x => x.IsList))
+            foreach (var roster in tree.FindRosters())
             {
-                roster.UpdateRosterTitle();
-            }
+                if (roster.IsFixed)
+                {
+                    var changedRosterTitle = questionnaire.GetFixedRosterTitle(roster.Identity.Id,
+                        roster.Identity.RosterVector.Last());
 
-            foreach (var roster in tree.FindRosters().Where(x => x.IsNumeric))
-            {
-                var titleQuestion = tree.GetQuestion(roster.AsNumeric.RosterTitleQuestionIdentity);
-                if (titleQuestion == null) continue;
-                var rosterTitle = titleQuestion.IsAnswered()
-                    ? titleQuestion.GetAnswerAsString(answerOptionValue => questionnaire.GetOptionsForQuestion(titleQuestion.Identity.Id, null, string.Empty).FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue)).Title)
-                    : null;
-                roster.SetRosterTitle(rosterTitle);
-                //roster.UpdateRosterTitle(answerOptionValue => questionnaire.GetOptionsForQuestion(titleQuestion.Identity.Id, null, string.Empty).FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue)).Title);
+                    roster.SetRosterTitle(changedRosterTitle);
+                }
+                else
+                {
+                    roster.UpdateRosterTitle((questionId, answerOptionValue) =>
+                        questionnaire.GetOptionsForQuestion(questionId, null, string.Empty)
+                            .FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue))
+                            .Title);
+                }
             }
         }
 
@@ -1037,7 +1045,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void UpdateTree(InterviewTree tree, IQuestionnaire questionnaire)
+        protected void UpdateTree(InterviewTree tree, IQuestionnaire questionnaire)
         {
             var itemsQueue = new Queue<IInterviewTreeNode>(tree.Sections);
 

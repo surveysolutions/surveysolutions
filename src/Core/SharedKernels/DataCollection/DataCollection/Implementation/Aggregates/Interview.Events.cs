@@ -265,57 +265,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
         
-        protected void ApplyRosterTitleChanges(IQuestionnaire targetQuestionnaire)
-        {
-            var rosterInstances =
-                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
-                    targetQuestionnaire.GetRostersWithTitlesToChange(), RosterVector.Empty,
-                    targetQuestionnaire).ToArray();
-
-            var changedTitles = rosterInstances.Select(
-                rosterInstance =>
-                    new ChangedRosterInstanceTitleDto(
-                        RosterInstance.CreateFromIdentity(rosterInstance),
-                        this.GetRosterTitle(targetQuestionnaire, rosterInstance)))
-                .ToArray();
-
-            if (changedTitles.Any())
-            {
-                this.ApplyEvent(new RosterInstancesTitleChanged(changedTitles));
-            }
-        }
-
-        private string GetRosterTitle(IQuestionnaire targetQuestionnaire, Identity rosterInstance)
-        {
-            if (targetQuestionnaire.IsFixedRoster(rosterInstance.Id))
-            {
-                return targetQuestionnaire.GetFixedRosterTitle(rosterInstance.Id,
-                    rosterInstance.RosterVector.Coordinates.Last());
-            }
-            else if (targetQuestionnaire.IsNumericRoster(rosterInstance.Id))
-            {
-                var questionId = targetQuestionnaire.GetRosterTitleQuestionId(rosterInstance.Id);
-                Identity rosterTitleQuestionIdentity = new Identity(questionId.Value, rosterInstance.RosterVector);
-                var questionType = targetQuestionnaire.GetQuestionType(questionId.Value);
-                var questionValue = this.interviewState.GetAnswerSupportedInExpressions(rosterTitleQuestionIdentity);
-
-                switch (questionType)
-                {
-                    case QuestionType.SingleOption:
-                    case QuestionType.MultyOption:
-                        return AnswerUtils.AnswerToString(questionValue, x => targetQuestionnaire.GetAnswerOptionTitle(questionId.Value, x));
-                    default:
-                        return AnswerUtils.AnswerToString(questionValue);
-                }
-            }
-            else
-            {
-                return targetQuestionnaire.GetAnswerOptionTitle(
-                    targetQuestionnaire.GetRosterSizeQuestion(rosterInstance.Id),
-                    rosterInstance.RosterVector.Last());
-            }
-        }
-
         private static ChangedRosterInstanceTitleDto ToChangedRosterInstanceTitleDto(InterviewTreeRoster roster)
             => new ChangedRosterInstanceTitleDto(ToRosterInstance(roster), roster.RosterTitle);
 
