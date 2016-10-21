@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            this.CheckLinkedSingleOptionQuestionInvariants(questionId, rosterVector, selectedRosterVector, questionnaire, answeredQuestion);
+            this.CheckLinkedSingleOptionQuestionInvariants(questionId, rosterVector, selectedRosterVector, questionnaire, answeredQuestion, sourceInterviewTree);
 
             var changedInterviewTree = sourceInterviewTree.Clone();
 
