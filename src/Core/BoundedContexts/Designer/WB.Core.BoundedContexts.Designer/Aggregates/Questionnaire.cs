@@ -2027,7 +2027,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.GroupTitleRequired,
-                    "The titles of sections and sub-sections can not be empty or contains whitespace only");
+                    "The titles of sections and sub-sections can not be empty or contain whitespace only");
             }
 
             if (title.Length > MaxTitleLength)
@@ -2136,7 +2136,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (startsWithDigitOrUnderscore)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't starts with digit or underscore");
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't start with digit or underscore");
             }
 
             bool endsWithUnderscore = stataCaption[stataCaption.Length-1] == '_';
