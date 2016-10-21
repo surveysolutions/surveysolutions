@@ -584,6 +584,23 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ITranslationsService>());
         }
 
+
+        public static Questionnaire Questionnaire(Guid responsible, QuestionnaireDocument document)
+        {
+            var questionnaire = new Questionnaire(
+                Mock.Of<ILogger>(),
+                Mock.Of<IClock>(),
+                Mock.Of<IExpressionProcessor>(),
+                Create.SubstitutionService(),
+                Create.KeywordsProvider(),
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IAttachmentService>(),
+                Mock.Of<ITranslationsService>());
+            questionnaire.Initialize(Guid.NewGuid(), document, new List<SharedPerson> {Create.SharedPerson(responsible)});
+            return questionnaire;
+        }
+
+
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
             string questionnaireId = null,
             QuestionnaireActionType? action = null,

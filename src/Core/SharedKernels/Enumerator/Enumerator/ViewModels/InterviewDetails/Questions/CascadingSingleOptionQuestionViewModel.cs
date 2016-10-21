@@ -274,7 +274,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private CascadingComboboxItemViewModel CreateFormattedOptionModel(CategoricalOption model, string hint = null)
         {
-            var text = !string.IsNullOrEmpty(hint) ? 
+            if (model == null) throw new ArgumentNullException(nameof(model));
+
+            var text = (!string.IsNullOrEmpty(hint) && !string.IsNullOrEmpty(model.Title)) ? 
                 Regex.Replace(model.Title, hint, "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
                 model.Title;
 
