@@ -9513,6 +9513,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   top: 6px;
   color: #3da802;
   background: #f2f3f5;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 #verification-modal .modal-content .modal-body .verification-items .verification-item .variable:before {
   display: block;

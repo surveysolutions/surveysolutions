@@ -1,18 +1,23 @@
-﻿extern alias designer;
-
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
-using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using WB.Core.GenericSubdomains.Portable;
 using System;
 using Newtonsoft.Json;
+using WB.Core.Infrastructure.EventBus;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
     internal class when_deserializing_designer_historical_events_Json 
     {
+        private class AccountRegistered : IEvent
+        {
+            public string ApplicationName { get; set; }
+            public string ConfirmationToken { get; set; }
+            public string Email { get; set; }
+        }
+
         Establish context = () =>
         {
             eventTypeResolver = new EventTypeResolver();
