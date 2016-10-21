@@ -229,9 +229,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return new InterviewTreeVariable(variableIdentity);
         }
 
-        public static InterviewTreeSubSection CreateSubSection(Identity subSectionIdentity)
+        public InterviewTreeSubSection CreateSubSection(Identity subSectionIdentity)
         {
-            return new InterviewTreeSubSection(subSectionIdentity);
+            return CreateSubSection(this.questionnaire, subSectionIdentity);
+        }
+
+        public static InterviewTreeSubSection CreateSubSection(IQuestionnaire questionnaire, Identity subSectionIdentity)
+        {
+            var childrenReferences = questionnaire.GetChidrenReferences(subSectionIdentity.Id);
+
+            return new InterviewTreeSubSection(subSectionIdentity, childrenReferences);
+        }
+
+        public static InterviewTreeSection CreateSection(IQuestionnaire questionnaire, Identity sectionIdentity)
+        {
+            var childrenReferences = questionnaire.GetChidrenReferences(sectionIdentity.Id);
+            return new InterviewTreeSection(sectionIdentity, Enumerable.Empty<IInterviewTreeNode>(), childrenReferences);
         }
 
         public static InterviewTreeStaticText CreateStaticText(Identity staticTextIdentity)

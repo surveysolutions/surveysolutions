@@ -33,15 +33,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var children = BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, state).ToList();
             bool isDisabled = state?.IsGroupDisabled(sectionIdentity) ?? false;
+            var section = InterviewTree.CreateSection(questionnaire, sectionIdentity);
 
-            return new InterviewTreeSection(sectionIdentity, children, isDisabled: isDisabled);
+            section.AddChildren(this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState).ToList());
+
+            if (interviewState.IsGroupDisabled(sectionIdentity))
+                section.Disable();
+
+            return section;
         }
 
         private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
         {
             List<IInterviewTreeNode> children = BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, state).ToList();
 
-            var subSection = InterviewTree.CreateSubSection(groupIdentity);
+            var subSection = InterviewTree.CreateSubSection(questionnaire, groupIdentity);
 
             subSection.AddChildren(children);
 
@@ -114,12 +120,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            return new InterviewTreeRoster(rosterIdentity, children,
+            var roster = new InterviewTreeRoster(rosterIdentity, children,
                 rosterType: rosterType,
-                isDisabled: isDisabled,
                 rosterTitle: rosterTitle,
                 rosterTitleQuestionIdentity: rosterTitleQuestionIdentity,
-                rosterSizeQuestion: sourceQuestionId);
+                rosterSizeQuestion: sourceQuestionId,
+                childrenReferences: questionnaire.GetChidrenReferences(rosterIdentity.Id));
+
+            if (isDisabled)
+                roster.Disable();
+
+            return roster;
         }
 
         private static InterviewTreeQuestion BuildInterviewTreeQuestion(IQuestionnaire questionnaire,

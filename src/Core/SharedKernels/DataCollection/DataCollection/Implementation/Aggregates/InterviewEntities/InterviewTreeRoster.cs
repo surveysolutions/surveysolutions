@@ -9,13 +9,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeRoster(Identity identity,
             IEnumerable<IInterviewTreeNode> children,
-            bool isDisabled = false,
             string rosterTitle = null,
             int sortIndex = 0,
             RosterType rosterType = RosterType.Fixed,
             Guid? rosterSizeQuestion = null,
-            Identity rosterTitleQuestionIdentity = null)
-            : base(identity, children, isDisabled)
+            Identity rosterTitleQuestionIdentity = null,
+            IEnumerable<QuestionnaireItemReference> childrenReferences = null)
+            : base(identity, children, childrenReferences)
         {
             this.RosterTitle = rosterTitle;
             this.SortIndex = sortIndex;
