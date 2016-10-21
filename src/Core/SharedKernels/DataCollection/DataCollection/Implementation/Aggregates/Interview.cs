@@ -276,7 +276,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var answersToFeaturedQuestions = preloadedLevel.Answers;
 
-                this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, state, false);
+                this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, state, false);
 
                 var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(
                     answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, preloadedLevel.RosterVector),
@@ -312,9 +312,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var state = new InterviewStateDependentOnAnswers();
 
-            this.ValidatePrefilledQuestions(questionnaire, answersToFeaturedQuestions, RosterVector.Empty, state);
-
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, state);
+            this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty, state);
+            
             var changedInterviewTree = sourceInterviewTree.Clone();
 
             var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
