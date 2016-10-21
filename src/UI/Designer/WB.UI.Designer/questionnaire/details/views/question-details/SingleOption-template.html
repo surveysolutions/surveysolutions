@@ -5,11 +5,15 @@
             <div class="table-holder">
                 <div class="table-row question-options-editor" ng-repeat="option in activeQuestion.options">
                     <div class="column-2">
-                        <input type="number" min="-2147483648" max="2147483647"
-                               name="option_value_{{$index}}"
-                               ng-model="option.value" ng-pattern="/^([-+]?\d+)$/"
-                               ng-keypress="onKeyPressInOptions($event)" 
-                               class="form-control question-option-value-editor"/>
+                        <ng-form name="options_value_form">
+                            <input type="number" min="-2147483648" max="2147483647"
+                                        name="option_value_{{$index}}"
+                                        ng-model="option.value"
+                                        ng-pattern="/^([-+]?\d+)$/"
+                                        ng-class="{'has-error': !options_value_form.option_value.$valid}" 
+                                        ng-keypress="onKeyPressInOptions($event)"
+                                        class="form-control question-option-value-editor"/>
+                        </ng-form>
                     </div>
                     <div class="column-3">
                         <input  ng-attr-id="{{'option-title-' + $index}}" type="text" ng-model="option.title" ng-keypress="onKeyPressInOptions($event)" class="form-control"/>
