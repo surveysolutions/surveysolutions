@@ -784,17 +784,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
-            if (!this.cacheOfChildEntities.ContainsKey(groupId))
-            {
-                this.cacheOfChildEntities[groupId] =
-                    this.GetGroupOrThrow(groupId)
-                        .Children
-                        .Where(entity => !(entity is IVariable))
-                        .Select(entity => entity.PublicKey)
-                        .ToReadOnlyCollection();
-            }
+            var result = GetChildEntityIds(groupId)
+                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewierQuestion(x)) ||
+                                      this.IsVariable(x));
 
-            var result = this.cacheOfChildEntities[groupId].Except(x => this.IsQuestion(x) && !this.IsInterviewierQuestion(x));
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
 
