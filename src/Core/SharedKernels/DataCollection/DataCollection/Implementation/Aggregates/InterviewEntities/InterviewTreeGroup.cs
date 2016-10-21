@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,13 +10,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private bool isDisabled;
         private List<IInterviewTreeNode> children;
 
-        protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled)
+        protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children, IEnumerable<QuestionnaireItemReference> childrenReferences)
         {
-            this.childEntitiesReferences = new List<QuestionnaireItemReference>().ToReadOnlyCollection();
+            this.childEntitiesReferences = childrenReferences.ToReadOnlyCollection();
 
             this.Identity = identity;
             this.children = children.ToList();
-            this.isDisabled = isDisabled;
+            this.isDisabled = false;
 
             foreach (var child in this.Children)
             {
@@ -158,11 +157,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
-        public InterviewTreeSubSection(Identity identity) : this (identity, Enumerable.Empty<IInterviewTreeNode>(), false)
+        public InterviewTreeSubSection(Identity identity, IEnumerable<QuestionnaireItemReference> childrenReferences) 
+            : this (identity, Enumerable.Empty<IInterviewTreeNode>(), childrenReferences)
         {
         }
 
-        public InterviewTreeSubSection(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled) : base(identity, children, isDisabled)
+        [Obsolete]
+        public InterviewTreeSubSection(Identity identity, IEnumerable<IInterviewTreeNode> children, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, children, childrenReferences)
         {
         }
 
@@ -171,7 +172,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeSection : InterviewTreeGroup
     {
-        public InterviewTreeSection(Identity identity, IEnumerable<IInterviewTreeNode> children, bool isDisabled) : base(identity, children, isDisabled)
+        public InterviewTreeSection(Identity identity, IEnumerable<IInterviewTreeNode> children, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, children, childrenReferences)
         {
         }
 
