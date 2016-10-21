@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
 {
     public abstract class AbstractAnswer { }
 
