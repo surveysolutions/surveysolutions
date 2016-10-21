@@ -519,7 +519,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeYesNoQuestion Clone()
         {
             var clone = (InterviewTreeYesNoQuestion)this.MemberwiseClone();
-            clone.answer = (AnsweredYesNoOption[])this.answer?.Clone();
+            clone.SetAnswer(this.answer?.ToArray());
             return clone;
         }
     }
@@ -642,7 +642,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeSingleLinkedOptionQuestion Clone()
         {
             var clone = (InterviewTreeSingleLinkedOptionQuestion) this.MemberwiseClone();
-            clone.Options = this.Options?.ToList();
+            clone.SetAnswer(new RosterVector(this.answer));
+            clone.SetOptions(this.Options);
             return clone;
         }
     }
@@ -681,8 +682,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeMultiLinkedOptionQuestion Clone()
         {
             var clone = (InterviewTreeMultiLinkedOptionQuestion)this.MemberwiseClone();
-            clone.answer = this.answer?.Select(a => (decimal[])a.Clone()).ToArray();
-            clone.Options = this.Options.ToList();
+            clone.SetAnswer(this.answer?.Select(a => (decimal[])a.Clone()).ToArray());
+            clone.SetOptions(this.Options);
             return clone;
         }
     }

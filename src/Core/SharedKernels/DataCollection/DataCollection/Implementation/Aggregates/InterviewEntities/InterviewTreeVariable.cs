@@ -1,3 +1,5 @@
+using System;
+
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     public class InterviewTreeVariable : InterviewTreeLeafNode

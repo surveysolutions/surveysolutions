@@ -18,11 +18,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.InterviewId = interviewId.FormatGuid();
             this.questionnaire = questionnaire;
 
+            this.SetSections(sections);
+        }
+
+        private void SetSections(IEnumerable<InterviewTreeSection> sections)
+        {
             this.Sections = sections.ToList();
 
             foreach (var section in this.Sections)
             {
-                ((IInternalInterviewTreeNode)section).SetTree(this);
+                ((IInternalInterviewTreeNode) section).SetTree(this);
             }
 
             WarmUpCache();
@@ -165,13 +170,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTree Clone()
         {
             var clonedInterviewTree = (InterviewTree)this.MemberwiseClone();
-            clonedInterviewTree.Sections = this.Sections.Select(s =>
-            {
-                var interviewTreeSection = (InterviewTreeSection)s.Clone();
-                ((IInternalInterviewTreeNode) interviewTreeSection).SetTree(clonedInterviewTree);
-                return interviewTreeSection;
-            }).ToReadOnlyCollection();
-
+            clonedInterviewTree.Sections = new List<InterviewTreeSection>();
+            clonedInterviewTree.SetSections(this.Sections.Select(s => (InterviewTreeSection)s.Clone()));
             clonedInterviewTree.WarmUpCache();
             return clonedInterviewTree;
         }
