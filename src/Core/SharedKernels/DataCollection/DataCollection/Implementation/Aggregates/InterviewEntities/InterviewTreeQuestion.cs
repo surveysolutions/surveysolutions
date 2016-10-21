@@ -287,32 +287,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override IInterviewTreeNode Clone()
         {
-            var clonedQuestion = (InterviewTreeQuestion) this.MemberwiseClone();
-            if (this.IsDateTime) clonedQuestion.AsDateTime = new InterviewTreeDateTimeQuestion(this.AsDateTime.IsAnswered ? this.AsDateTime.GetAnswer() : (object) null);
-            if (this.IsDouble) clonedQuestion.AsDouble = new InterviewTreeDoubleQuestion(this.AsDouble.IsAnswered ? this.AsDouble.GetAnswer() : (object)null);
-            if (this.IsGps) clonedQuestion.AsGps = new InterviewTreeGpsQuestion(this.AsGps.IsAnswered ? this.AsGps.GetAnswer() : (object)null);
-            if (this.IsMultiOption) clonedQuestion.AsMultiOption = new InterviewTreeMultiOptionQuestion(this.AsMultiOption.IsAnswered ? this.AsMultiOption.GetAnswer() : (object)null);
-            if (this.IsMultimedia) clonedQuestion.AsMultimedia = new InterviewTreeMultimediaQuestion(this.AsMultimedia.IsAnswered ? this.AsMultimedia.GetAnswer() : (object)null);
-            if (this.IsQRBarcode) clonedQuestion.AsQRBarcode = new InterviewTreeQRBarcodeQuestion(this.AsQRBarcode.IsAnswered ? this.AsQRBarcode.GetAnswer() : (object)null);
-            if (this.IsSingleOption) clonedQuestion.AsSingleOption = new InterviewTreeSingleOptionQuestion(this.AsSingleOption.IsAnswered ? this.AsSingleOption.GetAnswer() : (object)null);
-            if (this.IsText) clonedQuestion.AsText = new InterviewTreeTextQuestion(this.AsText.IsAnswered ? this.AsText.GetAnswer() : (object)null);
-            if (this.IsTextList) clonedQuestion.AsTextList = new InterviewTreeTextListQuestion(this.AsTextList.IsAnswered ? this.AsTextList.GetAnswer() : (object)null);
-            if (this.IsYesNo) clonedQuestion.AsYesNo = new InterviewTreeYesNoQuestion(this.AsYesNo.IsAnswered ? this.AsYesNo.GetAnswer() : (object)null);
-            if (this.IsInteger) clonedQuestion.AsInteger = new InterviewTreeIntegerQuestion(this.AsInteger.IsAnswered ? this.AsInteger.GetAnswer() : (object)null);
+            var clonedQuestion = (InterviewTreeQuestion)this.MemberwiseClone();
+            if (this.IsDateTime) clonedQuestion.AsDateTime = this.AsDateTime.Clone();
+            if (this.IsDouble) clonedQuestion.AsDouble = this.AsDouble.Clone();
+            if (this.IsGps) clonedQuestion.AsGps = this.AsGps.Clone();
+            if (this.IsMultiOption) clonedQuestion.AsMultiOption = this.AsMultiOption.Clone();
+            if (this.IsMultimedia) clonedQuestion.AsMultimedia = this.AsMultimedia.Clone();
+            if (this.IsQRBarcode) clonedQuestion.AsQRBarcode = this.AsQRBarcode.Clone();
+            if (this.IsSingleOption) clonedQuestion.AsSingleOption = this.AsSingleOption.Clone();
+            if (this.IsText) clonedQuestion.AsText = this.AsText.Clone();
+            if (this.IsTextList) clonedQuestion.AsTextList = this.AsTextList.Clone();
+            if (this.IsYesNo) clonedQuestion.AsYesNo = this.AsYesNo.Clone();
+            if (this.IsInteger) clonedQuestion.AsInteger = this.AsInteger.Clone();
 
-            if (this.IsMultiLinkedOption) clonedQuestion.AsMultiLinkedOption = new InterviewTreeMultiLinkedOptionQuestion(
-                this.AsMultiLinkedOption.Options,
-                this.AsMultiLinkedOption.GetAnswer(),
-                this.AsMultiLinkedOption.LinkedSourceId,
-                this.AsMultiLinkedOption.CommonParentRosterIdForLinkedQuestion);
-            if (this.IsSingleLinkedOption) clonedQuestion.AsSingleLinkedOption = new InterviewTreeSingleLinkedOptionQuestion(
-                this.AsSingleLinkedOption.Options,
-                this.AsSingleLinkedOption.GetAnswer(),
-                this.AsSingleLinkedOption.LinkedSourceId,
-                this.AsSingleLinkedOption.CommonParentRosterIdForLinkedQuestion);
-            if (this.IsCascading) clonedQuestion.AsCascading = new InterviewTreeCascadingQuestion(
-                clonedQuestion, 
-                this.AsCascading.CascadingParentQuestionId);
+            if (this.IsMultiLinkedOption) clonedQuestion.AsMultiLinkedOption = this.AsMultiLinkedOption.Clone();
+            if (this.IsSingleLinkedOption) clonedQuestion.AsSingleLinkedOption = this.AsSingleLinkedOption.Clone();
+            if (this.IsCascading) clonedQuestion.AsCascading = this.AsCascading.Clone(clonedQuestion); 
 
             clonedQuestion.FailedValidations = this.FailedValidations?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
@@ -337,6 +327,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeDateTimeQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeDateTimeQuestion Clone()
+        {
+            return (InterviewTreeDateTimeQuestion)this.MemberwiseClone();
+        }
     }
 
     public class InterviewTreeGpsQuestion
@@ -354,6 +349,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeGpsQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeGpsQuestion Clone()
+        {
+            var clone = (InterviewTreeGpsQuestion)this.MemberwiseClone();
+            clone.answer = this.answer?.Clone();
+            return clone;
+        }
     }
 
     public class InterviewTreeMultimediaQuestion
@@ -371,6 +373,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeMultimediaQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeMultimediaQuestion Clone() => (InterviewTreeMultimediaQuestion)this.MemberwiseClone();
     }
 
     public class InterviewTreeIntegerQuestion
@@ -388,6 +392,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeIntegerQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeIntegerQuestion Clone() => (InterviewTreeIntegerQuestion)this.MemberwiseClone();
     }
 
     public class InterviewTreeDoubleQuestion
@@ -405,6 +411,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeDoubleQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeDoubleQuestion Clone() => (InterviewTreeDoubleQuestion)this.MemberwiseClone();
     }
 
     public class InterviewTreeQRBarcodeQuestion
@@ -421,6 +429,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(string answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
         public bool EqualByAnswer(InterviewTreeQRBarcodeQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeQRBarcodeQuestion Clone() => (InterviewTreeQRBarcodeQuestion)this.MemberwiseClone();
     }
 
     public class InterviewTreeTextQuestion
@@ -438,6 +448,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeTextQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeTextQuestion Clone() => (InterviewTreeTextQuestion)this.MemberwiseClone();
     }
 
     public class InterviewTreeYesNoQuestion
@@ -478,6 +490,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             return string.Empty;
         }
+
+        public InterviewTreeYesNoQuestion Clone()
+        {
+            var clone = (InterviewTreeYesNoQuestion)this.MemberwiseClone();
+            clone.answer = (AnsweredYesNoOption[])this.answer?.Clone();
+            return clone;
+        }
     }
 
     public class InterviewTreeTextListQuestion
@@ -511,6 +530,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return string.Empty;
             return this.answer.Single(x => x.Item1 == code).Item2;
         }
+
+        public InterviewTreeTextListQuestion Clone()
+        {
+            var clone = (InterviewTreeTextListQuestion)this.MemberwiseClone();
+            clone.answer = (Tuple<decimal, string>[])clone.answer?.Clone();
+            return clone;
+        }
     }
 
     public class InterviewTreeSingleOptionQuestion
@@ -530,6 +556,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeSingleOptionQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeSingleOptionQuestion Clone() => (InterviewTreeSingleOptionQuestion)this.MemberwiseClone();
     }
 
     public class InterviewTreeMultiOptionQuestion
@@ -561,6 +589,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             SetAnswer((intValues ?? new int[0]).Select(Convert.ToDecimal).ToArray());
         }
+
+        public InterviewTreeMultiOptionQuestion Clone()
+        {
+            var clone = (InterviewTreeMultiOptionQuestion)this.MemberwiseClone();
+            clone.answer = (decimal[])this.answer?.Clone();
+            return clone;
+        }
     }
 
     public class InterviewTreeSingleLinkedOptionQuestion : InterviewTreeLinkedQuestion
@@ -578,6 +613,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void RemoveAnswer() => this.answer = null;
 
         public bool EqualByAnswer(InterviewTreeSingleLinkedOptionQuestion question) => question?.answer == this.answer;
+
+        public InterviewTreeSingleLinkedOptionQuestion Clone()
+        {
+            var clone = (InterviewTreeSingleLinkedOptionQuestion) this.MemberwiseClone();
+            clone.Options = this.Options?.ToList();
+            return clone;
+        }
     }
 
     public class InterviewTreeMultiLinkedOptionQuestion : InterviewTreeLinkedQuestion
@@ -610,6 +652,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return false;
         }
+
+        public InterviewTreeMultiLinkedOptionQuestion Clone()
+        {
+            var clone = (InterviewTreeMultiLinkedOptionQuestion)this.MemberwiseClone();
+            clone.answer = this.answer?.Select(a => (decimal[])a.Clone()).ToArray();
+            clone.Options = this.Options.ToList();
+            return clone;
+        }
     }
 
     public abstract class InterviewTreeLinkedQuestion
@@ -627,7 +677,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Options = linkedOptions?.ToList() ?? new List<RosterVector>();
         }
 
-        public List<RosterVector> Options { get; private set; }
+        public List<RosterVector> Options { get; protected set; }
 
         public void SetOptions(IEnumerable<RosterVector> options)
         {
@@ -637,7 +687,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeCascadingQuestion
     {
-        private readonly InterviewTreeQuestion question;
+        private InterviewTreeQuestion question;
         private readonly Guid cascadingParentQuestionId;
 
         public InterviewTreeCascadingQuestion(InterviewTreeQuestion question, Guid cascadingParentQuestionId)
@@ -654,6 +704,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public Guid CascadingParentQuestionId => this.cascadingParentQuestionId;
+
+        public InterviewTreeCascadingQuestion Clone(InterviewTreeQuestion question)
+        {
+            var clone = (InterviewTreeCascadingQuestion)this.MemberwiseClone();
+            clone.question = question;
+            return clone;
+        }
     }
 
 }

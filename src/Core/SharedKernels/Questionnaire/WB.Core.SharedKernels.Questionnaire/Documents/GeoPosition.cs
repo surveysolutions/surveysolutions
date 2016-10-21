@@ -87,5 +87,10 @@ namespace Main.Core.Entities.SubEntities
                                                                         x?.Timestamp == y?.Timestamp;
 
         public static bool operator !=(GeoPosition x, GeoPosition y) => !(x == y);
+
+        public GeoPosition Clone()
+        {
+            return new GeoPosition(Latitude, Longitude, Accuracy, Altitude, Timestamp);
+        }
     }
 }
