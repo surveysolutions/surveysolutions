@@ -1159,17 +1159,19 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
             params IInterviewTreeNode[] children)
         {
-            var interviewTreeSubSection = new InterviewTreeSubSection(groupIdentity, children, Enumerable.Empty<QuestionnaireItemReference>());
-            if (isDisabled) interviewTreeSubSection.Disable();
-            return interviewTreeSubSection;
+            var subSection = new InterviewTreeSubSection(groupIdentity, Enumerable.Empty<QuestionnaireItemReference>());
+            subSection.AddChildren(children);
+            if (isDisabled) subSection.Disable();
+            return subSection;
         }
 
         public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
         {
-            var interviewTreeSection = new InterviewTreeSection(sectionIdentity, children, Enumerable.Empty<QuestionnaireItemReference>());
+            var section = new InterviewTreeSection(sectionIdentity, Enumerable.Empty<QuestionnaireItemReference>());
+            section.AddChildren(children);
             if (isDisabled)
-                interviewTreeSection.Disable();
-            return interviewTreeSection;
+                section.Disable();
+            return section;
         }
 
         public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",

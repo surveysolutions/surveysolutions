@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         private readonly IQuestionnaire questionnaire;
 
+        private Dictionary<Identity, IInterviewTreeNode> nodesCache = new Dictionary<Identity, IInterviewTreeNode>();
+
         public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, IEnumerable<InterviewTreeSection> sections)
         {
             this.InterviewId = interviewId.FormatGuid();
@@ -22,58 +24,47 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 ((IInternalInterviewTreeNode)section).SetTree(this);
             }
+
+            WarmUpCache();
         }
 
         public string InterviewId { get; }
         public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
         
-        public InterviewTreeQuestion GetQuestion(Identity questionIdentity)
-            => this
-                .GetNodes<InterviewTreeQuestion>()
-                .SingleOrDefault(node => node.Identity == questionIdentity);
+        public InterviewTreeQuestion GetQuestion(Identity identity)
+            => this.GetNodeByIdentity(identity) as InterviewTreeQuestion;
 
+        internal InterviewTreeGroup GetGroup(Identity identity)
+            => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
 
-        internal InterviewTreeGroup GetGroup(Identity identity) 
-            => this
-            .GetNodes<InterviewTreeGroup>()
-            .SingleOrDefault(node => node.Identity == identity);
-
-        internal InterviewTreeStaticText GetStaticText(Identity identity) 
-            => this
-            .GetNodes<InterviewTreeStaticText>()
-            .Single(node => node.Identity == identity);
+        internal InterviewTreeStaticText GetStaticText(Identity identity)
+            => this.GetNodeByIdentity(identity) as InterviewTreeStaticText;
 
         public InterviewTreeVariable GetVariable(Identity identity)
-            => this
-            .GetNodes<InterviewTreeVariable>()
-            .Single(node => node.Identity == identity);
+            => this.GetNodeByIdentity(identity) as InterviewTreeVariable;
 
-        public IReadOnlyCollection<InterviewTreeQuestion> FindQuestions(Guid questionId)
-            => this
-                .GetNodes<InterviewTreeQuestion>()
-                .Where(node => node.Identity.Id == questionId)
-                .ToReadOnlyCollection();
+        public IEnumerable<InterviewTreeQuestion> FindQuestions(Guid questionId)
+            => this.FindEntity(questionId).OfType<InterviewTreeQuestion>();
 
-        public IReadOnlyCollection<InterviewTreeQuestion> FindQuestions()
-            => this
-                .GetNodes<InterviewTreeQuestion>()
-                .ToReadOnlyCollection();
+        public IEnumerable<InterviewTreeQuestion> FindQuestions()
+            => this.nodesCache.Values.OfType<InterviewTreeQuestion>();
 
-        public IReadOnlyCollection<InterviewTreeRoster> FindRosters()
-            => this
-                .GetNodes<InterviewTreeRoster>()
-                .ToReadOnlyCollection();
+        public IEnumerable<InterviewTreeRoster> FindRosters()
+            => this.nodesCache.Values.OfType<InterviewTreeRoster>();
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
         {
-            return this.GetNodes().Where(x => x.Identity.Id == nodeId);
+            return this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value);
         }
 
-        private IEnumerable<TNode> GetNodes<TNode>() => this.GetNodes().OfType<TNode>();
+        private IInterviewTreeNode GetNodeByIdentity(Identity identity)
+        {
+            // identity should not be null here, looks suspicious
+            if (identity == null) return null;
+            return this.nodesCache.GetOrNull(identity);
+        }
+       
 
-        private IEnumerable<IInterviewTreeNode> GetNodes()
-            => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(node => node.Children);
-     
         public void ActualizeTree()
         {
             var itemsQueue = new Queue<IInterviewTreeNode>(Sections);
@@ -95,14 +86,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void RemoveNode(Identity identity)
         {
-            foreach (var node in this.GetNodes().Where(x => x.Identity.Equals(identity)))
-                ((InterviewTreeGroup)node.Parent)?.RemoveChild(node.Identity);
+            // should not be null here, looks suspicious
+            var parentGroup = this.GetNodeByIdentity(identity)?.Parent as InterviewTreeGroup;
+            parentGroup?.RemoveChild(identity);
         }
 
         public IReadOnlyCollection<InterviewTreeNodeDiff> Compare(InterviewTree changedTree)
         {
-            var sourceNodes = this.GetNodes().ToList();
-            var changedNodes = changedTree.GetNodes().ToList();
+            var sourceNodes = this.nodesCache.Values;
+            var changedNodes = changedTree.nodesCache.Values;
 
             var leftOuterJoin = from source in sourceNodes
                                 join changed in changedNodes
@@ -180,6 +172,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return interviewTreeSection;
             }).ToReadOnlyCollection();
 
+            clonedInterviewTree.WarmUpCache();
             return clonedInterviewTree;
         }
 
@@ -244,7 +237,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static InterviewTreeSection CreateSection(IQuestionnaire questionnaire, Identity sectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(sectionIdentity.Id);
-            return new InterviewTreeSection(sectionIdentity, Enumerable.Empty<IInterviewTreeNode>(), childrenReferences);
+            return new InterviewTreeSection(sectionIdentity, childrenReferences);
         }
 
         public static InterviewTreeStaticText CreateStaticText(Identity staticTextIdentity)
@@ -286,6 +279,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             throw new ArgumentException("Unknown roster type");
+        }
+
+
+        private void WarmUpCache()
+        {
+            this.nodesCache = new Dictionary<Identity, IInterviewTreeNode>();
+            foreach (var node in this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(node => node.Children))
+            {
+                nodesCache[node.Identity] = node;
+            }
+        }
+        
+        public void RemoveFromCache(Identity identity)
+        {
+            var nodesToRemove =
+                 this.nodesCache[identity].TreeToEnumerable<IInterviewTreeNode>(node => node.Children)
+                    .Select(x => x.Identity)
+                    .Union(new[] {identity});
+
+            foreach (var nodeToRemove in nodesToRemove)
+            {
+                this.nodesCache.Remove(nodeToRemove);
+            }
+        }
+
+        public void AddToCache(IInterviewTreeNode node)
+        {
+            nodesCache[node.Identity] = node;
         }
     }
 
