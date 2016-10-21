@@ -29,13 +29,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
 
         Because of = () => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        It should_throw_exception_with_message_containting__title__contains__self__ = () =>
-            new[] { "text", "contains", "self" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
+        It should_not_throw_QuestionnaireException = () =>
+            exception.ShouldBeNull();
         
         private static Questionnaire questionnaire;
         private static Exception exception;

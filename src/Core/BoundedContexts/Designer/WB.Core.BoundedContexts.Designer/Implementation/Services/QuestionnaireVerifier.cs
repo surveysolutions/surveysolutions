@@ -1778,7 +1778,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             bool isTitle = validationConditionIndex == null;
             var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
 
-            if (traslatedEntityWithSubstitution.Entity is IQuestion && isTitle && substitutionReference == ((IQuestion)traslatedEntityWithSubstitution.Entity).StataExportCaption)
+            var question = traslatedEntityWithSubstitution.Entity as IQuestion;
+            if (question != null && 
+                isTitle && 
+                substitutionReference == question.StataExportCaption)
             {
                 return QuestionnaireVerificationMessage.Error("WB0016",
                     VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,

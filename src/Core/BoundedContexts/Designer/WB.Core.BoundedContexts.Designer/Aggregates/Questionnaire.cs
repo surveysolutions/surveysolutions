@@ -761,7 +761,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
             this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
-            
+
+            if (this.QuestionnaireDocument.Children.Count == 1 &&
+                this.QuestionnaireDocument.Children[0].PublicKey == groupId)
+            {
+                throw new QuestionnaireException(DomainExceptionType.Undefined, "Last existing section can not be removed from questionnaire");
+            }
+
             var group = this.GetGroupById(groupId);
 
             this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
@@ -809,7 +815,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
                 {
-                    throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}", MaxGroupDepth));
+                    throw new QuestionnaireException($"Sub-section or roster depth cannot be higher than {MaxGroupDepth}");
                 }
                 
             }
@@ -2021,7 +2027,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.GroupTitleRequired,
-                    "The titles of sections and sub-sections can not be empty or contains whitespace only");
+                    "The titles of sections and sub-sections can not be empty or contain whitespace only");
             }
 
             if (title.Length > MaxTitleLength)
@@ -2130,7 +2136,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (startsWithDigitOrUnderscore)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't starts with digit or underscore");
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't start with digit or underscore");
             }
 
             bool endsWithUnderscore = stataCaption[stataCaption.Length-1] == '_';
@@ -2595,17 +2601,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (substitutionReferences.Length == 0)
                 return;
 
-            if (substitutionReferences.Contains(variableName))
-            {
-                throw new QuestionnaireException(DomainExceptionType.TextContainsSubstitutionReferenceToSelf,
-                    "Text contains illegal substitution references to self");
-            }
-
             List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope;
 
             this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
 
-            this.ValidateSubstitutionReferences(entityId, parentGroup, substitutionReferences,
+            this.ValidateSubstitutionReferences(entityId, variableName, parentGroup, substitutionReferences,
                 out unknownReferences,
                 out questionsIncorrectTypeOfReferenced,
                 out questionsIllegalPropagationScope,
@@ -3015,7 +3015,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             title = title?.Trim();
         }
 
-        private void ValidateSubstitutionReferences(Guid entityId, IGroup parentGroup, string[] substitutionReferences,
+        private void ValidateSubstitutionReferences(Guid entityId, string variableName, IGroup parentGroup, string[] substitutionReferences,
             out List<string> unknownReferences, 
             out List<string> questionsIncorrectTypeOfReferenced,
             out List<string> questionsIllegalPropagationScope,
@@ -3056,8 +3056,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 bool isQuestionReference = questions.ContainsKey(substitutionReference);
                 bool isVariableReference = variables.ContainsKey(substitutionReference);
+                bool isSelfReference = string.Compare(substitutionReference, variableName, StringComparison.OrdinalIgnoreCase) == 0;
 
-                if (!isQuestionReference && !isVariableReference)
+                if (!isQuestionReference && !isVariableReference && !isSelfReference)
                 {
                     unknownReferences.Add(substitutionReference);
                 }
