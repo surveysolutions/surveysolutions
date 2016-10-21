@@ -15,11 +15,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Guid? rosterSizeQuestion = null,
             Identity rosterTitleQuestionIdentity = null,
             IEnumerable<QuestionnaireItemReference> childrenReferences = null)
-            : base(identity, children, childrenReferences)
+            : base(identity, childrenReferences)
         {
             this.RosterTitle = rosterTitle;
             this.SortIndex = sortIndex;
-
+            this.AddChildren(children);
             switch (rosterType)
             {
                 case RosterType.Fixed:

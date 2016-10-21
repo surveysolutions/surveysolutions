@@ -31,8 +31,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewTreeSection BuildInterviewTreeSection(Identity sectionIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
         {
-            var children = BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, state).ToList();
-            bool isDisabled = state?.IsGroupDisabled(sectionIdentity) ?? false;
             var section = InterviewTree.CreateSection(questionnaire, sectionIdentity);
 
             section.AddChildren(this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState).ToList());
@@ -45,11 +43,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
         {
-            List<IInterviewTreeNode> children = BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, state).ToList();
-
             var subSection = InterviewTree.CreateSubSection(questionnaire, groupIdentity);
 
-            subSection.AddChildren(children);
+            subSection.AddChildren(this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, state).ToList());
 
             if (state?.IsGroupDisabled(groupIdentity) ?? false)
                 subSection.Disable();
@@ -160,48 +156,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 question.MarkAsInvalid(state.InvalidAnsweredQuestions[childQuestionIdentity]);
 
             return question;
-        }
-
-        [Obsolete]
-        private static InterviewTreeQuestion BuildInterviewTreeQuestion(Identity questionIdentity, object answer, bool isQuestionDisabled, IReadOnlyCollection<RosterVector> linkedOptions, IQuestionnaire questionnaire)
-        {
-            QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
-            bool isDisabled = isQuestionDisabled;
-            string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
-            string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
-            bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
-            bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionIdentity.Id);
-            bool isLinkedQuestion = questionnaire.IsQuestionLinked(questionIdentity.Id) || questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
-            var linkedSourceEntityId = isLinkedQuestion ?
-                (questionnaire.IsQuestionLinked(questionIdentity.Id)
-                  ? questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id)
-                  : questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id))
-                  : (Guid?)null;
-
-            Guid? commonParentRosterIdForLinkedQuestion = isLinkedQuestion ? questionnaire.GetCommontParentForLinkedQuestionAndItSource(questionIdentity.Id) : null;
-            Identity commonParentIdentity = null;
-            if (isLinkedQuestion && commonParentRosterIdForLinkedQuestion.HasValue)
-            {
-                var level = questionnaire.GetRosterLevelForEntity(commonParentRosterIdForLinkedQuestion.Value);
-                var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
-                commonParentIdentity = new Identity(commonParentRosterIdForLinkedQuestion.Value, commonParentRosterVector);
-            }
-
-            Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
-
-            return new InterviewTreeQuestion(
-                questionIdentity,
-                questionType: questionType,
-                isDisabled: isDisabled,
-                title: title,
-                variableName: variableName,
-                answer: answer,
-                linkedOptions: linkedOptions,
-                cascadingParentQuestionId: cascadingParentQuestionId,
-                isYesNo: isYesNoQuestion,
-                isDecimal: isDecimalQuestion,
-                linkedSourceId: linkedSourceEntityId,
-                commonParentRosterIdForLinkedQuestion: commonParentIdentity);
         }
 
         private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)

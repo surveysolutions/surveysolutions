@@ -8,14 +8,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public abstract class InterviewTreeGroup : IInterviewTreeNode, IInternalInterviewTreeNode
     {
         private bool isDisabled;
-        private List<IInterviewTreeNode> children;
+        private List<IInterviewTreeNode> children = new List<IInterviewTreeNode>();
 
-        protected InterviewTreeGroup(Identity identity, IEnumerable<IInterviewTreeNode> children, IEnumerable<QuestionnaireItemReference> childrenReferences)
+        protected InterviewTreeGroup(Identity identity, IEnumerable<QuestionnaireItemReference> childrenReferences)
         {
             this.childEntitiesReferences = childrenReferences.ToReadOnlyCollection();
 
             this.Identity = identity;
-            this.children = children.ToList();
             this.isDisabled = false;
 
             foreach (var child in this.Children)
@@ -101,9 +100,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             internalTreeNode.SetTree(this.Tree);
             internalTreeNode.SetParent(this);
             this.children.Add(child);
+
+            Tree?.AddToCache(child);
         }
 
-        public void AddChildren(List<IInterviewTreeNode> nodes)
+        public void AddChildren(IEnumerable<IInterviewTreeNode> nodes)
         {
             nodes.ForEach(this.AddChild);
         }
@@ -112,12 +113,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             var nodesToRemove = this.children.Where(x => x.Identity.Equals(identity)).ToArray();
             nodesToRemove.ForEach(nodeToRemove => this.children.Remove(nodeToRemove));
-        }
 
-        public void RemoveChildren(Identity[] identities)
-        {
-            foreach (var child in this.children.Where(x => identities.Contains(x.Identity)))
-                this.children.Remove(child);
+            Tree?.RemoveFromCache(identity);
         }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
@@ -158,12 +155,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
         public InterviewTreeSubSection(Identity identity, IEnumerable<QuestionnaireItemReference> childrenReferences) 
-            : this (identity, Enumerable.Empty<IInterviewTreeNode>(), childrenReferences)
-        {
-        }
-
-        [Obsolete]
-        public InterviewTreeSubSection(Identity identity, IEnumerable<IInterviewTreeNode> children, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, children, childrenReferences)
+            : base(identity, childrenReferences)
         {
         }
 
@@ -172,7 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeSection : InterviewTreeGroup
     {
-        public InterviewTreeSection(Identity identity, IEnumerable<IInterviewTreeNode> children, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, children, childrenReferences)
+        public InterviewTreeSection(Identity identity, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, childrenReferences)
         {
         }
 
