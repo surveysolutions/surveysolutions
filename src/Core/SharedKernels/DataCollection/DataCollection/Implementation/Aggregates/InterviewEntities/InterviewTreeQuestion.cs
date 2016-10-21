@@ -153,6 +153,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return false;
         }
 
+        public void SetAnswer(AbstractAnswer answer)
+        {
+            if (answer == null)
+            {
+                this.RemoveAnswer();
+            }
+            else
+            {
+                this.AsText?.SetAnswer(((TextAnswer)answer).Value);
+                this.AsInteger?.SetAnswer(((NumericIntegerAnswer)answer).Value);
+                this.AsDouble?.SetAnswer(((NumericRealAnswer)answer).Value);
+                this.AsDateTime?.SetAnswer(((DateTimeAnswer)answer).Value);
+                this.AsMultimedia?.SetAnswer(((MultimediaAnswer)answer).FileName);
+                this.AsQRBarcode?.SetAnswer(((QRBarcodeAnswer)answer).DecodedText);
+                this.AsGps?.SetAnswer(((GpsAnswer)answer).Value);
+                this.AsSingleOption?.SetAnswer(((CategoricalFixedSingleOptionAnswer)answer).SelectedValue);
+                this.AsSingleLinkedOption?.SetAnswer(((CategoricalLinkedSingleOptionAnswer)answer).SelectedValue);
+                this.AsMultiOption?.SetAnswer(((CategoricalFixedMultiOptionAnswer)answer).CheckedValues);
+                this.AsMultiLinkedOption?.SetAnswer(((CategoricalLinkedMultiOptionAnswer)answer).CheckedValues);
+                this.AsYesNo?.SetAnswer(((YesNoAnswer)answer).SelectedOptions);
+                this.AsTextList?.SetAnswer(((TextListAnswer)answer).ToTupleArray());
+            }
+        }
+
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString() => $"Question ({this.Identity}) '{this.Title}'";
@@ -264,19 +288,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void RemoveAnswer()
         {
-            if (this.IsText) this.AsText.RemoveAnswer();
-            if (this.IsInteger) this.AsInteger.RemoveAnswer();
-            if (this.IsDouble) this.AsDouble.RemoveAnswer();
-            if (this.IsDateTime) this.AsDateTime.RemoveAnswer();
-            if (this.IsMultimedia) this.AsMultimedia.RemoveAnswer();
-            if (this.IsQRBarcode) this.AsQRBarcode.RemoveAnswer();
-            if (this.IsGps) this.AsGps.RemoveAnswer();
-            if (this.IsSingleOption) this.AsSingleOption.RemoveAnswer();
-            if (this.IsSingleLinkedOption) this.AsSingleLinkedOption.RemoveAnswer();
-            if (this.IsMultiOption)  this.AsMultiOption.RemoveAnswer();
-            if (this.IsMultiLinkedOption) this.AsMultiLinkedOption.RemoveAnswer();
-            if (this.IsYesNo) this.AsYesNo.RemoveAnswer();
-            if (this.IsTextList)  this.AsTextList.RemoveAnswer();
+            this.AsText?.RemoveAnswer();
+            this.AsInteger?.RemoveAnswer();
+            this.AsDouble?.RemoveAnswer();
+            this.AsDateTime?.RemoveAnswer();
+            this.AsMultimedia?.RemoveAnswer();
+            this.AsQRBarcode?.RemoveAnswer();
+            this.AsGps?.RemoveAnswer();
+            this.AsSingleOption?.RemoveAnswer();
+            this.AsSingleLinkedOption?.RemoveAnswer();
+            this.AsMultiOption?.RemoveAnswer();
+            this.AsMultiLinkedOption?.RemoveAnswer();
+            this.AsYesNo?.RemoveAnswer();
+            this.AsTextList?.RemoveAnswer();
         }
 
         public bool IsOnTheSameOrDeeperLevel(Identity questionIdentity)
@@ -463,7 +487,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool IsAnswered => this.answer != null;
         public AnsweredYesNoOption[] GetAnswer() => this.answer;
-        public void SetAnswer(AnsweredYesNoOption[] answer) => this.answer = answer;
+        public void SetAnswer(IEnumerable<AnsweredYesNoOption> answer) => this.answer = answer.ToArray();
 
         public void SetAnswer(YesNoAnswersOnly yesNoAnswersOnly)
         {
@@ -585,7 +609,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return false;
         }
 
-        internal void SetAnswer(int[] intValues)
+        internal void SetAnswer(IEnumerable<int> intValues)
         {
             SetAnswer((intValues ?? new int[0]).Select(Convert.ToDecimal).ToArray());
         }
@@ -635,7 +659,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsAnswered => this.answer != null;
         public decimal[][] GetAnswer() => this.answer;
         public void SetAnswer(decimal[][] answer) => this.answer = answer;
-        public void SetAnswer(RosterVector[] answer)
+        public void SetAnswer(IEnumerable<RosterVector> answer)
         {
             this.answer = answer.Select(x => x.ToArray()).ToArray();
         }
