@@ -64,9 +64,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.RosterTitle = rosterTitle;
         }
 
-        public void UpdateRosterTitle(Func<decimal, string> getCategoricalAnswerOptionText = null)
+        public void UpdateRosterTitle(Func<Guid, decimal, string> getCategoricalAnswerOptionText = null)
         {
-            if (!this.IsList && !this.IsNumeric) return;
+            if (!this.IsList && !this.IsNumeric && !this.IsMulti) return;
 
             if (this.IsList)
             {
@@ -75,12 +75,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.SetRosterTitle(rosterSizeQuestion.AsTextList.GetTitleByItemCode(this.Identity.RosterVector.Last()));
             }
 
+            if (this.IsMulti)
+            {
+                this.SetRosterTitle(getCategoricalAnswerOptionText?.Invoke(this.AsMulti.RosterSizeQuestion, this.Identity.RosterVector.Last()));
+            }
+
             if (this.IsNumeric)
             {
                 var titleQuestion = this.Tree.GetQuestion(this.AsNumeric.RosterTitleQuestionIdentity);
                 if (titleQuestion == null) return;
                 var rosterTitle = titleQuestion.IsAnswered()
-                    ? titleQuestion.GetAnswerAsString(getCategoricalAnswerOptionText)
+                    ? titleQuestion.GetAnswerAsString((answerOptionValue) => getCategoricalAnswerOptionText?.Invoke(titleQuestion.Identity.Id, answerOptionValue))
                     : null;
                 this.SetRosterTitle(rosterTitle);
             }
