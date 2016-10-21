@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     public abstract class AbstractAnswer { }
 
-    public class TextAnswer
+    public class TextAnswer : AbstractAnswer
     {
         public TextAnswer(string value)
         {
@@ -20,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string Value { get; }
     }
 
-    public class NumericIntegerAnswer
+    public class NumericIntegerAnswer : AbstractAnswer
     {
         public NumericIntegerAnswer(int value)
         {
@@ -30,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public int Value { get; }
     }
 
-    public class NumericRealAnswer
+    public class NumericRealAnswer : AbstractAnswer
     {
         public NumericRealAnswer(double value)
         {
@@ -40,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public double Value { get; }
     }
 
-    public class DateTimeAnswer
+    public class DateTimeAnswer : AbstractAnswer
     {
         public DateTimeAnswer(DateTime value)
         {
@@ -50,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public DateTime Value { get; }
     }
 
-    public class CategoricalFixedSingleOptionAnswer
+    public class CategoricalFixedSingleOptionAnswer : AbstractAnswer
     {
         public CategoricalFixedSingleOptionAnswer(int selectedValue)
         {
@@ -60,17 +62,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public int SelectedValue { get; }
     }
 
-    public class CategoricalFixedMultiOptionAnswer
+    public class CategoricalFixedMultiOptionAnswer : AbstractAnswer
     {
-        public CategoricalFixedMultiOptionAnswer(IEnumerable<decimal> checkedValues)
+        public CategoricalFixedMultiOptionAnswer(IEnumerable<int> checkedValues)
         {
             this.CheckedValues = checkedValues.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<decimal> CheckedValues { get; }
+        public IReadOnlyCollection<int> CheckedValues { get; }
     }
 
-    public class CategoricalLinkedSingleOptionAnswer
+    public class CategoricalLinkedSingleOptionAnswer : AbstractAnswer
     {
         public CategoricalLinkedSingleOptionAnswer(RosterVector selectedValue)
         {
@@ -80,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public RosterVector SelectedValue { get; }
     }
 
-    public class CategoricalLinkedMultiOptionAnswer
+    public class CategoricalLinkedMultiOptionAnswer : AbstractAnswer
     {
         public CategoricalLinkedMultiOptionAnswer(IEnumerable<RosterVector> checkedValues)
         {
@@ -90,7 +92,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IReadOnlyCollection<RosterVector> CheckedValues { get; }
     }
 
-    public class TextListAnswer
+    public class TextListAnswer : AbstractAnswer
     {
         public TextListAnswer(IEnumerable<TextListAnswerRow> rows)
         {
@@ -98,6 +100,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public IReadOnlyCollection<TextListAnswerRow> Rows { get; }
+
+        public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create(row.Code, row.Text)).ToArray();
     }
 
     public class TextListAnswerRow
@@ -112,7 +116,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string Text { get; }
     }
 
-    public class GpsAnswer
+    public class GpsAnswer : AbstractAnswer
     {
         public GpsAnswer(GeoPosition value)
         {
@@ -122,13 +126,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public GeoPosition Value { get; }
     }
 
-    public class QRBarcodeAnswer
+    public class QRBarcodeAnswer : AbstractAnswer
     {
-        public QRBarcodeAnswer(string text)
+        public QRBarcodeAnswer(string decodedText)
         {
-            this.Text = text;
+            this.DecodedText = decodedText;
         }
 
-        public string Text { get; }
+        public string DecodedText { get; }
+    }
+
+    public class MultimediaAnswer : AbstractAnswer
+    {
+        public MultimediaAnswer(string fileName)
+        {
+            this.FileName = fileName;
+        }
+
+        public string FileName { get; }
+    }
+
+    public class YesNoAnswer : AbstractAnswer
+    {
+        public YesNoAnswer(IEnumerable<AnsweredYesNoOption> selectedOptions)
+        {
+            this.SelectedOptions = selectedOptions.ToReadOnlyCollection();
+        }
+
+        public IReadOnlyCollection<AnsweredYesNoOption> SelectedOptions { get; }
     }
 }
