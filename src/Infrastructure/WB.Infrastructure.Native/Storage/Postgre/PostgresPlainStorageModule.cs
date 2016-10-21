@@ -83,6 +83,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             });
 
             cfg.AddDeserializedMapping(this.GetMappings(schemaName), "Plain");
+            cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
             return cfg.BuildSessionFactory();
         }
 
