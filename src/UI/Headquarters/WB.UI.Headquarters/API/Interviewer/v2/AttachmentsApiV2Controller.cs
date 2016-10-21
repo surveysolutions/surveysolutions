@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
