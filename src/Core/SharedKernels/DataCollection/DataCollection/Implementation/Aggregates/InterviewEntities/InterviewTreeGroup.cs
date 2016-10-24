@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public Identity Identity { get; }
+        public Identity Identity { get; private set; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
         public IReadOnlyCollection<IInterviewTreeNode> Children => this.children;
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.Children.Any(x => x.Identity.Equals(identity));
         }
 
-        public IInterviewTreeNode Clone()
+        public virtual IInterviewTreeNode Clone()
         {
             var clonedInterviewTreeGroup = (InterviewTreeGroup) this.MemberwiseClone();
             clonedInterviewTreeGroup.Tree = null;
