@@ -488,7 +488,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool IsAnswered => this.answer != null;
         public AnsweredYesNoOption[] GetAnswer() => this.answer;
-        public void SetAnswer(IEnumerable<AnsweredYesNoOption> answer) => this.answer = answer.ToArray();
+        public void SetAnswer(IEnumerable<AnsweredYesNoOption> answer) => this.answer = answer?.ToArray();
 
         public void SetAnswer(YesNoAnswersOnly yesNoAnswersOnly)
         {
@@ -642,7 +642,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeSingleLinkedOptionQuestion Clone()
         {
             var clone = (InterviewTreeSingleLinkedOptionQuestion) this.MemberwiseClone();
-            clone.SetAnswer(new RosterVector(this.answer));
+            if (this.IsAnswered) clone.SetAnswer(new RosterVector(this.answer));
             clone.SetOptions(this.Options);
             return clone;
         }
