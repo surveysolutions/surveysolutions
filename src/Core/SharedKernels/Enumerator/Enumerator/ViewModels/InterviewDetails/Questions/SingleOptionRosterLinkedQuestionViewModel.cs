@@ -23,7 +23,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionRosterLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswerRemoved>,
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<LinkedOptionsChanged>,
@@ -272,17 +271,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return string.IsNullOrEmpty(rosterPrefixes)
                 ? rosterTitle
                 : string.Join(": ", rosterPrefixes, rosterTitle);
-        }
-
-        public void Handle(AnswerRemoved @event)
-        {
-            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                foreach (var option in this.Options.Where(option => option.Selected))
-                {
-                    option.Selected = false;
-                }
-            }
         }
          
         public void Handle(AnswersRemoved @event)
