@@ -1160,7 +1160,7 @@ namespace WB.Tests.Unit.TestFactories
             params IInterviewTreeNode[] children)
         {
             var subSection = new InterviewTreeSubSection(groupIdentity, Enumerable.Empty<QuestionnaireItemReference>());
-            subSection.AddChildren(children);
+            subSection.AddChild(children);
             if (isDisabled) subSection.Disable();
             return subSection;
         }
@@ -1168,7 +1168,7 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
         {
             var section = new InterviewTreeSection(sectionIdentity, Enumerable.Empty<QuestionnaireItemReference>());
-            section.AddChildren(children);
+            section.AddChild(children);
             if (isDisabled)
                 section.Disable();
             return section;

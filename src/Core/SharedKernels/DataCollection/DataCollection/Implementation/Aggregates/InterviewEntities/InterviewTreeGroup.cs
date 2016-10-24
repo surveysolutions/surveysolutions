@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Tree?.AddToCache(child);
         }
 
-        public void AddChildren(IEnumerable<IInterviewTreeNode> nodes)
+        public void AddChild(IEnumerable<IInterviewTreeNode> nodes)
         {
             nodes.ForEach(this.AddChild);
         }
