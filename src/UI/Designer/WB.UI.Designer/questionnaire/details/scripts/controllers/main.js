@@ -115,7 +115,10 @@ angular.module('designerApp')
                         templateUrl: 'views/find-replace.html',
                         backdrop: false,
                         windowClass: "findReplaceModal",
-                        controller: 'findReplaceCtrl'
+                        controller: 'findReplaceCtrl',
+                        resolve: {
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false
+                        }
                     });
                     searchBoxOpened = true;
                     modalInstance.closed.then(function() {

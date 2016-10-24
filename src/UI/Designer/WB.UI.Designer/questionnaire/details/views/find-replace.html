@@ -63,7 +63,11 @@
     <div ng-switch on="step">
         <div ng-switch-when="search">
             <button type="button" class="btn btn-lg btn-primary" ng-disabled="searchForm.searchFor.length === 0" ng-click="findAll()">Find all</button>
-            <button type="button" class="btn btn-lg btn-primary" ng-disabled="foundReferences.length === 0" ng-click="confirmReplaceAll()">
+            <button type="button" 
+                    class="btn btn-lg btn-primary" 
+                    ng-if="!isReadOnlyForUser"
+                    ng-disabled="foundReferences.length === 0"
+                    ng-click="confirmReplaceAll()">
                 Replace all ({{foundReferences.length}})
             </button>
 

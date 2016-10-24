@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -61,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
+        [NoTransaction]
         public ActionResult LogOn(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;

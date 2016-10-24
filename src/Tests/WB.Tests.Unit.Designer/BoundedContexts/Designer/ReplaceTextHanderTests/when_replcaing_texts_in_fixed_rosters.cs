@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
     {
         private Establish context = () =>
         {
-            var responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+            responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 });
         };
 
-        Because of = () => questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith));
+        Because of = () => questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith, userId: responsibleId));
 
         It should_replace_fixed_roster_title = () =>
                 questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).FixedRosterTitles[1].Title.ShouldEqual($"two with {replaceWith}");
@@ -37,6 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static Questionnaire questionnaire;
 
         static readonly Guid rosterId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        private static Guid responsibleId;
         const string searchFor = "to_replace";
         const string replaceWith = "replaced";
     }
