@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
     {
         Establish context = () =>
         {
-            var responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+            responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 linkedFilterExpression: $"filter with {searchFor}");
         };
 
-        Because of = () => questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith));
+        Because of = () => questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith, userId: responsibleId));
 
         It should_replace_text_in_filter_expression = () =>
                 questionnaire.QuestionnaireDocument.Find<IQuestion>(filteredQuestionId).LinkedFilterExpression.ShouldEqual($"filter with {replaceWith}");
@@ -32,5 +32,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         const string replaceWith = "replaced";
         static readonly Guid chapterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         static readonly Guid filteredQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        static Guid responsibleId;
     }
 }

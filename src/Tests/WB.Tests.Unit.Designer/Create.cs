@@ -1045,9 +1045,14 @@ namespace WB.Tests.Unit.Designer
             public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
                 => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
 
-            public static ReplaceTextsCommand ReplaceTextsCommand(string searchFor, string replaceWith, bool matchWholeWord = false, bool matchCase = false, bool useRegex = false)
+            public static ReplaceTextsCommand ReplaceTextsCommand(string searchFor, 
+                string replaceWith, 
+                bool matchWholeWord = false, 
+                bool matchCase = false, 
+                bool useRegex = false,
+                Guid? userId = null)
             {
-                return new ReplaceTextsCommand(Guid.Empty, Guid.NewGuid(), searchFor.ToLower(), replaceWith, matchCase, matchWholeWord, useRegex);
+                return new ReplaceTextsCommand(Guid.Empty, userId ?? Guid.Empty, searchFor.ToLower(), replaceWith, matchCase, matchWholeWord, useRegex);
             }
             
             public static AddStaticText AddStaticText(Guid questionnaireId, Guid staticTextId, string text, Guid responsibleId, Guid parentId)
