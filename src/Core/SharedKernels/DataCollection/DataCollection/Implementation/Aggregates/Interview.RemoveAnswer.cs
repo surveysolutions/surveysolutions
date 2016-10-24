@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             RemoveAnswersForDependendCascadingQuestions(questionIdentity, changedInterviewTree, questionnaire, changedQuestionIdentities);
 
+            changedInterviewTree.ActualizeTree();
+
             this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
         }
 
