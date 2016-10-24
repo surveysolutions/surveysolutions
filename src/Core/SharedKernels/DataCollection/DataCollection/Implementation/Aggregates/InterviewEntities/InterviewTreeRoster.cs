@@ -43,11 +43,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string RosterTitle { get; set; }
         public int SortIndex { get; set; } = 0;
 
-        public InterviewTreeNumericRoster AsNumeric { get; }
-        public InterviewTreeListRoster AsList { get; }
-        public InterviewTreeYesNoRoster AsYesNo { get; }
-        public InterviewTreeMultiRoster AsMulti { get; }
-        public InterviewTreeFixedRoster AsFixed { get; }
+        public InterviewTreeNumericRoster AsNumeric { get; private set; }
+        public InterviewTreeListRoster AsList { get; private set; }
+        public InterviewTreeYesNoRoster AsYesNo { get; private set; }
+        public InterviewTreeMultiRoster AsMulti { get; private set; }
+        public InterviewTreeFixedRoster AsFixed { get; private set; }
 
         public bool IsNumeric => this.AsNumeric != null;
         public bool IsList => this.AsList != null;
@@ -90,6 +90,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.SetRosterTitle(rosterTitle);
             }
         }
+
+        public override IInterviewTreeNode Clone()
+        {
+            var clonedInterviewTreeRoster = (InterviewTreeRoster)base.Clone();
+            if (this.IsYesNo) clonedInterviewTreeRoster.AsYesNo = this.AsYesNo.Clone();
+            if (this.IsFixed) clonedInterviewTreeRoster.AsFixed = this.AsFixed.Clone();
+            if (this.IsList) clonedInterviewTreeRoster.AsList = this.AsList.Clone();
+            if (this.IsMulti) clonedInterviewTreeRoster.AsMulti = this.AsMulti.Clone();
+            if (this.IsNumeric) clonedInterviewTreeRoster.AsNumeric = this.AsNumeric.Clone();
+
+            return clonedInterviewTreeRoster;
+        }
     }
 
 
@@ -104,6 +116,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeFixedRoster
     {
+        public InterviewTreeFixedRoster Clone() => (InterviewTreeFixedRoster)this.MemberwiseClone();
     }
 
     public class InterviewTreeMultiRoster
@@ -114,6 +127,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.RosterSizeQuestion = rosterSizeQuestion;
         }
+        public InterviewTreeMultiRoster Clone() => (InterviewTreeMultiRoster)this.MemberwiseClone();
     }
 
     public class InterviewTreeYesNoRoster
@@ -124,6 +138,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.RosterSizeQuestion = rosterSizeQuestion;
         }
+
+        public InterviewTreeYesNoRoster Clone() => (InterviewTreeYesNoRoster)this.MemberwiseClone();
     }
 
     public class InterviewTreeNumericRoster
@@ -137,6 +153,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.RosterSizeQuestion = rosterSizeQuestion;
             this.RosterTitleQuestionIdentity = rosterTitleQuestionIdentity;
         }
+        public InterviewTreeNumericRoster Clone() => (InterviewTreeNumericRoster)this.MemberwiseClone();
     }
 
     public class InterviewTreeListRoster
@@ -147,5 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.RosterSizeQuestion = rosterSizeQuestion;
         }
+
+        public InterviewTreeListRoster Clone() => (InterviewTreeListRoster)this.MemberwiseClone();
     }
 }

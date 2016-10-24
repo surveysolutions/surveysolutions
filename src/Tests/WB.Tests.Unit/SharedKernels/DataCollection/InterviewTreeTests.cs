@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -563,7 +564,56 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.AsQRBarcode.GetAnswer(), question.AsQRBarcode.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsQRBarcode, question.AsQRBarcode), Is.False);
         }
- 
+
+        [Test]
+        public void When_Clone_tree_has_alot_of_nodes_Then_should_return_copy_of_source_tree_with_dif_references_for_all_tree()
+        {
+            //arrange
+            var sourceTree = CreateTreeForClone();
+
+            //act
+            var clonedTree = sourceTree.Clone();
+
+            //assert
+            Type[] ignoreTypes = new[] {typeof(Identity), typeof(RosterVector), typeof(string)};
+            var sourceInterviewTreeNodes = sourceTree.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(s => s.Children).ToList();
+            var clonedInterviewTreeNodes = clonedTree.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(s => s.Children).ToList();
+            foreach (var pair in Enumerable.Zip(sourceInterviewTreeNodes, clonedInterviewTreeNodes, (s, c) => new { SourceNode = s, ClonedNode = c }))
+            {
+                Assert.That(ReferenceEquals(pair.SourceNode, pair.ClonedNode), Is.False);
+
+                var nodeType = pair.SourceNode.GetType();
+
+                var properties = nodeType.GetProperties();
+                foreach (var property in properties)
+                {
+                    if (ignoreTypes.Contains(property.PropertyType))
+                        continue;
+
+                    var sourceValue = property.GetValue(pair.SourceNode);
+                    var clonedValue = property.GetValue(pair.ClonedNode);
+                    if (sourceValue == null && clonedValue == null)
+                        continue;
+
+                    Assert.That(ReferenceEquals(sourceValue, clonedValue), Is.False);
+                }
+
+                var fields = nodeType.GetFields();
+                foreach (var field in fields)
+                {
+                    if (ignoreTypes.Contains(field.FieldType))
+                        continue;
+
+                    var sourceValue = field.GetValue(pair.SourceNode);
+                    var clonedValue = field.GetValue(pair.ClonedNode);
+                    if (sourceValue == null && clonedValue == null)
+                        continue;
+
+                    Assert.That(ReferenceEquals(sourceValue, clonedValue), Is.False);
+                }
+            }
+        }
+
 
 
         private static InterviewTree CreateSimpleTree(Guid interviewId, Identity sectionIdentity, Identity questionIdentity)
@@ -590,7 +640,33 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                     Create.Entity.InterviewTreeSubSection(Create.Entity.Identity(Guid.Parse("88888888888888888888888888888888")), children: new IInterviewTreeNode[]
                     {
                         Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("99999999999999999999999999999999"))),
+                        Create.Entity.InterviewTreeVariable(Create.Entity.Identity(Guid.Parse("10000000000000000000000000000000"))),
+                        Create.Entity.InterviewTreeStaticText(Create.Entity.Identity(Guid.Parse("10000000000000000000111111111111"))),
                     }),
+                }),
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("20111111111111111111111111111111")), children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20222222222222222222222222222222")), questionType: QuestionType.Numeric),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20333333333333333333333333333333")), questionType: QuestionType.Text),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20444444444444444444444444444444")), questionType: QuestionType.DateTime),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20555555555555555555555555555555")), questionType: QuestionType.GpsCoordinates),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20666666666666666666666666666666")), questionType: QuestionType.Multimedia),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20777777777777777777777777777777")), questionType: QuestionType.MultyOption),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20888888888888888888888888888888")), questionType: QuestionType.MultyOption, linkedSourceId: Guid.NewGuid()),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20999999999999999999999999999999")), questionType: QuestionType.QRBarcode),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30111111111111111111111111111111")), questionType: QuestionType.TextList),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30222222222222222222222222222222")), questionType: QuestionType.SingleOption),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30333333333333333333333333333333")), questionType: QuestionType.SingleOption, linkedSourceId: Guid.NewGuid()),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30444444444444444444444444444444")), questionType: QuestionType.MultyOption, isYesNo: true),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30555555555555555555555555555555")), questionType: QuestionType.Numeric, isDecimal: true),
+                }),
+                Create.Entity.InterviewTreeSubSection(Create.Entity.Identity(Guid.Parse("40111111111111111111111111111111")), children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("40222222222222222222222222222222")), rosterType: RosterType.Fixed),
+                    Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("40333333333333333333333333333333")), rosterType: RosterType.List, rosterSizeQuestion: Guid.NewGuid()),
+                    Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("40444444444444444444444444444444")), rosterType: RosterType.Multi, rosterSizeQuestion: Guid.NewGuid()),
+                    Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("40555555555555555555555555555555")), rosterType: RosterType.Numeric, rosterSizeQuestion: Guid.NewGuid()),
+                    Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("40666666666666666666666666666666")), rosterType: RosterType.YesNo, rosterSizeQuestion: Guid.NewGuid()),
                 })
             });
             var sourceTree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
