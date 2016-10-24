@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
     {
         private Establish context = () =>
         {
-            var responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+            responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire.UpdateMacro(Create.Command.UpdateMacro(questionId, macroId, "macro_name", 
                 $"macro content {searchFor}", "desc", responsibleId));
 
-            command = Create.Command.ReplaceTextsCommand(searchFor, replaceWith, matchCase: true);
+            command = Create.Command.ReplaceTextsCommand(searchFor, replaceWith, matchCase: true, userId: responsibleId);
         };
 
         Because of = () => questionnaire.ReplaceTexts(command);
@@ -124,6 +124,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static ReplaceTextsCommand command;
+        private static Guid responsibleId;
         const string replaceWith = "replaced";
         const string searchFor = "to_replace";
     }
