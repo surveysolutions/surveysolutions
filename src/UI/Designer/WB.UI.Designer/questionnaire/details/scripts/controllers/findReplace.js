@@ -1,8 +1,9 @@
 ﻿angular.module('designerApp')
     .controller('findReplaceCtrl',
-        function($rootScope, $scope, $http, $state, commandService, utilityService) {
+        function ($rootScope, $scope, $http, $state, commandService, utilityService, isReadOnlyForUser) {
             var baseUrl = '../../api/findReplace';
 
+            $scope.isReadOnlyForUser = isReadOnlyForUser;
             $scope.searchForm = {
                 searchFor: '',
                 replaceWith: '',
