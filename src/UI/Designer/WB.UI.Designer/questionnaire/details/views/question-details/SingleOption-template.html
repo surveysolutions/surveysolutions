@@ -7,7 +7,7 @@
                     <div class="column-2">
                         <ng-form name="options_value_form">
                             <input type="number" min="-2147483648" max="2147483647"
-                                        name="option_value_{{$index}}"
+                                        name="option_value"
                                         ng-model="option.value"
                                         ng-pattern="/^([-+]?\d+)$/"
                                         ng-class="{'has-error': !options_value_form.option_value.$valid}" 
