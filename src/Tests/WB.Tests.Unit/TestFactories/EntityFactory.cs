@@ -1153,8 +1153,9 @@ namespace WB.Tests.Unit.TestFactories
         }
 
         public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
+            RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null,
             params IInterviewTreeNode[] children)
-            => new InterviewTreeRoster(rosterIdentity, children, childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
+            => new InterviewTreeRoster(rosterIdentity, children, rosterType: rosterType, rosterSizeQuestion: rosterSizeQuestion, childrenReferences : Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
 
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
             params IInterviewTreeNode[] children)
