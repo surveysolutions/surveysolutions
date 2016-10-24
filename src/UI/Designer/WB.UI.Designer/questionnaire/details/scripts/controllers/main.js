@@ -445,12 +445,18 @@ angular.module('designerApp')
 
                     var variablesCompletor =
                     {
-                        getCompletions: function (editor, session, pos, prefix, callback) {
+                        getCompletions: function(editor, session, pos, prefix, callback) {
                             var i = 0;
-                            callback(null, $scope.getVariablesNames().sort().reverse().map(function (variable) {
+                            callback(null,
+                                $scope.getVariablesNames()
+                                .sort()
+                                .reverse()
+                                .map(function(variable) {
                                     return { name: variable, value: variable, score: i++, meta: "variable" }
                                 }));
-                        }
+                        },
+
+                        identifierRegexps : [/[@a-zA-Z_0-9\$\-\u00A2-\uFFFF]/]
                     };
 
                     var lang_tool = ace.require("ace/ext/language_tools");
