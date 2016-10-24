@@ -360,6 +360,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void ReplaceTexts(ReplaceTextsCommand command)
         {
+            ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
             var allEntries = this.innerDocument.Children.TreeToEnumerable(x => x.Children);
             this.affectedByReplaceEntries = 0;
             var searchRegex = BuildSearchRegex(command.SearchFor, command.MatchCase, command.MatchWholeWord, command.UseRegex);

@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
     {
         Establish context = () =>
         {
-            var responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+            responsibleId = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
             questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
                 groupId: chapterId);
 
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                     Create.ValidationCondition($"q validation exp {searchFor}", message: $"q validation msg {searchFor}")
                 });
 
-            command = Create.Command.ReplaceTextsCommand(searchFor.ToLower(), replaceWith);
+            command = Create.Command.ReplaceTextsCommand(searchFor.ToLower(), replaceWith, userId: responsibleId);
         };
 
         Because of = () => questionnaire.ReplaceTexts(command);
@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         static readonly Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         static ReplaceTextsCommand command;
+        private static Guid responsibleId;
         const string replaceWith = "replaCed";
         const string searchFor = "%To Replace%";
     }
