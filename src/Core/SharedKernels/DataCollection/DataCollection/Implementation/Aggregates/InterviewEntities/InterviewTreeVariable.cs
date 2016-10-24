@@ -21,5 +21,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override string ToString() => $"Variable ({this.Identity})";
 
         public void SetValue(object value) => this.Value = value;
+        public override IInterviewTreeNode Clone()
+        {
+            return (IInterviewTreeNode)this.MemberwiseClone();
+        }
     }
 }
