@@ -171,8 +171,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             var clonedInterviewTree = (InterviewTree)this.MemberwiseClone();
             clonedInterviewTree.Sections = new List<InterviewTreeSection>();
-            clonedInterviewTree.SetSections(this.Sections.Select(s => (InterviewTreeSection)s.Clone()));
-            clonedInterviewTree.WarmUpCache();
+            var sections = this.Sections.Select(s => (InterviewTreeSection)s.Clone()).ToList();
+            clonedInterviewTree.SetSections(sections);
             return clonedInterviewTree;
         }
 
@@ -353,10 +353,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Disable() => this.isDisabled = true;
         public void Enable() => this.isDisabled = false;
 
-        public virtual IInterviewTreeNode Clone()
-        {
-            return (IInterviewTreeNode) this.MemberwiseClone();
-        }
+        public abstract IInterviewTreeNode Clone();
     }
 
     public enum QuestionnaireReferenceType
