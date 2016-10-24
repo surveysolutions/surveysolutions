@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>,
         ILitePublishedEventHandler<SingleOptionQuestionAnswered>,
         ILitePublishedEventHandler<TextListQuestionAnswered>,
-        ILitePublishedEventHandler<AnswerRemoved>,
+        ILitePublishedEventHandler<AnswersRemoved>,
         ILitePublishedEventHandler<YesNoQuestionAnswered>,
         IDisposable
     {
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual void Init(string interviewId) 
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
 
             if (this.interviewId != null)
             {
@@ -56,8 +56,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual void Init(string interviewId, params Identity[] questions)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (questions == null) throw new ArgumentNullException("questions");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (questions == null) throw new ArgumentNullException(nameof(questions));
 
             if (this.interviewId != null)
             {
@@ -71,11 +71,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void RaiseEventIfNeeded(IPublishedEvent<QuestionActiveEvent> @event)
         {
-            var shouldNotifyAboutInterviewAnswer = this.reactOnAllInterviewEvents && @event.EventSourceId.FormatGuid() == this.interviewId;
-            var shouldNotifyAboutListOfAnswers = this.questions.Length > 0 && 
-                                                 this.questions.Any(x => @event.Payload.QuestionId == x.Id && @event.Payload.RosterVector.Identical(x.RosterVector));
-
-            var shouldRaiseEvent = shouldNotifyAboutInterviewAnswer || shouldNotifyAboutListOfAnswers;
+            var shouldRaiseEvent = this.ShouldRaiseEvent(@event.EventSourceId.FormatGuid(),
+                new Identity(@event.Payload.QuestionId, @event.Payload.RosterVector));
 
             if (shouldRaiseEvent)
             {
@@ -83,85 +80,54 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        public void Handle(IPublishedEvent<TextQuestionAnswered> @event)
+        private bool ShouldRaiseEvent(string interviewId, Identity questionIdentity)
         {
-            this.RaiseEventIfNeeded(@event);
+            var shouldNotifyAboutInterviewAnswer = this.reactOnAllInterviewEvents && interviewId == this.interviewId;
+            var shouldNotifyAboutListOfAnswers = this.questions.Length > 0 &&
+                                                 this.questions.Any(x => x.Equals(questionIdentity));
+
+            return shouldNotifyAboutInterviewAnswer || shouldNotifyAboutListOfAnswers;
         }
 
-        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> @event)
+        public void Handle(IPublishedEvent<TextQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<DateTimeQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<PictureQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<TextListQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<YesNoQuestionAnswered> @event) => this.RaiseEventIfNeeded(@event);
+
+        public void Handle(IPublishedEvent<AnswersRemoved> @event)
         {
-            this.RaiseEventIfNeeded(@event);
+            string interviewId = @event.EventSourceId.FormatGuid();
+
+            if (@event.Payload.Questions.Any(x =>
+                this.ShouldRaiseEvent(interviewId, new Identity(x.Id, x.RosterVector))))
+            {
+                this.OnSomeQuestionAnswered();
+            }
         }
 
-        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
+        protected virtual void OnSomeQuestionAnswered() => this.QuestionAnswered?.Invoke(this, EventArgs.Empty);
 
-        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<NumericRealQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<PictureQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<TextListQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Handle(IPublishedEvent<YesNoQuestionAnswered> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        protected virtual void OnSomeQuestionAnswered()
-        {
-            var handler = this.QuestionAnswered;
-            handler?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void Handle(IPublishedEvent<AnswerRemoved> @event)
-        {
-            this.RaiseEventIfNeeded(@event);
-        }
-
-        public void Dispose()
-        {
-            this.registry.Unsubscribe(this);
-        }
+        public void Dispose() => this.registry.Unsubscribe(this);
     }
 }
