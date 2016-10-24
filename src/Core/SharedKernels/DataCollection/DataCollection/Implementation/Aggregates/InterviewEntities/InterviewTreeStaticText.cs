@@ -24,5 +24,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
 
         public override string ToString() => $"Text ({this.Identity})";
+        public override IInterviewTreeNode Clone()
+        {
+            return (IInterviewTreeNode)this.MemberwiseClone();
+        }
     }
 }
