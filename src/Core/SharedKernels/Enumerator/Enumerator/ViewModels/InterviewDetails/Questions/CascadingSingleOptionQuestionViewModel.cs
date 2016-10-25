@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
          IInterviewEntityViewModel,
          ILiteEventHandler<SingleOptionQuestionAnswered>,
          ILiteEventHandler<AnswersRemoved>,
-         ILiteEventHandler<AnswerRemoved>,
          ICompositeQuestion,
          IDisposable
     {
@@ -386,15 +385,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
-        }
-
-        public void Handle(AnswerRemoved @event)
-        {
-            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                this.ResetTextInEditor = string.Empty;
-                this.CanRemoveAnswer = false;
-            }
         }
     }
 }

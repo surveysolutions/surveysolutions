@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -86,7 +87,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             get
             {
-                return this.sectionsCache ?? (this.sectionsCache 
+                return this.sectionsCache ?? (this.sectionsCache
                     = this.innerDocument
                     .Children
                     .OfType<IGroup>()
@@ -301,7 +302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId)
-             => this.cacheOfMultiSelectAnswerOptionsAsValues.GetOrAdd(questionId, x 
+             => this.cacheOfMultiSelectAnswerOptionsAsValues.GetOrAdd(questionId, x
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
 
         //should be used on HQ only
@@ -353,7 +354,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                                 Value = Convert.ToInt32(answer.AnswerCode.Value),
                                 Title = answer.AnswerText,
                                 ParentValue =
-                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?) null
+                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?)null
                             };
                 }
             }
@@ -362,7 +363,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 foreach (var answer in question.Answers)
                 {
                     var parentOption = string.IsNullOrEmpty(answer.ParentValue)
-                        ? (int?) null
+                        ? (int?)null
                         : Convert.ToInt32(ParseAnswerOptionParentValueOrThrow(answer.ParentValue, question.PublicKey));
 
                     if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
@@ -385,7 +386,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, 
+                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this,
                     questionId, parentQuestionValue, filter, this.translationId);
             }
 
@@ -399,7 +400,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, 
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(new QuestionnaireIdentity(this.QuestionnaireId, Version), this,
                     questionId, optionText, this.translationId);
             }
 
@@ -439,7 +440,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!answerOption.ParentValue.HasValue)
                 throw new QuestionnaireException(
                     $"Answer option has no parent value. Option value: {answerOptionValue}, Question id: '{questionId}'.");
-                        
+
             return answerOption.ParentValue.Value;
         }
 
@@ -514,7 +515,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId) => this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
 
         public ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId)
-            => this.cacheOfParentsStartingFromTop.GetOrAdd(entityId, 
+            => this.cacheOfParentsStartingFromTop.GetOrAdd(entityId,
                 x => this.GetAllParentGroupsForEntityStartingFromBottom(entityId)
                     .Reverse()
                     .ToReadOnlyCollection());
@@ -600,8 +601,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.AllGroups
                 .Where(x => x.IsRoster)
-                .Where(x => x.RosterSizeSource == RosterSizeSourceType.FixedTitles || 
-                            IsMultioptionQuestion(x.RosterSizeQuestionId) || 
+                .Where(x => x.RosterSizeSource == RosterSizeSourceType.FixedTitles ||
+                            IsMultioptionQuestion(x.RosterSizeQuestionId) ||
                             (IsNumericQuestion(x.RosterSizeQuestionId) && x.RosterTitleQuestionId.HasValue))
                 .Select(x => x.PublicKey)
                 .ToList();
@@ -642,10 +643,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
             var entity = GetEntityOrThrow(entityId);
-            var rosterSizes=new List<Guid>();
+            var rosterSizes = new List<Guid>();
             while (entity != this.innerDocument)
             {
-                var group= entity as IGroup;
+                var group = entity as IGroup;
                 if (group != null)
                 {
                     if (IsRosterGroup(group))
@@ -690,6 +691,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return IsRosterGroup(@group);
         }
+
+        public bool IsSubSection(Guid groupId)
+        {
+            IGroup @group = this.GetGroup(groupId);
+
+            return @group?.IsRoster == false;
+        }
+
+        public Guid? GetCommontParentForLinkedQuestionAndItSource(Guid linkedQuestionId)
+        {
+            var linkedSourceId = this.IsQuestionLinked(linkedQuestionId)
+                   ? this.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
+                   : this.GetRosterReferencedByLinkedQuestion(linkedQuestionId);
+
+            var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(linkedSourceId).Shrink();
+            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(linkedQuestionId);
+
+            var commonPart = linkedSourceRosterScopes.GetCommonPart(linkedRosterScopes).ToArray();
+            return commonPart.Any() ? commonPart.LastOrDefault() : (Guid?)null;
+        }
+
+        public bool IsVariable(Guid id)
+            => this.AllVariables.Any(x => x.PublicKey == id);
 
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
@@ -743,7 +767,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 this.cacheOfChildEntities[groupId] =
                     this.GetGroupOrThrow(groupId)
                         .Children
-                        .Where(entity => !(entity is IVariable))
+                        //.Where(entity => !(entity is IVariable))
                         .Select(entity => entity.PublicKey)
                         .ToReadOnlyCollection();
             }
@@ -751,19 +775,49 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfChildEntities[groupId];
         }
 
+        public IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId)
+        {
+            return this.GetGroupOrThrow(groupId)
+                .Children
+                .Select(entity => entity.PublicKey)
+                .ToReadOnlyCollection();
+        }
+
+        public IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId)
+        {
+            var group = this.GetGroupOrThrow(groupId);
+
+            foreach (var child in group.Children)
+            {
+                var childEntityId = child.PublicKey;
+                if (child is Group)
+                {
+                    if ((child as Group).IsRoster)
+                        yield return new QuestionnaireItemReference(QuestionnaireReferenceType.Roster, child.PublicKey);
+                    else
+                        yield return new QuestionnaireItemReference(QuestionnaireReferenceType.SubSection, childEntityId);
+                }
+                else if (child is IStaticText)
+                {
+                    yield return new QuestionnaireItemReference(QuestionnaireReferenceType.StaticText, childEntityId);
+                }
+                else if (child is IQuestion)
+                {
+                    yield return new QuestionnaireItemReference(QuestionnaireReferenceType.Question, childEntityId);
+                }
+                else if (child is IVariable)
+                {
+                    yield return new QuestionnaireItemReference(QuestionnaireReferenceType.Variable, childEntityId);
+                }
+            }
+        }
+
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
-            if (!this.cacheOfChildEntities.ContainsKey(groupId))
-            {
-                this.cacheOfChildEntities[groupId] =
-                    this.GetGroupOrThrow(groupId)
-                        .Children
-                        .Where(entity => !(entity is IVariable))
-                        .Select(entity => entity.PublicKey)
-                        .ToReadOnlyCollection();
-            }
+            var result = GetChildEntityIds(groupId)
+                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewierQuestion(x)) ||
+                                      this.IsVariable(x));
 
-            var result = this.cacheOfChildEntities[groupId].Except(x => this.IsQuestion(x) && !this.IsInterviewierQuestion(x));
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
 
@@ -782,7 +836,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Children.OfType<IStaticText>()
                     .Select(s => s.PublicKey)
                     .ToReadOnlyCollection());
-        
+
 
         public bool IsPrefilled(Guid questionId)
         {
@@ -988,7 +1042,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
-                throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
+                return false;
+            //throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
 
             return numericQuestion.IsInteger;
         }
@@ -999,7 +1054,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var multipleOptionsQuestion = question as IMultyOptionsQuestion;
             if (multipleOptionsQuestion == null)
-                throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
+                return false;
+            //throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
 
             return multipleOptionsQuestion.YesNoView;
         }
@@ -1068,10 +1124,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return nestedRosters;
         }
 
-        public Guid? GetRosterSizeQuestion(Guid rosterId)
+        public Guid GetRosterSizeQuestion(Guid rosterId)
         {
             var roster = this.GetGroupOrThrow(rosterId);
-            return roster.RosterSizeQuestionId;
+            return roster.RosterSizeQuestionId.Value;
         }
 
         public Guid? GetRosterTitleQuestionId(Guid rosterId)

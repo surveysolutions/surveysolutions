@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
@@ -23,15 +20,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
-            answersTime = new DateTime(2013, 09, 01);
-            var fixedRosterTitles = new[] { new FixedRosterTitle(1, "Title 1"), new FixedRosterTitle(2, "Title 2"), new FixedRosterTitle(3, "Title 3") };
             fixedRosterId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
-            
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                 => _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterId }
-                 && _.GetFixedRosterTitles(fixedRosterId) == fixedRosterTitles
-                 && _.IsRosterGroup(fixedRosterId) == true
-                 && _.GetRostersFromTopToSpecifiedGroup(fixedRosterId) == new Guid[] { fixedRosterId });
+
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(
+                Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
+                Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
+                {
+                    Create.Entity.Roster(rosterId: fixedRosterId, variable: "rosterFixed",
+                        fixedRosterTitles: new[]
+                        {
+                            new FixedRosterTitle(0, "Title 1"),
+                            new FixedRosterTitle(1, "Title 2"),
+                            new FixedRosterTitle(2, "Title 3")
+                        },
+                        rosterSizeSourceType: RosterSizeSourceType.FixedTitles)
+                }));
 
             eventContext = new EventContext();
 
@@ -39,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
+            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, DateTime.Now, userId);
 
         It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
@@ -57,7 +60,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId;
         private static Guid questionnaireId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
-        private static DateTime answersTime;
         private static Guid supervisorId;
         private static Guid fixedRosterId;
         private static Interview interview;

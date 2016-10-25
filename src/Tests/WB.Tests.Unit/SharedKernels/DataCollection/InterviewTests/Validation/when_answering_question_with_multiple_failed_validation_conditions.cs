@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using NHibernate.Util;
 using NSubstitute;
@@ -43,9 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
             expressionProcessorProvider.GetExpressionState(new Guid(), 1)
                                        .ReturnsForAnyArgs(interviewExpressionStateV7);
 
-            var questionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Entity.Question(questionId: questionId,
-                questionType: QuestionType.Text,
-                validationConditions: new List<ValidationCondition> {
+            var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(questionId: questionId, validationConditions: new List<ValidationCondition> {
                     new ValidationCondition("validation1", "message1"),
                     new ValidationCondition("validation2", "message2")
                 }));
@@ -54,10 +52,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
             interview = CreateInterview(expressionProcessorStatePrototypeProvider: expressionProcessorProvider,
                 questionnaireId: questionnaire.PublicKey,
                 questionnaireRepository: questionnaireRepository);
+
+            interview.Apply(Create.Event.AnswersDeclaredValid(new []{ questionIdentity }));
+
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.AnswerTextQuestion(Guid.NewGuid(), questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, "answer");
+        Because of = () => 
+            interview.AnswerTextQuestion(Guid.NewGuid(), questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, "answer");
 
         It should_raise_events_with_mutliple_validations_info = () => 
             eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(e => e.Questions.First().Equals(questionIdentity) && e.FailedValidationConditions.Count == 1 && e.FailedValidationConditions[questionIdentity].Count == 2);

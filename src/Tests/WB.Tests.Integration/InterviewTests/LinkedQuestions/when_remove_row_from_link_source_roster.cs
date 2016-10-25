@@ -8,7 +8,6 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
@@ -30,12 +29,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             });
 
             interview = SetupInterview(questionnaire);
-            interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, new[]
+            interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, new[]
             {
                 new Tuple<decimal, string>(0, "a"),
                 new Tuple<decimal, string>(1, "b")
             });
-            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now, new decimal[] { 0 });
+            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, RosterVector.Empty, DateTime.Now, new decimal[] { 0 });
             eventContext = new EventContext();
         };
 

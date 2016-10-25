@@ -480,8 +480,12 @@
     <Compile Include="Infrastructure\FileSystemIOAccessorTests\when_making_valid_file_name_and_string_has_length_about_200_characters.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
     <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\IdentityTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_featured_questions.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_child_interviewer_entities.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTreeTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTreeEventPublisherTests.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_ordered_roster_size_question.cs" />
     <Compile Include="SharedKernels\Enumerator\SqliteStorageTests.cs" />
@@ -1019,7 +1023,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_minus_1_on_numeric_int_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_substuting_question_title_inside_roster_with_reference_to_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multi_option_question_increases_roster_with_nested_fixed_roster.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size_and_disable_rows_at_the_same_time.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_text_list_question_increases_roster_with_nested_fixed_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_with_61_selected_options_on_multioption_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_with_61_strings_on_textlist_question_which_triggers_roster.cs" />
@@ -1027,9 +1030,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_interviewer_entities.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_from_hq_interview_in_interviewer_assigned_status.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_from_hq_interview_which_didnt_exist_before.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_from_hq_interview_which_existed_before.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\InterviewStatusTimeSpanDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_approved_by_hq_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_completed_event_recived.cs" />
@@ -1235,7 +1235,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewSynchronizationFileStorageTests\when_removing_files_of_not_existing_interview_from_sync_storage.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\InterviewTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_creating_new_AnsweredQuestionSynchronizationDto_for_InterviewTextListAnswers.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_interview_is_canceled_by_hq_in_completed_state.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_by_HQ_in_any_other_state_then_Deleted_and_Approved_by_Supervisor.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_from_HQ.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Synchronization\when_rejecting_interview_in_deleted_state.cs" />
@@ -1260,7 +1259,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_absent.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_and_answer_has_3_values.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_and_previous_answer_has_3_values_and_new_answer_is_empty.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_without_previous_answer_and_new_answer_is_the_same.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_has_only_changed_values.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_is_not_the_same.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
@@ -1286,7 +1284,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_textlist_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_applying_synchronization_metadata_on_created_interviews.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_cancelling_interview_by_hq_synchronization.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_checking_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_roster_is_zero.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_create_interview_with_3_fixed_rosters_one_inside_other_and_1_separate_fixed_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview.cs" />
@@ -1298,8 +1295,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_no_propagatable_ancestor_groups.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_propagatable_ancestor_group.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_no_featured_questions_but_with_variable.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_no_featured_questions_by_deleted_template.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_prefilled_questions_and_created_info.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_prefilled_questions_and_created_info_and_status.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_real_question.cs" />
@@ -1311,8 +1306,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hq_approve_hard-deleted_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_length_of_selected_values_less_than_max_for_selected_answer_options_for_multiquestion.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_length_of_selected_values_more_than_max_for_selected_answer_options_for_multiquestion_throw_interview_exception.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_marking_interview_as_sent_to_headquarters_and_interview_is_approved_by_supervisor.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_marking_interview_as_sent_to_headquarters_and_interview_is_hard_deleted.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_propagated_group_is_conditionally_disabled.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_reevaluating_interview_with_group_depending_on_recently_enabled_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_reevaluating_whole_interview_and_questionnaire_has_group_with_custom_enablement_condition.cs" />
