@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection
 
         protected bool Equals(Identity other)
         {
-            return this.Id.Equals(other.Id) && this.RosterVector.Identical(other.RosterVector);
+            return this.Id == other.Id && this.RosterVector.Identical(other.RosterVector);
         }
 
         public override int GetHashCode()
