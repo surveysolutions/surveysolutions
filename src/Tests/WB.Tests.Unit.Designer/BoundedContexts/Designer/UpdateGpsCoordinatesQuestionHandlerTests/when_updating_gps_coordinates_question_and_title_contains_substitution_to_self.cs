@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -29,7 +30,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
                 new UpdateGpsCoordinatesQuestion(
                     questionnaire.Id,
@@ -46,13 +46,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                     isPreFilled: false,
                     scope: scope,
                     responsibleId: responsibleId,
-                    validationConditions: new List<ValidationCondition>())));
+                    validationConditions: new List<ValidationCondition>()));
 
-        It should_not_throw_QuestionnaireException = () =>
-            exception.ShouldBeNull();
-        
+        It should_update_question_text = () =>
+            questionnaire.QuestionnaireDocument.GetQuestion<GpsCoordinateQuestion>(questionId)
+                .QuestionText.ShouldEqual(titleWithSubstitutionToSelf);
+
         private static Questionnaire questionnaire;
-        private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
