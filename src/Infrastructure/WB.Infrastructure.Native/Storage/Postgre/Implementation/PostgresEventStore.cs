@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -22,6 +20,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly IEventTypeResolver eventTypeResolver;
         private static int BatchSize = 4096;
         private static string tableName;
+        private readonly string rawTableName;
 
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
             IEventTypeResolver eventTypeResolver)
@@ -29,7 +28,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
 
-            tableName = connectionSettings.SchemaName + ".events";
+            rawTableName = "events";
+            tableName = connectionSettings.SchemaName + "." + this.rawTableName;
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
@@ -136,7 +136,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = $"select reltuples::bigint from pg_class where relname='{tableName}'";
+                command.CommandText = $"select reltuples::bigint from pg_class where relname='{this.rawTableName}'";
                 var scalar = command.ExecuteScalar();
 
                 return scalar == null ? 0 : Convert.ToInt32(scalar);
@@ -184,7 +184,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 connection.Open();
 
                 int globalSequence = 0;
-                if (position.HasValue)
+                if (position.HasValue && position.Value.EventSourceIdOfLastEvent != Guid.Empty)
                 {
                     var lastGlobalSequenceCommand = connection.CreateCommand();
                     lastGlobalSequenceCommand.CommandText = $"SELECT globalsequence FROM {tableName} WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
@@ -210,7 +210,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         }
                     }
 
-                    yield return new EventSlice(events, new EventPosition(), false);
+                    var committedEvent = events.Last();
+                    yield return new EventSlice(events, new EventPosition(0, 0, committedEvent.EventSourceId, committedEvent.EventSequence), false);
 
                     processed += BatchSize;
                 }
@@ -220,9 +221,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public long GetEventsCountAfterPosition(EventPosition? position)
         {
-            var totalCountOfEvents = this.CountOfAllEvents();
-            if (!position.HasValue)
-                return totalCountOfEvents;
+            if (!position.HasValue || position.Value.EventSourceIdOfLastEvent == Guid.Empty)
+                return this.CountOfAllEvents();
 
             using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
