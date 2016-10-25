@@ -96,29 +96,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             parentGroup?.RemoveChild(identity);
         }
 
-        public IReadOnlyCollection<InterviewTreeNodeDiff> Compare(InterviewTree changedTree)
+        public IReadOnlyCollection<InterviewTreeNodeDiff> Compare(InterviewTree that)
         {
-            var sourceNodes = this.nodesCache.Values;
-            var changedNodes = changedTree.nodesCache.Values;
+            var existingIdentities = this.nodesCache.Keys.Where(thisIdentity => that.nodesCache.ContainsKey(thisIdentity));
+            var removedIdentities = this.nodesCache.Keys.Where(thisIdentity => !that.nodesCache.ContainsKey(thisIdentity));
+            var addedIdentities = that.nodesCache.Keys.Where(thatIdentity => !this.nodesCache.ContainsKey(thatIdentity));
 
-            var leftOuterJoin = from source in sourceNodes
-                                join changed in changedNodes
-                                    on source.Identity equals changed.Identity
-                                    into temp
-                                from changed in temp.DefaultIfEmpty()
-                                select InterviewTreeNodeDiff.Create(source, changed);
+            var diffs =
+                existingIdentities.Select(identity => InterviewTreeNodeDiff.Create(this.nodesCache[identity], that.nodesCache[identity]))
+                    .Concat(
+                removedIdentities.Select(identity => InterviewTreeNodeDiff.Create(this.nodesCache[identity], null)))
+                    .Concat(
+                addedIdentities.Select(identity => InterviewTreeNodeDiff.Create(null, that.nodesCache[identity])));
 
-            var rightOuterJoin = from changed in changedNodes
-                                 join source in sourceNodes
-                                     on changed.Identity equals source.Identity
-                                     into temp
-                                 from source in temp.DefaultIfEmpty()
-                                 select InterviewTreeNodeDiff.Create(source, changed);
-
-            var fullOuterJoin = leftOuterJoin.Concat(rightOuterJoin);
-
-            return fullOuterJoin
-                .DistinctBy(x => new {sourceIdentity = x.SourceNode?.Identity, changedIdentity = x.ChangedNode?.Identity})
+            return diffs
                 .Where(diff =>
                     diff.IsNodeAdded ||
                     diff.IsNodeRemoved ||
