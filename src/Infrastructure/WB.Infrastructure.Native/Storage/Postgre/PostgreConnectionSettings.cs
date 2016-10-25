@@ -2,6 +2,7 @@
 {
     public class PostgreConnectionSettings
     {
-        public string ConnectionString { get; set; } 
+        public string ConnectionString { get; set; }
+        public string SchemaName { get; set; }
     }
 }

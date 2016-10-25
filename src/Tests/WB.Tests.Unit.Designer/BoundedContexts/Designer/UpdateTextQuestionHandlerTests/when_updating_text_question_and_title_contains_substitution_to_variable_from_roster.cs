@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -15,54 +17,37 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : chapterId,
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId,
+                chapterId,
+                responsibleId,
                 isInteger : true,
-                stataExportCaption : "roster_size_question"
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: chapterId,
-                questionText: "old title",
-                stataExportCaption: "old_variable_name",
+                variableName: "roster_size_question"
+            );
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                responsibleId,
+                title: "old title",
+                variableName: "old_variable_name",
                 instructions: "old instructions",
-                conditionExpression: "old condition",
-                responsibleId: responsibleId,
-                questionType: QuestionType.QRBarcode
-            ));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
-                RosterSizeQuestionId = rosterSizeQuestionId,
-                RosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitles =  null,
-                RosterTitleQuestionId =null 
-            });
-            questionnaire.AddVariable(Create.Event.VariableAdded(
-                entityId : variableFromRosterId,
-                parentId : rosterId,
-                variableName : substitutionVariableName
-            ));
+                enablementCondition: "old condition");
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            
+            questionnaire.AddVariableAndMoveIfNeeded(Create.Command.AddVariable(questionnaire.Id, variableFromRosterId, rosterId, responsibleId, substitutionVariableName));
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateTextQuestion(
-                    questionId: questionId,
-                    title: titleWithSubstitution,
-                    variableName: variableName,
-                    variableLabel: null,
-                    isPreFilled: isPreFilled,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                     mask: null,
-                    responsibleId: responsibleId, 
-                    validationCoditions: new List<ValidationCondition>(), 
-                    properties: Create.QuestionProperties()));
+                    new UpdateTextQuestion(
+                        questionnaire.Id,
+                        questionId,
+                        responsibleId,
+                        new CommonQuestionParameters() {Title = titleWithSubstitution, VariableName = variableName,EnablementCondition = enablementCondition, Instructions = instructions}, 
+                        null,scope,
+                        isPreFilled,new List<ValidationCondition>())));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

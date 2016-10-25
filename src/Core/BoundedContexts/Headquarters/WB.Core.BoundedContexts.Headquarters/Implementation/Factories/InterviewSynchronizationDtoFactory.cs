@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -23,17 +25,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IRostrerStructureService rostrerStructureService;
 
         public InterviewSynchronizationDtoFactory(
             IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IRostrerStructureService rostrerStructureService)
         {
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
             
             this.interviewsRepository = interviewsRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.questionnaireStorage = questionnaireStorage;
+            this.rostrerStructureService = rostrerStructureService;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -64,10 +69,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(
-                    new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion), null);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
+                    new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion));
 
-            var rosterScopes = questionnaire.GetRosterScopes();
+			if (questionnaire == null)
+                throw new Exception("Questionnaire was not found");
+            var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
             
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)

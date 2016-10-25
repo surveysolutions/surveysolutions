@@ -207,7 +207,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             foreach (var answer in answers)
             {
-                decimal value = answer.AnswerCode ?? decimal.Parse(answer.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+                decimal value = answer.GetParsedValue();
                 decimal? parentValue = null;
                 if (!string.IsNullOrEmpty(answer.ParentValue))
                 {

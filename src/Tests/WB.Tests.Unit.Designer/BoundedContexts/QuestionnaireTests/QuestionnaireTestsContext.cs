@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -27,6 +29,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             return eventContext.Events.Where(evnt => evnt.Payload is T).Select(evnt => (T)evnt.Payload);
         }
+
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> children = null, Guid? createdBy = null)
+        {
+            var questionnaire = new QuestionnaireDocument();
+
+            if (children != null)
+            {
+                questionnaire.Children.AddRange(children);
+            }
+
+            questionnaire.CreatedBy = createdBy;
+
+            return questionnaire;
+        }
+
 
         public static Questionnaire CreateQuestionnaire(Guid responsibleId)
         {
@@ -66,17 +83,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId, expressionProcessor: expressionProcessor);
 
             groupId = groupId ?? Guid.NewGuid();
-            questionnaire.AddGroup(new NewGroupAdded
-            {
-                PublicKey = groupId.Value,
-                ResponsibleId = responsibleId,
-                GroupText = "New group"
-            });
-
-            if (isRoster)
-            {
-                questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, groupId.Value));
-            }
+            questionnaire.AddGroup(groupId.Value,
+                responsibleId: responsibleId,
+                title: "New group", isRoster: isRoster
+            );
 
             return questionnaire;
         }
@@ -86,7 +96,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
 
             Guid chapterId = mainChapterId ?? Guid.NewGuid();
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId, ResponsibleId = responsibleId, GroupText = "New section" });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId, title:"New section" );
             AddQuestion(questionnaire, rosterSizeQuestionId, chapterId, responsibleId, QuestionType.MultyOption, "rosterSizeQuestion",
                 new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") });
             AddGroup(questionnaire, rosterGroupId, chapterId, "", responsibleId, rosterSizeQuestionId, isRoster: true);
@@ -136,12 +146,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var groupId = Guid.NewGuid();
 
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: groupId, responsibleId: responsibleId);
-
-            questionnaire.AddTextQuestion(Guid.NewGuid(), groupId, "Title", "text", null, false, 
-                                         QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId, mask:null);
-
-            questionnaire.AddTextQuestion(secondQuestionId, groupId, "Title","name", null , false, 
-                                         QuestionScope.Interviewer, "", "", "", "", responsibleId: responsibleId, mask: null);
+            questionnaire.AddTextQuestion(Guid.NewGuid(), groupId, responsibleId, "Title", "text", null, false, QuestionScope.Interviewer, "", "", "", "", mask:null);
+            questionnaire.AddTextQuestion(secondQuestionId, groupId, responsibleId, "Title","name", null , false, QuestionScope.Interviewer, "", "", "", "", mask: null);
 
             return questionnaire;
         }
@@ -152,8 +158,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.AddGroupAndMoveIfNeeded(secondGroup,
                 responsibleId: responsibleId, title: "Second group", variableName: null, rosterSizeQuestionId: null, description: null, 
-                condition: null, hideIfDisabled: false,
-                parentGroupId: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
+                condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, 
+                rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;
         }
@@ -190,25 +196,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             AddGroup(questionnaire, nonRosterGroupId, chapterId, "", responsibleId, null);
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-                (
-                    publicKey: autoQuestionId,
-                    groupPublicKey: rosterId,
-                    questionText: "Title",
+            AddQuestion(questionnaire,
+                    questionId: autoQuestionId,
+                    groupId: rosterId,
                     questionType: secondQuestionType,
-                    stataExportCaption: "auto",
-                    featured: false,
-                    capital: false,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    instructions: string.Empty,
-                    answers: null,
-                    answerOrder: Order.AsIs,
-                    responsibleId: responsibleId,
-                    linkedToQuestionId: null
-                ));
+                    variableName: "auto",
+                    responsible: responsibleId);
 
             AddQuestion(questionnaire, questionId, nonRosterGroupId, responsibleId, firstQuestionType, "manual", new[] { new Option(Guid.NewGuid(), "1", "first title"), new Option(Guid.NewGuid(), "2", "second title") });
             return questionnaire;
@@ -218,28 +211,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Guid rosterId, Guid secondGroup, Guid autoQuestionId, Guid questionId, Guid responsibleId,
             QuestionType questionType, QuestionType autoQuestionType = QuestionType.Text)
         {
-            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(rosterId,
-                                                                                          secondGroup, responsibleId);
+            Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(rosterId, secondGroup, responsibleId);
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-                (
-                    publicKey : autoQuestionId,
-                    groupPublicKey : rosterId,
-                    questionText : "Title",
+            AddQuestion(questionnaire,
+                    questionId: autoQuestionId,
+                    groupId : rosterId,
                     questionType : autoQuestionType,
-                    stataExportCaption : "auto",
-                    featured : false,
-                    capital : false,
-                    questionScope : QuestionScope.Interviewer,
-                    conditionExpression : string.Empty,
-                    validationExpression : string.Empty,
-                    validationMessage : string.Empty,
-                    instructions : string.Empty,
-                    answers : null,
-                    answerOrder : Order.AsIs,
-                    responsibleId : responsibleId,
-                    linkedToQuestionId : null
-                ));
+                    variableName : "auto",
+                    condition : string.Empty,
+                    validation : string.Empty,
+                    responsible : responsibleId
+                );
             AddQuestion(questionnaire, questionId, secondGroup, responsibleId, questionType, "manual",
                 new[] { new Option(Guid.NewGuid(), "1", "title") });
             return questionnaire;
@@ -254,26 +236,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             return questionnaire;
         }
 
-        public static void AddQuestion(Questionnaire questionnaire, Guid questionId, Guid groupId, Guid responsible, QuestionType questionType, string alias, Option[] options = null, string condition = "", string validation = "")
+        public static void AddQuestion(Questionnaire questionnaire, Guid questionId, Guid groupId, Guid responsible, QuestionType questionType, 
+            string variableName, Option[] options = null, string condition = "", string validation = "")
         {
             if (IsNumericQuestion(questionType))
             {
-                questionnaire.AddNumericQuestion(questionId, groupId, "Title", alias, null, false,
-                    QuestionScope.Interviewer, condition, validation, "", "", null, responsible, true, null);
+                questionnaire.AddNumericQuestion(questionId, groupId, responsible,  "Title", variableName);
                 return;
             }
+
             questionnaire.AddTextQuestion(
                 questionId,
                 groupId,
+                responsible,
                 "Title",
-                alias, null,
+                variableName, null,
                 false,
                 QuestionScope.Interviewer,
                 condition,
                 validation,
                 "",
-                "", null,
-                responsible);
+                "", null);
         }
 
         public static bool AreOptionsRequiredByQuestionType(QuestionType type)
@@ -318,10 +301,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddGroupAndMoveIfNeeded(regularGroupId, responsibleId: responsibleId, title: "regularGroup", variableName: null, rosterSizeQuestionId: null,
                 description: null, condition: null, hideIfDisabled: false, parentGroupId: chapterId, isRoster: false,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
-            questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion",
-                "rosterSizeQuestion", null, QuestionScope.Interviewer, "", "", "", "", responsibleId,
-                new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") }, null,
-                false, null, false);
+            questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId, regularGroupId,responsibleId, 
+                new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") }, "rosterSizeQuestion",
+                "rosterSizeQuestion", null, QuestionScope.Interviewer, "", "", "", "", null, false, null, false);
             questionnaire.AddGroupAndMoveIfNeeded(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", variableName: null,
                 rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, hideIfDisabled: false, parentGroupId: chapterId, isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
@@ -336,12 +318,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             if (depth > 0)
             {
                 Guid parentId = depth == 1 ? dippestGroupId : Guid.NewGuid();
-                questionnaire.AddGroup(new NewGroupAdded
-                {
-                    PublicKey = parentId,
-                    ResponsibleId = responsibleId,
-                    GroupText = "New section"
-                });
+                questionnaire.AddGroup(parentId, responsibleId: responsibleId, title: "New section");
 
                 for (int i = 0; i < depth - 1; i++)
                 {

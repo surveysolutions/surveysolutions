@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -17,13 +17,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterSizeSourceType = RosterSizeSourceType.Question;
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : chapterId,
-                questionType : QuestionType.MultyOption
-            ));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+
+            questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId,chapterId,responsibleId);
+            questionnaire.AddGroup(groupId, responsibleId: responsibleId);
         };
 
         Because of = () =>

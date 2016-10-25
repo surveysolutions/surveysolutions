@@ -28,9 +28,6 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 var questionnaireId = Guid.NewGuid();
 
-                var nonAnsweredCombo = Guid.NewGuid();
-                var comboShouldNotBeRemoved = Guid.NewGuid();
-
                 var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(numericQuestionId, variable: "numeric"),
                     Create.SingleQuestion(parentSingleOptionQuestionId, "q1", enablementCondition: "numeric > 10",

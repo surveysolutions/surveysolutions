@@ -12,4 +12,18 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         Variable = 70,
         Translation = 80
     }
+
+    public enum QuestionnaireVerificationReferenceProperty
+    {
+        None = 0,
+        Title = 1,
+        ValidationExpression = 2,
+        ValidationMessage = 3,
+        EnablingCondition = 4,
+        VariableName = 5,
+        Option = 6,
+        VariableContent = 7,
+        FixedRosterItem = 8,
+        OptionsFilter = 9
+    }
 }

@@ -17,27 +17,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             parentQuestionId = Guid.NewGuid();
             updatedQuestionId = Guid.NewGuid();
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : parentQuestionId,
-                groupPublicKey: rootGroupId,
-                questionType : QuestionType.SingleOption,
-                answers : new[]
+            questionnaire.AddSingleOptionQuestion(
+                parentQuestionId,
+                rootGroupId,
+                responsibleId,
+                options : new[]
                 {
-                    new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() }
+                    new Option() { Title= "one", Value= "1", Id = Guid.NewGuid() },
+                    new Option() { Title= "two", Value= "2", Id = Guid.NewGuid() }
                 }
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-                (
-                publicKey : updatedQuestionId,
-                groupPublicKey: rootGroupId,
-                questionType : QuestionType.SingleOption,
+            );
+
+            questionnaire.AddSingleOptionQuestion(
+                updatedQuestionId,
+                rootGroupId,
+                responsibleId,
                 cascadeFromQuestionId : parentQuestionId,
-                answers : new[]
+                options: new[]
                 {
-                    new Answer { AnswerText = "one one", AnswerValue = "1.1", ParentValue = "1", PublicKey = Guid.NewGuid() },
+                    new Option() {Title = "one one", Value= "1.1", ParentValue = "1", Id = Guid.NewGuid() },
                 }
-            ));
+            );
         };
 
         private Because of = () => exception = Catch.Exception(() => questionnaire.DeleteQuestion(parentQuestionId, responsibleId));

@@ -4,7 +4,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -19,13 +19,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterFixedTitles = new[] { new FixedRosterTitleItem("1", "fixed title") };
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : rosterSizeQuestionId,
-                questionType : QuestionType.MultyOption,
-                groupPublicKey : chapterId
-            ));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId,
+                chapterId, responsibleId);
         };
 
         Because of = () =>

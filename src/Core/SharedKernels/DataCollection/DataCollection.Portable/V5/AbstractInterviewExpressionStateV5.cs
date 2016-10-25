@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 
@@ -143,12 +144,14 @@ namespace WB.Core.SharedKernels.DataCollection.V5
             targetLevel.UpdateYesNoAnswer(questionId, answer);
         }
 
-        public void SetInterviewProperties(IInterviewProperties properties)
+        public virtual void SetInterviewProperties(IInterviewProperties properties)
         {
             this.InterviewProperties = properties;
-            foreach (var item in this.InterviewScopes.Values)
+            var scopes = this.InterviewScopes.Values;
+
+            foreach (var scope in scopes)
             {
-                item.SetInterviewProperties(properties);
+                scope.SetInterviewProperties(properties);
             }
         }
 

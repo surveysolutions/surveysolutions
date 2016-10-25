@@ -15,8 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid responsibleId,
             CommonQuestionParameters commonQuestionParameters,
             int? maxAnswerCount,
-            string validationExpression,
-            string validationMessage,
             QuestionScope scope,
             List<ValidationCondition> validationConditions)
             : base(

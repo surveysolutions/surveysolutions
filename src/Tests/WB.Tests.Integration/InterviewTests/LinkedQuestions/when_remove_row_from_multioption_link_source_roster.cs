@@ -5,9 +5,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
@@ -31,9 +31,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 });
 
             interview = SetupInterview(questionnaireDocument: questionnaire);
-            interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0],
-                DateTime.Now, 2);
-            interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now,
+            interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, RosterVector.Empty, DateTime.Now, 2);
+            interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, RosterVector.Empty, DateTime.Now,
                 new [] { new decimal[] { 1 }, new decimal[] {0}});
             eventContext = new EventContext();
         };

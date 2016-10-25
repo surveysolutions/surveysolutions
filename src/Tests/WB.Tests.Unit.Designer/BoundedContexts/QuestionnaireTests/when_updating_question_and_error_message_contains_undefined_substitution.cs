@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -13,9 +15,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(Create.Event.AddGroup(groupId: chapterId));
-            questionnaire.AddQuestion(Create.Event.AddTextQuestion(questionId: textQuestionId, parentId: chapterId));
-            questionnaire.AddQuestion(Create.Event.AddTextQuestion(questionId: questionWithSubstitutionId, parentId: chapterId));
+            questionnaire.AddGroup( chapterId, responsibleId: responsibleId);
+            questionnaire.AddTextQuestion( textQuestionId, chapterId, responsibleId:responsibleId);
+            questionnaire.AddTextQuestion(questionWithSubstitutionId, chapterId, responsibleId);
 
             eventContext = new EventContext();
         };
@@ -28,22 +30,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         Because of = () => exception =
             Catch.Exception(() => questionnaire.UpdateTextQuestion(
-                questionId: questionWithSubstitutionId,
-                responsibleId: responsibleId,
-                title: "title",
-                hideIfDisabled: false,
-                variableName: "var",
-                validationCoditions: new List<ValidationCondition>() {new ValidationCondition
-                {
-                    Message = $"error message with substitution %{textQuestionVariable}%"
-                } },
-                variableLabel: null,
-                isPreFilled: false,
-                scope: QuestionScope.Interviewer,
-                enablementCondition: null,
-                instructions: null,
-                mask: null,
-                properties: null));
+                new UpdateTextQuestion(
+                    questionnaire.Id,
+                    questionWithSubstitutionId,
+                    responsibleId,
+                    new CommonQuestionParameters() {Title = "title", VariableName = "var"},
+                    null,QuestionScope.Interviewer, false,  
+                    validationConditions: new List<ValidationCondition>() {
+                    new ValidationCondition
+                        {
+                            Message = $"error message with substitution %{textQuestionVariable}%"
+                        }})));
 
         It should_exception_has_specified_message = () =>
             new[] {"unknown", "substitution", textQuestionVariable}.ShouldEachConformTo(x =>

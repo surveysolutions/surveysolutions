@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Dynamic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,7 +27,6 @@ using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
 
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
-using InterviewProperties = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.InterviewProperties;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 {
@@ -68,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public StatefulInterview(ILogger logger,
                                  IQuestionnaireStorage questionnaireRepository,
                                  IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
-            : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
+            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {
             this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
             this.groups = new ConcurrentDictionary<string, InterviewEnablementState>();
@@ -738,13 +736,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewHardDeleted();
 
             IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+
             var answerDtos = synchronizedInterview
                 .Answers
                 .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, questionnaire.GetAnswerType(answerDto.Id), answerDto.Answer))
                 .ToArray();
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
             this.ApplyEvent(new InterviewAnswersFromSyncPackageRestored(answerDtos, synchronizedInterview.UserId));
-            base.ApplyRosterTitleChanges(questionnaire);
+            
+            var changedInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+            
+            base.UpdateRosterTitles(changedInterviewTree, questionnaire);
+
+            this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
         }
 
         public bool HasGroup(Identity group)
@@ -1261,7 +1267,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                   .Where(x => x.Value.Any(c => c.UserRole != UserRoles.Operator))
                   .Select(x => x.Key)
                   .Where(this.IsEnabled)
-                  .Where(x => questionnaire.IsInterviewierQuestion(x.Id));
+                  .Where(x => questionnaire.IsInterviewierQuestion(x.Id))
+                  .Where(x => HasGroup(GetParentGroup(x)));
 
             var orderedCommentedQuestions = commentedEnabledInterviewerQuestionIds
                 .Select(x => new

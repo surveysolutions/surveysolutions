@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -8,9 +7,8 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
@@ -41,12 +39,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             var exportViewFactoryMock=new Mock<IExportViewFactory>();
 
             exportViewFactoryMock.Setup(
-                x =>
-                    x.CreateInterviewDataExportView(Moq.It.IsAny<QuestionnaireExportStructure>(),
+                x => x.CreateInterviewDataExportView(Moq.It.IsAny<QuestionnaireExportStructure>(),
                         Moq.It.IsAny<InterviewData>())).Returns(interviewDataExportView);
             var exportRecords = new TestInMemoryWriter<InterviewDataExportRecord>();
 
-            var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, exportViewFactoryMock.Object, exportRecords);
+            var exportStructure = new QuestionnaireExportStructure();
+            var questionnaireExportStructureStorageMock = new Mock<IQuestionnaireExportStructureStorage>();
+            questionnaireExportStructureStorageMock.Setup(
+                    x => x.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()))
+                .Returns(exportStructure);
+
+            var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, exportViewFactoryMock.Object, 
+                exportRecords, questionnaireExportStructureStorageMock.Object);
 
             interviewsExportDenormalizer.Handle(Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.Completed,
                 interviewId: interviewId));
@@ -125,7 +129,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
         }
 
         private InterviewsExportDenormalizer CreateInterviewsExportDenormalizer(
-            Guid interviewId, IExportViewFactory exportViewFactory, IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords)
+            Guid interviewId, IExportViewFactory exportViewFactory, IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords,
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
         {
             var interviewData = Create.Entity.InterviewData();
             var interviewReferenceStorage = new TestInMemoryWriter<InterviewReferences>();
@@ -135,7 +140,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             interviewDataStorage.Store(interviewData, interviewId);
 
             return new InterviewsExportDenormalizer(interviewDataStorage, interviewReferenceStorage,
-                exportViewFactory, exportRecords,Mock.Of<IQuestionnaireExportStructureStorage>());
+                exportViewFactory, exportRecords,
+                questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>());
         }
     }
 }

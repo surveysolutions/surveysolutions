@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
         void StoreQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument,
             bool census, List<TranslationDto> translationDtos);
 
-        Task RemoveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity);
+        void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
 
         Task StoreQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly);
 

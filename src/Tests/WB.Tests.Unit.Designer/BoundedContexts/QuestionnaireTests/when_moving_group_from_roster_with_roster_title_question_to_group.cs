@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -12,27 +12,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId});
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : chapterId,
-                isInteger : true
-            ));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles = null,
-                    RosterTitleQuestionId = rosterTitleQuestionId
-                });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId,
+                isInteger : true);
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            
+            questionnaire.AddGroup(groupFromRosterId, rosterId, responsibleId: responsibleId);
+            questionnaire.AddNumericQuestion(rosterTitleQuestionId, groupFromRosterId, responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : rosterTitleQuestionId,
-                groupPublicKey : groupFromRosterId
-            ));
+            questionnaire.UpdateGroup(rosterId, responsibleId, "test_title", "", rosterSizeQuestionId, "", null, false, true,
+                RosterSizeSourceType.Question, null, rosterTitleQuestionId);
         };
 
         Because of = () =>
@@ -53,9 +44,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         It should_throw_exception_with_message_containting__in__ = () =>
             exception.Message.ToLower().ShouldContain("in");
-
-        It should_throw_exception_with_message_containting__group__ = () =>
-            exception.Message.ToLower().ShouldContain("group");
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");

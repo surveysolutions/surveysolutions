@@ -498,7 +498,7 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
     <value>Share information to..</value>
   </data>
   <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
-    <value>We will test connection with our server and it's speed</value>
+    <value>We will test connection with our server and its speed</value>
   </data>
   <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
     <value>Test bandwidth to server</value>

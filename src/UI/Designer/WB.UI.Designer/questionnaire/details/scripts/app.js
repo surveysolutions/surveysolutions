@@ -8,7 +8,6 @@
         'ngAnimate',
         'ui.bootstrap',
         'ui.bootstrap.tpls',
-        'ui.bootstrap.transition',
         'ui.tree',
         'ui.utils',
         'jlareau.pnotify',
@@ -47,14 +46,10 @@
 
             }).state('questionnaire.chapter.question', {
                 url: "/question/{itemId}",
-                views: {
-                    '': {
-                        templateUrl: 'views/question.html',
-                        controller: 'QuestionCtrl'
-                    }
-                }
-            }).state('questionnaire.chapter.question.validation', {
-                url: "/val+{validationIndex}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/question.html',
@@ -63,6 +58,10 @@
                 }
             }).state('questionnaire.chapter.group', {
                 url: "/group/{itemId}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/group.html',
@@ -71,6 +70,10 @@
                 }
             }).state('questionnaire.chapter.variable', {
                 url: "/variable/{itemId}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/variable.html',
@@ -79,6 +82,10 @@
                 }
             }).state('questionnaire.chapter.roster', {
                 url: "/roster/{itemId}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/roster.html',
@@ -87,14 +94,10 @@
                 }
             }).state('questionnaire.chapter.statictext', {
                 url: "/static-text/{itemId}",
-                views: {
-                    '': {
-                        templateUrl: 'views/static-text.v1.html',
-                        controller: 'StaticTextCtrl'
-                    }
-                }
-            }).state('questionnaire.chapter.statictext.validation', {
-                url: "/val+{validationIndex}",
+                params: {
+                    property: 'None',
+                    indexOfEntityInProperty: null
+                },
                 views: {
                     '': {
                         templateUrl: 'views/static-text.v1.html',

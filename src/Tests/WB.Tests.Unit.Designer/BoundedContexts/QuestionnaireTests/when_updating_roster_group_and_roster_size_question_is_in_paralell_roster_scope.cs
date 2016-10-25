@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -19,17 +19,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             parallelRosterId = Guid.Parse("21111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, anotherRosterId));
+            questionnaire.AddGroup( anotherRosterId,  chapterId, responsibleId: responsibleId, isRoster:true);
 
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : anotherRosterId ));
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, isInteger : true, parentId : anotherRosterId ,responsibleId:responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parallelRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, parallelRosterId));
+            questionnaire.AddGroup( parallelRosterId,  chapterId, responsibleId: responsibleId,isRoster:true);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parallelRosterId });
+            questionnaire.AddGroup(groupId, parallelRosterId, responsibleId: responsibleId);
         };
 
         Because of = () =>

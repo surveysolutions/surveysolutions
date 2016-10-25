@@ -2,9 +2,10 @@ using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHandlerTests
@@ -14,37 +15,36 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey : Guid.NewGuid(),
-                groupPublicKey : chapterId,
-                stataExportCaption : notUniqueVariableName
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey: chapterId,
-                    questionText: "old title",
-                    stataExportCaption: "old_variable_name",
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddNumericQuestion(
+                Guid.NewGuid(),
+                chapterId,
+                responsibleId,
+                variableName: notUniqueVariableName);
+
+            questionnaire.AddQRBarcodeQuestion(
+                    questionId,
+                    chapterId,
+                    responsibleId,
+                    title: "old title",
+                    variableName: "old_variable_name",
                     instructions: "old instructions",
-                    conditionExpression: "old condition",
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.QRBarcode
-            ));
+                    enablementCondition: "old condition");
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
-                    questionId: questionId,
-                    title: title,
-                    variableName: notUniqueVariableName,
-                    variableLabel: null,
-                    isPreFilled: false,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    responsibleId: responsibleId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
+                    new UpdateGpsCoordinatesQuestion(
+                        questionnaire.Id,
+                        questionId,
+                        responsibleId,
+                        new CommonQuestionParameters() {Title = title, VariableName = notUniqueVariableName, EnablementCondition = enablementCondition ,Instructions = instructions}, 
+                        false,
+                        null,
+                        null,
+                        scope,
+                        new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -52,7 +52,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
         It should_throw_exception_with_message_containting__variable__should__unique__ = () =>
             new[] { "variable", "should", "unique" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
-
 
         private static Questionnaire questionnaire;
         private static Exception exception;

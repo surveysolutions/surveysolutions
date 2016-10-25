@@ -80,7 +80,7 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
                 kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(), 
-                kernel.Inject<IAsynchronousFileSystemAccessor>(), kernel.Inject<ILogger>(), 
+                kernel.Inject<ILogger>(), 
                 AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
             
             this.Bind<ISerializer>().ToMethod((ctx) => new PortableJsonSerializer());
