@@ -25,6 +25,8 @@ namespace WB.UI.Headquarters.Code
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class WriteToSyncLogAttribute : ActionFilterAttribute
     {
+        private const string UnknownStringArgumentValue = "unknown";
+
         private readonly SynchronizationLogType logAction;
 
         private IPlainStorageAccessor<SynchronizationLogItem> synchronizationLogItemPlainStorageAccessor
@@ -64,7 +66,7 @@ namespace WB.UI.Headquarters.Code
                 switch (this.logAction)
                 {
                     case SynchronizationLogType.CanSynchronize:
-                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("id", String.Empty);
+                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
                         if (context.Response.IsSuccessStatusCode) 
                             logItem.Log = SyncLogMessages.CanSynchronize;
                         else if (context.Response.StatusCode == HttpStatusCode.UpgradeRequired)
@@ -76,7 +78,7 @@ namespace WB.UI.Headquarters.Code
                         logItem.Log = string.IsNullOrEmpty(logItem.DeviceId) ? SyncLogMessages.DeviceCanBeAssignedToInterviewer : SyncLogMessages.InterviewerHasDevice;
                         break;
                     case SynchronizationLogType.LinkToDevice:
-                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("id", String.Empty);
+                        logItem.DeviceId = context.GetActionArgumentOrDefault<string>("id", string.Empty);
                         logItem.Log = SyncLogMessages.LinkToDevice;
                         break;
                     case SynchronizationLogType.GetInterviewer:
@@ -98,10 +100,10 @@ namespace WB.UI.Headquarters.Code
                         logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireAssemblyProcessed, context);
                         break;
                     case SynchronizationLogType.GetInterviewPackage:
-                        logItem.Log = SyncLogMessages.GetInterviewPackage.FormatString(context.GetActionArgumentOrDefault<string>("id", String.Empty));
+                        logItem.Log = SyncLogMessages.GetInterviewPackage.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
                         break;
                     case SynchronizationLogType.InterviewPackageProcessed:
-                        logItem.Log = SyncLogMessages.InterviewPackageProcessed.FormatString(context.GetActionArgumentOrDefault<string>("id", String.Empty));
+                        logItem.Log = SyncLogMessages.InterviewPackageProcessed.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
                         break;
                     case SynchronizationLogType.GetInterviews:
                         logItem.Log = this.GetInterviewsLogMessage(context);
@@ -116,11 +118,11 @@ namespace WB.UI.Headquarters.Code
                         logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAttachments, context);
                         break;
                     case SynchronizationLogType.GetAttachmentContent:
-                        logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgumentOrDefault<string>("id", String.Empty));
+                        logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
                         break;
                     case SynchronizationLogType.PostInterview:
                         var interviewId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
-                        logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(context, interviewId.Value) : "unknown", interviewId);
+                        logItem.Log = SyncLogMessages.PostPackage.FormatString(interviewId.HasValue ? GetInterviewLink(context, interviewId.Value) : UnknownStringArgumentValue, interviewId);
                         break;
                     case SynchronizationLogType.PostPackage:
                         var packageId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
@@ -206,7 +208,7 @@ namespace WB.UI.Headquarters.Code
                     context.GetActionArgumentOrDefault<int>("version", -1)));
 
             if (questionnaire == null)
-                return messageFormat.FormatString("unknown", "unknown");
+                return messageFormat.FormatString(UnknownStringArgumentValue, UnknownStringArgumentValue);
 
             return messageFormat.FormatString(questionnaire.Title, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
         }
