@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -31,9 +32,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
+                Create.Entity.NumericIntegerQuestion(id: numericQuestionId),
                 Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId),
 
-                Create.Entity.Roster(rosterId: parentRosterGroupId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                Create.Entity.Roster(rosterId: parentRosterGroupId, rosterSizeQuestionId:numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                 {
                     Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId),
                 }),
@@ -42,6 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview.Apply(Create.Event.NumericIntegerQuestionAnswered(numericQuestionId, RosterVector.Empty, 2));
             interview.Apply(Create.Event.RosterInstancesAdded(parentRosterGroupId, new decimal[0], 0, null));
             interview.Apply(Create.Event.RosterInstancesAdded(parentRosterGroupId, new decimal[0], 1, null));
             eventContext = new EventContext();
@@ -74,5 +77,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid questionWhichIncreasesRosterSizeId;
         private static Guid rosterGroupId;
         private static Guid parentRosterGroupId;
+        private static Guid numericQuestionId = Guid.Parse("33333333333333333333333333333333");
     }
 }

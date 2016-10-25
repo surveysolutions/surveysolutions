@@ -35,10 +35,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.LinkedQuesti
                  new PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0],
-                DateTime.Now, new[] {new Tuple<decimal, string>(0, "a"), new Tuple<decimal, string>(1, "b") });
-            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now,
-                new decimal[] { 0 });
+            interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, new[]
+            {
+                new Tuple<decimal, string>(0, "a"),
+                new Tuple<decimal, string>(1, "b")
+            });
+            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now, new decimal[] { 0 });
             eventContext = new EventContext();
         };
 
@@ -49,8 +51,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.LinkedQuesti
         };
 
         Because of = () =>
-           interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0],
-                DateTime.Now, new[] { new Tuple<decimal, string>(1, "b") });
+           interview.AnswerTextListQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, new[]
+           {
+               new Tuple<decimal, string>(1, "b")
+           });
 
         It should_raise_RosterInstancesRemoved_event_for_first_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event

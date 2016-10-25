@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel, 
-        ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -161,11 +161,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Dispose();
         }
 
-        public void Handle(AnswerRemoved @event)
+        public void Handle(AnswersRemoved @event)
         {
-            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            foreach (var question in @event.Questions)
             {
-                this.Answer = null;
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
+                {
+                    this.Answer = null;
+                }
             }
         }
     }

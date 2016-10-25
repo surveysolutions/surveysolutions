@@ -78,8 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_RosterInstancesAdded_event_with_SortIndexes = () =>
         {
             var addedRosters = eventContext.GetSingleEvent<RosterInstancesAdded>().Instances;
-            addedRosters[0].SortIndex.ShouldEqual(1);
-            addedRosters[1].SortIndex.ShouldEqual(2);
+            addedRosters.Select(x => x.SortIndex).ShouldContainOnly(1, 2);
         };
 
         It should_raise_RosterInstancesRemoved_event = () =>

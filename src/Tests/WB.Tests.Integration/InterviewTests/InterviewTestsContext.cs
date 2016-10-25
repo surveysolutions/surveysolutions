@@ -12,7 +12,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -92,7 +91,12 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null, bool useLatestEngine = true)
+        protected static StatefulInterview SetupStatefullInterview(
+            QuestionnaireDocument questionnaireDocument, 
+            IEnumerable<object> events = null, 
+            ILatestInterviewExpressionState precompiledState = null, 
+            bool useLatestEngine = true,
+            Dictionary<Guid, object> answersOnPrefilledQuestions = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -106,7 +110,8 @@ namespace WB.Tests.Integration.InterviewTests
             var interview = Create.StatefulInterview(
                 questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository,
-                expressionProcessorStatePrototypeProvider: statePrototypeProvider);
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider,
+                answersOnPrefilledQuestions: answersOnPrefilledQuestions);
 
             interview.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, 1);
             ApplyAllEvents(interview, events);
@@ -152,9 +157,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
-            var interview = new Interview(
-                Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+            var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             return interview;

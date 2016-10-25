@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -146,14 +146,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(AnswerRemoved answerRemoved)
+        public void Handle(AnswersRemoved @event)
         {
-            var myAnswerRemoved = this.questionIdentity.Id == answerRemoved.QuestionId && 
-                                  this.questionIdentity.RosterVector.Identical(answerRemoved.RosterVector);
-            if (myAnswerRemoved)
+            foreach (var question in @event.Questions)
             {
-                this.Answer = null;
-                this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetPictureFileName());
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
+                {
+                    this.Answer = null;
+                    this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetPictureFileName());
+                }
             }
         }
 
