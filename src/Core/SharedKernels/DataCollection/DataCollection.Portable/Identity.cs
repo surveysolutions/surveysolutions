@@ -18,15 +18,12 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override int GetHashCode()
         {
-            unchecked
+            if (!this.hashCode.HasValue)
             {
-                if (!this.hashCode.HasValue)
-                {
-                    this.hashCode = this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
-                }
-
-                return this.hashCode.Value;
+                this.hashCode = this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
             }
+
+            return this.hashCode.Value;
         }
 
         public Guid Id { get; }
