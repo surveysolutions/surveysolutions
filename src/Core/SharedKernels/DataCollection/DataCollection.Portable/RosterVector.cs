@@ -98,17 +98,15 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             if (!this.cachedHashCode.HasValue)
             {
-                unchecked
+                int hc = this.coordinates.Count;
+
+                for (int i = 0; i < this.coordinates.Count; i++)
                 {
-                    int hc = this.Coordinates.Count;
-
-                    foreach (var coordinate in this.Coordinates)
-                    {
-                        hc = unchecked(hc*13 + coordinate.GetHashCode());
-                    }
-
-                    this.cachedHashCode = hc;
+                    int hashCode = this.coordinates[i].GetHashCode();
+                    hc = unchecked(hc * 13 + hashCode);
                 }
+
+                this.cachedHashCode = hc;
             }
 
             return this.cachedHashCode.Value;
