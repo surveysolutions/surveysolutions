@@ -548,6 +548,10 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_sample_data_with_no_answers_on_gps_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_date_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_called_for_GetQuestionnaire_and_params_provided.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_for_GetInterviewPackage_and__called_without_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_called_for_GetInterview_and_param_of_unexpected_type.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\WriteToSyncLogAttributeTestsContext.cs" />
     <Compile Include="SyncAsyncRunner.cs" />
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
