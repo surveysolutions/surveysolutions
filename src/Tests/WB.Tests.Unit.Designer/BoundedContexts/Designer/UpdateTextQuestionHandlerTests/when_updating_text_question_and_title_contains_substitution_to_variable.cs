@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -15,43 +14,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded {PublicKey = chapterId});
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: chapterId,
-                questionText: "title",
-                stataExportCaption: "text",
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                responsibleId,
+                title: "title",
+                variableName: "q1",
                 instructions: "instructions",
-                conditionExpression: "condition",
-                responsibleId: responsibleId,
-                questionType: QuestionType.QRBarcode
-                ));
+                enablementCondition: "condition");
 
-            questionnaire.AddVariable(Create.Event.VariableAdded(
-                entityId: Guid.NewGuid(),
+            questionnaire.AddVariable(
+                Guid.NewGuid(),
                 responsibleId:responsibleId,
                 parentId: chapterId,
                 variableType: VariableType.String,
                 variableName: variableName,
-                variableExpression: "text + text"));
+                variableExpression: "text + text");
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                questionnaire.UpdateTextQuestion(
-                    questionId: questionId,
-                    title: titleWithSubstitutionToVariable,
-                    variableName: "text",
-                    variableLabel: null,
-                    isPreFilled: isPreFilled,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    mask: null,
-                    responsibleId: responsibleId, 
-                    validationCoditions: new List<ValidationCondition>(), 
-                    properties: Create.QuestionProperties()));
+             exception = Catch.Exception(() =>
+                 questionnaire.UpdateTextQuestion(
+                     new UpdateTextQuestion(
+                         questionnaire.Id,
+                         questionId,
+                         responsibleId,
+                         new CommonQuestionParameters() { Title = titleWithSubstitutionToVariable, VariableName = "q1" },
+                         null, scope, false,
+                         new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeNull();
@@ -64,9 +55,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private const string variableName = "var";
         private static string titleWithSubstitutionToVariable = $"title with substitution to variable - %{variableName}%";
-        private static string instructions = "intructions";
-        private static bool isPreFilled = false;
+        
         private static QuestionScope scope = QuestionScope.Interviewer;
-        private static string enablementCondition = null;
+        
     }
 }

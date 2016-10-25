@@ -43,11 +43,6 @@ namespace WB.UI.Designer.Code
 
         public override void Load()
         {
-            this.BindFilter<TransactionFilter>(FilterScope.First, 0)
-              .WhenActionMethodHasNo<NoTransactionAttribute>();
-            this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
-                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
-
             this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
                 .WhenActionMethodHasNo<NoTransactionAttribute>();
             this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)

@@ -1,3 +1,54 @@
+#2.22.1
+
+* Fix tree sorting bug, see Issues [#831](https://github.com/angular-ui-tree/angular-ui-tree/issues/831) and [#832](https://github.com/angular-ui-tree/angular-ui-tree/issues/832)
+
+#2.22.0
+
+* Improve horizontal movement detection for smoother node movement and to address Issue [#562](https://github.com/angular-ui-tree/angular-ui-tree/issues/562)
+
+#2.21.3
+
+* Set `appendChildOnHover` to `true` by default.
+
+#2.21.2
+
+* Re-integrate lost patch from PR [#650](https://github.com/angular-ui-tree/angular-ui-tree/pull/650).
+
+#2.21.1
+
+* Update CHANGELOG.md
+
+#2.21.0
+
+* New ui-tree-node attribute data-scroll-container allows for specifying any valid querySelector argument to scroll relative to the dragged node.
+* Fixes Issues [#49](https://github.com/angular-ui-tree/angular-ui-tree/issues/49), [#644](https://github.com/angular-ui-tree/angular-ui-tree/issues/644), [#158](https://github.com/angular-ui-tree/angular-ui-tree/issues/158), and [#544](https://github.com/angular-ui-tree/angular-ui-tree/issues/544)
+
+#2.20.0
+
+* Performance Improvements by skipping dragDelay when no delay is specified
+* Corrected error with ESC key not cancelling drag [#799](https://github.com/angular-ui-tree/angular-ui-tree/issues/799)
+* Corrected error where dropping on a noDrop clone tree would add node to second tree [Example of Error](http://gfycat.com/EverlastingCanineCleanerwrasse)
+
+#2.19.0
+
+* Fix error caused by version rollback.
+
+# 2.18.0
+
+* Enable setting a numeric value for the expand-on-hover attribute [#812](https://github.com/angular-ui-tree/angular-ui-tree/pull/812)
+
+# 2.17.0
+
+* Updated Angular/angularfire references in bower.json
+* Re-introduced feature to expand collapsed nodes when hovering another node [#783](https://github.com/angular-ui-tree/angular-ui-tree/pull/783)
+
+# 2.16.0
+
+* Updated Angular references to include 1.5
+* Fixed issue dragging and dropping a node into an empty tree
+* Added new callback for a toggle event that fires when any node is expanded or collapsed.
+* Fixed drag/drop error that occurred when the ng-app was attached to document.
+
 # 2.15.0
 
 * Remove scope dependency [#648](https://github.com/angular-ui-tree/angular-ui-tree/pull/648)

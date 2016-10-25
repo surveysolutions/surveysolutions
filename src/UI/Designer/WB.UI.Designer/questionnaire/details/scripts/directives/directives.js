@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function($) {
     angular.module('designerApp').directive('focusOnOut', function () {
         return function(scope, elem, attr) {
             scope.$on('focusOn', function(e, name) {
@@ -38,5 +38,22 @@
             replace: true,
             template: ""
         };
+    })
+    .directive('onEnter', function () {
+
+        var linkFn = function (scope, element, attrs) {
+            element.bind("keypress", function (event) {
+                if (event.which === 13) {
+                    scope.$apply(function () {
+                        scope.$eval(attrs.onEnter);
+                    });
+                    event.preventDefault();
+                }
+            });
+        };
+
+        return {
+            link: linkFn
+        };
     });
-})();
+})(jQuery);

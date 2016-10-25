@@ -115,7 +115,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                     result.RosterTitleHasChanged = eventContext.AnyEvent<RosterInstancesTitleChanged>(x => 
                         x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterIdentity.Id));
-                    result.RosterTitleBecomesEmpty = eventContext.AnyEvent<RosterInstancesTitleChanged>(x => x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterIdentity.Id && c.Title == string.Empty));
+                    result.RosterTitleBecomesEmpty = eventContext.AnyEvent<RosterInstancesTitleChanged>(x => x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterIdentity.Id && c.Title == null));
 
                     result.MultioptionRosterTriggeredTitleChanged = eventContext.AnyEvent<RosterInstancesTitleChanged>(x =>
                         x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterWithMultioptionsTitle && c.Title == string.Empty));

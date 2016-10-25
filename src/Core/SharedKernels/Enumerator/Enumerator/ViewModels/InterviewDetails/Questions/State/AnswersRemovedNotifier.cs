@@ -9,12 +9,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class AnswersRemovedNotifier : 
         ILiteEventHandler,
         ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<AnswerRemoved>,
         IDisposable
     {
         private readonly ILiteEventRegistry eventRegistry;
         private Identity Identity;
-        private string interviewId;
 
         public event EventHandler AnswerRemoved;
 
@@ -29,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.Identity = entityIdentity;
-            this.interviewId = interviewId;
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
@@ -37,21 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.Any(x => this.Identity.Equals(x)))
             {
-                this.OnAnswerRemoved();
+                this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
             }
-        }
-
-        public void Handle(AnswerRemoved @event)
-        {
-            if (this.Identity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                this.OnAnswerRemoved();
-            }
-        }
-
-        protected virtual void OnAnswerRemoved()
-        {
-            this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
         }
 
         public void Dispose()

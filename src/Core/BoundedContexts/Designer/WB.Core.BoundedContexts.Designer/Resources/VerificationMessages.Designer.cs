@@ -1360,7 +1360,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First chapter can not have enabling condition..
+        ///   Looks up a localized string similar to First section can not have enabling condition..
         /// </summary>
         internal static string WB0263_FirstChapterHasEnablingCondition {
             get {

@@ -3,11 +3,9 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
@@ -32,11 +30,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     Create.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: sourceOfLinkQuestionId, variable:"link")
                 });
 
-            interview = SetupInterview(questionnaireDocument: questionnaire);
-            interview.AnswerTextQuestion(userId, sourceOfLinkQuestionId, new decimal[] {0},
-                DateTime.Now, "a");
-            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now,
-                new decimal[] {0});
+            interview = SetupInterview(questionnaire);
+            interview.AnswerTextQuestion(userId, sourceOfLinkQuestionId, new decimal[] {0}, DateTime.Now, "a");
+            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now, new decimal[] {0});
             eventContext = new EventContext();
         };
 
@@ -49,9 +45,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         Because of = () =>
            interview.RemoveAnswer(sourceOfLinkQuestionId, new decimal[] { 0 }, userId, DateTime.Now);
 
-        It should_raise_AnswerRemoved_event_for_first_row = () =>
-            eventContext.ShouldContainEvent<AnswerRemoved>(@event
-                => @event.QuestionId == sourceOfLinkQuestionId && @event.RosterVector.SequenceEqual(new decimal[] { 0 }));
+        private It should_raise_AnswerRemoved_event_for_first_row = () =>
+            eventContext.GetSingleEvent<AnswersRemoved>()
+                .Questions.ShouldContain(Create.Identity(sourceOfLinkQuestionId, Create.RosterVector(0)));
 
         It should_raise_AnswersRemoved_event_for_answered_linked_Question = () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event

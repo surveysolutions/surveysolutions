@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -36,9 +34,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             InterviewRoster roster = interview.FindRosterByOrDeeperRosterLevel(nearestRosterId, entityIdentity.RosterVector);
 
-            var replaceTo = string.IsNullOrEmpty(roster.Title) ? this.substitutionService.DefaultSubstitutionText : roster.Title;
-            var result = this.substitutionService.ReplaceSubstitutionVariable(title, this.substitutionService.RosterTitleSubstitutionReference, replaceTo);
-            return result;
+            if (roster != null)
+            {
+                var replaceTo = string.IsNullOrEmpty(roster.Title) ? this.substitutionService.DefaultSubstitutionText : roster.Title;
+                var result = this.substitutionService.ReplaceSubstitutionVariable(title, this.substitutionService.RosterTitleSubstitutionReference, replaceTo);
+                return result;
+            }
+
+            return title;
         }
     }
 }

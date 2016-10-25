@@ -6,8 +6,8 @@
         <div class="row">
             <div class="form-group col-xs-6">
                 <label for="edit-group-title" class="wb-label">Roster source</label><br>
-                <div class="btn-group type-container-dropdown" dropdown>
-                    <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" dropdown-toggle type="button">
+                <div class="btn-group type-container-dropdown" uib-dropdown>
+                    <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" uib-dropdown-toggle type="button">
                         {{activeRoster.getTitleForRosterType()}}
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -61,8 +61,8 @@
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>Source question (answer determines both the number and the name of roster rows): </label>
-            <div class="btn-group" dropdown>
-                <button class="btn dropdown-toggle" dropdown-toggle type="button">
+            <div class="btn-group" uib-dropdown>
+                <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
                     <span class="select-placeholder" ng-if="selectedListQuestion == null">Select question</span>
                     <span class="selected-item" ng-if="selectedListQuestion !== null">
                         <span class="path">{{selectedListQuestion.breadcrumbs}}</span>
@@ -101,8 +101,8 @@
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>Source question for number of rows:</label>
-            <div class="btn-group" dropdown>
-                <button class="btn dropdown-toggle" dropdown-toggle type="button">
+            <div class="btn-group" uib-dropdown>
+                <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
                     <span class="select-placeholder" ng-if="selectedNumericQuestion == null">Select question</span>
                     <span class="selected-item" ng-if="selectedNumericQuestion !== null">
                         <span class="path">{{selectedNumericQuestion.breadcrumbs}}</span>
@@ -137,8 +137,8 @@
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>Source question for names of rows:</label>
-            <div class="btn-group" dropdown>
-                <button class="btn dropdown-toggle" dropdown-toggle type="button">
+            <div class="btn-group" uib-dropdown>
+                <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
                     <span class="select-placeholder" ng-if="selectedTitleQuestion == null">Select question</span>
                     <span class="selected-item" ng-if="selectedTitleQuestion !== null">
                         <span class="path">{{selectedTitleQuestion.breadcrumbs}}</span>
@@ -187,7 +187,7 @@
                                        ng-class="{'has-error': !editRosterForm.title_value_{{$index}}.$valid}" ng-keypress="onKeyPressInOptions($event)" class="form-control fixed-roster-value-editor">
                             </div>
                             <div class="column-3">
-                                <input type="text" ng-model="title.title" ng-keypress="onKeyPressInOptions($event)" class="form-control">
+                                <input ng-attr-id="{{'fixed-item-' + $index}}" type="text" ng-model="title.title" ng-keypress="onKeyPressInOptions($event)" class="form-control">
                             </div>
                             <div class="column-4">
                                 <a href class="btn" tabindex="-1" ng:click="removeFixedTitle($index)"></a>
@@ -226,8 +226,8 @@
 
         <div class="dropdown-with-breadcrumbs-and-icons">
             <label>Source question (answer determines both the number and the name of roster rows): </label>
-            <div class="btn-group" dropdown>
-                <button class="btn dropdown-toggle" dropdown-toggle type="button">
+            <div class="btn-group" uib-dropdown>
+                <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
                     <span class="select-placeholder" ng-if="selectedMultiQuestion == null">Select question</span>
                     <span class="selected-item" ng-if="selectedMultiQuestion !== null">
                         <span class="path">{{selectedMultiQuestion.breadcrumbs}}</span>

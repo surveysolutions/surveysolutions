@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 

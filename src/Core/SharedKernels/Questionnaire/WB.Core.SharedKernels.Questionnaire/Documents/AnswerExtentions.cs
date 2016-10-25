@@ -12,12 +12,10 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             if (answer == null)
                 return null;
 
-            return new CategoricalOption()
+            return new CategoricalOption
             {
                 Title = answer.AnswerText,
-                Value = answer.AnswerCode.HasValue ? 
-                            Convert.ToInt32(answer.AnswerCode.Value) : 
-                            Convert.ToInt32(decimal.Parse(answer.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture)),
+                Value = Convert.ToInt32(answer.GetParsedValue()),
                 ParentValue = answer.ParentCode.HasValue ? 
                             Convert.ToInt32(answer.ParentCode):
                             ParseValue(answer.ParentValue)
@@ -31,7 +29,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             if (decimal.TryParse(stringValue, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
                 return Convert.ToInt32(parsedValue);
 
-            return (int?) null;
+            return null;
         }
     }
 }

@@ -69,10 +69,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateSingleOptionQuestion>,
         ICommandPostProcessor<Questionnaire, AddLookupTable>,
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
-        ICommandPostProcessor<Questionnaire, DeleteLookupTable>
+        ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
+        ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>
     {
-        private IReadSideRepositoryWriter<AccountDocument> accountStorage
-            => ServiceLocator.Current.GetInstance<IReadSideRepositoryWriter<AccountDocument>>();
+        private IPlainStorageAccessor<User> accountStorage
+            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
 
         private IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireChangeRecord>>();
@@ -578,6 +579,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             string targetTitle,
             params QuestionnaireChangeReference[] references)
         {
+            AddQuestionnaireChangeItem(questionnaireId,
+                responsibleId,
+                actionType,
+                targetType,
+                targetId,
+                targetTitle,
+                null,
+                null,
+                references);
+        }
+
+        private void AddQuestionnaireChangeItem(
+            Guid questionnaireId,
+            Guid responsibleId,
+            QuestionnaireActionType actionType,
+            QuestionnaireItemType targetType,
+            Guid targetId,
+            string targetTitle,
+            string targetNewTitle,
+            int? affecedEntries,
+            params QuestionnaireChangeReference[] references)
+        {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
             var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.Query(x => x.
@@ -596,7 +619,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 ActionType = actionType,
                 TargetItemId = targetId,
                 TargetItemTitle = targetTitle,
-                TargetItemType = targetType
+                TargetItemType = targetType,
+                TargetItemNewTitle = targetNewTitle,
+                AffectedEntriesCount = affecedEntries
             };
 
             references.ForEach(r => r.QuestionnaireChangeRecord = questionnaireChangeItem);
@@ -609,7 +634,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             if (userId.HasValue)
             {
-                var creator = this.accountStorage.GetById(userId);
+                var creator = this.accountStorage.GetById(userId.Value.FormatGuid());
                 if (creator != null)
                     return creator.UserName;
             }
@@ -745,5 +770,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 ReferenceType = referenceType,
                 ReferenceTitle = title
             };
+
+        public void Process(Questionnaire aggregate, ReplaceTextsCommand command)
+        {
+            AddQuestionnaireChangeItem(command.QuestionnaireId, 
+                command.ResponsibleId, 
+                QuestionnaireActionType.ReplaceAllTexts, 
+                QuestionnaireItemType.Questionnaire, 
+                command.QuestionnaireId,
+                command.SearchFor,
+                command.ReplaceWith,
+                aggregate.GetLastReplacedEntriesCount()
+                );
+        }
     }
 }

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -166,7 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
 
-        Guid? GetRosterSizeQuestion(Guid rosterId);
+        Guid GetRosterSizeQuestion(Guid rosterId);
 
         Guid? GetRosterTitleQuestionId(Guid rosterId);
 
@@ -235,7 +233,12 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IReadOnlyCollection<string> GetTranslationLanguages();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
+        bool IsSubSection(Guid groupId);
 
-        Dictionary<ValueVector<Guid>, RosterScopeDescription>  GetRosterScopes();
+        Guid? GetCommontParentForLinkedQuestionAndItSource(Guid linkedQuestionId);
+        bool IsVariable(Guid id);
+        IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId);
+
+        IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId);
     }
 }

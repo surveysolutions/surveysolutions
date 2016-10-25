@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -35,10 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.LinkedQuesti
                 new PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.AnswerTextQuestion(userId, sourceOfLinkQuestionId, new decimal[] {0},
-                DateTime.Now, "a");
-            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now,
-                new decimal[] {0});
+            interview.AnswerTextQuestion(userId, sourceOfLinkQuestionId, new decimal[] {0}, DateTime.Now, "a");
+            interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now, new decimal[] {0});
             eventContext = new EventContext();
         };
 
@@ -52,12 +51,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.LinkedQuesti
            interview.RemoveAnswer(sourceOfLinkQuestionId, new decimal[] { 0 }, userId, DateTime.Now);
 
         It should_raise_AnswerRemoved_event_for_first_row = () =>
-            eventContext.ShouldContainEvent<AnswerRemoved>(@event
-                => @event.QuestionId == sourceOfLinkQuestionId && @event.RosterVector.SequenceEqual(new decimal[] { 0 }));
-
+            eventContext.GetEvent<AnswersRemoved>().Questions.ShouldContain(Create.Entity.Identity(sourceOfLinkQuestionId, Create.Entity.RosterVector(0)));
+        
         It should_raise_AnswersRemoved_event_for_answered_linked_Question = () =>
-            eventContext.ShouldContainEvent<AnswersRemoved>(@event
-                => @event.Questions.Count(q => q.Id == linkedQuestionId && !q.RosterVector.Any())==1);
+            eventContext.GetEvent<AnswersRemoved>().Questions.ShouldContain(Create.Entity.Identity(linkedQuestionId, RosterVector.Empty));
 
         It should_raise_LinkedOptionsChanged_event_with_empty_option_list_for_linked_question = () =>
             eventContext.ShouldContainEvent<LinkedOptionsChanged>(@event

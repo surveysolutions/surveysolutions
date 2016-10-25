@@ -9,7 +9,7 @@ namespace WB.UI.Shared.Enumerator
     {
         public override void Load()
         {
-            SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_esqlite3());
+            SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
 
             this.Bind<IUserInteractionService>().To<UserInteractionService>();
             this.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();

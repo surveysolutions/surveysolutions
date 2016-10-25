@@ -546,9 +546,7 @@ namespace WB.Tests.Integration
         public static Interview Interview(Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            var interview = new Interview(
-                Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+            var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.CreateInterview(
@@ -563,7 +561,9 @@ namespace WB.Tests.Integration
         }
 
         public static StatefulInterview StatefulInterview(Guid? questionnaireId = null,
-            IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+            IQuestionnaireStorage questionnaireRepository = null, 
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
+            Dictionary<Guid, object> answersOnPrefilledQuestions = null)
         {
             var interview = new StatefulInterview(
                 Mock.Of<ILogger>(),
@@ -574,7 +574,7 @@ namespace WB.Tests.Integration
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 1,
                 new Guid("D222D222D222D222D222D222D222D222"),
-                new Dictionary<Guid, object>(),
+                answersOnPrefilledQuestions ?? new Dictionary<Guid, object>(),
                 new DateTime(2012, 12, 20),
                 new Guid("F111F111F111F111F111F111F111F111"));
 
@@ -915,5 +915,14 @@ namespace WB.Tests.Integration
                 ParentValue = parentValue
             };
         }
+
+        public static IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationCondition(Identity questionIdentity)
+            => new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
+            {
+                {
+                    questionIdentity,
+                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                }
+            };
     }
 }

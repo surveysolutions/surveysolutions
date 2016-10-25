@@ -5,6 +5,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -28,11 +30,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
                     RosterSizeQuestionId = numericQuestionId
                 }
             );
-            questionnaireStorage = CreateQuestionnaireStorageMock(questionnarie).Object;
+            rosterStructureService = new RosterStructureService();
         };
 
         Because of = () =>
-            rosterScopes = questionnaireStorage.GetQuestionnaire(new QuestionnaireIdentity(), null).GetRosterScopes();
+            rosterScopes = rosterStructureService.GetRosterScopes(questionnarie);
 
         It should_contain_1_roster_scope = () =>
             rosterScopes.Count().ShouldEqual(1);
@@ -44,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Factories.QuestionnaireRost
             rosterScopes.Single().Value.Type.ShouldEqual(RosterScopeType.Numeric);
 
         private static QuestionnaireDocument questionnarie;
-        private static IQuestionnaireStorage questionnaireStorage;
+        private static IRostrerStructureService rosterStructureService;
         private static Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes;
         private static Guid numericRosterGroupId;
         private static Guid numericQuestionId;

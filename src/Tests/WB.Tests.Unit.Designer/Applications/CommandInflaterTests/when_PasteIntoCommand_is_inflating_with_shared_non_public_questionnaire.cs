@@ -22,9 +22,6 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
                     u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));
 
             var questionnaire = CreateQuestionnaireDocument(questoinnaireId, questionnaiteTitle, ownerId, false);
-
-            questionnaire.SharedPersons.Add(actionUserId);
-
             var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
                     => storage.GetById(it.IsAny<string>()) == questionnaire);
 

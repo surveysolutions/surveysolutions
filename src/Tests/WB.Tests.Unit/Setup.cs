@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -26,7 +24,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -202,32 +199,6 @@ namespace WB.Tests.Unit
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: questionnaireIdentity.Version,
                 questionnaireRepository: questionnaireRepository);
-        }
-
-        public static Mock<IQuestionnaireEntityFactory> QuestionnaireEntityFactoryWithStaticText(Guid? entityId = null, string text = null, string attachmentName = null)
-        {
-            var staticText = Create.Entity.StaticText(entityId, text, attachmentName);
-            var questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
-            if (!entityId.HasValue)
-            {
-                questionnaireEntityFactoryMock
-                   .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                   .Returns((Guid id, string t, string a) => Create.Entity.StaticText(id, t, a));
-            }
-            else if (string.IsNullOrWhiteSpace(attachmentName))
-            {
-                questionnaireEntityFactoryMock
-                    .Setup(x => x.CreateStaticText(entityId.Value, text, Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                    .Returns(staticText);
-            }
-            else
-            {
-                questionnaireEntityFactoryMock
-                   .Setup(x => x.CreateStaticText(entityId.Value, text, attachmentName, Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                   .Returns(staticText);
-            }
-
-            return questionnaireEntityFactoryMock;
         }
 
         public static ISupportedVersionProvider SupportedVersionProvider(int supportedVerstion)

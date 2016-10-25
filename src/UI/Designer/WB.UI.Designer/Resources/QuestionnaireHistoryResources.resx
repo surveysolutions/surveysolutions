@@ -264,4 +264,7 @@
   <data name="Translation_Updated" xml:space="preserve">
     <value>Translation "{0}" updated</value>
   </data>
+  <data name="TextsReplaced" xml:space="preserve">
+    <value>All '{0}' were replaced with '{1}'. {2} entries affected</value>
+  </data>
 </root>

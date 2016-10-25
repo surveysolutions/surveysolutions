@@ -121,6 +121,23 @@ namespace WB.Tests.Unit.TestFactories
                 DateTime.Now, 
                 selectedRosterVectors ?? new decimal[][]{});
 
+        public NumericIntegerQuestionAnswered NumericIntegerQuestionAnswered(
+            Guid? questionId = null, decimal[] rosterVector = null, int? answer = null)
+            => new NumericIntegerQuestionAnswered(
+                Guid.NewGuid(),
+                questionId ?? Guid.NewGuid(),
+                rosterVector ?? RosterVector.Empty,
+                DateTime.Now,
+                answer ?? 1);
+
+        public PictureQuestionAnswered PictureQuestionAnswered(Guid? questionId = null, decimal[] rosterVector = null, string answer = null, DateTime? answerTimeUtc = null)
+         => new PictureQuestionAnswered(
+               Guid.NewGuid(),
+               questionId ?? Guid.NewGuid(),
+               rosterVector ?? RosterVector.Empty,
+               answerTimeUtc ?? DateTime.Now,
+               answer ?? "file.png");
+
         public QuestionsDisabled QuestionsDisabled(Identity[] questions)
             => new QuestionsDisabled(questions);
 
@@ -219,6 +236,15 @@ namespace WB.Tests.Unit.TestFactories
                 rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
                 DateTime.Now,
                 answer ?? "answer");
+
+        public TextListQuestionAnswered TextListQuestionAnswered(
+           Guid? questionId = null, decimal[] rosterVector = null, Tuple<decimal, string>[] answers = null, DateTime? answerTimeUtc = null)
+           => new TextListQuestionAnswered(
+               Guid.NewGuid(),
+               questionId ?? Guid.NewGuid(),
+               rosterVector ?? RosterVector.Empty,
+               answerTimeUtc ?? DateTime.Now,
+               answers ?? new Tuple<decimal, string>[0]);
 
         public VariablesChanged VariablesChanged(params ChangedVariable[] changedVariables)
              => new VariablesChanged(changedVariables);

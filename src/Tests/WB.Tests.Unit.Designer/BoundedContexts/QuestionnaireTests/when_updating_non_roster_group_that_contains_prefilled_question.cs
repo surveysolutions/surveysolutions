@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -15,13 +15,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var prefilledQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey: rosterSizeQuestionId, isInteger:true, groupPublicKey: chapterId));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddNumericQuestion(
+                 rosterSizeQuestionId, isInteger:true, parentId: chapterId,responsibleId:responsibleId);
             
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded(
-                publicKey: prefilledQuestionId, isInteger: true, groupPublicKey: rosterId, featured:true));
+            questionnaire.AddGroup(rosterId, responsibleId: responsibleId);
+            questionnaire.AddNumericQuestion(prefilledQuestionId, isInteger: true, parentId: rosterId, isPreFilled:true, responsibleId:responsibleId);
             
             eventContext = new EventContext();
         };

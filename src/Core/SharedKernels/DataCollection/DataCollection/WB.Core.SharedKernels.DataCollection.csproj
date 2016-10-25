@@ -26,7 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -122,8 +122,34 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.Questionnaire.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.InterviewTree.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.Invariants.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.DateTimeQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.MultipleOptionsQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.RemoveAnswer.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.NumericRealQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.YesNoQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.QRBarcodeQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.SingleOptionQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.SingleOptionLinkedQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.PictureQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.MultipleOptionsLinkedQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.TextListQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.GPSQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.ExpressionState.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.TextQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\Answers.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewProperties.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTree.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.Events.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeGroup.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeNodeDiff.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeRoster.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticText.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariable.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\RosterManager.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\Latest\InterviewExpressionStateV10ToLatestAdapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V10\InterviewExpressionStateV9ToV10Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V2\InterviewExpressionStateV1ToV2Adapter.cs" />
@@ -135,7 +161,6 @@
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V9\InterviewExpressionStateV8ToV9Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IInterviewExpressionStateUpgrader.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ILatestInterviewExpressionState.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateForPreloading.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateUpgrader.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IReadOnlyInterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewPropertiesInvariants.cs" />
@@ -147,19 +172,14 @@
     <Compile Include="Commands\Interview\AnswerTextListQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerQRBarcodeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\CancelInterviewByHqSynchronizationCommand.cs" />
-    <Compile Include="Commands\Interview\CreateInterviewCreatedOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewOnClientCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
     <Compile Include="Commands\Interview\HardDeleteInterview.cs" />
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
     <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
-    <Compile Include="Commands\Interview\MarkInterviewAsSentToHeadquarters.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserBySupervisorCommand.cs" />
@@ -216,7 +236,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterCalculationData.cs" />
@@ -364,6 +383,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Implementation\Aggregates\Interview.NumericIntegerQuestion.cs" />
+    <Compile Include="Implementation\Aggregates\Interview.Apply.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

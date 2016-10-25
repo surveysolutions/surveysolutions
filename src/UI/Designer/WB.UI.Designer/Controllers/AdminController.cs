@@ -19,7 +19,6 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Extensions;
@@ -31,7 +30,7 @@ using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
 {
-    [CustomAuthorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
         private class RestoreState
@@ -129,8 +128,7 @@ namespace WB.UI.Designer.Controllers
                         this.zipUtils.DecompressGZip<QuestionnaireDocumentWithLookUpTables>(CreateStreamCopy(uploadFile.InputStream));
                     if (document != null)
                     {
-                        var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId,
-                            document.QuestionnaireDocument);
+                        var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, document.QuestionnaireDocument);
 
                         this.commandService.Execute(command);
                         foreach (var lookupTable in document.LookupTables)
@@ -617,7 +615,7 @@ namespace WB.UI.Designer.Controllers
                 Order = sb ?? string.Empty,
             });
 
-            Func<AccountListItem, bool> editAction =
+            Func<IAccountView, bool> editAction =
                 (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
 
             IEnumerable<AccountListViewItemModel> retVal =

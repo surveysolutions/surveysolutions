@@ -16,11 +16,11 @@ namespace WB.UI.Interviewer.Implementations.Services
 {
     internal class TabletDiagnosticService: ITabletDiagnosticService
     {
-        private readonly IAsynchronousFileSystemAccessor asynchronousFileSystemAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public TabletDiagnosticService(IAsynchronousFileSystemAccessor asynchronousFileSystemAccessor)
+        public TabletDiagnosticService(IFileSystemAccessor fileSystemAccessor)
         {
-            this.asynchronousFileSystemAccessor = asynchronousFileSystemAccessor;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
@@ -37,12 +37,12 @@ namespace WB.UI.Interviewer.Implementations.Services
         {
             var applicationFileName = "interviewer.apk";
             var pathToExternalDirectory = AndroidPathUtils.GetPathToExternalDirectory();
-            var downloadFolder = this.asynchronousFileSystemAccessor.CombinePath(pathToExternalDirectory, "download");
-            string pathTofile = this.asynchronousFileSystemAccessor.CombinePath(downloadFolder, applicationFileName);
+            var downloadFolder = this.fileSystemAccessor.CombinePath(pathToExternalDirectory, "download");
+            string pathTofile = this.fileSystemAccessor.CombinePath(downloadFolder, applicationFileName);
 
-            if (await this.asynchronousFileSystemAccessor.IsFileExistsAsync(pathTofile))
+            if (this.fileSystemAccessor.IsFileExists(pathTofile))
             {
-                await this.asynchronousFileSystemAccessor.DeleteFileAsync(pathTofile);
+                this.fileSystemAccessor.DeleteFile(pathTofile);
             }
 
             HttpClient client = new HttpClient();
@@ -53,7 +53,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             response.EnsureSuccessStatusCode();
 
             byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-            await this.asynchronousFileSystemAccessor.WriteAllBytesAsync(pathTofile, responseBytes);
+            this.fileSystemAccessor.WriteAllBytes(pathTofile, responseBytes);
 
             Intent promptInstall =
                 new Intent(Intent.ActionView).SetDataAndType(

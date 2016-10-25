@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -15,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -23,12 +25,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
     {
         protected static ExportViewFactory CreateExportViewFactory(
             IQuestionnaireStorage questionnaireStorage = null,
-            IExportQuestionService exportQuestionService = null)
+            IExportQuestionService exportQuestionService = null,
+            IRostrerStructureService rostrerStructureService = null)
         {
             return new ExportViewFactory(
                 Mock.Of<IFileSystemAccessor>(),
                 exportQuestionService ?? new ExportQuestionService(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                rostrerStructureService ?? new RosterStructureService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter( params IComposite[] chapterChildren)

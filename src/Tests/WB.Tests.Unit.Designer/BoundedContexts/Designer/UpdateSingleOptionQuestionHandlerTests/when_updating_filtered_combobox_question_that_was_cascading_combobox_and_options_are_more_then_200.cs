@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -14,45 +14,47 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         Establish context = () =>
         {
             int incrementer = 0;
-            oldAnswers = new Answer[210].Select(
+            oldOptions = new Option[210].Select(
                 answer =>
-                    new Answer
+                    new Option
                     {
-                        AnswerValue = incrementer.ToString(),
-                        AnswerText = (incrementer++).ToString()
+                        Value = incrementer.ToString(),
+                        Title= (incrementer++).ToString(),
+                        ParentValue = "1"
                     }).ToArray();
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddSingleOptionQuestion
             (
-                publicKey : parentQuestionId,
-                answers : new Answer[] { new Answer{ AnswerText = "option1", AnswerValue = "1"}, new Answer{AnswerText = "option2", AnswerValue = "2"}},
-                groupPublicKey : chapterId,
-                questionText : "Parent question",
-                questionType : QuestionType.SingleOption,
-                stataExportCaption : "cascade_parent",
-                featured : false,
+                parentQuestionId,
+                chapterId,
+                options : new Option[] { new Option{ Title = "option1", Value = "1"},
+                                         new Option(){Title= "option2", Value = "2"}},
+                title : "Parent question",
+                variableName : "cascade_parent",
+                isPreFilled : false,
                 responsibleId : responsibleId,
                 linkedToQuestionId : null,
                 isFilteredCombobox : false,
                 cascadeFromQuestionId : null
-            ));
+            );
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
+            questionnaire.AddSingleOptionQuestion
             (
-                publicKey : cascadeQuestionId,
-                answers : oldAnswers,
-                groupPublicKey : chapterId,
-                questionText : "Cascade question",
-                questionType : QuestionType.SingleOption,
-                stataExportCaption : "cascade",
-                featured : false,
+                cascadeQuestionId,
+                chapterId,
+                options: oldOptions,
+                title : "Cascade question",
+                variableName: "cascade",
+                isPreFilled: false,
                 responsibleId : responsibleId,
                 linkedToQuestionId : null,
                 isFilteredCombobox : false,
                 cascadeFromQuestionId : parentQuestionId
-            ));
+            );
+
+            questionnaire.UpdateCascadingComboboxOptions(cascadeQuestionId, responsibleId, oldOptions);
         };
 
         Because of = () =>
@@ -80,7 +82,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 
         It should_contains_question_with_answer_option_that_was_presiously_saved = () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(cascadeQuestionId)
-                .Answers.Count().ShouldEqual(oldAnswers.Count());
+                .Answers.Count().ShouldEqual(oldOptions.Count());
 
 
         private static Questionnaire questionnaire;
@@ -88,6 +90,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static Guid parentQuestionId = Guid.Parse("22222222222222222222222222222222");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static Answer[] oldAnswers;
+        private static Option[] oldOptions;
     }
 }

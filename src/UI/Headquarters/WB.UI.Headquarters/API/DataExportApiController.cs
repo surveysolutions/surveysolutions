@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.Infrastructure.Security;
 
 namespace WB.UI.Headquarters.API
 {
@@ -25,12 +26,13 @@ namespace WB.UI.Headquarters.API
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ILogger logger;
 
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+        private readonly IZipArchiveProtectionService zipArchiveProtectionService;
+        private readonly IExportSettings exportSettings;
 
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -38,16 +40,18 @@ namespace WB.UI.Headquarters.API
             IDataExportProcessesService dataExportProcessesService, 
             IParaDataAccessor paraDataAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            ILogger logger, 
-            IDdiMetadataAccessor ddiMetadataAccessor)
+            IDdiMetadataAccessor ddiMetadataAccessor,
+            IZipArchiveProtectionService zipArchiveProtectionService,
+            IExportSettings exportSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
             this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.logger = logger;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
+            this.zipArchiveProtectionService = zipArchiveProtectionService;
+            this.exportSettings = exportSettings;
         }
 
         [HttpGet]
@@ -140,12 +144,16 @@ namespace WB.UI.Headquarters.API
         private HttpResponseMessage CreateHttpResponseMessageWithFileContent(string filePath)
         {
             if (!fileSystemAccessor.IsFileExists(filePath))
-                throw new HttpException(404, "file is absent");
+                throw new HttpException(404, @"file is absent");
 
-            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            var result = new ProgressiveDownload(this.Request).ResultMessage(stream, "application/zip");
+            Stream exportZipStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            if (this.exportSettings.EncryptionEnforced())
+                exportZipStream = this.zipArchiveProtectionService.ProtectZipWithPassword(exportZipStream, this.exportSettings.GetPassword());
+
+            var result = new ProgressiveDownload(this.Request).ResultMessage(exportZipStream, @"application/zip");
             
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
                 FileNameStar = fileSystemAccessor.GetFileName(filePath)
             };

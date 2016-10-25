@@ -79,14 +79,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetEvent<RosterInstancesAdded>().Instances
                 .ShouldEachConformTo(instance => instance.SortIndex != null);
 
+        It should_raise_RosterInstancesAdded_event_with_2_instances_where_rsort_index_equals_to_0 = () =>
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.SortIndex == 0).ShouldEqual(2);
+
         It should_raise_RosterInstancesAdded_event_with_2_instances_where_rsort_index_equals_to_1 = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.SortIndex == 1).ShouldEqual(2);
 
         It should_raise_RosterInstancesAdded_event_with_2_instances_where_rsort_index_equals_to_2 = () =>
             eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.SortIndex == 2).ShouldEqual(2);
-
-        It should_raise_RosterInstancesAdded_event_with_2_instances_where_rsort_index_equals_to_3 = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count(instance => instance.SortIndex == 3).ShouldEqual(2);
 
         It should_raise_1_RosterRowsTitleChanged_events = () =>
             eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);

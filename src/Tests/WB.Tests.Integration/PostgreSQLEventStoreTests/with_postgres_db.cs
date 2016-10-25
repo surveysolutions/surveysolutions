@@ -3,11 +3,23 @@ using System.Configuration;
 using Machine.Specifications;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
     public class with_postgres_db
     {
+        protected class AccountRegistered : IEvent
+        {
+            public string ApplicationName { get; set; }
+            public string ConfirmationToken { get; set; }
+            public string Email { get; set; }
+        }
+
+        protected class AccountConfirmed : IEvent { }
+
+        protected class AccountLocked : IEvent { }
+
         Establish context = () =>
         {
             TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;

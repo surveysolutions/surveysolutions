@@ -367,6 +367,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All &apos;{0}&apos; were replaced with &apos;{1}&apos;. {2} entries affected.
+        /// </summary>
+        public static string TextsReplaced {
+            get {
+                return ResourceManager.GetString("TextsReplaced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This list does not contain any records.
         /// </summary>
         public static string ThisListDoesNotContainAnyRecords {
