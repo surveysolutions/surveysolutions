@@ -7,29 +7,18 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         private static readonly IEqualityComparer<Identity> instance = new IdentityComparer();
 
-        public static IEqualityComparer<Identity> Instance
-        {
-            get { return instance; }
-        }
+        public static IEqualityComparer<Identity> Instance => instance;
 
         #region IEqualityComparer<Contact> Members
 
         public bool Equals(Identity x, Identity y)
         {
-            return x.Id == y.Id &&
-                x.RosterVector.Length == y.RosterVector.Length &&
-                Enumerable.SequenceEqual<decimal>(x.RosterVector, y.RosterVector);
+            return x.Equals(y);
         }
 
         public int GetHashCode(Identity obj)
         {
-            int hc = obj.RosterVector.Length;
-            for (int i = 0; i < obj.RosterVector.Length; ++i)
-            {
-                hc = unchecked(hc * 13 + obj.RosterVector[i].GetHashCode());
-            }
-
-            return hc + obj.Id.GetHashCode() * 29;
+            return obj.GetHashCode();
         }
 
         #endregion
