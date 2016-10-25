@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -156,7 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             get
             {
-                return new MvxCommand(async () =>
+                return new MvxAsyncCommand(async () =>
                 {
                     try
                     {
@@ -176,9 +176,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(AnswerRemoved @event)
+        public void Handle(AnswersRemoved @event)
         {
-            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            if (@event.Questions.Contains(this.questionIdentity))
             {
                 InvokeOnMainThread(() =>
                 {

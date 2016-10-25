@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.NumericIntegerQuestion(id: questionWhichIncreasesRosterSizeId),
-                Create.Entity.MultipleOptionsQuestion(questionId: multyOptionQuestionWhichIncreasesNestedRosterSizeId, textAnswers: new[] { Create.Entity.Answer("t1", 5), }),
+                Create.Entity.MultipleOptionsQuestion(questionId: multyOptionQuestionWhichIncreasesNestedRosterSizeId, textAnswers: new[] { Create.Entity.Answer("t1", 5) }),
 
                 Create.Entity.Roster(rosterId: parentRosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
                 {
@@ -44,8 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(new MultipleOptionsQuestionAnswered(userId, multyOptionQuestionWhichIncreasesNestedRosterSizeId, new decimal[0],
-                DateTime.Now, new decimal[] { 5 }));
+            interview.Apply(new MultipleOptionsQuestionAnswered(userId, multyOptionQuestionWhichIncreasesNestedRosterSizeId, Empty.RosterVector, DateTime.Now, new decimal[] { 5 }));
             eventContext = new EventContext();
         };
 
@@ -56,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 1);
+           interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, Empty.RosterVector, DateTime.Now, 1);
 
         It should_raise_RosterInstancesAdded_event_for_first_row = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event

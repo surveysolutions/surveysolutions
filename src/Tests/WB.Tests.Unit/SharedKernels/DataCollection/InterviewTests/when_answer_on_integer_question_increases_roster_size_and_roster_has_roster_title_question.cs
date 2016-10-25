@@ -1,14 +1,11 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -17,32 +14,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            var questionnaireId = Guid.Parse("10000000000000000000000000000000");
-            userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(SectionId, QuestionnaireId,
+                  Create.Entity.NumericIntegerQuestion(questionWhichIncreasesRosterSizeId, variable: "num"),
+                  Create.Entity.Roster(rosterGroupId, variable: "r",
+                      rosterSizeSourceType: RosterSizeSourceType.Question,
+                      rosterSizeQuestionId: questionWhichIncreasesRosterSizeId,
+                      rosterTitleQuestionId: rosterTitleId,
+                      children: new IComposite[]
+                      {
+                          Create.Entity.NumericIntegerQuestion(rosterTitleId, variable: "title"),
+                      })));
 
-            var sectionId = Guid.Parse("FFFFFFFF0000000000000000DDDDDDDD");
-            rosterGroupId = Guid.Parse("11111111111111111111111111111111");
-            questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(QuestionnaireId, questionnaire);
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-
-                => _.GetAllSections() == new[] { sectionId }
-                && _.GetChildEntityIds(sectionId) == new[] { questionWhichIncreasesRosterSizeId }
-
-                && _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
-                && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
-                && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new Guid[] { rosterGroupId }
-
-                && _.HasGroup(rosterGroupId) == true
-                && _.IsRosterTitleQuestionAvailable(rosterGroupId) == true
-                && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
-
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
-
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = CreateInterview(questionnaireId: QuestionnaireId, questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };
@@ -68,8 +53,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static EventContext eventContext;
         private static Interview interview;
-        private static Guid userId;
-        private static Guid questionWhichIncreasesRosterSizeId;
-        private static Guid rosterGroupId;
+        private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        private static readonly Guid questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
+        private static readonly Guid rosterGroupId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid SectionId = Guid.Parse("FFFFFFFF0000000000000000DDDDDDDD");
+        private static readonly Guid  rosterTitleId = Guid.Parse("33333333333333333333333333333333");
+        private static readonly Guid QuestionnaireId = Guid.Parse("10000000000000000000000000000000");
     }
 }

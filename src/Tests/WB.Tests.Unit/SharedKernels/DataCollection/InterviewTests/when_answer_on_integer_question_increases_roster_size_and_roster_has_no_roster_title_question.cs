@@ -2,13 +2,9 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -24,22 +20,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterGroupId = Guid.Parse("11111111111111111111111111111111");
             questionWhichIncreasesRosterSizeId = Guid.Parse("22222222222222222222222222222222");
 
-
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-
-                => _.GetAllSections() == new[] { sectionId }
-                && _.GetChildEntityIds(sectionId) == new[] { questionWhichIncreasesRosterSizeId }
-
-                && _.HasQuestion(questionWhichIncreasesRosterSizeId) == true
-                && _.GetQuestionType(questionWhichIncreasesRosterSizeId) == QuestionType.Numeric
-                && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                && _.IsQuestionInteger(questionWhichIncreasesRosterSizeId) == true
-                && _.GetRosterGroupsByRosterSizeQuestion(questionWhichIncreasesRosterSizeId) == new Guid[] { rosterGroupId }
-
-                && _.HasGroup(rosterGroupId) == true
-                && _.IsRosterTitleQuestionAvailable(rosterGroupId) == false
-                && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, questionnaireId,
+                  Create.Entity.NumericIntegerQuestion(questionWhichIncreasesRosterSizeId, variable: "num"),
+                  Create.Entity.Roster(rosterGroupId, variable: "r",
+                      rosterSizeSourceType: RosterSizeSourceType.Question,
+                      rosterSizeQuestionId: questionWhichIncreasesRosterSizeId,
+                      rosterTitleQuestionId: null)));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 

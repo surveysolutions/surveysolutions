@@ -27,7 +27,6 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var childCascadedComboboxId = Guid.Parse("11111111111111111111111111111111");
                 var grandChildCascadedComboboxId = Guid.Parse("22222222222222222222222222222222");
                 var questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                var actorId = Guid.Parse("33333333333333333333333333333333");
                 var topRosterId = Guid.Parse("44444444444444444444444444444444");
                 var numericId = Guid.Parse("55555555555555555555555555555555");
 

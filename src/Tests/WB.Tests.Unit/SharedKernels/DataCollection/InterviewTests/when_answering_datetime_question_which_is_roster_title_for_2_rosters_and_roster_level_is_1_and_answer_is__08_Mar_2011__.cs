@@ -3,15 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -24,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             emptyRosterVector = new decimal[] { };
-            var rosterInstanceId = (decimal)22.5;
+            var rosterInstanceId = (decimal)0;
             rosterVector = emptyRosterVector.Concat(new[] { rosterInstanceId }).ToArray();
 
             questionId = Guid.Parse("11111111111111111111111111111111");
@@ -34,18 +29,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.Roster(rosterId: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
+                Create.Entity.NumericIntegerQuestion(id: numericQuestionId),
+                Create.Entity.Roster(rosterId: rosterAId, rosterSizeQuestionId:numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
                 {
                     Create.Entity.DateTimeQuestion(questionId: questionId),
                 }),
-                Create.Entity.Roster(rosterId: rosterBId, rosterTitleQuestionId: questionId),
+                Create.Entity.Roster(rosterId: rosterBId, rosterSizeQuestionId: numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId),
             }));
 
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, rosterInstanceId, sortIndex: null));
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId, sortIndex: null));
+            interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(interview.EventSourceId, userId, numericQuestionId, 1));
 
             eventContext = new EventContext();
         };
@@ -89,5 +84,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static decimal[] emptyRosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
+        private static Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");
+
     }
 }

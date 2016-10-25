@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class TextQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<TextQuestionAnswered>,
-        ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -206,12 +206,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(AnswerRemoved @event)
+        public void Handle(AnswersRemoved @event)
         {
-            if (@event.QuestionId == this.questionIdentity.Id &&
-                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            foreach (var question in @event.Questions)
             {
-                this.UpdateSelfFromModel();
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
+                {
+                    this.UpdateSelfFromModel();
+                }
             }
         }
     }
