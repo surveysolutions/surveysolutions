@@ -32,3 +32,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
+[assembly: InternalsVisibleTo("PerformanceTest")]
