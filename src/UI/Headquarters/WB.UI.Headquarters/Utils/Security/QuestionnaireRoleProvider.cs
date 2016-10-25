@@ -17,25 +17,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
     {
         private string applicationName = "Questionnaire";
 
-        private IUserWebViewFactory UserViewFactory
-        {
-            get { return ServiceLocator.Current.GetInstance<IUserWebViewFactory>(); }
-        }
+        private IUserWebViewFactory UserViewFactory => ServiceLocator.Current.GetInstance<IUserWebViewFactory>();
 
-        private IUserBrowseViewFactory UserBrowseViewFactory
-        {
-            get { return ServiceLocator.Current.GetInstance<IUserBrowseViewFactory>(); }
-        }
+        private IUserBrowseViewFactory UserBrowseViewFactory => ServiceLocator.Current.GetInstance<IUserBrowseViewFactory>();
 
-        private IPlainTransactionManager PlainTransactionManager
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager(); }
-        }
+        private IPlainTransactionManager PlainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
-        private IReadSideStatusService readSideStatusService
-        {
-            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
-        }
+        private IReadSideStatusService readSideStatusService => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
 
         public override string ApplicationName
         {
@@ -110,7 +98,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             UserRoles role;
             if (Enum.TryParse(roleName, out role))
             {
-                return this.UserBrowseViewFactory.Load(new UserBrowseInputModel(role) { PageSize = 100 }).Items.Select(u => u.UserName).ToArray();
+                return this.PlainTransactionManager.ExecuteInPlainTransaction(() => 
+                     this.UserBrowseViewFactory.Load(new UserBrowseInputModel(role) { PageSize = 100 }).Items.Select(u => u.UserName).ToArray());
             }
 
             return new string[0];
