@@ -22,12 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection
             {
                 if (!this.hashCode.HasValue)
                 {
-                    int hc = this.RosterVector.Length;
-                    for (int i = 0; i < this.RosterVector.Length; ++i)
-                    {
-                        hc = unchecked(hc*13 + this.RosterVector[i].GetHashCode());
-                    }
-                    this.hashCode = hc;
+                    this.hashCode = this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
                 }
 
                 return this.hashCode.Value;
