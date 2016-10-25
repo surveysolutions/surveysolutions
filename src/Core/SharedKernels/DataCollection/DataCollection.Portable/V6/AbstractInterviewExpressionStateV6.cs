@@ -146,8 +146,19 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             }
         }
 
+        public override void SetInterviewProperties(IInterviewProperties properties)
+        {
+            this.InterviewProperties = properties;
+            var scopes = this.InterviewScopes.Values;
+
+            foreach (var scope in scopes)
+            {
+                scope.SetInterviewProperties(properties);
+            }
+        }
+
         #endregion
-        
+
         void IInterviewExpressionStateV6.ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
         {
             foreach (var failedValidationCondition in failedValidationConditions)

@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
@@ -29,12 +30,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 : new ExportViewFactory(Mock.Of<IFileSystemAccessor>(_ => _.MakeStataCompatibleFileName(questionnaireDocument.Title) == questionnaireDocument.Title),
                                         new ExportQuestionService(),
                                         Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null) && 
-                                                                            _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument))
+                                                                            _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
+                                        new RosterStructureService())
                       .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));
 
             var questionnaireRosterScopes = (questionnaireDocument == null
                 ? null
-                : new PlainQuestionnaire(questionnaireDocument, 1, null).GetRosterScopes());
+                : new RosterStructureService().GetRosterScopes(questionnaireDocument));
 
             var userViewFactory = new Mock<IUserViewFactory>();
             return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterScopes, questionnaireDocument,

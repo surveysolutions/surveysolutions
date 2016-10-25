@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using MvvmCross.Test.Core;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -87,7 +89,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static Mock<ILiteEventRegistry> EventRegistry;
 
-        protected static List<CategoricalOption> Options = new List<CategoricalOption>
+        protected static ReadOnlyCollection<CategoricalOption> Options = new List<CategoricalOption>
         {
             Create.Entity.CategoricalQuestionOption(1, "title abc 1", 1),
             Create.Entity.CategoricalQuestionOption(2, "title def 2", 1),
@@ -95,7 +97,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             Create.Entity.CategoricalQuestionOption(4, "title gha 4", 2),
             Create.Entity.CategoricalQuestionOption(5, "title ccc 5", 2),
             Create.Entity.CategoricalQuestionOption(6, "title bcw 6", 2)
-        };
+        }.ToReadOnlyCollection();
 
         protected static readonly string interviewId = "Some interviewId";
 

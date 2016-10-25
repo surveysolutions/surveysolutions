@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             {
                 Create.MultyOptionsQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId,
                     variable: "link_mul"),
-                Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Create.Roster(id: Guid.NewGuid(), rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1",
                     children: new IComposite[]
@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         Because of = () =>
              exception = Catch.Exception(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVectors: answer));
+                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVectors: new[] { new decimal[] { 1 } }));
 
         It should_raise_InterviewException = () =>
            exception.ShouldBeOfExactType<InterviewException>();
@@ -52,6 +52,5 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private static Interview interview;
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
         private static Guid linkedToQuestionId = Guid.Parse("11111111111111111111111111111111");
-        private static decimal[][] answer = new[] { new decimal[] { 1 } };
     }
 }

@@ -52,7 +52,27 @@
                     .success(function (result) {
                         $scope.initialStaticText = angular.copy(result);
                         dataBind(result);
-                        utilityService.scrollToValidationCondition($state.params.validationIndex);
+                        utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
+
+                        var focusId = null;
+                        switch ($state.params.property) {
+                            case 'Title':
+                                focusId = 'edit-static-text';
+                                break;
+                            case 'EnablingCondition':
+                                focusId = 'edit-question-enablement-condition';
+                                break;
+                            case 'ValidationExpression':
+                                focusId = 'validation-expression-' + $state.params.indexOfEntityInProperty;
+                                break;
+                            case 'ValidationMessage':
+                                focusId = 'validation-message-' + $state.params.indexOfEntityInProperty;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        utilityService.setFocusIn(focusId);
                     });
             };
 

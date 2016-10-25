@@ -1,7 +1,7 @@
 ﻿angular.module('designerApp')
     .controller('GroupCtrl',
-        function ($rootScope, $scope, $stateParams, questionnaireService, commandService, hotkeys) {
-            $scope.currentChapterId = $stateParams.chapterId;
+        function ($rootScope, $scope, $state, $timeout, questionnaireService, commandService, hotkeys, utilityService) {
+            $scope.currentChapterId = $state.params.chapterId;
 
             var saveGroup = 'ctrl+s';
             if (hotkeys.get(saveGroup) !== false) {
@@ -25,9 +25,9 @@
             var dataBind = function (group) {
                 $scope.activeGroup = group;
 
-                $scope.activeGroup.isChapter = ($stateParams.itemId == $stateParams.chapterId);
-                $scope.activeGroup.itemId = $stateParams.itemId;
-                $scope.activeGroup.variableName = $stateParams.variableName;
+                $scope.activeGroup.isChapter = ($state.params.itemId === $state.params.chapterId);
+                $scope.activeGroup.itemId = $state.params.itemId;
+                $scope.activeGroup.variableName = $state.params.variableName;
 
                 if (!_.isNull($scope.groupForm) && !_.isUndefined($scope.groupForm)) {
                     $scope.groupForm.$setPristine();
@@ -35,18 +35,32 @@
             };
 
             $scope.loadGroup = function () {
-                questionnaireService.getGroupDetailsById($stateParams.questionnaireId, $stateParams.itemId).success(function (result) {
-
-                    dataBind(result.group);
-                    $scope.activeGroup.breadcrumbs = result.breadcrumbs;
-                    $scope.initialGroup = angular.copy($scope.activeGroup);
-                }
-                );
+                questionnaireService.getGroupDetailsById($state.params.questionnaireId, $state.params.itemId)
+                    .success(function(result) {
+                            dataBind(result.group);
+                            $scope.activeGroup.breadcrumbs = result.breadcrumbs;
+                            $scope.initialGroup = angular.copy($scope.activeGroup);
+                            
+                            var focusId = null;
+                            switch ($state.params.property) {
+                                case 'Title':
+                                    focusId = 'edit-group-title';
+                                    break;
+                                case 'EnablingCondition':
+                                    focusId = 'edit-group-condition';
+                                    break;
+                                    
+                                default:
+                                    break;
+                            }
+                            utilityService.setFocusIn(focusId);
+                        }
+                    );
             };
 
             $scope.saveGroup = function (callback) {
                 if ($scope.groupForm.$valid) {
-                    commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup).success(function () {
+                    commandService.updateGroup($state.params.questionnaireId, $scope.activeGroup).success(function () {
                         $scope.initialGroup = angular.copy($scope.activeGroup);
                         $rootScope.$emit('groupUpdated', {
                             itemId: $scope.activeGroup.itemId,

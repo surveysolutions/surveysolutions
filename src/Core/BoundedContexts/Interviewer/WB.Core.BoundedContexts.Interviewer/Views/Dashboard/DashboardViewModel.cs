@@ -207,6 +207,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RunSynchronization()
         {
+            if (this.viewModelNavigationService.HasPendingOperations)
+            {
+                this.viewModelNavigationService.ShowWaitMessage();
+                return;
+            }
+
             this.Synchronization.IsSynchronizationInProgress = true;
             this.Synchronization.Synchronize();
         }

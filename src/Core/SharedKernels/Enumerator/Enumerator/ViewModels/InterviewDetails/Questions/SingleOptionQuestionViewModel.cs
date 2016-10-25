@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IInterviewEntityViewModel, 
         IDisposable,
         ICompositeQuestionWithChildren,
-        ILiteEventHandler<AnswerRemoved>
+        ILiteEventHandler<AnswersRemoved>
     {
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -185,13 +185,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(AnswerRemoved @event)
+        public void Handle(AnswersRemoved @event)
         {
-            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            foreach (var question in @event.Questions)
             {
-                foreach (var option in this.Options.Where(option => option.Selected))
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
-                    option.Selected = false;
+                    foreach (var option in this.Options.Where(option => option.Selected).ToList())
+                    {
+                        option.Selected = false;
+                    }
                 }
             }
         }

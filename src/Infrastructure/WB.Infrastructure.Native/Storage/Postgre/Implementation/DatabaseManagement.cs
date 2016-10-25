@@ -4,9 +4,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal static class DatabaseManagement
     {
-        public static void InitDatabase(string connectionString)
+        public static void InitDatabase(string connectionString, string schemaName)
         {
             CreateDatabase(connectionString);
+            CreateSchema(connectionString, schemaName);
         }
 
         private static void CreateDatabase(string connectionString)
@@ -30,6 +31,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         // unfortunately there is no way to use parameters based syntax here 
                     createCommand.ExecuteNonQuery();
                 }
+            }
+        }
+
+        private static void CreateSchema(string connectionString, string schemaName)
+        {
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                var checkSchemaExistsCommand = connection.CreateCommand();
+                checkSchemaExistsCommand.CommandText = $"CREATE SCHEMA IF NOT EXISTS {schemaName}";
+                checkSchemaExistsCommand.ExecuteNonQuery();
             }
         }
     }

@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    //[Ignore("Fix in KP-7359")]
     internal class when_creating_interview_with_fixed_rosters_and_question_linked_on_them : InterviewTestsContext
     {
         Establish context = () =>

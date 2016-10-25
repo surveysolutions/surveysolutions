@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -25,18 +27,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var scopes = rosterScopes ?? new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
             var questionnaireMock = new Mock<IQuestionnaire>();
-            questionnaireMock.Setup(x => x.GetRosterScopes()).Returns(scopes);
+            var questionnaireDocumentMock = new Mock<QuestionnaireDocument>();
 
+            var rostrerStructureService = new Mock<IRostrerStructureService>();
+            rostrerStructureService.Setup(x => x.GetRosterScopes(Moq.It.IsAny<QuestionnaireDocument>())).Returns(scopes);
+            
             var questionnaireRosterStructureMockStorage = new Mock<IQuestionnaireStorage>();
             questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>())).Returns(questionnaireMock.Object);
-
+            questionnaireRosterStructureMockStorage.Setup(x => x.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocumentMock.Object);
             var userDocumentMockStorage = new Mock<IPlainStorageAccessor<UserDocument>>();
             userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);
 
             return new InterviewEventHandlerFunctional(
                 userDocumentMockStorage.Object,
                 new Mock<IReadSideKeyValueStorage<InterviewData>>().Object,
-                questionnaireRosterStructureMockStorage.Object);
+                questionnaireRosterStructureMockStorage.Object, 
+                rostrerStructureService.Object);
         }
 
         protected static Dictionary<ValueVector<Guid>, RosterScopeDescription> CreateQuestionnaireRosterScopes(Guid scopeId,

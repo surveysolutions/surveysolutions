@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Principal;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using NSubstitute;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -48,33 +49,6 @@ namespace WB.Tests.Unit.Designer
                 => _.IsClientVersionSupported(Moq.It.IsAny<int>()) == isClientVersionSupported
                 && _.GetListOfNewFeaturesForClient(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>()) == (isQuestionnaireVersionSupported ? new string[0] : new []{"New questionnaire feature"})
                 && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireContentVersion);
-        }
-
-        public static Mock<IQuestionnaireEntityFactory> QuestionnaireEntityFactoryWithStaticText(Guid? entityId = null, string text = null, string attachmentName = null)
-        {
-            var staticText = Create.StaticText(entityId, text, attachmentName);
-
-            var questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
-            if (!entityId.HasValue)
-            {
-                questionnaireEntityFactoryMock
-                   .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                   .Returns((Guid id, string t, string a, string c, bool h, IList<ValidationCondition> v) => Create.StaticText(id, t, a));
-            }
-            else if (string.IsNullOrWhiteSpace(attachmentName))
-            {
-                questionnaireEntityFactoryMock
-                    .Setup(x => x.CreateStaticText(entityId.Value, text, Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                    .Returns(staticText);
-            }
-            else
-            {
-                questionnaireEntityFactoryMock
-                   .Setup(x => x.CreateStaticText(entityId.Value, text, attachmentName, Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
-                   .Returns(staticText);
-            }
-
-            return questionnaireEntityFactoryMock;
         }
 
         public static void CommandApiControllerToAcceptAttachment(
@@ -143,6 +117,51 @@ namespace WB.Tests.Unit.Designer
                  .Returns(translatedQuestionnaireDocument);
 
             return serviceMock.Object;
+        }
+
+        public static void ServiceLocatorForCustomWebApiAuthorizeFilter(
+            IPlainTransactionManagerProvider transactionManagerProvider = null,
+            IReadSideStatusService readSideStatusService = null,
+            IMembershipUserService membershipUserService = null)
+        {
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IPlainTransactionManagerProvider>())
+                .Returns(transactionManagerProvider ?? Mock.Of<IPlainTransactionManagerProvider>(t => t.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()));
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IReadSideStatusService>())
+                .Returns(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IMembershipUserService>())
+                .Returns(membershipUserService ?? Mock.Of<IMembershipUserService>());
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+        }
+
+        public static HttpActionContext HttpActionContextWithOutAllowAnonymousOnAction()
+        {
+            var emptyAllowAnonymousList = new Collection<AllowAnonymousAttribute>();
+            var controllerDescriptor = Mock.Of<HttpControllerDescriptor>(c => c.GetCustomAttributes<AllowAnonymousAttribute>() == emptyAllowAnonymousList);
+            var actionDescriptor = Mock.Of<HttpActionDescriptor>(a => a.ControllerDescriptor == controllerDescriptor
+                && a.GetCustomAttributes<AllowAnonymousAttribute>() == emptyAllowAnonymousList);
+            return Mock.Of<HttpActionContext>(c => c.ActionDescriptor == actionDescriptor);
+        }
+
+        public static void HttpContextWithIsAuthenticatedFlag()
+        {
+            var httpRequest = new HttpRequest("", "http://same-url/", "");
+            var stringWriter = new StringWriter();
+            var httpResponse = new HttpResponse(stringWriter);
+            var httpContext = new HttpContext(httpRequest, httpResponse);
+
+            IIdentity identity = Mock.Of<IIdentity>(i => i.IsAuthenticated == true);
+            IPrincipal user = Mock.Of<IPrincipal>(u => u.Identity == identity);
+            httpContext.User = user;
+
+            HttpContext.Current = httpContext;
         }
     }
 }

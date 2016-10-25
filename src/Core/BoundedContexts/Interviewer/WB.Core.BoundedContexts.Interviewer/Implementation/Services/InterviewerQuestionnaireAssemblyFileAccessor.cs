@@ -58,18 +58,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IAsynchronousFileSystemAccessor asyncFileSystemAccessor;
         private readonly ILogger logger;
         private readonly string pathToStore;
         private readonly BackwardCompatibleQuestionnaireAssemblyFileAccessor backwardCompatibleAccessor;
 
         public InterviewerQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor,
-            IAsynchronousFileSystemAccessor asyncFileSystemAccessor, 
             ILogger logger, 
             string pathToAssembliesDirectory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.asyncFileSystemAccessor = asyncFileSystemAccessor;
             this.logger = logger;
             this.pathToStore = pathToAssembliesDirectory;
 
@@ -139,11 +136,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        public async Task RemoveAssemblyAsync(QuestionnaireIdentity questionnaireIdentity)
+        public void RemoveAssembly(QuestionnaireIdentity questionnaireIdentity)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
             
-            await this.asyncFileSystemAccessor.DeleteFileAsync(this.asyncFileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName));
+            this.fileSystemAccessor.DeleteFile(this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName));
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)

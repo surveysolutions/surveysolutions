@@ -24,6 +24,7 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
 
         private readonly Dictionary<string, TEntity> memoryCache = new Dictionary<string, TEntity>();
         private PersistentDictionary<string, string> esentCache;
+        private readonly HashSet<string> savedToEsentIds = new HashSet<string>();
 
         public EsentCachedReadSideStorage(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
         {
@@ -109,11 +110,15 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
         {
             if (this.isCacheUsed)
             {
-                var allKeyToRemove = this.memoryCache.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
-                foreach (var keyToRemove in allKeyToRemove)
+                var idsToRemoveFromCache = this.memoryCache.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
+                var idsToRemoveFromEsent = this.savedToEsentIds.Where(k => k.StartsWith(beginingOfId)).Except(idsToRemoveFromCache).ToArray();
+                var cachedIdsToRemove = idsToRemoveFromCache.Concat(idsToRemoveFromEsent);
+
+                foreach (var keyToRemove in cachedIdsToRemove)
                 {
-                    this.memoryCache[keyToRemove]=null;
+                    this.RemoveFromCache(keyToRemove);
                 }
+
             }
             else
             {
@@ -207,10 +212,12 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
                 if (entity == null)
                 {
                     this.esentCache.Remove(entityId);
+                    savedToEsentIds.Remove(entityId);
                 }
                 else
                 {
                     this.esentCache[entityId] = Serialize(entity);
+                    savedToEsentIds.Add(entityId);
                 }
 
                 this.memoryCache.Remove(entityId);
