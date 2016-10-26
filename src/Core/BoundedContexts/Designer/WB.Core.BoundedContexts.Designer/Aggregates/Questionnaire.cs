@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.sharedPersons = sharedPersons?.ToList() ?? new List<SharedPerson>();
 
             // Migrate single validation conditions to multiple
-            foreach (var question in document.Children.TreeToEnumerable(x => x.Children).OfType<IQuestion>())
+            foreach (var question in this.innerDocument.Children.TreeToEnumerable(x => x.Children).OfType<IQuestion>())
             {
                 question.ValidationConditions = question.ValidationConditions;
                 question.ValidationExpression = null;
