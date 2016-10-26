@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(Button control, GroupStateViewModel value)
         {
-            SimpleGroupStatus status = value != null ? value.SimpleStatus : SimpleGroupStatus.Other;
+            SimpleGroupStatus status = value?.SimpleStatus ?? SimpleGroupStatus.Other;
 
             var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(status);
 
