@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (diffByQuestion == null || diffByQuestion.IsNodeRemoved) return false;
 
-            return diffByQuestion.IsOptionsChanged;
+            return diffByQuestion.AreLinkedOptionsChanged;
         }
 
         private static bool IsVariableChanged(InterviewTreeVariableDiff diffByVariable)

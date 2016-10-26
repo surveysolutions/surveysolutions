@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public bool IsOptionsChanged
+        public bool AreLinkedOptionsChanged
         {
             get
             {
