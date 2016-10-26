@@ -52,6 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ICommandService commandService;
         private readonly AnswerNotifier answerNotifier;
 
+        private GroupStateViewModel groupOrSectionToNavigateGroupState;
+        public GroupStateViewModel GroupOrSectionToNavigateGroupState
+        {
+            get { return this.groupOrSectionToNavigateGroupState; }
+            set { this.RaiseAndSetIfChanged(ref this.groupOrSectionToNavigateGroupState, value); }
+        }
+
         private GroupStateViewModel groupState;
         public GroupStateViewModel GroupState
         {
@@ -139,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
 
             this.SetNavigationItemTitle();
-            this.SetGroupState();
+            this.SetGroupsStates();
 
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
@@ -150,6 +157,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             this.GroupState.UpdateFromGroupModel();
             this.RaisePropertyChanged(() => this.GroupState);
+
+            this.GroupOrSectionToNavigateGroupState?.UpdateFromGroupModel();
+            this.RaisePropertyChanged(() => this.GroupOrSectionToNavigateGroupState);
         }
 
         private Identity GetParentGroupOrRosterIdentity()
@@ -165,21 +175,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             return new Identity(parentId, parentRosterVector);
         }
 
-        private void SetGroupState()
+        private void SetGroupsStates()
         {
             switch (this.navigationGroupType)
             {
                 case NavigationGroupType.InsideGroupOrRoster:
                 case NavigationGroupType.Section:
                     this.groupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
+                    this.groupOrSectionToNavigateGroupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
+                    this.groupOrSectionToNavigateGroupState.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
                     break;
                 case NavigationGroupType.LastSection:
                     this.groupState = this.interviewViewModelFactory.GetNew<InterviewStateViewModel>();
+                    this.groupOrSectionToNavigateGroupState = null;
                     break;
             }
 
             this.groupState.Init(this.interviewId, this.Identity);
+
             this.RaisePropertyChanged(() => this.GroupState);
+            this.RaisePropertyChanged(() => this.GroupOrSectionToNavigateGroupState);
         }
  
         private void SetNextEnabledSection()
@@ -263,7 +278,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             this.SetNextEnabledSection();
             this.SetNavigationItemTitle();
-            this.SetGroupState();
+            this.SetGroupsStates();
         }
 
         public void Dispose()
