@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Tree?.AddToCache(child);
         }
 
-        public void AddChild(IEnumerable<IInterviewTreeNode> nodes)
+        public void AddChildren(IEnumerable<IInterviewTreeNode> nodes)
         {
             nodes.ForEach(this.AddChild);
         }
@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clonedInterviewTreeGroup.Tree = null;
             clonedInterviewTreeGroup.children = new List<IInterviewTreeNode>();
             var clonedChildren = this.Children.Select(n => n.Clone()).ToList();
-            clonedInterviewTreeGroup.AddChild(clonedChildren);
+            clonedInterviewTreeGroup.AddChildren(clonedChildren);
             return clonedInterviewTreeGroup;
         }
     }
