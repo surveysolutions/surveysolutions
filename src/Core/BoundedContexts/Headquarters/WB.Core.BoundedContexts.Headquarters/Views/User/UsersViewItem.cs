@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
+namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class UsersViewItem
     {

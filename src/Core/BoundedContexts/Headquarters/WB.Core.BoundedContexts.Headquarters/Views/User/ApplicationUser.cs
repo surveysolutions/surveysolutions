@@ -6,7 +6,12 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
-    public class ApplicationUser : IdentityUser
+    public class AppUserLogin : IdentityUserLogin<Guid> { }
+
+    public class AppUserRole : IdentityUserRole<Guid> { }
+    public class AppUserClaim : IdentityUserClaim<Guid> { }
+    public class AppRole : IdentityRole<Guid, AppUserRole> { }
+    public class ApplicationUser : IdentityUser<Guid, AppUserLogin, AppUserRole, AppUserClaim>
     {
         public virtual string FullName { get; set; }
         public virtual bool IsArchived { get; set; }
@@ -17,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public virtual DateTime CreationDate { get; set; }
         public virtual string DeviceId { get; set; }
 
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, Guid> manager)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
 

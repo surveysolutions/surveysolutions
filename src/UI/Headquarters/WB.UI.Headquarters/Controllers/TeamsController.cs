@@ -15,45 +15,42 @@ namespace WB.UI.Headquarters.Controllers
 
         private readonly IIdentityManager identityManager;
         private readonly ITeamViewFactory teamViewFactory;
+        private readonly IUserListViewFactory userListViewFactory;
 
         public TeamsController(
             ICommandService commandService,
             IIdentityManager identityManager,
             ILogger logger,
-            ITeamViewFactory teamViewFactory)
+            ITeamViewFactory teamViewFactory,
+            IUserListViewFactory userListViewFactory)
             : base(commandService, logger)
         {
             this.identityManager = identityManager;
             this.teamViewFactory = teamViewFactory;
+            this.userListViewFactory = userListViewFactory;
         }
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public UsersView AssigneeSupervisorsAndDependentInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-        {
-            return this.teamViewFactory.GetAssigneeSupervisorsAndDependentInterviewers(pageSize: pageSize, searchBy: query);
-        }
+            => this.teamViewFactory.GetAssigneeSupervisorsAndDependentInterviewers(pageSize: pageSize, searchBy: query);
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         public UsersView Supervisors(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
-        {
-            return this.teamViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
-        }
+            => this.userListViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
         public UsersView AsigneeInterviewersBySupervisor(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-        {
-            return this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query, supervisorId: this.identityManager.CurrentUserId);
-        }
+            => this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query,
+                supervisorId: this.identityManager.CurrentUserId);
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-        {
-            return this.teamViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.identityManager.CurrentUserId);
-        }
+            => this.teamViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
+                    supervisorId: this.identityManager.CurrentUserId);
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]

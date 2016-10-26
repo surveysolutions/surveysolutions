@@ -233,7 +233,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
             this.Bind<Func<IInterviewsToDeleteFactory>>().ToMethod(context => () => context.Kernel.Get<IInterviewsToDeleteFactory>());
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
-            this.Bind<ISupervisorsViewFactory>().To<SupervisorsViewFactory>();
             this.Bind<IInterviewInformationFactory>().To<InterviewerInterviewsFactory>();
             this.Bind<IDdiMetadataFactory>().To<DdiMetadataFactory>();
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
@@ -261,7 +260,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Kernel.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
             this.Kernel.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
             this.Kernel.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
-            this.Kernel.Bind<IInterviewersViewFactory>().To<InterviewersViewFactory>();
             this.Kernel.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
             this.Kernel.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
 

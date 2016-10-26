@@ -1,30 +1,31 @@
+using System;
+using System.Data.Entity.Migrations;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity.EntityFramework;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Headquarters.Identity;
 
 namespace WB.UI.Headquarters.Migrations
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-
-    internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<HQIdentityDbContext>
     {
+        public const string SchemaName = "system";
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            SetHistoryContextFactory("Npgsql",
+                (connection, defaultSchema) => new SchemaBasedHistoryContext(connection, defaultSchema, SchemaName));
         }
 
-        protected override void Seed(ApplicationDbContext context)
+        protected override void Seed(HQIdentityDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
             foreach (int userRole in Enum.GetValues(typeof(UserRoles)))
             {
-                context.Roles.AddOrUpdate(new IdentityRole
+                context.Roles.AddOrUpdate(new AppRole
                 {
-                    Id = userRole.ToString(),
+                    Id = ((byte)userRole).ToGuid(),
                     Name = Enum.GetName(typeof(UserRoles), userRole)
                 });
             }

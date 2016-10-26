@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         protected async Task<IdentityResult> UpdateAccountAsync(UserEditModel editModel)
         {
-            var appUser = await this.identityManager.GetUserById(editModel.Id);
+            var appUser = await this.identityManager.GetUserByIdAsync(editModel.Id);
 
             appUser.Email = editModel.Email;
             appUser.FullName = editModel.PersonName;
@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         protected async Task<IdentityResult> CreateUserAsync(UserModel user, UserRoles role, Guid? supervisorId = null)
             => await this.identityManager.CreateUserAsync(new ApplicationUser
             {
+                Id = Guid.NewGuid(),
                 IsLockedBySupervisor = false,
                 IsLockedByHeadquaters = user.IsLocked,
                 FullName = user.PersonName,

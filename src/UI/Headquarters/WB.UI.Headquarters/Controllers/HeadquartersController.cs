@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
@@ -67,11 +68,11 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(Guid id)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
 
-            var user = await this.identityManager.GetUserById(id);
+            var user = await this.identityManager.GetUserByIdAsync(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
 

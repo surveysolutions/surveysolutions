@@ -56,9 +56,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewersViewFactoryTe
 
         It should_return_all_interviewers_in_correct_order = () =>
         {
-            result.Items.Skip(0).First().UserId.ShouldEqual(interviewer21Id);
-            result.Items.Skip(1).First().UserId.ShouldEqual(interviewer31Id);
-            result.Items.Skip(2).First().UserId.ShouldEqual(interviewer34Id);
+            result.Items.Skip(0).First().UserId.ShouldEqual(interviewer21Id.ToString());
+            result.Items.Skip(1).First().UserId.ShouldEqual(interviewer31Id.ToString());
+            result.Items.Skip(2).First().UserId.ShouldEqual(interviewer34Id.ToString());
         };
 
         It should_return_supervisorname_for_each_interviewers = () =>

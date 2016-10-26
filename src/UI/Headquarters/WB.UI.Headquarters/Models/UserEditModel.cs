@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     public class UserEditModel
     {
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string UserName { get; set; }
 

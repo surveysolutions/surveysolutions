@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.Identity
 {
@@ -19,7 +20,7 @@ namespace WB.UI.Headquarters.Identity
         private readonly ApplicationUserManager userManager;
         private readonly ApplicationSignInManager signInManager;
         private readonly IAuthenticationManager authenticationManager;
-        private string currentUserId => this.authenticationManager.User.Identity.GetUserId();
+        private Guid currentUserId => Guid.Parse(this.authenticationManager.User.Identity.GetUserId());
 
         public IdentityManager(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
             IAuthenticationManager authenticationManager)
@@ -29,8 +30,15 @@ namespace WB.UI.Headquarters.Identity
             this.authenticationManager = authenticationManager;
         }
 
-        public bool HasAdministrator => this.userManager.Users.Any(
-            user => user.Roles.Any(role => role.RoleId == ((int)UserRoles.Administrator).ToString()));
+        public bool HasAdministrator
+        {
+            get
+            {
+                var adminRoleId = ((byte) UserRoles.Administrator).ToGuid();
+                return this.userManager.Users.Any(
+                    user => user.Roles.Any(role => role.RoleId == adminRoleId));
+            }
+        }
 
         public bool IsCurrentUserSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);
 
@@ -77,12 +85,12 @@ namespace WB.UI.Headquarters.Identity
 
         public void SignOut() => this.authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
-        public async Task<ApplicationUser> GetUserById(string userId) => await this.userManager.FindByIdAsync(userId);
+        public async Task<ApplicationUser> GetUserByIdAsync(Guid userId) => await this.userManager.FindByIdAsync(userId);
 
         public IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId)
         {
             var supervisorAndDependentInterviewers = this.userManager.Users.Where(
-                user => user.SupervisorId == supervisorId || user.Id == supervisorId.ToString());
+                user => user.SupervisorId == supervisorId || user.Id == supervisorId);
 
             foreach (var supervisorAndDependentInterviewer in supervisorAndDependentInterviewers)
             {
