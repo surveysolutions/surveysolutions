@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -95,8 +96,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
@@ -112,10 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
-        {
-            UpdateOptionsState();
-        }
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => this.UpdateOptionsState();
 
         private void UpdateOptionsState()
         {
@@ -145,34 +143,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             return optionViewModel;
         }
+        
+        public IMvxCommand ValueChangeCommand => new MvxCommand<string>(this.SendAnswerFilteredComboboxQuestionCommand);
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand
+        private async Task RemoveAnswerAsync()
         {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(this.SendAnswerFilteredComboboxQuestionCommand)); }
-        }
-
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get
+            try
             {
-                return new MvxAsyncCommand(async () =>
-                {
-                    try
-                    {
-                        await this.Answering.SendRemoveAnswerCommandAsync(
-                            new RemoveAnswerCommand(this.interviewId,
-                                this.principal.CurrentUserIdentity.UserId,
-                                this.questionIdentity,
-                                DateTime.UtcNow));
+                await this.Answering.SendRemoveAnswerCommandAsync(
+                    new RemoveAnswerCommand(this.interviewId,
+                        this.principal.CurrentUserIdentity.UserId,
+                        this.questionIdentity,
+                        DateTime.UtcNow));
 
-                        this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    }
-                    catch (InterviewException exception)
-                    {
-                        this.QuestionState.Validity.ProcessException(exception);
-                    }
-                });
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                this.ClearText();
+            }
+            catch (InterviewException exception)
+            {
+                this.QuestionState.Validity.ProcessException(exception);
             }
         }
 
@@ -180,12 +171,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.Contains(this.questionIdentity))
             {
-                InvokeOnMainThread(() =>
-                {
-                    this.ResetTextInEditor = string.Empty;
-                    this.DefaultText = null;
-                });
+                this.InvokeOnMainThread(this.ClearText);
             }
+        }
+
+        private void ClearText()
+        {
+            this.ResetTextInEditor = string.Empty;
+            this.DefaultText = null;
         }
 
         private FilteredComboboxItemViewModel selectedObject;
