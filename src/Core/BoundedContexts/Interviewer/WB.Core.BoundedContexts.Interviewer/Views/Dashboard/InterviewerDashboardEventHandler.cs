@@ -300,19 +300,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
             this.AnswerOnPrefilledQuestion(interviewId, questionId, answer);
-            this.SetStartedDateTimeOnFirstAnswer(interviewId, answerTimeUtc);
+            this.SetStartedDateTimeOnFirstAnswer(interviewId, questionId, answerTimeUtc);
         }
 
         private readonly HashSet<Guid> interviewsWithExistedStartedDateTime = new HashSet<Guid>();
 
-        private void SetStartedDateTimeOnFirstAnswer(Guid interviewId, DateTime answerTimeUtc)
+        private void SetStartedDateTimeOnFirstAnswer(Guid interviewId, Guid questionId, DateTime answerTimeUtc)
         {
             if (this.interviewsWithExistedStartedDateTime.Contains(interviewId))
                 return;
 
             var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
-
             if (interviewView == null) return;
+
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
+            if (questionnaire.IsPrefilled(questionId))
+                return;
+
+            var questionScope = questionnaire.GetQuestionScope(questionId);
+            if (questionScope != QuestionScope.Interviewer)
+                return;
 
             this.interviewsWithExistedStartedDateTime.Add(interviewId);
 
