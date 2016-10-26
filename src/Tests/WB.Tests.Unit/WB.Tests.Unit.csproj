@@ -444,6 +444,8 @@
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_DateTimeQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event_second_time.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_PictureQuestionAnswered_event.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_TextQuestionAnswered_event_for_prefilled_question.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_TextQuestionAnswered_event_answered_by_supervisor.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_YesNoQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_TextListQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\InterviewerDashboardFactoryTestsContext.cs" />
