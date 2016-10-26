@@ -805,7 +805,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         referencedQuestionId, new decimal[0], questionnaire);
 
                 var optionRosterVectors =
-                    targetQuestions.Where(q => !updatedState.IsQuestionDisabled(q) && updatedState.GetAnswerSupportedInExpressions(q) != null)
+                    targetQuestions.Where(q => !updatedState.IsQuestionDisabled(q) && updatedState.GetAnswer(q) != null)
                         .Select(q => q.RosterVector)
                         .ToArray();
 
@@ -1003,26 +1003,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState)
         {
-            if (!interviewExpressionState.AreLinkedQuestionsSupported())
-            {
-                var linkedQuestions = tree.FindQuestions().Where(x => x.IsLinked);
-                foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
-                {
-                    linkedQuestion.CalculateLinkedOptions();
-                }
-            }
-            else
+            var expressionStateSupportLinkedOptionsCalculation = interviewExpressionState.AreLinkedQuestionsSupported();
+            if (expressionStateSupportLinkedOptionsCalculation)
             {
                 var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
-                foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptions)
-                {
-                    tree.FindQuestions(linkedQuestionWithOptions.Key).ForEach(x => x.AsLinked.SetOptions(linkedQuestionWithOptions.Value));
-                }
+               
                 foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
                 {
                     var linkedQuestion = tree.GetQuestion(linkedQuestionWithOptions.Key);
                     linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value);
                 }
+
+                // backward compatibility with old assemblies
+                UpdateLinkedQuestionsCalculatedByObsoleteAlgorythm(tree, processLinkedQuestionFilters);
+            }
+            else
+            {
+                // backward compatibility if assembly cannot process linked questions
+                CalculateLinkedOptionsOnTree(tree);
+            }
+        }
+
+        [Obsolete("v 5.10, release 01 jul 16")]
+        private static void UpdateLinkedQuestionsCalculatedByObsoleteAlgorythm(InterviewTree tree, LinkedQuestionOptionsChanges processLinkedQuestionFilters)
+        {
+            foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptions)
+            {
+                tree.FindQuestions(linkedQuestionWithOptions.Key)
+                    .ForEach(x => x.AsLinked.SetOptions(linkedQuestionWithOptions.Value));
+            }
+        }
+
+        private static void CalculateLinkedOptionsOnTree(InterviewTree tree)
+        {
+            var linkedQuestions = tree.FindQuestions().Where(x => x.IsLinked);
+            foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
+            {
+                linkedQuestion.CalculateLinkedOptions();
             }
         }
 
