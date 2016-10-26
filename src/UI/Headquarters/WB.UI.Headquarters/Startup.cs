@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters
 
         public void ConfigureAuth(IAppBuilder app)
         {
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(HQIdentityDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
@@ -93,10 +93,18 @@ namespace WB.UI.Headquarters
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString(@"/Account/LogOn"),
-                Provider = new CookieAuthenticationProvider { }
-        });
+                Provider = new CookieAuthenticationProvider
+                {
+                    OnValidateIdentity = SecurityStampValidator
+                .OnValidateIdentity<ApplicationUserManager, ApplicationUser, Guid>(
+                    validateInterval: TimeSpan.FromMinutes(30),
+                    regenerateIdentityCallback: (manager, user) => user.GenerateUserIdentityAsync(manager),
+                    getUserIdCallback: (id) => Guid.Parse(id.GetUserId()))
+                }
+            });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+            
         }
 
         private static Task SetSessionStateBehavior(IOwinContext context, Func<Task> next)

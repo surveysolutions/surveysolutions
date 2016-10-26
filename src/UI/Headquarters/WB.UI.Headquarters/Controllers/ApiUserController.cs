@@ -59,11 +59,11 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(Guid id)
         {
             this.ViewBag.ActivePage = MenuItem.ApiUsers;
 
-            var user = await this.identityManager.GetUserById(id);
+            var user = await this.identityManager.GetUserByIdAsync(id);
 
             if (user == null) throw new HttpException(404, string.Empty);
 

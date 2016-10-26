@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
 {
     public class UserApiItem
     {
-        public UserApiItem(string id, string name, string email, DateTime creationDate, bool isLocked, string deviceId)
+        public UserApiItem(Guid id, string name, string email, DateTime creationDate, bool isLocked, string deviceId)
         {
             this.UserId = id;
             this.UserName = name;
@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api
         public string DeviceId { get; private set; }
 
         [DataMember]
-        public string UserId { get; private set; }
+        public Guid UserId { get; private set; }
 
         [DataMember]
         public string UserName { get; private set; }

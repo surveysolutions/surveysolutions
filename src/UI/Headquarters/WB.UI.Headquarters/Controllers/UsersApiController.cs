@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -18,22 +20,16 @@ namespace WB.UI.Headquarters.Controllers
     public class UsersApiController : BaseApiController
     {
         private readonly IIdentityManager identityManager;
-        private readonly IInterviewersViewFactory interviewersFactory;
-        private readonly ISupervisorsViewFactory supervisorsFactory;
         private readonly IUserListViewFactory usersFactory;
 
         public UsersApiController(
             ICommandService commandService,
             IIdentityManager identityManager,
             ILogger logger,
-            IInterviewersViewFactory interviewersFactory,
-            ISupervisorsViewFactory supervisorsFactory,
             IUserListViewFactory usersFactory)
             : base(commandService, logger)
         {
             this.identityManager = identityManager;
-            this.interviewersFactory = interviewersFactory;
-            this.supervisorsFactory = supervisorsFactory;
             this.usersFactory = usersFactory;
         }
 
@@ -43,9 +39,14 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter request)
         {
+            if (!string.IsNullOrWhiteSpace(filter.SupervisorName))
+                filter.SupervisorId = (await this.identityManager.GetUserByName(filter.SupervisorName))?.Id;
+
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            Guid viewerId = this.identityManager.CurrentUserId;
+            var currentUserRole = await this.identityManager.GetRoleForCurrentUserAsync();
+            if (currentUserRole == UserRoles.Supervisor)
+                filter.SupervisorId = this.identityManager.CurrentUserId;
 
             var input = new InterviewersInputModel
             {
@@ -60,14 +61,14 @@ namespace WB.UI.Headquarters.Controllers
                 ConnectedToDevice = request.ConnectedToDevice
             };
 
-            var interviewers = this.interviewersFactory.Load(input);
-
+            var interviewers = this.usersFactory.GetInterviewers(filter.PageIndex, filter.PageSize, filter.SortOrder.GetOrderRequestString(),
+                filter.SearchBy, filter.Archived, filter.ConnectedToDevice, filter.SupervisorId);
             return new DataTableResponse<InterviewerListItem>
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = interviewers.TotalCount,
                 RecordsFiltered = interviewers.TotalCount,
-                Data = interviewers.Items.ToList().Select(x => new InterviewerListItem
+                Data = interviewers.Select(x => new InterviewerListItem
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
@@ -97,34 +98,14 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public SupervisorsView Supervisors(UsersListViewModel data)
-        {
-            var input = new SupervisorsInputModel
-            {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                SearchBy = data.SearchBy,
-                Archived = false
-            };
-
-            return this.supervisorsFactory.Load(input);
-        }
+            => this.usersFactory.GetSupervisors(data.PageIndex, data.PageSize, data.SortOrder.GetOrderRequestString(),
+                data.SearchBy, false);
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
         public SupervisorsView ArchivedSupervisors(UsersListViewModel data)
-        {
-            var input = new SupervisorsInputModel
-            {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                SearchBy = data.SearchBy,
-                Archived = true
-            };
-
-            return this.supervisorsFactory.Load(input);
-        }
+            => this.usersFactory.GetSupervisors(data.PageIndex, data.PageSize, data.SortOrder.GetOrderRequestString(),
+                data.SearchBy, true);
 
         [HttpPost]
         [CamelCase]
@@ -170,14 +151,14 @@ namespace WB.UI.Headquarters.Controllers
                 SearchBy = request.Search.Value,
             };
 
-            var headquarters = this.usersFactory.Load(input);
+            var users = this.usersFactory.GetUsersByRole(data.PageIndex, data.PageSize, data.SortOrder.GetOrderRequestString(), data.SearchBy, archived, role);
 
             return new DataTableResponse<InterviewerListItem>
             {
                 Draw = request.Draw + 1,
-                RecordsTotal = headquarters.TotalCount,
-                RecordsFiltered = headquarters.TotalCount,
-                Data = headquarters.Items.ToList().Select(x => new InterviewerListItem
+                RecordsTotal = users.TotalCount,
+                RecordsFiltered = users.TotalCount,
+                Data = users.Items.ToList().Select(x => new InterviewerListItem
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,

@@ -146,17 +146,14 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Headquarter, Supervisor")]
-        public async ActionResult ReturnToObserver()
+        public async Task<ActionResult> ReturnToObserver()
         {
             if (!this.identityManager.IsCurrentUserObserver)
                 throw new HttpException(404, string.Empty);
 
-            var alowedRoles = new [] { UserRoles.Administrator.ToString(), UserRoles.Observer.ToString(), UserRoles.Operator.ToString() };
-            var userRoles = Roles.GetRolesForUser(currentUserIdentity.ObserverName);
+            var currentUserRole = await this.identityManager.GetRoleForCurrentUserAsync();
 
-            bool targetUserInValidRole = userRoles.Any(r => alowedRoles.Contains(r));
-
-            if (!targetUserInValidRole)
+            if (new[] { UserRoles.Administrator, UserRoles.Observer, UserRoles.Interviewer }.Contains(currentUserRole))
                 throw new HttpException(404, string.Empty);
 
             await this.identityManager.SignInBackFromObserverAsync();
