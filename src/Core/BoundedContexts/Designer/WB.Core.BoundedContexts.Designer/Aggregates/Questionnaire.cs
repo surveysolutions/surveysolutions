@@ -74,6 +74,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.innerDocument = document ?? new QuestionnaireDocument() { PublicKey = aggregateId };
             this.sharedPersons = sharedPersons?.ToList() ?? new List<SharedPerson>();
+
+            // Migrate single validation conditions to multiple
+            foreach (var question in document.Children.TreeToEnumerable(x => x.Children).OfType<IQuestion>())
+            {
+                question.ValidationConditions = question.ValidationConditions;
+                question.ValidationExpression = null;
+                question.ValidationMessage = null;
+            }
         }
         
         public Guid Id => this.innerDocument.PublicKey;
