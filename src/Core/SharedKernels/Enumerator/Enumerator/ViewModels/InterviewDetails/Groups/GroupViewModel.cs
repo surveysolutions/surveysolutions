@@ -133,6 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             this.eventRegistry.Unsubscribe(this);
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
+            this.answerNotifier.Dispose();
         }
     }
 }
