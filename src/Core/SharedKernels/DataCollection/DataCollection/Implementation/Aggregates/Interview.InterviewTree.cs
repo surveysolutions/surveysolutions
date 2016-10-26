@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var section = InterviewTree.CreateSection(questionnaire, sectionIdentity);
 
-            section.AddChild(this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState).ToList());
+            section.AddChildren(this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState).ToList());
 
             if (interviewState.IsGroupDisabled(sectionIdentity))
                 section.Disable();
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var subSection = InterviewTree.CreateSubSection(questionnaire, groupIdentity);
 
-            subSection.AddChild(this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, state).ToList());
+            subSection.AddChildren(this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, state).ToList());
 
             if (state?.IsGroupDisabled(groupIdentity) ?? false)
                 subSection.Disable();

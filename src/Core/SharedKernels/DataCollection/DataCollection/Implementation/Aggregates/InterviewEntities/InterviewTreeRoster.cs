@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.RosterTitle = rosterTitle;
             this.SortIndex = sortIndex;
-            this.AddChild(children);
+            this.AddChildren(children);
             switch (rosterType)
             {
                 case RosterType.Fixed:
