@@ -13,7 +13,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         bool IsGroupDisabled(Identity group);
         bool IsQuestionDisabled(Identity question);
         bool WasQuestionAnswered(Identity question);
-        object GetAnswerSupportedInExpressions(Identity question);
         Tuple<decimal, string>[] GetTextListAnswer(Identity question);
         ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector);
         IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToQuestionSingleOptionAnswers(IQuestionnaire questionnaire);
