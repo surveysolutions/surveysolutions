@@ -444,6 +444,8 @@
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_DateTimeQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event_second_time.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_PictureQuestionAnswered_event.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_TextQuestionAnswered_event_for_prefilled_question.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_TextQuestionAnswered_event_answered_by_supervisor.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_YesNoQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_TextListQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\InterviewerDashboardFactoryTestsContext.cs" />
@@ -483,6 +485,7 @@
     <Compile Include="SharedKernels\DataCollection\IdentityTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_featured_questions.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_parent_for_linked_question.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_child_interviewer_entities.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTreeTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTreeEventPublisherTests.cs" />
