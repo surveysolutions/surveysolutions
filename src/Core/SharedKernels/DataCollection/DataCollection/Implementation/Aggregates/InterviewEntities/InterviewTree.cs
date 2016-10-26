@@ -282,7 +282,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
         
-        public void RemoveFromCache(Identity identity)
+        public void ProcessRemovedNodeByIdentity(Identity identity)
         {
             var nodesToRemove =
                  this.nodesCache[identity].TreeToEnumerable<IInterviewTreeNode>(node => node.Children)
@@ -295,7 +295,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public void AddToCache(IInterviewTreeNode node)
+        public void ProcessAddedNode(IInterviewTreeNode node)
         {
             nodesCache[node.Identity] = node;
         }
