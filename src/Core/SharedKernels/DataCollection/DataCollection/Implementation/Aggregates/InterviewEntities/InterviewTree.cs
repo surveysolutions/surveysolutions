@@ -195,7 +195,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             bool isLinkedQuestion = questionnaire.IsQuestionLinked(questionIdentity.Id) || questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
             var linkedSourceEntityId = isLinkedQuestion ? (questionnaire.IsQuestionLinked(questionIdentity.Id) ? questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id) : questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id)) : (Guid?) null;
 
-            Guid? commonParentRosterIdForLinkedQuestion = isLinkedQuestion ? questionnaire.GetCommontParentForLinkedQuestionAndItSource(questionIdentity.Id) : null;
+            Guid? commonParentRosterIdForLinkedQuestion = isLinkedQuestion ? questionnaire.GetParentForLinkedQuestion(questionIdentity.Id) : null;
             Identity commonParentIdentity = null;
             if (isLinkedQuestion && commonParentRosterIdForLinkedQuestion.HasValue)
             {
