@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (!supervisorId.HasValue)
                 return this.View(new InterviewerModel() { IsShowSupervisorSelector = true });
 
-            var supervisor = await this.identityManager.GetUserById(supervisorId.ToString());
+            var supervisor = await this.identityManager.GetUserByIdAsync(supervisorId.Value);
 
             if (supervisor == null) throw new HttpException(404, string.Empty);
 
@@ -67,9 +67,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            var user = await this.identityManager.GetUserById(id);
+            var user = await this.identityManager.GetUserByIdAsync(id);
 
             if(user == null) throw new HttpException(404, string.Empty);
 

@@ -954,7 +954,6 @@
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Views\SurveySetup\BatchUpload.cshtml" />
-    <Content Include="Views\HQ\ImportResult.cshtml" />
     <Content Include="Views\HQ\ImportSample.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
@@ -1482,10 +1481,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.zh.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\Identity\ApplicationDbContext.cs" />
+    <Compile Include="App_Start\Identity\HQIdentityDbContext.cs" />
     <Compile Include="App_Start\Identity\ApplicationSignInManager.cs" />
     <Compile Include="App_Start\Identity\ApplicationUserManager.cs" />
+    <Compile Include="App_Start\Identity\AppUserStore.cs" />
     <Compile Include="App_Start\Identity\AspNetPasswordHasher.cs" />
+    <Compile Include="App_Start\Identity\IAppUserStore.cs" />
     <Compile Include="App_Start\Identity\IdentityManager.cs" />
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
@@ -1559,7 +1560,6 @@
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M005_AspNetUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M005_QuestionnaireRosterStructures.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M004_QuestionnaireImportDate.cs" />
@@ -1575,6 +1575,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M004_RemoveOldSyncTables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M006_AddSortOrderToFeaturedQuestions.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
+    <Compile Include="Migrations\SchemaBasedHistoryContext.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />

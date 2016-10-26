@@ -9,7 +9,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
@@ -36,15 +35,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 
             userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
 
-            controller = CreateApiUserController(commandService: commandServiceMock.Object,
-                globalInfoProvider: globalInfoProvider.Object,
-                userViewFactory: userViewFactory.Object);
+            controller = CreateApiUserController(commandService: commandServiceMock.Object);
         };
 
-        Because of = () =>
-        {
-            actionResult = controller.Edit(inputModel);
-        };
+        Because of = () => actionResult = controller.Edit(inputModel).Result;
 
         It should_return_ViewResult = () =>
             actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
@@ -54,7 +48,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 
         private static Mock<ICommandService> commandServiceMock = new Mock<ICommandService>();
         private static Mock<IUserViewFactory> userViewFactory = new Mock<IUserViewFactory>();
-        private static Mock<IGlobalInfoProvider> globalInfoProvider = new Mock<IGlobalInfoProvider>();
         private static ActionResult actionResult ;
         private static ApiUserController controller;
         private static UserEditModel inputModel;

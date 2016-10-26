@@ -150,6 +150,10 @@
       <HintPath>..\..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Polly, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Polly.4.3.0\lib\net45\Polly.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Quartz, Version=2.3.3.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
@@ -514,12 +518,9 @@
     <Compile Include="Views\IListView.cs" />
     <Compile Include="Views\InterviewDataAndQuestionnaireMerger.cs" />
     <Compile Include="Views\InterviewDetailsFilter.cs" />
-    <Compile Include="Views\Interviewer\IInterviewersViewFactory.cs" />
-    <Compile Include="Views\Interviewer\InterviewersInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewersItem.cs" />
     <Compile Include="Views\Interviewer\InterviewerStatisticsInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewersView.cs" />
-    <Compile Include="Views\Interviewer\InterviewersViewFactory.cs" />
     <Compile Include="Views\InterviewHistory\IInterviewHistoryFactory.cs" />
     <Compile Include="Views\InterviewHistory\InterviewDataExportSettings.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoricalAction.cs" />
@@ -639,19 +640,14 @@
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportLine.cs" />
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportView.cs" />
     <Compile Include="Views\Reposts\Views\TemplateViewItem.cs" />
-    <Compile Include="Views\Reposts\Views\UsersViewItem.cs" />
     <Compile Include="Views\Revalidate\InterviewTroubleshootFactory.cs" />
     <Compile Include="Views\Revalidate\InterviewTroubleshootInputModel.cs" />
     <Compile Include="Views\Revalidate\InterviewTroubleshootView.cs" />
-    <Compile Include="Views\SampleImport\ImportResult.cs" />
     <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
     <Compile Include="Views\SampleImport\SampleImportSettings.cs" />
     <Compile Include="Views\SampleImport\TempFileImportData.cs" />
-    <Compile Include="Views\Supervisor\ISupervisorsViewFactory.cs" />
-    <Compile Include="Views\Supervisor\SupervisorsInputModel.cs" />
     <Compile Include="Views\Supervisor\SupervisorsItem.cs" />
     <Compile Include="Views\Supervisor\SupervisorsView.cs" />
-    <Compile Include="Views\Supervisor\SupervisorsViewFactory.cs" />
     <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
     <Compile Include="Views\Survey\SurveysInputModel.cs" />
     <Compile Include="Views\Survey\SurveyStatusViewItem.cs" />
@@ -684,11 +680,10 @@
     <Compile Include="Views\User\ITeamViewFactory.cs" />
     <Compile Include="Views\User\IUserListViewFactory.cs" />
     <Compile Include="Views\User\TeamViewFactory.cs" />
-    <Compile Include="Views\User\UserListItem.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserListViewFactory.cs" />
-    <Compile Include="Views\User\UserListViewInputModel.cs" />
     <Compile Include="Views\User\UsersView.cs" />
+    <Compile Include="Views\User\UsersViewItem.cs" />
     <Compile Include="Views\User\UserView.cs" />
     <Compile Include="Views\User\UserViewFactory.cs" />
     <Compile Include="Views\User\UserViewInputModel.cs" />

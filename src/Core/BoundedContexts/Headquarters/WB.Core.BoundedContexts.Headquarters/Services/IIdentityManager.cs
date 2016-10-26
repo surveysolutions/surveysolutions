@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false);
         Task<UserRoles> GetRoleForCurrentUserAsync();
         void SignOut();
-        Task<ApplicationUser> GetUserById(string userId);
+        Task<ApplicationUser> GetUserByIdAsync(Guid userId);
         IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId);
         Task<ApplicationUser> GetUserByName(string userName);
         Task SignInAsObserverAsync(string userName);
