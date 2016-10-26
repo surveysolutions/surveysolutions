@@ -1,6 +1,7 @@
 ﻿<div class="form-group" ng-class="{'has-error': !questionForm.maxAnswerCount.$valid}">
     <label for="edit-question-max-answers-number">Maximum number of list elements</label>
     <input id="edit-question-max-answers-number"
+           maxlength="9"
            name="maxAnswerCount"
            type="text"
            ng-pattern="/^\d+$/"
