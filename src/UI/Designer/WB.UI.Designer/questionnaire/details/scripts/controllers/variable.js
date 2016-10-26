@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('VariableCtrl',
-        function ($scope, $rootScope, $state, questionnaireService, commandService, hotkeys) {
+        function ($scope, $rootScope, $state, questionnaireService, commandService, hotkeys, utilityService) {
             $scope.currentChapterId = $state.params.chapterId;
 
             var markFormAsChanged = function () {
@@ -73,6 +73,20 @@
                     .success(function(result) {
                         $scope.initialVariable = angular.copy(result);
                         bindVariable(result);
+
+                        var focusId = null;
+                        switch ($state.params.property) {
+                            case 'VariableName':
+                                focusId = 'edit-question-variable-name';
+                                break;
+                            case 'VariableContent':
+                                focusId = "edit-group-condition";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        utilityService.setFocusIn(focusId);
                     });
             };
 
