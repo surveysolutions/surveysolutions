@@ -239,6 +239,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                             {
                                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
                             }
+                            if (rowcodeAsDecumal > long.MaxValue || rowcodeAsDecumal < long.MinValue)
+                            {
+                                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
+                            }
                             long rowcode = (long)rowcodeAsDecumal;
                             var isParcedDecimalValueConvertableToInteger = (decimal)rowcode == rowcodeAsDecumal;
                             if (!isParcedDecimalValueConvertableToInteger)
