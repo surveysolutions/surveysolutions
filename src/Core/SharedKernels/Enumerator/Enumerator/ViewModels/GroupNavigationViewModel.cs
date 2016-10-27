@@ -52,20 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ICommandService commandService;
         private readonly AnswerNotifier answerNotifier;
 
-        private GroupStateViewModel groupOrSectionToNavigateGroupState;
-        public GroupStateViewModel GroupOrSectionToNavigateGroupState
+        private GroupStateViewModel navigateToGroupState;
+        public GroupStateViewModel NavigateToGroupState
         {
-            get { return this.groupOrSectionToNavigateGroupState; }
-            set { this.RaiseAndSetIfChanged(ref this.groupOrSectionToNavigateGroupState, value); }
+            get { return this.navigateToGroupState; }
+            set { this.RaiseAndSetIfChanged(ref this.navigateToGroupState, value); }
         }
-
-        private GroupStateViewModel groupState;
-        public GroupStateViewModel GroupState
-        {
-            get { return this.groupState; }
-            set { this.RaiseAndSetIfChanged(ref this.groupState, value); }
-        }
-
+        
         public DynamicTextViewModel Title { get; }
 
         private string rosterInstanceTitle;
@@ -155,11 +148,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void QuestionAnswered(object sender, EventArgs e)
         {
-            this.GroupState.UpdateFromGroupModel();
-            this.RaisePropertyChanged(() => this.GroupState);
-
-            this.GroupOrSectionToNavigateGroupState?.UpdateFromGroupModel();
-            this.RaisePropertyChanged(() => this.GroupOrSectionToNavigateGroupState);
+            this.NavigateToGroupState?.UpdateFromGroupModel();
+            this.RaisePropertyChanged(() => this.NavigateToGroupState);
         }
 
         private Identity GetParentGroupOrRosterIdentity()
@@ -181,20 +171,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 case NavigationGroupType.InsideGroupOrRoster:
                 case NavigationGroupType.Section:
-                    this.groupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
-                    this.groupOrSectionToNavigateGroupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
-                    this.groupOrSectionToNavigateGroupState.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
+                    this.navigateToGroupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
+                    this.navigateToGroupState.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
                     break;
                 case NavigationGroupType.LastSection:
-                    this.groupState = this.interviewViewModelFactory.GetNew<InterviewStateViewModel>();
-                    this.groupOrSectionToNavigateGroupState = null;
+                    this.navigateToGroupState = null;
                     break;
             }
-
-            this.groupState.Init(this.interviewId, this.Identity);
-
-            this.RaisePropertyChanged(() => this.GroupState);
-            this.RaisePropertyChanged(() => this.GroupOrSectionToNavigateGroupState);
+            
+            this.RaisePropertyChanged(() => this.NavigateToGroupState);
         }
  
         private void SetNextEnabledSection()
