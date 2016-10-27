@@ -195,7 +195,7 @@ namespace WB.UI.Headquarters.Code
         {
             var interviewerApiView = this.GetResponseObject<InterviewerApiView>(context);
 
-            var supervisorInfo = this.userViewFactory.Load(new UserViewInputModel(interviewerApiView.SupervisorId));
+            var supervisorInfo = this.userViewFactory.GetUser(new UserViewInputModel(interviewerApiView.SupervisorId));
             return SyncLogMessages.GetInterviewer.FormatString(supervisorInfo.UserName, supervisorInfo.PublicKey.FormatGuid());
         }
 

@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters.Controllers
             if (ModelState.IsValid)
             {
                 UserView userToCheck =
-                    this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
+                    this.userViewFactory.GetUser(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
                 if (userToCheck == null)
                 {
                     try
@@ -143,7 +143,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult ResetUserPassword(UserModel model)
         {
             UserView userToCheck =
-                this.userViewFactory.Load(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
+                this.userViewFactory.GetUser(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
             if (userToCheck != null && !userToCheck.IsArchived)
             {
                 try

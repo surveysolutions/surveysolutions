@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             var userViewFactory =
                 Mock.Of<IUserViewFactory>(
                     c =>
-                        c.Load(Moq.It.IsAny<UserViewInputModel>()) ==
+                        c.GetUser(Moq.It.IsAny<UserViewInputModel>()) ==
                         new UserView() {PublicKey = responsibleId, Roles = new HashSet<UserRoles>() {UserRoles.Interviewer}});
 
             commandService = new Mock<ICommandService>();

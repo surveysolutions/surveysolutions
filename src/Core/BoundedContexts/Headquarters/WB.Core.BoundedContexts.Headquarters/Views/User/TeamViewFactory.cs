@@ -1,69 +1,17 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class TeamViewFactory : ITeamViewFactory 
     {
         readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
-        readonly IPlainStorageAccessor<UserDocument> usersReader;
 
-        public TeamViewFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
-            IPlainStorageAccessor<UserDocument> usersReader)
+        public TeamViewFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
             this.interviewSummaryReader = interviewSummaryReader;
-            this.usersReader = usersReader;
-        }
-
-        public UsersView GetAllInterviewers(int pageSize, string searchBy, bool onlyActive = false)
-        {
-            var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>(users =>
-            {
-                var userDocuments = users.Where(user => user.Roles.Any(role => role == UserRoles.Interviewer));
-                if (onlyActive)
-                {
-                    userDocuments = userDocuments.Where(x => !x.IsArchived && !x.IsLockedByHQ && !x.IsLockedBySupervisor);
-                }
-
-                return ApplyFilterByUserName(searchBy, userDocuments)
-                    .OrderBy(user => user.UserName);
-            });
-
-            var result = this.usersReader.Query(users =>
-                queryByUsers(users)
-                    .Take(pageSize)
-                    .ToList()
-                    .Select(user => new UsersViewItem() { UserId = user.PublicKey, UserName = user.UserName }));
-            return new UsersView()
-            {
-                Users = result,
-
-                TotalCountByQuery = this.usersReader.Query(users => queryByUsers(users).Count())
-            };
-        }
-
-        public UsersView GetInterviewers(int pageSize, string searchBy, Guid supervisorId)
-        {
-            var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>((users) =>
-                ApplyFilterByInterviewers(searchBy, supervisorId, users)
-                    .OrderBy(user => user.UserName));
-
-            return new UsersView()
-            {
-                Users = this.usersReader.Query(users =>
-                    queryByUsers(users)
-                        .Take(pageSize)
-                        .ToList()
-                        .Select(user => new UsersViewItem() {UserId = user.PublicKey, UserName = user.UserName})),
-
-                TotalCountByQuery = this.usersReader.Query(users => queryByUsers(users).Count())
-            };
         }
 
         public UsersView GetAssigneeSupervisorsAndDependentInterviewers(int pageSize, string searchBy)
@@ -130,25 +78,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                                                        .OrderBy(x => x.UserName);
 
             return responsiblesFromInterviews;
-        }
-
-        private static IQueryable<UserDocument> ApplyFilterByInterviewers(string searchBy, Guid supervisorId, IQueryable<UserDocument> users)
-        {
-            users = users.Where(user => !user.IsArchived && !user.IsLockedBySupervisor && !user.IsLockedByHQ)
-                         .Where(user => (user.Roles.Any(role => role == UserRoles.Interviewer) && user.Supervisor.Id == supervisorId));
-
-            users = ApplyFilterByUserName(searchBy, users);
-
-            return users;
-        }
-
-        private static IQueryable<UserDocument> ApplyFilterByUserName(string searchBy, IQueryable<UserDocument> users)
-        {
-            if (!string.IsNullOrWhiteSpace(searchBy))
-            {
-                users = users.Where(x => x.UserName.ToLower().Contains(searchBy.ToLower()));
-            }
-            return users;
         }
     }
 }

@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             this.ThrowIfInterviewDoesnotExist(request.Id);
 
-            var userInfo = this.userViewFactory.Load(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value): new UserViewInputModel(request.ResponsibleName, null));
+            var userInfo = this.userViewFactory.GetUser(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value): new UserViewInputModel(request.ResponsibleName, null));
 
             if(userInfo == null)
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User was not found.");

@@ -15,19 +15,19 @@ namespace WB.UI.Headquarters.Controllers
 
         private readonly IIdentityManager identityManager;
         private readonly ITeamViewFactory teamViewFactory;
-        private readonly IUserListViewFactory userListViewFactory;
+        private readonly IUserViewFactory userViewFactory;
 
         public TeamsController(
             ICommandService commandService,
             IIdentityManager identityManager,
             ILogger logger,
             ITeamViewFactory teamViewFactory,
-            IUserListViewFactory userListViewFactory)
+            IUserViewFactory userViewFactory)
             : base(commandService, logger)
         {
             this.identityManager = identityManager;
             this.teamViewFactory = teamViewFactory;
-            this.userListViewFactory = userListViewFactory;
+            this.userViewFactory = userViewFactory;
         }
 
         [HttpGet]
@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         public UsersView Supervisors(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
-            => this.userListViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
+            => this.userViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
@@ -49,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.teamViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
+            => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
                     supervisorId: this.identityManager.CurrentUserId);
 
         [HttpGet]
