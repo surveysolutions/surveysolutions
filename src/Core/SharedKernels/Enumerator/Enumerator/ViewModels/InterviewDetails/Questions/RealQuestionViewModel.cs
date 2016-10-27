@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: this.Answer.Value);
+                answer: (double) this.Answer.Value);
 
             try
             {
