@@ -42,7 +42,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<InterviewOnClientCreated>,
                                          ILitePublishedEventHandler<AnswerRemoved>,
 
-                                         ILitePublishedEventHandler<TranslationSwitched>
+                                         ILitePublishedEventHandler<TranslationSwitched>,
+                                         ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -431,6 +433,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Handle(IPublishedEvent<PictureQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PictureFileName, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVectors, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVector, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)
