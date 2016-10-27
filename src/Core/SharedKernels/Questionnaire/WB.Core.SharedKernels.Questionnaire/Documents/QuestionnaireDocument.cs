@@ -56,8 +56,6 @@ namespace Main.Core.Documents
 
         public bool IsPublic { get; set; }
 
-        public bool UsesCSharp { get; set; }
-
         private IComposite parent;
 
         public IComposite GetParent()
