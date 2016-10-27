@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         };
 
         It should_send_command_to_service = () => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsQuestionCommand>(c => 
-            c.SelectedValues.SequenceEqual(new []{1m,2m}))));
+            c.SelectedValues.SequenceEqual(new []{1,2}))));
 
         static MultiOptionQuestionViewModel viewModel;
         static Identity questionId;

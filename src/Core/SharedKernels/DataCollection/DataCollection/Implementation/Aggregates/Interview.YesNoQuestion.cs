@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -17,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            this.CheckYesNoQuestionInvariants(command.Question, command.AnsweredOptions, questionnaire, sourceInterviewTree);
+            this.CheckYesNoQuestionInvariants(command.Question, new YesNoAnswer(command.AnsweredOptions), questionnaire, sourceInterviewTree);
 
             var changedInterviewTree = sourceInterviewTree.Clone();
 
