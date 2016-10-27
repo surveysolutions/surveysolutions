@@ -176,18 +176,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    var multioptionQuestion = question as IMultyOptionsQuestion;
-
+                    var multioptionQuestion = (IMultyOptionsQuestion) question;
                     if (!multioptionQuestion.YesNoView)
-                    {
                         return this.ParseMultioptionAnswer(answersWithColumnName);
-                    }
                     else
-                    {
                         return this.ParseYesNoAnswer(answersWithColumnName);
-                    }
                 case QuestionType.TextList:
-                    return answersWithColumnName.Select((a, i) => new Tuple<decimal, string>(i + 1, a.Item2)).ToArray();
+                    var rows = answersWithColumnName.Select((a, i) => new TextListAnswerRow(i + 1, a.Item2)).ToArray();
+                    return new TextListAnswer(rows);
                 case QuestionType.GpsCoordinates:
                     return this.CreateGeoPositionAnswer(answersWithColumnName, question);
                 default:
@@ -197,7 +193,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             }
         }
 
-        private AnsweredYesNoOption[] ParseYesNoAnswer(Tuple<string, string>[] answersWithColumnName)
+        private YesNoAnswer ParseYesNoAnswer(Tuple<string, string>[] answersWithColumnName)
         {
             List<Tuple<AnsweredYesNoOption, int>> result = new List<Tuple<AnsweredYesNoOption, int>>();
 
@@ -227,17 +223,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var noOptions = result.Where(x => x.Item2 == 0)
                                   .Select(x => x.Item1);
 
-            return sortedYesOptions.Concat(noOptions).ToArray();
+            var answeredYesNoOptions = sortedYesOptions.Concat(noOptions).ToArray();
+
+            return new YesNoAnswer(answeredYesNoOptions);
         }
 
-        private decimal[] ParseMultioptionAnswer(Tuple<string, string>[] answersWithColumnName)
+        private CategoricalFixedMultiOptionAnswer ParseMultioptionAnswer(Tuple<string, string>[] answersWithColumnName)
         {
-            List<Tuple<decimal, int>> result = new List<Tuple<decimal, int>>();
+            var result = new List<Tuple<int, int>>();
 
             foreach (var answerTuple in answersWithColumnName)
             {
                 string columnEncodedValue = this.ExtractValueFromColumnName(answerTuple.Item1);
-                decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
+                int? columnValue = ToNullableInt(DecimalToHeaderConverter.ToValue(columnEncodedValue));
 
                 int answerIndex = int.Parse(answerTuple.Item2);
 
@@ -247,10 +245,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 }
             }
 
-            return result.OrderBy(x => x.Item2).Select(x => x.Item1).ToArray();
+            return new CategoricalFixedMultiOptionAnswer(result.OrderBy(x => x.Item2).Select(x => x.Item1));
         }
 
-        private GeoPosition CreateGeoPositionAnswer(Tuple<string, string>[] answersWithColumnName, IQuestion question)
+        private GpsAnswer CreateGeoPositionAnswer(Tuple<string, string>[] answersWithColumnName, IQuestion question)
         {
             var result = new GeoPosition();
 
@@ -278,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                         break;
                 }
             }
-            return result;
+            return new GpsAnswer(result);
         }
 
         private string ExtractValueFromColumnName(string columnName)
@@ -297,5 +295,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         {
             return question.Answers.Select(answer => answer.GetParsedValue());
         }
+
+        private static int? ToNullableInt(decimal? value) => value.HasValue ? (int)value.Value : null as int?;
     }
 }
