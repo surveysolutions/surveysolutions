@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         Establish context = () =>
         {
             var userViewFactoryMock = new Mock<IUserViewFactory>();
-            userViewFactoryMock.Setup(_ => _.Load(Moq.It.IsAny<UserViewInputModel>()))
+            userViewFactoryMock.Setup(_ => _.GetUser(Moq.It.IsAny<UserViewInputModel>()))
                 .Returns(new UserView() { Roles = new HashSet<UserRoles>(new[] { UserRoles.Supervisor }) });
 
             attribute = Create((userName, password) => true, userViewFactoryMock.Object);

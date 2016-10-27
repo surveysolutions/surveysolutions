@@ -12,8 +12,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            supervisorsFactoryMock = new Mock<IUserListViewFactory>();
-            controller = CreateUsersController(userListViewViewFactory: supervisorsFactoryMock.Object);
+            supervisorsFactoryMock = new Mock<IUserViewFactory>();
+            controller = CreateUsersController(userViewViewFactory: supervisorsFactoryMock.Object);
         };
 
         Because of = () =>
@@ -29,6 +29,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         
         private static UserApiView actionResult;
         private static UsersController controller;
-        private static Mock<IUserListViewFactory> supervisorsFactoryMock;
+        private static Mock<IUserViewFactory> supervisorsFactoryMock;
     }
 }

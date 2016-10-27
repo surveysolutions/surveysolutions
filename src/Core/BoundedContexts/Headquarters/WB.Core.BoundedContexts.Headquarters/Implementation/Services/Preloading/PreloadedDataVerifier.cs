@@ -900,7 +900,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var userNameLowerCase = userName.ToLower();
             if (!responsiblesCache.ContainsKey(userNameLowerCase))
             {
-                var user = this.userViewFactory.Load(new UserViewInputModel(UserName: userNameLowerCase, UserEmail: null));
+                var user = this.userViewFactory.GetUser(new UserViewInputModel(UserName: userNameLowerCase, UserEmail: null));
 
                 var userNotExistOrArchived = user == null || user.IsArchived;
 

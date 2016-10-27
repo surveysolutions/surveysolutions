@@ -255,7 +255,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
             this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
             this.Kernel.Bind<ITeamViewFactory>().To<TeamViewFactory>();
-            this.Kernel.Bind<IUserListViewFactory>().To<UserListViewFactory>();
             this.Kernel.Bind<IUserViewFactory>().To<UserViewFactory>();
             this.Kernel.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
             this.Kernel.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();

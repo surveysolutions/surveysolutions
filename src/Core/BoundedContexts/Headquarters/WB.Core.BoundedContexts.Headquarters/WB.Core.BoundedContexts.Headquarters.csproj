@@ -678,14 +678,13 @@
     <Compile Include="Views\UsersAndQuestionnaires\TeamUsersAndQuestionnairesView.cs" />
     <Compile Include="Views\User\ApplicationUser.cs" />
     <Compile Include="Views\User\ITeamViewFactory.cs" />
-    <Compile Include="Views\User\IUserListViewFactory.cs" />
+    <Compile Include="Views\User\IUserViewFactory.cs" />
     <Compile Include="Views\User\TeamViewFactory.cs" />
     <Compile Include="Views\User\UserListView.cs" />
-    <Compile Include="Views\User\UserListViewFactory.cs" />
+    <Compile Include="Views\User\UserViewFactory.cs" />
     <Compile Include="Views\User\UsersView.cs" />
     <Compile Include="Views\User\UsersViewItem.cs" />
     <Compile Include="Views\User\UserView.cs" />
-    <Compile Include="Views\User\UserViewFactory.cs" />
     <Compile Include="Views\User\UserViewInputModel.cs" />
     <Compile Include="Views\ViewerStatus.cs" />
     <Compile Include="WebInterview\WebInterviewConfig.cs" />

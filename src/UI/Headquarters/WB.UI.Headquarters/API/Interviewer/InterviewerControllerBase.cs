@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         //if new version is created make correspondent changes
         public virtual HttpResponseMessage PostTabletInformation(TabletInformationPackage tabletInformationPackage)
         {
-            var user = this.userViewFactory.Load(new UserViewInputModel(tabletInformationPackage.AndroidId));
+            var user = this.userViewFactory.GetUser(new UserViewInputModel(tabletInformationPackage.AndroidId));
 
             this.tabletInformationService.SaveTabletInformation(
                 content: Convert.FromBase64String(tabletInformationPackage.Content),
