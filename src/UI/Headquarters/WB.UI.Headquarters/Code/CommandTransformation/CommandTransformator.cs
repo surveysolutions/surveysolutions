@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Headquarters.Code.CommandTransformation
@@ -69,26 +70,23 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             return resultCommand;
         }
 
-        private static KeyValuePair<Guid, object> ParseQuestionAnswer(UntypedQuestionAnswer answer)
+        private static KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer)
         {
             string answerAsString = answer.Answer.ToString();
-            object answerValue = null;
+            AbstractAnswer answerValue = null;
 
             switch (answer.Type)
             {
                 case QuestionType.Text:
-                    answerValue = answer.Answer;
-                    break;
-                case QuestionType.AutoPropagate:
-                    answerValue = answerAsString.Parse<int>();
+                    answerValue = new TextAnswer(answerAsString);
                     break;
                 case QuestionType.Numeric:
                     try
                     {
                         if (answer.Settings != null && (bool) answer.Settings.IsInteger)
-                            answerValue = answerAsString.Parse<int>();
+                            answerValue = new NumericIntegerAnswer(answerAsString.Parse<int>());
                         else
-                            answerValue = answerAsString.Parse<decimal>();
+                            answerValue = new NumericRealAnswer(answerAsString.Parse<double>());
                     }
                     catch (OverflowException)
                     {
@@ -96,20 +94,21 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                     }
                     break;
                 case QuestionType.DateTime:
-                    answerValue = answer.Answer is DateTime ? answer.Answer : answerAsString.Parse<DateTime>();
+                    answerValue = new DateTimeAnswer(answer.Answer as DateTime? ?? answerAsString.Parse<DateTime>());
                     break;
                 case QuestionType.SingleOption:
-                    answerValue = answerAsString.Parse<decimal>();
+                    answerValue = new CategoricalFixedSingleOptionAnswer(answerAsString.Parse<int>());
                     break;
                 case QuestionType.MultyOption:
-                    decimal[] answerAsDecimalArray = JsonArrayToStringArray(answer.Answer).Select(x=>x.Parse<decimal>()).ToArray();
-                    answerValue = answerAsDecimalArray;
+                    int[] answerAsIntArray = JsonArrayToStringArray(answer.Answer).Select(x=>x.Parse<int>()).ToArray();
+                    answerValue = new CategoricalFixedMultiOptionAnswer(answerAsIntArray);
                     break;
                 case QuestionType.GpsCoordinates:
                     var splitedCoordinates = answerAsString.Split('$');
                     if(splitedCoordinates.Length!=2)
                         throw new FormatException($"Value '{answerAsString}' is not in the correct format.");
-                    answerValue = new GeoPosition(splitedCoordinates[0].Parse<double>(), splitedCoordinates[1].Parse<double>(), 0, 0, DateTime.Now);
+                    var geoPosition = new GeoPosition(splitedCoordinates[0].Parse<double>(), splitedCoordinates[1].Parse<double>(), 0, 0, DateTime.Now);
+                    answerValue = new GpsAnswer(geoPosition);
                     break;
             }
 
@@ -118,7 +117,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                 throw new Exception("Error when parse question answer");
             }
 
-            return new KeyValuePair<Guid, object>(answer.Id, answerValue);
+            return new KeyValuePair<Guid, AbstractAnswer>(answer.Id, answerValue);
         }
 
         private static string[] JsonArrayToStringArray(object jsonArray)
