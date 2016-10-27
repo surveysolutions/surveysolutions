@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -137,17 +138,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             if (rosterScopeDescription.Type == RosterScopeType.Numeric)
             {
-                return Enumerable.Range(0, (int)answerObject).Select(i => (decimal)i).ToArray();
+                return Enumerable.Range(0, ((NumericIntegerAnswer) answerObject).Value)
+                    .Select(i => (decimal) i).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
-                return answerObject as decimal[];
+                return ((CategoricalFixedMultiOptionAnswer) answerObject).CheckedValues
+                    .Select(v => (decimal) v).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.TextList)
             {
-                return ((Tuple<decimal, string>[])answerObject).Select(a => a.Item1).ToArray();
+                return ((TextListAnswer) answerObject).Rows
+                    .Select(a => a.Value).ToArray();
             }
             return null;
         }
@@ -413,12 +417,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return result.ToArray();
         }
 
-        private Dictionary<Guid, object> BuildAnswerForLevel(string[] row, string[] header, string levelFileName)
+        private Dictionary<Guid, AbstractAnswer> BuildAnswerForLevel(string[] row, string[] header, string levelFileName)
         {
             var levelExportStructure = this.FindLevelInPreloadedData(levelFileName);
             if (levelExportStructure == null)
                 return null;
-            var result = new Dictionary<Guid, object>();
+            var result = new Dictionary<Guid, AbstractAnswer>();
 
             var rowWithoutMissingValues = row.Select(v =>
                   v?.Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty)
@@ -435,7 +439,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return result;
         }
 
-        private object BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
+        private AbstractAnswer BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
         {
             var exportedHeaderItem =
                 levelExportStructure.HeaderItems.Values.FirstOrDefault(
