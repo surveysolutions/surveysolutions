@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
@@ -14,7 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal class when_getting_question_otion_by_value : StatefulInterviewTestsContext
+    internal class when_getting_question_option_by_value : StatefulInterviewTestsContext
     {
         private Establish context = () =>
         {
@@ -23,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             options = new List<CategoricalOption>()
             {
                 option1,
-                new CategoricalOption() {Value = 1, Title = "2"}
+                new CategoricalOption() {Value = 2, Title = "2"}
             }.ToReadOnlyCollection();
 
             IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
