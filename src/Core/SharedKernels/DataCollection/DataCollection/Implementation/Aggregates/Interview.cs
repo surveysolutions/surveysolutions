@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -152,10 +153,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private static string JoinDecimalsWithComma(IEnumerable<decimal> values)
-        {
-            return string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
-        }
+        private static string JoinDecimalsWithComma(IEnumerable<decimal> values) => string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
+
+        private static string JoinIntsWithComma(IEnumerable<int> values) => string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
 
         private static ConcurrentHashSet<string> ToHashSetOfIdAndRosterVectorStrings(IEnumerable<InterviewItemId> synchronizationIdentities)
         {
@@ -306,7 +306,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
-            Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
+            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
