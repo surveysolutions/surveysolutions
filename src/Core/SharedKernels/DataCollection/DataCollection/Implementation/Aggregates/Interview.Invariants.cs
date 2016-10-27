@@ -6,19 +6,20 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        private void ValidatePrefilledQuestions(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions, RosterVector rosterVector = null, InterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
+        private void ValidatePrefilledQuestions(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null, InterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
         {
             var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
-            foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
+            foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)
             {
                 Guid questionId = answerToFeaturedQuestion.Key;
-                object answer = answerToFeaturedQuestion.Value;
+                AbstractAnswer answer = answerToFeaturedQuestion.Value;
 
                 var answeredQuestion = new Identity(questionId, currentRosterVector);
 
@@ -30,16 +31,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.CheckTextQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks);
                         break;
 
-                    case QuestionType.AutoPropagate:
-                        this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
-                            answeredQuestion, tree, applyStrongChecks);
-                        break;
                     case QuestionType.Numeric:
                         if (questionnaire.IsQuestionInteger(questionId))
-                            this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, (int)answer, questionnaire,
+                            this.CheckNumericIntegerQuestionInvariants(questionId, currentRosterVector, ((NumericIntegerAnswer)answer).Value, questionnaire,
                                 answeredQuestion, tree, applyStrongChecks);
                         else
-                            this.CheckNumericRealQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
+                            this.CheckNumericRealQuestionInvariants(questionId, currentRosterVector, ((NumericRealAnswer)answer).Value, questionnaire,
                                 answeredQuestion, currentInterviewState, tree, applyStrongChecks);
                         break;
 
@@ -49,18 +46,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
 
                     case QuestionType.SingleOption:
-                        this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, (decimal)answer, questionnaire,
+                        this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, ((CategoricalFixedSingleOptionAnswer)answer).SelectedValue, questionnaire,
                             answeredQuestion, tree, applyStrongChecks);
                         break;
 
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
                         {
-                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (AnsweredYesNoOption[])answer, questionnaire, tree, applyStrongChecks);
+                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (YesNoAnswer) answer, questionnaire, tree, applyStrongChecks);
                         }
                         else
                         {
-                            this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, (decimal[])answer, questionnaire, answeredQuestion, tree, applyStrongChecks);
+                            this.CheckMultipleOptionQuestionInvariants(questionId, currentRosterVector, ((CategoricalFixedMultiOptionAnswer)answer).CheckedValues, questionnaire, answeredQuestion, tree, applyStrongChecks);
                         }
                         break;
                     case QuestionType.QRBarcode:
@@ -71,13 +68,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
                     case QuestionType.TextList:
                         this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState,
-                            (Tuple<decimal, string>[])answer, tree, applyStrongChecks);
+                            ((TextListAnswer)answer).ToTupleArray(), tree, applyStrongChecks);
                         break;
 
                     default:
-                        throw new InterviewException(string.Format(
-                            "Question {0} has type {1} which is not supported as initial pre-filled question. InterviewId: {2}",
-                            questionId, questionType, this.EventSourceId));
+                        throw new InterviewException(
+                            $"Question {questionId} has type {questionType} which is not supported as initial pre-filled question. InterviewId: {this.EventSourceId}");
                 }
             }
         }
@@ -128,7 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionIdentity, linkedQuestionSelectedOption);
         }
 
-        private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal answer,
+        private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, double answer,
            IQuestionnaire questionnaire,
            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree, bool applyStrongChecks = true)
         {
@@ -179,7 +175,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckMultipleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedValues,
+        private void CheckMultipleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, IReadOnlyCollection<int> selectedValues,
             IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree,
             bool applyStrongChecks = true)
         {
@@ -196,9 +192,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, selectedValues.Length, questionnaire);
+                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, selectedValues.Count, questionnaire);
                 var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
-                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, selectedValues.Length,
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, selectedValues.Count,
                     questionnaire,
                     maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
@@ -206,15 +202,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (applyStrongChecks)
             {
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-                this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Length, questionnaire);
+                this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Count, questionnaire);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
 
-        private void CheckYesNoQuestionInvariants(Identity question, AnsweredYesNoOption[] answeredOptions, IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
+        private void CheckYesNoQuestionInvariants(Identity question, YesNoAnswer answer, IQuestionnaire questionnaire, InterviewTree tree, bool applyStrongChecks = true)
         {
-            decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.OptionValue).ToArray();
-            var yesAnswersCount = answeredOptions.Count(answeredOption => answeredOption.Yes);
+            int[] selectedValues = answer.CheckedOptions.Select(answeredOption => answeredOption.Value).ToArray();
+            var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
 
             var treeInvariants = new InterviewTreeInvariants(tree);
 
@@ -443,7 +439,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnaire), value, EventSourceId));
         }
 
-        private void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, decimal[] values, IQuestionnaire questionnaire)
+        private void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, IReadOnlyCollection<int> values, IQuestionnaire questionnaire)
         {
             IEnumerable<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(questionId);
 
@@ -451,7 +447,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (someValueIsNotOneOfAvailable)
                 throw new AnswerNotAcceptedException(string.Format(
                     "For question {0} were provided selected values {1} as answer. But only following values are allowed: {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire), JoinDecimalsWithComma(values),
+                    FormatQuestionForException(questionId, questionnaire), JoinIntsWithComma(values),
                     JoinDecimalsWithComma(availableValues),
                     EventSourceId));
         }
@@ -466,7 +462,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
-        private void ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(IQuestionnaire questionnaire, Guid questionId, decimal answer)
+        private void ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(IQuestionnaire questionnaire, Guid questionId, double answer)
         {
             int? countOfDecimalPlacesAllowed = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(questionId);
             if (!countOfDecimalPlacesAllowed.HasValue)
