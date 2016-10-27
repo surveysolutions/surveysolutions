@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [WriteToSyncLog(SynchronizationLogType.GetInterviewer)]
         public virtual InterviewerApiView Current()
         {
-            var user = this.userViewFactory.Load(new UserViewInputModel(this.identityManager.CurrentUserId));
+            var user = this.userViewFactory.GetUser(new UserViewInputModel(this.identityManager.CurrentUserId));
 
             return new InterviewerApiView()
             {

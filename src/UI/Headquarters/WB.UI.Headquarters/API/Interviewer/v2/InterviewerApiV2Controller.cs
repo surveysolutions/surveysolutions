@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             var fileContent = await httpContent.ReadAsByteArrayAsync();
 
             var deviceId = this.Request.Headers.GetValues("DeviceId").Single();
-            var user = this.userViewFactory.Load(new UserViewInputModel(deviceId));
+            var user = this.userViewFactory.GetUser(new UserViewInputModel(deviceId));
 
             this.tabletInformationService.SaveTabletInformation(
                 content: fileContent,

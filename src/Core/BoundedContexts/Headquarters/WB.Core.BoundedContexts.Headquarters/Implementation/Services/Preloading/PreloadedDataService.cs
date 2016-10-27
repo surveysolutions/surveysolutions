@@ -512,7 +512,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         {
             return this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                var user = this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
+                var user = this.userViewFactory.GetUser(new UserViewInputModel(UserName: userName, UserEmail: null));
                 if (user == null || user.IsArchived)
                     return null;
                 return user;

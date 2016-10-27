@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (!supervisorId.HasValue)
                 return null;
 
-            var userView =this.userViewFactory.Load(new UserViewInputModel(supervisorId.Value));
+            var userView =this.userViewFactory.GetUser(new UserViewInputModel(supervisorId.Value));
             return userView?.UserName;
         }
     }

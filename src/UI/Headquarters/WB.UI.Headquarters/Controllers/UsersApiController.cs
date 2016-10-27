@@ -20,13 +20,13 @@ namespace WB.UI.Headquarters.Controllers
     public class UsersApiController : BaseApiController
     {
         private readonly IIdentityManager identityManager;
-        private readonly IUserListViewFactory usersFactory;
+        private readonly IUserViewFactory usersFactory;
 
         public UsersApiController(
             ICommandService commandService,
             IIdentityManager identityManager,
             ILogger logger,
-            IUserListViewFactory usersFactory)
+            IUserViewFactory usersFactory)
             : base(commandService, logger)
         {
             this.identityManager = identityManager;

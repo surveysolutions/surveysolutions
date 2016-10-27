@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
                 UserName = "apiTest1"
             };
 
-            userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
+            userViewFactory.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
 
             controller = CreateApiUserController(commandService: commandServiceMock.Object);
         };

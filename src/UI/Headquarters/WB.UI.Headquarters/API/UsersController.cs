@@ -12,16 +12,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator  }, TreatPasswordAsPlain = true)]
     public class UsersController : BaseApiServiceController
     {
-        private readonly IUserListViewFactory usersFactory;
-        private readonly IUserViewFactory userViewFactory;
+        private readonly IUserViewFactory usersFactory;
 
         public UsersController(ILogger logger,
-            IUserListViewFactory usersFactory,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory usersFactory)
             :base(logger)
         {
             this.usersFactory = usersFactory;
-            this.userViewFactory = userViewFactory;
         }
 
         [HttpGet]
@@ -40,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [Route("api/v1/users/{id:guid}/details")]
         public UserApiDetails Details(Guid id)
         {
-            var user = this.userViewFactory.Load(new UserViewInputModel(id));
+            var user = this.usersFactory.GetUser(new UserViewInputModel(id));
 
             if (user == null || user.IsArchived)
             {
