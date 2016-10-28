@@ -174,10 +174,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 var questionIdentity = new Identity(categoricalQuestion.Id, categoricalQuestion.RosterVector);
 
-                IEnumerable<CategoricalOption> filteredOptions =
-                    interviewAggregate.GetFilteredOptionsForQuestion(questionIdentity, null, string.Empty);
-
-                categoricalQuestion.Options = filteredOptions
+                categoricalQuestion.Options = 
+                    interviewAggregate.GetFirstTopFilteredOptionsForQuestion(questionIdentity, null, string.Empty, 200)
                     .Select(x => new QuestionOptionView
                     {
                         Label = x.Title,

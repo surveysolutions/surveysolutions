@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 {
     internal class when_setting_ResetTextInEditor_in_null : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             SetUp();
 
@@ -24,18 +24,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
 
-            var interview = Mock.Of<IStatefulInterview>(_
-                => _.QuestionnaireIdentity == questionnaireId
-                   && _.GetSingleOptionAnswer(questionIdentity) == childAnswer
-                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer
-                   &&_.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1) == new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 }
-                   && _.GetFilteredOptionsForQuestion(questionIdentity, 1, string.Empty) == Options.Where(x => x.ParentValue == 1).ToList());
+            var interview = new Mock<IStatefulInterview>();
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
+            interview.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);
+            interview.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
+            interview.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
+            interview.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
+            interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
+                .Returns((Identity identity, int? value, string filter, int count) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
+
+            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id, interview.QuestionnaireIdentity);
+            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id, interview.Object.QuestionnaireIdentity);
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,

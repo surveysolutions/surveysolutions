@@ -40,15 +40,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? questionnaire.GetGroupTitle(groupId) ?? "<<NO GROUP TITLE>>"
                 : "<<MISSING GROUP>>";
 
-        public virtual IEnumerable<CategoricalOption> GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter)
+        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int itemsCount = 200)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            var filteredOptions = questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter);
+            itemsCount = itemsCount > 200 ? 200 : itemsCount;
 
-            if (questionnaire.IsSupportFilteringForOptions(question.Id))
-                return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, filteredOptions);
-            else
-                return filteredOptions;
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+
+            if (!questionnaire.IsSupportFilteringForOptions(question.Id))
+                return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter).Take(itemsCount).ToList();
+
+            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question,
+                questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
         }
 
         public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)

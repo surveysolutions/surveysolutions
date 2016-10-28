@@ -994,9 +994,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 else
                 {
                     roster.UpdateRosterTitle((questionId, answerOptionValue) =>
-                        questionnaire.GetOptionsForQuestion(questionId, null, string.Empty)
-                            .FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue))
-                            .Title);
+                        questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
                 }
             }
         }

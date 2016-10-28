@@ -121,8 +121,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return result;
         }
 
-        public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount)
-            => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Take(takeCount).ToReadOnlyCollection());
+        public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
+            => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
         
         public void RemoveAll()
         {

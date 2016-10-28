@@ -26,8 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             optionX = 1;
-            var optionY = -2;
-            optionZ = 3;
+            var optionY = (decimal) -2;
+            optionZ = (decimal) 2;
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
