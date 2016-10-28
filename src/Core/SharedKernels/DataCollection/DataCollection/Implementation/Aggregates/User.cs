@@ -41,22 +41,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string PersonName;
         public string PhoneNumber;
 
-        public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password,
-            Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName, string personName,
-            string phoneNumber)
-        {
-            this.UserName = userName;
-            this.Password = password;
-            this.CreationDate = DateTime.UtcNow;
-            this.Email = email;
-            this.IsLockedBySupervisor = isLockedBySupervisor;
-            this.IsLockedByHQ = isLockedByHq;
-            this.Supervisor = supervisor;
-            this.Roles = roles;
-            this.PersonName = personName;
-            this.PhoneNumber = phoneNumber;
-        }
-
         public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, string passwordHash,
             string personName, string phoneNumber, Guid userId)
         {

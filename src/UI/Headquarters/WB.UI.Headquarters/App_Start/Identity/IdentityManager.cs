@@ -57,6 +57,17 @@ namespace WB.UI.Headquarters.Identity
 
         public string CurrentUserDeviceId => this.authenticationManager.User.FindFirst(@"DeviceId")?.Value;
 
+        public IdentityResult CreateUser(ApplicationUser user, string password, UserRoles role)
+        {
+            user.CreationDate = DateTime.UtcNow;
+
+            var creationStatus = this.userManager.Create(user, password);
+            if (creationStatus.Succeeded)
+                creationStatus = this.userManager.AddToRole(user.Id, Enum.GetName(typeof(UserRoles), role));
+
+            return creationStatus;
+        }
+
         public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
@@ -76,6 +87,14 @@ namespace WB.UI.Headquarters.Identity
             return await this.userManager.UpdateAsync(user);
         }
 
+        public IdentityResult UpdateUser(ApplicationUser user, string password)
+        {
+            if (!string.IsNullOrWhiteSpace(password))
+                user.PasswordHash = this.userManager.PasswordHasher.HashPassword(password);
+
+            return this.userManager.Update(user);
+        }
+
         public async Task<UserRoles> GetRoleForCurrentUserAsync()
         {
             var userRoles = await this.userManager.GetRolesAsync(this.currentUserId);
@@ -86,6 +105,14 @@ namespace WB.UI.Headquarters.Identity
         public void SignOut() => this.authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
         public async Task<ApplicationUser> GetUserByIdAsync(Guid userId) => await this.userManager.FindByIdAsync(userId);
+
+        public ApplicationUser GetUserById(Guid userId) => this.userManager.FindById(userId);
+
+        public async Task<ApplicationUser> GetUserByNameAsync(string userName) => await this.userManager.FindByNameAsync(userName);
+        public ApplicationUser GetUserByName(string userName) => this.userManager.FindByName(userName);
+
+        public async Task<ApplicationUser> GetUserByEmailAsync(string email) => await this.userManager.FindByEmailAsync(email);
+        public ApplicationUser GetUserByEmail(string email) => this.userManager.FindByEmail(email);
 
         public IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId)
         {
@@ -98,15 +125,13 @@ namespace WB.UI.Headquarters.Identity
             }
         }
 
-        public async Task<ApplicationUser> GetUserByName(string userName) => await this.userManager.FindByNameAsync(userName);
-
         public Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false)
             => this.signInManager.PasswordSignInAsync(userName, password, isPersistent: isPersistent,
                 shouldLockout: false);
 
         public async Task SignInAsObserverAsync(string userName)
         {
-            var observer = await this.GetUserByName(userName);
+            var observer = await this.GetUserByNameAsync(userName);
             observer.ObserverName = this.CurrentUserName;
 
             await this.signInManager.SignInAsync(observer, true, true);
@@ -115,7 +140,7 @@ namespace WB.UI.Headquarters.Identity
         public async Task SignInBackFromObserverAsync()
         {
             var observerName = this.authenticationManager.User.FindFirst("ObserverName")?.Value;
-            var observer = await this.GetUserByName(observerName);
+            var observer = await this.GetUserByNameAsync(observerName);
 
             this.CurrentUser.ObserverName = string.Empty;
             this.authenticationManager.SignOut();

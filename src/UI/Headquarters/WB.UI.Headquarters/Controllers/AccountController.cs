@@ -128,7 +128,7 @@ namespace WB.UI.Headquarters.Controllers
             if (string.IsNullOrEmpty(personName))
                 throw new HttpException(404, string.Empty);
 
-            var user = this.identityManager.GetUserByName(personName);
+            var user = this.identityManager.GetUserByNameAsync(personName);
             if (user == null)
                 throw new HttpException(404, string.Empty);
 

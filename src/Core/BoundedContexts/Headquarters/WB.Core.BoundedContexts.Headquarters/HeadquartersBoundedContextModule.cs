@@ -151,7 +151,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             CommandRegistry
                 .Setup<User>()
-                .InitializesWith<CreateUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Password, command.PublicKey, command.Roles, command.Supervisor, command.UserName, command.PersonName, command.PhoneNumber))
                 .Handles<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.PasswordHash, command.PersonName, command.PhoneNumber, command.UserId))
                 .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
                 .Handles<ArchiveUserCommad>(command => command.UserId, (command, aggregate) => aggregate.Archive())
@@ -324,8 +323,7 @@ namespace WB.Core.BoundedContexts.Headquarters
            
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
-
-            CommandRegistry.Configure<User, CreateUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
+            
             CommandRegistry.Configure<User, UnarchiveUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
             CommandRegistry.Configure<User, UnarchiveUserAndUpdateCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
 
