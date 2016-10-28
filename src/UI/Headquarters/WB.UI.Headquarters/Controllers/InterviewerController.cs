@@ -53,8 +53,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 var creationResult = await this.CreateUserAsync(model, UserRoles.Interviewer, model.SupervisorId);
                 if (creationResult.Succeeded)
                 {
-                    await this.identityManager.SignInAsync(model.UserName, model.Password, isPersistent: false);
-
                     this.Success(Pages.InterviewerController_InterviewerCreationSuccess);
                     return this.Back();
                 }
