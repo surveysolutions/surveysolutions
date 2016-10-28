@@ -193,7 +193,6 @@
     <Compile Include="Commands\Interview\RejectInterviewFromHeadquartersCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="DataTransferObjects\Preloading\PreloadedDataDto.cs" />
     <Compile Include="DataTransferObjects\Preloading\PreloadedLevelDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\CommentSynchronizationDto.cs">
