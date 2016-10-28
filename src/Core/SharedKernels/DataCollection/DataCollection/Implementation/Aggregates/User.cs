@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using Ncqrs.Domain;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -18,8 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static readonly UserRoles[] RolesWhichSupportArchiving = { UserRoles.Interviewer, UserRoles.Supervisor };
 
         public Guid Id { get; private set; }
-
-        public User() {}
+        
 
         public void SetId(Guid id)
         {
@@ -66,20 +61,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DeviceId = command.DeviceId;
             this.DeviceChangingHistory.Add(
                 new DeviceInfo {Date = DateTime.UtcNow, DeviceId = command.DeviceId});
-        }
-
-        public void Lock()
-        {
-            this.ThrowIfUserArchived();
-
-            this.IsLockedByHQ = true;
-        }
-
-        public void Unlock()
-        {
-            this.ThrowIfUserArchived();
-
-            this.IsLockedByHQ = false;
         }
 
         public void LockBySupervisor()
