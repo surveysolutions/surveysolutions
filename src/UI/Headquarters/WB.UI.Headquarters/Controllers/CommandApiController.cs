@@ -75,16 +75,8 @@ namespace WB.UI.Headquarters.Controllers
                     var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
-                        var userException = e.GetSelfOrInnerAs<UserException>();
-                        if (userException == null)
-                        {
-                            this.Logger.Error(DefaultErrorMessage, e);
-                            response.DomainException = Strings.UnexpectedErrorOccurred;
-                        }
-                        else
-                        {
-                            response.DomainException = userException.Message;
-                        }
+                        this.Logger.Error(DefaultErrorMessage, e);
+                        response.DomainException = Strings.UnexpectedErrorOccurred;
                     }
                     else
                     {

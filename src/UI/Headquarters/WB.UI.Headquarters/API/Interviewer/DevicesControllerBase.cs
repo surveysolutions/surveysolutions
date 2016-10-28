@@ -10,9 +10,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
@@ -63,7 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 this.commandService.Execute(new RegisterTabletCommand(deviceId, this.identityManager.CurrentUserId, interviewerEngineVersion, id));
             }
 
-            this.identityManager.LinkDeviceToCurrentInterviewer(deviceId);
+            this.identityManager.LinkDeviceToCurrentInterviewer(id);
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
