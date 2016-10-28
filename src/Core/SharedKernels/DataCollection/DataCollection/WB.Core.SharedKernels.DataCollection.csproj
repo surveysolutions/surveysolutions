@@ -81,7 +81,6 @@
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
     <Compile Include="Commands\User\ArchiveUserCommad.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
-    <Compile Include="Commands\User\UnarchiveUserAndUpdateCommand.cs" />
     <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
     <Compile Include="DataCollectionInfrastructureModule.cs" />
     <Compile Include="DataCollectionSharedKernelAssemblyMarker.cs" />
