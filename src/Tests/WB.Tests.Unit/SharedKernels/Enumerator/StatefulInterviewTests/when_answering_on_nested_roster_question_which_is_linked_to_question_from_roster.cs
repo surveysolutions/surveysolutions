@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: rosterSizeQuestionId,
                         children: new IComposite[]
                         {
-                            Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1m, 2m}),
+                            Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1, 2}),
                             Create.Entity.Roster(rosterId: nestedRosterId,
                                 rosterSizeQuestionId: nestedRosterSizeQuestionId,
                                 children: new IComposite[]
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
             interview.AnswerNumericIntegerQuestion(interviewerId, rosterSizeQuestionId, RosterVector.Empty, DateTime.UtcNow, 1);
-            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, new RosterVector(new[] {0m}), DateTime.UtcNow, new[] {1m});
+            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, new RosterVector(new[] {0m}), DateTime.UtcNow, new[] {1});
         };
 
         Because of = () => interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionIdentity.Id, 

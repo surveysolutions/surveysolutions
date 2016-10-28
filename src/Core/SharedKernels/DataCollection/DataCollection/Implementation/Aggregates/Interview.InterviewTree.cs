@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answer = state?.GetAnswer(childQuestionIdentity);
             if (answer != null)
             {
-                question.SetAnswer(answer);
+                question.SetObjectAnswer(answer);
             }
 
             if (state?.InvalidAnsweredQuestions.ContainsKey(childQuestionIdentity) ?? false)

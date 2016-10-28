@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     internal class InterviewTestsContext
     {
         protected static Interview CreateInterview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
-            Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
+            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 1,
                 supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"),
-                answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
+                answersToFeaturedQuestions ?? new Dictionary<Guid, AbstractAnswer>(),
                 answersTime ?? new DateTime(2012, 12, 20),
                 userId ?? new Guid("F000F000F000F000F000F000F000F000"));
 

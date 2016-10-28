@@ -49,9 +49,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerSingleOptionQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 12);
-                interview.AnswerMultipleOptionsQuestion(userId, q2Id, Create.RosterVector(1), DateTime.Now, new[] { 1m, 2m, 3m });
+                interview.AnswerMultipleOptionsQuestion(userId, q2Id, Create.RosterVector(1), DateTime.Now, new[] { 1, 2, 3 });
                 interview.AnswerSingleOptionQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 2);
-                interview.AnswerMultipleOptionsQuestion(userId, q4Id, Create.RosterVector(1), DateTime.Now, new[] { 12m });
+                interview.AnswerMultipleOptionsQuestion(userId, q4Id, Create.RosterVector(1), DateTime.Now, new[] { 12 });
                 interview.AnswerSingleOptionQuestion(userId, q5Id, Create.RosterVector(1), DateTime.Now, 3);
 
                 var result = new InvokeResults();

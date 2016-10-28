@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             interview.AnswerNumericIntegerQuestion(userId: userId, questionId: triggerQuestionId,
                  answerTime: DateTime.Now, rosterVector: new decimal[0], answer: 1);
             interview.AnswerNumericRealQuestion(userId: userId, questionId: titleQuestionId,
-                answerTime: DateTime.Now, rosterVector: new decimal[] { 0 }, answer: (decimal)2.3);
+                answerTime: DateTime.Now, rosterVector: new decimal[] { 0 }, answer: 2.3);
         };
 
         Because of = () =>

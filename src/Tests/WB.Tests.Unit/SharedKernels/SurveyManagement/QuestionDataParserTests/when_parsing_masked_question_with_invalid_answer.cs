@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
           () =>
               parseResult =
                   questionDataParser.TryParse("aa",questionVarName,
-                      question, out parsedValue);
+                      question, out parsedValue, out parsedSingleColumnAnswer);
 
         It should_return__ParsedValueIsNotAllowed__error = () => parseResult.ShouldEqual(ValueParsingResult.ParsedValueIsNotAllowed);
 
