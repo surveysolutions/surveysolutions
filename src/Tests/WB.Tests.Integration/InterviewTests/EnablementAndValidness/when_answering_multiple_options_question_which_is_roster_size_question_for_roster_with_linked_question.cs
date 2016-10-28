@@ -57,7 +57,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 using (var eventContext = new EventContext())
                 {
 
-                    interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new decimal[] { 1 });
+                    interview.AnswerMultipleOptionsQuestion(userId, multiOptionQuestionId, Empty.RosterVector, DateTime.Now, new[] { 1 });
                     return new InvokeResults()
                     {
                         WasLinkedOptionsChanged =

@@ -72,7 +72,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 {
                     interview.AnswerNumericIntegerQuestion(userId, questionA, Empty.RosterVector, DateTime.Now, 1);
                     interview.AnswerNumericRealQuestion(userId, questionB, new decimal[] { 1 }, DateTime.Now, -30);
-                    interview.AnswerNumericRealQuestion(userId, questionB, new decimal[] { 2 }, DateTime.Now, 35m);
+                    interview.AnswerNumericRealQuestion(userId, questionB, new decimal[] { 2 }, DateTime.Now, 35);
                     interview.AnswerNumericRealQuestion(userId, questionB, new decimal[] { 3 }, DateTime.Now, 300);
 
                     return new InvokeResult

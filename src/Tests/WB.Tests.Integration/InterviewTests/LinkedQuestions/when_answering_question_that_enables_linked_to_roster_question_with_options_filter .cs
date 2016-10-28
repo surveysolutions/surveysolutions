@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 StatefulInterview interview = SetupStatefullInterview(questionnaireDocument);
 
-                interview.AnswerMultipleOptionsQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, new[] { 1m, 2m });
+                interview.AnswerMultipleOptionsQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2 });
                 interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(1), DateTime.Now, 20);
                 interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(2), DateTime.Now, 15);
                 //interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 1);
