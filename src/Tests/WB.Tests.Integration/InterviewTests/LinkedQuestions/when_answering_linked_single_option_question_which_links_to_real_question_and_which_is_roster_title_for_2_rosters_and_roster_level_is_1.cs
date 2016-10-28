@@ -32,9 +32,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var linkedOption1Vector = new decimal[] { 0 };
             linkedOption2Vector = new decimal[] { 1 };
             var linkedOption3Vector = new decimal[] { 2 };
-            var linkedOption1Answer = (decimal) 6.5;
-            var linkedOption2Answer = (decimal) 3.54;
-            var linkedOption3Answer = (decimal) -11.2;
+            var linkedOption1Answer = 6.5;
+            var linkedOption2Answer = 3.54;
+            var linkedOption3Answer = -11.2;
             linkedOption2TextInvariantCulture = "3.54";
 
             var triggerQuestionId = Guid.NewGuid();
