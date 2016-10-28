@@ -201,4 +201,7 @@
   <data name="EmptyTranslationFile" xml:space="preserve">
     <value>Selected translation file is empty</value>
   </data>
+  <data name="User_has_not_permissions_to_access_to_questionnaire" xml:space="preserve">
+    <value>User has not permissions to access to questionnaire</value>
+  </data>
 </root>

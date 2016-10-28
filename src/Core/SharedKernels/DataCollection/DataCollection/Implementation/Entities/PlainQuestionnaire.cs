@@ -699,19 +699,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return @group?.IsRoster == false;
         }
 
-        public Guid? GetCommontParentForLinkedQuestionAndItSource(Guid linkedQuestionId)
-        {
-            var linkedSourceId = this.IsQuestionLinked(linkedQuestionId)
-                   ? this.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
-                   : this.GetRosterReferencedByLinkedQuestion(linkedQuestionId);
-
-            var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(linkedSourceId).Shrink();
-            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(linkedQuestionId);
-
-            var commonPart = linkedSourceRosterScopes.GetCommonPart(linkedRosterScopes).ToArray();
-            return commonPart.Any() ? commonPart.LastOrDefault() : (Guid?)null;
-        }
-
         public bool IsVariable(Guid id)
             => this.AllVariables.Any(x => x.PublicKey == id);
 

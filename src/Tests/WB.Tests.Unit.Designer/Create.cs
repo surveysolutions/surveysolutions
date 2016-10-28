@@ -648,13 +648,12 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
-            Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
+            Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
         {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToList() ?? new List<IComposite>(),
-                UsesCSharp = usesCSharp,
                 Title = title,
                 CreatedBy = userId ?? Guid.NewGuid()
             };

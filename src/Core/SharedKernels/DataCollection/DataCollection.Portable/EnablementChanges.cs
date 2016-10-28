@@ -68,16 +68,18 @@ namespace WB.Core.SharedKernels.DataCollection
         public List<Identity> VariablesToBeDisabled { get; }
         public List<Identity> VariablesToBeEnabled { get; }
 
-        public static EnablementChanges Union(EnablementChanges first, EnablementChanges second)
-            => new EnablementChanges(
-                first.GroupsToBeDisabled.Union(second.GroupsToBeDisabled, IdentityComparer.Instance).ToList(),
-                first.GroupsToBeEnabled.Union(second.GroupsToBeEnabled, IdentityComparer.Instance).ToList(),
-                first.QuestionsToBeDisabled.Union(second.QuestionsToBeDisabled, IdentityComparer.Instance).ToList(),
-                first.QuestionsToBeEnabled.Union(second.QuestionsToBeEnabled, IdentityComparer.Instance).ToList(),
-                first.StaticTextsToBeDisabled.Union(second.StaticTextsToBeDisabled, IdentityComparer.Instance).ToList(),
-                first.StaticTextsToBeEnabled.Union(second.StaticTextsToBeEnabled, IdentityComparer.Instance).ToList(),
-                first.VariablesToBeDisabled.Union(second.VariablesToBeDisabled, IdentityComparer.Instance).ToList(),
-                first.VariablesToBeEnabled.Union(second.VariablesToBeEnabled, IdentityComparer.Instance).ToList());
+        private static EnablementChanges Union(EnablementChanges first, EnablementChanges second)
+        {
+            first.GroupsToBeDisabled.AddRange(second.GroupsToBeDisabled);
+            first.GroupsToBeEnabled.AddRange(second.GroupsToBeEnabled);
+            first.QuestionsToBeDisabled.AddRange(second.QuestionsToBeDisabled);
+            first.QuestionsToBeEnabled.AddRange(second.QuestionsToBeEnabled);
+            first.StaticTextsToBeDisabled.AddRange(second.StaticTextsToBeDisabled);
+            first.StaticTextsToBeEnabled.AddRange(second.StaticTextsToBeEnabled);
+            first.VariablesToBeDisabled.AddRange(second.VariablesToBeDisabled);
+            first.VariablesToBeEnabled.AddRange(second.VariablesToBeEnabled);
+            return first;
+        }
 
         public static EnablementChanges Union(IEnumerable<EnablementChanges> manyChanges)
             => manyChanges.Aggregate(new EnablementChanges(), Union);
