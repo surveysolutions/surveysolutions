@@ -62,6 +62,24 @@
         "src-noconflict/ace.js",
         "src-noconflict/ext-language_tools.js"
       ]
+    },
+    "pnotify": {
+      "main": [
+        "dist/pnotify.js",
+        "dist/pnotify.css",
+        "dist/pnotify.animate.js",
+        "dist/pnotify.brighttheme.css",
+        "dist/pnotify.buttons.css",
+        "dist/pnotify.buttons.js",
+        "dist/pnotify.callbacks.js",
+        "dist/pnotify.confirm.js",
+        "dist/pnotify.desktop.js",
+        "dist/pnotify.history.css",
+        "dist/pnotify.history.js",
+        "dist/pnotify.mobile.css",
+        "dist/pnotify.mobile.js",
+        "dist/pnotify.nonblock.js"
+      ]
     }
   }
 }
