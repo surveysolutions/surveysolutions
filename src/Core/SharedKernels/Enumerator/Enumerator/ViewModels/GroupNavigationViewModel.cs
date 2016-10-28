@@ -172,13 +172,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 case NavigationGroupType.InsideGroupOrRoster:
                 case NavigationGroupType.Section:
                     this.navigateToGroupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
-                    this.navigateToGroupState.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
                     break;
                 case NavigationGroupType.LastSection:
-                    this.navigateToGroupState = null;
+                    this.navigateToGroupState = this.interviewViewModelFactory.GetNew<InterviewStateViewModel>();
                     break;
             }
-            
+
+            this.navigateToGroupState.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
             this.RaisePropertyChanged(() => this.NavigateToGroupState);
         }
  
