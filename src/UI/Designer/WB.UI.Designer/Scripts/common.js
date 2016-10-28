@@ -25,7 +25,7 @@
 
         $('#export-pdf-modal-questionnaire-id').val(self.itemId);
         $('#export-pdf-modal-questionnaire-title').text(self.itemName);
-        self.setPdfMessage('Initializing...');
+
         $('#pdfDownloadButton').hide();
 
         self.updateExportPdfStatusNeverending();
@@ -64,7 +64,10 @@
     }
 
     self.setPdfMessage = function (message) {
-        $('#export-pdf-modal-status').text(message);
+        $('#export-pdf-modal-status').text(
+            message
+            //+ '\r\n\r\n' + 'Status updated ' + new Date().toLocaleTimeString()
+        );
     }
 }
 
