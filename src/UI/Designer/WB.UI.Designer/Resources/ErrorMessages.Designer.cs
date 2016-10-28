@@ -233,6 +233,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User has not permissions to access to questionnaire.
+        /// </summary>
+        internal static string User_has_not_permissions_to_access_to_questionnaire {
+            get {
+                return ResourceManager.GetString("User_has_not_permissions_to_access_to_questionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol..
         /// </summary>
         internal static string User_name_needs_to_be_between_3_and_15_characters {
