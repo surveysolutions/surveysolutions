@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: sectionId, children: new IComposite[]
             {
-                Create.Entity.MultipleOptionsQuestion(questionId: questionWhichIncreasesRosterSizeId, answers: new decimal[] { 0 }),
+                Create.Entity.MultipleOptionsQuestion(questionId: questionWhichIncreasesRosterSizeId, answers: new [] { 0 }),
                 Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, rosterSizeSourceType:RosterSizeSourceType.Question, children: new IComposite[]
                 {
                     Create.Entity.Roster(rosterId: fixedRosterGroupId, fixedRosterTitles: new[] { new FixedRosterTitle(0, title1) , new FixedRosterTitle(1, title2) }, rosterSizeSourceType:RosterSizeSourceType.FixedTitles )
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Because of = () =>
             interview.AnswerMultipleOptionsQuestion(userId, questionWhichIncreasesRosterSizeId, RosterVector.Empty, 
                 DateTime.Now,
-                new decimal[] { 0 });
+                new [] { 0 });
 
         It should_raise_RosterInstancesAdded_for_first_row_of_first_level_roster = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event

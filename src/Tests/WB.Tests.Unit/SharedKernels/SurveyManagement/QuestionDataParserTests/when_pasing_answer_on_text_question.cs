@@ -6,7 +6,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_text_question : QuestionDataParserTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             answer = "some answer";
             questionDataParser = CreateQuestionDataParser();
@@ -18,14 +18,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             };
         };
 
-        private Because of =
-            () =>
-                parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName, 
-                        question,
-                        out parcedValue);
+        Because of = () =>
+            parsingResult = questionDataParser.TryParse(answer, questionVarName, question, out parcedValue, out parsedSingleColumnAnswer);
 
-        private It should_result_value_be_equal_to_answer = () =>
+        It should_result_value_be_equal_to_answer = () =>
             parcedValue.ShouldEqual(answer);
     }
 }

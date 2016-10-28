@@ -13,12 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
             {
-                Create.Entity.YesNoQuestion(questionId: questionId, answers: new[]
-                {
-                    1.1m,
-                    2.22m,
-                    3.333m,
-                }),
+                Create.Entity.YesNoQuestion(questionId: questionId, answers: new[] { 1, 2, 3 }),
             });
 
             interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
@@ -26,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         Because of = () => 
             coughtException = 
-             Catch.Only<InterviewException>(() => interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, new[] { 1.1m}));
+             Catch.Only<InterviewException>(() => interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, new[] { 1 }));
 
         It should_not_allow_to_answer_on_yes_no_question_using_multiopions_question_method = () => 
             coughtException.Message.ShouldContain(" has Yes/No type, but command is sent to Multiopions type");

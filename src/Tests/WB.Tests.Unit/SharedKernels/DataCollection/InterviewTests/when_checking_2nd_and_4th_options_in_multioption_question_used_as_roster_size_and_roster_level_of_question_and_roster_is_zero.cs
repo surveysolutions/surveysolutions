@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.MultipleOptionsQuestion(questionId: questionId, textAnswers: new []
                 {
                     Create.Entity.Answer("option 1", 147m),
-                    Create.Entity.Answer(option2Title, option2 = 184m),
+                    Create.Entity.Answer(option2Title, option2 = 184),
                     Create.Entity.Answer("option 3", 3),
                     Create.Entity.Answer(option4Title, option4 = 1),
                     Create.Entity.Answer("option 5", 256128m),
@@ -111,8 +111,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId;
         private static Guid questionId;
         private static decimal[] emptyRosterVector;
-        private static decimal option2;
-        private static decimal option4;
+        private static int option2;
+        private static int option4;
         private static Guid rosterId;
         private static string option2Title;
         private static string option4Title;

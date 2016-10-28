@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
@@ -24,7 +25,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var fixedRosterGroup = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
             prefilledQuestionAnswer = "answer";
-            preloadedDataDto = new PreloadedDataDto(new [] { new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, object> { { prefilledQuestionId, prefilledQuestionAnswer } }), });
+            preloadedDataDto = new PreloadedDataDto(new []
+            {
+                new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, AbstractAnswer>
+                {
+                    { prefilledQuestionId, new TextAnswer(prefilledQuestionAnswer) }
+                }),
+            });
             answersTime = new DateTime(2013, 09, 01);
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]

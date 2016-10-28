@@ -532,7 +532,7 @@ namespace WB.Tests.Unit.TestFactories
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null,
             bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null,
-            params decimal[] answers)
+            params int[] answers)
             => new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -1057,11 +1057,11 @@ namespace WB.Tests.Unit.TestFactories
         public YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
             => new YesNoAnswers(allOptionCodes, yesNoAnswersOnly);
 
-        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null, bool ordered = false)
+        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, int[] answers = null, bool ordered = false)
             => Create.Entity.MultipleOptionsQuestion(
                 isYesNo: true,
                 questionId: questionId,
-                answers: answers ?? new decimal[] { },
+                answers: answers ?? new int[] { },
                 areAnswersOrdered: ordered);
 
         public TranslationInstance TranslationInstance(string value = null,
