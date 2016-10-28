@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
@@ -28,14 +29,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
             rosterTitleQuestionAnswer = "a";
-            preloadedDataDto = new PreloadedDataDto(
-                new[]
-                {
-                    new PreloadedLevelDto(new decimal[0],
-                        new Dictionary<Guid, object> {{prefilledIntQuestion, prefilledIntQuestionAnswer}}),
-                    new PreloadedLevelDto(new decimal[] {0},
-                        new Dictionary<Guid, object> {{rosterTitleQuestionId, rosterTitleQuestionAnswer}})
-                });
+            preloadedDataDto = new PreloadedDataDto(new[]
+            {
+                new PreloadedLevelDto(new decimal[0],
+                    new Dictionary<Guid, AbstractAnswer> { { prefilledIntQuestion, new NumericIntegerAnswer(prefilledIntQuestionAnswer) } }),
+                new PreloadedLevelDto(new decimal[] { 0 },
+                    new Dictionary<Guid, AbstractAnswer> { { rosterTitleQuestionId, new TextAnswer(rosterTitleQuestionAnswer) } })
+            });
 
             answersTime = new DateTime(2013, 09, 01);
 

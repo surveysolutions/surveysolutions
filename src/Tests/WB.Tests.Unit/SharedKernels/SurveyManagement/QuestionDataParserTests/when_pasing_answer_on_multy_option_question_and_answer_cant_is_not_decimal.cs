@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName, question, out parcedValue);
+                    questionDataParser.TryParse(answer, questionVarName, question, out parcedValue, out parsedSingleColumnAnswer);
 
         private It should_result_be_AnswerAsDecimalWasNotParsed = () =>
             parsingResult.ShouldEqual(ValueParsingResult.AnswerAsDecimalWasNotParsed);

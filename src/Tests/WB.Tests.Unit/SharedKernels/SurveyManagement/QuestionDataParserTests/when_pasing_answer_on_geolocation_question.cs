@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName + "__Latitude", question, out parcedValue);
+                    questionDataParser.TryParse(answer, questionVarName + "__Latitude", question, out parcedValue, out parsedSingleColumnAnswer);
 
         private It should_result_be_type_of_double = () =>
             parcedValue.ShouldBeOfExactType<double>();

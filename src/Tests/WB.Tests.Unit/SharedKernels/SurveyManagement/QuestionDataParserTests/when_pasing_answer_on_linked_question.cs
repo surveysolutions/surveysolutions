@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse("some answer",questionVarName, question, out parcedValue);
+                    questionDataParser.TryParse("some answer",questionVarName, question, out parcedValue, out parsedSingleColumnAnswer);
 
         private It should_result_be_UnsupportedLinkedQuestion = () =>
             parsingResult.ShouldEqual(ValueParsingResult.UnsupportedLinkedQuestion);

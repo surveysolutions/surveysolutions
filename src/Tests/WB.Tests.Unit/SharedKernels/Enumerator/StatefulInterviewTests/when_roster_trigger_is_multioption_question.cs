@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Rosters
                 Create.Entity.MultipleOptionsQuestion(
                     questionId: this.triggerQuestionId,
                     areAnswersOrdered: true,
-                    answers: new []{ 5m, 3, 2}
+                    answers: new []{ 5, 3, 2 }
                 ),
                 Create.Entity.Roster(
                     this.rosterId,
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Rosters
         [SetUp]
         public void BecauseOf()
         {
-            this.interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), this.triggerQuestionId, RosterVector.Empty, DateTime.Now, new decimal[] {2, 3});
+            this.interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), this.triggerQuestionId, RosterVector.Empty, DateTime.Now, new [] {2, 3});
         }
 
         [Test]

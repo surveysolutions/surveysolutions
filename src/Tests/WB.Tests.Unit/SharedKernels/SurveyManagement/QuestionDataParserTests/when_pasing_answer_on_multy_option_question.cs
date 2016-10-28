@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             };
         };
 
-        Because of = () => parsingResult = questionDataParser.TryParse(answer, questionVarName + "__2", question, out parcedValue);
+        Because of = () => parsingResult = questionDataParser.TryParse(answer, questionVarName + "__2", question, out parcedValue, out parsedSingleColumnAnswer);
 
         It should_result_be_equal_to_2 = () => parcedValue.ShouldEqual((decimal) 2);
     }

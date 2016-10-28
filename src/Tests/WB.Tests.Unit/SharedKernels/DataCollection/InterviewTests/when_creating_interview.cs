@@ -9,6 +9,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
             questionnaireVersion = 18;
-            answersToFeaturedQuestions = new Dictionary<Guid, object>();
+            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
             
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
@@ -59,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static long questionnaireVersion;
         private static Guid userId;
         private static Guid responsibleSupervisorId;
-        private static Dictionary<Guid, object> answersToFeaturedQuestions;
+        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private static Interview interview;
     }
 }

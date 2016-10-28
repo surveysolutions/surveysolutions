@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.AsSingleLinkedOption?.SetAnswer(((CategoricalLinkedSingleOptionAnswer)answer).SelectedValue);
                 this.AsMultiOption?.SetAnswer(((CategoricalFixedMultiOptionAnswer)answer).CheckedValues);
                 this.AsMultiLinkedOption?.SetAnswer(((CategoricalLinkedMultiOptionAnswer)answer).CheckedValues);
-                this.AsYesNo?.SetAnswer(((YesNoAnswer)answer).SelectedOptions);
+                this.AsYesNo?.SetAnswer(((YesNoAnswer)answer).ToAnsweredYesNoOptions());
                 this.AsTextList?.SetAnswer(((TextListAnswer)answer).ToTupleArray());
             }
         }
@@ -211,7 +211,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
 
-        public void SetAnswer(object answer)
+        [Obsolete("use SetAnswer instead")]
+        public void SetObjectAnswer(object answer)
         {
             if (this.IsText) { this.AsText.SetAnswer(answer as string); return; }
             if (this.IsInteger) { this.AsInteger.SetAnswer(Convert.ToInt32(answer)); return; }

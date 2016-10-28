@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            answers = new decimal[61];
+            answers = new int[61];
             for (int i = 0; i < answers.Length; i++)
             {
                 answers[i] = i;
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Interview interview;
         private static Guid userId;
         private static Guid rosterSizeQuestionId;
-        private static decimal[] answers;
+        private static int[] answers;
         private static InterviewException exception;
          
     }
