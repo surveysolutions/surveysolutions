@@ -166,8 +166,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (exportedQuestion == null)
                 return ValueParsingResult.OK;
 
+            AbstractAnswer parsedSingleColumnAnswer;
             return this.dataParser.TryParse(answer, columnName, this.GetQuestionByVariableName(exportedQuestion.VariableName),
-                out parsedValue);
+                out parsedValue, out parsedSingleColumnAnswer);
         }
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
