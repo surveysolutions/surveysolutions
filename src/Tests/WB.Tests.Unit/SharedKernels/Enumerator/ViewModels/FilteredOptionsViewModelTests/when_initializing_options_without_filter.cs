@@ -32,9 +32,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
                 new CategoricalOption() {Title = "a", Value = 1},
                 new CategoricalOption() {Title = "b", Value = 2},
                 new CategoricalOption() {Title = "c", Value = 3},
-            };
+            }.ToList();
 
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetFilteredOptionsForQuestion(questionId, null, string.Empty) == options);
+            var interview = Mock.Of<IStatefulInterview>(x => x.GetTopFilteredOptionsForQuestion(questionId, null, string.Empty, 200) == options);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
                 answerNotifier:  answerNotifier.Object);
         };
 
-        Because of = () => viewModel.Init(interviewId, questionId);
+        Because of = () => viewModel.Init(interviewId, questionId, 200);
 
         It should_build_options = () =>
         {
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
         static string interviewId;
         static Identity questionId;
         private static Guid questionGuid;
-        private static IEnumerable<CategoricalOption> options;
+        private static List<CategoricalOption> options;
         private static Mock<AnswerNotifier> answerNotifier;
     }
 }

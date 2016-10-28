@@ -35,7 +35,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.ReadSide;
@@ -377,7 +376,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IExportQuestionService>().To<ExportQuestionService>();
 
             this.Bind<IRostrerStructureService>().To<RosterStructureService>();
-            
         }
     }
 }

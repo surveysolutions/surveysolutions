@@ -1504,9 +1504,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
 
 
-        IEnumerable<CategoricalOption> IStatefulInterview.GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter)
+        List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
         {
-            return GetFilteredOptionsForQuestion(question, parentQuestionValue, filter);
+            return GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);
         }
 
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue)

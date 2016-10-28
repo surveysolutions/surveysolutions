@@ -260,10 +260,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!this.answerOnParentQuestion.HasValue) 
                 yield break;
 
-            var options = this.interview.GetFilteredOptionsForQuestion(questionIdentity, (int)this.answerOnParentQuestion.Value, textHint)   
-                .Select(x => x)
-                .Take(SuggestionsMaxCount)
-                .ToList();
+            var options = this.interview.GetTopFilteredOptionsForQuestion(questionIdentity, (int)this.answerOnParentQuestion.Value, 
+                textHint, SuggestionsMaxCount);
 
             foreach (var cascadingComboboxItemViewModel in options)
             {

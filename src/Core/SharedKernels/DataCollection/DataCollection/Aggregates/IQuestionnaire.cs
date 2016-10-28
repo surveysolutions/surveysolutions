@@ -174,8 +174,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllChildCascadingQuestions();
 
-        bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue);
-
         IEnumerable<Guid> GetAllSections();
 
         /// <summary>

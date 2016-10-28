@@ -305,7 +305,6 @@
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
-    <Compile Include="Implementation\Providers\ICategoricalOptionsProvider.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />

@@ -30,6 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private const int MaxOptionsCountInCascadingQuestion = 15000;
         private const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
 
+        private const int MaxOptionsCountInCategoricalOptionQuestion = 200;
+
         private const int DefaultVariableLengthLimit = 32;
         private const int DefaultRestrictedVariableLengthLimit = 20;
 
@@ -194,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
             Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
             Verifier<IQuestion>(FilteredComboboxContainsMoreThanMaxOptions, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
-            Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan200),
+            Verifier<IQuestion>(CategoricalOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOptionsCountMoreThan200),
             Verifier<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
             Verifier<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
             Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
@@ -611,10 +613,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static bool CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount(IQuestion question)
+        private static bool CategoricalOptionsCountMoreThanMaxOptionCount(IQuestion question)
         {
-            return !question.CascadeFromQuestionId.HasValue && IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
-                   question.Answers != null && question.Answers.Count > 200;
+            return ((IsCategoricalSingleAnswerQuestion(question) && !question.CascadeFromQuestionId.HasValue && !IsFilteredComboboxQuestion(question)) || IsCategoricalMultiAnswersQuestion(question))
+                && question.Answers != null && question.Answers.Count > MaxOptionsCountInCategoricalOptionQuestion;
         }
 
         private static bool FilteredComboboxContainsMoreThanMaxOptions(IQuestion question)

@@ -23,14 +23,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var childAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 3);
             var parentOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 1);
 
-            var interview = Mock.Of<IStatefulInterview>(_
-                => _.QuestionnaireIdentity == questionnaireId
-                   && _.GetSingleOptionAnswer(questionIdentity) == childAnswer
-                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer
-                   && _.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1) == new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 }
-                   && _.GetFilteredOptionsForQuestion(questionIdentity, 1, "a") == Options.Where(x => x.Value == 1).ToList());
+            var interview = new Mock<IStatefulInterview>();
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
+            interview.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);
+            interview.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
+            interview.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
+            interview.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
+            interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
+                .Returns((Identity identity, int? value, string filter, int count) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
+
+            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 

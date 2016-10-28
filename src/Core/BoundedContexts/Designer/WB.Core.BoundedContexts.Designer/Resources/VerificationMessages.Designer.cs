@@ -749,9 +749,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Contains more than 200 options..
         /// </summary>
-        internal static string WB0076_CategoricalOneAnswerOptionsCountMoreThan200 {
+        internal static string WB0076_CategoricalOptionsCountMoreThan200 {
             get {
-                return ResourceManager.GetString("WB0076_CategoricalOneAnswerOptionsCountMoreThan200", resourceCulture);
+                return ResourceManager.GetString("WB0076_CategoricalOptionsCountMoreThan200", resourceCulture);
             }
         }
         

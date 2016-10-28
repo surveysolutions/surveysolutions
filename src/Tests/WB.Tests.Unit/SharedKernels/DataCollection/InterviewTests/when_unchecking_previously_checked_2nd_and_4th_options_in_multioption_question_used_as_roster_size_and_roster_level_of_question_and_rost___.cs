@@ -30,11 +30,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             {
                 Create.Entity.MultipleOptionsQuestion(questionId: questionId, textAnswers: new []
                 {
-                    Create.Entity.Answer("option 1", 14.7m),
-                    Create.Entity.Answer("option 2", option2 = 18),
+                    Create.Entity.Answer("option 1", 14m),
+                    Create.Entity.Answer("option 2", option2 = 18m),
                     Create.Entity.Answer("option 3", option3 = 3),
                     Create.Entity.Answer("option 4", option4 = -1),
-                    Create.Entity.Answer("option 5", 256.128m),
+                    Create.Entity.Answer("option 5", 2568m),
                 }),
 
                 Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: questionId),

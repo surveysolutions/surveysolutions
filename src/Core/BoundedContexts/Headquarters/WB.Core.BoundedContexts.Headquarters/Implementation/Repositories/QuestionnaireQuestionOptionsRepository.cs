@@ -1,28 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
     public class QuestionnaireQuestionOptionsRepository : IQuestionOptionsRepository
     {
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity, ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, int? parentQuestionValue, string filter, Guid? translationId)
+       
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity, 
+            IQuestion question, int? parentQuestionValue, string filter, Guid? translationId)
         {
-            return categoricalOptionsProvider.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter, translationId);
+            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, string optionText, Guid? translationId)
+        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity,
+             IQuestion question, string optionText, Guid? translationId)
         {
-            return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionText(questionId, optionText, translationId);
+            return AnswerUtils.GetOptionForQuestionByOptionText(question, optionText);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
-            ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, decimal optionValue, Guid? translationId)
+             IQuestion question, decimal optionValue, Guid? translationId)
         {
-            return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionValue(questionId, optionValue, translationId);
+            return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue);
         }
     }
 }

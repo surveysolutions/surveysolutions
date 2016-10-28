@@ -24,9 +24,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(singleOptionAnswer);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
 
-            StatefulInterviewMock.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
+            StatefulInterviewMock.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1))
+                .Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
 
-            StatefulInterviewMock.Setup(x => x.GetFilteredOptionsForQuestion(questionIdentity, 1, string.Empty)).Returns(Options.Where(x => x.ParentValue == 1).ToList());
+            StatefulInterviewMock.Setup(x => x.GetTopFilteredOptionsForQuestion(questionIdentity, 1, string.Empty, Moq.It.IsAny<int>()))
+                .Returns(Options.Where(x => x.ParentValue == 1).ToList());
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == StatefulInterviewMock.Object);
 

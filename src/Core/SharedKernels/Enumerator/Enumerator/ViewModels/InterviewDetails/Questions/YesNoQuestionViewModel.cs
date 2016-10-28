@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             interviewIdAsString = interviewId;
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, 200);
 
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
