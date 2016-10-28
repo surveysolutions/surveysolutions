@@ -140,41 +140,25 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ResetUserPassword(UserModel model)
+        public async Task<ActionResult> ResetUserPassword(UserModel model)
         {
-            UserView userToCheck =
-                this.userViewFactory.GetUser(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-            if (userToCheck != null && !userToCheck.IsArchived)
+            if (ModelState.IsValid)
             {
-                try
-                {
-                    this.CommandService.Execute(new ChangeUserCommand(publicKey: userToCheck.PublicKey,
-                        email: userToCheck.Email, isLockedByHQ: userToCheck.IsLockedByHQ,
-                        isLockedBySupervisor: userToCheck.IsLockedBySupervisor,
-                        passwordHash: passwordHasher.Hash(model.Password), userId: Guid.Empty,
-                        personName: userToCheck.PersonName, phoneNumber: userToCheck.PhoneNumber));
+                var user = await this.identityManager.GetUserByNameAsync(model.UserName);
+                var updateResult = await this.identityManager.UpdateUserAsync(user, model.Password);
 
-                    this.Success(string.Format("Password for user '{0}' successfully changed", userToCheck.UserName));
-                }
-                catch (Exception ex)
+                if (updateResult.Succeeded)
                 {
-                    var userErrorMessage = "Error when updating password for user";
-                    this.Error(userErrorMessage);
-                    this.Logger.Error(userErrorMessage, ex);
+                    this.Success($"Password for user '{user.UserName}' successfully changed");
                 }
-            }
-            else
-            {
-                this.Error(string.Format("User '{0}' does not exists", model.UserName));
+                AddErrors(updateResult);
             }
 
             return RedirectToAction("ResetPrivilegedUserPassword");
         }
 
         private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
-        {
-            get { return this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>(); }
-        }
+            => this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>();
 
         public ActionResult Index() => this.View();
 

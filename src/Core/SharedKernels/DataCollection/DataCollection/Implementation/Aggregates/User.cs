@@ -36,24 +36,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string PersonName;
         public string PhoneNumber;
 
-        public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, string passwordHash,
-            string personName, string phoneNumber, Guid userId)
-        {
-            this.ThrowIfUserArchived();
-
-            this.Email = email;
-            this.Password = passwordHash;
-            this.PersonName = personName;
-            this.PhoneNumber = phoneNumber;
-
-            if (isLockedBySupervisor.HasValue)
-            {
-                this.IsLockedBySupervisor = isLockedBySupervisor.Value;
-            }
-
-            this.IsLockedByHQ = isLockedByHQ;
-        }
-
         public void LinkUserToDevice(LinkUserToDevice command)
         {
             this.ThrowIfUserArchived();
