@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -36,15 +35,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string PersonName;
         public string PhoneNumber;
 
-        public void LinkUserToDevice(LinkUserToDevice command)
-        {
-            this.ThrowIfUserArchived();
-
-            this.DeviceId = command.DeviceId;
-            this.DeviceChangingHistory.Add(
-                new DeviceInfo {Date = DateTime.UtcNow, DeviceId = command.DeviceId});
-        }
-
         public void Archive()
         {
             this.ThrowIfUserArchived();
@@ -57,19 +47,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.ThrowIfUserIsNotArchived();
             this.IsArchived = false;
-        }
-
-        public void UnarchiveAndUpdate(string passwordHash, string email, string personName, string phoneNumber)
-        {
-            this.ThrowIfUserIsNotArchived();
-
-            this.IsArchived = false;
-            this.Password = passwordHash;
-            this.Email = email;
-            this.IsLockedBySupervisor = false;
-            this.IsLockedByHQ = false;
-            this.PersonName = personName;
-            this.PhoneNumber = phoneNumber;
         }
 
         private void ThrowIfUserIsNotArchived()

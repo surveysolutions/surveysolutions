@@ -56,14 +56,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         public virtual HttpResponseMessage LinkCurrentInterviewerToDevice(string id, int version)
         {
             var interviewerEngineVersion = version.ToString(CultureInfo.InvariantCulture);
-            var interviewerId = this.identityManager.CurrentUserId;
             var deviceId = id.ToGuid();
             var device = this.devicesRepository.GetById(deviceId);
             if (device == null)
             {
-                this.commandService.Execute(new RegisterTabletCommand(deviceId, interviewerId, interviewerEngineVersion, id));
+                this.commandService.Execute(new RegisterTabletCommand(deviceId, this.identityManager.CurrentUserId, interviewerEngineVersion, id));
             }
-            this.commandService.Execute(new LinkUserToDevice(interviewerId, id));
+
+            this.identityManager.LinkDeviceToCurrentInterviewer(deviceId);
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
