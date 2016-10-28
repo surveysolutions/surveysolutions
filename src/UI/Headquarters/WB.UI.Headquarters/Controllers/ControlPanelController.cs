@@ -11,7 +11,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Storage.EventStore;
@@ -27,8 +26,6 @@ namespace WB.UI.Headquarters.Controllers
     [ControlPanelAccess]
     public class ControlPanelController : BaseController
     {
-        private readonly IUserViewFactory userViewFactory;
-        private readonly IPasswordHasher passwordHasher;
         private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
         private readonly IServiceLocator serviceLocator;
         private readonly IIdentityManager identityManager;
@@ -40,15 +37,11 @@ namespace WB.UI.Headquarters.Controllers
             ICommandService commandService,
             IIdentityManager identityManager,
             ILogger logger,
-            IUserViewFactory userViewFactory,
-            IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
             IEventStoreApiService eventStoreApiService,
             IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
              : base(commandService: commandService, logger: logger)
         {
-            this.userViewFactory = userViewFactory;
-            this.passwordHasher = passwordHasher;
             this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
             this.serviceLocator = serviceLocator;
             this.identityManager = identityManager;

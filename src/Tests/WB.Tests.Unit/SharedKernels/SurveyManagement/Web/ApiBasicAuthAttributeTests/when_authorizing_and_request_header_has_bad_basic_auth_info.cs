@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using System.Web.Http.Controllers;
 using Machine.Specifications;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.UI.Headquarters.Code;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttributeTests

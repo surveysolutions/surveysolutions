@@ -37,9 +37,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         Task<ApplicationUser> GetUserByEmailAsync(string email);
         ApplicationUser GetUserByEmail(string email);
         IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId);
-        void LinkDeviceToCurrentInterviewer(Guid deviceId);
+        void LinkDeviceToCurrentInterviewer(string deviceId);
         Task SignInAsObserverAsync(string userName);
         Task SignInBackFromObserverAsync();
         RestCredentials GetDesignerUserCredentials();
+        bool IsUserValidWithPassword(string userName, string password);
+        bool IsUserValidWithPasswordHash(string userName, string passwordHash);
+        void ArchiveUser(Guid userId, bool archive);
     }
 }

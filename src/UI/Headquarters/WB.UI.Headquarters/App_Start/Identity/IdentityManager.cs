@@ -137,6 +137,20 @@ namespace WB.UI.Headquarters.Identity
             this.UpdateUser(currentUser, null);
         }
 
+        public bool IsUserValidWithPassword(string userName, string password)
+            => this.IsUserValidWithPasswordHash(userName, this.userManager.PasswordHasher.HashPassword(password));
+
+        public bool IsUserValidWithPasswordHash(string userName, string passwordHash) =>
+            this.userManager.Find(userName, passwordHash) != null;
+
+        public void ArchiveUser(Guid userId, bool archive)
+        {
+            var currentUser = this.CurrentUser;
+            currentUser.IsArchived = archive;
+
+            this.UpdateUser(currentUser, null);
+        }
+
         public Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false)
             => this.signInManager.PasswordSignInAsync(userName, password, isPersistent: isPersistent,
                 shouldLockout: false);

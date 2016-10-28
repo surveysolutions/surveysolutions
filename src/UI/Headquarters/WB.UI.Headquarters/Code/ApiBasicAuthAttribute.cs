@@ -8,66 +8,26 @@ using System.Threading;
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.Transactions;
-using System.Collections.Generic;
-using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Resources;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
+namespace WB.UI.Headquarters.Code
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
-        private readonly Func<string, string, bool> isUserValid;
-        private readonly IEnumerable<UserRoles> roles = new UserRoles[] {};
-        private bool treatPasswordAsPlain = false;
-
-        private IUserViewFactory userViewFactory
-        {
-            get { return ServiceLocator.Current.GetInstance<IUserViewFactory>(); }
-        }
-
+        private IIdentityManager identityManager => ServiceLocator.Current.GetInstance<IIdentityManager>();
         private IReadSideStatusService readSideStatusService
-        {
-            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
-        }
+            => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
 
-        private IPlainTransactionManager TransactionManagerProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager(); }
-        }
+        public bool TreatPasswordAsPlain { get; set; } = false;
+        private readonly UserRoles[] roles;
 
-        private IPasswordHasher passwordHasher
+        public ApiBasicAuthAttribute(UserRoles[] roles)
         {
-            get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
-        }
-
-        public bool TreatPasswordAsPlain
-        {
-            get
-            {
-                return this.treatPasswordAsPlain;
-            }
-            set
-            {
-                this.treatPasswordAsPlain = value;
-            }
-        }
-
-        public ApiBasicAuthAttribute(UserRoles[] roles) : this(Membership.ValidateUser, roles)
-        {
-        }
-
-        internal ApiBasicAuthAttribute(Func<string, string, bool> isUserValid, IEnumerable<UserRoles> roles)
-        {
-            this.isUserValid = isUserValid;
             this.roles = roles;
         }
 
@@ -81,32 +41,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
             BasicCredentials basicCredentials = ParseCredentials(actionContext);
             
-
-            this.TransactionManagerProvider.BeginTransaction();
-            try
+            if (basicCredentials == null ||
+                !(this.TreatPasswordAsPlain && this.identityManager.IsUserValidWithPassword(basicCredentials.Username, basicCredentials.Password)) ||
+                !(!this.TreatPasswordAsPlain && this.identityManager.IsUserValidWithPasswordHash(basicCredentials.Username, basicCredentials.Password)))
             {
-                if (basicCredentials == null || !this.isUserValid(basicCredentials.Username, treatPasswordAsPlain ? this.passwordHasher.Hash(basicCredentials.Password) : basicCredentials.Password))
-                {
-                    this.RespondWithMessageThatUserDoesNotExists(actionContext);
-                    return;
-                }
-
-                var userInfo = this.userViewFactory.GetUser(new UserViewInputModel(UserName: basicCredentials.Username, UserEmail: null));
-                if (userInfo == null || userInfo.IsArchived)
-                {
-                    this.RespondWithMessageThatUserDoesNotExists(actionContext);
-                    return;
-                }
-
-                if (!userInfo.Roles.Intersect(this.roles).Any())
-                {
-                    this.RespondWithMessageThatUserIsNoPermittedRole(actionContext);
-                    return;
-                }
+                this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                return;
             }
-            finally
+
+            var userInfo = this.identityManager.GetUserByName(basicCredentials.Username);
+            if (userInfo == null || userInfo.IsArchived)
             {
-                this.TransactionManagerProvider.RollbackTransaction();
+                this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                return;
+            }
+
+            if (!this.roles.Contains(userInfo.Roles.First().Role))
+            {
+                this.RespondWithMessageThatUserIsNoPermittedRole(actionContext);
+                return;
             }
 
             var identity = new GenericIdentity(basicCredentials.Username, "Basic");
