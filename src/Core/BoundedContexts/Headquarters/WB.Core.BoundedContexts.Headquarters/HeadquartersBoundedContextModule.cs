@@ -154,8 +154,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.PasswordHash, command.PersonName, command.PhoneNumber, command.UserId))
                 .Handles<ArchiveUserCommad>(command => command.UserId, (command, aggregate) => aggregate.Archive())
                 .Handles<UnarchiveUserCommand>(command => command.UserId, (command, aggregate) => aggregate.Unarchive())
-                .Handles<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
-                .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
                 .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
 
             CommandRegistry

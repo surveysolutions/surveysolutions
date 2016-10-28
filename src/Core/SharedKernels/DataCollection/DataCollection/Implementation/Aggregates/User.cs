@@ -63,20 +63,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new DeviceInfo {Date = DateTime.UtcNow, DeviceId = command.DeviceId});
         }
 
-        public void LockBySupervisor()
-        {
-            this.ThrowIfUserArchived();
-
-            this.IsLockedBySupervisor = true;
-        }
-
-        public void UnlockBySupervisor()
-        {
-            this.ThrowIfUserArchived();
-
-            this.IsLockedBySupervisor = false;
-        }
-
         public void Archive()
         {
             this.ThrowIfUserArchived();
