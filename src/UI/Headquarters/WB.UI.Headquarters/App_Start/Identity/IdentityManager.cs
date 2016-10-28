@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using System.Web;
 using Main.Core.Entities.SubEntities;
@@ -123,6 +124,17 @@ namespace WB.UI.Headquarters.Identity
             {
                 yield return this.userManager.Delete(supervisorAndDependentInterviewer);
             }
+        }
+
+        public void LinkDeviceToCurrentInterviewer(string deviceId)
+        {
+            if (!this.IsCurrentUserInRole(UserRoles.Interviewer))
+                throw new AuthenticationException(@"Only interviewer can be linked to device");
+
+            var currentUser = this.CurrentUser;
+            currentUser.DeviceId = deviceId;
+
+            this.UpdateUser(currentUser, null);
         }
 
         public Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false)

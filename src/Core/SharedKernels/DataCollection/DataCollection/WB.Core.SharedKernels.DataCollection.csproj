@@ -80,7 +80,6 @@
     <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
     <Compile Include="Commands\User\ArchiveUserCommad.cs" />
-    <Compile Include="Commands\User\LinkUserToDevice.cs" />
     <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
     <Compile Include="DataCollectionInfrastructureModule.cs" />
     <Compile Include="DataCollectionSharedKernelAssemblyMarker.cs" />
@@ -314,7 +313,6 @@
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireStorage.cs" />
-    <Compile Include="Implementation\Repositories\UserRepository.cs" />
     <Compile Include="Implementation\Services\VariableToUIStringService.cs" />
     <Compile Include="MaskFormatter\EmptyMaskFormatter.cs" />
     <Compile Include="MaskFormatter\IMaskedFormatter.cs" />

@@ -147,13 +147,11 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
 
             this.Bind<User>().ToSelf();
-            this.Bind<IPlainAggregateRootRepository<User>>().To<UserRepository>();
 
             CommandRegistry
                 .Setup<User>()
                 .Handles<ArchiveUserCommad>(command => command.UserId, (command, aggregate) => aggregate.Archive())
-                .Handles<UnarchiveUserCommand>(command => command.UserId, (command, aggregate) => aggregate.Unarchive())
-                .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
+                .Handles<UnarchiveUserCommand>(command => command.UserId, (command, aggregate) => aggregate.Unarchive());
 
             CommandRegistry
                 .Setup<StatefulInterview>()
