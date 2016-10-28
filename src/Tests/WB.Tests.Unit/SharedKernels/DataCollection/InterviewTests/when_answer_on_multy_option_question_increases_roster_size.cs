@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.MultipleOptionsQuestion(questionId: multyOptionRosterSizeId, answers: new decimal[] { 1, 2, 3 }),
+                Create.Entity.MultipleOptionsQuestion(questionId: multyOptionRosterSizeId, answers: new [] { 1, 2, 3 }),
 
                 Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: multyOptionRosterSizeId),
             }));
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-           interview.AnswerMultipleOptionsQuestion(userId, multyOptionRosterSizeId, new decimal[] { }, DateTime.Now, new decimal[]{1,2});
+           interview.AnswerMultipleOptionsQuestion(userId, multyOptionRosterSizeId, new decimal[] { }, DateTime.Now, new []{1,2});
 
         It should_raise_RosterInstancesAdded_event = () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event

@@ -92,15 +92,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static AnswerYesNoQuestion command;
         private static Interview interview;
-        private static decimal option_NotChanged_FromNothing_ToNothing = 1m;
-        private static decimal option_NotChanged_FromNo______ToNo_____ = 2m;
-        private static decimal option_NotChanged_FromYes_____ToYes____ = 3m;
-        private static decimal option__Selected__FromNothing_ToYes____ = 4m;
-        private static decimal option__Selected__FromNo______ToYes____ = 5m;
-        private static decimal option_Deselected_FromNothing_ToNo_____ = 6m;
-        private static decimal option_Deselected_FromNo______ToNothing = 7m;
-        private static decimal option_Deselected_FromYes_____ToNo_____ = 8m;
-        private static decimal option_Deselected_FromYes_____ToNothing = 9m;
+        private static int option_NotChanged_FromNothing_ToNothing = 1;
+        private static int option_NotChanged_FromNo______ToNo_____ = 2;
+        private static int option_NotChanged_FromYes_____ToYes____ = 3;
+        private static int option__Selected__FromNothing_ToYes____ = 4;
+        private static int option__Selected__FromNo______ToYes____ = 5;
+        private static int option_Deselected_FromNothing_ToNo_____ = 6;
+        private static int option_Deselected_FromNo______ToNothing = 7;
+        private static int option_Deselected_FromYes_____ToNo_____ = 8;
+        private static int option_Deselected_FromYes_____ToNothing = 9;
         private static Guid rosterId = Guid.Parse("44444444444444444444444444444444");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }

@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
-                interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1m, 2m, 3m });
+                interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2, 3 });
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 15);
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(3), DateTime.Now, 35);
 

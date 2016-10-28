@@ -9,13 +9,14 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster : InterviewTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -23,11 +24,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             rosterGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
             prefilledQuestionAnswer = 2;
-            preloadedDataDto = new PreloadedDataDto(
-                new[]
+            preloadedDataDto = new PreloadedDataDto(new[]
+            {
+                new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, AbstractAnswer>
                 {
-                    new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, object> { { prefilledQuestionId, prefilledQuestionAnswer } }),
-                });
+                    {prefilledQuestionId, new NumericIntegerAnswer(prefilledQuestionAnswer)}
+                }),
+            });
             answersTime = new DateTime(2013, 09, 01);
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]

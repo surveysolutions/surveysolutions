@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
                 questionnaireRepository: questionnaires
                 );
 
-            interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty, DateTime.Now, new decimal[] {1});
+            interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty, DateTime.Now, new [] {1});
             eventContext = new EventContext();
         };
 

@@ -100,7 +100,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Today, 1);
                 interview.AnswerSingleOptionQuestion(userId, rosterTitleQuestionIdentity.Id, rosterTitleQuestionIdentity.RosterVector, DateTime.Today, 1);
-                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, Create.RosterVector(0), DateTime.Today, new decimal[] { 1 });
+                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, Create.RosterVector(0), DateTime.Today, new [] { 1 });
                 interview.AnswerYesNoQuestion(
                     new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, Create.RosterVector(0), DateTime.Today, 
                     new List<AnsweredYesNoOption>

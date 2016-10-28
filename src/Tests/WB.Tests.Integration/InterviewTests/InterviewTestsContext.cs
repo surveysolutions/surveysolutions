@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -96,7 +97,7 @@ namespace WB.Tests.Integration.InterviewTests
             IEnumerable<object> events = null, 
             ILatestInterviewExpressionState precompiledState = null, 
             bool useLatestEngine = true,
-            Dictionary<Guid, object> answersOnPrefilledQuestions = null)
+            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 

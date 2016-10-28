@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
@@ -36,12 +37,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         }
 
         protected static QuestionDataParser questionDataParser;
-        protected static object result;
+        protected static AbstractAnswer result;
         protected static Guid questionId = Guid.NewGuid();
         protected static string questionVarName = "var_a";
         protected static string answer;
         protected static object parcedValue;
         protected static ValueParsingResult parsingResult;
         protected static IQuestion question;
+        protected static AbstractAnswer parsedSingleColumnAnswer;
     }
 }

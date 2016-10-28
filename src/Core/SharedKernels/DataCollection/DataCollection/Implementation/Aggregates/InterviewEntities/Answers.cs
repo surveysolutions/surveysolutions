@@ -101,18 +101,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyCollection<TextListAnswerRow> Rows { get; }
 
-        public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create(row.Code, row.Text)).ToArray();
+        public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create(row.Value, row.Text)).ToArray();
     }
 
     public class TextListAnswerRow
     {
-        public TextListAnswerRow(decimal code, string text)
+        public TextListAnswerRow(decimal value, string text)
         {
-            this.Code = code;
+            this.Value = value;
             this.Text = text;
         }
 
-        public decimal Code { get; }
+        public decimal Value { get; }
         public string Text { get; }
     }
 
@@ -148,11 +148,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class YesNoAnswer : AbstractAnswer
     {
-        public YesNoAnswer(IEnumerable<AnsweredYesNoOption> selectedOptions)
+        public YesNoAnswer(IEnumerable<CheckedYesNoAnswerOption> checkedOptions)
         {
-            this.SelectedOptions = selectedOptions.ToReadOnlyCollection();
+            this.CheckedOptions = checkedOptions.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<AnsweredYesNoOption> SelectedOptions { get; }
+        public YesNoAnswer(IEnumerable<AnsweredYesNoOption> answeredOptions)
+            : this(answeredOptions.Select(option => new CheckedYesNoAnswerOption((int) option.OptionValue, option.Yes))) {}
+
+        public IReadOnlyCollection<CheckedYesNoAnswerOption> CheckedOptions { get; }
+
+        public IEnumerable<AnsweredYesNoOption> ToAnsweredYesNoOptions() => this.CheckedOptions.Select(option => new AnsweredYesNoOption(option.Value, option.Yes));
+    }
+
+    public class CheckedYesNoAnswerOption
+    {
+        public CheckedYesNoAnswerOption(int value, bool yes)
+        {
+            this.Value = value;
+            this.Yes = yes;
+        }
+
+        public int Value { get; }
+        public bool Yes { get; }
+        public bool No => !Yes;
     }
 }

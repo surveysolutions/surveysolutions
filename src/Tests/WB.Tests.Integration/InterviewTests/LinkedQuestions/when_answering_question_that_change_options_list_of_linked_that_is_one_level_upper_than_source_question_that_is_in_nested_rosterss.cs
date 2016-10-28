@@ -50,10 +50,10 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
 
-                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(1, 1), DateTime.Now, new[] { 1m, 2m, 3m });
-                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(1, 2), DateTime.Now, new[] { 1m, 3m, 4m });
-                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(2, 1), DateTime.Now, new[] { 1m, 3m });
-                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(2, 2), DateTime.Now, new[] { 2m, 4m });
+                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(1, 1), DateTime.Now, new[] { 1, 2, 3 });
+                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(1, 2), DateTime.Now, new[] { 1, 3, 4 });
+                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(2, 1), DateTime.Now, new[] { 1, 3 });
+                interview.AnswerMultipleOptionsQuestion(userId, q1Id, Create.RosterVector(2, 2), DateTime.Now, new[] { 2, 4 });
 
                 interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(1, 1, 1), DateTime.Now, 15);
                 interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(1, 1, 2), DateTime.Now, 22);
