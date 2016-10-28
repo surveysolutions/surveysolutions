@@ -1,6 +1,6 @@
 {
   "name": "angular-pnotify",
-  "version": "0.0.6",
+  "version": "0.1.2",
   "homepage": "https://github.com/jacqueslareau/angular-pnotify",
   "authors": [
     "Jacques Lareau <jack.lareau@gmail.com>"
@@ -22,18 +22,19 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.2.23",
-    "pnotify": "~2.0.1",
-    "jquery": ">=1.9"
+    "angular": "~1.5.5",
+    "pnotify": "~3.0.0",
+    "jquery": ">=1.9",
+    "bootstrap": "^3.3.6"
   },
-  "_release": "0.0.6",
+  "_release": "0.1.2",
   "_resolution": {
     "type": "version",
-    "tag": "0.0.6",
-    "commit": "e55c29bc7b30bb48a3cdcf4fdf68f770803a048c"
+    "tag": "0.1.2",
+    "commit": "a38bf21b168983a23c37ebe1b513a4b3dc85e289"
   },
-  "_source": "git://github.com/jacqueslareau/angular-pnotify.git",
-  "_target": "~0.0.6",
+  "_source": "https://github.com/jacqueslareau/angular-pnotify.git",
+  "_target": "^0.1.2",
   "_originalSource": "angular-pnotify",
   "_direct": true
 }

@@ -4,29 +4,29 @@
 
 	<meta charset="utf-8">
 
-	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/bower_components/pnotify/pnotify.core.css">
-	<link rel="stylesheet" href="/bower_components/pnotify/pnotify.buttons.css">
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="node_modules/pnotify/dist/pnotify.css">
+	<link rel="stylesheet" href="node_modules/pnotify/dist/pnotify.buttons.css">
 
-	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
-	<script src="/bower_components/angular/angular.js"></script>
-	<script src="/bower_components/pnotify/pnotify.core.js"></script>
-	<script src="/bower_components/pnotify/pnotify.confirm.js"></script>
-	<script src="/bower_components/pnotify/pnotify.buttons.js"></script>
-	<script src="/src/angular-pnotify.js"></script>
-  
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="node_modules/angular/angular.js"></script>
+	<script src="node_modules/pnotify/dist/pnotify.js"></script>
+	<script src="node_modules/pnotify/dist/pnotify.confirm.js"></script>
+	<script src="node_modules/pnotify/dist/pnotify.buttons.js"></script>
+	<script src="src/angular-pnotify.js"></script>
+
 </head>
 
 <body ng-app="pnotify-demo">
 
 	<div ng-controller="MyCtrl">
-    
+
 		<div class="container-fluid">
-    
+
 			<div class="page-header">
 				<h1>angular-pnotify demo</h1>
 			</div>
-      
+
 			<p>View source for more details.</p>
 			<hr>
 
@@ -45,24 +45,24 @@
 			<p><button ng-click="error()" class="btn btn-danger">Error</button></p>
 			<p><pre>notificationService.error('Error text')</pre></p>
 			<hr>
-      
+
 			<p>Use the generic PNotify object.</p>
 			<p><button ng-click="generic()" class="btn btn-primary">Generic PNotify</button></p>
 			<p>
 				<pre>
 notificationService.notify({
-	title: 'The notice title.', 
+	title: 'The notice title.',
 	title_escape: false,
 	text: 'The notice text.',
 	text_escape: false,
 	styling: "bootstrap3",
-	type: "notice", 
+	type: "notice",
 	icon: true
 });
 				</pre>
 			</p>
 			<hr>
-      
+
 			<p><button ng-click="confirmDialog()" class="btn btn-primary">Confirm dialog</button></p>
 			<p>
 				<pre>
@@ -89,7 +89,7 @@ notificationService.notify({
 			</p>
 			<hr>
 
-			<p><button ng-click="overrideDefaults()" class="btn btn-primary">Override defaults</button></p>      
+			<p><button ng-click="overrideDefaults()" class="btn btn-primary">Override defaults</button></p>
 			<p>
 				<pre>
 notificationService.notifyWithDefaults({
@@ -99,8 +99,8 @@ notificationService.notifyWithDefaults({
 				</pre>
 			</p>
 			<hr>
-      
-			<p><button ng-click="stackTopLeft()" class="btn btn-primary">Stack top left</button></p>      
+
+			<p><button ng-click="stackTopLeft()" class="btn btn-primary">Stack top left</button></p>
 			<p>
 				In config:
 				<pre>
@@ -109,7 +109,7 @@ notificationServiceProvider.setStack('top_left', 'stack-topleft', {
 	dir1: 'down',
 	dir2: 'right',
 	push: 'top'
-});          
+});
 				</pre>
 				In controller:
 				<pre>
@@ -117,8 +117,8 @@ notificationService.info('Hello World : Top left', 'top_left');
 				</pre>
 			</p>
 			<hr>
-      
-			<p><button ng-click="stackBottomRight()" class="btn btn-primary">Stack bottom right</button></p>      
+
+			<p><button ng-click="stackBottomRight()" class="btn btn-primary">Stack bottom right</button></p>
 			<p>
 				In config:
 				<pre>
@@ -135,19 +135,30 @@ notificationServiceProvider.setStack('bottom_right', 'stack-bottomright', {
 notificationService.info('Hello World : Bottom right', 'bottom_right');
 				</pre>
 			</p>
+            <hr>
+
+            <p><button ng-click="removeNotifications()" class="btn btn-primary">Remove all notifications</button></p>
+            <p>
+                In controller:
+				<pre>
+notificationService.removeNotifications();
+				</pre>
+            </p>
 
 		</div>
+
 	</div>
-	
+
 	<script>
 
 		angular.module('pnotify-demo', ['jlareau.pnotify'])
-  
+
 			.config(['notificationServiceProvider', function(notificationServiceProvider) {
 
 				notificationServiceProvider
-	  
+
 					.setDefaults({
+                        styling: 'bootstrap3',
 						delay: 4000,
 						buttons: {
 							closer: false,
@@ -172,7 +183,7 @@ notificationService.info('Hello World : Bottom right', 'bottom_right');
 						dir2: 'right',
 						push: 'top'
 					})
-					
+
 				;
 
 			}])
@@ -199,12 +210,12 @@ notificationService.info('Hello World : Bottom right', 'bottom_right');
 
 					// This is a sample using the generic PNotify object
 					notificationService.notify({
-						title: 'The notice title.', 
+						title: 'The notice title.',
 						title_escape: false,
 						text: 'The notice text.',
 						text_escape: false,
 						styling: 'bootstrap3',
-						type: 'notice', 
+						type: 'notice',
 						icon: true
 					});
 
@@ -231,7 +242,7 @@ notificationService.info('Hello World : Bottom right', 'bottom_right');
 						alert('Ok, cool.');
 					}).on('pnotify.cancel', function() {
 						alert('Oh ok. Chicken, I see.');
-					});      
+					});
 
 				};
 
@@ -249,6 +260,10 @@ notificationService.info('Hello World : Bottom right', 'bottom_right');
 				$scope.stackBottomRight = function(){
 					notificationService.info('Hello World : Bottom right', 'bottom_right');
 				};
+
+                $scope.removeNotifications = function(){
+                    notificationService.removeNotifications();
+                }
 
 			}]);
 

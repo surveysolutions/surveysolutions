@@ -1,10 +1,10 @@
 angular-pnotify
 ====================
 
-This is a simple wrapper for [PNotify](http://sciactive.com/pnotify/) as a [AngularJS](http://angularjs.org/) service. 
+This is a simple wrapper for [PNotify](http://sciactive.com/pnotify/) as a [AngularJS](http://angularjs.org/) service.
 This service provides several helper methods to display notifications on web applications.
 
-A PNotify 2.0 port heavily based on [angular-pines-notify](https://github.com/mykabam/angular-pines-notify) project. 
+A PNotify 2.0 port heavily based on [angular-pines-notify](https://github.com/mykabam/angular-pines-notify) project.
 
 ### Dependencies
 
@@ -28,11 +28,15 @@ Need to use at least Bootstrap 3 or jQuery UI to make pretty notifications.
 
 `bower install angular-pnotify`
 
+Or
+
+`npm install angular-pnotify`
+
 ### Usage
 
 Include at least Bootstrap 3 or jQuery UI CSS.
 
-Include PNotify related assets. You need to include at least pnotify.core.css and pnotify.core.js.
+Include PNotify related assets. You need to include at least pnotify.css and pnotify.js.
 Don't forget pnotify.confirm.js if you need confirmation dialogs.
 
 Then add angular-pnotify.js.
@@ -41,14 +45,14 @@ Here is an example using Bootstrap 3.
 
 ```html
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="bower_components/pnotify/pnotify.core.css">
-<link rel="stylesheet" href="bower_components/pnotify/pnotify.buttons.css">
+<link rel="stylesheet" href="bower_components/pnotify/dist/pnotify.css">
+<link rel="stylesheet" href="bower_components/pnotify/dist/pnotify.buttons.css">
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/pnotify/pnotify.core.js"></script>
-<script src="bower_components/pnotify/pnotify.confirm.js"></script>
-<script src="bower_components/pnotify/pnotify.buttons.js"></script>
+<script src="bower_components/pnotify/dist/pnotify.js"></script>
+<script src="bower_components/pnotify/dist/pnotify.confirm.js"></script>
+<script src="bower_components/pnotify/dist/pnotify.buttons.js"></script>
 <script src="bower_components/angular-pnotify/src/angular-pnotify.js"></script>
 ```
 
@@ -58,7 +62,7 @@ Add the angular-pnotify module as a dependency to your application module:
 angular.module('MyApp', ['jlareau.pnotify']);
 ```
 
-In order to use the API you need to inject the `notificationService` service into your controllers. 
+In order to use the API you need to inject the `notificationService` service into your controllers.
 
 ```javascript
 angular.module('MyApp')
@@ -104,10 +108,16 @@ Display a generic PNotify notification with the options you pass to it. It ignor
 
 #### notifyWithDefaults
 
-Same as `notify` but will merge the options with defaults. Useful when you only want to override or add one options, without 
+Same as `notify` but will merge the options with defaults. Useful when you only want to override or add one options, without
 clearing all defaults.
 
-`notificationService.notifyWithDefaults(options);`
+`notificationService.notifyWithDefaults(options, [stack name]);`
+
+#### removeNotifications
+
+Will clear all currently showing notifications.
+
+`notificationService.removeNotifications();`
 
 ### Provider
 
@@ -135,14 +145,14 @@ angular.module('MyApp')
 	.config(['notificationServiceProvider', function(notificationServiceProvider) {
 
 		notificationServiceProvider
-		
+
 			.setDefaults({
 				history: false,
 				delay: 4000,
 				closer: false,
 				closer_hover: false
 			})
-		
+
 			// Configure a stack named 'bottom_right' that append a call 'stack-bottomright'
 			.setStack('bottom_right', 'stack-bottomright', {
 				dir1: 'up',
@@ -157,7 +167,7 @@ angular.module('MyApp')
 				dir2: 'right',
 				push: 'top'
 			})
-			
+
 		;
 
 	}])
@@ -167,7 +177,7 @@ angular.module('MyApp')
 
 ### PNotify Stacks
 
-You can set the position and direction of notifications by using PNotify stacks. You can add stack information to the following methods: 
+You can set the position and direction of notifications by using PNotify stacks. You can add stack information to the following methods:
 
 * info
 * notice
@@ -185,7 +195,7 @@ angular.module('MyApp')
 			dir1: 'down',
 			dir2: 'right',
 			push: 'top'
-		}); 
+		});
 
 	}])
 ;
@@ -232,6 +242,13 @@ angular.module('MyApp')
 All the PNotify options can be passed through the notify functions.
 You can read more about the supported list of options and what they do on the
 [PNotify Github Page](https://github.com/sciactive/pnotify)
+
+### See Also
+
+- [ngToast](https://github.com/tameraydin/ngToast)
+- [Angular Material: Toast](https://material.angularjs.org/#/demo/material.components.toast)
+- [angular-toastr](https://github.com/Foxandxss/angular-toastr)
+- [angular-toasty](https://github.com/Salakar/angular-toasty)
 
 ### Thanks
 
