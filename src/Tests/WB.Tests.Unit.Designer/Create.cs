@@ -1076,6 +1076,15 @@ namespace WB.Tests.Unit.Designer
             {
                 return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression), responsibleId, parentId, index);
             }
+
+            public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", bool isPublic = false, bool isResponsibleAdmin = false)
+            {
+                return new UpdateQuestionnaire(questionnaireId, title, isPublic, responsibleId, isResponsibleAdmin);
+            }
+            public static DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId)
+            {
+                return new DeleteQuestionnaire(questionnaireId, responsibleId);
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")

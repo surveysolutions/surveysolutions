@@ -12,15 +12,13 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
@@ -467,7 +465,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var usersStorage = new TestPlainStorage<User>();
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
-            
+
+            var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
+            questionnaireStateTackerStorage.Store(
+                new QuestionnaireStateTracker
+                {
+                    CreatedBy = responsibleId,
+                    GroupsState = new Dictionary<Guid, string>() { { questionnaireId, "title" } },
+                },
+                questionnaireId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
+
             var command = new UpdateQuestionnaire(questionnaireId, "title", true, responsibleId, false);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
@@ -1000,6 +1008,61 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(state.QuestionsState.ContainsKey(questionId));
             Assert.That(state.StaticTextState.ContainsKey(staticTextId));
             Assert.That(state.GroupsState.ContainsKey(targetGroupId));
+        }
+
+
+        [Test]
+        public void When_deletting_questionnire_after_rename()
+        {
+            // arrange
+            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+
+            AssemblyContext.SetupServiceLocator();
+            var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
+
+            var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
+
+            questionnaireStateTackerStorage.Store(
+                new QuestionnaireStateTracker
+                {
+                    CreatedBy = responsibleId,
+                    GroupsState = new Dictionary<Guid, string>() { { questionnaireId, "first title" } },
+                    VariableState = new Dictionary<Guid, string>() {  },
+                    StaticTextState = new Dictionary<Guid, string>() {  },
+                    QuestionsState = new Dictionary<Guid, string>() {  }
+                },
+                questionnaireId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
+
+            var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId);
+            
+            var questionnaire = Create.Questionnaire();
+
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
+            var updateTitleCommand = Create.Command.UpdateQuestionnaire(questionnaireId, responsibleId, "new title");
+            var historyPostProcessor = CreateHistoryPostProcessor();
+            historyPostProcessor.Process(questionnaire, updateTitleCommand);
+
+            var deleteCommand = Create.Command.DeleteQuestionnaire(questionnaireId, responsibleId);
+
+
+            // act
+            historyPostProcessor.Process(questionnaire, deleteCommand);
+
+            // assert
+            var newHistoryItems = historyStorage.Query(historyItems => historyItems.ToArray());
+            var state = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+
+            Assert.That(newHistoryItems.Length, Is.EqualTo(2));
+            Assert.That(newHistoryItems[0].ActionType, Is.EqualTo(QuestionnaireActionType.Update));
+            Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
+            Assert.That(newHistoryItems[0].TargetItemTitle, Is.EqualTo("new title"));
+
+            Assert.That(newHistoryItems[1].ActionType, Is.EqualTo(QuestionnaireActionType.Delete));
+            Assert.That(newHistoryItems[1].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
+            Assert.That(newHistoryItems[1].TargetItemTitle, Is.EqualTo("new title"));
         }
 
 
