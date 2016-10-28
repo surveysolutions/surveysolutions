@@ -155,9 +155,9 @@ namespace WB.UI.Designer.Api.Headquarters
 
             if (!this.ValidateAccessPermissions(questionnaireView))
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
-                    ReasonPhrase = ErrorMessages.User_Not_authorized
+                    ReasonPhrase = ErrorMessages.User_has_not_permissions_to_access_to_questionnaire
                 });
             }
             return questionnaireView;
