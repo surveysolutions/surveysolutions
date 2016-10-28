@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -32,6 +31,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPasswordHasher passwordHasher;
         private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
         private readonly IServiceLocator serviceLocator;
+        private readonly IIdentityManager identityManager;
         private readonly ISettingsProvider settingsProvider;
         private readonly IEventStoreApiService eventStoreApiService;
 
@@ -43,7 +43,6 @@ namespace WB.UI.Headquarters.Controllers
             IUserViewFactory userViewFactory,
             IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
-            ITransactionManagerProvider transactionManagerProvider,
             IEventStoreApiService eventStoreApiService,
             IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
              : base(commandService: commandService, logger: logger)
@@ -52,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             this.passwordHasher = passwordHasher;
             this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
             this.serviceLocator = serviceLocator;
+            this.identityManager = identityManager;
             this.settingsProvider = settingsProvider;
             this.eventStoreApiService = eventStoreApiService;
         }
@@ -68,58 +68,58 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateHeadquarters(UserModel model)
+        public async Task<ActionResult> CreateHeadquarters(UserModel model)
         {
-            if (CreateUser(model, UserRoles.Headquarter))
-                return this.RedirectToAction("LogOn", "Account");
+            if (ModelState.IsValid)
+            {
+                var creationResult = await this.identityManager.CreateUserAsync(
+                            new ApplicationUser
+                            {
+                                UserName = model.UserName,
+                                Email = model.Email,
+                                FullName = model.PersonName,
+                                PhoneNumber = model.PhoneNumber
+                            }, model.Password, UserRoles.Headquarter);
 
+                if (creationResult.Succeeded)
+                {
+                    this.Success(@"Headquarters successfully created");
+                    return this.RedirectToAction("LogOn", "Account");
+                }
+                AddErrors(creationResult);
+            }
+
+            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateAdmin(UserModel model)
-        {
-            if (CreateUser(model, UserRoles.Administrator))
-                return this.RedirectToAction("LogOn", "Account");
-
-            return View(model);
-        }
-
-        private bool CreateUser(UserModel model, UserRoles role)
+        public async Task<ActionResult> CreateAdmin(UserModel model)
         {
             if (ModelState.IsValid)
             {
-                UserView userToCheck =
-                    this.userViewFactory.GetUser(new UserViewInputModel(UserName: model.UserName, UserEmail: null));
-                if (userToCheck == null)
-                {
-                    try
-                    {
-                        this.CommandService.Execute(new CreateUserCommand(publicKey: Guid.NewGuid(),
-                            userName: model.UserName,
-                            password: passwordHasher.Hash(model.Password), email: model.Email,
-                            isLockedBySupervisor: false,
-                            isLockedByHQ: false, roles: new[] { role }, supervsor: null,
-                        personName: model.PersonName,
-                        phoneNumber: model.PhoneNumber));
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        var userErrorMessage = string.Format("Error when creating user {0} in role {1}", model.UserName, role);
-                        this.Error(userErrorMessage);
-                        this.Logger.Error(userErrorMessage, ex);
-                    }
-                }
-                else
-                {
-                    this.Error("User name already exists. Please enter a different user name.");
-                }
-            }
-            return false;
-        }
+                var creationResult = await this.identityManager.CreateUserAsync(
+                            new ApplicationUser
+                            {
+                                UserName = model.UserName,
+                                Email = model.Email,
+                                FullName = model.PersonName,
+                                PhoneNumber = model.PhoneNumber
+                            }, model.Password, UserRoles.Administrator);
 
+                if (creationResult.Succeeded)
+                {
+                    this.Success(@"Administrator successfully created");
+                    return this.RedirectToAction("LogOn", "Account");
+                }
+                AddErrors(creationResult);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+        
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserModel());

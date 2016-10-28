@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         public DataTableResponse<InterviewerListItem> AllInterviewers([FromBody] DataTableRequestWithFilter request)
         {
             if (!string.IsNullOrWhiteSpace(filter.SupervisorName))
-                filter.SupervisorId = (await this.identityManager.GetUserByName(filter.SupervisorName))?.Id;
+                filter.SupervisorId = (await this.identityManager.GetUserByNameAsync(filter.SupervisorName))?.Id;
 
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers

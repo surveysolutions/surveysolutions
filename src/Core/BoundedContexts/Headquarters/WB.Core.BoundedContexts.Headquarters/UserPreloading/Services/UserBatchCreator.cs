@@ -3,46 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
     internal class UserBatchCreator : IUserBatchCreator
     {
         private readonly IUserPreloadingService userPreloadingService;
-
-        private readonly ICommandService commandService;
-
-        private readonly IPlainStorageAccessor<UserDocument> userStorage;
-
         private readonly ILogger logger;
+        private readonly IIdentityManager identityManager;
 
-        protected readonly IPasswordHasher passwordHasher;
+        private IPlainTransactionManager plainTransactionManager
+            => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-
-        private bool IsWorking = false;
+        private bool IsWorking;
 
         public UserBatchCreator(
-            IUserPreloadingService userPreloadingService, 
-            ICommandService commandService,
-            IPlainStorageAccessor<UserDocument> userStorage, 
-            ILogger logger, 
-            IPasswordHasher passwordHasher)
+            IUserPreloadingService userPreloadingService,
+            ILogger logger,
+            IIdentityManager identityManager)
         {
             this.userPreloadingService = userPreloadingService;
-            this.commandService = commandService;
-            this.userStorage = userStorage;
             this.logger = logger;
-            this.passwordHasher = passwordHasher;
+            this.identityManager = identityManager;
         }
 
         public void CreateUsersFromReadyToBeCreatedQueue()
@@ -56,14 +44,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 while (IsWorking)
                 {
                     string preloadingProcessIdToCreate = this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
+                        () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
 
                     if (string.IsNullOrEmpty(preloadingProcessIdToCreate))
                         break;
 
                     var preloadingProcessDataToCreate =
                         this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate).UserPrelodingData.ToList());
+                            () =>
+                                userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate)
+                                    .UserPrelodingData.ToList());
                     try
                     {
                         this.CreateUsersFromPreloadedData(preloadingProcessDataToCreate, preloadingProcessIdToCreate);
@@ -71,23 +61,24 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     catch (Exception e)
                     {
                         logger.Error(
-                            string.Format("preloading process with id {0} finished with error", preloadingProcessIdToCreate), e);
+                            string.Format("preloading process with id {0} finished with error",
+                                preloadingProcessIdToCreate), e);
 
                         this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate, e.Message));
+                            () =>
+                                userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate,
+                                    e.Message));
                         return;
                     }
 
                     this.plainTransactionManager.ExecuteInPlainTransaction(
                         () => userPreloadingService.FinishPreloadingProcess(preloadingProcessIdToCreate));
                 }
-
             }
             finally
             {
                 IsWorking = false;
             }
-
         }
 
         private void CreateUsersFromPreloadedData(IList<UserPreloadingDataRecord> data, string id)
@@ -98,19 +89,19 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             foreach (var supervisorToCreate in supervisorsToCreate)
             {
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => CreateSupervisorOrUnarchiveAndUpdate(supervisorToCreate));
+                this.CreateUserOrUnarchiveAndUpdate(supervisorToCreate, UserRoles.Supervisor);
 
                 this.plainTransactionManager.ExecuteInPlainTransaction(
                     () => userPreloadingService.IncrementCreatedUsersCount(id));
             }
 
-            var interviewersToCreate = data.Where(row => userPreloadingService.GetUserRoleFromDataRecord(row) == UserRoles.Interviewer).ToArray();
+            var interviewersToCreate =
+                data.Where(row => userPreloadingService.GetUserRoleFromDataRecord(row) == UserRoles.Interviewer)
+                    .ToArray();
 
             foreach (var interviewerToCreate in interviewersToCreate)
             {
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => CreateInterviewerOrUnarchiveAndUpdate(interviewerToCreate));
+                CreateInterviewerOrUnarchiveAndUpdate(interviewerToCreate);
 
                 this.plainTransactionManager.ExecuteInPlainTransaction(
                     () => userPreloadingService.IncrementCreatedUsersCount(id));
@@ -118,76 +109,46 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         }
 
 
-        private void CreateSupervisorOrUnarchiveAndUpdate(UserPreloadingDataRecord supervisorToCreate)
+        private void CreateUserOrUnarchiveAndUpdate(UserPreloadingDataRecord supervisorToCreate, UserRoles role, Guid? supervisorId = null)
         {
-            var archivedSupervisor =
-                userStorage.Query(
-                    _ =>
-                        _.FirstOrDefault(u => u.UserName.ToLower() == supervisorToCreate.Login.ToLower() && u.IsArchived));
-            if (archivedSupervisor == null)
+            var user = this.identityManager.GetUserByName(supervisorToCreate.Login);
+
+            if (user == null)
             {
-                commandService.Execute(new CreateUserCommand(Guid.NewGuid(), supervisorToCreate.Login,
-                    passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.Email,
-                    new[] { UserRoles.Supervisor },
-                    false,
-                    false, null,
-                    supervisorToCreate.FullName, supervisorToCreate.PhoneNumber));
-                return;
+                this.identityManager.CreateUser(new ApplicationUser
+                {
+                    UserName = supervisorToCreate.Login,
+                    FullName = supervisorToCreate.FullName,
+                    Email = supervisorToCreate.Email,
+                    PhoneNumber = supervisorToCreate.PhoneNumber,
+                    SupervisorId = supervisorId,
+                }, supervisorToCreate.Password, role);
+                
             }
+            else
+            {
+                var userRole = user.Roles.First().Role;
 
-            if (!archivedSupervisor.Roles.Contains(UserRoles.Supervisor))
-                throw new UserPreloadingException(
-                    String.Format("archived user '{0}' is in role '{1}' but must be in role supervisor",
-                        archivedSupervisor.UserName, string.Join(",", archivedSupervisor.Roles)));
+                if (userRole != role)
+                    throw new UserPreloadingException($"user '{user.UserName}' is in role '{userRole}' " +
+                                                      $"but must be in role {Enum.GetName(typeof(UserRoles), role)}");
 
-            commandService.Execute(new UnarchiveUserAndUpdateCommand(archivedSupervisor.PublicKey,
-                passwordHasher.Hash(supervisorToCreate.Password), supervisorToCreate.Email, supervisorToCreate.FullName,
-                supervisorToCreate.PhoneNumber));
+                user.FullName = supervisorToCreate.FullName;
+                user.Email = supervisorToCreate.Email;
+                user.PhoneNumber = supervisorToCreate.PhoneNumber;
+                user.IsArchived = false;
+
+                this.identityManager.UpdateUser(user, supervisorToCreate.Password);
+            }
         }
 
         void CreateInterviewerOrUnarchiveAndUpdate(UserPreloadingDataRecord interviewerToCreate)
         {
-            var archivedInterviewers =
-                userStorage.Query(
-                    _ =>
-                        _.FirstOrDefault(
-                            u => u.UserName.ToLower() == interviewerToCreate.Login.ToLower() && u.IsArchived));
+            var supervisor = this.identityManager.GetUserByName(interviewerToCreate.Supervisor);
+            if(supervisor == null)
+                throw new UserPreloadingException($"supervisor '{interviewerToCreate.Supervisor}' not found");
 
-            var supervisor = this.GetSupervisorForUser(interviewerToCreate);
-
-            if (archivedInterviewers == null)
-            {
-                commandService.Execute(new CreateUserCommand(Guid.NewGuid(), interviewerToCreate.Login,
-                    passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.Email,
-                    new[] { UserRoles.Interviewer },
-                    false,
-                    false, supervisor,
-                    interviewerToCreate.FullName, interviewerToCreate.PhoneNumber));
-                return;
-            }
-
-            if (!archivedInterviewers.Roles.Contains(UserRoles.Interviewer))
-                throw new UserPreloadingException(
-                    String.Format("archived user '{0}' is in role '{1}' but must be in role interviewer",
-                        archivedInterviewers.UserName, string.Join(",", archivedInterviewers.Roles)));
-
-            commandService.Execute(new UnarchiveUserAndUpdateCommand(archivedInterviewers.PublicKey,
-                passwordHasher.Hash(interviewerToCreate.Password), interviewerToCreate.Email, interviewerToCreate.FullName,
-                interviewerToCreate.PhoneNumber));
-        }
-
-        private UserLight GetSupervisorForUser(UserPreloadingDataRecord dataRecord)
-        {
-            var supervisor =
-                userStorage.Query(_ => _.FirstOrDefault(u => u.UserName.ToLower() == dataRecord.Supervisor.ToLower()));
-
-            if (supervisor == null)
-                return null;
-
-            if (!supervisor.Roles.Contains(UserRoles.Supervisor))
-                return null;
-
-            return new UserLight(supervisor.PublicKey, supervisor.UserName);
+            this.CreateUserOrUnarchiveAndUpdate(interviewerToCreate, UserRoles.Interviewer, supervisor.Id);
         }
     }
 }
