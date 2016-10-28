@@ -46,6 +46,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -553,7 +554,7 @@ namespace WB.Tests.Integration
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 1,
                 new Guid("D222D222D222D222D222D222D222D222"),
-                new Dictionary<Guid, object>(),
+                new Dictionary<Guid, AbstractAnswer>(),
                 new DateTime(2012, 12, 20),
                 new Guid("F111F111F111F111F111F111F111F111"));
 
@@ -563,7 +564,7 @@ namespace WB.Tests.Integration
         public static StatefulInterview StatefulInterview(Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
-            Dictionary<Guid, object> answersOnPrefilledQuestions = null)
+            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null)
         {
             var interview = new StatefulInterview(
                 Mock.Of<ILogger>(),
@@ -574,7 +575,7 @@ namespace WB.Tests.Integration
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 1,
                 new Guid("D222D222D222D222D222D222D222D222"),
-                answersOnPrefilledQuestions ?? new Dictionary<Guid, object>(),
+                answersOnPrefilledQuestions ?? new Dictionary<Guid, AbstractAnswer>(),
                 new DateTime(2012, 12, 20),
                 new Guid("F111F111F111F111F111F111F111F111"));
 

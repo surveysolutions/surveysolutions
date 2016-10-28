@@ -69,11 +69,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 interview.AnswerNumericIntegerQuestion(userId, rosterSizeIntQuestionId, Empty.RosterVector, DateTime.Now, 2);
 
-                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, new [] { 0m }, DateTime.Now, new [] { 1m, 2m });
+                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, new [] { 0m }, DateTime.Now, new [] { 1, 2 });
                 interview.AnswerTextQuestion(userId, textQuestionId, new[] { 0m, 1m }, DateTime.Now, "aaa");
                 interview.AnswerTextQuestion(userId, textQuestionId, new[] { 0m, 2m }, DateTime.Now, "bbb");
 
-                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, new [] { 1m }, DateTime.Now, new [] { 1m, 2m });
+                interview.AnswerMultipleOptionsQuestion(userId, rosterSizeMultiQuestionId, new [] { 1m }, DateTime.Now, new [] { 1, 2 });
                 interview.AnswerTextQuestion(userId, textQuestionId, new[] { 1m, 1m }, DateTime.Now, "ccc");
                 interview.AnswerTextQuestion(userId, textQuestionId, new[] { 1m, 2m }, DateTime.Now, "ddd");
 
