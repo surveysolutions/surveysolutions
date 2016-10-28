@@ -92,8 +92,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         }
 
         public void Process(Questionnaire aggregate, UpdateQuestionnaire command)
-            => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
+        {
+            var questionnaireId = command.QuestionnaireId;
+
+            this.UpdateQuestionnaireTitleIfNeed(questionnaireId, command.Title);
+
+            this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
+                QuestionnaireActionType.Update,
                 QuestionnaireItemType.Questionnaire, command.QuestionnaireId, command.Title);
+        }
+
+        private void UpdateQuestionnaireTitleIfNeed(Guid questionnaireId, string title)
+        {
+
+            var questionnaireStateTacker = this.questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+            var titleInState = questionnaireStateTacker.GroupsState[questionnaireId];
+            if (titleInState != title)
+            {
+                questionnaireStateTacker.GroupsState[questionnaireId] = title;
+                this.questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId.FormatGuid());
+            }
+        }
 
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command)
         {
