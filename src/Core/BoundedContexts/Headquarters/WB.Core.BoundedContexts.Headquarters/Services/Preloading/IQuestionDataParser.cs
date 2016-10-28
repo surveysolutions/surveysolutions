@@ -7,7 +7,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 {
     internal interface IQuestionDataParser
     {
-        ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out  object value);
+        /// <param name="parsedSingleColumnAnswer">Is null for multi-column questions like GPS, text list, etc.</param>
+        ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out object parsedValue, out AbstractAnswer parsedSingleColumnAnswer);
 
         AbstractAnswer BuildAnswerFromStringArray(Tuple<string, string>[] answersWithColumnName, IQuestion question);
     }

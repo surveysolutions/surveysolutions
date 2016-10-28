@@ -19,153 +19,172 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private readonly QuestionType[] QuestionTypesCommaFirbidden = new[] { QuestionType.MultyOption, QuestionType.SingleOption, QuestionType.Numeric, QuestionType.GpsCoordinates };
         public static string ColumnDelimiter = "__";
 
-        public ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out object parsedValue)
+        private AbstractAnswer ParseSingleColumnAnswer(string answer, string columnName, IQuestion question)
         {
-            parsedValue =null;
+            object parsedValue;
+            AbstractAnswer parsedSingleColumnAnswer;
+
+            return this.TryParse(answer, columnName, question, out parsedValue, out parsedSingleColumnAnswer)
+                == ValueParsingResult.OK
+                ? parsedSingleColumnAnswer
+                : null;
+        }
+
+        public ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out object parsedValue, out AbstractAnswer parsedSingleColumnAnswer)
+        {
             answer = answer?
                 .Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
                 .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty);
 
             if (string.IsNullOrEmpty(answer))
-                return ValueParsingResult.ValueIsNullOrEmpty;
+                return ParseFailed(ValueParsingResult.ValueIsNullOrEmpty, out parsedValue, out parsedSingleColumnAnswer);
 
             if (question == null)
-                return ValueParsingResult.QuestionWasNotFound;
+                return ParseFailed(ValueParsingResult.QuestionWasNotFound, out parsedValue, out parsedSingleColumnAnswer);
 
             if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
-                return ValueParsingResult.UnsupportedLinkedQuestion;
+                return ParseFailed(ValueParsingResult.UnsupportedLinkedQuestion, out parsedValue, out parsedSingleColumnAnswer);
 
             if (question is IMultimediaQuestion)
-                return ValueParsingResult.UnsupportedMultimediaQuestion;
+                return ParseFailed(ValueParsingResult.UnsupportedMultimediaQuestion, out parsedValue, out parsedSingleColumnAnswer);
 
             if (answer.Contains(',') && this.QuestionTypesCommaFirbidden.Contains(question.QuestionType))
-                return ValueParsingResult.CommaIsUnsupportedInAnswer;
+                return ParseFailed(ValueParsingResult.CommaIsUnsupportedInAnswer, out parsedValue, out parsedSingleColumnAnswer);
 
             switch (question.QuestionType)
             {
                 case QuestionType.Text:
                     var textQuestion = (TextQuestion) question;
                     parsedValue = answer;
+                    parsedSingleColumnAnswer = new TextAnswer(answer);
                     if (!string.IsNullOrEmpty(textQuestion.Mask))
                     {
                         var formatter = new MaskedFormatter(textQuestion.Mask);
                         bool maskMatches = formatter.IsTextMaskMatched(answer);
                         if (!maskMatches)
-                        {
-                            return ValueParsingResult.ParsedValueIsNotAllowed;
-                        }
+                            return ParseFailed(ValueParsingResult.ParsedValueIsNotAllowed, out parsedValue, out parsedSingleColumnAnswer);
                     }
-
                     return ValueParsingResult.OK;
+
                 case QuestionType.QRBarcode:
+                    parsedValue = answer;
+                    parsedSingleColumnAnswer = new QRBarcodeAnswer(answer);
+                    return ValueParsingResult.OK;
+
                 case QuestionType.TextList:
                     parsedValue = answer;
+                    parsedSingleColumnAnswer = null;
                     return ValueParsingResult.OK;
+
                 case QuestionType.GpsCoordinates:
                     try
                     {
                         parsedValue = GeoPosition.ParseProperty(answer, this.ExtractValueFromColumnName(columnName));
+                        parsedSingleColumnAnswer = null;
                         return ValueParsingResult.OK;
                     }
                     catch (Exception)
                     {
-                        return ValueParsingResult.AnswerAsGpsWasNotParsed;
+                        return ParseFailed(ValueParsingResult.AnswerAsGpsWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
                     }
-
-                case QuestionType.AutoPropagate:
-                    int intValue;
-                    if (!int.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out intValue))
-                        return ValueParsingResult.AnswerAsIntWasNotParsed;
-
-                    parsedValue = intValue;
-                    return ValueParsingResult.OK;
 
                 case QuestionType.Numeric:
                     var numericQuestion = question as INumericQuestion;
                     if (numericQuestion == null)
-                        return ValueParsingResult.QuestionTypeIsIncorrect;
+                        return ParseFailed(ValueParsingResult.QuestionTypeIsIncorrect, out parsedValue, out parsedSingleColumnAnswer);
 
                     // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
                     if (numericQuestion.IsInteger)
                     {
                         int intNumericValue;
                         if (!int.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out intNumericValue))
-                            return ValueParsingResult.AnswerAsIntWasNotParsed;
+                            return ParseFailed(ValueParsingResult.AnswerAsIntWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                         parsedValue = intNumericValue;
-
+                        parsedSingleColumnAnswer = new NumericIntegerAnswer(intNumericValue);
                         return ValueParsingResult.OK;
                     }
-                    decimal decimalNumericValue;
-                    if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out decimalNumericValue))
-                        return ValueParsingResult.AnswerAsDecimalWasNotParsed;
-                {
-                    parsedValue = decimalNumericValue;
+                    else
+                    {
+                        decimal decimalNumericValue;
+                        if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out decimalNumericValue))
+                            return ParseFailed(ValueParsingResult.AnswerAsDecimalWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
-                    return ValueParsingResult.OK;
-                }
+                        parsedValue = decimalNumericValue;
+                        parsedSingleColumnAnswer = new NumericRealAnswer((double) decimalNumericValue);
+                        return ValueParsingResult.OK;
+                    }
 
                 case QuestionType.DateTime:
                     DateTime date;
 
                     var dateTimeQuestion = question as DateTimeQuestion;
-                    if (dateTimeQuestion == null) return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
+                    if (dateTimeQuestion == null)
+                        return ParseFailed(ValueParsingResult.QuestionTypeIsIncorrect, out parsedValue, out parsedSingleColumnAnswer);
 
                     if (!DateTime.TryParse(answer, out date))
-                    {
-                        return ValueParsingResult.AnswerAsDateTimeWasNotParsed;
-                    }
+                        return ParseFailed(ValueParsingResult.AnswerAsDateTimeWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                     parsedValue = date;
+                    parsedSingleColumnAnswer = new DateTimeAnswer(date);
                     return ValueParsingResult.OK;
 
                 case QuestionType.SingleOption:
                     var singleOption = question as SingleQuestion;
                     if (singleOption == null)
-                        return ValueParsingResult.QuestionTypeIsIncorrect;
+                        return ParseFailed(ValueParsingResult.QuestionTypeIsIncorrect, out parsedValue, out parsedSingleColumnAnswer);
 
                     decimal decimalAnswerValue;
                     if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out decimalAnswerValue))
-                        return ValueParsingResult.AnswerAsDecimalWasNotParsed;
+                        return ParseFailed(ValueParsingResult.AnswerAsDecimalWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
+
                     if (!this.GetAnswerOptionsAsValues(question).Contains(decimalAnswerValue))
-                        return ValueParsingResult.ParsedValueIsNotAllowed;
+                        return ParseFailed(ValueParsingResult.ParsedValueIsNotAllowed, out parsedValue, out parsedSingleColumnAnswer);
 
                     parsedValue = decimalAnswerValue;
+                    parsedSingleColumnAnswer = new CategoricalFixedSingleOptionAnswer((int) decimalAnswerValue);
                     return ValueParsingResult.OK;
 
                 case QuestionType.MultyOption:
                     var multyOption = question as MultyOptionsQuestion;
                     if (multyOption == null)
-                        return ValueParsingResult.QuestionTypeIsIncorrect;
+                        return ParseFailed(ValueParsingResult.QuestionTypeIsIncorrect, out parsedValue, out parsedSingleColumnAnswer);
 
                     string columnEncodedValue = this.ExtractValueFromColumnName(columnName);
                     decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
 
                     if (!columnValue.HasValue)
-                    {
-                        return ValueParsingResult.AnswerAsDecimalWasNotParsed;
-                    }
+                        return ParseFailed(ValueParsingResult.AnswerAsDecimalWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                     if (!this.GetAnswerOptionsAsValues(question).Contains(columnValue.Value))
-                    {
-                        return ValueParsingResult.ParsedValueIsNotAllowed;
-                    }
+                        return ParseFailed(ValueParsingResult.ParsedValueIsNotAllowed, out parsedValue, out parsedSingleColumnAnswer);
 
                     int answerChecked;
                     if (!int.TryParse(answer, out answerChecked))
-                    {
-                        return ValueParsingResult.AnswerAsDecimalWasNotParsed;
-                    }
+                        return ParseFailed(ValueParsingResult.AnswerAsIntWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
+
                     if (answerChecked > 0)
                     {
                         parsedValue = columnValue.Value;
                     }
-                    
+                    else
+                    {
+                        parsedValue = null;
+                    }
+
+                    parsedSingleColumnAnswer = null;
+
                     return ValueParsingResult.OK;
             }
 
-            return ValueParsingResult.GeneralErrorOccured;                    
+            return ParseFailed(ValueParsingResult.GeneralErrorOccured, out parsedValue, out parsedSingleColumnAnswer);
+        }
 
+        private static ValueParsingResult ParseFailed(ValueParsingResult result, out object parsedValue, out AbstractAnswer parsedSingleColumnAnswer)
+        {
+            parsedValue = null;
+            parsedSingleColumnAnswer = null;
+            return result;
         }
 
         public AbstractAnswer BuildAnswerFromStringArray(Tuple<string, string>[] answersWithColumnName, IQuestion question)
@@ -187,8 +206,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 case QuestionType.GpsCoordinates:
                     return this.CreateGeoPositionAnswer(answersWithColumnName, question);
                 default:
-                    object parsedAnswer;
-                    this.TryParse(answersWithColumnName[0].Item2, answersWithColumnName[0].Item1, question, out parsedAnswer);
+                    AbstractAnswer parsedAnswer = this.ParseSingleColumnAnswer(answersWithColumnName[0].Item2, answersWithColumnName[0].Item1, question);
                     return parsedAnswer;
             }
         }
