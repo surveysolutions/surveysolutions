@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            exception = Catch.Only<InterviewException>(() => interview.AnswerNumericRealQuestion(userId, questionId, new decimal[0], DateTime.Now, 1.11m));
+            exception = Catch.Only<InterviewException>(() => interview.AnswerNumericRealQuestion(userId, questionId, new decimal[0], DateTime.Now, 1.11));
 
         It should_throw_InterviewException = () =>
             exception.ShouldNotBeNull();

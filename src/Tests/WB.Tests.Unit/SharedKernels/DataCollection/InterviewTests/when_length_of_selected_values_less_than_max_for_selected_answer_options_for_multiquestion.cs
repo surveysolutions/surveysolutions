@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.MultipleOptionsQuestion(questionId: validatingQuestionId, maxAllowedAnswers: 3, answers: new decimal[] { 1, 2, 3, 4 }),
+                Create.Entity.MultipleOptionsQuestion(questionId: validatingQuestionId, maxAllowedAnswers: 3, answers: new [] { 1, 2, 3, 4 }),
             }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
@@ -41,10 +42,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_raise_MultipleOptionsQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>(@event
-                => @event.QuestionId == validatingQuestionId && @event.SelectedValues == selectedValues);
+                => @event.QuestionId == validatingQuestionId && @event.SelectedValues.Select(x => (int) x).SequenceEqual(selectedValues));
 
         private static Guid validatingQuestionId;
-        private static decimal[] selectedValues = new decimal[] { 1, 2, 3 };
+        private static int[] selectedValues = { 1, 2, 3 };
         private static Interview interview;
         private static Guid userId;
         private static EventContext eventContext;

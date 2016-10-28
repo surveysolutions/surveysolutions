@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactory
                     optionsFilterExpression: "a"),
                 Create.Entity.MultipleOptionsQuestion(
                     questionId: multioptionQuestionId,
-                    answers: new decimal[] { 1, 2 },
+                    answers: new [] { 1, 2 },
                     optionsFilterExpression: "a"));
 
             var interviewDetailsView = new InterviewDetailsView

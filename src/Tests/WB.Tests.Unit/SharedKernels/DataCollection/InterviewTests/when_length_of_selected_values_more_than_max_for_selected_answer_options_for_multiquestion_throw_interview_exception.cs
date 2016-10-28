@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () => expectedException = Catch.Exception(() =>
-            interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new decimal[] { }, DateTime.Now, new decimal[] { 1, 2, 3 }));
+            interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new decimal[] { }, DateTime.Now, new [] { 1, 2, 3 }));
 
         It should_raise_MultipleOptionsQuestionAnswered_event_with_QuestionId_equal_to_validatingQuestionId = () =>
             expectedException.ShouldBeOfExactType(typeof(InterviewException));
