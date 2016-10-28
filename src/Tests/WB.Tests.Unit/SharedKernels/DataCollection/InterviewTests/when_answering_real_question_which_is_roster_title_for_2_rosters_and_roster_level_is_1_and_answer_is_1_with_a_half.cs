@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerNumericRealQuestion(userId, questionId, rosterVector, DateTime.Now, (decimal) 1.5);
+            interview.AnswerNumericRealQuestion(userId, questionId, rosterVector, DateTime.Now, 1.5);
 
         Cleanup stuff = () =>
         {

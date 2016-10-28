@@ -56,9 +56,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static AnswerYesNoQuestion command;
         private static Interview interview;
-        private static decimal option_1 = 1m;
-        private static decimal option_2 = 2m;
-        private static decimal option_3 = 3m;
+        private static int option_1 = 1;
+        private static int option_2 = 2;
+        private static int option_3 = 3;
         private static Guid rosterId = Guid.Parse("44444444444444444444444444444444");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }

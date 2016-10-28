@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.TestFactories
                 answerTime: DateTime.UtcNow,
                 selectedRosterVectors: answer);
 
-        public AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, decimal[] answer = null)
+        public AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, int[] answer = null)
             => new AnswerMultipleOptionsQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.TestFactories
                 answerTime: DateTime.UtcNow,
                 answer: answer);
 
-        public AnswerNumericRealQuestionCommand AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, decimal answer = 0)
+        public AnswerNumericRealQuestionCommand AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, double answer = 0)
             => new AnswerNumericRealQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,

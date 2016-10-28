@@ -235,7 +235,7 @@ namespace Main.Core.Tests.Documents
             var cascadingQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
             var singleOptionAnswerCodes = new decimal[] {1, 2, 3};
-            var multipleOptionsAnswerCodes = new decimal[] { 4, 5, 6};
+            var multipleOptionsAnswerCodes = new [] { 4, 5, 6};
             var cascadingQuestionCodes = new decimal[] { 7, 8, 9};
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 children: new IComposite[]

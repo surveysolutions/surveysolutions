@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             };
         };
 
-        Because of =  () => parsingResult = questionDataParser.TryParse(answer, questionVarName + "__1", question, out parcedValue);
+        Because of =  () => parsingResult = questionDataParser.TryParse(answer, questionVarName + "__1", question, out parcedValue, out parsedSingleColumnAnswer);
 
         It should_result_be_ParsedValueIsNotAllowed = () => parsingResult.ShouldEqual(ValueParsingResult.ParsedValueIsNotAllowed);
     }

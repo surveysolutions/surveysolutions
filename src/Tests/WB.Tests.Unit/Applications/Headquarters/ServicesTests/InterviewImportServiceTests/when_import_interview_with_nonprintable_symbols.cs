@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Implementation.Services;
 using It = Machine.Specifications.It;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     {
                         InterviewerId = interviewerId,
                         SupervisorId = supervisorId,
-                        PreloadedData = new PreloadedDataDto(new PreloadedLevelDto[] { new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, object>()) })
+                        PreloadedData = new PreloadedDataDto(new [] { new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, AbstractAnswer>()) })
                     }
                 });
 

@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
           () =>
               parseResult =
                   questionDataParser.TryParse("22",questionVarName,
-                      question, out parsedValue);
+                      question, out parsedValue, out parsedSingleColumnAnswer);
 
         It should_return_OK = () => parseResult.ShouldEqual(ValueParsingResult.OK);
 
