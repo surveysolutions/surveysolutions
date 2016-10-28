@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.DataCollection.Views;
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     internal class HeadquarterUserCommandValidator : 
-        ICommandValidator<User, CreateUserCommand>, 
         ICommandValidator<User, UnarchiveUserCommand>,
         ICommandValidator<User, UnarchiveUserAndUpdateCommand>
     {
@@ -24,22 +23,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public HeadquarterUserCommandValidator(IPlainStorageAccessor<UserDocument> users)
         {
             this.users = users;
-        }
-
-        public void Validate(User aggregate, CreateUserCommand command)
-        {
-            if (IsActiveUserExists(command.UserName))
-                throw new UserException(
-                    String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenFormat, command.UserName),
-                    UserDomainExceptionType.UserNameUsedByActiveUser);
-
-            if (IsArchivedUserExists(command.UserName))
-                throw new UserException(
-                    String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenByArchivedUsersFormat,
-                        command.UserName), UserDomainExceptionType.UserNameUsedByArchivedUser);
-            
-            if (command.Supervisor!=null)
-                ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(command.Roles, command.Supervisor.Id);
         }
 
         public void Validate(User aggregate, UnarchiveUserCommand command)
@@ -54,16 +37,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var user = users.GetById(aggregate.Id.FormatGuid());
             if (user.Supervisor != null)
                 ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
-        }
-
-        private bool IsActiveUserExists(string userName)
-        {
-            return users.Query(_ => _.Where(u => !u.IsArchived && u.UserName.ToLower() == userName.ToLower()).Count() > 0);
-        }
-
-        private bool IsArchivedUserExists(string userName)
-        {
-            return users.Query(_ => _.Where(u => u.IsArchived && u.UserName.ToLower() == userName.ToLower()).Count() > 0);
         }
 
         void ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(UserRoles[] userRoles, Guid supervisorId)

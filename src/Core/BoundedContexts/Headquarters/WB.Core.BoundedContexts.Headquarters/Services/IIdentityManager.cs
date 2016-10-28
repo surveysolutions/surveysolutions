@@ -24,13 +24,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         string CurrentUserName { get; }
         string CurrentUserDeviceId { get; }
         Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, UserRoles role);
+        IdentityResult CreateUser(ApplicationUser user, string password, UserRoles role);
         Task<IdentityResult> UpdateUserAsync(ApplicationUser user, string password);
+        IdentityResult UpdateUser(ApplicationUser user, string password);
         Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false);
         Task<UserRoles> GetRoleForCurrentUserAsync();
         void SignOut();
         Task<ApplicationUser> GetUserByIdAsync(Guid userId);
+        ApplicationUser GetUserById(Guid userId);
+        Task<ApplicationUser> GetUserByNameAsync(string userName);
+        ApplicationUser GetUserByName(string userName);
+        Task<ApplicationUser> GetUserByEmailAsync(string email);
+        ApplicationUser GetUserByEmail(string email);
         IEnumerable<IdentityResult> DeleteSupervisorAndDependentInterviewers(Guid supervisorId);
-        Task<ApplicationUser> GetUserByName(string userName);
         Task SignInAsObserverAsync(string userName);
         Task SignInBackFromObserverAsync();
         RestCredentials GetDesignerUserCredentials();
