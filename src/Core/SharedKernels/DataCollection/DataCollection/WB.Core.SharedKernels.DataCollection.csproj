@@ -195,9 +195,7 @@
     </Compile>
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\LockUserBySupervisorCommand.cs" />
-    <Compile Include="Commands\User\LockUserCommand.cs" />
     <Compile Include="Commands\User\UnlockUserBySupervisorCommand.cs" />
-    <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="DataTransferObjects\Preloading\PreloadedDataDto.cs" />
     <Compile Include="DataTransferObjects\Preloading\PreloadedLevelDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\CommentSynchronizationDto.cs">
