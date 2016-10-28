@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             filter = filter ?? String.Empty;
             var parentValueAsDecimal = parentValue.HasValue ? Convert.ToDecimal(parentValue) : (decimal?) null;
 
-            int batchsize = 15;
+            int batchsize = 50;
             int lastLoadedSortIndex = -1;
 
             if (translationIdAsString == null)

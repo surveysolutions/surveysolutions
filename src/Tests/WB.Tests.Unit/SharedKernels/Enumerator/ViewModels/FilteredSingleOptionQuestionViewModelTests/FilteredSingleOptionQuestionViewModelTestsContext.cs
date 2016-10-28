@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -34,6 +36,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>()
                 );
         }
+
+        protected static ReadOnlyCollection<CategoricalOption> Options = new List<CategoricalOption>
+        {
+            Create.Entity.CategoricalQuestionOption(1, "title abc 1"),
+            Create.Entity.CategoricalQuestionOption(2, "title def 2"),
+            Create.Entity.CategoricalQuestionOption(3, "title klo 3"),
+            Create.Entity.CategoricalQuestionOption(4, "title gha 4"),
+            Create.Entity.CategoricalQuestionOption(5, "title ccc 5"),
+            Create.Entity.CategoricalQuestionOption(6, "title bcw 6")
+        }.ToReadOnlyCollection();
 
         protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire(Guid questionId, List<CategoricalOption> optionList = null)
         {

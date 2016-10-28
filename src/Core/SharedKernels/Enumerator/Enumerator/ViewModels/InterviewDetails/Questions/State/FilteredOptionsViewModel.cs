@@ -16,9 +16,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private IStatefulInterview interview;
-        private IEnumerable<CategoricalOption> Options { get; set; }
+        private List<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
-        private int Count { get; set; } = int.MaxValue;
+        private int Count { get; set; } = 200;
 
         public virtual event EventHandler OptionsChanged;
 
@@ -52,18 +52,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.answerNotifier = answerNotifier;
         }
 
-        public virtual void Init(string interviewId, Identity entityIdentity)
+        public virtual void Init(string interviewId, Identity entityIdentity, int maxCountToLoad)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
+            this.Count = maxCountToLoad;
 
             interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.questionIdentity = entityIdentity;
 
-            this.Options = interview.GetFilteredOptionsForQuestion(entityIdentity, null, Filter);
+            this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, null, Filter, this.Count);
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
             {
@@ -72,21 +73,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public virtual IEnumerable<CategoricalOption> GetOptions(string filter = "",  int count = int.MaxValue)
+        public virtual List<CategoricalOption> GetOptions(string filter = "")
         {
             this.Filter = filter;
-            this.Count = count;
-            this.Options = this.interview.GetFilteredOptionsForQuestion(this.questionIdentity, null, filter)
-                                .Take(count)
-                                .ToList();
+            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, null, filter, this.Count).ToList();
             return Options;
         }
 
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            var newOptions = interview.GetFilteredOptionsForQuestion(questionIdentity, null, Filter)
-                                .Take(Count)
+            var newOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, null, Filter, Count)
                                 .ToList();
 
             var currentOptions = this.Options;

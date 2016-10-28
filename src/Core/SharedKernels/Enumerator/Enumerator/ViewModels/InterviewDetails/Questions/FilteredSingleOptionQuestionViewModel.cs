@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
 
             interview = this.interviewRepository.Get(interviewId);
@@ -240,7 +240,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
-            var options = this.filteredOptionsViewModel.GetOptions(searchFor, SuggestionsMaxCount)
+            var options = this.filteredOptionsViewModel.GetOptions(searchFor)
                 .Select(this.ToViewModel)
                 .ToList();
 

@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var interview = Mock.Of<IStatefulInterview>(_
                => _.QuestionnaireIdentity == questionnaireId
                   && _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer &&
-                  _.GetFilteredOptionsForQuestion(questionIdentity, null, answerValue) == new List<CategoricalOption>() {
+                  _.GetTopFilteredOptionsForQuestion(questionIdentity, null, answerValue, 200) == new List<CategoricalOption>() {
                     new CategoricalOption() {Title = "abc", Value = 1},
                     new CategoricalOption() {Title = "bac", Value = 2},
                     new CategoricalOption() {Title = "bba", Value = 4}});
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
             
             var filteredOptionsViewModel = Mock.Of<FilteredOptionsViewModel>(vm => 
-                vm.GetOptions(Moq.It.IsAny<string>(), 15) == new List<CategoricalOption>()
+                vm.GetOptions(Moq.It.IsAny<string>()) == new List<CategoricalOption>()
                 {
                     new CategoricalOption() {Title = "abc", Value = 1},
                     new CategoricalOption() {Title = "bac", Value = 2},
@@ -43,7 +43,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                     new CategoricalOption() {Title = "bba", Value = 4},
                     new CategoricalOption() {Title = "ccc", Value = 5},
                 });
-
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,

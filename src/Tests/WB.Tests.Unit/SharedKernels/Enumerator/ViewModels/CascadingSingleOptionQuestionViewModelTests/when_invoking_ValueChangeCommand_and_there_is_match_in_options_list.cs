@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -22,14 +23,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var childAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == answerOnChildQuestion);
             var parentOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 1);
 
-            var interview = Mock.Of<IStatefulInterview>(_
-                => _.QuestionnaireIdentity == questionnaireId
-                   && _.GetSingleOptionAnswer(questionIdentity) == childAnswer
-                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer
-                   && _.GetOptionForQuestionWithoutFilter(questionIdentity, 2, 1) == GetOption()
-                   && _.GetOptionForQuestionWithFilter(questionIdentity, "title klo 3", 1) == Options.Single(x => x.Value == 3));
+            var interview = new Mock<IStatefulInterview>();
 
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
+            interview.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);
+            interview.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
+            interview.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
+            interview.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 2, 1)).Returns(new CategoricalOption() { Title = "2", Value = 2, ParentValue = 1 });
+            interview.Setup(x => x.GetOptionForQuestionWithFilter(questionIdentity, Moq.It.IsAny<string>(), 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
+            interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
+                .Returns((Identity identity, int? value, string filter, int count) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
+
+
+            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
@@ -52,11 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         It should_send_answer_command = () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
-
-        private static CategoricalOption GetOption()
-        {
-            return new CategoricalOption() {Title = "2", Value = 2, ParentValue = 1};
-        }
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
 

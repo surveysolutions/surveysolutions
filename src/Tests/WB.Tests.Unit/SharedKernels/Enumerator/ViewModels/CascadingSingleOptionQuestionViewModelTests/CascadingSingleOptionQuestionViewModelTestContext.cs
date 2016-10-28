@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.GetRosterLevelForEntity(parentIdentity.Id) == 1
                 && _.GetCascadingQuestionParentId(questionIdentity.Id) == parentIdentity.Id
-                && _.GetOptionsForQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>()) == /*(optionsRepository == null) ? Options :*/ Options//optionsRepository.GetQuestionOptions()
+                && _.GetOptionsForQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>()) ==  Options
             );
 
             return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);

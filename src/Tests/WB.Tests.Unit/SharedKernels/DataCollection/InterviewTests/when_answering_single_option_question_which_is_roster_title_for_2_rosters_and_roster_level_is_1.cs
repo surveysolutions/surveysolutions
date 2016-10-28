@@ -27,16 +27,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            selectedOptionValue = (decimal) 2.2;
+            selectedOptionValue = 2;
             selectedOptionTitle = "Title 2.1";
 
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.NumericIntegerQuestion(id: numericQuestionId),
-                Create.Entity.Roster(rosterId: rosterAId, rosterSizeQuestionId:numericQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
+                Create.Entity.Roster(rosterId: rosterAId, rosterSizeQuestionId:numericQuestionId, 
+                    rosterSizeSourceType: RosterSizeSourceType.Question, rosterTitleQuestionId: questionId, children: new IComposite[]
                 {
-                    Create.Entity.SingleOptionQuestion(questionId: questionId, answers: new List<Answer> { Create.Entity.Answer(selectedOptionTitle, selectedOptionValue) }),
+                    Create.Entity.SingleOptionQuestion(questionId: questionId, answers: new List<Answer>
+                    {
+                        Create.Entity.Answer(selectedOptionTitle, selectedOptionValue)
+                    }),
                 }),
                 Create.Entity.Roster(rosterId: rosterBId, rosterSizeQuestionId:numericQuestionId, rosterTitleQuestionId: questionId),
             }));
