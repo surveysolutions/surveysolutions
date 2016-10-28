@@ -18,6 +18,7 @@ using WB.UI.Shared.Web.Membership;
 namespace WB.UI.Designer.Api
 {
     [Authorize]
+    [QuestionnairePermissions]
     public class QuestionnaireController : ApiController
     {
         private readonly IVerificationErrorsMapper verificationErrorsMapper;

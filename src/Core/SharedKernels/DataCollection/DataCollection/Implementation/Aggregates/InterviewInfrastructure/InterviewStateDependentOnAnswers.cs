@@ -36,8 +36,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             public bool WasQuestionAnswered(Identity question) => this.actualState.WasQuestionAnswered(question);
 
-            public object GetAnswerSupportedInExpressions(Identity question) => this.actualState.GetAnswerSupportedInExpressions(question);
-
             public Tuple<decimal, string>[] GetTextListAnswer(Identity question) => this.actualState.GetTextListAnswer(question);
 
             public ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector)
@@ -398,15 +396,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConversionHelper.ConvertIdentityToString(question);
 
             return this.AnsweredQuestions.Contains(questionKey);
-        }
-
-        public object GetAnswerSupportedInExpressions(Identity question)
-        {
-            string questionKey = ConversionHelper.ConvertIdentityToString(question);
-
-            return this.AnswersSupportedInExpressions.ContainsKey(questionKey)
-                ? this.AnswersSupportedInExpressions[questionKey]
-                : null;
         }
 
         public Tuple<decimal, string>[] GetTextListAnswer(Identity question)
