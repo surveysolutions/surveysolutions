@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         }
 
         protected static QuestionDataParser questionDataParser;
-        protected static object result;
+        protected static AbstractAnswer result;
         protected static Guid questionId = Guid.NewGuid();
         protected static string questionVarName = "var_a";
         protected static string answer;

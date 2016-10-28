@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using NHibernate.Util;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_building_answer_from_string_array_for_textlist_question : QuestionDataParserTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionDataParser = CreateQuestionDataParser();
             question = new TextListQuestion()
@@ -19,28 +22,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             };
         };
 
-        private Because of =
-            () =>
-                result =
-                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "__1", "a"), new Tuple<string, string>(questionVarName + "__2", "b"), new Tuple<string, string>(questionVarName + "__3", "c") },
-                        question);
+        Because of = () =>
+            result = questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "__1", "a"), new Tuple<string, string>(questionVarName + "__2", "b"), new Tuple<string, string>(questionVarName + "__3", "c") }, question);
 
-        private It should_result_be_type_of_array_of_Tuple_decimal_string = () =>
-            result.ShouldBeOfExactType<Tuple<decimal, string>[]>();
+        It should_result_be_type_of_array_of_Tuple_decimal_string = () =>
+            result.ShouldBeOfExactType<TextListAnswer>();
 
-        private It should_result_has_3_answers = () =>
-            ((Tuple<decimal, string>[]) result).Length.ShouldEqual(3);
+        It should_result_has_3_answers = () =>
+            ((TextListAnswer) result).Rows.Count.ShouldEqual(3);
 
-        private It should_result_first_item_key_equal_to_1 = () =>
-            ((Tuple<decimal, string>[]) result)[0].Item1.ShouldEqual(1);
+        It should_result_first_item_key_equal_to_1 = () =>
+            ((TextListAnswer) result).Rows.First().Value.ShouldEqual(1);
 
-        private It should_result_second_item_key_equal_to_2 = () =>
-            ((Tuple<decimal, string>[]) result)[1].Item1.ShouldEqual(2);
+        It should_result_second_item_key_equal_to_2 = () =>
+            ((TextListAnswer) result).Rows.Second().Value.ShouldEqual(2);
 
-        private It should_result_first_item_value_equal_to_1 = () =>
-            ((Tuple<decimal, string>[]) result)[0].Item2.ShouldEqual("a");
+        It should_result_first_item_value_equal_to_1 = () =>
+            ((TextListAnswer) result).Rows.First().Text.ShouldEqual("a");
 
-        private It should_result_second_item_value_equal_to_2 = () =>
-            ((Tuple<decimal, string>[]) result)[1].Item2.ShouldEqual("b");
+        It should_result_second_item_value_equal_to_2 = () =>
+            ((TextListAnswer) result).Rows.Second().Text.ShouldEqual("b");
     }
 }
