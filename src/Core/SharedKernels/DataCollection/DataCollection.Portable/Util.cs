@@ -6,25 +6,6 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public static class Util
     {
-        public static IEnumerable<T> GetCommonPart<T>(this IEnumerable<T> vector1, IEnumerable<T> vector2)
-        {
-            var array1 = vector1 as T[] ?? vector1.ToArray();
-            var array2 = vector2 as T[] ?? vector2.ToArray();
-
-            var minLength = Math.Min(array1.Count(), array2.Count());
-            for (int i = 0; i < minLength; i++)
-            {
-                if (array1[i].Equals(array2[i]))
-                {
-                    yield return array1[i];
-                }
-                else
-                {
-                    yield break;
-                }
-            }
-        }
-
         public static T[] Shrink<T>(this IEnumerable<T> vector)
         {
             var enumerable = vector as T[] ?? vector.ToArray();

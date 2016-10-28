@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             internalTreeNode.SetParent(this);
             this.children.Add(child);
 
-            Tree?.AddToCache(child);
+            Tree?.ProcessAddedNode(child);
         }
 
         public void AddChildren(IEnumerable<IInterviewTreeNode> nodes)
@@ -114,7 +114,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var nodesToRemove = this.children.Where(x => x.Identity.Equals(identity)).ToArray();
             nodesToRemove.ForEach(nodeToRemove => this.children.Remove(nodeToRemove));
 
-            Tree?.RemoveFromCache(identity);
+            Tree?.ProcessRemovedNodeByIdentity(identity);
         }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);

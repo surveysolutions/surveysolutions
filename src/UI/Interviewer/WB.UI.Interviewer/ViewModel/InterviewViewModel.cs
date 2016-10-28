@@ -22,7 +22,6 @@ namespace WB.UI.Interviewer.ViewModel
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
             NavigationState navigationState,
@@ -35,7 +34,7 @@ namespace WB.UI.Interviewer.ViewModel
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer)
-            : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
+            : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer)
         {
@@ -45,7 +44,10 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.viewModelNavigationService.NavigateToDashboard);
+        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() => {
+            this.viewModelNavigationService.NavigateToDashboard();
+            this.Dispose();
+        });
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 

@@ -263,6 +263,7 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Designer\FindReplaceController.cs" />
+    <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
     <Compile Include="Controllers\DeskController.cs" />

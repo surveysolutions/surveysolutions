@@ -36,6 +36,15 @@ visibility: visible !important;
     white-space: nowrap;
 }
 
+.question-title-section
+{
+    width: 50%;
+}
+
+.question-title-section .question-title {
+    word-break: break-all; 
+    display: block;
+}
 .filtered-combobox-button {
     margin-top: -5px;
 }

@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
             var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
-            var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.IsOptionsChanged).ToArray();
+            var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.AreLinkedOptionsChanged).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
             var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 

@@ -711,7 +711,6 @@ namespace WB.Tests.Unit.TestFactories
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToList() ?? new List<IComposite>(),
-                UsesCSharp = usesCSharp,
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithAttachments(Guid? chapterId = null, params Attachment[] attachments)

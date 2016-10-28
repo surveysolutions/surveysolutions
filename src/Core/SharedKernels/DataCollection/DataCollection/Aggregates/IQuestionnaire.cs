@@ -234,8 +234,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IReadOnlyCollection<string> GetTranslationLanguages();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
         bool IsSubSection(Guid groupId);
-
-        Guid? GetCommontParentForLinkedQuestionAndItSource(Guid linkedQuestionId);
         bool IsVariable(Guid id);
         IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId);
 
