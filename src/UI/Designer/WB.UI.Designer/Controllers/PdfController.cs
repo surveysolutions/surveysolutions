@@ -35,17 +35,19 @@ namespace WB.UI.Designer.Controllers
 
         public class PdfStatus
         {
-            private PdfStatus(string message, bool readyForDownload = false)
+            private PdfStatus(string message, bool readyForDownload = false, bool canRetry = false)
             {
                 this.Message = message;
                 this.ReadyForDownload = readyForDownload;
+                this.CanRetry = canRetry;
             }
 
             public string Message { get; }
             public bool ReadyForDownload { get; }
+            public bool CanRetry { get; }
 
             public static PdfStatus InProgress(string message) => new PdfStatus(message);
-            public static PdfStatus Failed(string message) => new PdfStatus(message);
+            public static PdfStatus Failed(string message) => new PdfStatus(message, canRetry: true);
             public static PdfStatus Ready(string message) => new PdfStatus(message, readyForDownload: true);
         }
 
@@ -138,6 +140,18 @@ namespace WB.UI.Designer.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        [System.Web.Mvc.HttpPost]
+        public ActionResult Retry(Guid id)
+        {
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(id, StartNewPdfGeneration);
+            if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
+            {
+                GeneratedPdfs.TryRemove(id);
+            }
+            GeneratedPdfs.GetOrAdd(id, this.StartNewPdfGeneration);
+            return this.Json(PdfStatus.InProgress("Retring export as PDF."));
+        }
+
         private PdfGenerationProgress StartNewPdfGeneration(Guid id)
         {
             var newPdfGenerationProgress = new PdfGenerationProgress();
@@ -145,12 +159,12 @@ namespace WB.UI.Designer.Controllers
             return newPdfGenerationProgress;
         }
 
+
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress)
         {
             var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
             var pdfDocument = this.GetSourceUrlsForPdf(id);
-            var pdfOutput = new PdfOutput { OutputFilePath = generationProgress.FilePath };
-
+            var pdfOutput = new PdfOutput {OutputFilePath = generationProgress.FilePath};
             Task.Run(() =>
             {
                 try
