@@ -197,29 +197,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Guid? sourceForLinkedQuestion = null;
             Identity commonParentRosterForLinkedQuestion = null;
 
-            if (questionnaire.IsQuestionLinked(questionIdentity.Id))
+            var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionIdentity.Id);
+            var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
+
+            if (isLinkedToQuestion)
                 sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
 
-            if (questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id))
+            if (isLinkedToRoster)
                 sourceForLinkedQuestion = questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id);
 
             if (sourceForLinkedQuestion.HasValue)
             {
-                var rosterSizeSourcesForSourceOfLinkedQuestion = questionnaire.GetRosterSizeSourcesForEntity(sourceForLinkedQuestion.Value).Shrink();
-                var rosterSizeSourcesForLinkedQuestion = questionnaire.GetRosterSizeSourcesForEntity(questionIdentity.Id);
+                Guid? targetRoster = questionnaire.GetCommonParentRosterForLinkedQuestionAndItSource(questionIdentity.Id);
 
-                var mutualRosterSizeSources = rosterSizeSourcesForLinkedQuestion.Intersect(rosterSizeSourcesForSourceOfLinkedQuestion).ToList();
-
-                if (mutualRosterSizeSources.Any())
+                if (targetRoster.HasValue)
                 {
-                    var parentForLinkedQuestionByRosterSizeSources = questionnaire.GetParentGroup(mutualRosterSizeSources.Last());
-
-                    if (parentForLinkedQuestionByRosterSizeSources.HasValue)
-                    {
-                        var level = questionnaire.GetRosterLevelForEntity(parentForLinkedQuestionByRosterSizeSources.Value);
-                        var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
-                        commonParentRosterForLinkedQuestion = new Identity(parentForLinkedQuestionByRosterSizeSources.Value, commonParentRosterVector);
-                    }
+                    var level = isLinkedToRoster  
+                        ? questionnaire.GetRosterLevelForGroup(sourceForLinkedQuestion.Value) 
+                        : questionnaire.GetRosterLevelForEntity(targetRoster.Value) + 1;
+                    var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
+                    commonParentRosterForLinkedQuestion = new Identity(targetRoster.Value, commonParentRosterVector);
                 }
             }
 
