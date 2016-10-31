@@ -235,9 +235,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var instance in instances)
             {
                 string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
-                var rosterRowInstances = this.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
-                    ? this.RosterGroupInstanceIds[rosterGroupKey]
-                    : new ConcurrentDistinctList<decimal>();
+
+                ConcurrentDistinctList<decimal> rosterGroupInstanceIds;
+                var rosterRowInstances = this.RosterGroupInstanceIds.TryGetValue(rosterGroupKey, out rosterGroupInstanceIds)?
+                     rosterGroupInstanceIds : new ConcurrentDistinctList<decimal>();
 
                 rosterRowInstances.Add(instance.RosterInstanceId);
 
@@ -250,10 +251,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var instance in instances)
             {
                 string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
+                
+                ConcurrentDistinctList<decimal> rosterGroupInstanceIds;
+                var rosterRowInstances = this.RosterGroupInstanceIds.TryGetValue(rosterGroupKey, out rosterGroupInstanceIds) ?
+                     rosterGroupInstanceIds : new ConcurrentDistinctList<decimal>();
 
-                var rosterRowInstances = this.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
-                    ? this.RosterGroupInstanceIds[rosterGroupKey]
-                    : new ConcurrentDistinctList<decimal>();
                 rosterRowInstances.Remove(instance.RosterInstanceId);
                 this.DisabledGroups.Remove(rosterGroupKey);
 
@@ -411,9 +413,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
 
-            return this.RosterGroupInstanceIds.ContainsKey(groupKey)
-                ? this.RosterGroupInstanceIds[groupKey].ToReadOnlyCollection()
-                : Enumerable.Empty<decimal>().ToReadOnlyCollection();
+            ConcurrentDistinctList<decimal> rosterGroupInstanceIds;
+
+            if (this.RosterGroupInstanceIds.TryGetValue(groupKey, out rosterGroupInstanceIds))
+                return rosterGroupInstanceIds.ToReadOnlyCollection();
+
+            return Enumerable.Empty<decimal>().ToReadOnlyCollection();
         }
 
         public string GetRosterTitle(Guid rosterId, RosterVector rosterVector)
