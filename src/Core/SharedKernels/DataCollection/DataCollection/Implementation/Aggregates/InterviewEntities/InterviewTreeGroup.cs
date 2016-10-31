@@ -148,6 +148,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clonedInterviewTreeGroup.AddChildren(clonedChildren);
             return clonedInterviewTreeGroup;
         }
+
+        public bool UsesSubstitutions()
+        {
+            return false;
+        }
     }
 
     public class InterviewTreeSubSection : InterviewTreeGroup

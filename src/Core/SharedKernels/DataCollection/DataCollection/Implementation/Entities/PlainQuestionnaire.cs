@@ -719,7 +719,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid questionId)
+        public Guid[] GetQuestionsUsingForSubstitution(Guid entityId)
+        {
+            return new Guid[0];
+        }
+        
+        public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid linkedQuestionId)
         {
             var isQuestionLinkedToQuestion = this.IsQuestionLinked(questionId);
             var questionSourceId = isQuestionLinkedToQuestion
