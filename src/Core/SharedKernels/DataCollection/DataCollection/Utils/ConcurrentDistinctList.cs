@@ -54,7 +54,10 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)this.list).GetEnumerator();
+            lock (this.lockObject)
+            {
+                return ((IEnumerable) this.list).GetEnumerator();
+            }
         }
     }
 }
