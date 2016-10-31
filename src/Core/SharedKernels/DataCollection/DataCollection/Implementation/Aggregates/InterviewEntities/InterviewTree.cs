@@ -192,7 +192,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
             bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
             bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionIdentity.Id);
-
+            Guid[] questionsUsingForSubstitution = questionnaire.GetQuestionsUsingForSubstitution(questionIdentity.Id);
             Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
             Guid? sourceForLinkedQuestion = null;
             Identity commonParentRosterForLinkedQuestion = null;
@@ -220,11 +220,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 }
             }
 
-            return new InterviewTreeQuestion(questionIdentity, questionType: questionType, isDisabled: false,
+            return new InterviewTreeQuestion(questionIdentity, questionType: questionType,
                 title: title, variableName: variableName, answer: null, linkedOptions: null,
                 cascadingParentQuestionId: cascadingParentQuestionId, isYesNo: isYesNoQuestion,
                 isDecimal: isDecimalQuestion, linkedSourceId: sourceForLinkedQuestion,
-                commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion);
+                commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
+                questionsUsingForSubstitution: questionsUsingForSubstitution);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
@@ -240,20 +241,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static InterviewTreeSubSection CreateSubSection(IQuestionnaire questionnaire, Identity subSectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(subSectionIdentity.Id);
-
+            Guid[] questionsUsingForSubstitution = questionnaire.GetQuestionsUsingForSubstitution(subSectionIdentity.Id);
             return new InterviewTreeSubSection(subSectionIdentity, childrenReferences);
         }
 
         public static InterviewTreeSection CreateSection(IQuestionnaire questionnaire, Identity sectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(sectionIdentity.Id);
+            Guid[] questionsUsingForSubstitution = questionnaire.GetQuestionsUsingForSubstitution(sectionIdentity.Id);
             return new InterviewTreeSection(sectionIdentity, childrenReferences);
         }
 
-        public static InterviewTreeStaticText CreateStaticText(Identity staticTextIdentity)
+
+        public InterviewTreeStaticText CreateStaticText(Identity staticTextIdentity)
         {
+            return CreateStaticText(this.questionnaire, staticTextIdentity);
+        }
+
+        public static InterviewTreeStaticText CreateStaticText(IQuestionnaire questionnaire, Identity staticTextIdentity)
+        {
+            Guid[] questionsUsingForSubstitution = questionnaire.GetQuestionsUsingForSubstitution(staticTextIdentity.Id);
             return new InterviewTreeStaticText(staticTextIdentity);
         }
+
 
         public RosterManager GetRosterManager(Guid rosterId)
         {
@@ -327,6 +337,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void Enable();
 
         IInterviewTreeNode Clone();
+
+        bool UsesSubstitutions();
     }
 
     public interface IInternalInterviewTreeNode
@@ -337,12 +349,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public abstract class InterviewTreeLeafNode : IInterviewTreeNode, IInternalInterviewTreeNode
     {
+        private readonly Guid[] questionsUsingForSubstitution;
         private bool isDisabled;
 
-        protected InterviewTreeLeafNode(Identity identity, bool isDisabled)
+        protected InterviewTreeLeafNode(Identity identity, Guid[] questionsUsingForSubstitution)
         {
+            this.questionsUsingForSubstitution = questionsUsingForSubstitution;
             this.Identity = identity;
-            this.isDisabled = isDisabled;
+            this.isDisabled = false;
         }
 
         public Identity Identity { get; }
@@ -359,6 +373,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Enable() => this.isDisabled = false;
 
         public abstract IInterviewTreeNode Clone();
+        public bool UsesSubstitutions()
+        {
+            return questionsUsingForSubstitution.Any();
+        }
     }
 
     public enum QuestionnaireReferenceType

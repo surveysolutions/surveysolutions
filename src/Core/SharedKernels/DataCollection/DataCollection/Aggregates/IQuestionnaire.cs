@@ -238,6 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId);
         Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid questionId);
         string GetVariableDescription(Guid variableId);
+        Guid[] GetQuestionsUsingForSubstitution(Guid entityId);
         string GetVariableName(Guid variableId);
         bool HasVariable(Guid entityId);
         bool HasStaticText(Guid entityId);
