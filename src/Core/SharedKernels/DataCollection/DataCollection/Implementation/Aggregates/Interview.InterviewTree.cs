@@ -64,10 +64,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return variable;
         }
 
-        private static InterviewTreeStaticText BuildInterviewTreeStaticText(InterviewStateDependentOnAnswers state,
-            Identity staticTextIdentity)
+        private static InterviewTreeStaticText BuildInterviewTreeStaticText(InterviewStateDependentOnAnswers state, Identity staticTextIdentity, IQuestionnaire questionnaire)
         {
-            var staticText = InterviewTree.CreateStaticText(staticTextIdentity);
+            var staticText = InterviewTree.CreateStaticText(questionnaire, staticTextIdentity);
 
             if (state?.IsStaticTextDisabled(staticTextIdentity) ?? false)
                 staticText.Disable();
@@ -192,7 +191,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var staticTextIdentity = new Identity(childId, groupIdentity.RosterVector);
 
-                    yield return BuildInterviewTreeStaticText(state, staticTextIdentity);
+                    yield return BuildInterviewTreeStaticText(state, staticTextIdentity, questionnaire);
                 }
                 else if (questionnaire.IsVariable(childId))
                 {

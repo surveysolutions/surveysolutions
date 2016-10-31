@@ -8,10 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeStaticText : InterviewTreeLeafNode
     {
         public InterviewTreeStaticText(Identity identity)
-            : this(identity, false) { }
-
-        public InterviewTreeStaticText(Identity identity, bool disabled)
-            : base(identity, disabled) { }
+            : base(identity, null) { }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }

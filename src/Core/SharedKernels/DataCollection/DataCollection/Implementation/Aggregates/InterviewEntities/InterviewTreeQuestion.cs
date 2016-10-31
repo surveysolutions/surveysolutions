@@ -12,7 +12,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
         public InterviewTreeQuestion(Identity identity, 
-            bool isDisabled, 
             string title, 
             string variableName,
             QuestionType questionType, 
@@ -20,10 +19,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             IEnumerable<RosterVector> linkedOptions, 
             Guid? cascadingParentQuestionId, 
             bool isYesNo, 
-            bool isDecimal, 
+            bool isDecimal,
+            Guid[] questionsUsingForSubstitution,
             Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null)
-            : base(identity, isDisabled)
+            : base(identity, questionsUsingForSubstitution)
         {
             this.Title = title;
             this.VariableName = variableName;
@@ -78,11 +78,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (cascadingParentQuestionId.HasValue)
                 this.AsCascading = new InterviewTreeCascadingQuestion(this, cascadingParentQuestionId.Value);
-        }
-
-        public InterviewTreeQuestion(Identity questionIdentity) : base(questionIdentity, false)
-        {
-            
         }
 
         public InterviewTreeDoubleQuestion AsDouble { get; private set; }

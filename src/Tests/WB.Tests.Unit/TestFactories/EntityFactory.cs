@@ -1174,21 +1174,39 @@ namespace WB.Tests.Unit.TestFactories
             return section;
         }
 
-        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
-            string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
-            Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null)
-            => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, questionType, answer,
-                linkedOptions, cascadingParentQuestionId, isYesNo, isDecimal, linkedSourceId);
 
         public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
-            => new InterviewTreeStaticText(staticTextIdentity, isDisabled);
+        {
+            var staticText = new InterviewTreeStaticText(staticTextIdentity);
+            if (isDisabled) staticText.Disable();
+            return staticText;
+        }
 
         public InterviewTreeVariable InterviewTreeVariable(Identity variableIdentity, bool isDisabled = false, object value = null)
-            => new InterviewTreeVariable(variableIdentity, isDisabled, value);
+        {
+            var variable = new InterviewTreeVariable(variableIdentity);
+            if (isDisabled) variable.Disable();
+            variable.SetValue(value);
+            return variable;
+        }
 
         public InterviewTreeQuestion InterviewTreeQuestion_SingleOption(Identity questionIdentity,
             bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
-            => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null, false, false);
+        {
+            var question = InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null, false, false);
+            if (isDisabled) question.Disable();
+            return question;
+        }
+
+        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
+            string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
+            Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
+        {
+            var question = new InterviewTreeQuestion(questionIdentity, title, variableName, questionType, answer, linkedOptions, cascadingParentQuestionId, isYesNo,  isDecimal, questionsUsingForSubstitution, linkedSourceId);
+
+            if (isDisabled) question.Disable();
+            return question;
+        }
 
         public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections) 
             => new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), sections);

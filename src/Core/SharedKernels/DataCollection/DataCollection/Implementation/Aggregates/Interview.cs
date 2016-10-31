@@ -163,22 +163,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 synchronizationIdentities.Select(
                     question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemRosterVector)));
         }
-        
-        private static Identity GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
-            RosterVector rosterVector, IQuestionnaire questionnare)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-            int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
-
-            if (questionRosterLevel > vectorRosterLevel)
-                throw new InterviewException(string.Format(
-                    "Question {0} expected to have roster level not deeper than {1} but it is {2}.",
-                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
-
-            decimal[] questionRosterVector = rosterVector.Shrink(questionRosterLevel);
-
-            return new Identity(questionId, questionRosterVector);
-        }
 
         protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
             IReadOnlyInterviewStateDependentOnAnswers state,
