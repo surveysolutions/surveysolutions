@@ -43,6 +43,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         RestCredentials GetDesignerUserCredentials();
         bool IsUserValidWithPassword(string userName, string password);
         bool IsUserValidWithPasswordHash(string userName, string passwordHash);
-        void ArchiveUser(Guid userId, bool archive);
+        Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds, bool archive);
     }
 }
