@@ -143,12 +143,19 @@ namespace WB.UI.Headquarters.Identity
         public bool IsUserValidWithPasswordHash(string userName, string passwordHash) =>
             this.userManager.Find(userName, passwordHash) != null;
 
-        public void ArchiveUser(Guid userId, bool archive)
+        public async Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds, bool archive)
         {
-            var currentUser = this.CurrentUser;
-            currentUser.IsArchived = archive;
+            var archiveUserResults = new List<IdentityResult>();
 
-            this.UpdateUser(currentUser, null);
+            var usersToArhive = this.userManager.Users.Where(user => userIds.Contains(user.Id)).ToList();
+            foreach (var userToArchive in usersToArhive)
+            {
+                userToArchive.IsArchived = archive;
+                var archiveResult = await this.UpdateUserAsync(userToArchive, null);
+                archiveUserResults.Add(archiveResult);
+            }
+
+            return archiveUserResults.ToArray();
         }
 
         public Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false)
