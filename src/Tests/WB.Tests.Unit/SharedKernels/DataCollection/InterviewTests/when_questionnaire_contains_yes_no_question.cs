@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         Because of = () => 
             coughtException = 
-             Catch.Only<InterviewException>(() => interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, new[] { 11m}));
+             Catch.Only<InterviewException>(() => interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, new[] { 11}));
 
         It should_not_allow_to_answer_on_yes_no_question_using_multiopions_question_method = () => 
             coughtException.Message.ShouldContain(" has Yes/No type, but command is sent to Multiopions type");
