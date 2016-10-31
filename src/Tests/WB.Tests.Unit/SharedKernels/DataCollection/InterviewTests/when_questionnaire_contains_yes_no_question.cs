@@ -15,9 +15,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             {
                 Create.Entity.YesNoQuestion(questionId: questionId, answers: new[]
                 {
-                    11m,
-                    222m,
-                    3333m,
+                    11,
+                    222,
+                    3333,
                 }),
             });
 
