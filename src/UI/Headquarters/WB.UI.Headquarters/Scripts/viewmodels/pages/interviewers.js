@@ -1,8 +1,6 @@
-﻿Supervisor.VM.Interviewers = function (listViewUrl, commandExecutionUrl, interviewersPageUrl, supervisorsUrl) {
+﻿Supervisor.VM.Interviewers = function (listViewUrl, archiveUsersApiUrl, interviewersPageUrl, supervisorsUrl) {
     Supervisor.VM.Interviewers.superclass.constructor.apply(this, arguments);
 
-    var archiveUserCommad = "ArchiveUserCommad";
-    var unArchiveUserCommad = "UnarchiveUserCommand";
     var self = this;
 
     self.Url = new Url(interviewersPageUrl);
@@ -24,33 +22,31 @@
     self.SearchBy = ko.observable('');
 
     self.archiveUser = function (userViewItem) {
-        self.sendUserCommands("#confirm-archive-template", "#confirm-archive-continue-message-template", [userViewItem], archiveUserCommad);
+        self.sendRequestIfConfirmed("#confirm-archive-template", "#confirm-archive-continue-message-template", [userViewItem], true);
     };
 
     self.unarchiveUser = function (userViewItem) {
-        self.sendUserCommands("#confirm-unarchive-template", "#confirm-unarchive-continue-message-template", [userViewItem], unArchiveUserCommad);
+        self.sendRequestIfConfirmed("#confirm-unarchive-template", "#confirm-unarchive-continue-message-template", [userViewItem], false);
     };
 
     self.unarchiveInterviewers = function () {
-        self.sendUserCommands("#confirm-unarchive-template", "#confirm-unarchive-continue-message-template", self.GetSelectedItemsAfterFilter(function (item) { return true; }), unArchiveUserCommad);
+        self.sendRequestIfConfirmed("#confirm-unarchive-template", "#confirm-unarchive-continue-message-template", self.GetSelectedItemsAfterFilter(function (item) { return true; }), false);
     };
 
     self.archiveInterviewers = function () {
-        self.sendUserCommands("#confirm-archive-template", "#confirm-archive-continue-message-template", self.GetSelectedItemsAfterFilter(function (item) { return true; }), archiveUserCommad);
+        self.sendRequestIfConfirmed("#confirm-archive-template", "#confirm-archive-continue-message-template", self.GetSelectedItemsAfterFilter(function (item) { return true; }), true);
     };
 
-    self.sendUserCommands = function (confirm_template, confirm_continue_template, filteredItems, commandName) {
+    self.sendRequestIfConfirmed = function (confirm_template, confirm_continue_template, filteredItems, archive) {
         self.AskConfirmationAndRunActionIfTrue(confirm_template, confirm_continue_template,
             function (filteredItems) {
-                var commands = ko.utils.arrayMap(filteredItems, function (rawItem) {
-                    return ko.toJSON({ userId: rawItem.UserId() });
-                });
 
-                var command = {
-                    type: commandName,
-                    commands: commands
+                var request = {
+                    userIds: filteredItems.map(user=>user.UserId()),
+                    archive: archive
                 };
-                self.SendCommands(command, function () {
+
+                self.SendRequest(archiveUsersApiUrl, request, function () {
                     setTimeout(function () { self.search(); }, 100);
                 });
             },

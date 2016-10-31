@@ -181,7 +181,27 @@ namespace WB.UI.Headquarters.Controllers
                 DomainException = string.Join(@"; ", identityResults.Select(result=>result.Errors))
             };
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public async Task<JsonCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
+        {
+            var archiveResults = await this.identityManager.ArchiveUsersAsync(request.UserIds, request.Archive);
+
+            return new JsonCommandResponse
+            {
+                IsSuccess = archiveResults.All(result=>result.Succeeded),
+                DomainException = string.Join(@"; ", archiveResults.Select(result => result.Errors))
+            };
+        }
     }
+
+    public class ArchiveUsersRequest
+    {
+        public Guid[] UserIds { get; set; }
+        public bool Archive { get; set; }
+    }
+
     public class DeleteSupervisorCommandRequest 
     {
         public Guid SupervisorId { get; set; }
