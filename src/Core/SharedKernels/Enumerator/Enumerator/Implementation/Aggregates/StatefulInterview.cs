@@ -1109,7 +1109,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public int CountActiveInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id);
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingInterviewerQuestions(groupIdentity.Id).ToList();
 
             var questionInstances = this
                 .GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
@@ -1136,7 +1136,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public int CountAnsweredQuestionsInInterview()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0])).ToList();
 
             return sectionInstances.Sum(section => this.CountAnsweredInterviewerQuestionsInGroupRecursively(section));
         }
@@ -1144,7 +1144,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public int CountActiveQuestionsInInterview()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0])).ToList();
 
             return sectionInstances.Sum(section => this.CountActiveInterviewerQuestionsInGroupRecursively(section));
         }
@@ -1152,7 +1152,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public int CountInvalidEntitiesInInterview()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
+            var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0])).ToList();
 
             return sectionInstances.Sum(section => this.CountInvalidInterviewerAnswersInGroupRecursively(section) + this.CountInvalidStaticTextsInGroupRecursively(section));
         }
