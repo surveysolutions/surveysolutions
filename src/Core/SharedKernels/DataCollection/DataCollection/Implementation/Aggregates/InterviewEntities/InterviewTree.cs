@@ -255,11 +255,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return new InterviewTreeStaticText(staticTextIdentity);
         }
 
-        public InterviewTreeRoster CreateRoster(Identity parentIdentity, Identity rosterIdentity, int index)
-        {
-            return GetRosterManager(rosterIdentity.Id).CreateRoster(parentIdentity, rosterIdentity, index);
-        }
-
         public RosterManager GetRosterManager(Guid rosterId)
         {
             if (questionnaire.IsFixedRoster(rosterId))

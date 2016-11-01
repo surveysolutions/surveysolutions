@@ -143,6 +143,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
             var newMultiAnswer = rosterSizeQuestion.AsMultiOption.IsAnswered ? rosterSizeQuestion.AsMultiOption.GetAnswer() : new decimal[0];
+
             return newMultiAnswer
                 .Select((optionValue, index) => new RosterIdentity(rosterId, parentIdentity.RosterVector, optionValue, index).ToIdentity())
                 .ToList();
