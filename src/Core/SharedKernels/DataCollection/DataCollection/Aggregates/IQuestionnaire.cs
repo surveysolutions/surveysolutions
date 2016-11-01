@@ -236,5 +236,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId);
 
         IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId);
+        Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid linkedQuestionId);
     }
 }

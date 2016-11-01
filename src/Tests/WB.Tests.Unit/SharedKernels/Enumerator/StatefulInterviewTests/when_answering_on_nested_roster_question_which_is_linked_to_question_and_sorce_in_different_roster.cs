@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
-using TextAnswer = WB.Core.SharedKernels.Enumerator.Entities.Interview.TextAnswer;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal class when_answering_on_nested_roster_question_which_is_linked_to_question_from_roster : StatefulInterviewTestsContext
+    internal class when_answering_on_nested_roster_question_which_is_linked_to_question_and_sorce_in_different_roster : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             sourceOfLinkedQuestionIdentity = Create.Entity.Identity(sourceOfLinkedQuestionId, new RosterVector(new[] { 0m, 1m }));
 
             var rosterId = Guid.Parse("22222222222222222222222222222222");
+            var roster2Id = Guid.Parse("22222222222222222222222222222221");
             var nestedRosterId = Guid.Parse("33333333333333333333333333333333");
 
             Guid rosterSizeQuestionId = Guid.Parse("44444444444444444444444444444444");
@@ -31,26 +32,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.Group(children: new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId),
-                    Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: rosterSizeQuestionId,
-                        children: new IComposite[]
+                    Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
+                    {
+                        Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1m, 2m}),
+                        Create.Entity.SingleQuestion(id: linkedSingleQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId),
+                        Create.Entity.MultyOptionsQuestion(id: linkedMultiQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId)
+                    }),
+                    Create.Entity.Roster(rosterId: roster2Id, rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
+                    {
+                        Create.Entity.Roster(rosterId: nestedRosterId, rosterSizeQuestionId: nestedRosterSizeQuestionId, children: new IComposite[]
                         {
-                            Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1, 2}),
-                            Create.Entity.Roster(rosterId: nestedRosterId,
-                                rosterSizeQuestionId: nestedRosterSizeQuestionId,
-                                children: new IComposite[]
-                                {
-                                    Create.Entity.TextQuestion(questionId: sourceOfLinkedQuestionId)
-                                }),
-                            Create.Entity.SingleQuestion(id: linkedSingleQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId),
-                            Create.Entity.MultyOptionsQuestion(id: linkedMultiQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId)
+                            Create.Entity.TextQuestion(questionId: sourceOfLinkedQuestionId)
                         })
+                    })
                 })
             });
             var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, 0);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
             interview.AnswerNumericIntegerQuestion(interviewerId, rosterSizeQuestionId, RosterVector.Empty, DateTime.UtcNow, 2);
-            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, new RosterVector(new[] {0m}), DateTime.UtcNow, new[] {1});
+            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, new[] { 1m });
         };
 
         Because of = () => interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionIdentity.Id,
@@ -62,11 +63,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_linked_multi_question_has_1_option = () => ((TextAnswer)interview.FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId,
             linkedMultiQuestionIdentity).First()).Answer.ShouldEqual(expectedLinkedOptionText);
 
-        It should_set_empty_options_set_for_linked_question_from_unanswered_branch = () => 
+        It should_set_empty_options_set_for_linked_question_from_unanswered_branch = () =>
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(
-                sourceOfLinkedQuestionId, 
+                sourceOfLinkedQuestionId,
                 Create.Entity.Identity(linkedSingleQuestionIdentity.Id, Create.Entity.RosterVector(1)))
-            .ShouldBeEmpty();
+                .ShouldBeEmpty();
 
         static StatefulInterview interview;
         static Identity linkedSingleQuestionIdentity;
