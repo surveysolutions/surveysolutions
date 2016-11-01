@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (targetRoster.HasValue)
                 {
                     var level = isLinkedToRoster  
-                        ? questionnaire.GetRosterLevelForGroup(sourceForLinkedQuestion.Value) 
+                        ? questionnaire.GetRosterLevelForGroup(sourceForLinkedQuestion.Value) - 1
                         : questionnaire.GetRosterLevelForEntity(targetRoster.Value) + 1;
                     var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
                     commonParentRosterForLinkedQuestion = new Identity(targetRoster.Value, commonParentRosterVector);
