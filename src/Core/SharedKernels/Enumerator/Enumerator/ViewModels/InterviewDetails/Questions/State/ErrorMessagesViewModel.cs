@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -36,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void ChangeValidationErrors(IEnumerable<string> errors)
         {
+            this.ValidationErrors.ForEach(x => x.Dispose());
             this.ValidationErrors.Clear();
 
             foreach (string error in errors)

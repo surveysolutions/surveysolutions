@@ -326,7 +326,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void RemoveMe()
         {
-            this.eventRegistry.Unsubscribe(this);
             this.RefreshHasChildrenFlag();
             this.Dispose();
         }
@@ -335,6 +334,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;
             this.NavigationState.BeforeScreenChanged -= this.OnBeforeScreenChanged;
+            this.Title.Dispose();
+            this.eventRegistry.Unsubscribe(this);
         }
 
         public void RefreshHasChildrenFlag()
