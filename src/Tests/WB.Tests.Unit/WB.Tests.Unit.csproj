@@ -493,6 +493,7 @@
     <Compile Include="SharedKernels\Enumerator\SqliteStorageTests.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\CompositeCollectionInflationServiceTests\CompositeCollectionInflationServiceTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_option_by_value.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level__2__and_linked_question_is_on_level__3.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level1_and_linked_question_is_on_level0.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level1_and_linked_question_is_on_level1.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level2_and_linked_question_is_on_level0.cs" />
