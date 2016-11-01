@@ -157,7 +157,7 @@ namespace WB.UI.Designer.Api.Headquarters
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
-                    ReasonPhrase = ErrorMessages.User_has_not_permissions_to_access_to_questionnaire
+                    ReasonPhrase = ErrorMessages.NoAccessToQuestionnaire
                 });
             }
             return questionnaireView;
