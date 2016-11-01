@@ -719,15 +719,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid linkedQuestionId)
+        public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid questionId)
         {
-            var isQuestionLinkedToQuestion = this.IsQuestionLinked(linkedQuestionId);
-            var linkedSourceId = isQuestionLinkedToQuestion
-                  ? this.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
-                  : this.GetRosterReferencedByLinkedQuestion(linkedQuestionId);
+            var isQuestionLinkedToQuestion = this.IsQuestionLinked(questionId);
+            var questionSourceId = isQuestionLinkedToQuestion
+                  ? this.GetQuestionReferencedByLinkedQuestion(questionId)
+                  : this.GetRosterReferencedByLinkedQuestion(questionId);
 
-            var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(linkedSourceId).Shrink();
-            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(linkedQuestionId);
+            var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(questionSourceId).Shrink();
+            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(questionId);
 
             var mutualRosterSizeSources = linkedSourceRosterScopes.Intersect(linkedRosterScopes).ToList();
 
@@ -747,8 +747,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             targetRoster = targetRostersWithSameScope.Count == 1
                 ? targetRostersWithSameScope.First()
                 : targetRostersWithSameScope.FirstOrDefault(rosterId => isQuestionLinkedToQuestion 
-                    ? IsQuestionChildOfGroup(linkedSourceId, rosterId)
-                    : IsRosterChildOfGroup(linkedSourceId, rosterId));
+                    ? IsQuestionChildOfGroup(questionSourceId, rosterId)
+                    : IsRosterChildOfGroup(questionSourceId, rosterId));
 
             return targetRoster;
         }
