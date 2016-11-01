@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             List<MultiOptionQuestionOptionViewModel> allSelectedOptions = 
                 this.areAnswersOrdered ?
-                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder).ToList() :
+                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedTimeStamp).ThenBy(x => x.CheckedOrder).ToList() :
                 this.Options.Where(x => x.Checked).ToList();
 
             if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
@@ -175,10 +175,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             }
 
-            var selectedValues = allSelectedOptions.OrderBy(x => x.CheckedTimeStamp)
-                .ThenBy(x => x.CheckedOrder)
-                .Select(x => x.Value)
-                .ToArray();
+            var selectedValues = allSelectedOptions.Select(x => x.Value).ToArray();
 
             var command = new AnswerMultipleOptionsQuestionCommand(
                 this.interviewId,
