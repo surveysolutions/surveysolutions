@@ -70,7 +70,7 @@ namespace WB.UI.Shared.Enumerator
             };
         }
 
-        private void ProcessException(Exception exception)
+        protected virtual void ProcessException(Exception exception)
         {
             Mvx.Error("UncaughtExceptionHandler with exception {0}", exception.ToLongString());
             Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);

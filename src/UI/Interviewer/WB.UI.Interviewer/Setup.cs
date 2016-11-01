@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Events;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Shared.Enumerator;
@@ -40,6 +41,7 @@ using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Ninject;
 using Xamarin;
+using Xamarin.InsightsCore;
 
 namespace WB.UI.Interviewer
 {
@@ -65,6 +67,17 @@ namespace WB.UI.Interviewer
 #else
             Insights.Initialize("20fe6ac44d54f5fed5370bc877d7ba7524f15363", applicationContext);
 #endif
+        }
+
+        protected override void ProcessException(Exception exception)
+        {
+            base.ProcessException(exception);
+
+            var serviceSettings = Mvx.Resolve<IRestServiceSettings>();
+            exception.Data["Endpoint"] = serviceSettings.Endpoint;
+
+            var principal = Mvx.Resolve<IPrincipal>();
+            exception.Data["User"] = principal.CurrentUserIdentity?.Name;
         }
 
         protected override void InitializeViewLookup()
