@@ -206,7 +206,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             var options = sourceNodes
                 .Where(x => !x.IsDisabled())
-                .Where(x => ((x as InterviewTreeQuestion)?.IsAnswered() ?? true))
+                .Where(x => (x as InterviewTreeQuestion)?.IsAnswered() ?? true)
                 .Select(x => x.Identity.RosterVector).ToArray();
             this.UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
