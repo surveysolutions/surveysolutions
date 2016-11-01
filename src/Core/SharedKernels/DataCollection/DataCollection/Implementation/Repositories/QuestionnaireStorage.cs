@@ -74,7 +74,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
             if (!this.questionnaireDocumentsCache.ContainsKey(repositoryId))
             {
-                this.questionnaireDocumentsCache[repositoryId] = this.repository.GetById(repositoryId);
+                var questionnaire = this.repository.GetById(repositoryId);
+                questionnaire?.ConnectChildrenWithParent();
+                this.questionnaireDocumentsCache[repositoryId] = questionnaire;
             }
 
             return this.questionnaireDocumentsCache[repositoryId];
