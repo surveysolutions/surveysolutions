@@ -97,6 +97,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User has not permissions to access to questionnaire.
+        /// </summary>
+        internal static string NoAccessToQuestionnaire {
+            get {
+                return ResourceManager.GetString("NoAccessToQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to import questionnaire. Your questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports only up to version {2}..
         /// </summary>
         internal static string NotSupportedQuestionnaireVersion {
@@ -229,15 +238,6 @@ namespace WB.UI.Designer.Resources {
         internal static string User_does_not_exist_Please_enter_a_valid_user_name {
             get {
                 return ResourceManager.GetString("User_does_not_exist_Please_enter_a_valid_user_name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User has not permissions to access to questionnaire.
-        /// </summary>
-        internal static string User_has_not_permissions_to_access_to_questionnaire {
-            get {
-                return ResourceManager.GetString("User_has_not_permissions_to_access_to_questionnaire", resourceCulture);
             }
         }
         
