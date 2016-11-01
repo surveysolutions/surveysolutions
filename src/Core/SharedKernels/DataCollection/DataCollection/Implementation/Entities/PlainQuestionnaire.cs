@@ -719,6 +719,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
+        public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid linkedQuestionId)
+        {
+            var isQuestionLinkedToQuestion = this.IsQuestionLinked(linkedQuestionId);
+            var linkedSourceId = isQuestionLinkedToQuestion
+                  ? this.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
+                  : this.GetRosterReferencedByLinkedQuestion(linkedQuestionId);
+
+            var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(linkedSourceId).Shrink();
+            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(linkedQuestionId);
+
+            var mutualRosterSizeSources = linkedSourceRosterScopes.Intersect(linkedRosterScopes).ToList();
+
+            if (!mutualRosterSizeSources.Any())
+                return null;
+
+            var closestRosterSizeSource = mutualRosterSizeSources.Last();
+
+            var targetRostersWithSameScope = new List<Guid>(IsFixedRoster(closestRosterSizeSource)
+                ? closestRosterSizeSource.ToEnumerable()
+                : GetRosterGroupsByRosterSizeQuestion(closestRosterSizeSource));
+
+            if (!targetRostersWithSameScope.Any())
+                return null;
+
+            Guid targetRoster;
+            targetRoster = targetRostersWithSameScope.Count == 1
+                ? targetRostersWithSameScope.First()
+                : targetRostersWithSameScope.FirstOrDefault(rosterId => isQuestionLinkedToQuestion 
+                    ? IsQuestionChildOfGroup(linkedSourceId, rosterId)
+                    : IsRosterChildOfGroup(linkedSourceId, rosterId));
+
+            return targetRoster;
+        }
+
+        private bool IsQuestionChildOfGroup(Guid questionId, Guid groupId)
+        {
+            return GetAllUnderlyingQuestions(groupId).Contains(questionId);
+        }
+
+        private bool IsRosterChildOfGroup(Guid rosterId, Guid groupId)
+        {
+            return rosterId == groupId || this.GetAllUnderlyingChildRosters(groupId).Contains(rosterId);
+        }
+
+
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
             var result = GetChildEntityIds(groupId)
