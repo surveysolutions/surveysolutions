@@ -769,7 +769,7 @@ namespace WB.Tests.Unit.TestFactories
         public ReadSideSettings ReadSideSettings()
             => new ReadSideSettings(readSideVersion: 0);
 
-        public RealNumericAnswer RealNumericAnswer(Identity answerIdentity = null, decimal answer = 42.42m)
+        public RealNumericAnswer RealNumericAnswer(Identity answerIdentity = null, double answer = 42.42)
         {
             answerIdentity = answerIdentity ?? Create.Entity.Identity(Guid.NewGuid(), Core.SharedKernels.DataCollection.RosterVector.Empty);
             var model = new RealNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);

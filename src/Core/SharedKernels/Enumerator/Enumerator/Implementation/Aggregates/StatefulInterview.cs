@@ -199,7 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             var answer = this.GetOrCreateAnswer<RealNumericAnswer>(@event);
-            answer.SetAnswer(@event.Answer);
+            answer.SetAnswer((double) @event.Answer);
         }
 
         internal new void Apply(NumericIntegerQuestionAnswered @event)
@@ -881,7 +881,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     break;
                 case AnswerType.Decimal:
                     this.GetOrCreateAnswer<RealNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer((decimal?)answerDto.Answer);
+                        .SetAnswer((double?)(decimal?)answerDto.Answer);
                     break;
                 case AnswerType.DateTime:
                     this.GetOrCreateAnswer<DateTimeAnswer>(answerDto.Id, answerDto.RosterVector)
