@@ -753,6 +753,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return targetRoster;
         }
 
+        public string GetVariableDescription(Guid variableId) => this.GetVariable(variableId).Description;
+
+        public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
+
+        public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
+        public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
+
         private bool IsQuestionChildOfGroup(Guid questionId, Guid groupId)
         {
             return GetAllUnderlyingQuestions(groupId).Contains(questionId);
@@ -767,8 +774,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
             var result = GetChildEntityIds(groupId)
-                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewierQuestion(x)) ||
-                                      this.IsVariable(x));
+                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewierQuestion(x)));
 
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
@@ -1450,6 +1456,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
 
+        private IVariable GetVariable(Guid questionId) => GetVariable(this.VariablesCache, questionId);
+
         private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 
         private static string FormatQuestionForException(IQuestion question)
@@ -1486,6 +1494,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         private static IQuestion GetQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId) => questions.GetOrNull(questionId);
+
+        private static IVariable GetVariable(Dictionary<Guid, IVariable> variables, Guid variableId) => variables.GetOrNull(variableId);
 
         private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId) => entities.GetOrNull(entityId);
 
