@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     children: new IComposite[]
                     {
                         new StaticText(staticTextWithSubstitutionId, "test %v1%", null, false, null),
-                        new Variable(variableId, new VariableData(VariableType.LongInteger, "v1", "5"))
+                        new Variable(variableId, new VariableData(VariableType.LongInteger, "v1", "5", null))
                     }));
 
             interview = CreateInterviewData(interviewId);

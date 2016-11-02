@@ -644,7 +644,7 @@ namespace WB.Tests.Unit.Designer
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
         {
             return new Variable(publicKey: id ?? Guid.NewGuid(),
-                variableData: new VariableData(type: type, name: variableName, expression: expression));
+                variableData: new VariableData(type: type, name: variableName, expression: expression, description: null));
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
@@ -1003,7 +1003,7 @@ namespace WB.Tests.Unit.Designer
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, Guid? userId = null)
             {
-                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression));
+                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, null));
             }
 
             public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, Guid responsibleId)
@@ -1074,7 +1074,7 @@ namespace WB.Tests.Unit.Designer
 
             public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, int? index =null)
             {
-                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression), responsibleId, parentId, index);
+                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, null), responsibleId, parentId, index);
             }
 
             public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", bool isPublic = false, bool isResponsibleAdmin = false)

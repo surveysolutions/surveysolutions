@@ -318,7 +318,8 @@
                         variableData: {
                             expression: variable.expression,
                             name: variable.variable,
-                            type: variable.type
+                            type: variable.type,
+                            description: variable.description
                         }
                     }
 

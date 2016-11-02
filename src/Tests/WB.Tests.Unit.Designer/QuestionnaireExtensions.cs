@@ -237,7 +237,7 @@ namespace WB.Tests.Unit.Designer
             questionnaire.AddVariableAndMoveIfNeeded(
                 new AddVariable(questionnaire.Id, 
                     entityId,
-                    new VariableData(variableType, variableName, variableExpression), 
+                    new VariableData(variableType, variableName, variableExpression, null), 
                     responsibleId, parentId));
             
         }

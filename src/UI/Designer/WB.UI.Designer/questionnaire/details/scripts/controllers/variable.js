@@ -20,6 +20,7 @@
 
                 $scope.activeVariable.typeOptions = variable.typeOptions;
                 $scope.activeVariable.typeName = _.find($scope.activeVariable.typeOptions, { value: variable.type }).text;
+                $scope.activeVariable.description = variable.description;
             };
 
             $scope.setType = function (type) {
