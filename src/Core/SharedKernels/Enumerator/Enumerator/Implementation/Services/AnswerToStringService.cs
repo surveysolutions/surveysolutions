@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 var realNumericAnswer = (RealNumericAnswer)answer;
                 if (questionnaire.ShouldUseFormatting(questionId))
                 {
-                    return realNumericAnswer.Answer.FormatDecimal();
+                    return realNumericAnswer.Answer.FormatDouble();
                 }
 
                 return Monads.Maybe(() => realNumericAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture)) ??
