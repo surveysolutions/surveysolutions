@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using EventStore.Common.Utils;
 using MvvmCross.Core.ViewModels;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
