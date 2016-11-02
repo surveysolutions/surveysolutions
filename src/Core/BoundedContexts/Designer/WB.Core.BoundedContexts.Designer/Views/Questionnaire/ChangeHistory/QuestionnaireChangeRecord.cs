@@ -16,6 +16,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public virtual QuestionnaireItemType TargetItemType { get; set; }
         public virtual Guid TargetItemId { get; set; }
         public virtual string TargetItemTitle { get; set; }
+        public virtual string TargetItemNewTitle { get; set; }
+        public virtual int? AffectedEntriesCount { get; set; }
         public virtual ISet<QuestionnaireChangeReference> References { get; set; } = new HashSet<QuestionnaireChangeReference>();
     }
 }

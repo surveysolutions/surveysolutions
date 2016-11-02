@@ -2,8 +2,10 @@ using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -14,34 +16,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-publicKey: questionId,
-groupPublicKey: chapterId,
-questionText: "old title",
-stataExportCaption: "old_variable_name",
-instructions: "old instructions",
-conditionExpression: "old condition",
-responsibleId: responsibleId,
-questionType: QuestionType.QRBarcode
-));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddQRBarcodeQuestion(questionId,
+                    chapterId,
+                        responsibleId,
+                        title: "old title",
+                        variableName: "old_variable_name",
+                        instructions: "old instructions",
+                        enablementCondition: "old condition");
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                questionnaire.UpdateTextQuestion(
-                    questionId: notExistingQuestionId,
-                    title: title,
-                    variableName: variableName,
-                    variableLabel: null,
-                    isPreFilled: isPreFilled,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                     mask: null,
-                    responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
-
+             exception = Catch.Exception(() =>
+                 questionnaire.UpdateTextQuestion(
+                     new UpdateTextQuestion(
+                         questionnaire.Id,
+                         notExistingQuestionId,
+                         responsibleId,
+                         new CommonQuestionParameters() { Title = title, VariableName = variableName },
+                         null, scope, false,
+                         new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
@@ -58,9 +52,7 @@ questionType: QuestionType.QRBarcode
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "qr_barcode_question";
         private static string title = "title";
-        private static string instructions = "intructions";
-        private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
-        private static string enablementCondition = null;
+        
     }
 }

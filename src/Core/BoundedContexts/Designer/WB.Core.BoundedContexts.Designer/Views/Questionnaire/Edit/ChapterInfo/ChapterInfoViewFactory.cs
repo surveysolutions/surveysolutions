@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
@@ -136,14 +137,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             List<VariableName> variables = predefinedVariables.Select(x => new VariableName(null, x)).ToList();
 
             var questionnaireItems = document.TreeToEnumerable<IComposite>(x => x.Children);
+
             var variableNames = questionnaireItems
-                .Select(z => new VariableName(z.PublicKey.FormatGuid(), 
-                    string.Empty +
-                    (z as IQuestion)?.StataExportCaption + 
-                    (z as IGroup)?.VariableName + 
-                    (z as IVariable)?.Name) 
-                )
-                .Where(kv => !string.IsNullOrWhiteSpace(kv.Name))
+                .Select(x => new VariableName(x.PublicKey.FormatGuid(), x.GetVariable()))
+                .Where(variableName => !string.IsNullOrWhiteSpace(variableName.Name))
                 .ToList();
 
             variables.AddRange(variableNames);

@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
          IInterviewEntityViewModel,
          ILiteEventHandler<SingleOptionQuestionAnswered>,
          ILiteEventHandler<AnswersRemoved>,
-         ILiteEventHandler<AnswerRemoved>,
          ICompositeQuestion,
          IDisposable
     {
@@ -274,7 +273,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private CascadingComboboxItemViewModel CreateFormattedOptionModel(CategoricalOption model, string hint = null)
         {
-            var text = !string.IsNullOrEmpty(hint) ? 
+            if (model == null) throw new ArgumentNullException(nameof(model));
+
+            var text = (!string.IsNullOrEmpty(hint) && !string.IsNullOrEmpty(model.Title)) ? 
                 Regex.Replace(model.Title, hint, "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
                 model.Title;
 
@@ -384,15 +385,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
-        }
-
-        public void Handle(AnswerRemoved @event)
-        {
-            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                this.ResetTextInEditor = string.Empty;
-                this.CanRemoveAnswer = false;
-            }
         }
     }
 }

@@ -5,11 +5,11 @@
   
     public class MembershipWebUser : IMembershipWebUser
     {
-        private readonly IMembershipHelper hepler;
+        private readonly IMembershipHelper helper;
 
         public MembershipWebUser(IMembershipHelper helper)
         {
-            this.hepler = helper;
+            this.helper = helper;
         }
 
         public MembershipUser MembershipUser => Membership.GetUser();
@@ -18,6 +18,6 @@
 
         public string UserName => MembershipUser.UserName;
 
-        public bool IsAdmin => Roles.IsUserInRole(this.hepler.ADMINROLENAME);
+        public bool IsAdmin => Roles.IsUserInRole(this.helper.ADMINROLENAME);
     }
 }

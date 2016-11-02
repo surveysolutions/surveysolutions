@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Resources;
+using System.Runtime.Remoting;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -49,6 +50,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return MvcHtmlString.Create(variableRecord);
             }
 
+            if (record.ActionType == QuestionnaireActionType.ReplaceAllTexts)
+            {
+                var replaceRecord = GetFormattedHistoricalRecordForReplaceTexts(record);
+                if (!string.IsNullOrWhiteSpace(replaceRecord))
+                    return MvcHtmlString.Create(replaceRecord);
+            }
+
             var localizedNameOfItemBeingInAction = GetStringRepresentation(record.TargetType);
 
             var questionnaireItemLinkWithTitle = BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
@@ -69,6 +77,12 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             }
 
             return MvcHtmlString.Create(mainRecord);
+        }
+
+        private static string GetFormattedHistoricalRecordForReplaceTexts(QuestionnaireChangeHistoricalRecord record)
+        {
+            return string.Format(QuestionnaireHistoryResources.TextsReplaced, record.TargetTitle, record.TargetNewTitle,
+                record.AffectedEntries);
         }
 
         private static string GetFormattedHistoricalRecordForVariable(QuestionnaireChangeHistoricalRecord record)

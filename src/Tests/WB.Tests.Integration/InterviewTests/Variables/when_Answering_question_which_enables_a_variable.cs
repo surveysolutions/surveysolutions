@@ -45,8 +45,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                => (long?)@event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id == variableId);
 
         It should_raise_VariablesDisabled_event_for_the_variable = () =>
-           eventContext.ShouldContainEvent<VariablesEnabled>(@event
-               => @event.Variables[0].Id == variableId);
+           eventContext.GetSingleEvent<VariablesEnabled>().Variables.ShouldContainOnly( Create.Identity(variableId, Empty.RosterVector));
 
         private static EventContext eventContext;
         private static Interview interview;

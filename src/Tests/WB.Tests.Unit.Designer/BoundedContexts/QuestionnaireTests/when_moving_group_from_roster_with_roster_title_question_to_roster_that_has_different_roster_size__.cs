@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -12,43 +12,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterSizeQuestion1Id,
-                groupPublicKey : chapterId,
-                isInteger : true,
-                questionType: QuestionType.Numeric
-            ));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterSizeQuestion2Id,
-                groupPublicKey : chapterId,
-                isInteger : true,
-                questionType:QuestionType.Numeric
-            ));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = targetGroupId, ParentGroupPublicKey = chapterId});
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, targetGroupId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: targetGroupId){
-                    RosterSizeQuestionId = rosterSizeQuestion2Id,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles = null,
-                    RosterTitleQuestionId = null
-                });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddNumericQuestion(
+                rosterSizeQuestion1Id,
+                chapterId,
+                responsibleId,
+                isInteger : true);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = sourceRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, sourceRosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: sourceRosterId){
-                    RosterSizeQuestionId = rosterSizeQuestion1Id,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles = null,
-                    RosterTitleQuestionId = rosterTitleQuestionId
-                });
+            questionnaire.AddNumericQuestion(
+                rosterSizeQuestion2Id,
+                chapterId,
+                responsibleId,
+                isInteger : true);
+            questionnaire.AddGroup(targetGroupId, chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestion2Id, rosterFixedTitles: null);
+            
+            questionnaire.AddGroup(sourceRosterId,  chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestion1Id, rosterFixedTitles: null);
+            
+            questionnaire.AddGroup(groupFromRosterId, sourceRosterId, responsibleId: responsibleId);
+            questionnaire.AddNumericQuestion(rosterTitleQuestionId,groupFromRosterId,responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = sourceRosterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterTitleQuestionId,
-                groupPublicKey : groupFromRosterId,
-                questionType:QuestionType.Numeric
-            ));
+            questionnaire.UpdateGroup(sourceRosterId, responsibleId, "rosterTitle", "", rosterSizeQuestion1Id, "", null, false, true,
+                RosterSizeSourceType.Question, null, rosterTitleQuestionId);
         };
 
         Because of = () =>

@@ -6,11 +6,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -19,26 +16,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
     {
         Establish context = () =>
         {
-            questionFactory = new Mock<IQuestionnaireEntityFactory>();
-
-            questionFactory.Setup(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()))
-                .Callback((QuestionData qd) => questionData = qd)
-                .Returns(CreateMultimediaQuestion(
-                    questionId: questionId,
-                    enablementCondition: condition,
-                    instructions: instructions,
-                    title: title,
-                    variableName: variableName));
-
-            @event = new MultimediaQuestionUpdated()
-            {
-                QuestionId = questionId,
-                EnablementCondition = condition,
-                Instructions = instructions,
-                Title = title,
-                VariableName = variableName
-            };
-
             questionnaireView = CreateQuestionnaireDocument(new[]
             {
                 CreateGroup(groupId: parentGroupId,
@@ -53,34 +30,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                             Instructions = "old instructions"
                         }
                     })
-            });
+            }, responsibleId);
 
-            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView, questionnaireEntityFactory: questionFactory.Object);
+            denormalizer = CreateQuestionnaireDenormalizer(questionnaire: questionnaireView);
         };
 
         Because of = () =>
-            denormalizer.UpdateMultimediaQuestion(@event);
-
-        It should_call_question_factory_ones = () =>
-           questionFactory.Verify(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()), Times.Once);
-
-        It should_pass_PublicKey_equals_questionId_to_question_factory = () =>
-            questionData.PublicKey.ShouldEqual(questionId);
-
-        It should_pass_QuestionType_equals_Multimedia_to_question_factory = () =>
-           questionData.QuestionType.ShouldEqual(QuestionType.Multimedia);
-
-        It should_pass_QuestionText_equals_questionId_to_question_factory = () =>
-           questionData.QuestionText.ShouldEqual(title);
-
-        It should_pass_StataExportCaption_equals_questionId_to_question_factory = () =>
-           questionData.StataExportCaption.ShouldEqual(variableName);
-
-        It should_pass_ConditionExpression_equals_questionId_to_question_factory = () =>
-           questionData.ConditionExpression.ShouldEqual(condition);
-
-        It should_pass_Instructions_equals_questionId_to_question_factory = () =>
-           questionData.Instructions.ShouldEqual(instructions);
+            denormalizer.UpdateMultimediaQuestion(questionId, title, variableName, instructions:instructions, enablementCondition:condition, 
+                variableLabel:null, hideIfDisabled:false, responsibleId:responsibleId, scope:QuestionScope.Interviewer, properties:new QuestionProperties(false, false));
 
         It should__not_be_null_qr_barcode_question_from_questionnaire__ = () =>
             GetMultimediaQuestionById().ShouldNotBeNull();
@@ -126,11 +83,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             return questionnaireView.FirstOrDefault<IMultimediaQuestion>(question => question.PublicKey == questionId);
         }
 
-        private static QuestionData questionData;
-        private static Mock<IQuestionnaireEntityFactory> questionFactory;
         private static QuestionnaireDocument questionnaireView;
         private static Questionnaire denormalizer;
-        private static MultimediaQuestionUpdated @event;
+        private static Guid responsibleId = Guid.Parse("B1111111111111111111111111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string variableName = "qr_barcode_question";

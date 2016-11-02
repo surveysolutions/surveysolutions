@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -13,16 +13,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var linkedQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCA");
+
+            var anotherRosterId = Guid.Parse("BCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCA");
             groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestionId = Guid.Parse("11111111111111111111111111111111");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded (publicKey : rosterSizeQuestionId, 
-                questionType : QuestionType.MultyOption, 
-                linkedToQuestionId : Guid.NewGuid(), 
-                groupPublicKey : chapterId ));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+
+            questionnaire.AddGroup(anotherRosterId, responsibleId: responsibleId, isRoster:true);
+            questionnaire.AddTextQuestion(linkedQuestionId, anotherRosterId,responsibleId);
+
+            questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId, 
+                chapterId,
+                responsibleId, 
+                options: new Option[0],
+                linkedToQuestionId : linkedQuestionId);
+            questionnaire.AddGroup(groupId, responsibleId: responsibleId);
         };
 
         Because of = () =>

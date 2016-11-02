@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -52,8 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            interview.RemoveAnswer(questionWhichIncreasesRosterSizeId, new decimal[0], userId, DateTime.Now);
 
         It should_raise_AnswerRemoved_event_for_first_row = () =>
-            eventContext.ShouldContainEvent<AnswerRemoved>(@event
-                => @event.QuestionId == questionWhichIncreasesRosterSizeId && !@event.RosterVector.Any());
+            eventContext.GetEvent<AnswersRemoved>().Questions.ShouldContain(Create.Entity.Identity(questionWhichIncreasesRosterSizeId, RosterVector.Empty));
 
         It should_not_raise_RosterInstancesAdded_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>();

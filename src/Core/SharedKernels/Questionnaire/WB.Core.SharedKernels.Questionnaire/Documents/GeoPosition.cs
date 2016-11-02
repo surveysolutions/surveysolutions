@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -57,5 +56,41 @@ namespace Main.Core.Entities.SubEntities
         }
 
         public static string[] PropertyNames { get { return propertyNames; } }
+
+        public override bool Equals(object obj)
+        {
+            GeoPosition geoPosition = obj as GeoPosition;
+            return geoPosition != null && this.Equals(geoPosition);
+        }
+
+        protected bool Equals(GeoPosition other) => this.Latitude.Equals(other.Latitude) && this.Longitude.Equals(other.Longitude) &&
+                                                    this.Accuracy.Equals(other.Accuracy) && this.Altitude.Equals(other.Altitude) &&
+                                                    this.Timestamp.Equals(other.Timestamp);
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = this.Latitude.GetHashCode();
+                hashCode = (hashCode*397) ^ this.Longitude.GetHashCode();
+                hashCode = (hashCode*397) ^ this.Accuracy.GetHashCode();
+                hashCode = (hashCode*397) ^ this.Altitude.GetHashCode();
+                hashCode = (hashCode*397) ^ this.Timestamp.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(GeoPosition x, GeoPosition y) => x?.Accuracy == y?.Accuracy &&
+                                                                        x?.Altitude == y?.Altitude &&
+                                                                        x?.Latitude == y?.Latitude &&
+                                                                        x?.Longitude == y?.Longitude &&
+                                                                        x?.Timestamp == y?.Timestamp;
+
+        public static bool operator !=(GeoPosition x, GeoPosition y) => !(x == y);
+
+        public GeoPosition Clone()
+        {
+            return new GeoPosition(Latitude, Longitude, Accuracy, Altitude, Timestamp);
+        }
     }
 }

@@ -74,11 +74,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.aggregateRootRepositoryWithCache.CleanCache();
             this.snapshotStoreWithCache.CleanCache();
 
-            this.eventStore.RemoveEventSourceById(interviewId);
-
             this.interviewViewRepository.Remove(interviewId.FormatGuid());
 
             this.RemoveInterviewImages(interviewId);
+            this.eventStore.RemoveEventSourceById(interviewId);
         }
 
         private void RemoveInterviewImages(Guid interviewId)

@@ -148,7 +148,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             return File.ReadAllText(fileName);
         }
 
-        public void CopyFileOrDirectory(string sourceDir, string targetDir)
+        public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false)
         {
             FileAttributes attr = File.GetAttributes(sourceDir);
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
@@ -160,14 +160,14 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
                 this.CreateDirectory(destDir);
 
                 foreach (var file in this.GetFilesInDirectory(sourceDir))
-                    File.Copy(file, this.CombinePath(destDir, this.GetFileName(file)));
+                    File.Copy(file, this.CombinePath(destDir, this.GetFileName(file)), overrideAll);
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
-                    this.CopyFileOrDirectory(directory, destDir);
+                    this.CopyFileOrDirectory(directory, destDir, overrideAll);
             }
             else
             {
-                this.CopyFile(sourceDir, targetDir);
+                this.CopyFile(sourceDir, targetDir, overrideAll);
             }
         }
 
@@ -193,12 +193,12 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
         }
 
-        private void CopyFile(string sourcePath, string backupFolderPath)
+        private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll = false)
         {
             var sourceFileName = this.GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
-            File.Copy(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), true);
+            File.Copy(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), overrideAll);
         }
 
         public string ChangeExtension(string path1, string newExtension)

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Tests.Unit.Designer</RootNamespace>
     <AssemblyName>WB.Tests.Unit.Designer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <NuGetPackageImportStamp>
@@ -75,20 +75,16 @@
       <HintPath>..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
+    <Reference Include="Machine.Specifications, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Machine.Specifications.0.11.0\lib\net45\Machine.Specifications.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+    <Reference Include="Machine.Specifications.Should, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Machine.Specifications.Should.0.11.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications.Should, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Machine.Specifications.Should.0.9.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.1.2.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -111,8 +107,8 @@
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Moq, Version=4.5.8.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Moq.4.5.8\lib\net45\Moq.dll</HintPath>
+    <Reference Include="Moq, Version=4.5.22.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Moq.4.5.22\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MultipartDataMediaFormatter, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -151,15 +147,43 @@
       <HintPath>..\..\..\libs\SpreadsheetGear2012.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.AppContext.4.1.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Diagnostics.FileVersionInfo.4.0.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Diagnostics.StackTrace.4.0.1\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.IO.4.1.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions">
@@ -174,12 +198,54 @@
       <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Reflection.Metadata.1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Reflection.4.1.0\lib\net462\System.Reflection.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Reflection.Metadata.1.3.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.Extensions.4.1.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.InteropServices.4.1.0\lib\net462\System.Runtime.InteropServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Security.Cryptography.Algorithms.4.2.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Security.Cryptography.Encoding.4.0.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Security.Cryptography.Primitives.4.0.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Text.Encoding.CodePages.4.0.1\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Thread, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Threading.Thread.4.0.0\lib\net46\System.Threading.Thread.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
@@ -217,6 +283,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="System.Xml.XmlDocument, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Xml.XmlDocument.4.0.1\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.XPath, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Xml.XPath.4.0.1\lib\net46\System.Xml.XPath.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Xml.XPath.XDocument.4.0.1\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
       <Private>True</Private>
@@ -227,6 +306,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\CustomWebApiAuthorizeFilterTests.cs" />
     <Compile Include="Api\Headquarters\QuestionnairesControllerTests\QuestionnairesControllerTestContext.cs" />
     <Compile Include="Api\Headquarters\QuestionnairesControllerTests\when_getting_Questionaire_but_client_version_lower_than_serrver_one.cs" />
     <Compile Include="Api\Tester\TranslationsControllerTests\TranslationsControllerTestsContext.cs" />
@@ -268,9 +348,6 @@
     <Compile Include="Applications\CommandInflaterTests\when_PasteIntoCommand_is_inflating_with_shared_non_public_questionnaire.cs" />
     <Compile Include="Applications\CommandInflaterTests\when_PasteIntoCommand_is_inflating.cs" />
     <Compile Include="Applications\CommandInflaterTests\when_PasteAfterCommand_is_inflating.cs" />
-    <Compile Include="Applications\FiltersTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
-    <Compile Include="Applications\FiltersTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
-    <Compile Include="Applications\FiltersTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="Applications\ImportControllerTests\ImportControllerTestContext.cs" />
     <Compile Include="Applications\ImportControllerTests\when_getting_attachment_content.cs" />
     <Compile Include="Applications\ImportControllerTests\when_getting_Questionaire_and_questionnaire_has_warnings_only.cs" />
@@ -426,6 +503,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_multi_roster_with_79_rows_and_nested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_multi_roster_with_80_rows_and_missing_max_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_multi_roster_with_80_rows_and_nested_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_with_incorrect_syntax_in_enablement_conditions_.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_not_existing_substitutions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_self_in_substitution.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_condition_expression_and_without_name.cs" />
@@ -441,6 +519,20 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_variables_with_indirect_circular_references.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_static_text_with_empty_and_too_long_validation_messages_and_expressions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireViewFactoryTests\QuestionnaireViewFactoryTests.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_texts_for_different_user.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_texts_in_filter_expression.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_texts_in_linked_question_filter_expression.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_texts_with_ignoring_casing.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_with_match_whole_word.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replcaing_texts_in_fixed_rosters.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_all_texts_in_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_replacing_texts_in_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_for_text_in_fixed_rosters.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_for_text_with_match_whole_word_option.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_texts_in_filter_expression.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_texts_in_linked_question_filter_expression.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_texts_using_case_insensitive_option.cs" />
+    <Compile Include="BoundedContexts\Designer\ReplaceTextHanderTests\when_searching_texts_using_regex.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\TranslationsServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_empty_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_getting_translation_file_for_one_question.cs" />
@@ -455,6 +547,10 @@
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_variable_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_variable.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateVariableHandlerTest\when_updating_variable_and_all_parameters_specified.cs" />
+    <Compile Include="BoundedContexts\Designer\UserTests\when_updating_locked_user_and_specifying_is_locked_false.cs" />
+    <Compile Include="BoundedContexts\Designer\UserTests\when_updating_not_confirmed_user_and_specifying_is_confirmed_true.cs" />
+    <Compile Include="BoundedContexts\Designer\UserTests\when_updating_unlocked_user_and_specifying_is_locked_true.cs" />
+    <Compile Include="BoundedContexts\Designer\UserTests\when_updating_user.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_or_updating_attachment_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_or_updating_attachment_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_cloning_questionnaire_with_attachment.cs" />
@@ -474,6 +570,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTests\Translations\when_deleting_translation_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Translations\when_updating_translation.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_cloning_question_with_calidation_conditions.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\when_deleting_last_group.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_sending_command_with_HideIfDisabled_flag.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_categorical_question_has_more_than_30_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_linked_question_that_has_filter_expression_referencing_to_single_linked.cs" />
@@ -500,12 +597,10 @@
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_group_is_not_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_undefined_substitution.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_messagr_contains_substitution_to_variable_from_roster.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_self.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_question_and_error_message_contains_substitution_to_illegal_question_type.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_variable_from_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_question_from_roster.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_self.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_substitution_to_illegal_question_type.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_updating_group_and_title_contains_undefined_substitution.cs" />
     <Compile Include="EventContext.cs" />
@@ -532,18 +627,13 @@
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_integer_rowcode_value.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_unique_rowcode_values.cs" />
     <Compile Include="BoundedContexts\Designer\MacrosSubstitutionServiceTests\when_inlining_macroses_in_expression.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_duplicated_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_LookupTableAdded_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_LookupTableDeleted_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_LookupTableUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_roster_edit_view_referencing_non_existing_question.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_group_into_group.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_static_text_after_question.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_question_into_group.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_question_after_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_AddingMacro.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_with_macros_and_lookup_tables.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\LookupTables\when_adding_lookup_table.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\LookupTables\when_adding_lookup_table_with_invalid_variable_name.cs" />
@@ -591,7 +681,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_title_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_more_than_200_options.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_duplicated_var_name.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_contains_consecutive_underscore_characters.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_nested_roster_with_condition_on_parents_sibling_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_lower_then_5.cs" />
@@ -610,18 +699,10 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="Create.Event.cs" />
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountDenormalizerTests\AccountDenormalizerTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountDenormalizerTests\when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountDenormalizerTests\when_handling_AccountUpdated_event_and_user_name_equals__ADMIN__.cs" />
     <Compile Include="BoundedContexts\Designer\AccountRepositoryTests\AccountRepositoryTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\AccountRepositoryTests\when_account_repository_creating_new_user.cs" />
     <Compile Include="BoundedContexts\Designer\AccountRepositoryTests\when_registering_new_user_with_account_repository.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountTests\AccountTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountTests\when_updating_account.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountTests\when_updating_confirmed_account_and_specifying_is_confirmed_true.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountTests\when_updating_locked_account_and_specifying_is_locked_false.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountTests\when_updating_not_confirmed_account_and_specifying_is_confirmed_true.cs" />
-    <Compile Include="BoundedContexts\Designer\AccountTests\when_updating_unlocked_account_and_specifying_is_locked_true.cs" />
+    <Compile Include="BoundedContexts\Designer\UserTests\UserTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\AccountViewFactoryTests\AccountViewFactoryTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\AccountViewFactoryTests\when_loading_view_filtered_by_account_name__ADMIN__and_repository_has_account_with_name__admin__.cs" />
     <Compile Include="BoundedContexts\Designer\AddStaticTextHandlerTests\when_adding_static_text_and_entity_with_same_id_already_exists.cs" />
@@ -674,30 +755,11 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionChangeEventTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_adding_a_group_and_there_already_is_one_group_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_adding_a_question_and_there_already_is_one_question_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_deleting_group_by_id_and_there_are_3_groups_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_deleting_question_by_id_and_there_are_4_questions_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_ExpressionsMigratedToCSharp_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupBecameARoster_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupStoppedBeingARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event_and_max_value_is_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\QuestionnaireEntityFactoryTestContext.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__AutoPtopagate__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__QRBarcode__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__Text__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireEntityFactoryTests\when_QuestionnaireEntityFactory_creates_static_text.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\QuestionnaireInfoFactoryTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_cascading_question_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view.cs" />
@@ -736,7 +798,6 @@
     <Compile Include="BoundedContexts\QuestionnaireTests\UpdateQuestionnaireTests.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_group_under_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_group_with_invalid_variable_name.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_prefilled_question_under_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_paralell_roster_scope.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_roster_group_and_roster_size_question_is_under_deeper_roster.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\when_adding_roster_group_and_size_source_is_text_list_question_and_roster_title_specified.cs" />
@@ -867,7 +928,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_references_itself_in_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_multimedia_questions_with_supervisor_and_prefilled_scope_respectively.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_2_orphan_roster_groups_they_must_be_treated_as_grops_with_separate_roster_levels.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_and_group_with_incorrect_syntax_in_enablement_conditions_.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_incorrect_syntax_in_enablement_conditions_.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_incorrect_syntax_in_validation_and_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_incorrect_syntax_in_validation_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_incorrect_syntax_in_enablement_condition.cs" />
@@ -978,7 +1039,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_all_parameters_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_it_does_not_exists_in_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateDateTimeQuestionHandlerTests\when_updating_datetime_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
@@ -1010,7 +1070,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_all_parameters_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_it_does_not_exists_in_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_title_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />
@@ -1124,7 +1183,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_all_parameters_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_condition_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_it_does_not_exists_in_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_more_than_one_question_with_same_id_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_invalid_question.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_with_not_supported_type.cs" />

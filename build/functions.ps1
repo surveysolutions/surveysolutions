@@ -200,16 +200,16 @@ function RunTests($BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Running tests']"
 
     $projects = GetProjectsWithTests
-
+    
     if ($projects -ne $null) {
-        $parallelRunner = Get-ChildItem '.\packages\' | 
-                                    Where-Object { $_.Name -like 'Machine.Specifications.TeamCityParallelRunner.*'} | 
+        $parallelRunner = Get-ChildItem 'build\tools\' | 
+                                    Where-Object { $_.Name -like 'Machine.Specifications.TeamCityParallelRunner*'} | 
                                     Select -First 1
-        if ($parallelRunner) {
+	if ($parallelRunner) {
             $assemblies = $projects | ForEach-Object -Process {GetOutputAssembly $_ $BuildConfiguration} | Where-Object {(Test-Path $_) -and ($_ -notlike "*Mono*")}
             $assembliesJoined = [string]::Join(" ", $assemblies)
 
-            $command = Join-Path ".\packages\$parallelRunner" "\tools\mspec-teamcity-prunner.exe --threads 3 $assembliesJoined"
+            $command = Join-Path "build\tools\$parallelRunner" "\mspec-teamcity-prunner.exe --threads 3 $assembliesJoined"
             Write-Host $command
             iex $command | Write-Host
         }
@@ -228,6 +228,7 @@ function RunConfigTransform($Project, $BuildConfiguration){
 	$PathToTransformFile = Join-Path $file.directoryname "Web.$BuildConfiguration.config"
 
 	$command = "$(GetPathToConfigTransformator) $PathToConfigFile $PathToTransformFile $PathToConfigFile"
+	Write-Host $command
 	iex $command
 }
 

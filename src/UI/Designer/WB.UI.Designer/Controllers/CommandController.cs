@@ -11,7 +11,6 @@ using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Controllers
 {
-    [CustomAuthorize]
     [Obsolete("API controller should be used instead")]
     public class CommandController : Controller
     {

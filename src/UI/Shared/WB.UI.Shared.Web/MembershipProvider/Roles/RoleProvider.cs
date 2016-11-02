@@ -14,10 +14,8 @@ namespace WB.UI.Shared.Web.MembershipProvider.Roles
     {
         private IRoleRepository _roleService;
 
-        private ITransactionManagerProvider TransactionProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
-        }
+        private IPlainTransactionManagerProvider TransactionProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
+
         /// <summary>
         /// Gets repository used to retrieve information from the data source.
         /// </summary>
@@ -87,12 +85,12 @@ namespace WB.UI.Shared.Web.MembershipProvider.Roles
         /// <param name="username">The user name to search for.</param><param name="roleName">The role to search in.</param>
         public override bool IsUserInRole(string username, string roleName)
         {
-            var transactionManager = this.TransactionProvider.GetTransactionManager();
-            var shouldUseOwnTransaction = !transactionManager.IsQueryTransactionStarted;
+            var transactionManager = this.TransactionProvider.GetPlainTransactionManager();
+            var shouldUseOwnTransaction = !transactionManager.IsTransactionStarted;
 
             if (shouldUseOwnTransaction)
             {
-                transactionManager.BeginQueryTransaction();
+                transactionManager.BeginTransaction();
             }
 
             try
@@ -104,7 +102,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Roles
             {
                 if (shouldUseOwnTransaction)
                 {
-                    transactionManager.RollbackQueryTransaction();
+                    transactionManager.RollbackTransaction();
                 }
             }
         }
@@ -118,12 +116,12 @@ namespace WB.UI.Shared.Web.MembershipProvider.Roles
         /// <param name="username">The user to return a list of roles for.</param>
         public override string[] GetRolesForUser(string username)
         {
-            var transactionManager = this.TransactionProvider.GetTransactionManager();
-            var shouldUseOwnTransaction = !transactionManager.IsQueryTransactionStarted;
+            var transactionManager = this.TransactionProvider.GetPlainTransactionManager();
+            var shouldUseOwnTransaction = !transactionManager.IsTransactionStarted;
 
             if (shouldUseOwnTransaction)
             {
-                transactionManager.BeginQueryTransaction();
+                transactionManager.BeginTransaction();
             }
 
 
@@ -138,7 +136,7 @@ namespace WB.UI.Shared.Web.MembershipProvider.Roles
             {
                 if (shouldUseOwnTransaction)
                 {
-                    transactionManager.RollbackQueryTransaction();
+                    transactionManager.RollbackTransaction();
                 }
             }
         }

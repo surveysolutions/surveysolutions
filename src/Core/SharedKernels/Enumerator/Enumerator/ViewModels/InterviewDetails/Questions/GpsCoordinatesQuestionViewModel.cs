@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class GpsCoordinatesQuestionViewModel :
         MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<AnswersRemoved>,
         ICompositeQuestion,
         IDisposable
     {
@@ -211,12 +211,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry.Unsubscribe(this);
         }
 
-        public void Handle(AnswerRemoved @event)
+        public void Handle(AnswersRemoved @event)
         {
-            if (@event.QuestionId == this.questionIdentity.Id &&
-                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            foreach (var question in @event.Questions)
             {
-                this.Answer = null;
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
+                {
+                    this.Answer = null;
+                }
             }
         }
     }

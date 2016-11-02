@@ -110,16 +110,13 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
         {
             if (this.isCacheUsed)
             {
-                var allKeyToRemoveFromCache = this.memoryCache.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
-                foreach (var keyToRemove in allKeyToRemoveFromCache)
-                {
-                    this.memoryCache[keyToRemove]=null;
-                }
+                var idsToRemoveFromCache = this.memoryCache.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
+                var idsToRemoveFromEsent = this.savedToEsentIds.Where(k => k.StartsWith(beginingOfId)).Except(idsToRemoveFromCache).ToArray();
+                var cachedIdsToRemove = idsToRemoveFromCache.Concat(idsToRemoveFromEsent);
 
-                var allKeyToRemoveFromEsent = this.savedToEsentIds.Where(k => k.StartsWith(beginingOfId)).Except(allKeyToRemoveFromCache).ToArray();
-                foreach (var keyToRemove in allKeyToRemoveFromEsent)
+                foreach (var keyToRemove in cachedIdsToRemove)
                 {
-                    this.memoryCache[keyToRemove] = null;
+                    this.RemoveFromCache(keyToRemove);
                 }
 
             }

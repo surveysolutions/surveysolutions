@@ -53,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
         IUpdateHandler<InterviewHistoryView, GroupsEnabled>,
         IUpdateHandler<InterviewHistoryView, AnswerRemoved>,
+        IUpdateHandler<InterviewHistoryView, AnswersRemoved>,
         IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>,
         IUpdateHandler<InterviewHistoryView, InterviewReceivedByInterviewer>,
         IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>
@@ -267,6 +268,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, @event.Payload.UserId,
                 @event.Payload.RemoveTimeUtc, this.CreateQuestionParameters(@event.Payload.QuestionId, @event.Payload.RosterVector));
+
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersRemoved> @event)
+        {
+           @event.Payload.Questions.ForEach(e=>  this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, null,
+                @event.EventTimeStamp, this.CreateQuestionParameters(e.Id, e.RosterVector)));
 
             return view;
         }

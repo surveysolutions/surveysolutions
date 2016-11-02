@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -11,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Infrastructure.Shared.Enumerator;
 
 namespace WB.UI.Interviewer.Settings
 {
@@ -202,10 +201,7 @@ namespace WB.UI.Interviewer.Settings
                 $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, avaliable {(int) (((double) (100*mi.AvailMem))/mi.TotalMem)}";
         }
 
-        private string GetDataBaseSize()
-        {
-            return
-                FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(FileSystem.Current.LocalStorage.Path));
-        }
+        private string GetDataBaseSize() => FileSizeUtils.SizeSuffix(
+            this.fileSystemAccessor.GetDirectorySize(AndroidPathUtils.GetPathToLocalDirectory()));
     }
 }

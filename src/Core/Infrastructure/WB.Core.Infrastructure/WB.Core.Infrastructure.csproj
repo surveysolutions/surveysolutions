@@ -63,7 +63,9 @@
     <Compile Include="EventBus\Lite\ILiteEventRaiseFilter.cs" />
     <Compile Include="EventBus\Lite\Implementation\LiteEventRegistryEntity.cs" />
     <Compile Include="EventBus\Lite\Implementation\RaiseFilters\AggregateRootRaiseFilter.cs" />
-    <Compile Include="FileSystem\IAsynchronousFileSystemAccessor.cs" />
+    <Compile Include="EventFreeInfrastructureModule.cs" />
+    <Compile Include="EventSourcedInfrastructureModule.cs" />
+    <Compile Include="FileSystem\IZipArchiveProtectionService.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepository.cs" />
     <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepositoryWithCache.cs" />
     <Compile Include="CommandBus\Implementation\CommandService.cs" />
@@ -89,7 +91,6 @@
     <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
     <Compile Include="Implementation\Storage\InMemoryCachedSnapshotStore.cs" />
     <Compile Include="InfrastructureModule.cs" />
-    <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="EventBus\Lite\ILiteEventHandler.cs" />
     <Compile Include="EventBus\Lite\ILiteEventRegistry.cs" />
     <Compile Include="EventBus\Lite\ILiteEventBus.cs" />

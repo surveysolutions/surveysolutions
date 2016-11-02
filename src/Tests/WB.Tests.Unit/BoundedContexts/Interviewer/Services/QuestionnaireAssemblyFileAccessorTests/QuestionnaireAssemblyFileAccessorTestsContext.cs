@@ -7,12 +7,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.QuestionnaireAssemb
 {
     internal class QuestionnaireAssemblyFileAccessorTestsContext
     {
-        public static InterviewerQuestionnaireAssemblyFileAccessor CreateQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor = null,
-            IAsynchronousFileSystemAccessor asyncFileSystemAccessor = null, ILogger logger = null, string pathToAssembliesDirectory = null)
+        public static InterviewerQuestionnaireAssemblyFileAccessor CreateQuestionnaireAssemblyFileAccessor(
+            IFileSystemAccessor fileSystemAccessor = null, ILogger logger = null, string pathToAssembliesDirectory = null)
         {
             return new InterviewerQuestionnaireAssemblyFileAccessor(
                 fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                asyncFileSystemAccessor: asyncFileSystemAccessor ?? Mock.Of<IAsynchronousFileSystemAccessor>(),
                 logger: logger ?? Mock.Of<ILogger>(),
                 pathToAssembliesDirectory: pathToAssembliesDirectory ?? string.Empty);
         }

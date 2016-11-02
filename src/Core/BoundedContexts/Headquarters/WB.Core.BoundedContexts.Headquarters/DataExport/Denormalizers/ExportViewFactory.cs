@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -32,14 +33,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         private readonly IExportQuestionService exportQuestionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
+        private readonly IRostrerStructureService rostrerStructureService;
+
         public ExportViewFactory(
             IFileSystemAccessor fileSystemAccessor,
             IExportQuestionService exportQuestionService,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IRostrerStructureService rostrerStructureService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportQuestionService = exportQuestionService;
             this.questionnaireStorage = questionnaireStorage;
+            this.rostrerStructureService = rostrerStructureService;
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid id, long version)
@@ -54,11 +59,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             result.QuestionnaireId = id.QuestionnaireId;
             result.Version = id.Version;
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(id, null);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(id);
             if (questionnaire == null)
                 return null;
 
-            var rosterScopes = questionnaire.GetRosterScopes();
+            questionnaire.ConnectChildrenWithParent();
+
+            var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
 
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id);
             questionnaireDocument.ConnectChildrenWithParent();

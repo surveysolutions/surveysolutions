@@ -78,8 +78,7 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IDataExportProcessDetails>().To<DataExportProcessDetails>();
             this.Kernel.Bind<IUserBrowseViewFactory>().To<UserBrowseViewFactory>();
             this.Kernel.Bind<IUserWebViewFactory>().To<UserWebViewFactory>();
-
-            this.Kernel.Bind<ILatestInterviewExpressionState>().To<InterviewExpressionStateForPreloading>();
+            
             this.Kernel.Bind<IReadOnlyInterviewStateDependentOnAnswers>().To<InterviewStateDependentOnAnswers>();
             this.Kernel.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
@@ -171,8 +170,7 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<IExportSettings>().To<ExportSettings>();
 
-            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>().WhenInjectedInto<ZipArchiveUtilsWithEncryptionDecorator>();
-            this.Bind<IArchiveUtils>().To<ZipArchiveUtilsWithEncryptionDecorator>();
+            this.Bind<IArchiveUtils, IZipArchiveProtectionService>().To<ZipArchiveUtils>();
 
             this.BindFilter<TransactionFilter>(FilterScope.First, 0)
                 .WhenActionMethodHasNo<NoTransactionAttribute>();

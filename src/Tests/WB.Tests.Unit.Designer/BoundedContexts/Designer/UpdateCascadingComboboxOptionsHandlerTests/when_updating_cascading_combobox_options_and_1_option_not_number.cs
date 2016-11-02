@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingComboboxOptionsHandlerTests
@@ -13,32 +13,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingCombobo
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: parentQuestionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.SingleOption,
-                questionText: "text",
-                stataExportCaption: "var",
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddSingleOptionQuestion(
+                parentQuestionId,
+                chapterId,
+                title: "text",
+                variableName: "var",
 
                 responsibleId: responsibleId,
-                answers: new Answer[]
+                options: new Option[]
                 {
-                    new Answer { AnswerText = "Option 1", AnswerValue = "1" },
-                    new Answer { AnswerText = "Option 2", AnswerValue = "2" }
+                    new Option() { Title= "Option 1", Value = "1" },
+                    new Option(){ Title = "Option 2", Value = "2" }
                 }
-            ));
+            );
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.SingleOption,
-                questionText: "text",
-                stataExportCaption: "var",
+            questionnaire.AddSingleOptionQuestion(
+                questionId,
+                chapterId,
+                title: "text",
+                variableName: "q2",
                 isFilteredCombobox: false,
                 responsibleId: responsibleId,
                 cascadeFromQuestionId: parentQuestionId
-            ));
+            );
         };
 
         Because of = () =>

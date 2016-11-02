@@ -3,17 +3,11 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
@@ -26,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             emptyRosterVector = new decimal[] { };
-            var rosterInstanceId = (decimal)22.5;
+            var rosterInstanceId = 0m;
             rosterVector = emptyRosterVector.Concat(new[] { rosterInstanceId }).ToArray();
 
             questionId = Guid.Parse("11111111111111111111111111111111");
@@ -56,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     }),
                 Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
-                Create.Roster(id: linkedToRosterId, variable: "ros3",
+                Create.Roster(id: linkedToRosterId, fixedRosterTitles: new [] { Create.FixedRosterTitle(0), Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)}, variable: "ros3",
                     children: new IComposite[]
                     {
                         Create.DateTimeQuestion(id: linkedToQuestionId, variable: "link_source")
@@ -64,14 +58,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             });
 
             interview = SetupInterview(questionnaireDocument: questionnaireDocument);
-            interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption1Vector[0], sortIndex: null));
-            interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption2Vector[0], sortIndex: null));
-            interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption3Vector[0], sortIndex: null));
-            interview.Apply(new DateTimeQuestionAnswered(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Answer));
-            interview.Apply(new DateTimeQuestionAnswered(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Answer));
-            interview.Apply(new DateTimeQuestionAnswered(userId, linkedToQuestionId, linkedOption3Vector, DateTime.Now, linkedOption3Answer));
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, rosterInstanceId, sortIndex: null));
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId, sortIndex: null));
+
+            interview.AnswerDateTimeQuestion(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Answer);
+            interview.AnswerDateTimeQuestion(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Answer);
+            interview.AnswerDateTimeQuestion(userId, linkedToQuestionId, linkedOption3Vector, DateTime.Now, linkedOption3Answer);
+            interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, 1);
 
             interview.Apply(new LinkedOptionsChanged(new[]
             {

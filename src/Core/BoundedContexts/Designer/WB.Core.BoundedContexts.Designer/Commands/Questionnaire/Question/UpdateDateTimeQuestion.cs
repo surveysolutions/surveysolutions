@@ -1,7 +1,6 @@
 using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
