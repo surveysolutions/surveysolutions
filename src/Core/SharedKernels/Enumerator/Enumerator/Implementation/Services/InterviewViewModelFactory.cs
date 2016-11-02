@@ -46,7 +46,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             
             GroupModel = 200,
             RosterModel = 201,
-            StaticTextModel = 300
+            StaticTextModel = 300,
+            VariableModel = 400,
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -75,6 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.GroupModel, Load<GroupViewModel> },
                 { InterviewEntityType.RosterModel, Load<RosterViewModel>},
                 { InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
+                { InterviewEntityType.VariableModel, Load<VariableViewModel>},
             };
 
         private static T Load<T>() where T : class => Mvx.Resolve<T>();
@@ -193,8 +195,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         throw new ArgumentOutOfRangeException();
                 }
             }
+            if (questionnaire.HasVariable(entityId))
+            {
+                return InterviewEntityType.VariableModel;
+            }
+            if (questionnaire.HasStaticText(entityId))
+            {
+                return InterviewEntityType.StaticTextModel;
+            }
 
-            return InterviewEntityType.StaticTextModel;
+            throw new ArgumentException("Don't found type for entity : " + entityId);
         }
 
         private IInterviewEntityViewModel CreateInterviewEntityViewModel(
