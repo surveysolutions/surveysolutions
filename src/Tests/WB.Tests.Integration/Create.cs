@@ -835,7 +835,7 @@ namespace WB.Tests.Integration
         public static Variable Variable(Guid? id=null, VariableType type=VariableType.LongInteger, string variableName="v1", string expression="2*2")
         {
             return new Variable(publicKey: id ?? Guid.NewGuid(),
-                variableData: new VariableData(type: type, name: variableName, expression: expression));
+                variableData: new VariableData(type: type, name: variableName, expression: expression, description: null));
         }
 
         public static ChangedVariable ChangedVariableValueDto(Guid? variableId=null, RosterVector vector=null, object value=null)

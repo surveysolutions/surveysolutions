@@ -319,14 +319,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var variable = questionnaire?.Find<IVariable>(variableId);
             if (variable == null)
                 return null;
-            VariableView result = new VariableView()
+            VariableView result = new VariableView
             {
                 Id = variable.PublicKey,
                 ItemId = variable.PublicKey.FormatGuid(),
-                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression),
+                VariableData = new VariableData(variable.Type, variable.Name, variable.Expression, variable.Description),
+                TypeOptions = VariableTypeOptions,
+                Breadcrumbs = this.GetBreadcrumbs(questionnaire, variable),
             };
-            result.TypeOptions = VariableTypeOptions;
-            result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, variable);
 
             return result;
         }

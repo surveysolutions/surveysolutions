@@ -6934,6 +6934,7 @@ ul.dropdown-menu li > a {
   letter-spacing: 1px;
   line-height: 20px;
   text-transform: none;
+  cursor: default;
 }
 ul.dropdown-menu li > a[disabled] {
   color: #bbb;

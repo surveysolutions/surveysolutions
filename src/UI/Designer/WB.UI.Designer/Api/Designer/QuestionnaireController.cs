@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
@@ -95,7 +96,8 @@ namespace WB.UI.Designer.Api
                 name = variableView.VariableData.Name,
                 TypeOptions = variableView.TypeOptions,
                 Type = variableView.VariableData.Type,
-                breadcrumbs = variableView.Breadcrumbs
+                breadcrumbs = variableView.Breadcrumbs,
+                description = variableView.VariableData.Description
             });
 
             return result;

@@ -1045,7 +1045,7 @@ namespace WB.Tests.Unit.TestFactories
         public Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
             => new Variable(
                 id ?? Guid.NewGuid(),
-                new VariableData(type, variableName, expression));
+                new VariableData(type, variableName, expression, null));
 
         public VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
             => new VariableValueLabel(value, label);
