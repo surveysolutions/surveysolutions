@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             firstOption.Checked.ShouldBeTrue();
             firstOption.Title.ShouldEqual("item1");
             firstOption.CheckedOrder.ShouldEqual(1);
-            firstOption.Value.ShouldEqual(1m);
+            firstOption.Value.ShouldEqual(1);
         };
 
         It should_subscribe_model_in_events_registry = () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));

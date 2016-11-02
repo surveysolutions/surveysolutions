@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        const decimal jsonSerializerDecimalLimit = 9999999999999999m;
+        const double jsonSerializerDecimalLimit = 9999999999999999;
         
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -35,8 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; }
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
-        private decimal? answer;
-        public decimal? Answer
+        private double? answer;
+        public double? Answer
         {
             get { return this.answer; }
             set
@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: (double) this.Answer.Value);
+                answer: this.Answer.Value);
 
             try
             {

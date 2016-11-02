@@ -183,7 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
                 DateTime.UtcNow,
-                selectedValues.Select(v => (int) v).ToArray());
+                selectedValues);
 
             try
             {

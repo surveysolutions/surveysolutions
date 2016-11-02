@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionViewModel = questionViewModel;
         }
 
-        public decimal Value { get; set; }
+        public int Value { get; set; }
 
         private string title;
         public string Title

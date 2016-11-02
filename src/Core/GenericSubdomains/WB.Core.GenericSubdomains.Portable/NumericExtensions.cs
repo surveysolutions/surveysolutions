@@ -3,18 +3,41 @@ using System.Globalization;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
-    public static class DecimalExtensions
+    public static class NumericExtensions
     {
-        public static string FormatDecimal(this decimal source, int presigion = 16)
+        public static int PercentOf(this long source, long totalCount)
         {
-            return FormatDecimal((decimal?) source, presigion);
+            if (source > totalCount) return 100;
+            return (int)((decimal)source / totalCount * 100);
         }
 
-        public static string FormatDecimal(this decimal? source, int presigion = 16)
-        {
-            if (!source.HasValue) return String.Empty;
+        public static string FormatDecimal(this decimal source, int precigion = 16)
+            => ((decimal?)source).FormatDecimal(precigion);
 
-            var mantissaFormat = new string('#', presigion);
+        public static string FormatDecimal(this decimal? source, int precigion = 16)
+        {
+            if (!source.HasValue) return string.Empty;
+
+            var mantissaFormat = new string('#', precigion);
+            var groupSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyGroupSeparator;
+            var decimalSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyDecimalSeparator;
+            string format = $"#{groupSeparator}0{decimalSeparator}{mantissaFormat}";
+
+            var valueAsString = source.Value.ToString(format, CultureInfo.CurrentCulture);
+
+            valueAsString = FixLeadingZeroes(valueAsString);
+
+            return valueAsString;
+        }
+
+        public static string FormatDouble(this double source, int precigion = 16)
+            => ((double?)source).FormatDouble(precigion);
+
+        public static string FormatDouble(this double? source, int precigion = 16)
+        {
+            if (!source.HasValue) return string.Empty;
+
+            var mantissaFormat = new string('#', precigion);
             var groupSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyGroupSeparator;
             var decimalSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyDecimalSeparator;
             string format = $"#{groupSeparator}0{decimalSeparator}{mantissaFormat}";
