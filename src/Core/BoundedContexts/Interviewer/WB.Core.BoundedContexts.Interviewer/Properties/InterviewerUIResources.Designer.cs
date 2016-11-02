@@ -569,7 +569,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We will test connection with our server and it&apos;s speed.
+        ///   Looks up a localized string similar to We will test connection with our server and its speed.
         /// </summary>
         public static string Diagnostics_TestConnection_Description {
             get {

@@ -31,11 +31,13 @@
             <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
             <div class="pseudo-form-control">
-                <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="validation.expression" ng-attr-tabindex="{{$index + 1}}"></div>
+                <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="validation.expression" 
+                     ng-attr-id="{{'validation-expression-' + $index}}"
+                     ng-attr-tabindex="{{$index + 1}}"></div>
             </div>
 
-            <label for="validationMessage{{$index}}" class="validation-message">Error message <help key="validationMessage" /></label>
-            <textarea id="validationMessage{{$index}}" ng-model="validation.message" ng-attr-tabindex="{{$index + 1}}"
+            <label for="validation-message-{{$index}}" class="validation-message">Error message <help key="validationMessage" /></label>
+            <textarea ng-attr-id="{{'validation-message-' + $index}}" ng-model="validation.message" ng-attr-tabindex="{{$index + 1}}"
                       class="form-control" msd-elastic maxlength="250"></textarea>
         </div>
         <div class="form-group" ng-if="activeStaticText.validationConditions.length < 10">

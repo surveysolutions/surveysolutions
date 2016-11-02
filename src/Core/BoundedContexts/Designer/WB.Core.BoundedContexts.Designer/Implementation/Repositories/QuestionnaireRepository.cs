@@ -30,6 +30,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         public Questionnaire Get(Guid aggregateId)
         {
             var questionnaireDocument = this.questionnaireStorage.GetById(aggregateId.FormatGuid());
+
+            if (questionnaireDocument == null)
+                return null;
+
             var sharedPersons = this.sharedPersonsStorage.GetById(aggregateId.FormatGuid());
             var personsCollection = sharedPersons?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
             var questionnaire = this.serviceLocator.GetInstance<Questionnaire>();

@@ -226,7 +226,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return ZlpIOHelper.ReadAllText(pathToFile);
         }
 
-        public void CopyFileOrDirectory(string sourceDir, string targetDir)
+        public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false)
         {
             FileAttributes attr = File.GetAttributes(sourceDir);
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
@@ -238,10 +238,10 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 this.CreateDirectory(destDir);
 
                 foreach (var file in this.GetFilesInDirectory(sourceDir))
-                    ZlpIOHelper.CopyFile(file, this.CombinePath(destDir, this.GetFileName(file)), true);
+                    ZlpIOHelper.CopyFile(file, this.CombinePath(destDir, this.GetFileName(file)), overrideAll);
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
-                    this.CopyFileOrDirectory(directory, this.CombinePath(destDir, sourceDirectoryName));
+                    this.CopyFileOrDirectory(directory, this.CombinePath(destDir, sourceDirectoryName), overrideAll);
             }
             else
             {
@@ -326,12 +326,12 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
         }
 
-        private void CopyFile(string sourcePath, string backupFolderPath)
+        private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll = false)
         {
             var sourceFileName = this.GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
-            ZlpIOHelper.CopyFile(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), true);
+            ZlpIOHelper.CopyFile(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), overrideAll);
         }
     }
 }

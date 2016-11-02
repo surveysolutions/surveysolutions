@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.BoundedContexts.Designer</RootNamespace>
     <AssemblyName>WB.Core.BoundedContexts.Designer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
     <TargetFrameworkProfile />
@@ -64,12 +64,12 @@
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.1.2.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.2.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -104,13 +104,42 @@
       <HintPath>..\..\..\..\..\libs\SpreadsheetGear2012.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.AppContext.4.1.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Diagnostics.FileVersionInfo.4.0.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Diagnostics.StackTrace.4.0.1\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.IO.4.1.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -122,11 +151,52 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\System.Reflection.Metadata.1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Reflection.4.1.0\lib\net462\System.Reflection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Reflection.Metadata.1.3.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Runtime.Extensions.4.1.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Runtime.InteropServices.4.1.0\lib\net462\System.Runtime.InteropServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.Algorithms.4.2.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.Encoding.4.0.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.Primitives.4.0.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Text.Encoding.CodePages.4.0.1\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Thread, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Threading.Thread.4.0.0\lib\net46\System.Threading.Thread.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
@@ -134,26 +204,38 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.XmlDocument, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Xml.XmlDocument.4.0.1\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.XPath, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Xml.XPath.4.0.1\lib\net46\System.Xml.XPath.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Xml.XPath.XDocument.4.0.1\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\AccountAR.cs" />
+    <Compile Include="Aggregates\User.cs" />
+    <Compile Include="Aggregates\IAccountView.cs" />
     <Compile Include="Aggregates\Questionnaire.cs" />
     <Compile Include="Aggregates\Snapshots\QuestionnaireState.cs" />
-    <Compile Include="Commands\Account\AccountCommandBase.cs" />
-    <Compile Include="Commands\Account\AddRoleToAccountCommand.cs" />
-    <Compile Include="Commands\Account\ChangeOnlineAccountCommand.cs" />
-    <Compile Include="Commands\Account\ChangePasswordAccountCommand.cs" />
-    <Compile Include="Commands\Account\ChangePasswordQuestionAndAnswerAccountCommand.cs" />
-    <Compile Include="Commands\Account\ChangePasswordResetTokenCommand.cs" />
-    <Compile Include="Commands\Account\ConfirmAccountCommand.cs" />
-    <Compile Include="Commands\Account\DeleteAccountCommand.cs" />
-    <Compile Include="Commands\Account\LockAccountCommand.cs" />
-    <Compile Include="Commands\Account\LoginFailedAccountCommand.cs" />
-    <Compile Include="Commands\Account\RegisterAccountCommand.cs" />
-    <Compile Include="Commands\Account\RemoveRoleFromAccountCommand.cs" />
-    <Compile Include="Commands\Account\ResetPasswordAccountCommand.cs" />
-    <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
-    <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
+    <Compile Include="Commands\Account\UserCommand.cs" />
+    <Compile Include="Commands\Account\AssignUserRole.cs" />
+    <Compile Include="Commands\Account\ChangeUserPassword.cs" />
+    <Compile Include="Commands\Account\ChangeSecurityQuestion.cs" />
+    <Compile Include="Commands\Account\SetPasswordResetToken.cs" />
+    <Compile Include="Commands\Account\ConfirmUserAccount.cs" />
+    <Compile Include="Commands\Account\DeleteUserAccount.cs" />
+    <Compile Include="Commands\Account\LockUserAccount.cs" />
+    <Compile Include="Commands\Account\RegisterFailedLogin.cs" />
+    <Compile Include="Commands\Account\RegisterUser.cs" />
+    <Compile Include="Commands\Account\RemoveUserRole.cs" />
+    <Compile Include="Commands\Account\ResetUserPassword.cs" />
+    <Compile Include="Commands\Account\UnlockUserAccount.cs" />
+    <Compile Include="Commands\Account\UpdateUserAccount.cs" />
     <Compile Include="Commands\CommandUtils.cs" />
     <Compile Include="Commands\Questionnaire\Attachments\DeleteAttachment.cs" />
     <Compile Include="Commands\Questionnaire\Attachments\AddOrUpdateAttachment.cs" />
@@ -203,6 +285,7 @@
     <Compile Include="Commands\Questionnaire\Group\UpdateGroup.cs" />
     <Compile Include="Commands\Questionnaire\ImportQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\ReplaceTextsCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\AddStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />
@@ -215,19 +298,9 @@
     <Compile Include="Commands\Questionnaire\Variable\MoveVariable.cs" />
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\ExpressionsMigratedToCSharp.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableDeleted.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\LookupTables\LookupTableUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\Macros\MacroAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\Macros\MacroDeleted.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\Macros\MacroUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\MultimediaQuestionUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireVariable.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableDeleted.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\VariableUpdated.cs" />
+    <Compile Include="Implementation\Repositories\UserRepository.cs" />
+    <Compile Include="Implementation\Services\FindReplaceService.cs" />
+    <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
@@ -381,21 +454,6 @@
     <Compile Include="Implementation\Services\CodeGeneration\Model\HierarchyReferenceModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionStateModelFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
-    <Compile Include="Events\Users\AccountConfirmed.cs" />
-    <Compile Include="Events\Users\AccountDeleted.cs" />
-    <Compile Include="Events\Users\AccountLocked.cs" />
-    <Compile Include="Events\Users\AccountLoginFailed.cs" />
-    <Compile Include="Events\Users\AccountOnlineUpdated.cs" />
-    <Compile Include="Events\Users\AccountPasswordChanged.cs" />
-    <Compile Include="Events\Users\AccountPasswordQuestionAndAnswerChanged.cs" />
-    <Compile Include="Events\Users\AccountPasswordReset.cs" />
-    <Compile Include="Events\Users\AccountPasswordResetTokenChanged.cs" />
-    <Compile Include="Events\Users\AccountRegistered.cs" />
-    <Compile Include="Events\Users\AccountRoleAdded.cs" />
-    <Compile Include="Events\Users\AccountRoleRemoved.cs" />
-    <Compile Include="Events\Users\AccountUnlocked.cs" />
-    <Compile Include="Events\Users\AccountUpdated.cs" />
-    <Compile Include="Events\Users\UserLoggedIn.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ConditionDescriptionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynExpressionProcessor.cs" />
@@ -480,51 +538,8 @@
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractListQuestionData.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractNumericQuestionData.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionData.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\AbstractQuestionCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireEntity.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\StaticTextCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\StaticTextDeleted.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\StaticTextUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\StaticTextAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QRBarcodeQuestionCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QRBarcodeQuestionUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupBecameARoster.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\Group.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupStoppedBeingARoster.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\TextListQuestionCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\TextListQuestionChanged.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\NumericQuestionChanged.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\NumericQuestionCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireActive.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\RosterChanged.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\SharedPersonToQuestionnaireAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\SharedPersonFromQuestionnaireRemoved.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\FullGroupData.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\FullQuestionData.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupDeleted.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\GroupUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\ImageDeleted.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\ImageUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\ImageUploaded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\NewGroupAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\NewQuestionAdded.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\NewQuestionnaireCreated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionChanged.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionCloned.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionDeleted.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireItemMoved.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\QuestionnaireUpdated.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDto\TemplateImported.cs" />
     <Compile Include="Exceptions\QuestionnaireException.cs" />
     <Compile Include="Exceptions\DomainExceptionType.cs" />
-    <Compile Include="Implementation\Factories\IQuestionnaireEntityFactory.cs" />
-    <Compile Include="Implementation\Factories\QuestionnaireEntityFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeBaseModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireLevelTemplateModel.cs" />
@@ -535,7 +550,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\Model\GroupTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireExpressionStateModel.cs" />
-    <Compile Include="Mappings\AccountDocumentMap.cs" />
+    <Compile Include="Mappings\UserMap.cs" />
     <Compile Include="Mappings\QuestionnaireChangeRecordMap.cs" />
     <Compile Include="Mappings\QuestionnaireListViewItemMap.cs" />
     <Compile Include="Resources\VerificationMessages.Designer.cs">
@@ -581,20 +596,14 @@
     <Compile Include="Translations\TranslationInstanceMap.cs" />
     <Compile Include="Translations\TranslationsService.cs" />
     <Compile Include="Translations\TranslationValidationError.cs" />
-    <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntry.cs" />
-    <Compile Include="UsageStats\QuestionnaireImport\QuestionnaireImportedEntryMap.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationMessage.cs" />
-    <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
+    <Compile Include="ValueObjects\QuestionnaireNodeReference.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
     <Compile Include="ValueObjects\VerificationMessageLevel.cs" />
-    <Compile Include="Views\Account\AccountDenormalizer.cs" />
-    <Compile Include="Views\Account\AccountDocument.cs" />
-    <Compile Include="Views\Account\AccountListItem.cs" />
     <Compile Include="Views\Account\AccountListView.cs" />
     <Compile Include="Views\Account\AccountListViewFactory.cs" />
     <Compile Include="Views\Account\AccountListViewInputModel.cs" />
-    <Compile Include="Views\Account\AccountView.cs" />
     <Compile Include="Views\Account\AccountViewFactory.cs" />
     <Compile Include="Views\Account\AccountViewInputModel.cs" />
     <Compile Include="Views\Account\CQRSAccountRepository.cs" />

@@ -2,46 +2,39 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
-    internal class when_updating_empty_roster_making_it_a_group_and_another_roster_has_roster_title_question_inside_it :
-        QuestionnaireTestsContext
+    internal class when_updating_empty_roster_making_it_a_group_and_another_roster_has_roster_title_question_inside_it : QuestionnaireTestsContext
     {
         private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded
-            (
-                publicKey : rosterSizeQuestionId,
-                isInteger : true,
-                groupPublicKey : chapterId
-            ));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = anotherRosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId: responsibleId, groupId: anotherRosterId));
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : rosterTitleQuestionId,
-                groupPublicKey : anotherRosterId,
-                questionType : QuestionType.Text
-            ));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: anotherRosterId){
-                    RosterSizeQuestionId = rosterSizeQuestionId,
-                    RosterSizeSource = RosterSizeSourceType.Question,
-                    FixedRosterTitles =  null,
-                    RosterTitleQuestionId =rosterTitleQuestionId 
-                });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId,isInteger : true,parentId: chapterId,responsibleId:responsibleId);
+            questionnaire.AddGroup(anotherRosterId,  chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            
+            questionnaire.AddTextQuestion(rosterTitleQuestionId,anotherRosterId, responsibleId);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId:responsibleId, groupId: rosterId));
-            questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
+            //update roster title question
+           /* questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: anotherRosterId){
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     FixedRosterTitles =  null,
                     RosterTitleQuestionId =rosterTitleQuestionId 
-                });
+                });*/
+
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true, rosterSourceType: RosterSizeSourceType.Question,
+                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: null);
+            //update roster title question
+            /*questionnaire.ChangeRoster(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
+                    RosterSizeQuestionId = rosterSizeQuestionId,
+                    RosterSizeSource = RosterSizeSourceType.Question,
+                    FixedRosterTitles =  null,
+                    RosterTitleQuestionId =rosterTitleQuestionId 
+                });*/
         };
 
         Because of = () => questionnaire.UpdateGroup(groupId: rosterId, responsibleId: responsibleId, title: "title",variableName:null, 

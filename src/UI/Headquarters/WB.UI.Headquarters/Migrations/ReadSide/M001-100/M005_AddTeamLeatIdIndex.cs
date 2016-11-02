@@ -5,6 +5,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     [Migration(5)]
     public class M005_AddTeamLeatIdIndex : Migration
     {
+        private const string schemaName = "readside";
         private const string teamLeadIdIndexName = "interviewsummaries_teamleadid";
         private const string interviewSummariesTableName = "InterviewSummaries";
         private const string teamleadIdColumnName = "teamleadid";
@@ -12,10 +13,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         {
             if (!Schema.Table(interviewSummariesTableName).Index(teamLeadIdIndexName).Exists())
             {
-                Execute.Sql($"create index {teamLeadIdIndexName} on {interviewSummariesTableName} using btree({teamleadIdColumnName});");
+                Execute.Sql($"create index {teamLeadIdIndexName} on {schemaName}.{interviewSummariesTableName} using btree({teamleadIdColumnName});");
             }
 
-            Execute.Sql($"ALTER TABLE {interviewSummariesTableName} ALTER {teamleadIdColumnName} TYPE uuid, ALTER {teamleadIdColumnName} SET NOT NULL;");
+            Execute.Sql($"ALTER TABLE {schemaName}.{interviewSummariesTableName} ALTER {teamleadIdColumnName} TYPE uuid, ALTER {teamleadIdColumnName} SET NOT NULL;");
         }
 
         public override void Down()

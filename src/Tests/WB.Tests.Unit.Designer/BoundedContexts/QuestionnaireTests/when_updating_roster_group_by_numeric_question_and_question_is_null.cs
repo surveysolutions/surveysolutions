@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -14,11 +14,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(publicKey: rosterSizeQuestionId, groupPublicKey: chapterId, questionType: QuestionType.Numeric, isInteger:true));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(groupId, chapterId, responsibleId: responsibleId);
+            questionnaire.AddNumericQuestion(rosterSizeQuestionId, chapterId, responsibleId, isInteger:true);
 
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = parentGroupId });
+            questionnaire.AddGroup(parentGroupId, responsibleId: responsibleId);
         };
 
         Because of = () =>

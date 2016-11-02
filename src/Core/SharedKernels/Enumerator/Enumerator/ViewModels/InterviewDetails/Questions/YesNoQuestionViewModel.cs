@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly IUserInteractionService userInteraction;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private Guid interviewId;
@@ -54,6 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
+            IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             IUserInteractionService userInteraction,
@@ -68,6 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
+            this.mainThreadDispatcher = mainThreadDispatcher;
 
             this.questionState = questionStateViewModel;
             this.Answering = answering;
@@ -116,8 +119,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
-            this.Options.Clear();
-            newOptions.ForEach(x => this.Options.Add(x));
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.Options.Clear();
+                newOptions.ForEach(x => this.Options.Add(x));
+            });
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -316,7 +322,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var orderedOptions = @event.AnsweredOptions.Select(ao => ao.OptionValue).ToList();
             var orderedYesOptions = @event.AnsweredOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToList();
 
-            foreach (var option in this.Options)
+            foreach (var option in this.Options.ToList())
             {
                 var selectedOptionIndex = orderedOptions.IndexOf(option.Value);
 

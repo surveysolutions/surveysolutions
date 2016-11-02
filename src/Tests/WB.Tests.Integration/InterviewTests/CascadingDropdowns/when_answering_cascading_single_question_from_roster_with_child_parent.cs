@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
@@ -23,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             {
                 Setup.MockedServiceLocator();
 
-                var parentSingleOptionQuestionId = Guid.Parse("00000000000000000000000000000000");
+                var parentSingleOptionQuestionId = Guid.Parse("10000000000000000000000000000000");
                 var childCascadedComboboxId = Guid.Parse("11111111111111111111111111111111");
                 var questionnaireId = Guid.Parse("22222222222222222222222222222222");
                 var actorId = Guid.Parse("33333333333333333333333333333333");
@@ -53,14 +54,9 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         })
                     );
 
-                Interview interview = SetupInterview(questionnaire, new List<object>
-                {
-                    Create.Event.SingleOptionQuestionAnswered(questionId: parentSingleOptionQuestionId, answer: 1, propagationVector: new decimal[] { }),
-                    Create.Event.QuestionsEnabled(
-                        Create.Identity(childCascadedComboboxId, new decimal[] { 0 }),
-                        Create.Identity(childCascadedComboboxId, new decimal[] { 0 }))
+                Interview interview = SetupInterview(questionnaire);
 
-                });
+                interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, RosterVector.Empty, DateTime.Now, 1);
 
                 using (var eventContext = new EventContext())
                 {

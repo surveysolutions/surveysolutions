@@ -6,7 +6,7 @@ var runSequence = require('run-sequence');
 var concat = require('gulp-concat');
 var debug = require('gulp-debug');
 
-var minifyHTML = require('gulp-minify-html');
+var minifyHTML = require('gulp-htmlmin');
 var templateCache = require("gulp-angular-templatecache");
 
 var paths = {
@@ -53,7 +53,7 @@ gulp.task("bowerJs", function(){
 
 gulp.task('templates', function () {
     return gulp.src(paths.htmls)
-      //.pipe(minifyHTML())
+      .pipe(minifyHTML({collapseWhitespace: false}))
       .pipe(templateCache({ root: 'views' }))
       .pipe(plugins.rev())
       .pipe(gulp.dest('build'));
@@ -62,8 +62,8 @@ gulp.task('templates', function () {
 gulp.task('devJs', function () {
     return gulp.src(paths.scripts)
       //.pipe(debug({ title: 'unicorn:' }))
-      .pipe(plugins.jshint())
-      .pipe(plugins.jshint.reporter('default'))
+      //.pipe(plugins.jshint())
+      //.pipe(plugins.jshint.reporter('default'))
       .pipe(plugins.ngAnnotate())
       .pipe(plugins.uglify())
       .pipe(concat('app.js'))

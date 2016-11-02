@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.BoundedContexts.Headquarters</RootNamespace>
     <AssemblyName>WB.Core.BoundedContexts.Headquarters</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
     <TargetFrameworkProfile />
@@ -50,8 +50,8 @@
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.15.0.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ddidotnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -289,6 +289,7 @@
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
+    <Compile Include="Implementation\Services\RostrerStructureService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
@@ -296,7 +297,6 @@
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesService.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
-    <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Mappings\AttachmentContentMap.cs" />
     <Compile Include="Mappings\BrokenInterviewPackageMap.cs" />
     <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
@@ -373,6 +373,7 @@
     <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
+    <Compile Include="Services\IRostrerStructureService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\ITabletInformationService.cs" />

@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.GetError("WB0017").References.Single().Id.ShouldEqual(staticTextId);
 
         It should_return_error_WB0017_with_reference_with_validation_condition_index_equal_to_message_referencing_not_existing_variable_index = () =>
-            verificationMessages.GetError("WB0017").References.Single().FailedValidationConditionIndex.ShouldEqual(2);
+            verificationMessages.GetError("WB0017").References.Single().IndexOfEntityInProperty.ShouldEqual(2);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

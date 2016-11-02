@@ -6,42 +6,29 @@ namespace WB.Core.SharedKernels.DataCollection
     /// <summary>
     /// Full identity of group or question: id and roster vector.
     /// </summary>
-    /// <remarks>
-    /// Is used only internally to simplify return of id and roster vector as return value
-    /// and to reduce parameters count in calculation methods.
-    /// Should not be made public or be used in any form in events or commands.
-    /// </remarks>
     [DebuggerDisplay("Identity {Id} {RosterVector}")]
-    public class Identity
+    public sealed class Identity
     {
-        private int? hashCode = null;
+        private int? hashCode;
 
-        protected bool Equals(Identity other)
+        private bool Equals(Identity other)
         {
-            return this.Id.Equals(other.Id) && this.RosterVector.Identical(other.RosterVector);
+            return this.Id == other.Id && this.RosterVector.Identical(other.RosterVector);
         }
 
         public override int GetHashCode()
         {
-            unchecked
+            if (!this.hashCode.HasValue)
             {
-                if (!this.hashCode.HasValue)
-                {
-                    int hc = this.RosterVector.Length;
-                    for (int i = 0; i < this.RosterVector.Length; ++i)
-                    {
-                        hc = unchecked(hc*13 + this.RosterVector[i].GetHashCode());
-                    }
-                    this.hashCode = hc;
-                }
-
-                return this.hashCode.Value;
+                this.hashCode = this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
             }
+
+            return this.hashCode.Value;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
 
-        public RosterVector RosterVector { get; private set; }
+        public RosterVector RosterVector { get; }
 
         public Identity(Guid id, RosterVector rosterVector)
         {

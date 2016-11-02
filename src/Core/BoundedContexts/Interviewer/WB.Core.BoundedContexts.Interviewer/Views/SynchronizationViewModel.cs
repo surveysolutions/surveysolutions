@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public void Synchronize()
+        public virtual void Synchronize()
         {
             this.IsSynchronizationInfoShowed = true;
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();

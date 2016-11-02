@@ -5,26 +5,29 @@ using System.Threading.Tasks;
 using SQLite;
 using SQLitePCL;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.UI.Interviewer.Services
 {
     public class BackupRestoreService : IBackupRestoreService
     {
         private readonly IArchiveUtils archiver;
-        private readonly IAsynchronousFileSystemAccessor fileSystemAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ILogger logger;
         private readonly string privateStorage;
         private readonly string logDirectoryPath;
 
         public BackupRestoreService(
             IArchiveUtils archiver,
-            IAsynchronousFileSystemAccessor fileSystemAccessor,
+            IFileSystemAccessor fileSystemAccessor,
+            ILogger logger,
             string privateStorage,
             string logDirectoryPath)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.logger = logger;
             this.privateStorage = privateStorage;
             this.logDirectoryPath = logDirectoryPath;
         }
@@ -36,16 +39,15 @@ namespace WB.UI.Interviewer.Services
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            var isBackupFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(backupToFolderPath).ConfigureAwait(false);
+            var isBackupFolderExists = this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath);
             if (!isBackupFolderExists)
-                await this.fileSystemAccessor.CreateDirectoryAsync(backupToFolderPath).ConfigureAwait(false);
-
-            var isLogFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(this.logDirectoryPath).ConfigureAwait(false);
-            if (isLogFolderExists)
-                await this.fileSystemAccessor.CopyDirectoryAsync(this.logDirectoryPath, this.privateStorage)
-                                             .ConfigureAwait(false);
+                this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
             this.BackupSqliteDbs();
+
+            var isLogFolderExists = this.fileSystemAccessor.IsDirectoryExists(this.logDirectoryPath);
+            if (isLogFolderExists)
+                this.fileSystemAccessor.CopyFileOrDirectory(this.logDirectoryPath, this.privateStorage, true);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
@@ -57,7 +59,7 @@ namespace WB.UI.Interviewer.Services
 
             return backupFilePath;
         }
-
+           
         private void Cleanup()
         {
             foreach (var tempBackupFile in Directory.GetFiles(this.privateStorage, "*.sqlite3.back", SearchOption.AllDirectories))
@@ -70,21 +72,30 @@ namespace WB.UI.Interviewer.Services
         {
             foreach (var dbPathToBackup in Directory.GetFiles(this.privateStorage, "*.sqlite3", SearchOption.AllDirectories))
             {
-                string destDBPath;
-                using (var connection = new SQLiteConnectionWithLock(dbPathToBackup, openFlags: SQLiteOpenFlags.ReadOnly))
+                try
                 {
-                    destDBPath = $"{connection.DatabasePath}.{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss-fff}";
+                    string destDBPath;
+                    var backupConnectionString = new SQLiteConnectionString(dbPathToBackup, true);
+                    using (var connection = new SQLiteConnectionWithLock(backupConnectionString, openFlags: SQLiteOpenFlags.ReadOnly))
+                    {
+                        destDBPath = $"{connection.DatabasePath}.{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss-fff}";
 
-                    CreateDatabaseBackup(connection, destDBPath);
+                        CreateDatabaseBackup(connection, destDBPath);
+                    }
+
+                    var destFileName = Path.ChangeExtension(destDBPath, "back");
+                    if (File.Exists(destFileName))
+                    {
+                        File.Delete(destFileName);
+                    }
+
+                    File.Move(destDBPath, destFileName);
                 }
-
-                var destFileName = Path.ChangeExtension(destDBPath, "back");
-                if (File.Exists(destFileName))
+                catch (Exception ex)
                 {
-                    File.Delete(destFileName);
+                    this.logger.Error(ex.Message, ex);
+                    File.Copy(dbPathToBackup, $"{dbPathToBackup}.back");
                 }
-
-                File.Move(destDBPath, destFileName);
             }
         }
 
@@ -145,12 +156,12 @@ namespace WB.UI.Interviewer.Services
 
         public async Task RestoreAsync(string backupFilePath)
         {
-            if (await this.fileSystemAccessor.IsFileExistsAsync(backupFilePath))
+            if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {
-                if (await this.fileSystemAccessor.IsDirectoryExistsAsync(this.privateStorage))
+                if (this.fileSystemAccessor.IsDirectoryExists(this.privateStorage))
                 {
-                    await this.fileSystemAccessor.RemoveDirectoryAsync(this.privateStorage);
-                    await this.fileSystemAccessor.CreateDirectoryAsync(this.privateStorage);
+                    this.fileSystemAccessor.DeleteDirectory(this.privateStorage);
+                    this.fileSystemAccessor.CreateDirectory(this.privateStorage);
                 }
 
                 await this.archiver.UnzipAsync(backupFilePath, this.privateStorage, true);

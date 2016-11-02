@@ -203,9 +203,10 @@ namespace WB.Tests.Unit.TestFactories
                 new ExportViewFactory(new FileSystemIOAccessor(), 
                                       new ExportQuestionService(), 
                                       Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
-                                                                          _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaire, 1, null)))
-                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
-                new PlainQuestionnaire(questionnaire, 1, null).GetRosterScopes(), 
+                                                                          _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == new PlainQuestionnaire(questionnaire, 1, null)),
+                                      new RosterStructureService())
+                                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
+                new RosterStructureService().GetRosterScopes(questionnaire), 
                 questionnaire,
                 new QuestionDataParser(),
                 new UserViewFactory(new TestPlainStorage<UserDocument>()));

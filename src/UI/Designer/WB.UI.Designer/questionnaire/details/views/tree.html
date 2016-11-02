@@ -3,13 +3,14 @@
          ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
         <div ng-click="$event.stopPropagation()" class="search-box" ng-switch-when="search">
             <div class="input-group">
-                <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on-out="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
                 <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
+                <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on-out="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
+                <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer" title="More" ng-click="showFindReplaceDialog()"></span>
             </div>
             <button ng-click="hideSearch();$event.stopPropagation()" title="Cancel search" type="button"></button>
         </div>
 
-        <div ng-switch-when="default">
+        <div ng-switch-when="default" class="chapter-name">
             <a id="group-{{currentChapter.itemId}}" class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
                 <span>{{currentChapter.title}}</span>
             </a>
@@ -48,7 +49,7 @@
                         </ul>
                     </div>
 
-                    <input type="button" class="btn lighter-hover pull-right" ng-disabled="!readyToPaste" value="PASTE" ng-click="pasteItemInto(currentChapter)"/>
+                    <input type="button" class="btn lighter-hover pull-right" ng-disabled="!readyToPaste" value="PASTE" ng-click="pasteItemInto(currentChapter)" />
                 </div>
             </div>
 

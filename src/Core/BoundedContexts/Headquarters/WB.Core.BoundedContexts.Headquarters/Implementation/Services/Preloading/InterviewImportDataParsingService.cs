@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -14,22 +15,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        
-
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+        private readonly IRostrerStructureService rostrerStructureService;
 
         public InterviewImportDataParsingService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory, 
             IPreloadedDataRepository preloadedDataRepository, 
             IQuestionnaireStorage questionnaireStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
+            IRostrerStructureService rostrerStructureService)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.preloadedDataRepository = preloadedDataRepository;
             this.questionnaireStorage = questionnaireStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.rostrerStructureService = rostrerStructureService;
         }
 
         public InterviewImportData[] GetInterviewsImportDataForSample(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
@@ -47,18 +49,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var bigTemplateObject =
                 this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() => this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
+			if (bigTemplateObject == null)
+                throw new Exception("Questionnaire was not found");
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
-            var questionnaire =
-                this.questionnaireStorage.GetQuestionnaire(
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
-                    null);
-            if (questionnaire == null)
-                throw new Exception("Questionnaire was not found");
-
-            var questionnaireRosterStructure = questionnaire.GetRosterScopes();
+            var questionnaireRosterStructure = this.rostrerStructureService.GetRosterScopes(bigTemplateObject);
 
             var preloadedDataService = this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
                     questionnaireRosterStructure, bigTemplateObject);

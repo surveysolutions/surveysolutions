@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -33,9 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = new EventContext();
         };
 
-        Because of = () =>
-            interview.AnswerPictureQuestion(userId: userId, questionId: questionId, answerTime: answerTime,
-                                              rosterVector: propagationVector, pictureFileName: pictureFileName);
+        Because of = () => interview.AnswerPictureQuestion(userId: userId, questionId: questionId, answerTime: answerTime, rosterVector: propagationVector, pictureFileName: pictureFileName);
 
         Cleanup stuff = () =>
         {
@@ -45,10 +38,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_raise_PictureQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<PictureQuestionAnswered>();
-
-        [Ignore("Interview state shoul return validity status")]
-        It should_raise_ValidityChanges_event = () =>
-            eventContext.ShouldContainEvent<AnswersDeclaredValid>();
 
         It should_raise_PictureQuestionAnswered_event_with_QuestionId_equal_to_questionId = () =>
             eventContext.GetSingleEvent<PictureQuestionAnswered>().QuestionId.ShouldEqual(questionId);
@@ -60,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetSingleEvent<PictureQuestionAnswered>().RosterVector.ShouldEqual(propagationVector);
 
         It should_raise_PictureQuestionAnswered_event_with_AnswerTime_equal_to_answerTime = () =>
-            eventContext.GetSingleEvent<PictureQuestionAnswered>().AnswerTimeUtc.ShouldEqual(answerTime);
+            eventContext.GetSingleEvent<PictureQuestionAnswered>().AnswerTimeUtc.Should().BeCloseTo(DateTime.UtcNow, 2000);
 
         It should_raise_PictureQuestionAnswered_event_with_PictureFileName_equal_to_pictureFileName = () =>
             eventContext.GetSingleEvent<PictureQuestionAnswered>().PictureFileName.ShouldEqual(pictureFileName);
@@ -69,8 +58,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Interview interview;
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
-        private static decimal[] propagationVector = new decimal[0];
-        private static DateTime answerTime = DateTime.Now;
+        private static readonly decimal[] propagationVector = RosterVector.Empty;
+        private static DateTime answerTime = 2.August(2010).At(22, 00);
         private static string pictureFileName = "my_face.jpg";
     }
 }

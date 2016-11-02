@@ -9,8 +9,10 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -18,7 +20,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -32,7 +33,6 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -41,23 +41,16 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
-using WB.UI.Shared.Web.Membership;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
@@ -69,10 +62,12 @@ namespace WB.Tests.Unit.Designer
 {
     internal static partial class Create
     {
-        public static AccountDocument AccountDocument(string userName = "")
-        {
-            return new AccountDocument() { UserName = userName };
-        }
+        public static User AccountDocument(string userName = "", Guid? userId = null)
+            => new User
+            {
+                ProviderUserKey = userId ?? Guid.NewGuid(),
+                UserName = userName,
+            };
 
         public static Answer Answer(string answer, decimal? value = null, string stringValue = null, decimal? parentValue = null)
         {
@@ -579,7 +574,6 @@ namespace WB.Tests.Unit.Designer
         public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null)
         {
             return new Questionnaire(
-                new QuestionnaireEntityFactory(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
@@ -589,6 +583,23 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>());
         }
+
+
+        public static Questionnaire Questionnaire(Guid responsible, QuestionnaireDocument document)
+        {
+            var questionnaire = new Questionnaire(
+                Mock.Of<ILogger>(),
+                Mock.Of<IClock>(),
+                Mock.Of<IExpressionProcessor>(),
+                Create.SubstitutionService(),
+                Create.KeywordsProvider(),
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IAttachmentService>(),
+                Mock.Of<ITranslationsService>());
+            questionnaire.Initialize(Guid.NewGuid(), document, new List<SharedPerson> {Create.SharedPerson(responsible)});
+            return questionnaire;
+        }
+
 
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
             string questionnaireId = null,
@@ -624,7 +635,6 @@ namespace WB.Tests.Unit.Designer
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 CreatedBy = createdBy,
-                SharedPersons = sharedPersons
             };
         }
 
@@ -637,7 +647,8 @@ namespace WB.Tests.Unit.Designer
                 variableData: new VariableData(type: type, name: variableName, expression: expression));
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null, Guid? responsibleId = null)
+        public static QuestionnaireDocument QuestionnaireDocument(
+            Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
         {
             return new QuestionnaireDocument
             {
@@ -645,7 +656,7 @@ namespace WB.Tests.Unit.Designer
                 Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
                 Title = title,
-                CreatedBy = responsibleId ?? Guid.NewGuid()
+                CreatedBy = userId ?? Guid.NewGuid()
             };
         }
 
@@ -888,19 +899,19 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireNodeReference[] questionnaireNodeReferences)
         {
-            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireVerificationReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireNodeReferences);
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireNodeReference[] questionnaireNodeReferences)
         {
-            return QuestionnaireVerificationMessage.Error(code, message, questionnaireVerificationReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, questionnaireNodeReferences);
         }
 
-        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireNodeReference[] questionnaireNodeReferences)
         {
-            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireVerificationReferences);
+            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireNodeReferences);
         }
 
         public static VerificationMessage VerificationMessage(string code, string message, params VerificationReferenceEnriched[] references)
@@ -919,9 +930,9 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireVerificationReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
+        public static QuestionnaireNodeReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
         {
-            return new QuestionnaireVerificationReference(type, id ?? Guid.NewGuid());
+            return new QuestionnaireNodeReference(type, id ?? Guid.NewGuid());
         }
 
         public static VerificationReferenceEnriched VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
@@ -1024,8 +1035,8 @@ namespace WB.Tests.Unit.Designer
                 => new MoveQuestion(questionnaireId, questionId, targetGroupId ?? Guid.NewGuid(), targetIndex ?? 0,
                     responsibleId);
 
-            public static ImportQuestionnaire ImportQuestionnaire(QuestionnaireDocument questionnaireDocument)
-                => new ImportQuestionnaire(Guid.NewGuid(), questionnaireDocument);
+            public static ImportQuestionnaire ImportQuestionnaire(QuestionnaireDocument questionnaireDocument, Guid? responsibleId = null)
+                => new ImportQuestionnaire(responsibleId ?? Guid.NewGuid(), questionnaireDocument);
 
             public static PasteAfter PasteAfter(Guid questionnaireId, Guid entityId, Guid itemToPasteAfterId, 
                 Guid sourceQuestionnaireId, Guid sourceItemId, Guid responsibleId) 
@@ -1033,6 +1044,39 @@ namespace WB.Tests.Unit.Designer
 
             public static DeleteGroup DeleteGroup(Guid questionnaireId, Guid groupId)
                 => new DeleteGroup(questionnaireId, groupId, Guid.NewGuid());
+
+            public static ReplaceTextsCommand ReplaceTextsCommand(string searchFor, 
+                string replaceWith, 
+                bool matchWholeWord = false, 
+                bool matchCase = false, 
+                bool useRegex = false,
+                Guid? userId = null)
+            {
+                return new ReplaceTextsCommand(Guid.Empty, userId ?? Guid.Empty, searchFor.ToLower(), replaceWith, matchCase, matchWholeWord, useRegex);
+            }
+            
+            public static AddStaticText AddStaticText(Guid questionnaireId, Guid staticTextId, string text, Guid responsibleId, Guid parentId)
+            {
+                return new AddStaticText(questionnaireId, staticTextId, text, responsibleId, parentId);
+            }
+            
+            public static AddDefaultTypeQuestion AddDefaultTypeQuestion(Guid questionnaireId, Guid questionId, string text, Guid responsibleId, Guid parentId, int? tagretIndex = null)
+            {
+                return new AddDefaultTypeQuestion(questionnaireId, questionId, parentId, text, responsibleId, tagretIndex);
+            }
+
+            public static UpdateNumericQuestion UpdateNumericQuestion(Guid questionnaireId, Guid questionId, Guid responsibleId, 
+                string title, bool isPreFilled = false, QuestionScope scope = QuestionScope.Interviewer, bool isInteger = false, 
+                bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null)
+            {
+                return new UpdateNumericQuestion(questionnaireId, questionId, responsibleId, new CommonQuestionParameters {Title = title}, isPreFilled, scope, 
+                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>());
+            }
+
+            public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, int? index =null)
+            {
+                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression), responsibleId, parentId, index);
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
@@ -1129,5 +1173,10 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();
+
+        public static CustomWebApiAuthorizeFilter CustomWebApiAuthorizeFilter()
+        {
+            return new CustomWebApiAuthorizeFilter();
+        }
     }
 }

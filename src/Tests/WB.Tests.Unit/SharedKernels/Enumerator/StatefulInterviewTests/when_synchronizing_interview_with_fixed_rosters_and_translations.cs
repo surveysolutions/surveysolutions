@@ -19,8 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             Guid substitutedQuestionId = Guid.Parse("00000000000000000000000000000001");
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var questionnaire = Create.Entity.QuestionnaireDocument(questionnaireId,
-                Create.Entity.FixedRoster(
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id : questionnaireId,
+                children: Create.Entity.FixedRoster(
                     rosterId: rosterId, 
                     fixedTitles: new[] {"item1"},
                     children: new IComposite[]

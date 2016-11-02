@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<AnswerRemoved>,
         ILiteEventHandler<LinkedOptionsChanged>,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ICompositeQuestionWithChildren,
@@ -222,17 +221,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         option.Selected = false;
                     }
-                }
-            }
-        }
-
-        public void Handle(AnswerRemoved @event)
-        {
-            if (this.Identity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                foreach (var option in this.Options.Where(option => option.Selected))
-                {
-                    option.Selected = false;
                 }
             }
         }

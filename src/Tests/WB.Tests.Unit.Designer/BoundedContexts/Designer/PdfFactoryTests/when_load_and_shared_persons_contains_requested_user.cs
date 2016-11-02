@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
             questionnaireSharedPersons.SharedPersons.Add(Create.SharedPerson(id: userId, email: userEmail));
             var modificationStatisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser {Date = DateTime.Now};
 
-            var accountsDocumentReader = Mock.Of<IReadSideRepositoryReader<AccountDocument>>(x => x.GetById(userId.FormatGuid()) == accountDocument);
+            var accountsDocumentReader = Mock.Of<IPlainStorageAccessor<User>>(x => x.GetById(userId.FormatGuid()) == accountDocument);
             var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
             var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireSharedPersons);
             var questionnaireChangeHistoryStorage = new InMemoryPlainStorageAccessor<QuestionnaireChangeRecord>();

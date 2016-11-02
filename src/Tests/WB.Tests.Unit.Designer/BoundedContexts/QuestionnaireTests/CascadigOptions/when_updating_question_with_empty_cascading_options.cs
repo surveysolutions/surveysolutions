@@ -18,27 +18,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             parentQuestionId = Guid.Parse("22222222222222222222222222222222");
             updatedQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : parentQuestionId,
-                groupPublicKey:rootGroupId,
-                questionType : QuestionType.SingleOption,
-                answers : new[] {
-                    new Answer
+            questionnaire.AddSingleOptionQuestion(
+                parentQuestionId,
+                rootGroupId,
+                actorId,
+                options : new Option[] {
+                    new Option()
                     {
-                        AnswerText = "one",
-                        AnswerValue = "1",
-                        PublicKey = Guid.NewGuid()
+                        Title = "one",
+                        Value = "1",
+                        Id = Guid.NewGuid()
+                    },
+                    new Option()
+                    {
+                        Title = "two",
+                        Value = "2",
+                        Id = Guid.NewGuid()
                     }
                 }
-            ));
+            );
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : updatedQuestionId,
-                groupPublicKey: rootGroupId,
-                questionType : QuestionType.SingleOption
-            ));
+            questionnaire.AddSingleOptionQuestion(updatedQuestionId,
+                rootGroupId,
+                actorId,
+                options: new Option[] {
+                    new Option{Title = "one",Value = "1",Id = Guid.NewGuid()},
+                    new Option{Title = "two",Value = "2",Id = Guid.NewGuid()}
+                });
         };
 
         Because of = () => questionnaire.UpdateSingleOptionQuestion(
@@ -65,7 +71,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
 
 
         It should_contains_question_with_empty_answers = () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId).Answers.Count().ShouldEqual(0);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId).Answers.Count().ShouldEqual(2);
 
 
         private static Questionnaire questionnaire;

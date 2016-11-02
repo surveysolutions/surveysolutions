@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -20,25 +20,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : rosterSizeQuestionId,
-                isInteger : true,
-                groupPublicKey : chapterId,
-                questionType: QuestionType.Numeric
-            ));
+            questionnaire.AddNumericQuestion(
+                rosterSizeQuestionId,
+                chapterId,
+                responsibleId, isInteger: true);
 
             AddGroup(questionnaire: questionnaire, groupId: groupId, parentGroupId: chapterId, condition: null, responsibleId: responsibleId,
                 rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
                 rosterFixedTitles: null, rosterTitleQuestionId: null);
             
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : rosterTitleQuestionId,
-                groupPublicKey : groupId,
-                questionType : QuestionType.Text
-            ));
+            questionnaire.AddTextQuestion(rosterTitleQuestionId,
+                groupId,responsibleId);
 
             AddGroup(questionnaire: questionnaire, groupId: anotherRosterId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true,

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 
@@ -13,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public GenerationResult() {}
 
-        public GenerationResult(bool success, ImmutableArray<Diagnostic> diagnostics)
+        public GenerationResult(bool success, IEnumerable<Diagnostic> diagnostics)
         {
             this.Success = success;
             this.Diagnostics = diagnostics
@@ -27,30 +26,17 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
     public class GenerationDiagnostic
     {
-        private readonly string message;
-        private readonly GenerationDiagnosticSeverity severity;
-        private readonly string location;
+        public string Message { get; }
 
-        public string Message
-        {
-            get { return this.message; }
-        }
+        public string Location { get; }
 
-        public string Location
-        {
-            get { return this.location; }
-        }
-
-        public GenerationDiagnosticSeverity Severity
-        {
-            get { return this.severity; }
-        }
+        public GenerationDiagnosticSeverity Severity { get; }
 
         public GenerationDiagnostic(string message, string location, GenerationDiagnosticSeverity severity)
         {
-            this.message = message;
-            this.location = location;
-            this.severity = severity;
+            this.Message = message;
+            this.Location = location;
+            this.Severity = severity;
         }
     }
 
