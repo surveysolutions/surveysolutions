@@ -29,7 +29,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             public bool IsGroupDisabled(Identity @group) => this.actualState.IsGroupDisabled(@group);
 
+            public bool IsStaticTextDisabled(Identity @group) => this.actualState.IsStaticTextDisabled(@group);
+
             public bool IsQuestionDisabled(Identity question) => this.actualState.IsQuestionDisabled(question);
+            public bool IsVariableDisabled(Identity variable) => this.actualState.IsVariableDisabled(variable);
 
             public bool WasQuestionAnswered(Identity question) => this.actualState.WasQuestionAnswered(question);
 
@@ -49,6 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedToRosterSingleOptionAnswers(questionnaire);
             public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedToRosterMultipleOptionsAnswers(questionnaire);
             public IReadOnlyCollection<RosterVector> GetOptionsForLinkedQuestion(Identity linkedQuestionIdentity) => this.actualState.GetOptionsForLinkedQuestion(linkedQuestionIdentity);
+            public object GetAnswer(Identity identity) => this.actualState.GetAnswer(identity);
         }
 
 
@@ -65,7 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DisabledQuestions = new ConcurrentHashSet<string>();
             this.RosterGroupInstanceIds = new ConcurrentDictionary<string, ConcurrentDistinctList<decimal>>();
             this.ValidAnsweredQuestions = new ConcurrentHashSet<Identity>();
-            this.InvalidAnsweredQuestions = new ConcurrentHashSet<Identity>();
+            this.InvalidAnsweredQuestions = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
             this.AnswerComments = new ConcurrentBag<AnswerComment>();
             this.RosterTitles = new ConcurrentDictionary<string, string>();
             this.DisabledStaticTexts = new ConcurrentHashSet<Identity>();
@@ -74,6 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
 
             this.VariableValues = new ConcurrentDictionary<Identity, object>();
+            this.DisabledVariables = new ConcurrentHashSet<Identity>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -88,12 +93,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> RosterGroupInstanceIds { set; get; }
         public ConcurrentDictionary<string, string> RosterTitles { set; get; }
         public ConcurrentHashSet<Identity> ValidAnsweredQuestions { set; get; }
-        public ConcurrentHashSet<Identity> InvalidAnsweredQuestions { set; get; }
+        public IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
 
         public ConcurrentHashSet<Identity> ValidStaticTexts { set; get; }
         public IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> InvalidStaticTexts { set; get; }
         public ConcurrentDictionary<Identity, object> VariableValues { set; get; }
+        public ConcurrentHashSet<Identity> DisabledVariables { set; get; }
         public bool IsValid { get; set; }
 
         public InterviewStateDependentOnAnswers Clone()
@@ -111,7 +117,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 DisabledQuestions = new ConcurrentHashSet<string>(this.DisabledQuestions),
                 RosterGroupInstanceIds = this.RosterGroupInstanceIds.ToConcurrentDictionary(x => x.Key, x => new ConcurrentDistinctList<decimal>(x.Value)),
                 ValidAnsweredQuestions = new ConcurrentHashSet<Identity>(this.ValidAnsweredQuestions),
-                InvalidAnsweredQuestions = new ConcurrentHashSet<Identity>(this.InvalidAnsweredQuestions),
+                InvalidAnsweredQuestions = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>(this.InvalidAnsweredQuestions),
                 AnswerComments = new ConcurrentBag<AnswerComment>(this.AnswerComments),
                 RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value),
 
@@ -130,7 +136,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changes.ValidityChanges != null)
             {
-                this.DeclareAnswersInvalid(changes.ValidityChanges.AnswersDeclaredInvalid);
+                this.DeclareAnswersInvalid(changes.ValidityChanges.FailedValidationConditions.ToDictionary());
             }
 
             if (changes.RosterCalculationData != null)
@@ -251,6 +257,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     ? this.RosterGroupInstanceIds[rosterGroupKey]
                     : new ConcurrentDistinctList<decimal>();
                 rosterRowInstances.Remove(instance.RosterInstanceId);
+                this.DisabledGroups.Remove(rosterGroupKey);
 
                 this.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
             }
@@ -304,12 +311,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void DeclareAnswersInvalid(IEnumerable<Identity> questions)
+        public void DeclareAnswersInvalid(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> questions)
         {
             foreach (var questionKey in questions)
             {
-                this.ValidAnsweredQuestions.Remove(questionKey);
-                this.InvalidAnsweredQuestions.Add(questionKey);
+                this.InvalidAnsweredQuestions[questionKey.Key] = questionKey.Value;
+                this.ValidAnsweredQuestions.Remove(questionKey.Key);
             }
         }
 
@@ -362,6 +369,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new AmendingWrapper(this, getRosterInstanceIds);
         }
 
+        public bool IsStaticTextDisabled(Identity staticText)
+        {
+            return this.DisabledStaticTexts.Contains(staticText);
+        }
 
         public bool IsGroupDisabled(Identity group)
         {
@@ -375,6 +386,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string questionKey = ConversionHelper.ConvertIdentityToString(question);
 
             return this.DisabledQuestions.Contains(questionKey);
+        }
+
+        public bool IsVariableDisabled(Identity variable)
+        {
+            return this.DisabledVariables.Contains(variable);
         }
 
         public bool WasQuestionAnswered(Identity question)
@@ -450,9 +466,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IReadOnlyCollection<RosterVector> GetOptionsForLinkedQuestion(Identity linkedQuestionIdentity)
             => this.LinkedQuestionOptions.GetOrNull(linkedQuestionIdentity);
 
+        public object GetAnswer(Identity identity)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(identity);
+
+            if (this.AnswersSupportedInExpressions.ContainsKey(questionKey))
+                return this.AnswersSupportedInExpressions[questionKey];
+
+            if (this.TextListAnswers.ContainsKey(questionKey))
+                return this.TextListAnswers[questionKey];
+
+            if (LinkedMultipleOptionsAnswers.ContainsKey(questionKey))
+                return this.LinkedMultipleOptionsAnswers[questionKey].Item2;
+
+            if (LinkedSingleOptionAnswersBuggy.ContainsKey(questionKey))
+                return this.LinkedSingleOptionAnswersBuggy[questionKey].Item2;
+
+            return null;
+        }
+
         public void ChangeVariables(ChangedVariable[] changedVariables)
         {
             changedVariables.ForEach(variable => this.VariableValues[variable.Identity] = variable.NewValue);
+        }
+
+        public void EnableVariables(Identity[] variables)
+        {
+            variables.ForEach(x => this.DisabledVariables.Remove(x));
+        }
+
+        public void DisableVariables(Identity[] variables)
+        {
+            variables.ForEach(x => this.DisabledVariables.Add(x));
         }
     }
 }

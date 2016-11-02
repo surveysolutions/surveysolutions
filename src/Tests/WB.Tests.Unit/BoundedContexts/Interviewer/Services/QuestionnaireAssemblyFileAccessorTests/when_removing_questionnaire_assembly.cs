@@ -13,17 +13,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.QuestionnaireAssemb
         Establish context = () =>
         {
             interviewerQuestionnaireAssemblyFileAccessor = CreateQuestionnaireAssemblyFileAccessor(
-                asyncFileSystemAccessor: mockOfAsyncFileSystemAccessor.Object);
+                fileSystemAccessor: mockOfFileSystemAccessor.Object);
         };
 
-        Because of = async () =>
-            await interviewerQuestionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
+        Because of = () =>
+            interviewerQuestionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity);
 
         It should_call_delete_file_of_async_file_system_accessor = () =>
-            mockOfAsyncFileSystemAccessor.Verify(x => x.DeleteFileAsync(Moq.It.IsAny<string>()), Times.Once);
+            mockOfFileSystemAccessor.Verify(x => x.DeleteFile(Moq.It.IsAny<string>()), Times.Once);
 
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static readonly Mock<IAsynchronousFileSystemAccessor> mockOfAsyncFileSystemAccessor = new Mock<IAsynchronousFileSystemAccessor>();
+        private static readonly Mock<IFileSystemAccessor> mockOfFileSystemAccessor = new Mock<IFileSystemAccessor>();
         private static InterviewerQuestionnaireAssemblyFileAccessor interviewerQuestionnaireAssemblyFileAccessor;
     }
 }

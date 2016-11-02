@@ -15,10 +15,9 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -45,8 +44,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedStaticTextsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedGroupsCache = null;
-        private Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes = null;
-
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -90,7 +87,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             get
             {
-                return this.sectionsCache ?? (this.sectionsCache 
+                return this.sectionsCache ?? (this.sectionsCache
                     = this.innerDocument
                     .Children
                     .OfType<IGroup>()
@@ -148,14 +145,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                         .ToDictionary(
                             group => group.PublicKey.FormatGuid(),
                             group => group));
-            }
-        }
-
-        private Dictionary<ValueVector<Guid>, RosterScopeDescription> RosterScopes
-        {
-            get
-            {
-                return this.rosterScopes ?? (this.rosterScopes = this.CreateRosterScopes());
             }
         }
 
@@ -313,7 +302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId)
-             => this.cacheOfMultiSelectAnswerOptionsAsValues.GetOrAdd(questionId, x 
+             => this.cacheOfMultiSelectAnswerOptionsAsValues.GetOrAdd(questionId, x
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
 
         //should be used on HQ only
@@ -365,7 +354,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                                 Value = Convert.ToInt32(answer.AnswerCode.Value),
                                 Title = answer.AnswerText,
                                 ParentValue =
-                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?) null
+                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?)null
                             };
                 }
             }
@@ -374,7 +363,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 foreach (var answer in question.Answers)
                 {
                     var parentOption = string.IsNullOrEmpty(answer.ParentValue)
-                        ? (int?) null
+                        ? (int?)null
                         : Convert.ToInt32(ParseAnswerOptionParentValueOrThrow(answer.ParentValue, question.PublicKey));
 
                     if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
@@ -397,7 +386,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, 
+                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this,
                     questionId, parentQuestionValue, filter, this.translationId);
             }
 
@@ -411,7 +400,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(new QuestionnaireIdentity(this.QuestionnaireId, Version), this, 
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(new QuestionnaireIdentity(this.QuestionnaireId, Version), this,
                     questionId, optionText, this.translationId);
             }
 
@@ -451,7 +440,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!answerOption.ParentValue.HasValue)
                 throw new QuestionnaireException(
                     $"Answer option has no parent value. Option value: {answerOptionValue}, Question id: '{questionId}'.");
-                        
+
             return answerOption.ParentValue.Value;
         }
 
@@ -526,7 +515,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId) => this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
 
         public ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId)
-            => this.cacheOfParentsStartingFromTop.GetOrAdd(entityId, 
+            => this.cacheOfParentsStartingFromTop.GetOrAdd(entityId,
                 x => this.GetAllParentGroupsForEntityStartingFromBottom(entityId)
                     .Reverse()
                     .ToReadOnlyCollection());
@@ -612,8 +601,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.AllGroups
                 .Where(x => x.IsRoster)
-                .Where(x => x.RosterSizeSource == RosterSizeSourceType.FixedTitles || 
-                            IsMultioptionQuestion(x.RosterSizeQuestionId) || 
+                .Where(x => x.RosterSizeSource == RosterSizeSourceType.FixedTitles ||
+                            IsMultioptionQuestion(x.RosterSizeQuestionId) ||
                             (IsNumericQuestion(x.RosterSizeQuestionId) && x.RosterTitleQuestionId.HasValue))
                 .Select(x => x.PublicKey)
                 .ToList();
@@ -654,10 +643,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
             var entity = GetEntityOrThrow(entityId);
-            var rosterSizes=new List<Guid>();
+            var rosterSizes = new List<Guid>();
             while (entity != this.innerDocument)
             {
-                var group= entity as IGroup;
+                var group = entity as IGroup;
                 if (group != null)
                 {
                     if (IsRosterGroup(group))
@@ -702,6 +691,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return IsRosterGroup(@group);
         }
+
+        public bool IsSubSection(Guid groupId)
+        {
+            IGroup @group = this.GetGroup(groupId);
+
+            return @group?.IsRoster == false;
+        }
+
+        public bool IsVariable(Guid id)
+            => this.AllVariables.Any(x => x.PublicKey == id);
 
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
@@ -755,7 +754,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 this.cacheOfChildEntities[groupId] =
                     this.GetGroupOrThrow(groupId)
                         .Children
-                        .Where(entity => !(entity is IVariable))
+                        //.Where(entity => !(entity is IVariable))
                         .Select(entity => entity.PublicKey)
                         .ToReadOnlyCollection();
             }
@@ -763,19 +762,94 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfChildEntities[groupId];
         }
 
+        public IReadOnlyCollection<Guid> GetChildEntityIdsWithVariablesWithoutChache(Guid groupId)
+        {
+            return this.GetGroupOrThrow(groupId)
+                .Children
+                .Select(entity => entity.PublicKey)
+                .ToReadOnlyCollection();
+        }
+
+        public IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId)
+        {
+            var group = this.GetGroupOrThrow(groupId);
+
+            foreach (var child in group.Children)
+            {
+                var childEntityId = child.PublicKey;
+                if (child is Group)
+                {
+                    if ((child as Group).IsRoster)
+                        yield return new QuestionnaireItemReference(QuestionnaireReferenceType.Roster, child.PublicKey);
+                    else
+                        yield return new QuestionnaireItemReference(QuestionnaireReferenceType.SubSection, childEntityId);
+                }
+                else if (child is IStaticText)
+                {
+                    yield return new QuestionnaireItemReference(QuestionnaireReferenceType.StaticText, childEntityId);
+                }
+                else if (child is IQuestion)
+                {
+                    yield return new QuestionnaireItemReference(QuestionnaireReferenceType.Question, childEntityId);
+                }
+                else if (child is IVariable)
+                {
+                    yield return new QuestionnaireItemReference(QuestionnaireReferenceType.Variable, childEntityId);
+                }
+            }
+        }
+
+        public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid questionId)
+        {
+            var isQuestionLinkedToQuestion = this.IsQuestionLinked(questionId);
+            var questionSourceId = isQuestionLinkedToQuestion
+                  ? this.GetQuestionReferencedByLinkedQuestion(questionId)
+                  : this.GetRosterReferencedByLinkedQuestion(questionId);
+
+            var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(questionSourceId).Shrink();
+            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(questionId);
+
+            var mutualRosterSizeSources = linkedSourceRosterScopes.Intersect(linkedRosterScopes).ToList();
+
+            if (!mutualRosterSizeSources.Any())
+                return null;
+
+            var closestRosterSizeSource = mutualRosterSizeSources.Last();
+
+            var targetRostersWithSameScope = new List<Guid>(IsFixedRoster(closestRosterSizeSource)
+                ? closestRosterSizeSource.ToEnumerable()
+                : GetRosterGroupsByRosterSizeQuestion(closestRosterSizeSource));
+
+            if (!targetRostersWithSameScope.Any())
+                return null;
+
+            Guid targetRoster;
+            targetRoster = targetRostersWithSameScope.Count == 1
+                ? targetRostersWithSameScope.First()
+                : targetRostersWithSameScope.FirstOrDefault(rosterId => isQuestionLinkedToQuestion 
+                    ? IsQuestionChildOfGroup(questionSourceId, rosterId)
+                    : IsRosterChildOfGroup(questionSourceId, rosterId));
+
+            return targetRoster;
+        }
+
+        private bool IsQuestionChildOfGroup(Guid questionId, Guid groupId)
+        {
+            return GetAllUnderlyingQuestions(groupId).Contains(questionId);
+        }
+
+        private bool IsRosterChildOfGroup(Guid rosterId, Guid groupId)
+        {
+            return rosterId == groupId || this.GetAllUnderlyingChildRosters(groupId).Contains(rosterId);
+        }
+
+
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
-            if (!this.cacheOfChildEntities.ContainsKey(groupId))
-            {
-                this.cacheOfChildEntities[groupId] =
-                    this.GetGroupOrThrow(groupId)
-                        .Children
-                        .Where(entity => !(entity is IVariable))
-                        .Select(entity => entity.PublicKey)
-                        .ToReadOnlyCollection();
-            }
+            var result = GetChildEntityIds(groupId)
+                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewierQuestion(x)) ||
+                                      this.IsVariable(x));
 
-            var result = this.cacheOfChildEntities[groupId].Except(x => this.IsQuestion(x) && !this.IsInterviewierQuestion(x));
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
 
@@ -794,7 +868,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Children.OfType<IStaticText>()
                     .Select(s => s.PublicKey)
                     .ToReadOnlyCollection());
-        
+
 
         public bool IsPrefilled(Guid questionId)
         {
@@ -943,127 +1017,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return true;
         }
 
-
-        public Dictionary<ValueVector<Guid>, RosterScopeDescription> GetRosterScopes()
-        {
-            return this.RosterScopes;
-        }
-
-        public Dictionary<ValueVector<Guid>, RosterScopeDescription> CreateRosterScopes()
-        {
-            var result = new Dictionary<ValueVector<Guid>, RosterScopeDescription>();
-            var groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId(this.innerDocument);
-            this.AddRosterScopes(this.innerDocument, groupsMappedOnPropagatableQuestion, result);
-
-            return result;
-        }
-
-        private void AddRosterScopes(QuestionnaireDocument questionnaire, IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion,
-           Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
-        {
-            var rosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question);
-            var fixedRosterGroups = questionnaire.Find<IGroup>(@group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles).ToList();
-
-            var rosterSizeQuestions = questionnaire.Find<IQuestion>(question => rosterGroups.Any(group => group.RosterSizeQuestionId.Value == question.PublicKey));
-
-            foreach (var rosterSizeQuestion in rosterSizeQuestions)
-            {
-                var groupsFromRosterSizeQuestionScope =
-                    rosterGroups.Where(group => group.RosterSizeQuestionId == rosterSizeQuestion.PublicKey).ToList();
-
-                var scopeVectorsOfTriggers = groupsFromRosterSizeQuestionScope.Select(
-                    roster =>
-                        this.GetScopeOfQuestionnaireItem(roster,
-                            groupsMappedOnPropagatableQuestion)).GroupBy(k => k);
-
-                foreach (var scopeVectorsOfTrigger in scopeVectorsOfTriggers)
-                {
-                    var rosterIdWithTitleQuestionIds =
-                        this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(questionnaire,
-                            groupsFromRosterSizeQuestionScope.Where(group =>
-                                GetScopeOfQuestionnaireItem(group, groupsMappedOnPropagatableQuestion)
-                                    .SequenceEqual(scopeVectorsOfTrigger.Key)));
-
-                    var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, rosterSizeQuestion.StataExportCaption,
-                        GetRosterScopeTypeByQuestionType(rosterSizeQuestion.QuestionType), rosterIdWithTitleQuestionIds);
-
-                    rosterScopes.Add(scopeVectorsOfTrigger.Key, rosterDescription);
-                }
-            }
-
-            foreach (var fixedRosterGroup in fixedRosterGroups)
-            {
-                var scopeVector = this.GetScopeOfQuestionnaireItem(fixedRosterGroup, groupsMappedOnPropagatableQuestion);
-                rosterScopes[scopeVector] =
-                    new RosterScopeDescription(scopeVector,
-                        string.Empty, RosterScopeType.Fixed,
-                        new Dictionary<Guid, RosterTitleQuestionDescription> { { fixedRosterGroup.PublicKey, null } });
-            }
-        }
-
-        private RosterScopeType GetRosterScopeTypeByQuestionType(QuestionType questionType)
-        {
-            switch (questionType)
-            {
-                case QuestionType.Numeric:
-                    return RosterScopeType.Numeric;
-                case QuestionType.MultyOption:
-                    return RosterScopeType.MultyOption;
-                case QuestionType.TextList:
-                    return RosterScopeType.TextList;
-            }
-            return RosterScopeType.Numeric;
-        }
-
-        private IDictionary<Guid, Guid> GetAllRosterScopesGroupedByRosterId(QuestionnaireDocument template)
-        {
-            var result = template.Find<IGroup>(group => @group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question).ToDictionary(roster => roster.PublicKey, roster => roster.RosterSizeQuestionId.Value);
-
-            foreach (var roster in template.Find<IGroup>(group => group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles))
-            {
-                result.Add(roster.PublicKey, roster.PublicKey);
-            }
-
-            return result;
-        }
-
-        private ValueVector<Guid> GetScopeOfQuestionnaireItem(IComposite questionnaireItem,
-            IDictionary<Guid, Guid> groupsMappedOnPropagatableQuestion)
-        {
-            var result = new List<Guid>();
-            var questionParent = questionnaireItem;
-
-            while (questionParent != null)
-            {
-                var group = questionParent as IGroup;
-                if (group != null && (group.IsRoster))
-                {
-                    result.Add(groupsMappedOnPropagatableQuestion[group.PublicKey]);
-                }
-                questionParent = questionParent.GetParent();
-            }
-            result.Reverse();
-
-            return new ValueVector<Guid>(result);
-        }
-
-        private Dictionary<Guid, RosterTitleQuestionDescription> GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(QuestionnaireDocument questionnaire, IEnumerable<IGroup> groupsFromRosterSizeQuestionScope)
-        {
-            return
-                groupsFromRosterSizeQuestionScope
-                    .ToDictionary(roster => roster.PublicKey,
-                        roster => roster.RosterTitleQuestionId.HasValue
-                            ? this.CreateRosterTitleQuestionDescription(
-                                questionnaire.Find<IQuestion>(roster.RosterTitleQuestionId.Value))
-                            : null);
-        }
-
-        private RosterTitleQuestionDescription CreateRosterTitleQuestionDescription(IQuestion question)
-        {
-            return new RosterTitleQuestionDescription(question.PublicKey,
-                question.Answers.ToDictionary(a => a.ParsedValue(), a => a.AnswerText));
-        }
-
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))
@@ -1121,7 +1074,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion == null)
-                throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
+                return false;
+            //throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
 
             return numericQuestion.IsInteger;
         }
@@ -1132,7 +1086,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var multipleOptionsQuestion = question as IMultyOptionsQuestion;
             if (multipleOptionsQuestion == null)
-                throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
+                return false;
+            //throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
 
             return multipleOptionsQuestion.YesNoView;
         }
@@ -1201,10 +1156,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return nestedRosters;
         }
 
-        public Guid? GetRosterSizeQuestion(Guid rosterId)
+        public Guid GetRosterSizeQuestion(Guid rosterId)
         {
             var roster = this.GetGroupOrThrow(rosterId);
-            return roster.RosterSizeQuestionId;
+            return roster.RosterSizeQuestionId.Value;
         }
 
         public Guid? GetRosterTitleQuestionId(Guid rosterId)

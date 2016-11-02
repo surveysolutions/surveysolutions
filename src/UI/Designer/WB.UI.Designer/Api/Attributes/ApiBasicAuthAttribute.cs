@@ -9,7 +9,6 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using System.Web.Security;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
@@ -19,20 +18,9 @@ namespace WB.UI.Designer.Api.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
-        private IMembershipUserService userHelper
-        {
-            get { return ServiceLocator.Current.GetInstance<IMembershipUserService>(); }
-        }
+        private IMembershipUserService UserHelper => ServiceLocator.Current.GetInstance<IMembershipUserService>();
 
-        private IReadSideStatusService readSideStatusService
-        {
-            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
-        }
-
-        private ITransactionManagerProvider TransactionManagerProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
-        }
+        private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
         private readonly Func<string, string, bool> validateUserCredentials;
 
@@ -46,19 +34,13 @@ namespace WB.UI.Designer.Api.Attributes
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            if (this.readSideStatusService.AreViewsBeingRebuiltNow())
-            {
-                this.ResponseMaintenanceMessage(actionContext);
-                return;
-            }
-
             var credentials = ParseCredentials(actionContext);
             if (credentials == null)
             {
                 this.ThrowUnathorizedException(actionContext);
                 return;
             }
-            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            this.TransactionManagerProvider.GetPlainTransactionManager().BeginTransaction();
             try
             {
                 if (!this.Authorize(credentials.Username, credentials.Password))
@@ -92,7 +74,7 @@ namespace WB.UI.Designer.Api.Attributes
             }
             finally
             {
-                this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                this.TransactionManagerProvider.GetPlainTransactionManager().RollbackTransaction();
             }
         }
 
@@ -142,13 +124,8 @@ namespace WB.UI.Designer.Api.Attributes
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
             {
                 ReasonPhrase =
-                    string.Format(ErrorMessages.UserNotApproved, this.userHelper.WebUser.MembershipUser.Email)
+                    string.Format(ErrorMessages.UserNotApproved, this.UserHelper.WebUser.MembershipUser.Email)
             };
-        }
-
-        private void ResponseMaintenanceMessage(HttpActionContext actionContext)
-        {
-            actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = ErrorMessages.Maintenance };
         }
 
         private bool Authorize(string username, string password)
@@ -158,12 +135,12 @@ namespace WB.UI.Designer.Api.Attributes
 
         private bool IsAccountLockedOut()
         {
-            return this.userHelper.WebUser == null || this.userHelper.WebUser.MembershipUser.IsLockedOut;
+            return this.UserHelper.WebUser == null || this.UserHelper.WebUser.MembershipUser.IsLockedOut;
         }
 
         private bool IsAccountNotApproved()
         {
-            return !this.userHelper.WebUser.MembershipUser.IsApproved;
+            return !this.UserHelper.WebUser.MembershipUser.IsApproved;
         }
     }
 }

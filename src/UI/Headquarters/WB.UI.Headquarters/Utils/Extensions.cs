@@ -1,12 +1,29 @@
+using System;
 using System.Web.Http.Filters;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils
+namespace WB.UI.Headquarters.Utils
 {
     public static class Extensions
     {
-        public static T GetActionArgument<T>(this HttpActionExecutedContext context, string argument)
+        public static T GetActionArgumentOrDefault<T>(this HttpActionExecutedContext context, string argument, T defaultValue)
         {
-            return (T) context.ActionContext.ActionArguments[argument];
+            object value;
+            if (!context.ActionContext.ActionArguments.TryGetValue(argument, out value))
+                return defaultValue;
+
+            if (value is T)
+            {
+                return (T)value;
+            }
+
+            try
+            {
+                return (T)Convert.ChangeType(value, typeof(T));
+            }
+            catch (InvalidCastException)
+            {
+                return defaultValue;
+            }
         }
     }
 }

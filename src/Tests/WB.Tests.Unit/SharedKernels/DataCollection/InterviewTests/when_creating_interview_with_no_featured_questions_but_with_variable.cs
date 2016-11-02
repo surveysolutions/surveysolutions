@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
@@ -35,18 +30,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocument(id: questionnaireId,
-                children: new IComposite[]
-                {
-
-                    Create.Entity.Variable(id:variableId, type: VariableType.Boolean, expression: "true")
-                });
-
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                 new PlainQuestionnaire(questionnaire, 18));
-
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
+                Create.Entity.PlainQuestionnaire(
+                    CreateQuestionnaireDocumentWithOneChapter(Create.Entity.Variable(id: variableId,
+                        type: VariableType.Boolean, expression: "true")), questionnaireVersion),
+                questionnaireVersion);
             
-
             var expressionState = Substitute.For<ILatestInterviewExpressionState>();
             expressionState.Clone().Returns(expressionState);
             var structuralChanges = new StructuralChanges();

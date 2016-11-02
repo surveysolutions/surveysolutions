@@ -8,10 +8,13 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
+    /// <remarks>
+    /// This implementation supports only set of features used by us.
+    /// For instance it will not notify indexer change (http://stackoverflow.com/questions/657675/propertychanged-for-indexer-property) because we do not use such bindings.
+    /// The same is applied for other features.
+    /// </remarks>
     public class CompositeCollection<T> : IObservableCollection<T>
     {
-        private const string IndexerName = "Item[]";
-
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
@@ -71,8 +74,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.Count = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
-            this.OnPropertyChanged(nameof(this.Count));
+            var newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
+            if (newCount != this.Count)
+            {
+                this.Count = newCount;
+                this.OnPropertyChanged(nameof(this.Count));
+            }
 
             if (this.CollectionChanged == null)
                 return;
@@ -97,16 +104,13 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, e.NewItems, newIndex);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, e.OldItems,
-                        oldIndex);
+                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, e.OldItems, oldIndex);
                     break;
                 case NotifyCollectionChangedAction.Move:
-                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, e.NewItems, newIndex,
-                        oldIndex);
+                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, e.NewItems, newIndex, oldIndex);
                     break;
                 case NotifyCollectionChangedAction.Replace:
-                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems,
-                        e.OldItems, newIndex);
+                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems, e.OldItems, newIndex);
                     break;
                 default:
                     throw new Exception("bug");
@@ -128,7 +132,6 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems, offset));
 
-            this.OnPropertyChanged(IndexerName);
             this.OnPropertyChanged(nameof(this.Count));
         }
 

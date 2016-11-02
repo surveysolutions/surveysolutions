@@ -21,14 +21,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             {
                 connection.Open();
                 NpgsqlConnectionStringBuilder connectionStringBuilder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString);
-                string schemaName = connectionStringBuilder.SearchPath ?? "public";
+                string schemaName = connectionStringBuilder.SearchPath ?? this.connectionSettings.SchemaName;
 
                 var dbCommand = connection.CreateCommand();
                 dbCommand.CommandText = $"drop schema {schemaName} cascade;create schema {schemaName};";
                 dbCommand.ExecuteNonQuery();
             }
 
-            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString, this.dbUpgradeSettings);
+            DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString, this.connectionSettings.SchemaName, this.dbUpgradeSettings);
         }
 
         public bool CheckDatabaseConnection()

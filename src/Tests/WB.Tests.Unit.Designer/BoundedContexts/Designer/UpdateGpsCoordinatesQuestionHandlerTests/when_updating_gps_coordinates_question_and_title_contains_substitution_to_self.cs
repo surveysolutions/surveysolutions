@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -14,42 +17,40 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(
-                Create.Event.NewQuestionAdded(
-                    publicKey: questionId,
-                    groupPublicKey:chapterId,
-                    questionText: "old title",
-                    stataExportCaption: "old_variable_name",
-                    instructions: "old instructions",
-                    conditionExpression: "old condition",
-                    responsibleId: responsibleId,
-                    questionType: QuestionType.QRBarcode
-            ));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                title: "old title",
+                variableName: "old_variable_name",
+                instructions: "old instructions",
+                enablementCondition: "old condition",
+                responsibleId: responsibleId);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
+                new UpdateGpsCoordinatesQuestion(
+                    questionnaire.Id,
                     questionId: questionId,
-                    title: titleWithSubstitutionToSelf,
-                    variableName: variableName,
-                    variableLabel: null,
+                    commonQuestionParameters: new CommonQuestionParameters()
+                    {
+                        Title = titleWithSubstitutionToSelf,
+                        VariableName = variableName,
+                        Instructions = instructions,
+                        EnablementCondition = enablementCondition
+                    },
+                    validationMessage: null,
+                    validationExpression: null,
                     isPreFilled: false,
                     scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    responsibleId: responsibleId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
+                    responsibleId: responsibleId,
+                    validationConditions: new List<ValidationCondition>())));
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        It should_throw_exception_with_message_containting__title__contains__self__ = () =>
-            new[] { "text", "contains", "self" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
-
+        It should_not_throw_QuestionnaireException = () =>
+            exception.ShouldBeNull();
+        
         private static Questionnaire questionnaire;
         private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

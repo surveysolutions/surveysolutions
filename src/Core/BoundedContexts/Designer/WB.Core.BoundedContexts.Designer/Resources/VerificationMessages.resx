@@ -550,6 +550,6 @@
     <value>Roster has reached size limit. Reduce roster size or decrease nesting.</value>
   </data>
   <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
-    <value>First chapter can not have enabling condition.</value>
+    <value>First section can not have enabling condition.</value>
   </data>
 </root>

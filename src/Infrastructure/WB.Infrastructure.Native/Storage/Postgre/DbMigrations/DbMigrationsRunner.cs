@@ -1,5 +1,8 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Linq;
+using System.Reflection;
 using FluentMigrator;
+using FluentMigrator.Infrastructure;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Announcers;
 using FluentMigrator.Runner.Initialization;
@@ -17,7 +20,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             public int Timeout { get; set; }
         }
 
-        public static void MigrateToLatest(string connectionString, DbUpgradeSettings dbUpgradeSettings)
+        public static void MigrateToLatest(string connectionString, string schemaName, DbUpgradeSettings dbUpgradeSettings)
         {
             // var announcer = new NullAnnouncer();
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetForType(typeof(DbMigrationsRunner));
@@ -25,15 +28,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 
             var migrationContext = new RunnerContext(announcer)
             {
-                Namespace = dbUpgradeSettings.MigrationsNamespace
+                Namespace = dbUpgradeSettings.MigrationsNamespace,
             };
 
             var options = new MigrationOptions
             {
                 PreviewOnly = false,
             };
-            var factory = new FluentMigrator.Runner.Processors.Postgres.PostgresProcessorFactory();
 
+            var factory = new InSchemaPostgresProcessorFactory(schemaName);
             using (var processor = factory.Create(connectionString, announcer, options))
             {
                 var runner = new MigrationRunner(dbUpgradeSettings.MigrationsAssembly, migrationContext, processor);

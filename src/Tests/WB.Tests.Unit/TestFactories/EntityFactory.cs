@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -174,6 +175,8 @@ namespace WB.Tests.Unit.TestFactories
                 groupsToBeEnabled ?? new List<Identity>(),
                 questionsToBeDisabled ?? new List<Identity>(),
                 questionsToBeEnabled ?? new List<Identity>(),
+                new List<Identity>(),
+                new List<Identity>(),
                 new List<Identity>(),
                 new List<Identity>());
 
@@ -1147,7 +1150,48 @@ namespace WB.Tests.Unit.TestFactories
         public QuestionnaireView QuestionnaireView(QuestionnaireIdentity questionnaireIdentity)
         {
             return new QuestionnaireView { Id = questionnaireIdentity.ToString()};
-            
         }
+
+        public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
+            RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null,
+            params IInterviewTreeNode[] children)
+            => new InterviewTreeRoster(rosterIdentity, children, rosterType: rosterType, rosterSizeQuestion: rosterSizeQuestion, childrenReferences : Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
+
+        public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
+            params IInterviewTreeNode[] children)
+        {
+            var subSection = new InterviewTreeSubSection(groupIdentity, Enumerable.Empty<QuestionnaireItemReference>());
+            subSection.AddChild(children);
+            if (isDisabled) subSection.Disable();
+            return subSection;
+        }
+
+        public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
+        {
+            var section = new InterviewTreeSection(sectionIdentity, Enumerable.Empty<QuestionnaireItemReference>());
+            section.AddChild(children);
+            if (isDisabled)
+                section.Disable();
+            return section;
+        }
+
+        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
+            string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
+            Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null)
+            => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, questionType, answer,
+                linkedOptions, cascadingParentQuestionId, isYesNo, isDecimal, linkedSourceId);
+
+        public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
+            => new InterviewTreeStaticText(staticTextIdentity, isDisabled);
+
+        public InterviewTreeVariable InterviewTreeVariable(Identity variableIdentity, bool isDisabled = false, object value = null)
+            => new InterviewTreeVariable(variableIdentity, isDisabled, value);
+
+        public InterviewTreeQuestion InterviewTreeQuestion_SingleOption(Identity questionIdentity,
+            bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
+            => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null, false, false);
+
+        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections) 
+            => new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), sections);
     }
 }

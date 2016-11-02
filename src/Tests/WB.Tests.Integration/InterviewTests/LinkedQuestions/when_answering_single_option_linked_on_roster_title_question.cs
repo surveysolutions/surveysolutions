@@ -3,15 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
@@ -22,13 +17,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
-            var triggerQuestionId = Guid.NewGuid();
-            var titleQuestionId = Guid.NewGuid();
+            
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {
-                Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: linkedToQuestionId,
-                    variable: "link_single"),
-                Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId, variable: "link_single"),
+                Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Create.Roster(id: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1",
                     children: new IComposite[]
@@ -38,20 +31,15 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 Create.TextQuestion(id: disabledQuestionsId, variable: "txt_disabled", enablementCondition:"IsAnswered(link_single)")
             });
 
-            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterId));
-            interview.Apply(new LinkedOptionsChanged(new[]
-            {
-                new ChangedLinkedOptions(new Identity(linkedToQuestionId, new decimal[0]), new RosterVector[]
-                {
-                    answer
-                })
-            }));
+            interview = SetupInterview(questionnaireDocument);
+            interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, 1);
+            interview.AnswerNumericRealQuestion(userId, titleQuestionId, Create.RosterVector(0), DateTime.Now, 18.5m);
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVector: answer);
+        Because of = () =>
+            interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
+                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVector: new [] { 0m });
 
         Cleanup stuff = () =>
         {
@@ -67,10 +55,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         private static EventContext eventContext;
         private static Interview interview;
-        private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
-        private static Guid linkedToQuestionId = Guid.Parse("11111111111111111111111111111111");
-        private static Guid rosterId = Guid.Parse("22222222222222222222222222222222");
-        private static decimal[] answer = { 0 };
-        private static Guid disabledQuestionsId = Guid.NewGuid();
+        private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
+        private static readonly Guid linkedToQuestionId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid rosterId = Guid.Parse("22222222222222222222222222222222");
+        private static readonly Guid disabledQuestionsId = Guid.Parse("33333333333333333333333333333333");
+        private static readonly Guid triggerQuestionId = Guid.Parse("44444444444444444444444444444444");
+        private static readonly Guid titleQuestionId = Guid.Parse("55555555555555555555555555555555");
     }
 }

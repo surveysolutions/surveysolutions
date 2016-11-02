@@ -2,9 +2,8 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerTests
@@ -14,35 +13,37 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-publicKey: questionId,
-groupPublicKey: chapterId,
-questionText: "old title",
-stataExportCaption: "old_variable_name",
-instructions: "old instructions",
-conditionExpression: "old condition",
-responsibleId: responsibleId,
-questionType: QuestionType.QRBarcode
-));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddQRBarcodeQuestion(
+                questionId,
+                chapterId,
+                title: "old title",
+                variableName: "old_variable_name",
+                instructions: "old instructions",
+                enablementCondition: "old condition",
+                responsibleId: responsibleId);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: titleWithSubstitutionToSelf,
-                    variableName: variableName,
-                variableLabel: null, enablementCondition: null, hideIfDisabled: false, instructions: null,
-                    responsibleId: responsibleId, scope: QuestionScope.Interviewer,
-                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                    properties: Create.QuestionProperties()));
+                questionnaire.UpdateQRBarcodeQuestion(
+                    new UpdateQRBarcodeQuestion(
+                        questionnaire.Id,
+                        questionId: questionId,
+                        commonQuestionParameters: new CommonQuestionParameters()
+                        {
+                            Title = titleWithSubstitutionToSelf,
+                            VariableName = "var",
 
-        It should_throw_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
+                        },
+                        validationExpression: null,
+                        validationMessage: null,
+                        responsibleId: responsibleId,
+                        scope: QuestionScope.Interviewer,
+                        validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
 
-        It should_throw_exception_with_message_containting__title__contains__self__ = () =>
-             new[] { "text", "contains", "self" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().Contains(keyword));
-
+        It should_not_throw_QuestionnaireException = () =>
+            exception.ShouldBeNull();
         
         private static Questionnaire questionnaire;
         private static Exception exception;

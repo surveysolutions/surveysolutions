@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredComboboxOptionsHandlerTests
@@ -13,16 +13,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: questionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.SingleOption,
-                questionText: "text",
-                stataExportCaption: "var",
-                isFilteredCombobox: true,
-                responsibleId: responsibleId
-            ));
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddSingleOptionQuestion(
+                questionId,
+                chapterId,
+                responsibleId,
+                title: "text",
+                variableName: "var",
+                isFilteredCombobox: true);
             
         };
 

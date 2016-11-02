@@ -4,13 +4,12 @@ using System.Linq;
 using System.Reflection;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
@@ -106,9 +105,9 @@ namespace WB.Tests.Integration.EventHandler
 
        private static Type[] typesToExclude =
        {
-            typeof (ILogger), typeof (IQuestionnaireEntityFactory), typeof(IPlainKeyValueStorage<QuestionnaireQuestionsInfo>), 
+            typeof (ILogger), typeof(IPlainKeyValueStorage<QuestionnaireQuestionsInfo>), 
             typeof (IQuestionnaireStorage), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
-             
+            typeof (IRostrerStructureService),
             typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
             typeof(ILookupTableService), typeof(IAttachmentService), typeof(IQuestionnaireExportStructureStorage)

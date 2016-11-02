@@ -27,7 +27,7 @@ namespace Main.Core.Entities.SubEntities
             return this.MemberwiseClone() as Answer;
         }
 
-        public decimal ParsedValue()
+        public decimal GetParsedValue()
         {
             return this.AnswerCode ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
         }

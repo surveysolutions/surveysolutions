@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -12,21 +12,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey: categoricalLinkedQuestionId,
-                groupPublicKey: chapterId,
-                questionType: QuestionType.MultyOption,
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(rosterId,chapterId, responsibleId: responsibleId, isRoster: true);
+            
+            questionnaire.AddGroup(groupInsideRosterId,  rosterId, responsibleId: responsibleId);
+            questionnaire.AddTextQuestion(linkedSourceQuestionId,
+                groupInsideRosterId,
+                responsibleId);
+
+            questionnaire.AddMultiOptionQuestion(categoricalLinkedQuestionId,
+                chapterId,
+                responsibleId,
+                options: new Option[0],
                 linkedToQuestionId: linkedSourceQuestionId
-            ));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
-            questionnaire.MarkGroupAsRoster(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = groupInsideRosterId, ParentGroupPublicKey = rosterId });
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded(
-                publicKey : linkedSourceQuestionId,
-                groupPublicKey : groupInsideRosterId,
-                questionType : QuestionType.Text
-            ));
+            );
         };
 
         Because of = () => exception = Catch.Exception(() => questionnaire.MoveGroup(groupId: rosterId, targetGroupId: chapterId, responsibleId: responsibleId, targetIndex:0));

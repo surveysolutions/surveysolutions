@@ -10,6 +10,7 @@ using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Designer.Controllers
 {
+    [AllowAnonymous]
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : BaseController
     {
@@ -28,9 +29,6 @@ namespace WB.UI.Designer.Controllers
         public ActionResult NConfig() => this.View();
 
         public ActionResult Versions() => this.View();
-
-        [NoTransaction]
-        public ActionResult ReadSide() => this.View();
 
         public ActionResult MakeAdmin() => this.View();
 

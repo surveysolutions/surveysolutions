@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireDto;
+
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -20,24 +20,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
 
-            questionnaire.AddQuestion(Create.Event.NumericQuestionAdded
-            (
-                publicKey : rosterSizeQuestionId,
+            questionnaire.AddNumericQuestion(
+                rosterSizeQuestionId,
                 isInteger : true,
-                groupPublicKey : chapterId
-            ));
+                parentId: chapterId,
+                responsibleId:responsibleId);
 
             AddGroup(questionnaire: questionnaire, groupId: rosterGroupWithRosterTitleQuestionId, parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
 
-            questionnaire.AddQuestion(Create.Event.NewQuestionAdded
-            (
-                publicKey : rosterTitleQuestionId,
-                questionType : QuestionType.Text,
-                groupPublicKey : rosterGroupWithRosterTitleQuestionId
-            ));
+            questionnaire.AddTextQuestion(rosterTitleQuestionId,rosterGroupWithRosterTitleQuestionId, responsibleId);
 
             AddGroup(questionnaire: questionnaire, groupId: Guid.NewGuid(), parentGroupId: chapterId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true,
