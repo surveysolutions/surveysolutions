@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
                 Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId),
                 Create.Entity.Roster(rosterId: roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
                 {
-                    Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1m, 2m}),
+                    Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1, 2}),
                     Create.Entity.Roster(rosterId: roster2Id, 
                         rosterTitleQuestionId: sourceOfLinkedQuestionId,
                         rosterSizeQuestionId: nestedRosterSizeQuestionId,
@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
             interview.AnswerNumericIntegerQuestion(interviewerId, rosterSizeQuestionId, RosterVector.Empty, DateTime.UtcNow, 2);
-            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, new[] { 1m, 2m });
-            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, new[] { 1m, 2m });
+            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, new[] { 1, 2 });
+            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, new[] { 1, 2 });
             interview.AnswerNumericIntegerQuestion(interviewerId, roster3TriggerId, Create.Entity.RosterVector(0, 1), DateTime.UtcNow, 2);
         };
 
