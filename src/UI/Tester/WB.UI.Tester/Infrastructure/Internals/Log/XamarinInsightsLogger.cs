@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -16,30 +17,31 @@ namespace WB.UI.Tester.Infrastructure.Internals.Log
 
         public void Warn(string message, Exception exception = null)
         {
-            Insights.Report(exception: exception, warningLevel: Insights.Severity.Warning, extraData: CollectExtraData());
+            ReportException(exception: exception, warningLevel: Insights.Severity.Warning);
         }
 
         public void Error(string message, Exception exception = null)
         {
-            Insights.Report(exception: exception, warningLevel: Insights.Severity.Error, extraData: CollectExtraData());
+            ReportException(exception: exception, warningLevel: Insights.Severity.Error);
         }
 
         public void Fatal(string message, Exception exception = null)
         {
-            Insights.Report(exception: exception, warningLevel: Insights.Severity.Critical, extraData: CollectExtraData());
+            ReportException(exception: exception, warningLevel: Insights.Severity.Critical);
         }
 
-        private IDictionary CollectExtraData()
+        private void ReportException(Exception exception, Insights.Severity warningLevel)
         {
-            var settings = Mvx.Resolve<IRestServiceSettings>();
-            var principal = Mvx.Resolve<IPrincipal>();
+            var settings = ServiceLocator.Current.GetInstance<IRestServiceSettings>();
+            var principal = ServiceLocator.Current.GetInstance<IPrincipal>();
 
             var extraData = new Dictionary<string, string>
             {
                 {"Endpoint", settings.Endpoint},
                 {"User",     principal.CurrentUserIdentity?.Name}
             };
-            return extraData;
+
+            Insights.Report(exception: exception, warningLevel: warningLevel, extraData: extraData);
         }
     }
 }
