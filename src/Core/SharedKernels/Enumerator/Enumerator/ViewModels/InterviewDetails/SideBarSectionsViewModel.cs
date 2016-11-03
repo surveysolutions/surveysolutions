@@ -283,7 +283,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                return new MvxCommand(async () => await Task.Run(() =>
+                return new MvxAsyncCommand(async () => await Task.Run(() =>
                     {
                         this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromGroupModel());
                     }));
@@ -293,6 +293,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
+            this.Sections.ForEach(x => x.Dispose());
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
         }
     }
