@@ -52,10 +52,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.registry.Subscribe(this, interviewId);
         }
 
-        public string Text
-        {
-            get { return (this.variableDescription ?? this.variableName) + ": " + (this.variableValue.ToString() ?? "<empty>"); }
-        }
+        public string Text => this.variableName + ": " + (this.variableValue.ToString() ?? "<empty>");
+        public string Description => this.variableDescription;
+        public bool IsShowDescription => !string.IsNullOrEmpty(this.variableDescription);
 
 
         public void Handle(VariablesChanged @event)
