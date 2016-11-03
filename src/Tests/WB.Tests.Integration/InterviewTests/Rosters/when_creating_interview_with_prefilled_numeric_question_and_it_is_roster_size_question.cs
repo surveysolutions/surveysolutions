@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     var interview = SetupStatefullInterview(questionnaireDocument, 
                         answersOnPrefilledQuestions: new Dictionary<Guid, AbstractAnswer>
                         {
-                            { numericQuestionId, new NumericIntegerAnswer(3) }
+                            { numericQuestionId, NumericIntegerAnswer.FromInt(3) }
                         });
 
                     result.AnyNumericRosterWasCreated = eventContext.AnyEvent<RosterInstancesAdded>(x => x.Instances.Any(r => r.GroupId == roster1Id));

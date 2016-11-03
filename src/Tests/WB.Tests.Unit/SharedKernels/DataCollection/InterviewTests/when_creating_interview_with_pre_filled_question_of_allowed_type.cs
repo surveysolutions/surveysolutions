@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>();
             prefilledQuestionAnswer = "answer";
-            answersToFeaturedQuestions.Add(prefilledQuestionId, new TextAnswer(prefilledQuestionAnswer));
+            answersToFeaturedQuestions.Add(prefilledQuestionId, TextAnswer.FromString(prefilledQuestionAnswer));
             answersTime = new DateTime(2013, 09, 01);
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]

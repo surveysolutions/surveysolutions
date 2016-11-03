@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
-            var integerAnswer = (rosterSizeQuestion != null && rosterSizeQuestion.AsInteger.IsAnswered) ? rosterSizeQuestion.AsInteger.GetAnswer() : 0;
+            var integerAnswer = (rosterSizeQuestion != null && rosterSizeQuestion.AsInteger.IsAnswered) ? rosterSizeQuestion.AsInteger.GetAnswer().Value : 0;
             return Enumerable.Range(0, integerAnswer)
                 .Select(index => new RosterIdentity(rosterId, parentIdentity.RosterVector, index, index).ToIdentity())
                 .ToList();
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
-            var listAnswer = rosterSizeQuestion.AsTextList.IsAnswered ? rosterSizeQuestion.AsTextList.GetAnswer() : new Tuple<decimal, string>[0];
+            var listAnswer = rosterSizeQuestion.AsTextList.IsAnswered ? rosterSizeQuestion.AsTextList.GetAnswer().ToTupleArray() : new Tuple<decimal, string>[0];
             return listAnswer
                 .Select(answer => new RosterIdentity(rosterId, parentIdentity.RosterVector, answer.Item1, 0).ToIdentity())
                 .ToList();
@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
-            var newMultiAnswer = rosterSizeQuestion.AsMultiOption.IsAnswered ? rosterSizeQuestion.AsMultiOption.GetAnswer() : new decimal[0];
+            var newMultiAnswer = rosterSizeQuestion.AsMultiFixedOption.IsAnswered ? rosterSizeQuestion.AsMultiFixedOption.GetAnswer().ToDecimals() : new decimal[0];
 
             return newMultiAnswer
                 .Select((optionValue, index) => new RosterIdentity(rosterId, parentIdentity.RosterVector, optionValue, index).ToIdentity())
@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
-            var newYesNoAnswer = rosterSizeQuestion.AsYesNo.IsAnswered ? rosterSizeQuestion.AsYesNo.GetAnswer() : new AnsweredYesNoOption[0];
+            var newYesNoAnswer = rosterSizeQuestion.AsYesNo.IsAnswered ? rosterSizeQuestion.AsYesNo.GetAnswer().ToAnsweredYesNoOptions() : new AnsweredYesNoOption[0];
             return newYesNoAnswer
                 .Where(x => x.Yes)
                 .Select((selectedYesOption, index) => new RosterIdentity(rosterId, parentIdentity.RosterVector, selectedYesOption.OptionValue, index).ToIdentity())

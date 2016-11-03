@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             {
                 new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, AbstractAnswer>
                 {
-                    { prefilledQuestionId, new NumericRealAnswer(prefilledQuestionAnswer) }
+                    { prefilledQuestionId, NumericRealAnswer.FromDouble(prefilledQuestionAnswer) }
                 }),
             });
             answersTime = new DateTime(2013, 09, 01);

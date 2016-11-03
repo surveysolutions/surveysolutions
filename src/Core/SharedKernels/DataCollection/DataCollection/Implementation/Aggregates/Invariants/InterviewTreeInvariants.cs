@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             if (!parentQuestion.IsAnswered)
                 return;
 
-            int actualParentValue = parentQuestion.GetAnswer();
+            int actualParentValue = parentQuestion.GetAnswer().SelectedValue;
 
             if (answerParentValue != actualParentValue)
                 throw new AnswerNotAcceptedException(

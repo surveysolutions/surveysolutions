@@ -18,12 +18,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
 
-            this.CheckYesNoQuestionInvariants(command.Question, new YesNoAnswer(command.AnsweredOptions), questionnaire, sourceInterviewTree);
+            this.CheckYesNoQuestionInvariants(command.Question, YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions), questionnaire, sourceInterviewTree);
 
             var changedInterviewTree = sourceInterviewTree.Clone();
 
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
-            changedInterviewTree.GetQuestion(answeredQuestion).AsYesNo.SetAnswer(command.AnsweredOptions);
+            changedInterviewTree.GetQuestion(answeredQuestion).AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions));
 
             changedInterviewTree.ActualizeTree();
 
