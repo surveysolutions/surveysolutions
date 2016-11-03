@@ -15,7 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class GroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         IInterviewEntityViewModel,
-        ICompositeEntity,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -135,6 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
             this.answerNotifier.Dispose();
             this.GroupTitle.Dispose();
+            this.Enablement.Dispose();
         }
     }
 }
