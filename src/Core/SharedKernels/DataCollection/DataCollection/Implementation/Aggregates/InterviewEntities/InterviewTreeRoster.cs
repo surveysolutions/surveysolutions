@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeRoster : InterviewTreeGroup
     {
         public InterviewTreeRoster(Identity identity,
+            SubstitionText title,
             IEnumerable<IInterviewTreeNode> children,
             string rosterTitle = null,
             int sortIndex = 0,
@@ -15,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Guid? rosterSizeQuestion = null,
             Identity rosterTitleQuestionIdentity = null,
             IEnumerable<QuestionnaireItemReference> childrenReferences = null)
-            : base(identity, childrenReferences)
+            : base(identity, title, childrenReferences)
         {
             this.RosterTitle = rosterTitle;
             this.SortIndex = sortIndex;

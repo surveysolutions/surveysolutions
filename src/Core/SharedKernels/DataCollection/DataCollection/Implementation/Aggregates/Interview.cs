@@ -76,11 +76,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
 
+        private readonly ISubstitionTextFactory substitionTextFactory;
 
-        public Interview(IQuestionnaireStorage questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
+        public Interview(IQuestionnaireStorage questionnaireRepository, 
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider, 
+            ISubstitionTextFactory substitionTextFactory)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.expressionProcessorStatePrototypeProvider = expressionProcessorStatePrototypeProvider;
+            this.substitionTextFactory = substitionTextFactory;
         }
 
         private void SetQuestionnaireProperties(Guid questionnaireId, long questionnaireVersion)

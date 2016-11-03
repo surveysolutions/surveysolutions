@@ -256,6 +256,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
+            //foreach (var identity in changedQuestionTitles)
+            //{
+            //    tree.GetQuestion(identity).CalculateSubstitutions();
+            //}
+
+            //foreach (var identity in changedStaticTextTitles)
+            //{
+            //    tree.GetStaticText(identity).CalculateSubstitutions();
+            //}
+
+            //foreach (var identity in changedGroupTitles)
+            //{
+            //    tree.GetGroup(identity).CalculateSubstitutions();
+            //}
+
             if (changedQuestionTitles.Any() || changedStaticTextTitles.Any() || changedGroupTitles.Any())
             {
                 this.ApplyEvent(new SubstitutionTitlesChanged(

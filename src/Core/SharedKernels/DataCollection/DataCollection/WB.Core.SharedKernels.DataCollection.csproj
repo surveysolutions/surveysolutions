@@ -149,7 +149,10 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeRoster.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticText.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariable.cs" />
+    <Compile Include="Services\ISubstitionTextFactory.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\RosterManager.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitionText.cs" />
+    <Compile Include="Implementation\Services\SubstitionTextFactory.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\Latest\InterviewExpressionStateV10ToLatestAdapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V10\InterviewExpressionStateV9ToV10Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V2\InterviewExpressionStateV1ToV2Adapter.cs" />

@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using System.Collections.Generic;
 using System.Globalization;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
@@ -19,6 +20,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -34,6 +36,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -1154,12 +1157,18 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
             RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null,
             params IInterviewTreeNode[] children)
-            => new InterviewTreeRoster(rosterIdentity, children, rosterType: rosterType, rosterSizeQuestion: rosterSizeQuestion, childrenReferences : Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
+        {
+            var titleWithSubstitutions = Create.Entity.SubstitionText("Title");
+            return new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, children, rosterType: rosterType,
+                rosterSizeQuestion: rosterSizeQuestion,
+                childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
+        }
 
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
             params IInterviewTreeNode[] children)
         {
-            var subSection = new InterviewTreeSubSection(groupIdentity, Enumerable.Empty<QuestionnaireItemReference>());
+            var titleWithSubstitutions = Create.Entity.SubstitionText("Title");
+            var subSection = new InterviewTreeSubSection(groupIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             subSection.AddChildren(children);
             if (isDisabled) subSection.Disable();
             return subSection;
@@ -1167,7 +1176,8 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
         {
-            var section = new InterviewTreeSection(sectionIdentity, Enumerable.Empty<QuestionnaireItemReference>());
+            var titleWithSubstitutions = Create.Entity.SubstitionText("Title");
+            var section = new InterviewTreeSection(sectionIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             section.AddChildren(children);
             if (isDisabled)
                 section.Disable();
@@ -1177,7 +1187,8 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
         {
-            var staticText = new InterviewTreeStaticText(staticTextIdentity);
+            var titleWithSubstitutions = Create.Entity.SubstitionText("Title");
+            var staticText = new InterviewTreeStaticText(staticTextIdentity, titleWithSubstitutions);
             if (isDisabled) staticText.Disable();
             return staticText;
         }
@@ -1202,13 +1213,22 @@ namespace WB.Tests.Unit.TestFactories
             string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
             Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
         {
-            var question = new InterviewTreeQuestion(questionIdentity, title, variableName, questionType, answer, linkedOptions, cascadingParentQuestionId, isYesNo,  isDecimal, questionsUsingForSubstitution, linkedSourceId);
+            var titleWithSubstitutions = Create.Entity.SubstitionText(title);
+            var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, cascadingParentQuestionId, isYesNo,  isDecimal, linkedSourceId);
 
             if (isDisabled) question.Disable();
             return question;
         }
 
-        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections) 
-            => new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), sections);
+        private SubstitionText SubstitionText(string title)
+        {
+            return new SubstitionText(title, new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+        }
+
+
+        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections)
+        {
+            return new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory(), sections);
+        }
     }
 }

@@ -4,9 +4,11 @@ using System.Reflection;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
@@ -235,7 +237,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsText);
@@ -261,7 +264,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsInteger);
@@ -288,7 +292,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsDouble);
@@ -314,7 +319,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsTextList);
@@ -340,7 +346,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsDateTime);
@@ -366,7 +373,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsGps);
@@ -392,7 +400,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsMultimedia);
@@ -418,7 +427,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsMultiFixedOption);
@@ -445,7 +455,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsYesNo);
@@ -475,7 +486,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsMultiLinkedOption);
@@ -502,7 +514,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsSingleFixedOption);
@@ -530,7 +543,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsSingleLinkedOption);
@@ -556,7 +570,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsQRBarcode);
@@ -574,7 +589,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var clonedTree = sourceTree.Clone();
 
             //assert
-            Type[] ignoreTypes = new[] {typeof(Identity), typeof(RosterVector), typeof(string)};
+            Type[] ignoreTypes = new[] {typeof(Identity), typeof(RosterVector), typeof(string), typeof(ISubstitutionService), typeof(IVariableToUIStringService) };
             var sourceInterviewTreeNodes = sourceTree.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(s => s.Children).ToList();
             var clonedInterviewTreeNodes = clonedTree.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(s => s.Children).ToList();
             foreach (var pair in Enumerable.Zip(sourceInterviewTreeNodes, clonedInterviewTreeNodes, (s, c) => new { SourceNode = s, ClonedNode = c }))

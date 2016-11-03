@@ -275,5 +275,12 @@ namespace WB.Tests.Unit.TestFactories
                 fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Substitute.For<IQuestionnaireExportStructureStorage>());
         }
+
+        public ISubstitionTextFactory SubstitionTextFactory()
+        {
+            var factoryMock = new Mock<ISubstitionTextFactory> { DefaultValue = DefaultValue.Mock };
+            return factoryMock.Object;
+            //return new SubstitionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
+        }
     }
 }
