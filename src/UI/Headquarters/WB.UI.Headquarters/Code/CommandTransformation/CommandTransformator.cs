@@ -78,15 +78,15 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             switch (answer.Type)
             {
                 case QuestionType.Text:
-                    answerValue = new TextAnswer(answerAsString);
+                    answerValue = TextAnswer.FromString(answerAsString);
                     break;
                 case QuestionType.Numeric:
                     try
                     {
                         if (answer.Settings != null && (bool) answer.Settings.IsInteger)
-                            answerValue = new NumericIntegerAnswer(answerAsString.Parse<int>());
+                            answerValue = NumericIntegerAnswer.FromInt(answerAsString.Parse<int>());
                         else
-                            answerValue = new NumericRealAnswer(answerAsString.Parse<double>());
+                            answerValue = NumericRealAnswer.FromDouble(answerAsString.Parse<double>());
                     }
                     catch (OverflowException)
                     {
@@ -94,21 +94,21 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                     }
                     break;
                 case QuestionType.DateTime:
-                    answerValue = new DateTimeAnswer(answer.Answer as DateTime? ?? answerAsString.Parse<DateTime>());
+                    answerValue = DateTimeAnswer.FromDateTime(answer.Answer as DateTime? ?? answerAsString.Parse<DateTime>());
                     break;
                 case QuestionType.SingleOption:
-                    answerValue = new CategoricalFixedSingleOptionAnswer(answerAsString.Parse<int>());
+                    answerValue = CategoricalFixedSingleOptionAnswer.FromInt(answerAsString.Parse<int>());
                     break;
                 case QuestionType.MultyOption:
                     int[] answerAsIntArray = JsonArrayToStringArray(answer.Answer).Select(x=>x.Parse<int>()).ToArray();
-                    answerValue = new CategoricalFixedMultiOptionAnswer(answerAsIntArray);
+                    answerValue = CategoricalFixedMultiOptionAnswer.FromInts(answerAsIntArray);
                     break;
                 case QuestionType.GpsCoordinates:
                     var splitedCoordinates = answerAsString.Split('$');
                     if(splitedCoordinates.Length!=2)
                         throw new FormatException($"Value '{answerAsString}' is not in the correct format.");
                     var geoPosition = new GeoPosition(splitedCoordinates[0].Parse<double>(), splitedCoordinates[1].Parse<double>(), 0, 0, DateTime.Now);
-                    answerValue = new GpsAnswer(geoPosition);
+                    answerValue = GpsAnswer.FromGeoPosition(geoPosition);
                     break;
             }
 

@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -145,7 +146,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }
                     if (question.Answer is AnsweredYesNoOption[])
                     {
-                        this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(question.Id, questionRosterVector, ConvertToYesNoAnswersOnly((AnsweredYesNoOption[])question.Answer));
+                        this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(question.Id, questionRosterVector, YesNoAnswer.FromAnsweredYesNoOptions((AnsweredYesNoOption[])question.Answer).ToYesNoAnswersOnly());
                     }
                     if (question.Answer is Tuple<decimal, string>[])
                     {
@@ -314,7 +315,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.AnsweredQuestions.Remove(questionKey);
             }
 
-            var yesNoAnswers = ConvertToYesNoAnswersOnly(@event.AnsweredOptions);
+            var yesNoAnswers = YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions).ToYesNoAnswersOnly();
             this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(@event.QuestionId, @event.RosterVector, yesNoAnswers);
         }
 

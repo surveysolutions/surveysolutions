@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -22,9 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = sourceInterviewTree.Clone();
 
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
-            var question = changedInterviewTree.GetQuestion(answeredQuestion).AsSingleOption;
-            var questionWasAnsweredAndAnswerChanged = question.IsAnswered && question.GetAnswer() != selectedValue;
-            question.SetAnswer(Convert.ToInt32(selectedValue));
+            var question = changedInterviewTree.GetQuestion(answeredQuestion).AsSingleFixedOption;
+            var questionWasAnsweredAndAnswerChanged = question.IsAnswered && question.GetAnswer().SelectedValue != selectedValue;
+            question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(selectedValue)));
             
             if (questionWasAnsweredAndAnswerChanged)
             {

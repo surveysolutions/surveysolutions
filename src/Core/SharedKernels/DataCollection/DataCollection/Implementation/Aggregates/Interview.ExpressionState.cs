@@ -111,36 +111,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsText)
                 {
                     expressionState.UpdateTextAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsText.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsText.GetAnswer().Value);
                 }
 
                 if (changedQuestion.IsTextList)
                 {
                     expressionState.UpdateTextListAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsTextList.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsTextList.GetAnswer().ToTupleArray());
                 }
 
                 if (changedQuestion.IsDouble)
                 {
                     expressionState.UpdateNumericRealAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsDouble.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsDouble.GetAnswer().Value);
                 }
 
                 if (changedQuestion.IsInteger)
                 {
                     expressionState.UpdateNumericIntegerAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsInteger.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsInteger.GetAnswer().Value);
                 }
 
                 if (changedQuestion.IsDateTime)
                 {
                     expressionState.UpdateDateAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsDateTime.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsDateTime.GetAnswer().Value);
                 }
 
                 if (changedQuestion.IsGps)
                 {
-                    var gpsAnswer = changedQuestion.AsGps.GetAnswer();
+                    var gpsAnswer = changedQuestion.AsGps.GetAnswer().Value;
                     expressionState.UpdateGeoLocationAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, gpsAnswer.Latitude, gpsAnswer.Longitude,
                         gpsAnswer.Accuracy, gpsAnswer.Altitude);
@@ -149,43 +149,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsQRBarcode)
                 {
                     expressionState.UpdateQrBarcodeAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsQRBarcode.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsQRBarcode.GetAnswer().DecodedText);
                 }
 
                 if (changedQuestion.IsMultimedia)
                 {
                     expressionState.UpdateMediaAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsMultimedia.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsMultimedia.GetAnswer().FileName);
                 }
 
                 if (changedQuestion.IsYesNo)
                 {
                     expressionState.UpdateYesNoAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, ConvertToYesNoAnswersOnly(changedQuestion.AsYesNo.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsYesNo.GetAnswer().ToYesNoAnswersOnly());
                 }
 
-                if (changedQuestion.IsSingleOption)
+                if (changedQuestion.IsSingleFixedOption)
                 {
                     expressionState.UpdateSingleOptionAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsSingleOption.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsSingleFixedOption.GetAnswer().SelectedValue);
                 }
 
-                if (changedQuestion.IsMultiOption)
+                if (changedQuestion.IsMultiFixedOption)
                 {
                     expressionState.UpdateMultiOptionAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsMultiOption.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsMultiFixedOption.GetAnswer().ToDecimals().ToArray());
                 }
 
                 if (changedQuestion.IsSingleLinkedOption)
                 {
                     expressionState.UpdateLinkedSingleOptionAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsSingleLinkedOption.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsSingleLinkedOption.GetAnswer().SelectedValue);
                 }
 
                 if (changedQuestion.IsMultiLinkedOption)
                 {
                     expressionState.UpdateLinkedMultiOptionAnswer(changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, changedQuestion.AsMultiLinkedOption.GetAnswer());
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsMultiLinkedOption.GetAnswer().ToDecimalArrayArray());
                 }
             }
         }
@@ -214,13 +214,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             return expressionProcessorState;
-        }
-
-        private static YesNoAnswersOnly ConvertToYesNoAnswersOnly(AnsweredYesNoOption[] answeredOptions)
-        {
-            var yesAnswers = answeredOptions.Where(x => x.Yes).Select(x => x.OptionValue).ToArray();
-            var noAnswers = answeredOptions.Where(x => !x.Yes).Select(x => x.OptionValue).ToArray();
-            return new YesNoAnswersOnly(yesAnswers, noAnswers);
         }
     }
 }

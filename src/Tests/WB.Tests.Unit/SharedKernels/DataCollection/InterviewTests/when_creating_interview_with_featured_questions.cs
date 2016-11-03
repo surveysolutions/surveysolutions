@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             
             answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>
             {
-                {prefilledQuestionId, new TextAnswer("answer")},
-                {prefilledQuestion1Id, new TextAnswer("answer 1")}
+                {prefilledQuestionId, TextAnswer.FromString("answer")},
+                {prefilledQuestion1Id, TextAnswer.FromString("answer 1")}
             };
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]

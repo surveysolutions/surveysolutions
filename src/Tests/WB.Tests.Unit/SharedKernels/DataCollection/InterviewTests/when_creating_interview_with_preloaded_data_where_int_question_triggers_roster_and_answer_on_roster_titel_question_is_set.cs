@@ -32,9 +32,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             preloadedDataDto = new PreloadedDataDto(new[]
             {
                 new PreloadedLevelDto(new decimal[0],
-                    new Dictionary<Guid, AbstractAnswer> { { prefilledIntQuestion, new NumericIntegerAnswer(prefilledIntQuestionAnswer) } }),
+                    new Dictionary<Guid, AbstractAnswer> { { prefilledIntQuestion, NumericIntegerAnswer.FromInt(prefilledIntQuestionAnswer) } }),
                 new PreloadedLevelDto(new decimal[] { 0 },
-                    new Dictionary<Guid, AbstractAnswer> { { rosterTitleQuestionId, new TextAnswer(rosterTitleQuestionAnswer) } })
+                    new Dictionary<Guid, AbstractAnswer> { { rosterTitleQuestionId, TextAnswer.FromString(rosterTitleQuestionAnswer) } })
             });
 
             answersTime = new DateTime(2013, 09, 01);

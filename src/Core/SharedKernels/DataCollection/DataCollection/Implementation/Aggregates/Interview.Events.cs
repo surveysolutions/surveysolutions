@@ -119,36 +119,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsText)
                 {
                     this.ApplyEvent(new TextQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsText.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsText.GetAnswer().Value));
                 }
 
                 if (changedQuestion.IsTextList)
                 {
                     this.ApplyEvent(new TextListQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsTextList.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsTextList.GetAnswer().ToTupleArray()));
                 }
 
                 if (changedQuestion.IsDouble)
                 {
                     this.ApplyEvent(new NumericRealQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, (decimal)changedQuestion.AsDouble.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, (decimal)changedQuestion.AsDouble.GetAnswer().Value));
                 }
 
                 if (changedQuestion.IsInteger)
                 {
                     this.ApplyEvent(new NumericIntegerQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsInteger.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsInteger.GetAnswer().Value));
                 }
 
                 if (changedQuestion.IsDateTime)
                 {
                     this.ApplyEvent(new DateTimeQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsDateTime.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsDateTime.GetAnswer().Value));
                 }
 
                 if (changedQuestion.IsGps)
                 {
-                    var gpsAnswer = changedQuestion.AsGps.GetAnswer();
+                    var gpsAnswer = changedQuestion.AsGps.GetAnswer().Value;
                     this.ApplyEvent(new GeoLocationQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, DateTime.UtcNow, gpsAnswer.Latitude, gpsAnswer.Longitude,
                         gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Timestamp));
@@ -157,43 +157,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsQRBarcode)
                 {
                     this.ApplyEvent(new QRBarcodeQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsQRBarcode.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsQRBarcode.GetAnswer().DecodedText));
                 }
 
                 if (changedQuestion.IsMultimedia)
                 {
                     this.ApplyEvent(new PictureQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultimedia.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultimedia.GetAnswer().FileName));
                 }
 
                 if (changedQuestion.IsYesNo)
                 {
                     this.ApplyEvent(new YesNoQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsYesNo.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsYesNo.GetAnswer().ToAnsweredYesNoOptions().ToArray()));
                 }
 
-                if (changedQuestion.IsSingleOption)
+                if (changedQuestion.IsSingleFixedOption)
                 {
                     this.ApplyEvent(new SingleOptionQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleOption.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleFixedOption.GetAnswer().SelectedValue));
                 }
 
-                if (changedQuestion.IsMultiOption)
+                if (changedQuestion.IsMultiFixedOption)
                 {
                     this.ApplyEvent(new MultipleOptionsQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiOption.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiFixedOption.GetAnswer().ToDecimals().ToArray()));
                 }
 
                 if (changedQuestion.IsSingleLinkedOption)
                 {
                     this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleLinkedOption.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleLinkedOption.GetAnswer().SelectedValue));
                 }
 
                 if (changedQuestion.IsMultiLinkedOption)
                 {
                     this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedOption.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedOption.GetAnswer().ToDecimalArrayArray()));
                 }
             }
         }
