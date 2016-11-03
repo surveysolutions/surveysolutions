@@ -719,20 +719,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public Guid[] GetQuestionsUsingForSubstitution(Guid entityId)
-        {
-            return new Guid[0];
-        }
-        
         public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid linkedQuestionId)
         {
-            var isQuestionLinkedToQuestion = this.IsQuestionLinked(questionId);
+            var isQuestionLinkedToQuestion = this.IsQuestionLinked(linkedQuestionId);
             var questionSourceId = isQuestionLinkedToQuestion
-                  ? this.GetQuestionReferencedByLinkedQuestion(questionId)
-                  : this.GetRosterReferencedByLinkedQuestion(questionId);
+                  ? this.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
+                  : this.GetRosterReferencedByLinkedQuestion(linkedQuestionId);
 
             var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(questionSourceId).Shrink();
-            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(questionId);
+            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(linkedQuestionId);
 
             var mutualRosterSizeSources = linkedSourceRosterScopes.Intersect(linkedRosterScopes).ToList();
 

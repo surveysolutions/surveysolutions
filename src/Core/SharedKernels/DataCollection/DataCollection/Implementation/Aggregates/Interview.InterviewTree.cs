@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -11,29 +12,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state = null)
         {
-            var sections = this.BuildInterviewTreeSections(questionnaire, state).ToList();
+            var tree = new InterviewTree(this.EventSourceId, questionnaire, this.substitionTextFactory, new List<InterviewTreeSection>());
+            var sections = this.BuildInterviewTreeSections(tree, questionnaire, this.substitionTextFactory, state).ToList();
 
-            return new InterviewTree(this.EventSourceId, questionnaire, sections);
+            tree.SetSections(sections);
+            return tree;
         }
 
-        private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        private IEnumerable<InterviewTreeSection> BuildInterviewTreeSections(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, InterviewStateDependentOnAnswers state)
         {
             var sectionIds = questionnaire.GetAllSections();
 
             foreach (var sectionId in sectionIds)
             {
                 var sectionIdentity = new Identity(sectionId, RosterVector.Empty);
-                var section = this.BuildInterviewTreeSection(sectionIdentity, questionnaire, state);
+                var section = this.BuildInterviewTreeSection(tree, sectionIdentity, questionnaire, textFactory, state);
 
                 yield return section;
             }
         }
 
-        private InterviewTreeSection BuildInterviewTreeSection(Identity sectionIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        private InterviewTreeSection BuildInterviewTreeSection(InterviewTree tree, Identity sectionIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, InterviewStateDependentOnAnswers state)
         {
-            var section = InterviewTree.CreateSection(questionnaire, sectionIdentity);
+            var section = InterviewTree.CreateSection(tree, questionnaire, textFactory, sectionIdentity);
 
-            section.AddChildren(this.BuildInterviewTreeGroupChildren(sectionIdentity, questionnaire, interviewState).ToList());
+            section.AddChildren(this.BuildInterviewTreeGroupChildren(tree, sectionIdentity, questionnaire, textFactory, interviewState).ToList());
 
             if (interviewState.IsGroupDisabled(sectionIdentity))
                 section.Disable();
@@ -41,11 +44,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return section;
         }
 
-        private InterviewTreeSubSection BuildInterviewTreeSubSection(Identity groupIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        private InterviewTreeSubSection BuildInterviewTreeSubSection(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, InterviewStateDependentOnAnswers state)
         {
-            var subSection = InterviewTree.CreateSubSection(questionnaire, groupIdentity);
+            var subSection = InterviewTree.CreateSubSection(tree, questionnaire, textFactory, groupIdentity);
 
-            subSection.AddChildren(this.BuildInterviewTreeGroupChildren(groupIdentity, questionnaire, state).ToList());
+            subSection.AddChildren(this.BuildInterviewTreeGroupChildren(tree, groupIdentity, questionnaire, textFactory, state).ToList());
 
             if (state?.IsGroupDisabled(groupIdentity) ?? false)
                 subSection.Disable();
@@ -53,8 +56,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return subSection;
         }
 
-        private static InterviewTreeVariable BuildInterviewTreeVariable(InterviewStateDependentOnAnswers state,
-            Identity childVariableIdentity)
+        private static InterviewTreeVariable BuildInterviewTreeVariable(InterviewStateDependentOnAnswers state, Identity childVariableIdentity)
         {
             var variable = InterviewTree.CreateVariable(childVariableIdentity);
 
@@ -64,9 +66,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return variable;
         }
 
-        private static InterviewTreeStaticText BuildInterviewTreeStaticText(InterviewStateDependentOnAnswers state, Identity staticTextIdentity, IQuestionnaire questionnaire)
+        private static InterviewTreeStaticText BuildInterviewTreeStaticText(InterviewTree tree, InterviewStateDependentOnAnswers state, Identity staticTextIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
         {
-            var staticText = InterviewTree.CreateStaticText(questionnaire, staticTextIdentity);
+            var staticText = InterviewTree.CreateStaticText(tree, questionnaire, textFactory, staticTextIdentity);
 
             if (state?.IsStaticTextDisabled(staticTextIdentity) ?? false)
                 staticText.Disable();
@@ -76,10 +78,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return staticText;
         }
 
-        private InterviewTreeRoster BuildInterviewTreeRoster(Identity rosterIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        private InterviewTreeRoster BuildInterviewTreeRoster(InterviewTree tree, Identity rosterIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, InterviewStateDependentOnAnswers state)
         {
-            var children = BuildInterviewTreeGroupChildren(rosterIdentity, questionnaire, state).ToList();
+            var children = BuildInterviewTreeGroupChildren(tree, rosterIdentity, questionnaire, textFactory, state).ToList();
             bool isDisabled = state.IsGroupDisabled(rosterIdentity);
+            
             string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterIdentity.Id, rosterIdentity.RosterVector);
             string rosterTitle = state?.RosterTitles.ContainsKey(rosterGroupKey) ?? false
                 ? state.RosterTitles[rosterGroupKey]
@@ -114,8 +117,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
                 }
             }
+            var title = textFactory.CreateText(rosterIdentity, questionnaire.GetGroupTitle(rosterIdentity.Id), questionnaire, tree);
 
-            var roster = new InterviewTreeRoster(rosterIdentity, children,
+            var roster = new InterviewTreeRoster(rosterIdentity,
+                title,
+                children,
                 rosterType: rosterType,
                 rosterTitle: rosterTitle,
                 rosterTitleQuestionIdentity: rosterTitleQuestionIdentity,
@@ -128,10 +134,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return roster;
         }
 
-        private static InterviewTreeQuestion BuildInterviewTreeQuestion(IQuestionnaire questionnaire,
+        private static InterviewTreeQuestion BuildInterviewTreeQuestion(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory,
             InterviewStateDependentOnAnswers state, Identity childQuestionIdentity)
         {
-            var question = InterviewTree.CreateQuestion(questionnaire, childQuestionIdentity);
+            var question = InterviewTree.CreateQuestion(tree, questionnaire, textFactory, childQuestionIdentity);
 
             if (question.IsLinked)
             {
@@ -157,7 +163,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return question;
         }
 
-        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(Identity groupIdentity, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        private IEnumerable<IInterviewTreeNode> BuildInterviewTreeGroupChildren(InterviewTree tree, Identity groupIdentity, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, InterviewStateDependentOnAnswers state)
         {
             var childIds = questionnaire.GetChildEntityIds(groupIdentity.Id);
 
@@ -173,25 +179,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     foreach (var childRosterVector in childRosterVectors)
                     {
                         var childRosterIdentity = new Identity(childId, childRosterVector);
-                        yield return this.BuildInterviewTreeRoster(childRosterIdentity, questionnaire, state);
+                        yield return this.BuildInterviewTreeRoster(tree, childRosterIdentity, questionnaire, textFactory, state);
                     }
                 }
                 else if (questionnaire.HasGroup(childId))
                 {
                     var childGroupIdentity = new Identity(childId, groupIdentity.RosterVector);
-                    yield return this.BuildInterviewTreeSubSection(childGroupIdentity, questionnaire, state);
+                    yield return this.BuildInterviewTreeSubSection(tree, childGroupIdentity, questionnaire, textFactory, state);
                 }
                 else if (questionnaire.HasQuestion(childId))
                 {
                     var childQuestionIdentity = new Identity(childId, groupIdentity.RosterVector);
 
-                    yield return BuildInterviewTreeQuestion(questionnaire, state, childQuestionIdentity);
+                    yield return BuildInterviewTreeQuestion(tree, questionnaire, textFactory, state, childQuestionIdentity);
                 }
                 else if (questionnaire.IsStaticText(childId))
                 {
                     var staticTextIdentity = new Identity(childId, groupIdentity.RosterVector);
 
-                    yield return BuildInterviewTreeStaticText(state, staticTextIdentity, questionnaire);
+                    yield return BuildInterviewTreeStaticText(tree, state, staticTextIdentity, questionnaire, textFactory);
                 }
                 else if (questionnaire.IsVariable(childId))
                 {

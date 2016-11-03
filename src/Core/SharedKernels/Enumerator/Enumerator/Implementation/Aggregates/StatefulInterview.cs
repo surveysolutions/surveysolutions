@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -65,8 +66,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public StatefulInterview(ILogger logger,
                                  IQuestionnaireStorage questionnaireRepository,
-                                 IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider)
+                                 IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
+                                 ISubstitionTextFactory textFactory)
+            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, textFactory)
         {
             this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
             this.groups = new ConcurrentDictionary<string, InterviewEnablementState>();

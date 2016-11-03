@@ -7,8 +7,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTreeStaticText : InterviewTreeLeafNode
     {
-        public InterviewTreeStaticText(Identity identity)
-            : base(identity, null) { }
+        public SubstitionText Title { get; private set; }
+
+        public InterviewTreeStaticText(Identity identity, SubstitionText title)
+            : base(identity)
+        {
+            this.Title = title;
+        }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
@@ -23,7 +28,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override string ToString() => $"Text ({this.Identity})";
         public override IInterviewTreeNode Clone()
         {
-            return (IInterviewTreeNode)this.MemberwiseClone();
+            var clone = (InterviewTreeStaticText)this.MemberwiseClone();
+            clone.Title = this.Title?.Clone(null);
+            return clone;
+        }
+
+        public override void CalculateSubstitutions()
+        {
+            this.Title.ReplaceSubstitutions();
+        }
+        public override void SetTree(InterviewTree tree)
+        {
+            base.SetTree(tree);
+            this.Title?.SetTree(tree);
         }
     }
 }
