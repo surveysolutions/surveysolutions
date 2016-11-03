@@ -6,8 +6,9 @@
   <EditTextPreference android:key="GpsDesiredAccuracy" android:numeric="integer" android:defaultValue="@integer/GpsDesiredAccuracy"/>
 
   <CheckBoxPreference android:key="VibrateOnError" />
+  <CheckBoxPreference android:key="ShowVariables" />
   <Preference android:key="version" />
-
+  
   <PreferenceCategory android:key="dev_settings_category">
     <EditTextPreference android:key="DesignerEndpoint" android:defaultValue="@string/DesignerEndpoint"/>
     <CheckBoxPreference android:key="AcceptUnsignedSslCertificate" android:defaultValue="@bool/AcceptUnsignedSslCertificate" />
