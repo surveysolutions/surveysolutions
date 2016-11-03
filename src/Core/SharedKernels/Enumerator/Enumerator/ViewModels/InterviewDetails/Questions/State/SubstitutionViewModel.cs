@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(this.interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            var variableNames = this.substitutionService.GetAllSubstitutionVariableNames(this.textWithSubstitutions);
+            string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(this.textWithSubstitutions);
 
             return new SubstitutionVariables
             {

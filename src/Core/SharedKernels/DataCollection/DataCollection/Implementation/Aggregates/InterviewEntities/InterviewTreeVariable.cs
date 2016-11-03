@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public object Value { get; private set; }
         public bool HasValue => this.Value != null;
 
-        public InterviewTreeVariable(Identity identity) : base(identity, null)
+        public InterviewTreeVariable(Identity identity) : base(identity)
         {
         }
 
@@ -17,6 +17,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override IInterviewTreeNode Clone()
         {
             return (IInterviewTreeNode)this.MemberwiseClone();
+        }
+
+        public override void CalculateSubstitutions()
+        {
         }
     }
 }

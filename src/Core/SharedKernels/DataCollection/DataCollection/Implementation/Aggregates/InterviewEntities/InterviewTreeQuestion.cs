@@ -11,8 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
-        public InterviewTreeQuestion(Identity identity, 
-            string title, 
+        public InterviewTreeQuestion(Identity identity,
+            SubstitionText title, 
             string variableName,
             QuestionType questionType, 
             object answer,
@@ -20,10 +20,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Guid? cascadingParentQuestionId, 
             bool isYesNo, 
             bool isDecimal,
-            Guid[] questionsUsingForSubstitution,
             Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null)
-            : base(identity, questionsUsingForSubstitution)
+            : base(identity)
         {
             this.Title = title;
             this.VariableName = variableName;
@@ -98,7 +97,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeCascadingQuestion AsCascading { get; private set; }
 
-        public string Title { get; }
+        public SubstitionText Title { get; private set; }
         public string VariableName { get; }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
@@ -323,13 +322,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (this.IsMultiLinkedOption) clonedQuestion.AsMultiLinkedOption = this.AsMultiLinkedOption.Clone();
             if (this.IsSingleLinkedOption) clonedQuestion.AsSingleLinkedOption = this.AsSingleLinkedOption.Clone();
-            if (this.IsCascading) clonedQuestion.AsCascading = this.AsCascading.Clone(clonedQuestion); 
+            if (this.IsCascading) clonedQuestion.AsCascading = this.AsCascading.Clone(clonedQuestion);
 
+            clonedQuestion.Title = this.Title?.Clone(Tree);
             clonedQuestion.FailedValidations = this.FailedValidations?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
 
             return clonedQuestion;
+        }
+
+        public override void CalculateSubstitutions()
+        {
+            this.Title.ReplaceSubstitutions();
+        }
+
+        public override void SetTree(InterviewTree tree)
+        {
+            base.SetTree(tree);
+            this.Title?.SetTree(tree);
         }
     }
 

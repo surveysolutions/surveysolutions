@@ -4,24 +4,27 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     public class InterviewTree
     {
         private readonly IQuestionnaire questionnaire;
+        private readonly ISubstitionTextFactory textFactory;
 
         private Dictionary<Identity, IInterviewTreeNode> nodesCache = new Dictionary<Identity, IInterviewTreeNode>();
 
-        public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, IEnumerable<InterviewTreeSection> sections)
+        public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, IEnumerable<InterviewTreeSection> sections)
         {
             this.InterviewId = interviewId.FormatGuid();
             this.questionnaire = questionnaire;
+            this.textFactory = textFactory;
 
             this.SetSections(sections);
         }
 
-        private void SetSections(IEnumerable<InterviewTreeSection> sections)
+        public void SetSections(IEnumerable<InterviewTreeSection> sections)
         {
             this.Sections = sections.ToList();
 
@@ -41,6 +44,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         internal InterviewTreeGroup GetGroup(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
+
+        internal InterviewTreeRoster GetRoster(Identity identity)
+            => this.GetNodeByIdentity(identity) as InterviewTreeRoster;
 
         internal InterviewTreeStaticText GetStaticText(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeStaticText;
@@ -69,7 +75,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.nodesCache.GetOrNull(identity);
         }
        
-
         public void ActualizeTree()
         {
             var itemsQueue = new Queue<IInterviewTreeNode>(Sections);
@@ -182,17 +187,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeQuestion CreateQuestion(Identity questionIdentity)
         {
-            return CreateQuestion(this.questionnaire, questionIdentity);
+            return CreateQuestion(this, this.questionnaire, this.textFactory, questionIdentity);
         }
 
-        public static InterviewTreeQuestion CreateQuestion(IQuestionnaire questionnaire, Identity questionIdentity)
+        public static InterviewTreeQuestion CreateQuestion(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity questionIdentity)
         {
             QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
-            string title = questionnaire.GetQuestionTitle(questionIdentity.Id);
+            SubstitionText title = textFactory.CreateText(questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id), questionnaire, tree);
             string variableName = questionnaire.GetQuestionVariableName(questionIdentity.Id);
             bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionIdentity.Id);
             bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionIdentity.Id);
-            Guid[] questionsUsingForSubstitution = questionnaire.GetQuestionsUsingForSubstitution(questionIdentity.Id);
             Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionIdentity.Id);
             Guid? sourceForLinkedQuestion = null;
             Identity commonParentRosterForLinkedQuestion = null;
@@ -224,8 +228,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 title: title, variableName: variableName, answer: null, linkedOptions: null,
                 cascadingParentQuestionId: cascadingParentQuestionId, isYesNo: isYesNoQuestion,
                 isDecimal: isDecimalQuestion, linkedSourceId: sourceForLinkedQuestion,
-                commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
-                questionsUsingForSubstitution: questionsUsingForSubstitution);
+                commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
@@ -235,41 +238,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeSubSection CreateSubSection(Identity subSectionIdentity)
         {
-            return CreateSubSection(this.questionnaire, subSectionIdentity);
+            return CreateSubSection(this, this.questionnaire, textFactory, subSectionIdentity);
         }
 
-        public static InterviewTreeSubSection CreateSubSection(IQuestionnaire questionnaire, Identity subSectionIdentity)
+        public static InterviewTreeSubSection CreateSubSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity subSectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(subSectionIdentity.Id);
-            Guid[] questionsUsingForSubstitution = questionnaire.GetQuestionsUsingForSubstitution(subSectionIdentity.Id);
-            return new InterviewTreeSubSection(subSectionIdentity, childrenReferences);
+            SubstitionText title = textFactory.CreateText(subSectionIdentity, questionnaire.GetGroupTitle(subSectionIdentity.Id), questionnaire, tree);
+            return new InterviewTreeSubSection(subSectionIdentity, title, childrenReferences);
         }
 
-        public static InterviewTreeSection CreateSection(IQuestionnaire questionnaire, Identity sectionIdentity)
+        public static InterviewTreeSection CreateSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity sectionIdentity)
         {
             var childrenReferences = questionnaire.GetChidrenReferences(sectionIdentity.Id);
-            Guid[] questionsUsingForSubstitution = questionnaire.GetQuestionsUsingForSubstitution(sectionIdentity.Id);
-            return new InterviewTreeSection(sectionIdentity, childrenReferences);
+            SubstitionText title = textFactory.CreateText(sectionIdentity, questionnaire.GetGroupTitle(sectionIdentity.Id), questionnaire, tree);
+            return new InterviewTreeSection(sectionIdentity, title, childrenReferences);
         }
-
 
         public InterviewTreeStaticText CreateStaticText(Identity staticTextIdentity)
         {
-            return CreateStaticText(this.questionnaire, staticTextIdentity);
+            return CreateStaticText(this, this.questionnaire, textFactory, staticTextIdentity);
         }
 
-        public static InterviewTreeStaticText CreateStaticText(IQuestionnaire questionnaire, Identity staticTextIdentity)
+        public static InterviewTreeStaticText CreateStaticText(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity staticTextIdentity)
         {
-            Guid[] questionsUsingForSubstitution = questionnaire.GetQuestionsUsingForSubstitution(staticTextIdentity.Id);
-            return new InterviewTreeStaticText(staticTextIdentity);
+            SubstitionText title = textFactory.CreateText(staticTextIdentity, questionnaire.GetStaticText(staticTextIdentity.Id), questionnaire, tree);
+            return new InterviewTreeStaticText(staticTextIdentity, title);
         }
-
 
         public RosterManager GetRosterManager(Guid rosterId)
         {
             if (questionnaire.IsFixedRoster(rosterId))
             {
-                return new FixedRosterManager(this, this.questionnaire, rosterId);
+                return new FixedRosterManager(this, this.questionnaire, rosterId, this.textFactory);
             }
 
             Guid sourceQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
@@ -278,19 +279,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 if (this.questionnaire.IsQuestionYesNo(sourceQuestionId))
                 {
-                    return new YesNoRosterManager(this, this.questionnaire, rosterId);
+                    return new YesNoRosterManager(this, this.questionnaire, rosterId, this.textFactory);
                 }
-                return new MultiRosterManager(this, this.questionnaire, rosterId);
+                return new MultiRosterManager(this, this.questionnaire, rosterId, this.textFactory);
             }
 
             if (questionaType == QuestionType.Numeric)
             {
-                return new NumericRosterManager(this, this.questionnaire, rosterId);
+                return new NumericRosterManager(this, this.questionnaire, rosterId, this.textFactory);
             }
 
             if (questionaType == QuestionType.TextList)
             {
-                return new ListRosterManager(this, this.questionnaire, rosterId);
+                return new ListRosterManager(this, this.questionnaire, rosterId, this.textFactory);
             }
 
             throw new ArgumentException("Unknown roster type");
@@ -323,6 +324,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             nodesCache[node.Identity] = node;
         }
+
+        public IEnumerable<IInterviewTreeNode> GetEntitiesWithSubstitution()
+        {
+            return new IInterviewTreeNode[0] {};
+        }
     }
 
     public interface IInterviewTreeNode
@@ -338,7 +344,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         IInterviewTreeNode Clone();
 
-        bool UsesSubstitutions();
+        void CalculateSubstitutions();
     }
 
     public interface IInternalInterviewTreeNode
@@ -349,12 +355,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public abstract class InterviewTreeLeafNode : IInterviewTreeNode, IInternalInterviewTreeNode
     {
-        private readonly Guid[] questionsUsingForSubstitution;
         private bool isDisabled;
 
-        protected InterviewTreeLeafNode(Identity identity, Guid[] questionsUsingForSubstitution)
+        protected InterviewTreeLeafNode(Identity identity)
         {
-            this.questionsUsingForSubstitution = questionsUsingForSubstitution;
             this.Identity = identity;
             this.isDisabled = false;
         }
@@ -364,7 +368,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IInterviewTreeNode Parent { get; private set; }
         IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
-        void IInternalInterviewTreeNode.SetTree(InterviewTree tree) => this.Tree = tree;
+        public virtual void SetTree(InterviewTree tree)
+        {
+            this.Tree = tree;
+        }
+
         void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
@@ -373,10 +381,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Enable() => this.isDisabled = false;
 
         public abstract IInterviewTreeNode Clone();
-        public bool UsesSubstitutions()
-        {
-            return questionsUsingForSubstitution.Any();
-        }
+
+        public abstract void CalculateSubstitutions();
     }
 
     public enum QuestionnaireReferenceType

@@ -26,8 +26,10 @@ namespace WB.Tests.Unit.TestFactories
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             QuestionnaireIdentity questionnaireId = null)
         {
+            var textFactoryMock = new Mock<ISubstitionTextFactory> {DefaultValue = DefaultValue.Mock};
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
+                expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
+                textFactoryMock.Object);
 
             interview.SetId(interviewId ?? Guid.NewGuid());
             return interview;
@@ -57,7 +59,8 @@ namespace WB.Tests.Unit.TestFactories
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                interviewExpressionStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
+                interviewExpressionStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                Create.Service.SubstitionTextFactory())
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, questionnaireVersion ?? 1),
             };
@@ -74,7 +77,8 @@ namespace WB.Tests.Unit.TestFactories
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
                 Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
-                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                Create.Service.SubstitionTextFactory())
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
             };

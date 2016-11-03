@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<IDynamicTextViewModelFactory>().To<DynamicTextViewModelFactory>();
             this.Bind<IRosterTitleSubstitutionService>().To<RosterTitleSubstitutionService>();
 
+            this.Bind<ISubstitionTextFactory>().To<SubstitionTextFactory>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();

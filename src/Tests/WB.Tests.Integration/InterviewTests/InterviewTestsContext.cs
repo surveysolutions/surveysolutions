@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -159,7 +160,8 @@ namespace WB.Tests.Integration.InterviewTests
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+                statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                Create.SubstitionTextFactory());
 
             return interview;
         }

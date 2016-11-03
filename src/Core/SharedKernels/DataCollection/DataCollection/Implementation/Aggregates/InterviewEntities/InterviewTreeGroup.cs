@@ -10,12 +10,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private bool isDisabled;
         private List<IInterviewTreeNode> children = new List<IInterviewTreeNode>();
 
-        protected InterviewTreeGroup(Identity identity, IEnumerable<QuestionnaireItemReference> childrenReferences)
+        protected InterviewTreeGroup(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences)
         {
             this.childEntitiesReferences = childrenReferences.ToReadOnlyCollection();
 
             this.Identity = identity;
             this.isDisabled = false;
+            this.Title = title;
 
             foreach (var child in this.Children)
             {
@@ -24,6 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public Identity Identity { get; private set; }
+        public SubstitionText Title { get; private set; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
         public IReadOnlyCollection<IInterviewTreeNode> Children => this.children;
@@ -31,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree)
         {
             this.Tree = tree;
-
+            this.Title.SetTree(tree);
             foreach (var child in this.Children)
             {
                 ((IInternalInterviewTreeNode)child).SetTree(tree);
@@ -146,19 +148,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clonedInterviewTreeGroup.children = new List<IInterviewTreeNode>();
             var clonedChildren = this.Children.Select(n => n.Clone()).ToList();
             clonedInterviewTreeGroup.AddChildren(clonedChildren);
+            clonedInterviewTreeGroup.Title = this.Title?.Clone(clonedInterviewTreeGroup.Tree);
             return clonedInterviewTreeGroup;
         }
 
-        public bool UsesSubstitutions()
+        public void CalculateSubstitutions()
         {
-            return false;
+            this.Title.ReplaceSubstitutions();
         }
     }
 
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
-        public InterviewTreeSubSection(Identity identity, IEnumerable<QuestionnaireItemReference> childrenReferences) 
-            : base(identity, childrenReferences)
+        public InterviewTreeSubSection(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) 
+            : base(identity, title, childrenReferences)
         {
         }
 
@@ -167,7 +170,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class InterviewTreeSection : InterviewTreeGroup
     {
-        public InterviewTreeSection(Identity identity, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, childrenReferences)
+        public InterviewTreeSection(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }
 

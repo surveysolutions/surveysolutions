@@ -46,6 +46,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -548,7 +549,8 @@ namespace WB.Tests.Integration
             IQuestionnaireStorage questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                Create.SubstitionTextFactory());
 
             interview.CreateInterview(
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -561,6 +563,15 @@ namespace WB.Tests.Integration
             return interview;
         }
 
+        public static ISubstitionTextFactory SubstitionTextFactory()
+        {
+            var factoryMock = new Mock<ISubstitionTextFactory>
+            {
+                DefaultValue = DefaultValue.Mock
+            };
+            return factoryMock.Object;
+        }
+
         public static StatefulInterview StatefulInterview(Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
@@ -569,7 +580,8 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(
                 Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                Create.SubstitionTextFactory());
 
             interview.CreateInterview(
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
