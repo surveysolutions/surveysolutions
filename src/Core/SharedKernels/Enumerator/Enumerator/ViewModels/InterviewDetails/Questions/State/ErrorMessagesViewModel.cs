@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MvvmCross.Core.ViewModels;
@@ -6,7 +7,8 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class ErrorMessagesViewModel : MvxNotifyPropertyChanged
+    public class ErrorMessagesViewModel : MvxNotifyPropertyChanged,
+        IDisposable
     {
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
 
@@ -46,6 +48,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 errorViewModel.Init(this.interviewId, this.entityIdentity, error);
 
                 this.ValidationErrors.Add(errorViewModel);
+            }
+        }
+
+        public void Dispose()
+        {
+            foreach (var dynamicTextViewModel in this.ValidationErrors)
+            {
+                dynamicTextViewModel.Dispose();
             }
         }
     }
