@@ -419,10 +419,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.Title, question.Title);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
-            Assert.NotNull(clonedQuestion.AsMultiOption);
-            Assert.AreEqual(clonedQuestion.AsMultiOption.GetAnswer(), question.AsMultiOption.GetAnswer());
-            Assert.That(ReferenceEquals(clonedQuestion.AsMultiOption, question.AsMultiOption), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsMultiOption.GetAnswer(), question.AsMultiOption.GetAnswer()), Is.False);
+            Assert.NotNull(clonedQuestion.AsMultiFixedOption);
+            Assert.AreEqual(clonedQuestion.AsMultiFixedOption.GetAnswer(), question.AsMultiFixedOption.GetAnswer());
+            Assert.That(ReferenceEquals(clonedQuestion.AsMultiFixedOption, question.AsMultiFixedOption), Is.False);
+            Assert.That(ReferenceEquals(clonedQuestion.AsMultiFixedOption.GetAnswer(), question.AsMultiFixedOption.GetAnswer()), Is.False);
         }
 
         [Test]
@@ -449,8 +449,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsYesNo);
             Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer(), question.AsYesNo.GetAnswer());
-            Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().First(), question.AsYesNo.GetAnswer().First());
-            Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().Second(), question.AsYesNo.GetAnswer().Second());
+            Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().CheckedOptions.First(), question.AsYesNo.GetAnswer().CheckedOptions.First());
+            Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().CheckedOptions.Second(), question.AsYesNo.GetAnswer().CheckedOptions.Second());
             Assert.That(ReferenceEquals(clonedQuestion.AsYesNo, question.AsYesNo), Is.False);
             Assert.That(ReferenceEquals(clonedQuestion.AsYesNo.GetAnswer(), question.AsYesNo.GetAnswer()), Is.False);
         }
@@ -505,9 +505,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.Title, question.Title);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
-            Assert.NotNull(clonedQuestion.AsSingleOption);
-            Assert.AreEqual(clonedQuestion.AsSingleOption.GetAnswer(), question.AsSingleOption.GetAnswer());
-            Assert.That(ReferenceEquals(clonedQuestion.AsSingleOption, question.AsSingleOption), Is.False);
+            Assert.NotNull(clonedQuestion.AsSingleFixedOption);
+            Assert.AreEqual(clonedQuestion.AsSingleFixedOption.GetAnswer(), question.AsSingleFixedOption.GetAnswer());
+            Assert.That(ReferenceEquals(clonedQuestion.AsSingleFixedOption, question.AsSingleFixedOption), Is.False);
         }
 
         [Test]

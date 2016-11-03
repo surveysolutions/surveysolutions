@@ -1045,21 +1045,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var changedMultiQuestion in structuralChanges.ChangedMultiQuestions)
             {
-                tree.GetQuestion(changedMultiQuestion.Key).AsMultiOption.SetAnswer(changedMultiQuestion.Value);
+                tree.GetQuestion(changedMultiQuestion.Key).AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(changedMultiQuestion.Value));
             }
 
             foreach (var changedSingleQuestion in structuralChanges.ChangedSingleQuestions)
             {
-                var question = tree.GetQuestion(changedSingleQuestion.Key).AsSingleOption;
+                var question = tree.GetQuestion(changedSingleQuestion.Key).AsSingleFixedOption;
                 if (changedSingleQuestion.Value.HasValue)
-                    question.SetAnswer(changedSingleQuestion.Value.Value);
+                    question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(changedSingleQuestion.Value.Value));
                 else
                     question.RemoveAnswer();
             }
 
             foreach (var changedYesNoQuestion in structuralChanges.ChangedYesNoQuestions)
             {
-                tree.GetQuestion(changedYesNoQuestion.Key).AsYesNo.SetAnswer(changedYesNoQuestion.Value);
+                tree.GetQuestion(changedYesNoQuestion.Key).AsYesNo.SetAnswer(YesNoAnswer.FromYesNoAnswersOnly(changedYesNoQuestion.Value));
             }
 
             foreach (var removedRosterIdentity in structuralChanges.RemovedRosters)

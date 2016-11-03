@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 case QuestionType.Text:
                     var textQuestion = (TextQuestion) question;
                     parsedValue = answer;
-                    parsedSingleColumnAnswer = new TextAnswer(answer);
+                    parsedSingleColumnAnswer = TextAnswer.FromString(answer);
                     if (!string.IsNullOrEmpty(textQuestion.Mask))
                     {
                         var formatter = new MaskedFormatter(textQuestion.Mask);
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
                 case QuestionType.QRBarcode:
                     parsedValue = answer;
-                    parsedSingleColumnAnswer = new QRBarcodeAnswer(answer);
+                    parsedSingleColumnAnswer = QRBarcodeAnswer.FromString(answer);
                     return ValueParsingResult.OK;
 
                 case QuestionType.TextList:
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                             return ParseFailed(ValueParsingResult.AnswerAsIntWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                         parsedValue = intNumericValue;
-                        parsedSingleColumnAnswer = new NumericIntegerAnswer(intNumericValue);
+                        parsedSingleColumnAnswer = NumericIntegerAnswer.FromInt(intNumericValue);
                         return ValueParsingResult.OK;
                     }
                     else
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                             return ParseFailed(ValueParsingResult.AnswerAsDecimalWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                         parsedValue = decimalNumericValue;
-                        parsedSingleColumnAnswer = new NumericRealAnswer((double) decimalNumericValue);
+                        parsedSingleColumnAnswer = NumericRealAnswer.FromDecimal(decimalNumericValue);
                         return ValueParsingResult.OK;
                     }
 
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                         return ParseFailed(ValueParsingResult.AnswerAsDateTimeWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                     parsedValue = date;
-                    parsedSingleColumnAnswer = new DateTimeAnswer(date);
+                    parsedSingleColumnAnswer = DateTimeAnswer.FromDateTime(date);
                     return ValueParsingResult.OK;
 
                 case QuestionType.SingleOption:
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                         return ParseFailed(ValueParsingResult.ParsedValueIsNotAllowed, out parsedValue, out parsedSingleColumnAnswer);
 
                     parsedValue = decimalAnswerValue;
-                    parsedSingleColumnAnswer = new CategoricalFixedSingleOptionAnswer((int) decimalAnswerValue);
+                    parsedSingleColumnAnswer = CategoricalFixedSingleOptionAnswer.FromDecimal(decimalAnswerValue);
                     return ValueParsingResult.OK;
 
                 case QuestionType.MultyOption:
@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                         return this.ParseYesNoAnswer(answersWithColumnName);
                 case QuestionType.TextList:
                     var rows = answersWithColumnName.Select((a, i) => new TextListAnswerRow(i + 1, a.Item2)).ToArray();
-                    return new TextListAnswer(rows);
+                    return TextListAnswer.FromTextListAnswerRows(rows);
                 case QuestionType.GpsCoordinates:
                     return this.CreateGeoPositionAnswer(answersWithColumnName, question);
                 default:
@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             var answeredYesNoOptions = sortedYesOptions.Concat(noOptions).ToArray();
 
-            return new YesNoAnswer(answeredYesNoOptions);
+            return YesNoAnswer.FromAnsweredYesNoOptions(answeredYesNoOptions);
         }
 
         private CategoricalFixedMultiOptionAnswer ParseMultioptionAnswer(Tuple<string, string>[] answersWithColumnName)
@@ -263,7 +263,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 }
             }
 
-            return new CategoricalFixedMultiOptionAnswer(result.OrderBy(x => x.Item2).Select(x => x.Item1));
+            return CategoricalFixedMultiOptionAnswer.FromInts(result.OrderBy(x => x.Item2).Select(x => x.Item1));
         }
 
         private GpsAnswer CreateGeoPositionAnswer(Tuple<string, string>[] answersWithColumnName, IQuestion question)
@@ -294,7 +294,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                         break;
                 }
             }
-            return new GpsAnswer(result);
+            return GpsAnswer.FromGeoPosition(result);
         }
 
         private string ExtractValueFromColumnName(string columnName)

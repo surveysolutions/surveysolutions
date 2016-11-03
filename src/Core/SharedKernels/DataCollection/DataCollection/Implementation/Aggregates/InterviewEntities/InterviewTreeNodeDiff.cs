@@ -111,9 +111,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (SourceNode.IsMultimedia) return !SourceNode.AsMultimedia.EqualByAnswer(ChangedNode.AsMultimedia);
                 if (SourceNode.IsQRBarcode) return !SourceNode.AsQRBarcode.EqualByAnswer(ChangedNode.AsQRBarcode);
                 if (SourceNode.IsGps) return !SourceNode.AsGps.EqualByAnswer(ChangedNode.AsGps);
-                if (SourceNode.IsSingleOption) return !SourceNode.AsSingleOption.EqualByAnswer(ChangedNode.AsSingleOption);
+                if (SourceNode.IsSingleFixedOption) return !SourceNode.AsSingleFixedOption.EqualByAnswer(ChangedNode.AsSingleFixedOption);
                 if (SourceNode.IsSingleLinkedOption) return !SourceNode.AsSingleLinkedOption.EqualByAnswer(ChangedNode.AsSingleLinkedOption);
-                if (SourceNode.IsMultiOption) return !SourceNode.AsMultiOption.EqualByAnswer(ChangedNode.AsMultiOption);
+                if (SourceNode.IsMultiFixedOption) return !SourceNode.AsMultiFixedOption.EqualByAnswer(ChangedNode.AsMultiFixedOption);
                 if (SourceNode.IsMultiLinkedOption) return !SourceNode.AsMultiLinkedOption.EqualByAnswer(ChangedNode.AsMultiLinkedOption);
                 if (SourceNode.IsYesNo) return !SourceNode.AsYesNo.EqualByAnswer(ChangedNode.AsYesNo);
                 if (SourceNode.IsTextList) return !SourceNode.AsTextList.EqualByAnswer(ChangedNode.AsTextList);
