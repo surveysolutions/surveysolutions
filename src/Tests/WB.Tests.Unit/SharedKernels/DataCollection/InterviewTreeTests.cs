@@ -320,8 +320,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.NotNull(clonedQuestion.AsTextList);
             Assert.AreEqual(clonedQuestion.AsTextList.GetAnswer(), question.AsTextList.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsTextList, question.AsTextList), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsTextList.GetAnswer(), question.AsTextList.GetAnswer()), Is.False);
         }
+
         [Test]
         public void When_Clone_DateTime_question_Then_should_return_copy_of_question_with_dif_references()
         {
@@ -347,6 +347,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.AsDateTime.GetAnswer(), question.AsDateTime.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsDateTime, question.AsDateTime), Is.False);
         }
+
         [Test]
         public void When_Clone_GpsCoordinates_question_Then_should_return_copy_of_question_with_dif_references()
         {
@@ -371,8 +372,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.NotNull(clonedQuestion.AsGps);
             Assert.AreEqual(clonedQuestion.AsGps.GetAnswer(), question.AsGps.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsGps, question.AsGps), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsGps.GetAnswer(), question.AsGps.GetAnswer()), Is.False);
         }
+
         [Test]
         public void When_Clone_Multimedia_question_Then_should_return_copy_of_question_with_dif_references()
         {
@@ -398,6 +399,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.AsMultimedia.GetAnswer(), question.AsMultimedia.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsMultimedia, question.AsMultimedia), Is.False);
         }
+
         [Test]
         public void When_Clone_MultiOption_question_Then_should_return_copy_of_question_with_dif_references()
         {
@@ -422,7 +424,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.NotNull(clonedQuestion.AsMultiFixedOption);
             Assert.AreEqual(clonedQuestion.AsMultiFixedOption.GetAnswer(), question.AsMultiFixedOption.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsMultiFixedOption, question.AsMultiFixedOption), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsMultiFixedOption.GetAnswer(), question.AsMultiFixedOption.GetAnswer()), Is.False);
         }
 
         [Test]
@@ -452,7 +453,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().CheckedOptions.First(), question.AsYesNo.GetAnswer().CheckedOptions.First());
             Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().CheckedOptions.Second(), question.AsYesNo.GetAnswer().CheckedOptions.Second());
             Assert.That(ReferenceEquals(clonedQuestion.AsYesNo, question.AsYesNo), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsYesNo.GetAnswer(), question.AsYesNo.GetAnswer()), Is.False);
         }
 
         [Test]
@@ -536,7 +536,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.NotNull(clonedQuestion.AsSingleLinkedOption);
             Assert.AreEqual(clonedQuestion.AsSingleLinkedOption.GetAnswer(), question.AsSingleLinkedOption.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsSingleLinkedOption, question.AsSingleLinkedOption), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsSingleLinkedOption.GetAnswer(), question.AsSingleLinkedOption.GetAnswer()), Is.False);
             Assert.That(ReferenceEquals(clonedQuestion.AsSingleLinkedOption.Options, question.AsSingleLinkedOption.Options), Is.False);
         }
         [Test]
