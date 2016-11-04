@@ -1158,7 +1158,7 @@ namespace WB.Tests.Unit.TestFactories
             RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null,
             params IInterviewTreeNode[] children)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText("Title");
+            var titleWithSubstitutions = Create.Entity.SubstitionText(rosterIdentity, "Title");
             return new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, children, rosterType: rosterType,
                 rosterSizeQuestion: rosterSizeQuestion,
                 childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
@@ -1167,7 +1167,7 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
             params IInterviewTreeNode[] children)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText("Title");
+            var titleWithSubstitutions = Create.Entity.SubstitionText(groupIdentity, "Title");
             var subSection = new InterviewTreeSubSection(groupIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             subSection.AddChildren(children);
             if (isDisabled) subSection.Disable();
@@ -1176,7 +1176,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText("Title");
+            var titleWithSubstitutions = Create.Entity.SubstitionText(sectionIdentity, "Title");
             var section = new InterviewTreeSection(sectionIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             section.AddChildren(children);
             if (isDisabled)
@@ -1187,7 +1187,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText("Title");
+            var titleWithSubstitutions = Create.Entity.SubstitionText(staticTextIdentity, "Title");
             var staticText = new InterviewTreeStaticText(staticTextIdentity, titleWithSubstitutions);
             if (isDisabled) staticText.Disable();
             return staticText;
@@ -1213,16 +1213,16 @@ namespace WB.Tests.Unit.TestFactories
             string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
             Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
         {
-            var titleWithSubstitutions = Create.Entity.SubstitionText(title);
+            var titleWithSubstitutions = Create.Entity.SubstitionText(questionIdentity, title);
             var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, cascadingParentQuestionId, isYesNo,  isDecimal, linkedSourceId);
 
             if (isDisabled) question.Disable();
             return question;
         }
 
-        private SubstitionText SubstitionText(string title)
+        private SubstitionText SubstitionText(Identity identity, string title)
         {
-            return new SubstitionText(title, new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+            return new SubstitionText(identity, title, new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
         }
 
 

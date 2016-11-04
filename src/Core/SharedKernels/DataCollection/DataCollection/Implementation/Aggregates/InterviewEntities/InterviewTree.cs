@@ -329,6 +329,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             return new IInterviewTreeNode[0] {};
         }
+
+        public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
+        {
+            for (int i = questionIdentity.RosterVector.Length; i >= 0; i--)
+            {
+                var entityIdentity = new Identity(entityId, questionIdentity.RosterVector.Take(i).ToArray());
+                var entity = this.GetNodeByIdentity(entityIdentity);
+                if (entity != null)
+                    return entity;
+            }
+
+            return null;
+        }
     }
 
     public interface IInterviewTreeNode
@@ -344,7 +357,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         IInterviewTreeNode Clone();
 
-        void CalculateSubstitutions();
+        void ReplaceSubstitutions();
     }
 
     public interface IInternalInterviewTreeNode
@@ -382,7 +395,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public abstract IInterviewTreeNode Clone();
 
-        public abstract void CalculateSubstitutions();
+        public abstract void ReplaceSubstitutions();
     }
 
     public enum QuestionnaireReferenceType

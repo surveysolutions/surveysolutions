@@ -222,7 +222,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
         }
 
-        private void ApplySubstitutionEvents(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        private void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
         {
             var changedQuestionTitles = new List<Identity>();
             var changedStaticTextTitles = new List<Identity>();
@@ -258,17 +258,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             //foreach (var identity in changedQuestionTitles)
             //{
-            //    tree.GetQuestion(identity).CalculateSubstitutions();
+            //    tree.GetQuestion(identity).ReplaceSubstitutions();
             //}
 
             //foreach (var identity in changedStaticTextTitles)
             //{
-            //    tree.GetStaticText(identity).CalculateSubstitutions();
+            //    tree.GetStaticText(identity).ReplaceSubstitutions();
             //}
 
             //foreach (var identity in changedGroupTitles)
             //{
-            //    tree.GetGroup(identity).CalculateSubstitutions();
+            //    tree.GetGroup(identity).ReplaceSubstitutions();
             //}
 
             if (changedQuestionTitles.Any() || changedStaticTextTitles.Any() || changedGroupTitles.Any())

@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clone;
         }
 
-        public override void CalculateSubstitutions()
+        public override void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
         }
