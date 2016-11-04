@@ -16,9 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             var validationExpression = "some validation";
 
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new MultimediaQuestion()
+            questionnaire = CreateQuestionnaireDocument(new MultimediaQuestion()
             {
                 PublicKey = questionId,
                 StataExportCaption = "var",

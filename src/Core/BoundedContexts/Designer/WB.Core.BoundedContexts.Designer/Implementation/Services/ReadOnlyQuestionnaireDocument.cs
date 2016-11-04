@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             this.Translation = translation;
             this.Questionnaire = questionnaire;
-            this.Questionnaire.ConnectChildrenWithParent();
             this.allItems = CreateEntitiesIdAndTypePairsInQuestionnaireFlowOrder(this.Questionnaire);
         }
 

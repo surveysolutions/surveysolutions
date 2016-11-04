@@ -41,9 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                             .OrderByDescending(h => h.Sequence)
                             .Skip((page - 1)*pageSize)
                             .Take(pageSize).ToArray());
-
-            questionnaire.ConnectChildrenWithParent();
-
+            
             return new QuestionnaireChangeHistory(id, questionnaire.Title,
                 questionnaireHistory.Select(h => CreateQuestionnaireChangeHistoryWebItem(questionnaire, h))
                     .ToList(), page, count, pageSize);

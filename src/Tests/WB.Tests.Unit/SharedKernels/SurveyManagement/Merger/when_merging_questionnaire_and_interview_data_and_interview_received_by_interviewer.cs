@@ -23,8 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group(nestedGroupTitle)
                 {
-                    PublicKey = nestedGroupId,
-                    Children = new List<IComposite>()
+                    PublicKey = nestedGroupId
                 });
 
             interview = CreateInterviewData(interviewId);

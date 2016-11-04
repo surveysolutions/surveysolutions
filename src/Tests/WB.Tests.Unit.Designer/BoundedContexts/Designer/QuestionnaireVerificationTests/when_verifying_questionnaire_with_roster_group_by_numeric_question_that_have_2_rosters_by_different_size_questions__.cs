@@ -14,20 +14,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new NumericQuestion("roster size question 1")
+            questionnaire = CreateQuestionnaireDocument(
+                new NumericQuestion("roster size question 1")
             {
                 PublicKey = rosterSizeQuestion1Id,
                 StataExportCaption = "var1",
                 IsInteger = true
-            });
-            questionnaire.Children.Add(new NumericQuestion("roster size question 2")
+            },
+                new NumericQuestion("roster size question 2")
             {
                 PublicKey = rosterSizeQuestion2Id,
                 StataExportCaption = "var2",
                 IsInteger = true
-            });
-            questionnaire.Children.Add(new Group()
+            },
+                new Group()
             {
                 PublicKey = rosterGroup1Id,
                 IsRoster = true,
@@ -35,8 +35,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 RosterSizeSource = RosterSizeSourceType.Question,
                 RosterSizeQuestionId = rosterSizeQuestion1Id,
                 RosterTitleQuestionId = rosterTitleQuestionId
-            });
-            questionnaire.Children.Add(new Group()
+            },
+                new Group()
             {
                 PublicKey = rosterGroup2Id,
                 IsRoster = true,

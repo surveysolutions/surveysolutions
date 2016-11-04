@@ -16,17 +16,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notSupportedForLinkingQuestionId = Guid.Parse("13333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new SingleQuestion()
+            questionnaire = CreateQuestionnaireDocument(
+                new SingleQuestion()
             {
                 PublicKey = notSupportedForLinkingQuestionId,
                 StataExportCaption = "var1",
                 QuestionType = QuestionType.SingleOption,
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
-
-            questionnaire.Children.Add(new SingleQuestion()
+            },
+                new SingleQuestion()
             {
                 PublicKey = linkedQuestionId,
                 LinkedToQuestionId = notSupportedForLinkingQuestionId,

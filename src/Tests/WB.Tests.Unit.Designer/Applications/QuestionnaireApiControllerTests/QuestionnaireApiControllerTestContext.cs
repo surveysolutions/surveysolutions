@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
@@ -72,9 +73,12 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             return new QuestionnaireDocument();
         }
 
-        public static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> questionnaireItems)
+        public static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireItems)
         {
-            return new QuestionnaireDocument() {Children = new List<IComposite>(questionnaireItems)};
+            return new QuestionnaireDocument()
+            {
+                Children = new ReadOnlyCollection<IComposite>(questionnaireItems.ToList())
+            };
         }
 
         public static NewEditStaticTextView CreateStaticTextView()

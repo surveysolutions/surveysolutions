@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Code;
 
 namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
@@ -53,9 +54,9 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
                         {
                             new TextQuestion() { PublicKey = questionId1 },
                             new TextQuestion() { PublicKey = questionId2 },
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 
@@ -71,9 +72,9 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
                         Children = new List<IComposite>
                         {
                             Create.StaticText(staticTextId, null)
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 

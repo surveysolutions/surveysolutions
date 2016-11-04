@@ -26,8 +26,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var rosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var questionnaireRoster = Create.Entity.Roster(rosterSizeSourceType: RosterSizeSourceType.Question,
-                rosterTitleQuestionId: timestampQuestionId, rosterSizeQuestionId: rosterSizeQuestionId, rosterId: rosterId);
-            questionnaireRoster.Children.Add(Create.Entity.DateTimeQuestion(questionId: timestampQuestionId, isTimestamp: true));
+                rosterTitleQuestionId: timestampQuestionId, rosterSizeQuestionId: rosterSizeQuestionId, rosterId: rosterId, 
+                children: new []{
+                    Create.Entity.DateTimeQuestion(questionId: timestampQuestionId, isTimestamp: true)}
+            );
 
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
                 Create.Entity.PlainQuestionnaire(CreateQuestionnaireDocumentWithOneChapter(new IComposite[]

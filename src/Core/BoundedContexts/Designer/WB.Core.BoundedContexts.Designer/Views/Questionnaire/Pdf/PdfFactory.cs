@@ -53,9 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 return null;
             }
-
-            questionnaire.ConnectChildrenWithParent();
-
+            
             var sharedPersons = sharedPersonsStorage.GetById(questionnaireId)?.SharedPersons ?? new List<SharedPerson>();
 
             var modificationStatisticsByUsers = questionnaireChangeHistoryStorage.Query(_ => _

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,6 +13,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -81,14 +83,16 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            var result = new QuestionnaireDocument();
-            var chapter = new Group("Chapter");
-            result.Children.Add(chapter);
-
-            foreach (var child in children)
+            var result = new QuestionnaireDocument
             {
-                chapter.Children.Add(child);
-            }
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter")
+                    {
+                        Children = children.ToReadOnlyCollection()
+                    }
+                }.ToReadOnlyCollection()
+            };
 
             return result;
         }

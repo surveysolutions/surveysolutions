@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                             new Answer() {AnswerText = "2", AnswerCode = 2},
                                         }
                                     ),
-                                }
+                                }.ToReadOnlyCollection()
                             },
                             new Group()
                             {
@@ -63,11 +64,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 {
                                     Create.TextQuestion(q2Id, text: "text title", validationConditions: new List<ValidationCondition> {new ValidationCondition { Expression = "q1 > 10" } }),
                                     Create.SingleQuestion(q4Id, cascadeFromQuestionId: q5Id, title: "single title"),
-                                }
+                                }.ToReadOnlyCollection()
                             },
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 
@@ -106,7 +107,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                         {
                                             Create.TextListQuestion(q4Id, title: "text list title"),
                                             Create.NumericRealQuestion(q7Id, title: "numeric title"),
-                                        }
+                                        }.ToReadOnlyCollection()
                                     },
                                     new Group()
                                     {
@@ -117,9 +118,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                         {
                                             Create.NumericRealQuestion(q5Id, title: "numeric title"),
                                             Create.StaticText(st2Id, "static text 2"),
-                                        }
+                                        }.ToReadOnlyCollection()
                                     }
-                                }
+                                }.ToReadOnlyCollection()
                             },
                             new Group()
                             {
@@ -132,7 +133,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 Children = new List<IComposite>()
                                 {
                                     Create.TextQuestion(q3Id, text: "text title"),
-                                }
+                                }.ToReadOnlyCollection()
                             },
                             Create.NumericIntegerQuestion(numericQuestionId, "q1", title: "Integer 1"),
                             Create.MultipleOptionsQuestion(q2Id, "["+ numericQuestionId +"] > 25", title: "MultiOption",
@@ -143,7 +144,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 }),
                             Create.StaticText(st1Id, "static text 1"),
                             Create.Variable(var1Id, VariableType.String, "var1")
-                        }
+                        }.ToReadOnlyCollection()
                     },
                     new Group()
                     {
@@ -162,9 +163,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 PublicKey = q8Id,
                                 QuestionText = "Photo",
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 
@@ -189,9 +190,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 RosterSizeQuestionId = q2Id,
                                 RosterTitleQuestionId = q3Id,
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 
@@ -218,14 +219,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                 {
                                     Create.NumericIntegerQuestion(q4Id, "int",  title:"Integer 1"),
                                     Create.SingleQuestion(q5Id, "linked_question", linkedToQuestionId:q4Id, title:"linked"),
-                                }
+                                }.ToReadOnlyCollection()
                             },
                             Create.SingleQuestion(q1Id, "list_question", title: "cascading_question"),
                             Create.SingleQuestion(q2Id, "list_question", title: "cascading_question_2", cascadeFromQuestionId: q1Id),
                             Create.SingleQuestion(q3Id, "list_question", title: "cascading_question_3", cascadeFromQuestionId: q2Id),
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 
@@ -238,11 +239,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 VariableName = "fixed_roster_inside_list_roster",
                 IsRoster = true,
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3") },
-                Children = new List<IComposite>()
-                { 
-                     //Create.TextListQuestion(q3Id, variable:"list_question", title: "list_question_inside_fixed_roster", maxAnswerCount: 16),
-                }
+                FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3") }
             };
             var listNestedRoster = new Group
             {
@@ -251,11 +248,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 VariableName = "fixed_roster_inside_list_roster",
                 IsRoster = true,
                 RosterSizeSource = RosterSizeSourceType.Question,
-                RosterSizeQuestionId = q2Id,
-                Children = new List<IComposite>()
-                {
-                     //Create.TextListQuestion(q3Id, variable:"list_question", title: "list_question_inside_fixed_roster", maxAnswerCount: 16),
-                }
+                RosterSizeQuestionId = q2Id
             };
             return new QuestionnaireDocument()
             {
@@ -280,12 +273,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                                     (shouldReplaceFixedRosterWithListOne? listNestedRoster : fixedNestedRoster),
 
                                     Create.TextListQuestion(q2Id, variable:"list_question", title: "list_question_inside_roster", maxAnswerCount: 16),
-                                }
+                                }.ToReadOnlyCollection()
                             },
                             Create.TextListQuestion(q1Id, variable:"list_question", title: "list_question"),
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 

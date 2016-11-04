@@ -6,13 +6,12 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -55,9 +54,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                         QuestionType = QuestionType.Numeric,
                                         StataExportCaption = "questionInNestedRosterId"
                                     }
-                                }
+                                }.ToReadOnlyCollection()
                         }
-                    }
+                    }.ToReadOnlyCollection()
                 });
 
             interview = CreateInterviewData(interviewId);

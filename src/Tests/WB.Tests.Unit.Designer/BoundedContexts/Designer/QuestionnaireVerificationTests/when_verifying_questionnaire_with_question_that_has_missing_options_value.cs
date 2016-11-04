@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionWithMissingValues = Guid.Parse("10000000000000000000000000000000");
 
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new SingleQuestion()
+            questionnaire = CreateQuestionnaireDocument(new SingleQuestion()
             {
                 PublicKey = questionWithMissingValues,
                 StataExportCaption = "var",

@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(
+            questionnaire = CreateQuestionnaireDocument(
                 new TextQuestion(new string('q', 5 * 1024 * 1024))
                 {
                     StataExportCaption = "var0"

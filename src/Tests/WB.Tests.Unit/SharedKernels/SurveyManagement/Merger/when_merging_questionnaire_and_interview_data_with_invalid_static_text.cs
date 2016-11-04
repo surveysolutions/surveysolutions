@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                 Create.Entity.ValidationCondition("n1 != 1"),
                                 Create.Entity.ValidationCondition("n1 != 2"),
                             })
-                        }
+                        }.ToReadOnlyCollection()
                 });
 
             interview = CreateInterviewData(interviewId);

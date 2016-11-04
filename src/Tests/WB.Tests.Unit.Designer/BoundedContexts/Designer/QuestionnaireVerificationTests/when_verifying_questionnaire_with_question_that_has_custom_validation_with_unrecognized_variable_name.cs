@@ -19,9 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
        Establish context = () =>
         {
             questionWithCustomValidation = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new SingleQuestion()
+            questionnaire = CreateQuestionnaireDocument(new SingleQuestion()
             {
                 PublicKey = questionWithCustomValidation,
                 ValidationExpression = "some random expression",

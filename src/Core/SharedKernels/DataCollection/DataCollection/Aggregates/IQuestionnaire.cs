@@ -21,8 +21,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid? ResponsibleId { get; }
 
-        void InitializeQuestionnaireDocument();
-
         [Obsolete("This method is for import service only and should be removed at all.")]
         IQuestion GetQuestionByStataCaption(string stataCaption);
 
