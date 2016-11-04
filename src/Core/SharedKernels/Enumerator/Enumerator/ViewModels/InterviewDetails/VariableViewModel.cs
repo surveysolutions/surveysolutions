@@ -5,6 +5,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 
 
@@ -58,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.registry.Subscribe(this, interviewId);
         }
 
-        public string Text => this.variableName + ": " + (this.variableValue.ToString() ?? "<empty>");
+        public string Text => this.variableName + ": " + (this.variableValue.ToString() ?? UIResources.VariableEmptyValue);
         public string Description => this.variableDescription;
         public bool IsShowDescription => !string.IsNullOrEmpty(this.variableDescription);
 
