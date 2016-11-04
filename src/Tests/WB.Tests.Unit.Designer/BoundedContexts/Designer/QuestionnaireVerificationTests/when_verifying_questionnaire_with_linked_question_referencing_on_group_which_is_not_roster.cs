@@ -14,9 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(Create.Group(groupId: groupId, title: "title"));
-            questionnaire.Children.Add(
+            questionnaire = CreateQuestionnaireDocument(
+                Create.Group(groupId: groupId, title: "title"),
                 new SingleQuestion()
             {
                 PublicKey = linkedQuestionId,

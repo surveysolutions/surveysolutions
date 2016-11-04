@@ -17,14 +17,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             var rosterTitleQuestionId = Guid.Parse("11333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new NumericQuestion("question 1")
+            questionnaire = CreateQuestionnaireDocument(
+                new NumericQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
                 StataExportCaption = "var",
                 IsInteger = true
-            });
-            questionnaire.Children.Add(new Group()
+            },
+                new Group()
             {
                 PublicKey = rosterGroupId,
                 IsRoster = true,

@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                                 StataExportCaption = "multimedia",
                                 ConditionExpression = "text == \"a\""
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     },
                 });
 

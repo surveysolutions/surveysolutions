@@ -63,7 +63,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
             InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, 
             IEnumerable<AttachmentInfoView> attachmentInfoViews)
         {
-            questionnaire.ConnectChildrenWithParent();
             Dictionary<string, AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
 
             if (questionnaire.Attachments != null && attachmentInfoViews != null)

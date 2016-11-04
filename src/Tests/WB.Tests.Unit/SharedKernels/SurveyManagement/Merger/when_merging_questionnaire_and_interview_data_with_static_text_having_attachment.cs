@@ -9,6 +9,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                         new List<IComposite>()
                         {
                             Create.Entity.StaticText(publicKey: staticTextId, text: staticText, attachmentName: attachmentName)
-                        }
+                        }.ToReadOnlyCollection()
                 });
             questionnaire.Attachments = new List<Attachment>() {new Attachment() {ContentId = attachmentContentId, Name = attachmentName } };
 

@@ -241,7 +241,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 Children = new List<IComposite>()
                 {
                     Create.Group(chapterId)
-                }
+                }.ToReadOnlyCollection()
             };
 
             var questionnaire = Create.Questionnaire();
@@ -983,7 +983,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                         Create.Variable(variableId),
                         Create.TextQuestion(questionId: questionId)
                     })
-                }
+                }.ToReadOnlyCollection()
             };
             
             var questionnaire = Create.Questionnaire();

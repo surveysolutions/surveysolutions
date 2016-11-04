@@ -173,7 +173,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
             if (questionnaire == null)
                 return null;
-            questionnaire.ConnectChildrenWithParent();
 
             var roster = questionnaire.Find<IGroup>(rosterId);
             if (roster == null)
@@ -243,7 +242,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
             if (questionnaire == null)
                 return null;
-            questionnaire.ConnectChildrenWithParent();
 
             var question = questionnaire.Find<IQuestion>(questionId);
             if (question == null)
@@ -291,9 +289,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
             if (questionnaire == null)
                 return null;
-
-            questionnaire.ConnectChildrenWithParent();
-
+            
             var roster = this.GetRoster(questionnaire, rosterId); 
 
             Func<IEnumerable<IQuestion>, IEnumerable<IQuestion>> questionFilter;
@@ -336,8 +332,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
             if (questionnaireDocument == null)
                 return null;
-
-            questionnaireDocument.ConnectChildrenWithParent();
 
             ReadOnlyQuestionnaireDocument questionnaire = new ReadOnlyQuestionnaireDocument(questionnaireDocument);
 

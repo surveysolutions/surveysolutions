@@ -284,8 +284,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     new QuestionnaireIdentity(interview.QuestionnaireId,
                         interview.QuestionnaireVersion));
 
-            questionnaire.ConnectChildrenWithParent();
-
             var linkedQuestions = questionnaire.Find<IQuestion>(q => q.LinkedToRosterId.HasValue || q.LinkedToQuestionId.HasValue).ToArray();
             var interviewLinkedQuestionOptions = this.interviewLinkedQuestionOptionsStore.GetById(interview.InterviewId);
 

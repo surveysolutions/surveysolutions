@@ -15,26 +15,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             rosterId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-
 
             var rosterSizeQiestionId = Guid.Parse("20000000000000000000000000000000");
-
-            questionnaire.Children.Add(new NumericQuestion()
+            questionnaire = CreateQuestionnaireDocument(
+            new NumericQuestion()
             {
                 PublicKey = rosterSizeQiestionId,
                 IsInteger = true,
                 StataExportCaption = "var"
-            });
-            questionnaire.Children.Add(new Group()
+            },new Group()
             {
                 PublicKey = rosterId,
                 IsRoster = true,
                 VariableName = "int",
-                RosterSizeQuestionId = rosterSizeQiestionId,
-                
+                RosterSizeQuestionId = rosterSizeQiestionId
             });
-
 
             verifier = CreateQuestionnaireVerifier();
         };

@@ -10,16 +10,7 @@ namespace Main.Core.Entities.SubEntities.Question
     /// </summary>
     public class SingleQuestion : AbstractQuestion
     {
-        public SingleQuestion()
-        {
-            this.Children = new List<IComposite>();
-        }
-
-        public SingleQuestion(Guid qid, string text) : base(text)
-        {
-            this.PublicKey = qid;
-            this.Children = new List<IComposite>();
-        }
+        public SingleQuestion(string questionText = null, List<IComposite> children = null):base(questionText, children){ }
 
         public override void AddAnswer(Answer answer)
         {

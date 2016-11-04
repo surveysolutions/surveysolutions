@@ -10,6 +10,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             ConditionExpression = "s546i==1",
                             StataExportCaption = "s546i"
                         }
-                    }
+                    }.ToReadOnlyCollection()
                 }
             });
 

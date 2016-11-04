@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.Composite;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -13,17 +13,12 @@ namespace Main.Core.Entities.SubEntities
     [DebuggerDisplay("Question {PublicKey}")]
     public abstract class AbstractQuestion : IQuestion
     {
-        protected AbstractQuestion()
+        protected AbstractQuestion(string questionText = null, List<IComposite> children = null)
         {
             this.Answers = new List<Answer>();
             this.validationConditions = new List<ValidationCondition>();
             this.Properties = new QuestionProperties(false, false);
-        }
-
-        protected AbstractQuestion(string text)
-            : this()
-        {
-            this.QuestionText = text;
+            this.QuestionText = questionText;
         }
 
         public Order? AnswerOrder { get; set; }
@@ -33,11 +28,13 @@ namespace Main.Core.Entities.SubEntities
         [Obsolete("long time ago")]
         public bool Capital { get; set; }
 
-        public List<IComposite> Children
+        private ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
+
+        public ReadOnlyCollection<IComposite> Children
         {
             get
             {
-                return new List<IComposite>(0);
+                return children;
             }
             set
             {
@@ -135,6 +132,15 @@ namespace Main.Core.Entities.SubEntities
             question.Properties = this.Properties;
 
             return question;
+        }
+
+        public void Insert(int index, IComposite itemToInsert, Guid? parent)
+        {
+        }
+
+        public void RemoveChild(Guid child)
+        {
+            
         }
 
         public void ConnectChildrenWithParent()

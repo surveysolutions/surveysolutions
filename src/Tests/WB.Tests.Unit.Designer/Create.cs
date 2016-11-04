@@ -1,6 +1,7 @@
 ﻿extern alias designer;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -184,71 +185,6 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ICompilerSettings>());
         }
 
-        private static QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId,
-            string questionnaireTitle,
-            string chapter1Id,
-            string chapter1Title,
-            string chapter2Id,
-            string chapter2Title,
-            string chapter1GroupId,
-            string chapter1GroupTitle,
-            string chapter2QuestionId,
-            string chapter2QuestionTitle,
-            string chapter2QuestionVariable,
-            string chapter2QuestionConditionExpression,
-            string chapter1StaticTextId,
-            string chapter1StaticText,
-            bool isPublic)
-        {
-            return new QuestionnaireDocument()
-            {
-                PublicKey = Guid.Parse(questionnaireId),
-                Title = questionnaireTitle,
-                IsPublic = isPublic,
-                Children = new List<IComposite>()
-                {
-                    new Group()
-                    {
-                        PublicKey = Guid.Parse(chapter1Id),
-                        Title = chapter1Title,
-                        Children = new List<IComposite>()
-                        {
-                            Create.StaticText(staticTextId: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
-                            new Group()
-                            {
-                                PublicKey = GetQuestionnaireItemId(chapter1GroupId),
-                                Title = chapter1GroupTitle,
-                                Children = new List<IComposite>()
-                                {
-                                    new Group()
-                                    {
-                                        IsRoster = true
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    new Group()
-                    {
-                        PublicKey = Guid.Parse(chapter2Id),
-                        Title = chapter2Title,
-                        Children = new List<IComposite>()
-                        {
-                            new TextQuestion()
-                            {
-                                PublicKey = GetQuestionnaireItemId(chapter2QuestionId),
-                                QuestionText = chapter2QuestionTitle,
-                                StataExportCaption = chapter2QuestionVariable,
-                                QuestionType = QuestionType.Text,
-                                ConditionExpression = chapter2QuestionConditionExpression
-                            }
-                        }
-                    }
-                }
-            };
-        }
-
-
         public static QuestionProperties QuestionProperties()
         {
             return new QuestionProperties(false, false);
@@ -354,7 +290,7 @@ namespace WB.Tests.Unit.Designer
                 VariableName = variable,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
-                Children = children != null ? children.ToList() : new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 RosterSizeQuestionId = rosterSizeQuestionId,
             };
         }
@@ -653,7 +589,7 @@ namespace WB.Tests.Unit.Designer
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
                 CreatedBy = userId ?? Guid.NewGuid()
             };
@@ -682,15 +618,18 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, 
             Translation[] translations = null, params IComposite[] children)
         {
-            var result = new QuestionnaireDocument { PublicKey = questionnaireId ?? Guid.NewGuid() };
-            var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
-
-            result.Children.Add(chapter);
-
-            foreach (var child in children)
+            var result = new QuestionnaireDocument
             {
-                chapter.Children.Add(child);
-            }
+                PublicKey = questionnaireId ?? Guid.NewGuid(),
+                Children = new IComposite[]
+                {
+                    new Group("Chapter")
+                    {
+                        PublicKey = chapterId.GetValueOrDefault(),
+                        Children = children.ToReadOnlyCollection()
+                    }
+                }.ToReadOnlyCollection()
+            };
 
             result.Attachments.AddRange(attachments ?? new Attachment[0]);
             result.Translations.AddRange(translations ?? new Translation[0]);

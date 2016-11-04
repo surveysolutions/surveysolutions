@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
                             {
                                 Create.Entity.Group(groupId: group2Id, title: "GroupC - %subst%")
                             })
-                }
+                }.ToReadOnlyCollection()
             });
 
             Guid questionnaireId = Guid.NewGuid();

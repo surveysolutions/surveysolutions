@@ -9,6 +9,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
@@ -21,15 +22,12 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
     {
         Establish context = () =>
         {
-            questionnaireDocument = CreateQuestionnaireDocument(new[]
-            {
+            questionnaireDocument = CreateQuestionnaireDocument(
                 new Group()
                 {
                     PublicKey = new Guid(),
-                    Children =
-                        new IComposite[101].Select(_ => new TextQuestion() {PublicKey = new Guid()}).ToList<IComposite>()
-                }
-            });
+                    Children = new IComposite[101].Select(_ => new TextQuestion() {PublicKey = new Guid()}).ToList<IComposite>().ToReadOnlyCollection()
+                });
             var questionnaireView = CreateQuestionnaireView(questionnaireDocument);
 
             verificationMessages = CreateQuestionnaireVerificationErrors(questionnaireDocument.Find<IComposite>(_ => true));

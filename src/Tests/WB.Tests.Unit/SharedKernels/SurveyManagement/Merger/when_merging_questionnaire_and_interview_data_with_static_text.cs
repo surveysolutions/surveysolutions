@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using It = Machine.Specifications.It;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                         new List<IComposite>()
                         {
                             Create.Entity.StaticText(publicKey: staticTextId, text: staticText)
-                        }
+                        }.ToReadOnlyCollection()
                 });
 
             interview = CreateInterviewData(interviewId);

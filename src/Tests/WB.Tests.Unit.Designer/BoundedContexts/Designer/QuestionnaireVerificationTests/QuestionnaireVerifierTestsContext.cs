@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             return new QuestionnaireDocument
             {
-                Children = questionnaireChildren.ToList(),
+                Children = questionnaireChildren.ToReadOnlyCollection(),
             };
         }
 
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                 StataExportCaption = "var2",
                                 PublicKey = questionIdFromRoster
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     }
                 });
 
@@ -135,7 +135,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                 StataExportCaption = "var2",
                                 PublicKey = questionIdFromOtherRosterWithSameLevel
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     },
                     new Group
                     {
@@ -175,7 +175,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                 StataExportCaption = "var2",
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     },
                     new Group
                     {
@@ -212,7 +212,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                 StataExportCaption = underDeeperRosterLevelQuestionId.ToString(),
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     },
                     new Group
                     {
@@ -253,7 +253,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                 StataExportCaption = "var2",
                                 PublicKey = underDeeperRosterLevelQuestionId
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     },
                     new SingleQuestion
                     {
@@ -276,10 +276,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     new Group("Chapter")
                     {
                         PublicKey = Guid.Parse("FFF000AAA111EE2DD2EE111AAA000FFF"),
-                        Children = chapterChildren.ToList(),
+                        Children = chapterChildren.ToReadOnlyCollection(),
                         IsRoster = false
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 

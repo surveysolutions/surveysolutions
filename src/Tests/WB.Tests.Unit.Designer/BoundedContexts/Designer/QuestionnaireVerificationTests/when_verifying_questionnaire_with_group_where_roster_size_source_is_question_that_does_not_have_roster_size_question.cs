@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -18,15 +19,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
 
             rosterGroupId = Guid.Parse("13333333333333333333333333333333");
-            questionnaire =
-                CreateQuestionnaireDocumentWithOneChapter(new Group()
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group()
                 {
                     PublicKey = rosterGroupId,
                     IsRoster = true,
                     RosterSizeSource = RosterSizeSourceType.Question,
                     VariableName = "a",
-                    Children = new List<IComposite>() { new NumericQuestion(){StataExportCaption = "var"} }
-                });
+                    Children = new List<IComposite>() { new NumericQuestion(){StataExportCaption = "var"} }.ToReadOnlyCollection()
+            });
 
             verifier = CreateQuestionnaireVerifier();
         };

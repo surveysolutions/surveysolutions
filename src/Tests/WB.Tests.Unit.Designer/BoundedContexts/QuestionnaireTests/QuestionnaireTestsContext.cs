@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -8,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
@@ -32,14 +34,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> children = null, Guid? createdBy = null)
         {
-            var questionnaire = new QuestionnaireDocument();
-
-            if (children != null)
+            var questionnaire = new QuestionnaireDocument
             {
-                questionnaire.Children.AddRange(children);
-            }
-
-            questionnaire.CreatedBy = createdBy;
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
+                CreatedBy = createdBy
+            };
 
             return questionnaire;
         }

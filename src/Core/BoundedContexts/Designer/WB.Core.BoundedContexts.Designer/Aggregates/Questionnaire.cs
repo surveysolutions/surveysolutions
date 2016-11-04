@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
             }
 
-            this.innerDocument.Add(newGroup, parentId, null);
+            this.innerDocument.Add(newGroup, parentId);
         }
 
         private void RemoveRosterFlagFromGroup(Guid groupId)
@@ -651,7 +651,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (parentGroupId.HasValue)
             {
-                this.innerDocument.ConnectChildrenWithParent();
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
                 this.ThrowIfTargetGroupHasReachedAllowedDepthLimit(parentGroupId.Value);
             }
@@ -717,8 +716,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: fixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(groupId));
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             var group = this.GetGroupById(groupId);
 
             var wasGroupAndBecomeARoster = !@group.IsRoster && isRoster;
@@ -782,7 +780,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
 
-            this.innerDocument.RemoveGroup(groupId);
+            this.innerDocument.RemoveEntity(groupId);
         }
 
         public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex, Guid responsibleId)
@@ -796,7 +794,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
             }
-            this.innerDocument.ConnectChildrenWithParent();
+
             var sourceGroup = this.GetGroupById(groupId);
 
             if (targetGroupId.HasValue)
@@ -865,8 +863,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentGroupId);
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
@@ -901,7 +898,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 linkedFilterExpression: null,
                 isTimestamp: false);
 
-            this.innerDocument.Add(question, command.ParentGroupId, null);
+            this.innerDocument.Add(question, command.ParentGroupId);
             
             if (command.Index.HasValue)
             {
@@ -949,8 +946,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     variableName: question.StataExportCaption,
                     parentGroup: targetGroup);
             }
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(question, targetGroup);
 
@@ -1500,7 +1496,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
-            this.innerDocument.ConnectChildrenWithParent();
+            
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
             var staticText = new StaticText(publicKey: command.EntityId,
@@ -1510,7 +1506,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationConditions: null,
                 attachmentName: null);
 
-            this.innerDocument.Add(c: staticText, parent: command.ParentId, parentPropagationKey: null);
+            this.innerDocument.Add(staticText, command.ParentId);
 
             if (command.Index.HasValue)
             {
@@ -1569,12 +1565,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
-            this.innerDocument.ConnectChildrenWithParent();
+            
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
             var variable = new Variable(command.EntityId, command.VariableData);
 
-            this.innerDocument.Add(c: variable, parent: command.ParentId, parentPropagationKey: null);
+            this.innerDocument.Add(variable, command.ParentId);
             
             if (command.Index.HasValue)
             {
@@ -1672,10 +1668,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.ItemToPasteAfterId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(pasteAfter.EntityId);
             ThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.SourceDocument, pasteAfter.SourceItemId);
-
-            this.innerDocument.ConnectChildrenWithParent();
-            pasteAfter.SourceDocument.ConnectChildrenWithParent();
-
+            
             var itemToInsertAfter = this.innerDocument.Find<IComposite>(pasteAfter.ItemToPasteAfterId);
             var targetToPasteIn = itemToInsertAfter.GetParent();
             var entityToInsert = pasteAfter.SourceDocument.Find<IComposite>(pasteAfter.SourceItemId);
@@ -1691,10 +1684,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteInto.ResponsibleId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(pasteInto.EntityId);
             ThrowDomainExceptionIfEntityDoesNotExists(pasteInto.SourceDocument, pasteInto.SourceItemId);
-
-            this.innerDocument.ConnectChildrenWithParent();
-            pasteInto.SourceDocument.ConnectChildrenWithParent();
-
+            
             this.ThrowDomainExceptionIfGroupDoesNotExist(pasteInto.ParentId);
 
             var entityToInsert = pasteInto.SourceDocument.Find<IComposite>(pasteInto.SourceItemId);
@@ -1849,8 +1839,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName, variableLengthLimit);
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, isPrefilled, parentGroup);
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
 
             if (parentGroup != null)
@@ -2612,9 +2601,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
 
             List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope;
-
-            this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
-
+            
             this.ValidateSubstitutionReferences(entityId, variableName, parentGroup, substitutionReferences,
                 out unknownReferences,
                 out questionsIncorrectTypeOfReferenced,
@@ -2684,9 +2671,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (!GetGroupsByRosterTitleId(question.PublicKey).Any())
                 return;
-
-            this.innerDocument.ConnectChildrenWithParent();
-
+            
             IGroup sourceRoster = GetFirstRosterParentGroupOrNull(question);
             IGroup targetRoster = GetFirstRosterParentGroupOrNull(targetGroup);
 
@@ -3148,8 +3133,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private bool IsUnderPropagatableGroup(IComposite item)
         {
-            this.innerDocument.ConnectChildrenWithParent();
-
             return this.GetFirstRosterParentGroupOrNull(item) != null;
         }
 
@@ -3201,8 +3184,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 scopeIds.Add(GetScopeOrRoster(entityAsGroup));
             }
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             var currentParent = (IGroup)entity.GetParent();
             while (currentParent != null)
             {
@@ -3347,8 +3329,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private IEnumerable<IGroup> GetAllParentGroups(IComposite entity)
         {
-            this.innerDocument.ConnectChildrenWithParent();
-
             var currentParent = (IGroup)entity.GetParent();
 
             while (currentParent != null)

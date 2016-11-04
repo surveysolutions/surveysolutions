@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
     public class NumericQuestion : AbstractQuestion, INumericQuestion
     {
-        public NumericQuestion()
-        {
-        }
-
-        public NumericQuestion(string text)
-            : base(text)
-        {
-        }
+        public NumericQuestion(string questionText = null, List<IComposite> children = null):base(questionText, children){ }
 
         public override void AddAnswer(Answer answer)
         {

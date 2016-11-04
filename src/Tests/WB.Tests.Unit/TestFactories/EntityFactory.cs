@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
@@ -248,7 +249,7 @@ namespace WB.Tests.Unit.TestFactories
                 VariableName = variable,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
-                Children = children?.ToList() ?? new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
             };
 
         public HeaderStructureForLevel HeaderStructureForLevel()
@@ -706,14 +707,14 @@ namespace WB.Tests.Unit.TestFactories
             => new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
             };
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
             => new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithAttachments(Guid? chapterId = null, params Attachment[] attachments)
@@ -722,7 +723,7 @@ namespace WB.Tests.Unit.TestFactories
                 Children = new List<IComposite>
                 {
                     new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
-                },
+                }.ToReadOnlyCollection(),
                 Attachments = attachments.ToList()
             };
 
@@ -732,7 +733,7 @@ namespace WB.Tests.Unit.TestFactories
                 Children = new List<IComposite>
                 {
                     new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
-                },
+                }.ToReadOnlyCollection(),
                 Translations = translations.ToList()
             };
 
@@ -748,9 +749,9 @@ namespace WB.Tests.Unit.TestFactories
                     new Group("Chapter")
                     {
                         PublicKey = chapterId.GetValueOrDefault(),
-                        Children = children.ToList()
+                        Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
                     }
-                }
+                }.ToReadOnlyCollection()
             };
 
         public QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
