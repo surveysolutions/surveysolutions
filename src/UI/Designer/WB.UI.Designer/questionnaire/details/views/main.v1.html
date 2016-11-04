@@ -423,7 +423,7 @@
                                             <span ng-if="reference.type == 'Attachment'" class="icon icon-attachment icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Variable'" class="icon icon-variable icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Translation'" class="icon icon-translation icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
-                                            <span class="title" tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">{{reference.title}}</span>
+                                            <span class="title" tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">{{reference.title}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>
                                     </li>
