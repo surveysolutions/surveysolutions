@@ -1367,5 +1367,50 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0264_Warn13 {
+            get {
+                return ResourceManager.GetString("WB0264_Warn13", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0265_Warn14 {
+            get {
+                return ResourceManager.GetString("WB0265_Warn14", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0266_Warn15 {
+            get {
+                return ResourceManager.GetString("WB0266_Warn15", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0267_Warn16 {
+            get {
+                return ResourceManager.GetString("WB0267_Warn16", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0268_Warn17 {
+            get {
+                return ResourceManager.GetString("WB0268_Warn17", resourceCulture);
+            }
+        }
     }
 }
