@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -94,6 +95,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     if (typeOfViewModel == typeof(StaticTextViewModel))
                         return Resource.Layout.interview_disabled_static_text;
                 }
+            }
+
+            var variableViewModel = source as VariableViewModel;
+            if (variableViewModel != null && !variableViewModel.IsVisible)
+            {
+                return UnknownViewType;
             }
 
 

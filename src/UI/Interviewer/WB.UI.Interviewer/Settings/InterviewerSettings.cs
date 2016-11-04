@@ -63,6 +63,7 @@ namespace WB.UI.Interviewer.Settings
         public string Endpoint => this.CurrentSettings.Endpoint;
         public int EventChunkSize => this.CurrentSettings.EventChunkSize?? Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize);
         public bool VibrateOnError => this.CurrentSettings.VibrateOnError ?? Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
+        public bool ShowVariables => false;
         public TimeSpan Timeout => new TimeSpan(0, 0, this.CurrentSettings.HttpResponseTimeoutInSec);
         public int BufferSize => this.CurrentSettings.CommunicationBufferSize;
         public bool AcceptUnsignedSslCertificate => false;
