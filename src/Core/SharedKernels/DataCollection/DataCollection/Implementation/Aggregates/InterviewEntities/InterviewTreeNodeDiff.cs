@@ -75,8 +75,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeGroupDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode) : base(sourceNode, changedNode)
         {
         }
-        public bool IsTitleChanged => !this.IsNodeRemoved && !this.IsNodeAdded &&
-                                      this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+        public bool IsTitleChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.IsNodeAdded && !this.ChangedNode.Title.HasSubstitutions) return false;
+                return this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+            }
+        }
     }
 
     public class InterviewTreeQuestionDiff : InterviewTreeNodeDiff
@@ -88,8 +95,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public bool IsTitleChanged => !this.IsNodeRemoved && !this.IsNodeAdded &&
-                                      this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+        public bool IsTitleChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.IsNodeAdded && !this.ChangedNode.Title.HasSubstitutions) return false;
+                return this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+            }
+        }
+
+        public bool AreValidationMessagesChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.ChangedNode.IsValid) return false;
+                var changedMessages = this.ChangedNode.MessagesWithSubstitions.Select(x => x.Text).ToArray();
+                if (this.IsNodeAdded && !changedMessages.Any()) return false;
+                var sourceMessages = this.SourceNode?.MessagesWithSubstitions.Select(x => x.Text).ToArray() ?? new string[0];
+                return !changedMessages.SequenceEqual(sourceMessages);
+            }
+        }
 
         public bool IsValid => this.SourceNode == null || !this.SourceNode.IsValid && this.ChangedNode.IsValid;
 
@@ -157,8 +184,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             ? !this.ChangedNode.IsValid
             : this.SourceNode.IsValid && !this.ChangedNode.IsValid;
 
-        public bool IsTitleChanged => !this.IsNodeRemoved && !this.IsNodeAdded &&
-                                      this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+        public bool IsTitleChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.IsNodeAdded && !this.ChangedNode.Title.HasSubstitutions) return false;
+                return this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+            }
+        }
+
+        public bool AreValidationMessagesChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.ChangedNode.IsValid) return false;
+                var changedMessages = this.ChangedNode.MessagesWithSubstitions.Select(x => x.Text).ToArray();
+                if (this.IsNodeAdded && !changedMessages.Any()) return false;
+                var sourceMessages = this.SourceNode?.MessagesWithSubstitions.Select(x => x.Text).ToArray() ?? new string[0];
+                return !changedMessages.SequenceEqual(sourceMessages);
+            }
+        }
     }
 
     public class InterviewTreeVariableDiff : InterviewTreeNodeDiff

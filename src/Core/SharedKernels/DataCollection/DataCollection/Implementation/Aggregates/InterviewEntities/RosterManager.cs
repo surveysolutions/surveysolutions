@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         protected SubstitionText GetGroupTitle(Identity rosterIdentity)
         {
             var title = this.questionnaire.GetGroupTitle(this.rosterId);
-            return this.textFactory.CreateText(rosterIdentity, title, this.questionnaire, this.interviewTree);
+            return this.textFactory.CreateText(rosterIdentity, title, this.questionnaire);
         }
     } 
 

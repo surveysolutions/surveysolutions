@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 
         Because of = () => categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty);
 
-        It should_find_roster_title_substitutions = () =>
+        It should_find_2_options = () =>
             categoricalOptions.Count().ShouldEqual(2);
 
         private static PlainQuestionnaire plainQuestionnaire;

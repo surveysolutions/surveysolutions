@@ -44,7 +44,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             events = new EventContext();
         };
 
-        Because of = () => interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
+        Because of = () => 
+            interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
 
         It should_raise_titles_changed_for_new_roster_instances = () => 
             events.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Questions.Length == 4);

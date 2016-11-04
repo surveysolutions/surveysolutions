@@ -970,27 +970,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            //foreach (var identity in changedQuestionTitles)
-            //{
-            //    tree.GetQuestion(identity).ReplaceSubstitutions();
-            //}
-
-            //foreach (var identity in changedStaticTextTitles)
-            //{
-            //    tree.GetStaticText(identity).ReplaceSubstitutions();
-            //}
-
-            //foreach (var identity in changedGroupTitles)
-            //{
-            //    tree.GetGroup(identity).ReplaceSubstitutions();
-            //}
-
-            if (changedQuestionTitles.Any() || changedStaticTextTitles.Any() || changedGroupTitles.Any())
+            foreach (var identity in changedQuestionTitles)
             {
-                this.ApplyEvent(new SubstitutionTitlesChanged(
-                    changedQuestionTitles.ToArray(),
-                    changedStaticTextTitles.ToArray(),
-                    changedGroupTitles.ToArray()));
+                tree.GetQuestion(identity).ReplaceSubstitutions();
+            }
+
+            foreach (var identity in changedStaticTextTitles)
+            {
+                tree.GetStaticText(identity).ReplaceSubstitutions();
+            }
+
+            foreach (var identity in changedGroupTitles)
+            {
+                tree.GetGroup(identity).ReplaceSubstitutions();
             }
         }
 
