@@ -936,6 +936,65 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
         }
 
+        private void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        {
+            var changedQuestionTitles = new List<Identity>();
+            var changedStaticTextTitles = new List<Identity>();
+            var changedGroupTitles = new List<Identity>();
+            foreach (var questionIdentity in changedQuestionIdentities)
+            {
+                var rosterLevel = questionIdentity.RosterVector.Length;
+
+                var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionIdentity.Id);
+                foreach (var substitutedQuestionId in substitutedQuestionIds)
+                {
+                    changedQuestionTitles.AddRange(tree.FindEntity(substitutedQuestionId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+
+                var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionIdentity.Id);
+                foreach (var substitutedStaticTextId in substitutedStaticTextIds)
+                {
+                    changedStaticTextTitles.AddRange(tree.FindEntity(substitutedStaticTextId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+
+                var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionIdentity.Id);
+                foreach (var substitutedGroupId in substitutedGroupIds)
+                {
+                    changedGroupTitles.AddRange(tree.FindEntity(substitutedGroupId)
+                        .Select(x => x.Identity)
+                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                }
+            }
+
+            //foreach (var identity in changedQuestionTitles)
+            //{
+            //    tree.GetQuestion(identity).ReplaceSubstitutions();
+            //}
+
+            //foreach (var identity in changedStaticTextTitles)
+            //{
+            //    tree.GetStaticText(identity).ReplaceSubstitutions();
+            //}
+
+            //foreach (var identity in changedGroupTitles)
+            //{
+            //    tree.GetGroup(identity).ReplaceSubstitutions();
+            //}
+
+            if (changedQuestionTitles.Any() || changedStaticTextTitles.Any() || changedGroupTitles.Any())
+            {
+                this.ApplyEvent(new SubstitutionTitlesChanged(
+                    changedQuestionTitles.ToArray(),
+                    changedStaticTextTitles.ToArray(),
+                    changedGroupTitles.ToArray()));
+            }
+        }
+
+
         private void UpdateTreeWithVariableChanges(InterviewTree tree, VariableValueChanges variableValueChanges)
             => variableValueChanges?.ChangedVariableValues.ForEach(x => tree.GetVariable(x.Key).SetValue(x.Value));
 

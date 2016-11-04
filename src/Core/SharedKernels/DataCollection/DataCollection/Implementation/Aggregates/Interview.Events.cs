@@ -6,7 +6,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -30,6 +29,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyValidityEvents(diff);
             this.ApplyVariableEvents(changedVariables);
             this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet);
+            this.ApplySubstitutionEvents(diff);
+        }
+
+        private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
+            var groupsWithChangedTitles = diff.OfType<InterviewTreeGroupDiff>().Where(x => x.IsTitleChanged).Select(x => x.ChangedNode.Identity).ToArray();
+            var questionsWithChangedTitles = diff.OfType<InterviewTreeQuestionDiff>().Where(x => x.IsTitleChanged).Select(x => x.ChangedNode.Identity).ToArray();
+            var staticTextsWithChangedTitles = diff.OfType<InterviewTreeStaticTextDiff>().Where(x => x.IsTitleChanged).Select(x => x.ChangedNode.Identity).ToArray();
+
+            if (groupsWithChangedTitles.Any() || questionsWithChangedTitles.Any() || staticTextsWithChangedTitles.Any())
+            {
+                this.ApplyEvent(new SubstitutionTitlesChanged(questionsWithChangedTitles, staticTextsWithChangedTitles, groupsWithChangedTitles));
+            }
         }
 
         private void ApplyLinkedOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
@@ -222,64 +234,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
         }
 
-        private void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
-        {
-            var changedQuestionTitles = new List<Identity>();
-            var changedStaticTextTitles = new List<Identity>();
-            var changedGroupTitles = new List<Identity>();
-            foreach (var questionIdentity in changedQuestionIdentities)
-            {
-                var rosterLevel = questionIdentity.RosterVector.Length;
-
-                var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionIdentity.Id);
-                foreach (var substitutedQuestionId in substitutedQuestionIds)
-                {
-                    changedQuestionTitles.AddRange(tree.FindEntity(substitutedQuestionId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
-                }
-
-                var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionIdentity.Id);
-                foreach (var substitutedStaticTextId in substitutedStaticTextIds)
-                {
-                    changedStaticTextTitles.AddRange(tree.FindEntity(substitutedStaticTextId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
-                }
-
-                var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionIdentity.Id);
-                foreach (var substitutedGroupId in substitutedGroupIds)
-                {
-                    changedGroupTitles.AddRange(tree.FindEntity(substitutedGroupId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
-                }
-            }
-
-            //foreach (var identity in changedQuestionTitles)
-            //{
-            //    tree.GetQuestion(identity).ReplaceSubstitutions();
-            //}
-
-            //foreach (var identity in changedStaticTextTitles)
-            //{
-            //    tree.GetStaticText(identity).ReplaceSubstitutions();
-            //}
-
-            //foreach (var identity in changedGroupTitles)
-            //{
-            //    tree.GetGroup(identity).ReplaceSubstitutions();
-            //}
-
-            if (changedQuestionTitles.Any() || changedStaticTextTitles.Any() || changedGroupTitles.Any())
-            {
-                this.ApplyEvent(new SubstitutionTitlesChanged(
-                    changedQuestionTitles.ToArray(),
-                    changedStaticTextTitles.ToArray(),
-                    changedGroupTitles.ToArray()));
-            }
-        }
-        
         private static ChangedRosterInstanceTitleDto ToChangedRosterInstanceTitleDto(InterviewTreeRoster roster)
             => new ChangedRosterInstanceTitleDto(ToRosterInstance(roster), roster.RosterTitle);
 

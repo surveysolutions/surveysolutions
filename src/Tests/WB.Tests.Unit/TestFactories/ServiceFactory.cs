@@ -278,9 +278,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public ISubstitionTextFactory SubstitionTextFactory()
         {
-            var factoryMock = new Mock<ISubstitionTextFactory> { DefaultValue = DefaultValue.Mock };
-            return factoryMock.Object;
-            //return new SubstitionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
+            return new SubstitionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
         }
     }
 }

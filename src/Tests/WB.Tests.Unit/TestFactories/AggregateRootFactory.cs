@@ -24,12 +24,13 @@ namespace WB.Tests.Unit.TestFactories
         public Interview Interview(Guid? interviewId = null,
             IQuestionnaireStorage questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
-            QuestionnaireIdentity questionnaireId = null)
+            QuestionnaireIdentity questionnaireId = null,
+            ISubstitionTextFactory textFactory = null)
         {
             var textFactoryMock = new Mock<ISubstitionTextFactory> {DefaultValue = DefaultValue.Mock};
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
-                textFactoryMock.Object);
+                textFactory ?? textFactoryMock.Object);
 
             interview.SetId(interviewId ?? Guid.NewGuid());
             return interview;

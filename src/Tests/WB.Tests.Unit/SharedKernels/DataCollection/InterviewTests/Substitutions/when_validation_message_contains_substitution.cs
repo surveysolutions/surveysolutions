@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
             events = new EventContext();
         };
 
-        Because of = () => interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
+        Because of = () => 
+            interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
 
         It should_raise_title_changed_event_for_group_after_answer = () =>
             events.ShouldContainEvent<SubstitutionTitlesChanged>(x => 

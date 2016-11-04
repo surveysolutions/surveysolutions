@@ -26,6 +26,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         {
             string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text);
 
+            var byRosters = new List<SubstitutionVariable>();
+            if (this.substitutionService.ContainsRosterTitle(text))
+            {
+                byRosters.Add(new SubstitutionVariable
+                {
+                    Name = this.substitutionService.RosterTitleSubstitutionReference,
+                    Id = questionnaire.GetRostersFromTopToSpecifiedQuestion(identity.Id).Last()
+                });
+            }
+            
             var substitutionVariables = new SubstitutionVariables
             {
                 ByQuestions = variableNames.Where(questionnaire.HasQuestion).Select(variable => new SubstitutionVariable
@@ -38,11 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     Name = x,
                     Id = questionnaire.GetVariableIdByVariableName(x)
                 }).ToList(),
-                ByRosters = new List<SubstitutionVariable> { new SubstitutionVariable
-                {
-                    Name = this.substitutionService.RosterTitleSubstitutionReference,
-                    Id = Guid.Empty
-                }}
+                ByRosters = byRosters
             };
             return new SubstitionText(identity, text, substitutionVariables, this.substitutionService, this.variableToUiStringService);
         }
