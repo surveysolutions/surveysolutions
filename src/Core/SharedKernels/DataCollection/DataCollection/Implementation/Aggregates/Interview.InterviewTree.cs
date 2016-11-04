@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         break;
                 }
             }
-            var title = textFactory.CreateText(rosterIdentity, questionnaire.GetGroupTitle(rosterIdentity.Id), questionnaire, tree);
+            var title = textFactory.CreateText(rosterIdentity, questionnaire.GetGroupTitle(rosterIdentity.Id), questionnaire);
 
             var roster = new InterviewTreeRoster(rosterIdentity,
                 title,

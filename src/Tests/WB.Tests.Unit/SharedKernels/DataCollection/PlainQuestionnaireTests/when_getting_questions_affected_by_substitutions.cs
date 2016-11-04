@@ -29,9 +29,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
         };  
 
-        Because of = () => affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);
+        Because of = () => 
+            affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);
 
-        It should_find_roster_title_substitutions = () => affectedQuestions.ShouldContain(substitutionTargetQuestionId);
+        It should_find_roster_title_substitutions = () => 
+            affectedQuestions.ShouldContain(substitutionTargetQuestionId);
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static Guid substitutionTargetQuestionId;

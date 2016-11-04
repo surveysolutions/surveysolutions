@@ -829,6 +829,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return null;
         }
 
+        public string[] GetValidationMessages(Guid questionId)
+        {
+            if (IsQuestion(questionId))
+            {
+                return this.GetQuestion(questionId).ValidationConditions.Select(x => x.Message).ToArray();
+            }
+            else if (IsStaticText(questionId))
+            {
+                return this.GetStaticTextImpl(questionId).ValidationConditions.Select(x => x.Message).ToArray();
+            }
+
+            return null;
+        }
+
         public bool HasMoreThanOneValidationRule(Guid questionId)
         {
             if (this.IsQuestion(questionId))

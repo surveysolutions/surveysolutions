@@ -92,10 +92,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.Text;
         }
 
-        public SubstitionText Clone(InterviewTree interviewTree)
+        public SubstitionText Clone()
         {
             var clone = (SubstitionText)this.MemberwiseClone();
-            clone.SetTree(interviewTree);
             return clone;
         }
     }

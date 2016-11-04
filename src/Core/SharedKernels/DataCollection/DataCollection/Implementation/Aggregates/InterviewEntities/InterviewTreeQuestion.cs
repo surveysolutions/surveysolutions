@@ -21,9 +21,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             bool isYesNo, 
             bool isDecimal,
             Guid? linkedSourceId = null, 
-            Identity commonParentRosterIdForLinkedQuestion = null)
+            Identity commonParentRosterIdForLinkedQuestion = null,
+            SubstitionText[] messages = null)
             : base(identity)
         {
+            this.MessagesWithSubstitions = messages ?? new SubstitionText[0];
             this.Title = title;
             this.VariableName = variableName;
 
@@ -98,6 +100,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeCascadingQuestion AsCascading { get; private set; }
 
         public SubstitionText Title { get; private set; }
+
+        public SubstitionText[] MessagesWithSubstitions { get; private set; }
+
+        public SubstitionText[] ValidationMessages { get; private set; }
+
         public string VariableName { get; }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
@@ -324,10 +331,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleLinkedOption) clonedQuestion.AsSingleLinkedOption = this.AsSingleLinkedOption.Clone();
             if (this.IsCascading) clonedQuestion.AsCascading = this.AsCascading.Clone(clonedQuestion);
 
-            clonedQuestion.Title = this.Title?.Clone(Tree);
+            clonedQuestion.Title = this.Title?.Clone();
+            clonedQuestion.MessagesWithSubstitions = this.MessagesWithSubstitions.Select(x => x.Clone()).ToArray();
             clonedQuestion.FailedValidations = this.FailedValidations?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
+
 
             return clonedQuestion;
         }
@@ -335,12 +344,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
+            foreach (var messagesWithSubstition in MessagesWithSubstitions)
+            {
+                messagesWithSubstition.ReplaceSubstitutions();
+            }
         }
 
         public override void SetTree(InterviewTree tree)
         {
             base.SetTree(tree);
             this.Title?.SetTree(tree);
+            foreach (var messagesWithSubstition in MessagesWithSubstitions)
+            {
+                messagesWithSubstition.SetTree(tree);
+            }
         }
     }
 

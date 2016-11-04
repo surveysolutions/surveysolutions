@@ -9,10 +9,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public SubstitionText Title { get; private set; }
 
-        public InterviewTreeStaticText(Identity identity, SubstitionText title)
+        public SubstitionText[] MessagesWithSubstitions { get; private set; }
+
+        public InterviewTreeStaticText(Identity identity, SubstitionText title, SubstitionText[] messages = null)
             : base(identity)
         {
             this.Title = title;
+            this.MessagesWithSubstitions = messages ?? new SubstitionText[0];
         }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
@@ -29,18 +32,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override IInterviewTreeNode Clone()
         {
             var clone = (InterviewTreeStaticText)this.MemberwiseClone();
-            clone.Title = this.Title?.Clone(null);
+            clone.Title = this.Title?.Clone();
+            clone.MessagesWithSubstitions = this.MessagesWithSubstitions.Select(x => x.Clone()).ToArray();
             return clone;
         }
 
         public override void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
+            foreach (var messagesWithSubstition in MessagesWithSubstitions)
+            {
+                messagesWithSubstition.ReplaceSubstitutions();
+            }
         }
         public override void SetTree(InterviewTree tree)
         {
             base.SetTree(tree);
             this.Title?.SetTree(tree);
+            foreach (var messagesWithSubstition in MessagesWithSubstitions)
+            {
+                messagesWithSubstition.SetTree(tree);
+            }
         }
     }
 }
