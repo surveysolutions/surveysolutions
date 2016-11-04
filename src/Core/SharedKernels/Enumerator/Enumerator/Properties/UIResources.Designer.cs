@@ -982,6 +982,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;empty&gt;.
+        /// </summary>
+        public static string VariableEmptyValue {
+            get {
+                return ResourceManager.GetString("VariableEmptyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string Yes {
