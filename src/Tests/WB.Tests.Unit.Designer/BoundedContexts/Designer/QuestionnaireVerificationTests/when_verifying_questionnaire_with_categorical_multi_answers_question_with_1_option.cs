@@ -14,9 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new MultyOptionsQuestion()
+            questionnaire = CreateQuestionnaireDocument(new MultyOptionsQuestion()
             {
                 PublicKey = questionId,
                 StataExportCaption = "var",

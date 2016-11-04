@@ -153,8 +153,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             {
                 return null;
             }
-
-            questionnaire.ConnectChildrenWithParent();
+            
             return this.preloadedDataServiceFactory. CreatePreloadedDataService(questionnaireExportStructure,
                 questionnaireRosterStructure, questionnaire);
         }

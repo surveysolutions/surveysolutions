@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -16,9 +17,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new TextQuestion("question 1") { PublicKey = rosterSizeQuestionId, StataExportCaption = "var" });
-            questionnaire.Children.Add(new Group() { PublicKey = rosterGroupId, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterSizeQuestionId });
+            questionnaire = CreateQuestionnaireDocument(new IComposite[] {
+            new TextQuestion("question 1") { PublicKey = rosterSizeQuestionId, StataExportCaption = "var" },
+            new Group() { PublicKey = rosterGroupId, IsRoster = true, VariableName = "a", RosterSizeQuestionId = rosterSizeQuestionId }});
             verifier = CreateQuestionnaireVerifier();
         };
 

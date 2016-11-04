@@ -1,9 +1,9 @@
 ﻿using System;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryViewFactoryTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryTests
 {
     internal class InterviewSummaryTestsContext
     {
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
                 StataExportCaption = "gps1",
                 Featured = true
                 
-            }, questionnaireId, null);
+            }, questionnaireId);
 
             questionnaireDocument.Add(new NumericQuestion()
             {
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
                 IsInteger = true,
                 Featured = true
 
-            }, questionnaireId, null);
+            }, questionnaireId);
 
             return questionnaireDocument;
 

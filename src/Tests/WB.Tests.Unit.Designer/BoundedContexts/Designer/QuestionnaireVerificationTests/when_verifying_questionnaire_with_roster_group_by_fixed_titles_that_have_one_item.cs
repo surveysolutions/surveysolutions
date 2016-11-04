@@ -15,11 +15,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new TextQuestion() { StataExportCaption = "var" });
-            questionnaire.Children.Add(
-                   Create.FixedRoster(rosterId: rosterGroupId,
-                        fixedTitles: new[] { "fixed title 1" }, variable:"a"));
+            questionnaire = CreateQuestionnaireDocument(
+                new TextQuestion() { StataExportCaption = "var" },
+                Create.FixedRoster(rosterId: rosterGroupId, fixedTitles: new[] { "fixed title 1" }, variable:"a"));
+
             verifier = CreateQuestionnaireVerifier();
         };
 

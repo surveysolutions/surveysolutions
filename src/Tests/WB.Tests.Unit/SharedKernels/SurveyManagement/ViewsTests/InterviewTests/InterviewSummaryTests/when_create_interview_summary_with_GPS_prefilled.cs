@@ -3,6 +3,7 @@ using Machine.Specifications;
 using It = Machine.Specifications.It;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryTests;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryViewFactoryTests
 {

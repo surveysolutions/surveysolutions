@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Unit;
 
 namespace Main.Core.Tests.Documents
@@ -267,8 +268,8 @@ namespace Main.Core.Tests.Documents
         private QuestionnaireDocument CreateQuestionnaireDocumentWithTreeRostersOneGroupAndTwoRosterTitleQuestion(Guid textQuestionId,
             Guid textQuestion1Id, Guid roster1Id, Guid roster2Id, Guid roster3Id, Guid group1Id)
         {
-            var doc = new QuestionnaireDocument();
-            var chapter1 = new Group("Chapter 1") { PublicKey = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB") };
+            
+            
             var numQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD1");
             var numQuestion = new NumericQuestion("Numeric") { PublicKey = numQuestionId};
             var numQuestion1Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD2");
@@ -282,14 +283,18 @@ namespace Main.Core.Tests.Documents
                 PublicKey = roster1Id,
                 RosterTitleQuestionId = textQuestionId, 
                 IsRoster = true, 
-                RosterSizeQuestionId = numQuestionId };
+                RosterSizeQuestionId = numQuestionId,
+                Children = new IComposite[]{textQuestion}.ToReadOnlyCollection()
+            };
 
             var roster2 = new Group("R 2")
             {
                 PublicKey = roster2Id,
                 RosterTitleQuestionId = textQuestionId, 
                 IsRoster = true, 
-                RosterSizeQuestionId = numQuestionId };
+                RosterSizeQuestionId = numQuestionId,
+                Children = new IComposite[] { textQuestion1 }.ToReadOnlyCollection()
+            };
 
             var roster3 = new Group("R 3")
             {
@@ -306,22 +311,18 @@ namespace Main.Core.Tests.Documents
                 IsRoster = false,
                 RosterSizeQuestionId = numQuestion1Id
             };
-
-            roster1.Children.Add(textQuestion);
-            roster2.Children.Add(textQuestion1);
-
-            chapter1.Children.Add(numQuestion);
-            chapter1.Children.Add(numQuestion1);
-
-            chapter1.Children.Add(roster1);
-            chapter1.Children.Add(roster2);
-            chapter1.Children.Add(roster3);
-
-            chapter1.Children.Add(group1);
-
-            doc.Children.Add(chapter1);
-
-            return doc;
+            
+            return new QuestionnaireDocument
+            {
+                Children = new IComposite[]
+                {
+                    new Group("Chapter 1")
+                    {
+                        PublicKey = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"),
+                        Children = new IComposite[] {numQuestion, numQuestion1, roster1, roster2, roster3, group1}.ToReadOnlyCollection()
+                    }
+                }.ToReadOnlyCollection()
+            };
         }
     }
 }

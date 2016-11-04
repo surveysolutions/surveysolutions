@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -57,9 +58,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                     RosterSizeSource = RosterSizeSourceType.Question,
                                     RosterSizeQuestionId = rosterSizeQuestionId,
                                 }
-                            }
+                            }.ToReadOnlyCollection()
                         }
-                    }
+                    }.ToReadOnlyCollection()
                 },
                 new Group("separate roster")
                 {

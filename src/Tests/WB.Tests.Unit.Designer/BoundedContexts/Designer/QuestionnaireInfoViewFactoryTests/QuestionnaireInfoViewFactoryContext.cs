@@ -25,9 +25,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedWith = null,
             IPlainStorageAccessor<User> accountsDocumentReader = null)
         {
+            var doc = new QuestionnaireDocument();
             return
                 new QuestionnaireInfoViewFactory(sharedWith ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(),
-                                                repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
+                                                repository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == doc),
                                                 accountsDocumentReader ?? Mock.Of<IPlainStorageAccessor<User>>(),
                                                 Mock.Of<IAttachmentService>(), Mock.Of<IMembershipUserService>(x=>x.WebUser == Substitute.For<IMembershipWebUser>()));
         }

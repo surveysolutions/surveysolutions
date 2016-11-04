@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.GetChapterOfTests
 {
@@ -22,11 +23,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.GetChapterOf
                     Children = new List<IComposite>()
                     {
                         new Group("group") { PublicKey = targetGroupId }
-                    }
+                    }.ToReadOnlyCollection()
                 },
                 new Group("group") { PublicKey = Guid.NewGuid() }
             );
-            questionnaire.ConnectChildrenWithParent();
         };
 
         Because of = () => foundGroup = questionnaire.GetChapterOfItemById(targetGroupId);

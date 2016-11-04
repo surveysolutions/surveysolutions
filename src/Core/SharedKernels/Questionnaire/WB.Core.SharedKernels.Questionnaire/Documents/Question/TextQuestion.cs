@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Entities.Composite;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
     public class TextQuestion : AbstractQuestion
     {
-        public TextQuestion(string text)
-            : base(text)
-        {
-        }
-
-        public TextQuestion()
-        {
-        }
+        public TextQuestion(string questionText = null, List<IComposite> children = null):base(questionText, children){}
 
         public override void AddAnswer(Answer answer)
         {

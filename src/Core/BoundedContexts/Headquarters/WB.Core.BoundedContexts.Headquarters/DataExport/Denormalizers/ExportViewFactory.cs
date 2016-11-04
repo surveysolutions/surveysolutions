@@ -63,13 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             if (questionnaire == null)
                 return null;
 
-            questionnaire.ConnectChildrenWithParent();
-
             var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
-
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id);
-            questionnaireDocument.ConnectChildrenWithParent();
-
+            
             var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaireDocument);
 
             result.HeaderToLevelMap.Add(new ValueVector<Guid>(),

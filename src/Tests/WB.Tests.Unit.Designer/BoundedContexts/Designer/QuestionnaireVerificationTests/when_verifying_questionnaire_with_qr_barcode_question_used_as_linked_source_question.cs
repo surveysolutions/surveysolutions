@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -15,22 +16,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new NumericQuestion()
+            questionnaire = CreateQuestionnaireDocument(
+                new NumericQuestion()
             {
                 PublicKey = rosterSizeQuestionId,
                 IsInteger = true,
                 StataExportCaption = "var1"
-            });
-            questionnaire.Children.Add(new MultyOptionsQuestion()
+            },
+                new MultyOptionsQuestion()
             {
                 PublicKey = multiQuestionLinkedToQRBarcodeQuestionId,
                 StataExportCaption = "var2",
                 LinkedToQuestionId = qrBarcodeQuestionId,
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
-            questionnaire.Children.Add(new Group()
+            },
+                new Group()
             {
                 PublicKey = groupId,
                 IsRoster = true,
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         PublicKey = qrBarcodeQuestionId,
                         StataExportCaption = "var3"
                     }
-                }
+                }.ToReadOnlyCollection()
             });
 
             verifier = CreateQuestionnaireVerifier();

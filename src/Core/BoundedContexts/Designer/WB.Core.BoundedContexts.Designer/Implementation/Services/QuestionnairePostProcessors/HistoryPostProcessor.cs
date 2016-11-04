@@ -415,8 +415,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void CloneEntity(Questionnaire aggregate, QuestionnaireDocument sourceQuestionnaire, Guid questionnaireId, Guid targetEntityId, Guid sourceEntityId, Guid responsibleId)
         {
-            aggregate.QuestionnaireDocument.ConnectChildrenWithParent();
-
             QuestionnaireItemType entityType = (QuestionnaireItemType)(-1);
             string entityTitle = "";
 
@@ -677,8 +675,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void UpdateFullQuestionnaireState(QuestionnaireDocument questionnaireDocument, Guid questionnaireId, Guid createdBy)
         {
-            questionnaireDocument.ConnectChildrenWithParent();
-
             var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaireStateTacker == null)
                 questionnaireStateTacker = new QuestionnaireStateTracker() { CreatedBy = createdBy };

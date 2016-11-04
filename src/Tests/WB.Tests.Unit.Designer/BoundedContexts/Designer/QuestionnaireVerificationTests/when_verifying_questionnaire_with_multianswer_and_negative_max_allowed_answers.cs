@@ -16,9 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-            
-            questionnaire.Children.Add(new MultyOptionsQuestion()
+            questionnaire = CreateQuestionnaireDocument(new MultyOptionsQuestion()
             {
                 PublicKey = multyOptionsQuestionId,
                 StataExportCaption = "var",

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Humanizer;
@@ -302,10 +303,10 @@ namespace WB.Tests.Integration
             => Create.QuestionnaireDocument(id: id, children: Create.Chapter(children: children));
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-            => new QuestionnaireDocument
+            => new QuestionnaireDocument()
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
             };
 
         public static Group Chapter(string title = "Chapter X", IEnumerable<IComposite> children = null)
@@ -518,7 +519,7 @@ namespace WB.Tests.Integration
                 PublicKey = id ?? Guid.NewGuid(),
                 VariableName = variable,
                 ConditionExpression = enablementCondition,
-                Children = children != null ? children.ToList() : new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
             };
 
         public static StaticText StaticText(

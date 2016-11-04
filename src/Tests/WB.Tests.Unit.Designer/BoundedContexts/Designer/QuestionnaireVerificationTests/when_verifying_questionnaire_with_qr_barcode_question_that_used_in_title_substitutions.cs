@@ -13,15 +13,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new TextQuestion()
+            questionnaire = CreateQuestionnaireDocument(new TextQuestion()
             {
                 PublicKey = questionWithSubstitutionToQRBarcodeId,
                 StataExportCaption = "var",
                 QuestionText = string.Format("question with substitution to %{0}%", qrBarcodeQuestionVariableName)
-            });
-            questionnaire.Children.Add(new QRBarcodeQuestion()
+            },
+            new QRBarcodeQuestion()
             {
                 PublicKey = qrBarcodeQuestionId,
                 StataExportCaption = qrBarcodeQuestionVariableName

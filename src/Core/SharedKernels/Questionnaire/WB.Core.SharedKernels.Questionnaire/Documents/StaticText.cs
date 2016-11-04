@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -8,7 +9,7 @@ namespace Main.Core.Entities.SubEntities
     public class StaticText : IStaticText
     {
         public StaticText(Guid publicKey, string text, string enablementCondition, 
-            bool hideIfDisabled, IList<ValidationCondition> validationConditions, string attachmentName = null) 
+            bool hideIfDisabled, IList<ValidationCondition> validationConditions, string attachmentName = null, List<IComposite> children = null) 
         {
             this.PublicKey = publicKey;
             this.Text = text;
@@ -19,10 +20,18 @@ namespace Main.Core.Entities.SubEntities
             this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
         }
 
-        public List<IComposite> Children
+        private ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
+
+        public ReadOnlyCollection<IComposite> Children
         {
-            get { return new List<IComposite>(0); }
-            set { }
+            get
+            {
+                return children;
+            }
+            set
+            {
+                // do nothing
+            }
         }
 
         private IComposite parent;
@@ -63,6 +72,15 @@ namespace Main.Core.Entities.SubEntities
             staticText.SetParent(null);
 
             return staticText;
+        }
+
+        public void Insert(int index, IComposite itemToInsert, Guid? parent)
+        {
+            
+        }
+
+        public void RemoveChild(Guid child)
+        {
         }
 
         public Guid PublicKey { get; set; }

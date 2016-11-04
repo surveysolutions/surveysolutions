@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -22,26 +25,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             underDeeperRosterLevelQuestionId = Guid.Parse("12222222222222222222222222222222");
             var rosterGroupId = Guid.Parse("13333333333333333333333333333333");
             var rosterQuestionId = Guid.Parse("13333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new NumericQuestion
-            {
-                PublicKey = rosterGroupId,
-                StataExportCaption = "var1",
-                IsInteger = true
-            });
-
-            var rosterGroup = new Group() { PublicKey = rosterGroupId, VariableName = "a", IsRoster = true, RosterSizeQuestionId = rosterQuestionId };
-            rosterGroup.Children.Add(new NumericQuestion() { PublicKey = underDeeperRosterLevelQuestionId, StataExportCaption = "var2" });
-            questionnaire.Children.Add(rosterGroup);
-            questionnaire.Children.Add(new SingleQuestion()
-            {
-                PublicKey = questionWithCustomValidation,
-                ValidationExpression = "some random expression",
-                ValidationMessage = "some random message",
-                StataExportCaption = "var3",
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
+            questionnaire = CreateQuestionnaireDocument(
+                new NumericQuestion
+                {
+                    PublicKey = rosterGroupId,
+                    StataExportCaption = "var1",
+                    IsInteger = true
+                },
+                new Group()
+                {
+                    PublicKey = rosterGroupId, VariableName = "a", IsRoster = true,
+                    RosterSizeQuestionId = rosterQuestionId,
+                    Children = new IComposite[]{ new NumericQuestion() { PublicKey = underDeeperRosterLevelQuestionId, StataExportCaption = "var2" }}.ToReadOnlyCollection()
+                },
+            
+                new SingleQuestion()
+                {
+                    PublicKey = questionWithCustomValidation,
+                    ValidationExpression = "some random expression",
+                    ValidationMessage = "some random message",
+                    StataExportCaption = "var3",
+                    Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+                });
 
             var expressionProcessor = new Mock<IExpressionProcessor>();
 

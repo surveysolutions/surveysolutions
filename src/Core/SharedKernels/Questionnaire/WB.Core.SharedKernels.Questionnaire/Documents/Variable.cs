@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Main.Core.Entities.Composite;
 
 namespace WB.Core.SharedKernels.QuestionnaireEntities
 {
     public class Variable : IVariable
     {
-        public Variable(Guid publicKey, VariableData variableData)
+        //used for deserialization, change carefuly
+        public Variable(Guid publicKey, VariableData variableData, List<IComposite> children = null)
         {
             this.PublicKey = publicKey;
             if (variableData != null)
@@ -24,10 +26,18 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         public string Name { get; set; }
         public string Expression { get; set; }
 
-        public List<IComposite> Children
+        private ReadOnlyCollection<IComposite> children = new ReadOnlyCollection<IComposite>(new List<IComposite>(0));
+
+        public ReadOnlyCollection<IComposite> Children
         {
-            get { return new List<IComposite>(0); }
-            set { }
+            get
+            {
+                return children;
+            }
+            set
+            {
+                // do nothing
+            }
         }
 
         private IComposite parent;
@@ -66,6 +76,14 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
             var variable = (IVariable)this.MemberwiseClone();
             variable.SetParent(null);
             return variable;
+        }
+
+        public void Insert(int index, IComposite itemToInsert, Guid? parent)
+        {
+        }
+
+        public void RemoveChild(Guid child)
+        {
         }
     }
 }

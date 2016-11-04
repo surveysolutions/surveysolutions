@@ -177,8 +177,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? translationId = null)
         {
-            InitializeQuestionnaireDocument(document);
-
             this.innerDocument = document;
             this.Version = version;
 
@@ -204,11 +202,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid QuestionnaireId => this.innerDocument.PublicKey;
 
         public string Title => this.innerDocument.Title;
-
-        public void InitializeQuestionnaireDocument()
-        {
-            InitializeQuestionnaireDocument(this.innerDocument);
-        }
 
         public IQuestion GetQuestionByStataCaption(string stataCaption) => GetQuestionByStataCaption(this.QuestionCache, stataCaption);
 
@@ -1393,10 +1386,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 group = (IGroup)group.GetParent();
             }
         }
-
         
-        private static bool IsExpressionDefined(string expression) => !string.IsNullOrWhiteSpace(expression);
-
         private bool DoesQuestionSupportRoster(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -1480,11 +1470,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 question.QuestionText ?? "<<NO QUESTION TITLE>>",
                 question.StataExportCaption ?? "<<NO VARIABLE NAME>>",
                 question.PublicKey);
-        }
-
-        private static void InitializeQuestionnaireDocument(QuestionnaireDocument source)
-        {
-            source.ConnectChildrenWithParent();
         }
 
         private static IQuestion GetQuestionOrThrow(Dictionary<Guid, IQuestion> questions, Guid questionId)
