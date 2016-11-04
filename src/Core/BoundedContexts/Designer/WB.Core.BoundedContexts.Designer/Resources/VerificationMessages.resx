@@ -552,4 +552,19 @@
   <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
     <value>First section can not have enabling condition.</value>
   </data>
+  <data name="WB0264_Warn13" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WB0265_Warn14" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WB0266_Warn15" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WB0267_Warn16" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WB0268_Warn17" xml:space="preserve">
+    <value />
+  </data>
 </root>
