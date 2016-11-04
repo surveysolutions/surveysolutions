@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Accessors;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAccessorTests
 {
