@@ -201,9 +201,6 @@
   <data name="Prefs_ShowVariables" xml:space="preserve">
     <value>Отображать переменные</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary" xml:space="preserve">
-    <value>Отметьте для отображения переменных </value>
-  </data>
   <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
     <value>Переменные отображаются при прохождении интервью</value>
   </data>
