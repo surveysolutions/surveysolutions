@@ -17,7 +17,7 @@
         self.sendCommandAfterFilterAndConfirm(
             "HqApproveInterviewCommand",
             function (item) { return { InterviewId: item.InterviewId } },
-            function (item) { return item.CanApproveOrReject(); },
+            function (item) { return item.CanApprove(); },
             "#confirm-approve-template",
             "#confirm-continue-message-template"
         );
@@ -27,7 +27,7 @@
         self.sendCommandAfterFilterAndConfirm(
             "HqRejectInterviewCommand",
             function (item) { return { InterviewId: item.InterviewId } },
-            function (item) { return item.CanApproveOrReject(); },
+            function (item) { return item.CanReject(); },
             "#confirm-reject-template",
             "#confirm-continue-message-template"
         );
