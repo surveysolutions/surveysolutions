@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             this.variableToUiStringService = variableToUiStringService;
         }
 
-        public SubstitionText CreateText(Identity identity, string text, IQuestionnaire questionnaire, InterviewTree tree)
+        public SubstitionText CreateText(Identity identity, string text, IQuestionnaire questionnaire)
         {
             string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text);
 
