@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry registry;
+        private readonly IEnumeratorSettings settings;
 
         private string variableName;
         private string variableDescription;
@@ -28,17 +29,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public VariableViewModel(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry registry)
+            ILiteEventRegistry registry,
+            IEnumeratorSettings settings)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.registry = registry;
+            this.settings = settings;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
+
+            if (!this.IsVisible)
+                return;
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
@@ -56,6 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string Description => this.variableDescription;
         public bool IsShowDescription => !string.IsNullOrEmpty(this.variableDescription);
 
+        public bool IsVisible => settings.ShowVariables;
 
         public void Handle(VariablesChanged @event)
         {
