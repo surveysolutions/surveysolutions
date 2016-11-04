@@ -120,6 +120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     diff.IsNodeRemoved ||
                     diff.IsNodeDisabled ||
                     diff.IsNodeEnabled ||
+                    IsTitleChanged(diff as InterviewTreeNodeDiff) ||
                     IsRosterTitleChanged(diff as InterviewTreeRosterDiff) ||
                     IsAnswerByQuestionChanged(diff as InterviewTreeQuestionDiff) ||
                     IsQuestionValid(diff as InterviewTreeQuestionDiff) ||
@@ -129,6 +130,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsVariableChanged(diff as InterviewTreeVariableDiff) ||
                     IsOptionsSetChanged(diff as InterviewTreeQuestionDiff))
                 .ToReadOnlyCollection();
+        }
+
+        private bool IsTitleChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)
+        {
+            if (interviewTreeNodeDiff.IsNodeRemoved)
+                return false;
+
+            var diffByQuestion = interviewTreeNodeDiff as InterviewTreeQuestionDiff;
+            if (diffByQuestion != null)
+            {
+                return diffByQuestion.IsTitleChanged;
+            }
+
+            var diffByRoster = interviewTreeNodeDiff as InterviewTreeGroupDiff;
+            if (diffByRoster != null)
+            {
+                return diffByRoster.IsTitleChanged;
+            }
+
+            var diffByStaticText = interviewTreeNodeDiff as InterviewTreeStaticTextDiff;
+            if (diffByStaticText != null)
+            {
+                return diffByStaticText.IsTitleChanged;
+            }
+
+            return false;
         }
 
         private bool IsOptionsSetChanged(InterviewTreeQuestionDiff diffByQuestion)
