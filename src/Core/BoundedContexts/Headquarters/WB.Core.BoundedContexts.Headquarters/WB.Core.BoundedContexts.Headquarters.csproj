@@ -290,6 +290,7 @@
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\RostrerStructureService.cs" />
+    <Compile Include="Implementation\Services\SupportedQuestionnaireVersion.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
@@ -308,6 +309,7 @@
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
     <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
+    <Compile Include="Mappings\SupportedQuestionnaireVersionMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Mappings\TabletDocumentMap.cs" />
     <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
@@ -383,6 +385,8 @@
     <Compile Include="Services\Preloading\IPreloadingTemplateService.cs" />
     <Compile Include="Services\Preloading\IQuestionDataParser.cs" />
     <Compile Include="HeadquartersBoundedContextModule.cs" />
+    <Compile Include="Services\QuestionnaireAssemblyAlreadyExistsException.cs" />
+    <Compile Include="Services\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Services\QuestionnaireVersionProvider.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
