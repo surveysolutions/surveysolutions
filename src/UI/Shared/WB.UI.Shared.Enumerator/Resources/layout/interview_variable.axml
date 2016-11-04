@@ -9,7 +9,7 @@
     local:MvxBind="Html Text;" />
 
   <TextView
-    style="@style/Interview_Question_Title"
+    style="@style/Interview_Variable_Description"
     local:MvxBind="Html Description; Visible IsShowDescription" />
 
   <View style="@style/Interview_Entity_Divider" />
