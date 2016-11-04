@@ -332,7 +332,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clonedQuestion;
         }
 
-        public override void CalculateSubstitutions()
+        public override void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
         }

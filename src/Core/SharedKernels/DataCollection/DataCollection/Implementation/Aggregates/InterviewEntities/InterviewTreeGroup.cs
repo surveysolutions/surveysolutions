@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clonedInterviewTreeGroup;
         }
 
-        public void CalculateSubstitutions()
+        public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
         }
