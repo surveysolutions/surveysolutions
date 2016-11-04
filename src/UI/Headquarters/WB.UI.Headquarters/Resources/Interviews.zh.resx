@@ -121,10 +121,6 @@
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
 &lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈： &lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
   </data>
-  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;。</value>
-  </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个选中的访谈将被分配。&lt;/h3&gt;
 &lt;b&gt;注意！&lt;/b&gt;您只能分配处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;、&lt;i&gt;{2}（只能分配给其他调查员）&lt;/i&gt;和&lt;i&gt;{3}&lt;/i&gt;。</value>
