@@ -22,9 +22,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
+            var textFactory = Create.Service.SubstitionTextFactory();
             var interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaireRepository,
-                expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider);
+                expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider,
+                textFactory: textFactory);
 
             interview.CreateInterview(
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),

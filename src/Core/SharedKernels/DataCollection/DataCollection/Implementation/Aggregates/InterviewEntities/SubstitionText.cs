@@ -14,13 +14,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly SubstitutionVariables substitutionVariables;
         private InterviewTree tree;
 
-        public SubstitionText() { }
+        public SubstitionText()
+        {
+        }
 
         public SubstitionText(
             Identity identity,
-            string text, 
-            SubstitutionVariables variables, 
-            ISubstitutionService substitutionService, 
+            string text,
+            SubstitutionVariables variables,
+            ISubstitutionService substitutionService,
             IVariableToUIStringService variableToUiStringService)
         {
             this.Text = text;
@@ -37,11 +39,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string Text { get; private set; }
 
+        public bool HasSubstitutions => this.substitutionVariables!= null &&
+                (this.substitutionVariables.ByRosters.Any() ||
+                this.substitutionVariables.ByVariables.Any() || 
+                this.substitutionVariables.ByQuestions.Any());
+
+
         public void ReplaceSubstitutions()
         {
-            if (this.substitutionVariables == null ||
-                (!this.substitutionVariables.ByRosters.Any() && !this.substitutionVariables.ByVariables.Any() &&
-                 !this.substitutionVariables.ByQuestions.Any()))
+            if (!HasSubstitutions)
             {
                 return;
             }
@@ -96,6 +102,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class SubstitutionVariables
     {
+        public SubstitutionVariables()
+        {
+            ByRosters = new List<SubstitutionVariable>();
+            ByVariables = new List<SubstitutionVariable>();
+            ByQuestions = new List<SubstitutionVariable>();
+        }
+
         public IEnumerable<SubstitutionVariable> ByQuestions { get; set; }
         public IEnumerable<SubstitutionVariable> ByVariables { get; set; }
         public IEnumerable<SubstitutionVariable> ByRosters { get; set; }

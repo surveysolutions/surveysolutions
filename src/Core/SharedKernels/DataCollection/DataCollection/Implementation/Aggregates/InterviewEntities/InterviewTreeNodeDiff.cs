@@ -75,6 +75,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeGroupDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode) : base(sourceNode, changedNode)
         {
         }
+        public bool IsTitleChanged => !this.IsNodeRemoved && !this.IsNodeAdded &&
+                                      this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
     }
 
     public class InterviewTreeQuestionDiff : InterviewTreeNodeDiff
@@ -85,6 +87,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeQuestionDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode) : base(sourceNode, changedNode)
         {
         }
+
+        public bool IsTitleChanged => !this.IsNodeRemoved && !this.IsNodeAdded &&
+                                      this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
 
         public bool IsValid => this.SourceNode == null || !this.SourceNode.IsValid && this.ChangedNode.IsValid;
 
@@ -151,6 +156,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsInvalid => this.SourceNode == null
             ? !this.ChangedNode.IsValid
             : this.SourceNode.IsValid && !this.ChangedNode.IsValid;
+
+        public bool IsTitleChanged => !this.IsNodeRemoved && !this.IsNodeAdded &&
+                                      this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
     }
 
     public class InterviewTreeVariableDiff : InterviewTreeNodeDiff

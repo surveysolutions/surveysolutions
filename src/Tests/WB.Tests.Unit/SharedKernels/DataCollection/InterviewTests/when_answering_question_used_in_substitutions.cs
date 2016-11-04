@@ -38,7 +38,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = new EventContext();
         };
 
-        Because of = () => interview.AnswerTextQuestion(Guid.NewGuid(), substitutedQuestionId, Empty.RosterVector, DateTime.Now, "answer");
+        Because of = () => 
+            interview.AnswerTextQuestion(Guid.NewGuid(), substitutedQuestionId, Empty.RosterVector, DateTime.Now, "answer");
 
         It should_raise_substitution_changed_event_with_2_questions = () =>
             eventContext.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Questions.Length == 2);
