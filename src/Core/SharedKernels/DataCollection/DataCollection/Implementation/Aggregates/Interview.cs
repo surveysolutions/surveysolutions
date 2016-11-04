@@ -931,7 +931,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
-            this.ApplySubstitutionEvents(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.ReplaceSubstitutions(changedInterviewTree, questionnaire, changedQuestionIdentities);
 
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
         }

@@ -31,20 +31,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 ByQuestions = variableNames.Where(questionnaire.HasQuestion).Select(variable => new SubstitutionVariable
                 {
                     Name = variable,
-                    Id = new Identity(questionnaire.GetQuestionIdByVariable(variable), RosterVector.Empty)
+                    Id = questionnaire.GetQuestionIdByVariable(variable)
                 }).ToList(),
                 ByVariables = variableNames.Where(questionnaire.HasVariable).Select(x => new SubstitutionVariable
                 {
                     Name = x,
-                    Id = new Identity(questionnaire.GetVariableIdByVariableName(x), RosterVector.Empty)
+                    Id = questionnaire.GetVariableIdByVariableName(x)
                 }).ToList(),
                 ByRosters = new List<SubstitutionVariable> { new SubstitutionVariable
                 {
                     Name = this.substitutionService.RosterTitleSubstitutionReference,
-                    Id = new Identity(Guid.Empty, RosterVector.Empty)
+                    Id = Guid.Empty
                 }}
             };
-            return new SubstitionText(text, substitutionVariables, this.substitutionService, this.variableToUiStringService);
+            return new SubstitionText(identity, text, substitutionVariables, this.substitutionService, this.variableToUiStringService);
         }
     }
 }

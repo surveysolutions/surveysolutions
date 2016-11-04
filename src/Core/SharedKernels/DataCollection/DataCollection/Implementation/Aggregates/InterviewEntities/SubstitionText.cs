@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -7,6 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class SubstitionText
     {
+        private readonly Identity identity;
         private readonly ISubstitutionService substitutionService;
         private readonly IVariableToUIStringService variableToUiStringService;
         private readonly SubstitutionVariables substitutionVariables;
@@ -15,12 +17,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public SubstitionText() { }
 
         public SubstitionText(
+            Identity identity,
             string text, 
             SubstitutionVariables variables, 
             ISubstitutionService substitutionService, 
             IVariableToUIStringService variableToUiStringService)
         {
             this.Text = text;
+            this.identity = identity;
             this.substitutionService = substitutionService;
             this.variableToUiStringService = variableToUiStringService;
             this.substitutionVariables = variables;
@@ -45,8 +49,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var textWithReplacedSubstitutions = this.Text;
             foreach (var substitution in this.substitutionVariables.ByRosters)
             {
-                var roster = this.tree.GetRoster(substitution.Id);
-                var rosterTitle = string.IsNullOrEmpty(roster.RosterTitle) 
+                var roster = this.tree.FindEntityInQuestionBranch(substitution.Id, identity) as InterviewTreeRoster;
+                var rosterTitle = string.IsNullOrEmpty(roster?.RosterTitle) 
                     ? this.substitutionService.DefaultSubstitutionText 
                     : roster.RosterTitle;
                 textWithReplacedSubstitutions = this.substitutionService.ReplaceSubstitutionVariable(textWithReplacedSubstitutions, substitution.Name, rosterTitle);
@@ -54,8 +58,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             foreach (var substitution in this.substitutionVariables.ByVariables)
             {
-                var variableValue = this.tree.GetVariable(substitution.Id);
-                var variableValueAsString = this.variableToUiStringService.VariableToUIString(variableValue);
+                var variable = this.tree.FindEntityInQuestionBranch(substitution.Id, identity) as InterviewTreeVariable;
+                var variableValueAsString = this.variableToUiStringService.VariableToUIString(variable?.Value);
                 variableValueAsString = string.IsNullOrEmpty(variableValueAsString)
                     ? this.substitutionService.DefaultSubstitutionText
                     : variableValueAsString;
@@ -65,8 +69,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             foreach (var substitution in this.substitutionVariables.ByQuestions)
             {
-                var baseInterviewAnswer = this.tree.GetQuestion(substitution.Id);
-                string answerString = baseInterviewAnswer.GetAnswerAsString();
+                var question = this.tree.FindEntityInQuestionBranch(substitution.Id, identity) as InterviewTreeQuestion;
+                string answerString = question?.GetAnswerAsString();
                 answerString = string.IsNullOrEmpty(answerString)
                     ? this.substitutionService.DefaultSubstitutionText
                     : answerString;
@@ -100,7 +104,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
     public class SubstitutionVariable
     {
-        public Identity Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
     }
 
