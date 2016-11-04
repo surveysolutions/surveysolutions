@@ -1,13 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.SharedKernels.DataCollection.Accessors
+namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     internal class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
@@ -38,11 +38,21 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
         {
+            if (assembly.Length == 0)
+            {
+                throw new ArgumentException($"Assembly file is empty. Cannot be saved. Questionnaire: {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}", 
+                    nameof(assembly));
+            }
+
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
-            if (assembly.Length == 0)
-                throw new Exception(string.Format("Assembly file is empty. Cannot be saved. Questionnaire: {0}, version: {1}", questionnaireId, questionnaireVersion));
+            if (this.fileSystemAccessor.IsFileExists(pathToSaveAssembly))
+            {
+                throw new QuestionnaireAssemblyAlreadyExistsException(
+                    "Questionnaire assembly file already exists and can not be overwritten",
+                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+            }
 
             this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, assembly);
 
@@ -59,16 +69,16 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
-            Logger.Info(string.Format("Trying to delete assembly for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
+            Logger.Info($"Trying to delete assembly for questionnaire {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}");
 
             //loaded assembly could be locked
             try
             {
                 this.fileSystemAccessor.DeleteFile(pathToSaveAssembly);
             }
-            catch (Exception e)
+            catch (IOException e)
             {
-                Logger.Error(string.Format("Error on assembly deletion for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
+                Logger.Error($"Error on assembly deletion for questionnaire {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}");
                 Logger.Error(e.Message, e);
             }
         }

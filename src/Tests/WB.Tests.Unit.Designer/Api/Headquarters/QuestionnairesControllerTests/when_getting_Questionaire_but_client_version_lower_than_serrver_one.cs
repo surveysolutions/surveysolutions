@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
         };
 
         Because of = () =>
-            exception = Catch.Only<HttpResponseException>(() => questionnairesController.Get(questionnaireId, 12));
+            exception = Catch.Only<HttpResponseException>(() => questionnairesController.Get(questionnaireId, 12, null));
 
         It should_throw_HttpResponseException_with_StatusCode_ExpectationFailed = () =>
             exception.Response.StatusCode.ShouldEqual(HttpStatusCode.ExpectationFailed);

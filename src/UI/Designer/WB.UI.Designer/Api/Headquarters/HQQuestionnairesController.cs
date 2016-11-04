@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public QuestionnaireCommunicationPackage Get(Guid id, int clientQuestionnaireContentVersion)
+        public QuestionnaireCommunicationPackage Get(Guid id, int clientQuestionnaireContentVersion, int? minSupportedQuestionnaireVersion)
         {
             var questionnaireView = this.GetQuestionnaireViewOrThrow(id);
 
@@ -96,7 +96,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
             var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
-            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, questionnaireContentVersion);
+            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, Math.Max(questionnaireContentVersion, minSupportedQuestionnaireVersion.GetValueOrDefault()));
 
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;

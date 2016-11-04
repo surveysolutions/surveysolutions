@@ -72,7 +72,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
@@ -390,6 +389,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Accessors\" />
     <Folder Include="Commands\Questionnaire\" />
     <Folder Include="Implementation\ReadSide\" />
     <Folder Include="ValueObjects\Questionnaire\" />
