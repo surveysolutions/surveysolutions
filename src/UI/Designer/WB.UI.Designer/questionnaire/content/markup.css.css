@@ -9579,7 +9579,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   padding-right: 24px;
 }
 .error-tooltip {
-  height: 100%;
   overflow: hidden;
 }
 .error-tooltip .tooltip-inner {
