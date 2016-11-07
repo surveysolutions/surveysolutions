@@ -564,7 +564,10 @@
   <data name="WB0267_Warn16" xml:space="preserve">
     <value />
   </data>
-  <data name="WB0268_Warn17" xml:space="preserve">
+  <data name="WB0268_Warn17_1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WB0269_Warn17_2" xml:space="preserve">
     <value />
   </data>
 </root>

@@ -486,7 +486,7 @@ namespace WB.Tests.Unit.Designer
             string validationExpression = null,
             string validationMessage = null,
             QuestionType questionType = QuestionType.Text,
-            IList<ValidationCondition> validationConditions = null,
+            IEnumerable<ValidationCondition> validationConditions = null,
             string variableLabel =null,
             string title= "Question X test",
             string instructions = null,
@@ -503,7 +503,7 @@ namespace WB.Tests.Unit.Designer
                 VariableLabel = variableLabel,
                 Instructions = instructions,
                 Answers = answers.ToList(),
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
             };
         }
 
@@ -595,10 +595,11 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(IEnumerable<IComposite> children)
+            => QuestionnaireDocumentWithOneChapter(null, null, null, null, children.ToArray());
+
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
-        {
-            return QuestionnaireDocumentWithOneChapter(null, null, null, null, children);
-        }
+            => QuestionnaireDocumentWithOneChapter(null, null, null, null, children);
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
         {
@@ -1124,6 +1125,49 @@ namespace WB.Tests.Unit.Designer
         public static CustomWebApiAuthorizeFilter CustomWebApiAuthorizeFilter()
         {
             return new CustomWebApiAuthorizeFilter();
+        }
+
+        public static QuestionnaireVerifier QuestionnaireVerifier(
+            IExpressionProcessor expressionProcessor = null,
+            ISubstitutionService substitutionService = null,
+            IKeywordsProvider keywordsProvider = null,
+            IExpressionProcessorGenerator expressionProcessorGenerator = null,
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            ILookupTableService lookupTableService = null,
+            IAttachmentService attachmentService = null,
+            ITopologicalSorter<string> topologicalSorter = null,
+            IQuestionnaireTranslator questionnaireTranslator = null)
+        {
+            var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
+            fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
+
+            var questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
+            string generationResult;
+            questionnireExpressionProcessorGeneratorMock.Setup(
+                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult))
+                .Returns(new GenerationResult() { Success = true, Diagnostics = new List<GenerationDiagnostic>() });
+
+            var substitutionServiceInstance = new SubstitutionService();
+
+            var lookupTableServiceMock = new Mock<ILookupTableService>(MockBehavior.Default)
+            {
+                DefaultValue = DefaultValue.Mock
+            };
+
+            var attachmentServiceMock = Stub<IAttachmentService>.WithNotEmptyValues;
+
+            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object,
+                fileSystemAccessorMock.Object,
+                substitutionService ?? substitutionServiceInstance,
+                keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
+                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
+                new DesignerEngineVersionService(),
+                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
+                lookupTableService ?? lookupTableServiceMock.Object,
+                attachmentService ?? attachmentServiceMock,
+                topologicalSorter ?? Create.TopologicalSorter<string>(),
+                Mock.Of<ITranslationsService>(),
+                questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>());
         }
     }
 }
