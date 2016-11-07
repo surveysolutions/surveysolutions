@@ -93,9 +93,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaireModel = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
-            ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(newGroupIdentity.Id);
+            
+            ReadOnlyCollection<Guid> parentIds = questionnaireModel.GetParentsStartingFromTop(newGroupIdentity.Id);
 
             var breadCrumbs = new List<BreadCrumbItemViewModel>();
             int metRosters = 0;
@@ -103,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 var groupTitle = questionnaireModel.GetGroupTitle(parentId);
 
-                if (questionnaire.IsRosterGroup(parentId))
+                if (questionnaireModel.IsRosterGroup(parentId))
                 {
                     metRosters++;
                     var itemRosterVector = newGroupIdentity.RosterVector.Shrink(metRosters);
@@ -125,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             }
 
-            this.Items.ForEach(x => x.Dispose());
+            this.Items?.ForEach(x => x.Dispose());
             this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(breadCrumbs);
         }
 
@@ -146,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
             this.eventRegistry.Unsubscribe(this);
-            this.Items.ForEach(x => x.Dispose());
+            this.Items?.ForEach(x => x.Dispose());
         }
     }
 }

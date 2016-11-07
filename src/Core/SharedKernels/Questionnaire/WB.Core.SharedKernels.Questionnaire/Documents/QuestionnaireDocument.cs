@@ -90,6 +90,7 @@ namespace Main.Core.Documents
         public void SetParent(IComposite parent)
         {
             this.parent = parent;
+            this.childrenWereConnected = false;
         }
 
         public Guid PublicKey { get; set; }
