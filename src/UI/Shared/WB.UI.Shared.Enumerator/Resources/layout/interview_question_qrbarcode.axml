@@ -7,7 +7,8 @@
 
     <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
       <TableLayout android:layout_width="wrap_content"
-                   android:layout_height="wrap_content">
+                   android:layout_height="wrap_content" 
+                   android:stretchColumns="0">
         <TableRow>
           <TextView style="@style/Interview_Question_RecordedAnswer"
                     local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
