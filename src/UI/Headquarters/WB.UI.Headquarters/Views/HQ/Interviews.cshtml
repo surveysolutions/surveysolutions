@@ -156,7 +156,19 @@
             InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-continue-message-template">
-        <br />@Interviews.ContinueConfirmMessage
+        <br/>@Interviews.ContinueConfirmMessage
+    </script>
+    <script type="text/html" id="confirm-assign-to-other-team-template">
+        <div class="container-fluid">
+            <div class="row">
+                @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
+                    "<span class='text-normal' data-bind='text: eligibleSelectedItems.length'></span>",
+                    InterviewStatus.SupervisorAssigned.ToLocalizeString(),
+                    InterviewStatus.InterviewerAssigned.ToLocalizeString(),
+                    InterviewStatus.RejectedBySupervisor.ToLocalizeString(),
+                    InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
+            </div>
+        </div>
     </script>
 }
 

@@ -25,34 +25,20 @@
     }
     self.Assign = function () {
         var commandName = "AssignSupervisorCommand";
-       
-        var parametersFunc = function (item) { return { InterviewerId: self.AssignTo().UserId, InterviewId: item.InterviewId } };
-        var filterFunc = function (item) {
-            return item.CanBeReassigned()
-                && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.AssignTo().UserId);
-        };
-        var messageTemplateId = "#confirm-assign-template";
+        var messageTemplateId = "#confirm-assign-to-other-team-template";
         var continueMessageTemplateId = "#confirm-continue-message-template";
-        var onSuccessCommandExecuting = function () {
-            self.AssignTo(undefined);
-        };
-        var onCancelConfirmation = function () {
-            self.AssignTo(undefined);
-        };
-
-        var filteredItems = self.GetSelectedItemsAfterFilter(function (item) {
-            return item.CanBeReassigned()
-                && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.AssignTo().UserId);
+      
+        var eligibleSelectedItems = self.GetSelectedItemsAfterFilter(function (item) {
+            return item.CanAssingToOtherTeam() && (item.ResponsibleId() !== self.AssignTo().UserId);
         });
-        var receivedByInterviewerItems = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === true });
-
+        
         var popupViewModel = {
-            allItems: filteredItems,
-            receivedItems: receivedByInterviewerItems
+            eligibleSelectedItems: eligibleSelectedItems
         };
+
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, popupViewModel);
 
-        if (filteredItems.length === 0) {
+        if (eligibleSelectedItems.length === 0) {
             bootbox.alert(messageHtml);
             return;
         }
@@ -61,20 +47,25 @@
 
         bootbox.confirm(messageHtml, function (result) {
             if (result) {
-                var itemsThatShouldBeReassigned = [];
-                if ($("#reassignReceivedByInterviewer").is(':checked')) {
-                    itemsThatShouldBeReassigned = filteredItems;
-                } else {
-                    itemsThatShouldBeReassigned = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === false });
-                }
+                var itemsThatShouldBeReassigned = eligibleSelectedItems;
 
                 if (itemsThatShouldBeReassigned.length > 0) {
-                    self.sendCommand(commandName, parametersFunc, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
+                    var getParamsToAssignToOtherTeam = function(interview) {
+                        return {
+                            SupervisorId: self.AssignTo().UserId,
+                            InterviewId: interview.InterviewId
+                        }
+                    };
+
+                    var onSuccessCommandExecuting = function () {
+                        self.AssignTo(undefined);
+                    };
+
+                    self.sendCommand(commandName, getParamsToAssignToOtherTeam, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
                 }
-            } else {
-                if (!_.isUndefined(onCancelConfirmation)) {
-                    onCancelConfirmation();
-                }
+            }
+            else {
+                self.AssignTo(undefined);
             }
         });
     };
