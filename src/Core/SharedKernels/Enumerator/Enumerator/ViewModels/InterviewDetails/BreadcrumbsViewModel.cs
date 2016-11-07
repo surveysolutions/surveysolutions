@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -124,6 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             }
 
+            this.Items.ForEach(x => x.Dispose());
             this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(breadCrumbs);
         }
 
@@ -144,6 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
             this.eventRegistry.Unsubscribe(this);
+            this.Items.ForEach(x => x.Dispose());
         }
     }
 }
