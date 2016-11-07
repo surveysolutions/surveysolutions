@@ -1,6 +1,5 @@
 ﻿using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
@@ -17,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         }
 
         public int GetSupportedQuestionnaireVersion() => ApiVersion.MaxQuestionnaireVersion;
-        public int GetMinVerstionSupportedByInterviewer() => this.supportedVersionStorage.GetById(id).MinQuestionnaireVersionSupportedByInterviewer;
+        public int? GetMinVerstionSupportedByInterviewer() => this.supportedVersionStorage.GetById(id)?.MinQuestionnaireVersionSupportedByInterviewer;
 
         public void RememberMinSupportedVersion()
         {
