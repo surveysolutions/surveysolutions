@@ -30,27 +30,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(MoreThan50PercentQuestionsWithoutValidationConditions, "WB0208", VerificationMessages.WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions),
             Warning<IComposite>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
+            Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
+            Warning<IQuestion, ValidationCondition>(q => q.ValidationConditions, HasLongValidationCondition, "WB0212", index => string.Format(VerificationMessages.WB0212_LongValidationCondition, index)),
+            Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb),
+            Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
+            Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
+
+            Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
             Warning<IQuestion>(QuestionIsTooShort, "WB0255", VerificationMessages.WB0255_QuestionIsTooShort),
             Warning<GpsCoordinateQuestion>(Any, "WB0264", VerificationMessages.WB0264_GpsQuestion),
-            Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
             Warning(MoreThan30PercentQuestionsAreText, "WB0265", VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText),
-
-            Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
-
-            Warning<IQuestion, ValidationCondition>(question => question.ValidationConditions, HasLongValidationCondition, "WB0212", index => string.Format(VerificationMessages.WB0212_LongValidationCondition, index)),
-
-            Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
-            Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
-            Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb),
-            Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
+            Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
 
-            ValidationConditionRefersToAFutureQuestion,
-            EnablementConditionRefersToAFutureQuestion
+            this.ValidationConditionRefersToAFutureQuestion,
+            this.EnablementConditionRefersToAFutureQuestion
         };
 
-        private bool QuestionIsTooShort(IQuestion question)
+        private static bool QuestionIsTooShort(IQuestion question)
         {
             if (string.IsNullOrEmpty(question.QuestionText) || !AnsweredManually(question))
                 return false;
@@ -60,7 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool Any(IComposite entity) => true;
 
-        private bool UseFunctionIsValidEmailToValidateEmailAddress(IQuestion question)
+        private static bool UseFunctionIsValidEmailToValidateEmailAddress(IQuestion question)
         {
             if (question.QuestionType != QuestionType.Text || string.IsNullOrEmpty(question.QuestionText) || question.ValidationConditions.Count >0)
                 return false;
@@ -68,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.QuestionText.IndexOf("email", StringComparison.InvariantCultureIgnoreCase) >= 0;
         }
 
-        private bool TooFewVariableLabelsAreDefined(MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool TooFewVariableLabelsAreDefined(MultiLanguageQuestionnaireDocument questionnaire)
         {
             var countOfAllQuestions = questionnaire.Find<IQuestion>(AnsweredManually).Count();
             var countOfQuestionsWithoutLabels =
@@ -173,38 +171,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return result;
         }
 
-        private bool AttachmentSizeIsMoreThan5Mb(AttachmentSize attachmentSize, MultiLanguageQuestionnaireDocument questionnaire) 
+        private static bool AttachmentSizeIsMoreThan5Mb(AttachmentSize attachmentSize, MultiLanguageQuestionnaireDocument questionnaire) 
             => attachmentSize.Size > 5*1024*1024;
 
-        private bool UnusedAttachments(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return !questionnaire
+        private static bool UnusedAttachments(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
+            => !questionnaire
                 .Find<IStaticText>(t => t.AttachmentName == attachment.Name)
                 .Any();
-        }
 
         private bool TotalAttachmentsSizeIsMoreThan50Mb(MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return this.attachmentService
+            => this.attachmentService
                 .GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
-                .Sum(x => x.Size) > 50*1024*1024; // 50 Mb;
-        }
+                .Sum(x => x.Size) > 50*1024*1024;
 
         private static bool HasLongValidationCondition(ValidationCondition condition)
-        {
-            return !string.IsNullOrEmpty(condition.Expression) && condition.Expression.Length > 500;
-        }
+            => !string.IsNullOrEmpty(condition.Expression) && condition.Expression.Length > 500;
 
         private static bool HasNoGpsQuestions(MultiLanguageQuestionnaireDocument questionnaire)
             => !questionnaire.Find<IQuestion>(q => q.QuestionType == QuestionType.GpsCoordinates).Any();
 
         private static bool CategoricalQuestionHasALotOfOptions(IQuestion question)
-        {
-            return question.QuestionType == QuestionType.SingleOption && 
-                   !question.IsFilteredCombobox.GetValueOrDefault(false) && 
-                   !question.CascadeFromQuestionId.HasValue &&
-                   question.Answers.Count > 30;
-        }
+            => question.QuestionType == QuestionType.SingleOption
+            && !question.IsFilteredCombobox.GetValueOrDefault(false)
+            && !question.CascadeFromQuestionId.HasValue
+            && question.Answers.Count > 30;
 
         private bool HasLongEnablementCondition(IComposite groupOrQuestion)
         {
@@ -260,10 +250,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool IsFixedRoster(IGroup group) => group.IsRoster && (group.FixedRosterTitles?.Any() ?? false);
 
-        private static bool IsNumericWithoutValidation(IQuestion question)
-            => IsNumeric(question)
-            && NoValidation(question);
-
         private static bool NoValidation(IQuestion question) => !question.ValidationConditions.Any();
 
         private static bool IsNumeric(IQuestion question)
@@ -280,7 +266,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
                 questionnaire
                     .Find<TEntity>(entity => true)
                     .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
@@ -292,7 +278,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
                questionnaire
                    .Find<TEntity>(x => hasError(x, questionnaire))
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
@@ -301,7 +287,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
             Func<Attachment, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire) =>
+            return questionnaire =>
                questionnaire
                    .Attachments
                    .Where(x => hasError(x, questionnaire))
@@ -319,7 +305,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
             Func<AttachmentSize, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire) =>
+            return questionnaire =>
                    this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
                    .Where(x => hasError(x, questionnaire))
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
@@ -329,7 +315,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
            Func<TEntity, bool> hasError, string code, string message)
            where TEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
                 questionnaire
                     .Find<TEntity>(hasError)
                     .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
@@ -338,7 +324,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
             Func<MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire) =>
+            return questionnaire =>
                 hasError(questionnaire)
                     ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
