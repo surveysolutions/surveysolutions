@@ -11,8 +11,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands
 
             var sanitizer = new WbHtmlSanitizer
             {
-                AllowedTags = removeAllTags ? new string[0] : new[] { "u", "s", "i", "b", "br", "font" },
-                AllowedAttributes = removeAllTags ? new string[0] : new[] { "color" }
+                AllowedTags = removeAllTags ? new string[0] : new[] { "u", "s", "i", "b", "br", "font", "tt", "big", "strong", "small", "sup" ,"sub", "blockquote", "cite", "dfn", "p", "h1", "em"},
+                AllowedAttributes = removeAllTags ? new string[0] : new[] { "color", "size" }
             };
             string sanitizedHtml = html;
             bool wasChanged = true;
