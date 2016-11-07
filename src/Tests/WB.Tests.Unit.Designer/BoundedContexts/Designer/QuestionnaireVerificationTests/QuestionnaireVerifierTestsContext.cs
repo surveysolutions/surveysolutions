@@ -35,38 +35,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             IAttachmentService attachmentService = null,
             ITopologicalSorter<string> topologicalSorter = null,
             IQuestionnaireTranslator questionnaireTranslator = null)
-        {
-            var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
-
-            var questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
-            string generationResult;
-            questionnireExpressionProcessorGeneratorMock.Setup(
-                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult))
-                .Returns(new GenerationResult() {Success = true, Diagnostics = new List<GenerationDiagnostic>()});
-
-            var substitutionServiceInstance = new SubstitutionService();
-
-            var lookupTableServiceMock = new Mock<ILookupTableService>(MockBehavior.Default)
-                                         {
-                                             DefaultValue = DefaultValue.Mock
-                                         };
-
-            var attachmentServiceMock = Stub<IAttachmentService>.WithNotEmptyValues;
-
-            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, 
-                fileSystemAccessorMock.Object,
-                substitutionService ?? substitutionServiceInstance,
-                keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
-                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, 
-                new DesignerEngineVersionService(),
-                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
-                lookupTableService ?? lookupTableServiceMock.Object,
-                attachmentService ?? attachmentServiceMock,
-                topologicalSorter ?? Create.TopologicalSorter<string>(),
-                Mock.Of<ITranslationsService>(),
-                questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>());
-        }
+            => Create.QuestionnaireVerifier(
+                expressionProcessor: expressionProcessor,
+                substitutionService: substitutionService,
+                keywordsProvider: keywordsProvider,
+                expressionProcessorGenerator: expressionProcessorGenerator,
+                macrosSubstitutionService: macrosSubstitutionService,
+                lookupTableService: lookupTableService,
+                attachmentService: attachmentService,
+                topologicalSorter: topologicalSorter,
+                questionnaireTranslator: questionnaireTranslator);
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
         {
