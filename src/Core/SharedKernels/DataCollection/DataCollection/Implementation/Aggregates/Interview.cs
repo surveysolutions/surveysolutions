@@ -938,9 +938,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
         {
-            var changedQuestionTitles = new List<Identity>();
-            var changedStaticTextTitles = new List<Identity>();
-            var changedGroupTitles = new List<Identity>();
             foreach (var questionIdentity in changedQuestionIdentities)
             {
                 var rosterLevel = questionIdentity.RosterVector.Length;
@@ -948,41 +945,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionIdentity.Id);
                 foreach (var substitutedQuestionId in substitutedQuestionIds)
                 {
-                    changedQuestionTitles.AddRange(tree.FindEntity(substitutedQuestionId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                    tree.FindEntity(substitutedQuestionId)
+                        .Where(x => x.Identity.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector))
+                        .ForEach(x => x.ReplaceSubstitutions());
                 }
 
                 var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionIdentity.Id);
                 foreach (var substitutedStaticTextId in substitutedStaticTextIds)
                 {
-                    changedStaticTextTitles.AddRange(tree.FindEntity(substitutedStaticTextId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                    tree.FindEntity(substitutedStaticTextId)
+                        .Where(x => x.Identity.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector))
+                        .ForEach(x => x.ReplaceSubstitutions()); ;
                 }
 
                 var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionIdentity.Id);
                 foreach (var substitutedGroupId in substitutedGroupIds)
                 {
-                    changedGroupTitles.AddRange(tree.FindEntity(substitutedGroupId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
+                    tree.FindEntity(substitutedGroupId)
+                        .Where(x => x.Identity.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector))
+                        .ForEach(x => x.ReplaceSubstitutions());
                 }
-            }
-
-            foreach (var identity in changedQuestionTitles)
-            {
-                tree.GetQuestion(identity).ReplaceSubstitutions();
-            }
-
-            foreach (var identity in changedStaticTextTitles)
-            {
-                tree.GetStaticText(identity).ReplaceSubstitutions();
-            }
-
-            foreach (var identity in changedGroupTitles)
-            {
-                tree.GetGroup(identity).ReplaceSubstitutions();
             }
         }
 
