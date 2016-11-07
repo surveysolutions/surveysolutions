@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -161,10 +162,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (ChangedNode == null) return false;
                 if (!ChangedNode.IsLinked) return false;
 
-                if (SourceNode?.AsLinked.Options.Count != ChangedNode.AsLinked.Options.Count)
+                var sourceOptions = this.SourceNode?.AsLinked.Options ?? new List<RosterVector>();
+
+                if (sourceOptions.Count  != ChangedNode.AsLinked.Options.Count)
                     return true;
 
-                return !SourceNode.AsLinked.Options.SequenceEqual(ChangedNode.AsLinked.Options);
+                return !sourceOptions.SequenceEqual(ChangedNode.AsLinked.Options);
             }
         }
     }
