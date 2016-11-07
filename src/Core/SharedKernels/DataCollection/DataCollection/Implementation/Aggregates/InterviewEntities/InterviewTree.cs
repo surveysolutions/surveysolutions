@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     diff.IsNodeRemoved ||
                     diff.IsNodeDisabled ||
                     diff.IsNodeEnabled ||
-                    IsTitleChanged(diff as InterviewTreeNodeDiff) ||
+                    IsTitleChanged(diff) ||
                     IsRosterTitleChanged(diff as InterviewTreeRosterDiff) ||
                     IsAnswerByQuestionChanged(diff as InterviewTreeQuestionDiff) ||
                     IsQuestionValid(diff as InterviewTreeQuestionDiff) ||

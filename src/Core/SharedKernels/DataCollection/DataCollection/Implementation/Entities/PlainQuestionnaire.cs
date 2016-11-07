@@ -822,15 +822,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return null;
         }
 
-        public string[] GetValidationMessages(Guid questionId)
+        public string[] GetValidationMessages(Guid entityId)
         {
-            if (IsQuestion(questionId))
+            if (IsQuestion(entityId))
             {
-                return this.GetQuestion(questionId).ValidationConditions.Select(x => x.Message).ToArray();
+                return this.GetQuestion(entityId).ValidationConditions.Select(x => x.Message).ToArray();
             }
-            else if (IsStaticText(questionId))
+            else if (IsStaticText(entityId))
             {
-                return this.GetStaticTextImpl(questionId).ValidationConditions.Select(x => x.Message).ToArray();
+                return this.GetStaticTextImpl(entityId).ValidationConditions.Select(x => x.Message).ToArray();
             }
 
             return null;
