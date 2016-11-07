@@ -26,10 +26,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_WB0254_warning = () => errors.ShouldContainWarning("WB0254", "Use function IsValidEmail() to validate email address.");
 
         It should_return_error_with_references_on_text_question = () =>
-          errors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+          errors.First(warning => warning.Code == "WB0254").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_error_with_references_on_text_question_id = () =>
-          errors.First().References.First().Id.ShouldEqual(textQuestionId);
+          errors.First(warning => warning.Code == "WB0254").References.First().Id.ShouldEqual(textQuestionId);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
