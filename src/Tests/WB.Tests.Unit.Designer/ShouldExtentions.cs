@@ -72,13 +72,29 @@ namespace WB.Tests.Unit.Designer
             }
         }
 
-        public static void ShouldContainWarning(
-            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code, string warningMessage =null)
+        public static void ShouldContainWarning(this IEnumerable<QuestionnaireVerificationMessage> messages, string code, string message = null)
         {
-            verificationMessages.ShouldContain(message
-                => message.MessageLevel == VerificationMessageLevel.Warning
-                   && message.Code == code && (warningMessage == null || message.Message == warningMessage));
+            if (message == null)
+            {
+                messages
+                    .Where(m => m.MessageLevel == VerificationMessageLevel.Warning)
+                    .Select(m => m.Code)
+                    .ShouldContain(code);
+            }
+            else
+            {
+                messages.ShouldContain(m
+                    => m.MessageLevel == VerificationMessageLevel.Warning
+                    && m.Code == code
+                    && m.Message == message);
+            }
         }
+
+        public static void ShouldNotContainWarning(this IEnumerable<QuestionnaireVerificationMessage> messages, string code)
+            => messages
+                .Where(m => m.MessageLevel == VerificationMessageLevel.Warning)
+                .Select(m => m.Code)
+                .ShouldNotContain(code);
 
         public static void ShouldContainError(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)

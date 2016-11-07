@@ -1407,9 +1407,18 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string WB0268_Warn17 {
+        internal static string WB0268_Warn17_1 {
             get {
-                return ResourceManager.GetString("WB0268_Warn17", resourceCulture);
+                return ResourceManager.GetString("WB0268_Warn17_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0269_Warn17_2 {
+            get {
+                return ResourceManager.GetString("WB0269_Warn17_2", resourceCulture);
             }
         }
     }
