@@ -130,6 +130,10 @@
   <data name="AssignReceivedConfirm" xml:space="preserve">
     <value>Применить на {0} интервью, который интервьюер уже получил</value>
   </data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;
+&lt;b&gt;Внимание!&lt;/b&gt;Только интервью, которые не были получены интервьюверами и имеющие следующие статусы &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;, &lt;i&gt;{3}&lt;/i&gt; and &lt;i&gt;{4}&lt;/i&gt;, могут быть переназначены.</value>
+  </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Вы хотите продолжить?</value>
   </data>
