@@ -722,7 +722,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(questionSourceId).Shrink();
             var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(linkedQuestionId);
 
-            var mutualRosterSizeSources = linkedSourceRosterScopes.Intersect(linkedRosterScopes).ToList();
+            var mutualRosterSizeSources = linkedSourceRosterScopes.GetCommonPart(linkedRosterScopes).ToList();
 
             if (!mutualRosterSizeSources.Any())
                 return null;
