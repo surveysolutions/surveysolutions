@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public QuestionnaireCommunicationPackage Get(Guid id, int clientQuestionnaireContentVersion, int? minSupportedQuestionnaireVersion)
+        public QuestionnaireCommunicationPackage Get(Guid id, int clientQuestionnaireContentVersion, [FromUri]int? minSupportedQuestionnaireVersion = null)
         {
             var questionnaireView = this.GetQuestionnaireViewOrThrow(id);
 
