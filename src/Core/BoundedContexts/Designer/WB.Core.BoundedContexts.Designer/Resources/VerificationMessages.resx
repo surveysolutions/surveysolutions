@@ -564,4 +564,13 @@
   <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
     <value>You have a barcode question. Tablets must support autofocus to be used with this questionnaire.</value>
   </data>
+  <data name="WB0216_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WB0217_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WB0218_" xml:space="preserve">
+    <value />
+  </data>
 </root>

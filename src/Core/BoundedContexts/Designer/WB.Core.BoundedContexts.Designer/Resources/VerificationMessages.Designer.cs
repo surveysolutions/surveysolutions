@@ -1252,6 +1252,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0216_ {
+            get {
+                return ResourceManager.GetString("WB0216_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0217_ {
+            get {
+                return ResourceManager.GetString("WB0217_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string WB0218_ {
+            get {
+                return ResourceManager.GetString("WB0218_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
