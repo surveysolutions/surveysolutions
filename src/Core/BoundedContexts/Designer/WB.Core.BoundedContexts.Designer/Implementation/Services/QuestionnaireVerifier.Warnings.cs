@@ -4,10 +4,12 @@ using System.Linq;
 using CsQuery.ExtensionMethods;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -25,11 +27,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(TooManyQuestions, "WB0205", VerificationMessages.WB0205_TooManyQuestions),
             Warning(FewSectionsManyQuestions, "WB0206", VerificationMessages.WB0206_FewSectionsManyQuestions),
             Warning<IGroup>(FixedRosterContains3OrLessItems, "WB0207", VerificationMessages.WB0207_FixedRosterContains3OrLessItems),
-            Warning(MoreThanHalfNumericQuestionsWithoutValidationConditions, "WB0208", VerificationMessages.WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions),
+            Warning(MoreThan50PercentQuestionsWithoutValidationConditions, "WB0208", VerificationMessages.WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions),
             Warning<IComposite>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
             Warning<IQuestion>(QuestionIsTooShort, "WB0255", VerificationMessages.WB0255_QuestionIsTooShort),
+            Warning<GpsCoordinateQuestion>(Any, "WB0264", VerificationMessages.WB0264_GpsQuestion),
+            Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
+            Warning(MoreThan30PercentQuestionsAreText, "WB0265", VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText),
 
             Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
 
@@ -39,9 +44,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
             Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb),
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
+            WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
 
-            Warning(ValidationConditionRefersToAFutureQuestion),
-            Warning(EnablementConditionRefersToAFutureQuestion)
+            ValidationConditionRefersToAFutureQuestion,
+            EnablementConditionRefersToAFutureQuestion
         };
 
         private bool QuestionIsTooShort(IQuestion question)
@@ -51,6 +57,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return question.QuestionText.Split(new[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length <= 2;
         }
+
+        private static bool Any(IComposite entity) => true;
 
         private bool UseFunctionIsValidEmailToValidateEmailAddress(IQuestion question)
         {
@@ -104,6 +112,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 }
             }
             return result;
+        }
+
+        private static IEnumerable<QuestionnaireNodeReference[]> SameTitle(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var questionsWithConditions = questionnaire.Find<IQuestion>();
+
+            var duplicateGroupings = questionsWithConditions
+                .GroupBy(question => question.QuestionText)
+                .Where(grouping => grouping.Count() > 1);
+
+            foreach (var duplicateGrouping in duplicateGroupings)
+            {
+                QuestionnaireNodeReference[] references =
+                    duplicateGrouping
+                        .Select(question => CreateReference(question))
+                        .ToArray();
+
+                yield return references;
+            }
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> ValidationConditionRefersToAFutureQuestion(
@@ -200,8 +227,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => questionnaire.Find<IQuestion>().Count() > 100
             && questionnaire.Find<IGroup>(IsSection).Count() < 3;
 
-        private static bool MoreThanHalfNumericQuestionsWithoutValidationConditions(MultiLanguageQuestionnaireDocument questionnaire)
-            => questionnaire.Find<IQuestion>().Count(x => IsNumericWithoutValidation(x) && AnsweredManually(x)) > 0.5 * questionnaire.Find<IQuestion>().Count(IsNumeric);
+        private static bool MoreThan30PercentQuestionsAreText(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire.Find<TextQuestion>().Count(AnsweredManually) > 0.3 * questionnaire.Find<IQuestion>().Count(AnsweredManually);
+
+        private static bool MoreThan50PercentQuestionsWithoutValidationConditions(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire.Find<IQuestion>().Where(NoValidation).Count(AnsweredManually) > 0.5 * questionnaire.Find<IQuestion>().Count(AnsweredManually);
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
@@ -232,7 +262,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool IsNumericWithoutValidation(IQuestion question)
             => IsNumeric(question)
-            && !question.ValidationConditions.Any();
+            && NoValidation(question);
+
+        private static bool NoValidation(IQuestion question) => !question.ValidationConditions.Any();
 
         private static bool IsNumeric(IQuestion question)
             => question.QuestionType == QuestionType.Numeric;
@@ -276,13 +308,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
         }
 
-
-        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>
-            Warning(
-            Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>
-                validationConditionRefersToAFutureQuestion)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> WarningForCollection(
+            Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireNodeReference[]>> getReferences, string code, string message)
         {
-            return (questionnaire) => validationConditionRefersToAFutureQuestion(questionnaire);
+            return questionnaire
+                => getReferences(questionnaire)
+                    .Select(references => QuestionnaireVerificationMessage.Warning(code, message, references));
         }
 
         private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(

@@ -12,8 +12,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 {
                     Create.Question(),
                 })
-                .ExpectWarning("WB0264")
-                .AndNoWarning("WB0269");
+                .ExpectWarning("WB0211")
+                .AndNoWarning("WB0264");
 
         [Test]
         public void gps_question()
@@ -21,8 +21,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 {
                     Create.GpsCoordinateQuestion(),
                 })
-                .ExpectNoWarning("WB0264")
-                .AndWarning("WB0269");
+                .ExpectNoWarning("WB0211")
+                .AndWarning("WB0264");
 
         [Test]
         public void no_barcode_question()
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 {
                     Create.Question(),
                 })
-                .ExpectNoWarning("WB0268");
+                .ExpectNoWarning("WB0267");
 
         [Test]
         public void barcode_question()
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 {
                     Create.QRBarcodeQuestion(),
                 })
-                .ExpectWarning("WB0268");
+                .ExpectWarning("WB0267");
 
         [Test]
         public void less_than_50_percent_questions_with_validations()
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.Question(),
                     Create.Question(validationConditions: new[] { Create.ValidationCondition() }),
                 })
-                .ExpectWarning("WB0265");
+                .ExpectWarning("WB0208");
 
         [Test]
         public void more_than_50_percent_questions_with_validations()
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.Question(validationConditions: new[] { Create.ValidationCondition() }),
                     Create.Question(validationConditions: new[] { Create.ValidationCondition() }),
                 })
-                .ExpectNoWarning("WB0265");
+                .ExpectNoWarning("WB0208");
 
         [Test]
         public void more_than_30_percent_questions_are_text()
@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.NumericIntegerQuestion(),
                     Create.NumericIntegerQuestion(),
                 })
-                .ExpectWarning("WB0266");
+                .ExpectWarning("WB0265");
 
         [Test]
         public void less_than_30_percent_questions_are_text()
@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.NumericIntegerQuestion(),
                     Create.NumericIntegerQuestion(),
                 })
-                .ExpectNoWarning("WB0266");
+                .ExpectNoWarning("WB0265");
 
         [Test]
         public void questions_with_same_title()
@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.Question(title: "Question"),
                     Create.Question(title: "Question"),
                 })
-                .ExpectWarning("WB0267");
+                .ExpectWarning("WB0266");
 
         [Test]
         public void questions_with_different_titles()
@@ -98,6 +98,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.Question(title: "Question 1"),
                     Create.Question(title: "Question 2"),
                 })
-                .ExpectNoWarning("WB0267");
+                .ExpectNoWarning("WB0266");
     }
 }

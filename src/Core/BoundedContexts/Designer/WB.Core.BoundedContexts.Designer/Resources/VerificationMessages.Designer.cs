@@ -1180,11 +1180,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Most numeric questions can have validation conditions. Add validation conditions to improve data quality..
+        ///   Looks up a localized string similar to More than 50% of questions contain no validation conditions. Add validation conditions to improve data quality..
         /// </summary>
-        internal static string WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions {
+        internal static string WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions {
             get {
-                return ResourceManager.GetString("WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions", resourceCulture);
+                return ResourceManager.GetString("WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions", resourceCulture);
             }
         }
         
@@ -1369,56 +1369,38 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to You have a GPS question. Tablets must support autofocus to be used with this questionnaire..
         /// </summary>
-        internal static string WB0264_Warn13 {
+        internal static string WB0264_GpsQuestion {
             get {
-                return ResourceManager.GetString("WB0264_Warn13", resourceCulture);
+                return ResourceManager.GetString("WB0264_GpsQuestion", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to More than 30% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead..
         /// </summary>
-        internal static string WB0265_Warn14 {
+        internal static string WB0265_MoreThan30PercentQuestionsAreText {
             get {
-                return ResourceManager.GetString("WB0265_Warn14", resourceCulture);
+                return ResourceManager.GetString("WB0265_MoreThan30PercentQuestionsAreText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Duplicate questions. (Questions have the same title.).
         /// </summary>
-        internal static string WB0266_Warn15 {
+        internal static string WB0266_SameTitle {
             get {
-                return ResourceManager.GetString("WB0266_Warn15", resourceCulture);
+                return ResourceManager.GetString("WB0266_SameTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to You have a barcode question. Tablets must support autofocus to be used with this questionnaire..
         /// </summary>
-        internal static string WB0267_Warn16 {
+        internal static string WB0267_QRBarcodeQuestion {
             get {
-                return ResourceManager.GetString("WB0267_Warn16", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string WB0268_Warn17_1 {
-            get {
-                return ResourceManager.GetString("WB0268_Warn17_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string WB0269_Warn17_2 {
-            get {
-                return ResourceManager.GetString("WB0269_Warn17_2", resourceCulture);
+                return ResourceManager.GetString("WB0267_QRBarcodeQuestion", resourceCulture);
             }
         }
     }
