@@ -6,6 +6,8 @@
   <EditTextPreference android:key="GpsDesiredAccuracy" android:numeric="integer" android:defaultValue="@integer/GpsDesiredAccuracy"/>
 
   <CheckBoxPreference android:key="VibrateOnError" />
+  <CheckBoxPreference android:key="ShowLocationOnMap" />
+  
   <CheckBoxPreference android:key="ShowVariables" />
   <Preference android:key="version" />
   

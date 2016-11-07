@@ -9,5 +9,6 @@ namespace WB.Core.SharedKernels.Enumerator
         int EventChunkSize { get; }
         bool VibrateOnError { get; }
         bool ShowVariables { get; }
+        bool ShowLocationOnMap { get; }
     }
 }

@@ -60,6 +60,11 @@ namespace WB.UI.Tester.Activities
                     checkBoxPreference.Summary = summary;
                 };
 
+                this.SetBooleanPreferenceTitleAndSummary(TesterSettings.ShowLocationOnMapParamName, 
+                    UIResources.Prefs_ShowLocationOnMap, 
+                    UIResources.Prefs_ShowLocationOnMapSummary,
+                    settings.ShowLocationOnMap);
+
                 this.SetPreferenceTitleAndSummary("GpsDesiredAccuracy", UIResources.Prefs_GpsDesiredAccuracyTitle,
                     string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, settings.GpsDesiredAccuracy));
 

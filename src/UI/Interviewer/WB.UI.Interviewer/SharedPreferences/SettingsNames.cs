@@ -1,3 +1,5 @@
+using Java.Lang;
+
 namespace WB.UI.Interviewer.SharedPreferences
 {
     public class SettingsNames
@@ -10,5 +12,6 @@ namespace WB.UI.Interviewer.SharedPreferences
         public const string GpsDesiredAccuracy = "GpsDesiredAccuracy";
         public const string EventChunkSize = "EventChunkSize";
         public const string VibrateOnError = "VibrateOnError";
+        public const string ShowLocationOnMap = "ShowLocationOnMap";
     }
 }

@@ -40,18 +40,8 @@ lib/Debug
 App_Data/LocalStorage/*
 
 scaffolding.config
-src/UI/Headquarters/WB.UI.Headquarters/App_Data/Elmah/
-src/UI/Headquarters/WB.UI.Headquarters/App_Data/ExportedData/
-src/UI/Headquarters/WB.UI.Headquarters/App_Data/PreLoadedData/*
-src/UI/Headquarters/WB.UI.Headquarters/App_Data/SampleCreationStatus/*
 src/UI/Headquarters/WB.UI.Headquarters/App_Data/
-src/UI/Supervisor/Web.Supervisor/App_Data/Elmah/*
-src/UI/Supervisor/Web.Supervisor/App_Data/ExportedData/*
-src/UI/Supervisor/WB.UI.Supervisor/App_Data
 src/UI/Designer/WB.UI.Designer/questionnaire/node_modules/
-src/UI/Designer/WB.UI.Designer/UpdatedDesigner/node_modules/
-src/UI/Designer/WB.UI.Designer/UpdatedDesigner/build
-src/UI/Headquarters/WB.UI.Headquarters/DATA/*
 src/UI/Designer/WB.UI.Designer/App_Data/ReadSide/Esent
 
 Thumbs.db

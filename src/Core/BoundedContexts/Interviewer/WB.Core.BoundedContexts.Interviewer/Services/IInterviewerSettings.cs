@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -18,6 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         void SetGpsDesiredAccuracy(double value);
         void SetEventChunkSize(int eventChunkSize);
         void SetVibrateOnError(bool vibrate);
+        void SetShowLocationOnMap(bool showLocationOnMap);
 
         string BackupFolder { get; }
         string RestoreFolder { get; }
