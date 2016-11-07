@@ -20,8 +20,9 @@
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
         var statistics = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "AllInterviews"})';
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
+        var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Supervisors" })';
         $(function() {
-            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl);
+            var model = new Supervisor.VM.HQInterviews(statistics, $interviewsPageUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -37,6 +38,16 @@
     <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
     <div class="btn-group">
         <div class="form-inline">
+            <div class="btn-group">
+                <div class="input-group">
+                    <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: AssignTo, typeaheadOptions: {source: Users, displayText: function(item){return item.UserName}, afterSelect: function(){ $root.Assign(); }}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text" />
+                    <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                    <div class="input-group-btn" data-bind="click: function(){ AssignTo(undefined);}, disable: IsNothingSelected">
+                        <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                    </div>
+                </div>
+            </div>
+
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">@Common.Approve</button>
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">@Common.Reject</button>
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.UnapproveInterview">@Common.Unapprove</button>
