@@ -16,6 +16,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         private const string GpsDesiredAccuracyParameterName = "GpsDesiredAccuracy";
         internal const string VibrateOnErrorParameterName = "VibrateOnError";
         internal const string ShowVariablesParamterName = "ShowVariables";
+        internal const string ShowLocationOnMapParamName = "ShowLocationOnMap";
 
         private static ISharedPreferences SharedPreferences => PreferenceManager.GetDefaultSharedPreferences(Application.Context);
 
@@ -91,5 +92,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         public int EventChunkSize => 1000;
 
         public bool ShowVariables => SharedPreferences.GetBoolean(ShowVariablesParamterName, false);
+
+        public bool ShowLocationOnMap => SharedPreferences.GetBoolean(ShowLocationOnMapParamName, true);
     }
 }

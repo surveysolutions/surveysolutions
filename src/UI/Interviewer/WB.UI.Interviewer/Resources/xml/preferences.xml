@@ -4,6 +4,7 @@
   <PreferenceCategory android:key="interview_settings_category">
     <EditTextPreference android:key="GpsReceiveTimeoutSec" android:numeric="integer"/>
     <EditTextPreference android:key="GpsDesiredAccuracy" android:numeric="integer"/>
+    <CheckBoxPreference android:key="ShowLocationOnMap" />
     <CheckBoxPreference android:key="VibrateOnError" />
   </PreferenceCategory>
 

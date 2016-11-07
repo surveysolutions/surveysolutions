@@ -9,7 +9,8 @@ namespace WB.UI.Shared.Enumerator.Converters
     {
         protected override string Convert(GpsLocation value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            bool showMap = (bool) parameter;
+            if (value == null || !showMap)
                 return string.Empty;
 
             return string.Format(

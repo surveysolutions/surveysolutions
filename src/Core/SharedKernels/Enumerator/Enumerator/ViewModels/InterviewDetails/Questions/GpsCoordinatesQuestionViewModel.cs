@@ -33,6 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.answer = value; this.RaisePropertyChanged(); }
         }
 
+        public bool ShowLocationOnMap => this.settings.ShowLocationOnMap;
+
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
@@ -98,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
             IUserInterfaceStateService userInterfaceStateService,
             AnsweringViewModel answering,
-             QuestionInstructionViewModel instructionViewModel,
+            QuestionInstructionViewModel instructionViewModel,
             ILiteEventRegistry liteEventRegistry,
             ILogger logger)
         {

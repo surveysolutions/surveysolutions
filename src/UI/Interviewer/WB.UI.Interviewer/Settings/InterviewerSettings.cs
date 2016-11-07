@@ -22,9 +22,6 @@ namespace WB.UI.Interviewer.Settings
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        
-        private readonly string backupFolder;
-        private readonly string restoreFolder;
 
         public InterviewerSettings(
             IPlainStorage<ApplicationSettingsView> settingsStorage, 
@@ -44,8 +41,8 @@ namespace WB.UI.Interviewer.Settings
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.backupFolder = backupFolder;
-            this.restoreFolder = restoreFolder;
+            this.BackupFolder = backupFolder;
+            this.RestoreFolder = restoreFolder;
         }
 
         private ApplicationSettingsView CurrentSettings => this.settingsStorage.FirstOrDefault() ?? new ApplicationSettingsView
@@ -64,11 +61,12 @@ namespace WB.UI.Interviewer.Settings
         public int EventChunkSize => this.CurrentSettings.EventChunkSize?? Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize);
         public bool VibrateOnError => this.CurrentSettings.VibrateOnError ?? Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
         public bool ShowVariables => false;
+        public bool ShowLocationOnMap => this.CurrentSettings.ShowLocationOnMap.GetValueOrDefault(true);
         public TimeSpan Timeout => new TimeSpan(0, 0, this.CurrentSettings.HttpResponseTimeoutInSec);
         public int BufferSize => this.CurrentSettings.CommunicationBufferSize;
         public bool AcceptUnsignedSslCertificate => false;
         public int GpsReceiveTimeoutSec => this.CurrentSettings.GpsResponseTimeoutInSec;
-        public double GpsDesiredAccuracy => this.CurrentSettings.GpsDesiredAccuracy.GetValueOrDefault((double)Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
+        public double GpsDesiredAccuracy => this.CurrentSettings.GpsDesiredAccuracy.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
 
         public Version GetSupportedQuestionnaireContentVersion()
         {
@@ -169,9 +167,14 @@ namespace WB.UI.Interviewer.Settings
             });
         }
 
-        public string BackupFolder => backupFolder;
+        public void SetShowLocationOnMap(bool showLocationOnMap)
+        {
+            this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
+        }
 
-        public string RestoreFolder => restoreFolder;
+        public string BackupFolder { get; }
+
+        public string RestoreFolder { get; }
 
         private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {

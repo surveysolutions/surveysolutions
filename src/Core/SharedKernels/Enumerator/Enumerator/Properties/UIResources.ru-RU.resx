@@ -428,6 +428,12 @@
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
     <value>Замечания супервизора</value>
   </data>
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>Показывать положение на карте</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>Загружать карту для отображения текущего положения на GPS вопросах</value>
+  </data>
   <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;пусто&gt;</value>
   </data>

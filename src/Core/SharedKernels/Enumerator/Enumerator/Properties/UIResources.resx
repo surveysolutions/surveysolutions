@@ -428,6 +428,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
     <value>Supervisor note:</value>
   </data>
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>Show location on map</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>Load map do show location for GPS questions</value>
+  </data>
   <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;empty&gt;</value>
   </data>
