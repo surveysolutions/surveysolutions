@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
         string GetValidationMessage(Guid questionId, int conditionIndex);
-        string[] GetValidationMessages(Guid questionId);
+        string[] GetValidationMessages(Guid entityId);
 
         bool HasMoreThanOneValidationRule(Guid questionId);
         string GetQuestionInstruction(Guid questionId);

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -98,26 +97,4 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clone;
         }
     }
-
-    public class SubstitutionVariables
-    {
-        public SubstitutionVariables()
-        {
-            ByRosters = new List<SubstitutionVariable>();
-            ByVariables = new List<SubstitutionVariable>();
-            ByQuestions = new List<SubstitutionVariable>();
-        }
-
-        public IEnumerable<SubstitutionVariable> ByQuestions { get; set; }
-        public IEnumerable<SubstitutionVariable> ByVariables { get; set; }
-        public IEnumerable<SubstitutionVariable> ByRosters { get; set; }
-    }
-
-
-    public class SubstitutionVariable
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-    }
-
 }
