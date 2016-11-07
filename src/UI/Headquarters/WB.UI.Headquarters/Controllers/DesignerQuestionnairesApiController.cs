@@ -117,8 +117,7 @@ namespace WB.UI.Headquarters.Controllers
                     queryString: new
                     {
                         clientQuestionnaireContentVersion = supportedVersion,
-                        minSupportedQuestionnaireVersion =
-                        this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer()
+                        minSupportedQuestionnaireVersion = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer()
                     });
 
                 QuestionnaireDocument questionnaire =

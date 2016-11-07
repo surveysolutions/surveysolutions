@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
     public interface ISupportedVersionProvider
     {
         int GetSupportedQuestionnaireVersion();
-        int GetMinVerstionSupportedByInterviewer();
+        int? GetMinVerstionSupportedByInterviewer();
         void RememberMinSupportedVersion();
     }
 }
