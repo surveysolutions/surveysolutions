@@ -16,136 +16,161 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.AddPreferencesFromResource(Resource.Xml.preferences);
-
-            this.SetupPreferences();
+            FragmentManager.BeginTransaction().Replace(Android.Resource.Id.Content, new PrefsFragment()).Commit();
         }
 
-        private void SetupPreferences()
+        protected override bool IsValidFragment(string fragmentName)
         {
-            var interviewerSettings = Mvx.Resolve<IInterviewerSettings>();
-
-            this.SetPreferenceTitleAndSummary("interview_settings_category", InterviewerUIResources.Prefs_InterviewSettings, string.Empty);
-            this.SetPreferenceTitleAndSummary("about_category", InterviewerUIResources.Prefs_AboutApplication, string.Empty);
-            this.SetPreferenceTitleAndSummary("connection_settings_category", InterviewerUIResources.Prefs_ConnectionSettings, string.Empty);
-
-            this.SetPreferenceTitleAndSummary("version", InterviewerUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
-            this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
-
-            this.FindPreference(SettingsNames.GpsDesiredAccuracy).PreferenceChange += async (sender, e) =>
-            {
-                double newValue;
-                if (double.TryParse(e.NewValue.ToString(), out newValue))
-                {
-                    interviewerSettings.SetGpsDesiredAccuracy(newValue);
-                }
-
-                this.UpdateSettings();
-            };
-
-            this.FindPreference(SettingsNames.Endpoint).PreferenceChange += async (sender, e) =>
-            {
-                interviewerSettings.SetEndpoint(e.NewValue.ToString());
-                this.UpdateSettings();
-            };
-            this.FindPreference(SettingsNames.EventChunkSize).PreferenceChange += async (sender, e) =>
-            {
-                interviewerSettings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.EventChunkSize));
-                this.UpdateSettings();
-            };
-            this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += async (sender, e) =>
-            {
-                interviewerSettings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue, (int)interviewerSettings.Timeout.TotalSeconds));
-                this.UpdateSettings();
-            };
-            this.FindPreference(SettingsNames.BufferSize).PreferenceChange += async (sender, e) =>
-            {
-                interviewerSettings.SetCommunicationBufferSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.BufferSize));
-                this.UpdateSettings();
-            };
-            this.FindPreference(SettingsNames.GpsReceiveTimeoutSec).PreferenceChange += async (sender, e) =>
-            {
-                interviewerSettings.SetGpsResponseTimeout(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.GpsReceiveTimeoutSec));
-                this.UpdateSettings();
-            };
-            this.FindPreference(SettingsNames.VibrateOnError).PreferenceChange += async (sender, e) =>
-            {
-                interviewerSettings.SetVibrateOnError(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.VibrateOnError));
-                this.UpdateSettings();
-            };
-            this.UpdateSettings();
+            return false;
         }
 
-        private void UpdateSettings()
+        public class PrefsFragment : PreferenceFragment
         {
-            var interviewerSettings = Mvx.Resolve<IInterviewerSettings>();
-
-            this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, InterviewerUIResources.Prefs_EndpointTitle,
-                interviewerSettings.Endpoint, interviewerSettings.Endpoint);
-            this.SetPreferenceTitleAndSummary(SettingsNames.HttpResponseTimeout,
-                InterviewerUIResources.Prefs_HttpResponseTimeoutTitle,
-                InterviewerUIResources.Prefs_HttpResponseTimeoutSummary, interviewerSettings.Timeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-            this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize, InterviewerUIResources.Prefs_BufferSizeTitle,
-                InterviewerUIResources.Prefs_BufferSizeSummary, interviewerSettings.BufferSize.ToString());
-
-            this.SetPreferenceTitleAndSummary(SettingsNames.GpsReceiveTimeoutSec,
-                InterviewerUIResources.Prefs_GpsReceiveTimeoutSecTitle,
-                InterviewerUIResources.Prefs_GpsReceiveTimeoutSecSummary,
-                interviewerSettings.GpsReceiveTimeoutSec.ToString());
-
-            this.SetPreferenceTitleAndSummary(SettingsNames.GpsDesiredAccuracy, 
-                UIResources.Prefs_GpsDesiredAccuracyTitle,
-                UIResources.Prefs_GpsDesiredAccuracySubTitle,
-                interviewerSettings.GpsDesiredAccuracy.ToString());
-            this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, InterviewerUIResources.Prefs_EventChunkSizeTitle,
-                InterviewerUIResources.Prefs_EventChunkSizeSummary, interviewerSettings.EventChunkSize.ToString());
-
-            this.SetBooleanPreferenceTitleAndSummary(SettingsNames.VibrateOnError, UIResources.Prefs_VibrateOnErrorTitle,
-                UIResources.Prefs_VibrateOnErrorSummary, interviewerSettings.VibrateOnError);
-
-        }
-        private static bool ParseBooleanSettingsValue(object settingsValue, bool defaultValue)
-        {
-            bool intValue;
-            if (bool.TryParse(settingsValue.ToString(), out intValue))
-                return intValue;
-
-            return defaultValue;
-        }
-
-        private static int ParseIntegerSettingsValue(object settingsValue, int defaultValue)
-        {
-            var intValue = -1;
-            if (int.TryParse(settingsValue.ToString(), out intValue) && intValue > 0)
-                return intValue;
-
-            return defaultValue;
-        }
-
-        private void SetPreferenceTitleAndSummary(string preferenceKey, string title, string summary, string defaultValue = "")
-        {
-            var preference = this.FindPreference(preferenceKey);
-
-            preference.Title = title;
-            preference.Summary = summary;
-
-            var editPreference = preference as EditTextPreference;
-            if (editPreference != null)
+            public override void OnCreate(Bundle savedInstanceState)
             {
-                editPreference.Text = defaultValue;
+                base.OnCreate(savedInstanceState);
+                this.AddPreferencesFromResource(Resource.Xml.preferences);
+                this.SetupPreferences();
             }
-        }
 
-        private void SetBooleanPreferenceTitleAndSummary(string preferenceKey, string title, string summary, bool defaultValue)
-        {
-            var preference = this.FindPreference(preferenceKey);
-
-            preference.Title = title;
-            preference.Summary = summary;
-            var checkBoxPreference = preference as CheckBoxPreference;
-            if (checkBoxPreference != null)
+            private void SetupPreferences()
             {
-                checkBoxPreference.Checked = defaultValue;
+                var interviewerSettings = Mvx.Resolve<IInterviewerSettings>();
+
+                this.SetPreferenceTitleAndSummary("interview_settings_category", InterviewerUIResources.Prefs_InterviewSettings, string.Empty);
+                this.SetPreferenceTitleAndSummary("about_category", InterviewerUIResources.Prefs_AboutApplication, string.Empty);
+                this.SetPreferenceTitleAndSummary("connection_settings_category", InterviewerUIResources.Prefs_ConnectionSettings, string.Empty);
+
+                this.SetPreferenceTitleAndSummary("version", InterviewerUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
+                this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
+
+                this.FindPreference(SettingsNames.GpsDesiredAccuracy).PreferenceChange += (sender, e) =>
+                {
+                    double newValue;
+                    if (double.TryParse(e.NewValue.ToString(), out newValue))
+                    {
+                        interviewerSettings.SetGpsDesiredAccuracy(newValue);
+                    }
+
+                    this.UpdateSettings();
+                };
+
+                this.FindPreference(SettingsNames.Endpoint).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetEndpoint(e.NewValue.ToString());
+                    this.UpdateSettings();
+                };
+                this.FindPreference(SettingsNames.EventChunkSize).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.EventChunkSize));
+                    this.UpdateSettings();
+                };
+                this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue, (int)interviewerSettings.Timeout.TotalSeconds));
+                    this.UpdateSettings();
+                };
+                this.FindPreference(SettingsNames.BufferSize).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetCommunicationBufferSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.BufferSize));
+                    this.UpdateSettings();
+                };
+                this.FindPreference(SettingsNames.GpsReceiveTimeoutSec).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetGpsResponseTimeout(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.GpsReceiveTimeoutSec));
+                    this.UpdateSettings();
+                };
+                this.FindPreference(SettingsNames.VibrateOnError).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetVibrateOnError(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.VibrateOnError));
+                    this.UpdateSettings();
+                };
+                this.FindPreference(SettingsNames.ShowLocationOnMap).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetShowLocationOnMap(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.ShowLocationOnMap));
+                    this.UpdateSettings();
+                };
+
+                this.UpdateSettings();
+            }
+
+            private void UpdateSettings()
+            {
+                var interviewerSettings = Mvx.Resolve<IInterviewerSettings>();
+
+                this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, InterviewerUIResources.Prefs_EndpointTitle,
+                    interviewerSettings.Endpoint, interviewerSettings.Endpoint);
+                this.SetPreferenceTitleAndSummary(SettingsNames.HttpResponseTimeout,
+                    InterviewerUIResources.Prefs_HttpResponseTimeoutTitle,
+                    InterviewerUIResources.Prefs_HttpResponseTimeoutSummary, interviewerSettings.Timeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+                this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize, InterviewerUIResources.Prefs_BufferSizeTitle,
+                    InterviewerUIResources.Prefs_BufferSizeSummary, interviewerSettings.BufferSize.ToString());
+
+                this.SetPreferenceTitleAndSummary(SettingsNames.GpsReceiveTimeoutSec,
+                    InterviewerUIResources.Prefs_GpsReceiveTimeoutSecTitle,
+                    InterviewerUIResources.Prefs_GpsReceiveTimeoutSecSummary,
+                    interviewerSettings.GpsReceiveTimeoutSec.ToString());
+
+                this.SetPreferenceTitleAndSummary(SettingsNames.GpsDesiredAccuracy,
+                    UIResources.Prefs_GpsDesiredAccuracyTitle,
+                    UIResources.Prefs_GpsDesiredAccuracySubTitle,
+                    interviewerSettings.GpsDesiredAccuracy.ToString());
+                this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, InterviewerUIResources.Prefs_EventChunkSizeTitle,
+                    InterviewerUIResources.Prefs_EventChunkSizeSummary, interviewerSettings.EventChunkSize.ToString());
+
+                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.VibrateOnError, UIResources.Prefs_VibrateOnErrorTitle,
+                    UIResources.Prefs_VibrateOnErrorSummary, interviewerSettings.VibrateOnError);
+
+                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.ShowLocationOnMap, 
+                    UIResources.Prefs_ShowLocationOnMap,
+                    UIResources.Prefs_ShowLocationOnMapSummary,
+                    interviewerSettings.ShowLocationOnMap);
+
+
+            }
+            private static bool ParseBooleanSettingsValue(object settingsValue, bool defaultValue)
+            {
+                bool intValue;
+                if (bool.TryParse(settingsValue.ToString(), out intValue))
+                    return intValue;
+
+                return defaultValue;
+            }
+
+            private static int ParseIntegerSettingsValue(object settingsValue, int defaultValue)
+            {
+                var intValue = -1;
+                if (int.TryParse(settingsValue.ToString(), out intValue) && intValue > 0)
+                    return intValue;
+
+                return defaultValue;
+            }
+
+            private void SetPreferenceTitleAndSummary(string preferenceKey, string title, string summary, string defaultValue = "")
+            {
+                var preference = this.FindPreference(preferenceKey);
+
+                preference.Title = title;
+                preference.Summary = summary;
+
+                var editPreference = preference as EditTextPreference;
+                if (editPreference != null)
+                {
+                    editPreference.Text = defaultValue;
+                }
+            }
+
+            private void SetBooleanPreferenceTitleAndSummary(string preferenceKey, string title, string summary, bool defaultValue)
+            {
+                var preference = this.FindPreference(preferenceKey);
+
+                preference.Title = title;
+                preference.Summary = summary;
+                var checkBoxPreference = preference as CheckBoxPreference;
+                if (checkBoxPreference != null)
+                {
+                    checkBoxPreference.Checked = defaultValue;
+                }
             }
         }
     }

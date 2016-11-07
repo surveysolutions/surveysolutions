@@ -14,5 +14,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public double? GpsDesiredAccuracy { get; set; }
         public int? EventChunkSize { get; set; }
         public bool? VibrateOnError { get; set; }
+        public bool? ShowLocationOnMap { get; set; }
     }
 }
