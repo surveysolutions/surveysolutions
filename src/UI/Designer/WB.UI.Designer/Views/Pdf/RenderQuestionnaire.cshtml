@@ -176,7 +176,7 @@
         {
             <section class="section">
                 <div class="section_header">
-                    <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId)</h2>
+                    <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
                 </div>
                 @Html.Partial("_RenderChildren", sectionId)
             </section>
