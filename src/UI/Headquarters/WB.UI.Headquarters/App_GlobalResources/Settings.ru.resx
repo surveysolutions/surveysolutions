@@ -141,4 +141,7 @@
   <data name="LogoUpdated" xml:space="preserve">
     <value>Логотип обновлён</value>
   </data>
+  <data name="LogoNotUpdated" xml:space="preserve">
+    <value>Логотип не был обновлён. Предоставьте правильное изображение</value>
+  </data>
 </root>

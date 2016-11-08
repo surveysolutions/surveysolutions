@@ -144,4 +144,7 @@
   <data name="LogoUpdated" xml:space="preserve">
     <value>Company logo updated</value>
   </data>
+  <data name="LogoNotUpdated" xml:space="preserve">
+    <value>Company logo was not updated. Please provide a valid image</value>
+  </data>
 </root>

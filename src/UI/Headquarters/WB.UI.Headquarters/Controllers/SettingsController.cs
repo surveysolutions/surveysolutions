@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using ImageResizer;
 using Resources;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -48,17 +50,42 @@ namespace WB.UI.Headquarters.Controllers
                         {
                             await fileInputStream.CopyToAsync(ms);
                             var array = ms.ToArray();
-                            this.logoStorage.Store(new CompanyLogo
+
+                            try
                             {
-                                Logo = array
-                            }, CompanyLogo.StorageKey);
-                            WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
+                                ValidateImage(array);
+
+                                this.logoStorage.Store(new CompanyLogo
+                                {
+                                    Logo = array
+                                }, CompanyLogo.StorageKey);
+                                WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
+                            }
+                            catch (ImageCorruptedException)
+                            {
+                                WriteToTempData(Alerts.ERROR, Settings.LogoNotUpdated);
+                            }
                         }
                     }
                 }
             }
 
             return RedirectToAction("Index");
+        }
+
+        private void ValidateImage(byte[] source)
+        {
+            using (var outputStream = new MemoryStream())
+            {
+                ImageBuilder.Current.Build(source, outputStream, new ResizeSettings
+                {
+                    MaxWidth = 1,
+                    MaxHeight = 1,
+                    Format = "png"
+                });
+
+                outputStream.ToArray();
+            }
         }
     }
 }
