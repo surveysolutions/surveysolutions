@@ -138,4 +138,10 @@
   <data name="GlobalNotice" xml:space="preserve">
     <value>Global note</value>
   </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Company logo</value>
+  </data>
+  <data name="LogoUpdated" xml:space="preserve">
+    <value>Company logo updated</value>
+  </data>
 </root>

@@ -860,6 +860,7 @@
     <Compile Include="API\ProgressiveDownloadResult.cs" />
     <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
+    <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
@@ -1308,6 +1309,7 @@
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CloneQuestionnaireModel.cs" />
+    <Compile Include="Models\CompanyLogo\CompanyLogo.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\CypherSettingsModel.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />
@@ -1492,7 +1494,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\Attributes\" />
-    <Folder Include="API\Resources\" />
     <Folder Include="App_Data\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>

@@ -1,9 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using System.IO;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Resources;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Models.CompanyLogo;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -12,15 +17,48 @@ namespace WB.UI.Headquarters.Controllers
     [ObserverNotAllowed]
     public class SettingsController : BaseController
     {
-        public SettingsController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger)
+        private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;
+
+        public SettingsController(ICommandService commandService, 
+            IGlobalInfoProvider globalInfo,
+            IPlainKeyValueStorage<CompanyLogo> logoStorage,
+            ILogger logger)
             : base(commandService, globalInfo, logger)
         {
-            
+            this.logoStorage = logoStorage;
         }
 
         public ActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateLogo()
+        {
+            if (Request.Files.Count > 0)
+            {
+                var file = Request.Files[0];
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    using (var fileInputStream = file.InputStream)
+                    {
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            await fileInputStream.CopyToAsync(ms);
+                            var array = ms.ToArray();
+                            this.logoStorage.Store(new CompanyLogo
+                            {
+                                Logo = array
+                            }, CompanyLogo.StorageKey);
+                            WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
