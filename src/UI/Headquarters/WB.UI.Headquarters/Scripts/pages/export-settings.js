@@ -45,6 +45,10 @@
             false);
     };
 
+    self.updateLogo = function() {
+
+    };
+
     self.regeneratePass = function () {
         var confirmRegenerateHtml = self.getBindedHtmlTemplate("#confirm-regenerate-password");
 

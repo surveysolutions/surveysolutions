@@ -135,4 +135,10 @@
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
   </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Логотип</value>
+  </data>
+  <data name="LogoUpdated" xml:space="preserve">
+    <value>Логотип обновлён</value>
+  </data>
 </root>
