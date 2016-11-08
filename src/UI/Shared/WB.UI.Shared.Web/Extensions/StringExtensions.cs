@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Ganss.XSS;
 
 namespace WB.UI.Shared.Web.Extensions
 {
@@ -41,6 +42,16 @@ namespace WB.UI.Shared.Web.Extensions
             if (string.IsNullOrEmpty(value)) return value;
 
             return value.Length <= maxLength ? value : value.Substring(0, maxLength) + "...";
+        }
+
+        public static string RemoveHtmlTags(this string value)
+        {
+            if (value == null) return null;
+            var sanitizer = new WbHtmlSanitizer();
+            sanitizer.AllowedAttributes.Clear();
+            sanitizer.AllowedTags.Clear();
+
+            return sanitizer.Sanitize(value);
         }
     }
 }

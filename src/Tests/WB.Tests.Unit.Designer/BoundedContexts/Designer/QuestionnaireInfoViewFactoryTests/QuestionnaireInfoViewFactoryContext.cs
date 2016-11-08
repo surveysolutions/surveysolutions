@@ -1,18 +1,19 @@
 ﻿using System;
+using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Shared.Web.Membership;
+using It = Moq.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTests
 {
+    [Subject(typeof(QuestionnaireInfoViewFactory))]
     internal class QuestionnaireInfoViewFactoryContext
     {
         protected static QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId, string questionnaireTitle)
