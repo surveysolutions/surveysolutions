@@ -1,10 +1,22 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.Questionnaire.Documents
 {
     public static class QuestionnaireEntityExtensions
     {
+        public static IQuestionnaireEntity GetPrevious(this IQuestionnaireEntity entity)
+        {
+            var parent = entity.GetParent();
+            if (parent == null) return null;
+
+            var indexInParent = parent.Children.IndexOf(entity as IComposite);
+            if (indexInParent <= 0) return null;
+
+            return parent.Children[indexInParent - 1];
+        }
+
         public static string GetTitle(this IQuestionnaireEntity entity)
             => (entity as IQuestion)?.QuestionText
             ?? (entity as IStaticText)?.Text

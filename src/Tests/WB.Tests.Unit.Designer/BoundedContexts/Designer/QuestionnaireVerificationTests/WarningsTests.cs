@@ -1,3 +1,4 @@
+using System.Linq;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 
@@ -7,7 +8,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     internal class WarningsTests
     {
         [Test]
-        public void no_gps_question()
+        public void no_prefilled_questions()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Question(),
+                })
+                .ExpectWarning("WB0216");
+
+        [Test]
+        public void prefilled_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Question(isPrefilled: true),
+                })
+                .ExpectNoWarning("WB0216");
+
+        [Test]
+        public void variable_label_length_121()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Question(variableLabel: new string(Enumerable.Range(1, 121).Select(x => 'a').ToArray())),
+                })
+                .ExpectWarning("WB0217");
+
+        [Test]
+        public void variable_label_length_120()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Question(variableLabel: new string(Enumerable.Range(1, 120).Select(x => 'a').ToArray())),
+                })
+                .ExpectNoWarning("WB0217");
+
+        [Test]
+        public void no_gps_questions()
             => Create.QuestionnaireDocumentWithOneChapter(new[]
                 {
                     Create.Question(),
@@ -25,7 +58,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .AndWarning("WB0264");
 
         [Test]
-        public void no_barcode_question()
+        public void no_barcode_questions()
             => Create.QuestionnaireDocumentWithOneChapter(new[]
                 {
                     Create.Question(),
@@ -84,7 +117,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         [Test]
         public void questions_with_same_title()
-            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
                     Create.Question(title: "Question"),
                     Create.Question(title: "Question"),
@@ -93,11 +126,42 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         [Test]
         public void questions_with_different_titles()
-            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
                     Create.Question(title: "Question 1"),
                     Create.Question(title: "Question 2"),
                 })
                 .ExpectNoWarning("WB0266");
+
+        [Test]
+        public void consecutive_questions_with_same_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                })
+                .ExpectWarning("WB0218");
+
+        [Test]
+        public void independent_questions_with_same_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(),
+                    Create.Question(enablementCondition: "x > 10"),
+                })
+                .ExpectNoWarning("WB0218");
+
+        [Test]
+        public void questions_with_different_enablements()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "y > 10"),
+                    Create.Question(enablementCondition: "z > 10"),
+                })
+                .ExpectNoWarning("WB0218");
     }
 }
