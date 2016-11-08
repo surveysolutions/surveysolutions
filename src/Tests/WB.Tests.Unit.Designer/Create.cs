@@ -490,6 +490,7 @@ namespace WB.Tests.Unit.Designer
             string variableLabel =null,
             string title= "Question X test",
             string instructions = null,
+            bool isPrefilled = false,
             params Answer[] answers)
         {
             return new TextQuestion(title)
@@ -503,7 +504,8 @@ namespace WB.Tests.Unit.Designer
                 VariableLabel = variableLabel,
                 Instructions = instructions,
                 Answers = answers.ToList(),
-                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                Featured = isPrefilled,
             };
         }
 

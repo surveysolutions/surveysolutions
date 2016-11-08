@@ -9,8 +9,6 @@ namespace Main.Core.Entities.Composite
     {
         ReadOnlyCollection<IComposite> Children { get; set; }
 
-        IComposite GetParent();
-
         void SetParent(IComposite parent);
 
         T Find<T>(Guid publicKey) where T : class, IComposite;

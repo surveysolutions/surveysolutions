@@ -564,13 +564,13 @@
   <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
     <value>You have a barcode question. Tablets must support autofocus to be used with this questionnaire.</value>
   </data>
-  <data name="WB0216_" xml:space="preserve">
-    <value />
+  <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+    <value>No prefilled (identifying) questions are defined. Define at least one prefilled question.</value>
   </data>
-  <data name="WB0217_" xml:space="preserve">
-    <value />
+  <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+    <value>Variable label is too long (more than 120 chars) and will be truncated in SPSS file export.</value>
   </data>
-  <data name="WB0218_" xml:space="preserve">
-    <value />
+  <data name="WB0218_ConsecutiveIdenticalEnablementConditions" xml:space="preserve">
+    <value>Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section.</value>
   </data>
 </root>
