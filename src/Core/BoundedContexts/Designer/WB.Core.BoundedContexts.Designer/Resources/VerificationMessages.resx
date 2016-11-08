@@ -553,7 +553,7 @@
     <value>First section can not have enabling condition.</value>
   </data>
   <data name="WB0264_GpsQuestion" xml:space="preserve">
-    <value>You have a GPS question. Tablets must support autofocus to be used with this questionnaire.</value>
+    <value>You have a GPS question. Tablets must support geolocation to be used with this questionnaire.</value>
   </data>
   <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
     <value>More than 30% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead.</value>
