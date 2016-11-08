@@ -70,7 +70,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     CanApprove = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
                     CanReject = x.Status == InterviewStatus.ApprovedBySupervisor,
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
-                    CanAssingToOtherTeam = CanInterviewBeAssingToOtherTeam(x),
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     CreatedOnClient = x.WasCreatedOnClient,
@@ -78,18 +77,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }).ToList()
             };
             return result;
-        }
-
-        private bool CanInterviewBeAssingToOtherTeam(InterviewSummary interview)
-        {
-            if (interview.Status == InterviewStatus.SupervisorAssigned)
-                return true;
-
-            var isAssignedToInterviewer = interview.Status == InterviewStatus.RejectedBySupervisor || interview.Status == InterviewStatus.InterviewerAssigned;
-            if (isAssignedToInterviewer && !interview.ReceivedByInterviewer)
-                return true;
-
-            return false;
         }
 
         private static IQueryable<InterviewSummary> ApplyFilter(AllInterviewsInputModel input, IQueryable<InterviewSummary> _)
