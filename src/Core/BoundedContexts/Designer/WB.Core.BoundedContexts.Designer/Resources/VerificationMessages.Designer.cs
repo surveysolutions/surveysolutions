@@ -1396,7 +1396,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have a GPS question. Tablets must support autofocus to be used with this questionnaire..
+        ///   Looks up a localized string similar to You have a GPS question. Tablets must support geolocation to be used with this questionnaire..
         /// </summary>
         internal static string WB0264_GpsQuestion {
             get {
