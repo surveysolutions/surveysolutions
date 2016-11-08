@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -35,6 +36,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb),
             Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
             Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
+            Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
+            Warning<IQuestion>(VariableLableMoreThan120Characters, "WB0217", VerificationMessages.WB0217_VariableLableMoreThan120Characters),
+            WarningForCollection(ConsecutiveIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveIdenticalEnablementConditions),
 
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
@@ -47,6 +51,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.ValidationConditionRefersToAFutureQuestion,
             this.EnablementConditionRefersToAFutureQuestion
         };
+
+        private static bool VariableLableMoreThan120Characters(IQuestion question)
+            => (question.VariableLabel?.Length ?? 0) > 120;
 
         private static bool QuestionIsTooShort(IQuestion question)
         {
@@ -112,24 +119,32 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return result;
         }
 
-        private static IEnumerable<QuestionnaireNodeReference[]> SameTitle(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireNodeReference[]> ConsecutiveIdenticalEnablementConditions(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire
+                .Find<IQuestion>()
+                .GroupBy(question => new
+                {
+                    Enablement = question.ConditionExpression,
+                    FirstConsecutiveQuestionWithSameEnablement = question.UnwrapReferences(GetPreviousQuestionWithSameEnablement).Last(),
+                })
+                .Where(grouping => grouping.Count() > 2)
+                .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
+
+        private static IQuestion GetPreviousQuestionWithSameEnablement(IQuestion question)
         {
-            var questionsWithConditions = questionnaire.Find<IQuestion>();
+            var previousQuestion = question.GetPrevious() as IQuestion;
 
-            var duplicateGroupings = questionsWithConditions
-                .GroupBy(question => question.QuestionText)
-                .Where(grouping => grouping.Count() > 1);
-
-            foreach (var duplicateGrouping in duplicateGroupings)
-            {
-                QuestionnaireNodeReference[] references =
-                    duplicateGrouping
-                        .Select(question => CreateReference(question))
-                        .ToArray();
-
-                yield return references;
-            }
+            return previousQuestion?.ConditionExpression == question.ConditionExpression
+                ? previousQuestion
+                : null;
         }
+
+        private static IEnumerable<QuestionnaireNodeReference[]> SameTitle(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire
+                .Find<IQuestion>()
+                .GroupBy(question => question.QuestionText)
+                .Where(grouping => grouping.Count() > 1)
+                .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
         private IEnumerable<QuestionnaireVerificationMessage> ValidationConditionRefersToAFutureQuestion(
             MultiLanguageQuestionnaireDocument questionnaire)
@@ -189,6 +204,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool HasNoGpsQuestions(MultiLanguageQuestionnaireDocument questionnaire)
             => !questionnaire.Find<IQuestion>(q => q.QuestionType == QuestionType.GpsCoordinates).Any();
+
+        private static bool NoPrefilledQuestions(MultiLanguageQuestionnaireDocument questionnaire)
+            => !questionnaire.Find<IQuestion>(q => q.Featured).Any();
 
         private static bool CategoricalQuestionHasALotOfOptions(IQuestion question)
             => question.QuestionType == QuestionType.SingleOption

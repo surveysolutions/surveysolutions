@@ -1252,29 +1252,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to No prefilled (identifying) questions are defined. Define at least one prefilled question..
         /// </summary>
-        internal static string WB0216_ {
+        internal static string WB0216_NoPrefilledQuestions {
             get {
-                return ResourceManager.GetString("WB0216_", resourceCulture);
+                return ResourceManager.GetString("WB0216_NoPrefilledQuestions", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Variable label is too long (more than 120 chars) and will be truncated in SPSS file export..
         /// </summary>
-        internal static string WB0217_ {
+        internal static string WB0217_VariableLableMoreThan120Characters {
             get {
-                return ResourceManager.GetString("WB0217_", resourceCulture);
+                return ResourceManager.GetString("WB0217_VariableLableMoreThan120Characters", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section..
         /// </summary>
-        internal static string WB0218_ {
+        internal static string WB0218_ConsecutiveIdenticalEnablementConditions {
             get {
-                return ResourceManager.GetString("WB0218_", resourceCulture);
+                return ResourceManager.GetString("WB0218_ConsecutiveIdenticalEnablementConditions", resourceCulture);
             }
         }
         
