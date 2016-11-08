@@ -116,13 +116,25 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.InterviewDetails_ShowGroupsLabel</button></span>
-                @if (((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
-                     || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
+                @{
+                    bool isSupervisorApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
+                    bool isHeadquarteerOrAdminApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+
+                    bool isSupervisorRedjectSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
+                    bool isHeadquarteerOrAdminRedjectSupport = (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+
+                    bool isHeadquarteerOrAdminUnapproveSupport = Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator);
+                }
+                
+                @if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
                 {
                     <button class="btn btn-success " data-bind="click: showApproveModal">@Pages.ApproveRejectPartialView_ApproveAction</button>
+                }
+                @if (isSupervisorRedjectSupport || isHeadquarteerOrAdminRedjectSupport)
+                {
                     <button class="btn btn-danger" data-bind="click: showRejectModal">@Pages.ApproveRejectPartialView_RejectAction</button>
                 }
-                @if (Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
+                @if (isHeadquarteerOrAdminUnapproveSupport)
                 {
                     <button class="btn" data-bind="click: showUnapproveByHeadquarterModal">@Pages.ApproveRejectPartialView_UnapproveAction</button>
                 }
