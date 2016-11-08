@@ -394,7 +394,6 @@
     <Compile Include="SyncProvider\ISyncEventHandler.cs" />
     <Compile Include="SyncProvider\SyncEventHandler.cs" />
     <Compile Include="SyncSettings.cs" />
-    <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingDataRecord.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingProcess.cs" />
     <Compile Include="UserPreloading\Dto\UserPreloadingVerificationError.cs" />
