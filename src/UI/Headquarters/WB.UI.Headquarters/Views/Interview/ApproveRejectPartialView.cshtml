@@ -3,9 +3,17 @@
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 @model InterviewStatus
 
+@{
+    bool isSupervisorApproveSupport = ((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
+    bool isHeadquarteerOrAdminApproveSupport = ((Model == InterviewStatus.Completed || Model == InterviewStatus.ApprovedBySupervisor) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
 
-@if (((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) 
-    || ((Model == InterviewStatus.ApprovedBySupervisor || Model == InterviewStatus.ApprovedByHeadquarters) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
+    bool isSupervisorRedjectSupport = ((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
+    bool isHeadquarteerOrAdminRedjectSupport = (Model == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+
+    bool isHeadquarteerOrAdminUnapproveSupport = Model == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator);
+}
+
+@if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
 {
     <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -25,7 +33,10 @@
             </div>
         </div>
     </div>
+}
 
+@if (isSupervisorRedjectSupport || isHeadquarteerOrAdminRedjectSupport)
+{
     <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -44,7 +55,10 @@
             </div>
         </div>
     </div>
+}
 
+@if (isHeadquarteerOrAdminUnapproveSupport)
+{
     <div class="modal fade" id="unapproveByHeadquarterModal" tabindex="-1" role="dialog" aria-labelledby="unapproveInterviewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
