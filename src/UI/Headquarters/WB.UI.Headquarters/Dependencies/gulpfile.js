@@ -2,7 +2,6 @@
     plugins = require('gulp-load-plugins')(),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
-    del = require('del'),
     mainBowerFiles = require('main-bower-files'),
     sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
@@ -12,28 +11,32 @@
     rename = require('gulp-rename');
 
 var config = {
-    production: !!util.env.production
+    production: !!util.env.production,
+    buildDir: './build',
+    loginPath: '../Views/Account/LogIn.cshtml',
+    cssSource: './css/markup.scss',
+    cssInjectSectionName: 'markup'
 };
 
 gulp.task('styles', function () {
-    var target = gulp.src('./css/markup.scss');
+    var target = gulp.src(config.cssSource);
     return target
         .pipe(sass())
         .pipe(autoprefixer('last 2 version'))
-        .pipe(gulp.dest('./build'))
+        .pipe(gulp.dest(config.buildDir))
         .pipe(rename({ suffix: '.min' }))
         .pipe(plugins.rev())
         .pipe(cssnano())
-    	.pipe(gulp.dest('./build'));
+    	.pipe(gulp.dest(config.buildDir));
 });
 
 gulp.task('login', ['styles'], function () {
-    var target = gulp.src('../Views/Account/LogIn.cshtml');
-    var sources = gulp.src('./build/markup-*.min.css', { read: false });
+    var target = gulp.src(config.loginPath);
+    var sources = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
 
     if (config.production) {
         return target
-            .pipe(plugins.inject(sources, { relative: true, name: 'markup' }))
+            .pipe(plugins.inject(sources, { relative: true, name: config.cssInjectSectionName }))
             .pipe(gulp.dest('../Views/Account/'));
     }
 
@@ -41,7 +44,7 @@ gulp.task('login', ['styles'], function () {
 });
 
 gulp.task('clean', function () {
-    return gulp.src('./build/*');//.pipe(plugins.clean());
+    return gulp.src(config.buildDir + '/*').pipe(plugins.clean());
 });
 
 gulp.task('default', ['clean'], function () {
