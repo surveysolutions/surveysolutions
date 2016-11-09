@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
 
             interview.FindReferencedRostersForLinkedQuestion(linkToRosterId, questionIdentity)
                 .Returns(new List<InterviewRoster> { Create.Entity.InterviewRoster(rosterId: linkToRosterId, rosterTitle: "title1")});
-            interview.GetParentRosterTitlesWithoutLastForRoster(linkToRosterId, RosterVector.Empty)
+            interview.GetParentRosterTitlesWithoutLastForRoster(TODO)
                 .ReturnsForAnyArgs(new List<string>() {"item"});
         };
 

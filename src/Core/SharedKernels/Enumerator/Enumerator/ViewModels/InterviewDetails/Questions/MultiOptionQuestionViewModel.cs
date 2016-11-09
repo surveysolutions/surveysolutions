@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
@@ -13,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -102,9 +100,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateQuestionOptions()
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
-            MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(questionIdentity);
+            var answerOnMultiOptionQuestion = interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer();
             var optionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select((x, index) => this.ToViewModel(x, existingAnswer))
+                .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion))
                 .ToList();
 
             this.Options.ForEach(x => x.DisposeIfDisposable());
@@ -132,17 +130,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasOptions => true;
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer)
+        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, decimal[] multiOptionAnswer)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {
                 Value = model.Value,
                 Title = model.Title,
                 Checked = multiOptionAnswer != null &&
-                          multiOptionAnswer.IsAnswered &&
-                          multiOptionAnswer.Answers.Any(x => model.Value == x),
+                          multiOptionAnswer.Any(x => model.Value == x),
             };
-            var indexOfAnswer = Array.IndexOf(multiOptionAnswer.Answers ?? new decimal[]{}, model.Value);
+            var indexOfAnswer = Array.IndexOf(multiOptionAnswer ?? new decimal[]{}, model.Value);
 
             result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?) null;
             result.QuestionState = this.questionState;

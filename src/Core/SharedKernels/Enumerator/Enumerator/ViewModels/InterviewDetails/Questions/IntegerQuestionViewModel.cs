@@ -146,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
+            var answerModel = interview.GetIntegerQuestion(entityIdentity);
 
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
@@ -156,8 +156,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (answerModel.IsAnswered)
             {
-                this.Answer = answerModel.Answer;
-                this.previousAnswer = Monads.Maybe(() => answerModel.Answer);
+                this.Answer = answerModel.GetAnswer();
+                this.previousAnswer = Monads.Maybe(() => answerModel.GetAnswer());
             }
             this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
             var isRosterSizeOfLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(entityIdentity.Id);

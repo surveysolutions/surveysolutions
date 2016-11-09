@@ -31,7 +31,6 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<ISubstitionTextFactory>().To<SubstitionTextFactory>();
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
-            this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
             this.Bind<IOptionsRepository>().To<OptionsRepository>();
             this.Bind<IQuestionOptionsRepository>().To<QuestionOptionsRepository>();
 

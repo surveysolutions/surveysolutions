@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 );
 
             var interview = Substitute.For<IStatefulInterview>();
-            interview.GetParentRosterTitlesWithoutLast(linkToQuestionId, Create.Entity.RosterVector(1, 1))
+            interview.GetParentRosterTitlesWithoutLast(TODO)
                 .Returns(new List<string> {"title"});
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkToQuestionId, questionIdentity)
                 .Returns(new [] { Create.Entity.TextAnswer("subtitle", linkToQuestionId, Create.Entity.RosterVector(1, 1))});
