@@ -92,7 +92,7 @@
                                 <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
                                     <div class="inner">
                                         <a class="handler" ui-tree-handle><span></span></a>
-                                        <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">{{chapter.title}}</a>
+                                        <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})" ng-bind-html="chapter.title | escape"></a>
                                     </div>
                                 </div>
                                 <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
