@@ -11,6 +11,7 @@
     "gulp-debug": "^3.0.0",
     "gulp-inject": "^4.1.0",
     "gulp-load-plugins": "^1.4.0",
+    "gulp-ng-annotate": "^2.0.0",
     "gulp-notify": "^2.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-rev": "^7.1.2",
