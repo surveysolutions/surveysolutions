@@ -579,4 +579,7 @@
   <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
     <value>Using @rowindex with a multi-choice roster may be unstable. Consider using @rowcode instead.</value>
   </data>
+  <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+    <value>No current time question was found. Consider recording the date of interview in your questionnaire.</value>
+  </data>
 </root>

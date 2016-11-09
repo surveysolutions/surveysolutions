@@ -37,6 +37,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Questionnaire.Find<T>(condition);
 
+        public bool Has<T>(Func<T, bool> condition) where T : class
+            => this.Questionnaire.Find<T>(condition).Any();
+
         public IEnumerable<T> FindInGroup<T>(Guid groupId)
              => this.Questionnaire.FindInGroup<T>(groupId);
 
