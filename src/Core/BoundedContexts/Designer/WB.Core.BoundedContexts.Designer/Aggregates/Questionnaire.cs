@@ -537,6 +537,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             innerDocument.Attachments.RemoveAll(x => x.AttachmentId == command.AttachmentId);
+
+            if(command.OldAttachmentId.HasValue)
+                innerDocument.Attachments.RemoveAll(x => x.AttachmentId == command.OldAttachmentId.Value);
+
             innerDocument.Attachments.Add(new Attachment
             {
                 AttachmentId = command.AttachmentId,
@@ -565,6 +569,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Name = command.Name,
             };
             innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
+
+            if(command.OldTranslationId.HasValue)
+                innerDocument.Translations.RemoveAll(x => x.Id == command.OldTranslationId.Value);
+
             innerDocument.Translations.Add(translation);
         }
 
@@ -599,12 +607,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateLookupTable(UpdateLookupTable command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.LookupTableId, command.LookupTableName, DefaultVariableLengthLimit);
 
-            if (!this.innerDocument.LookupTables.ContainsKey(command.LookupTableId))
+            if (command.OldLookupTableId.HasValue)
             {
-                throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
+                if (innerDocument.LookupTables.ContainsKey(command.OldLookupTableId.Value))
+                    innerDocument.LookupTables.Remove(command.OldLookupTableId.Value);
             }
 
             innerDocument.LookupTables[command.LookupTableId] = new LookupTable

@@ -927,7 +927,7 @@ namespace WB.Tests.Unit.Designer
             
             public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)
             {
-                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId);
+                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId, null);
             }
 
             public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
@@ -951,7 +951,7 @@ namespace WB.Tests.Unit.Designer
 
             public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, Guid responsibleId)
             {
-                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name);
+                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name, null);
             }
 
             public static DeleteTranslation DeleteTranslation(Guid questionnaireId, Guid translationId, Guid responsibleId)
