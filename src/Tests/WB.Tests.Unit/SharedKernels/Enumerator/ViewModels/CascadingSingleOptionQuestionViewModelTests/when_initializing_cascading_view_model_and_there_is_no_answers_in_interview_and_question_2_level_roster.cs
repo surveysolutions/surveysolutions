@@ -18,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var parentOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == false);
 
             var interview = Mock.Of<IStatefulInterview>(_ 
-                => _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer
-                   && _.GetSingleOptionAnswer(parentIdentity) == parentOptionAnswer);
+                => _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer
+                   && _.GetSingleOptionQuestion(parentIdentity) == parentOptionAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 

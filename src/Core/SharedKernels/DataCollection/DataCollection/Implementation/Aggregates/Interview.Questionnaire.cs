@@ -21,10 +21,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire;
         }
 
-        private static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
+        protected static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
             => $"'{GetQuestionTitleForException(questionId, questionnaire)} [{GetQuestionVariableNameForException(questionId, questionnaire)}]'";
 
-        private static string FormatGroupForException(Guid groupId, IQuestionnaire questionnaire)
+        protected static string FormatGroupForException(Guid groupId, IQuestionnaire questionnaire)
             => $"'{GetGroupTitleForException(groupId, questionnaire)} ({groupId:N})'";
 
         private static string GetQuestionTitleForException(Guid questionId, IQuestionnaire questionnaire)

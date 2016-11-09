@@ -53,10 +53,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
          
-            this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.group);
+            this.QuestionsCount = interview.CountEnabledQuestions(this.group);
             this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
-            this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.group);
-            this.InvalidAnswersCount = interview.CountInvalidInterviewerEntitiesInGroupOnly(this.group);
+            this.AnsweredQuestionsCount = interview.CountEnabledAnsweredQuestions(this.group);
+            this.InvalidAnswersCount = interview.CountEnabledInvalidQuestionsAndStaticTexts(this.group);
 
             this.SimpleStatus = CalculateSimpleStatus(this.group, interview);
 
@@ -65,10 +65,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private static SimpleGroupStatus CalculateSimpleStatus(Identity group, IStatefulInterview interview)
         {
-            if (interview.HasInvalidInterviewerQuestionsInGroupOnly(group))
+            if (interview.HasEnabledInvalidQuestionsAndStaticTexts(group))
                 return SimpleGroupStatus.Invalid;
 
-            if (interview.HasUnansweredInterviewerQuestionsInGroupOnly(group))
+            if (interview.HasUnansweredQuestions(group))
                 return SimpleGroupStatus.Other;
 
             bool isSomeSubgroupNotCompleted = interview

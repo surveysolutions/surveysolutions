@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
             if (!cascadingQuestionParentId.HasValue) throw new ArgumentNullException("parent of cascading question is missing");
 
-            var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
+            
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
@@ -106,16 +106,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
 
-            var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
-            if (parentAnswerModel.IsAnswered)
+            var parentSingleOptionQuestion = interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
+            if (parentSingleOptionQuestion.IsAnswered)
             {
-                this.answerOnParentQuestion = parentAnswerModel.Answer;
+                this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer();
             }
 
-            if (answerModel.IsAnswered)
+            var singleOptionQuestion = interview.GetSingleOptionQuestion(entityIdentity);
+            if (singleOptionQuestion.IsAnswered)
             {
-                var selectedValue = answerModel.Answer;
-                var answerOption = this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, (int)selectedValue.Value, (int?)parentAnswerModel.Answer);
+                var answerOption = this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity,
+                    singleOptionQuestion.GetAnswer(), (int?)this.answerOnParentQuestion);
+
                 this.selectedObject = this.CreateFormattedOptionModel(answerOption);
                 this.ResetTextInEditor = this.selectedObject.OriginalText;
                 this.FilterText = this.selectedObject.OriginalText;
@@ -353,10 +355,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                var parentAnswerModel = this.interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
-                if (parentAnswerModel.IsAnswered)
+                var parentSingleOptionQuestion = this.interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
+                if (parentSingleOptionQuestion.IsAnswered)
                 {
-                    this.answerOnParentQuestion = parentAnswerModel.Answer;
+                    this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer();
                     this.UpdateSuggestionsList(string.Empty);
                 }              
             }

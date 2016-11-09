@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     Create.Entity.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{2, 2})
                 });
 
-            interview.GetParentRosterTitlesWithoutLast(secondRosterTitlQuestionId, linkedAnswerRosterVector)
+            interview.GetParentRosterTitlesWithoutLast(TODO)
                 .Returns(new List<string> {
                     "nastya"
                 });
