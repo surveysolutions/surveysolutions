@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
             Warning<IQuestion>(VariableLableMoreThan120Characters, "WB0217", VerificationMessages.WB0217_VariableLableMoreThan120Characters),
             WarningForCollection(ConsecutiveQuestionsWithIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions),
+            WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options),
 
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
@@ -119,6 +120,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return result;
         }
 
+        private static IEnumerable<QuestionnaireNodeReference[]> ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire
+                .Find<SingleQuestion>()
+                .Where(IsUnconditionalWith2Options)
+                .GroupBy(question => new
+                {
+                    FirstConsecutiveUnconditionalSingleOptionQuestionWith2Options = question.UnwrapReferences(GetPreviousUnconditionalSingleOptionQuestionWith2Options).Last(),
+                })
+                .Where(grouping => grouping.Count() >= 3)
+                .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
+
+        private static SingleQuestion GetPreviousUnconditionalSingleOptionQuestionWith2Options(SingleQuestion question)
+        {
+            var previousQuestion = question.GetPrevious() as SingleQuestion;
+
+            return previousQuestion != null && IsUnconditionalWith2Options(previousQuestion) 
+                ? previousQuestion
+                : null;
+        }
+
+        private static bool IsUnconditionalWith2Options(SingleQuestion question)
+            => string.IsNullOrWhiteSpace(question.ConditionExpression)
+            && question.Answers.Count == 2;
+
         private static IEnumerable<QuestionnaireNodeReference[]> ConsecutiveQuestionsWithIdenticalEnablementConditions(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<IQuestion>()
@@ -127,7 +152,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Enablement = question.ConditionExpression,
                     FirstConsecutiveQuestionWithSameEnablement = question.UnwrapReferences(GetPreviousQuestionWithSameEnablement).Last(),
                 })
-                .Where(grouping => grouping.Count() > 2)
+                .Where(grouping => grouping.Count() >= 3)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
         private static IQuestion GetPreviousQuestionWithSameEnablement(IQuestion question)
