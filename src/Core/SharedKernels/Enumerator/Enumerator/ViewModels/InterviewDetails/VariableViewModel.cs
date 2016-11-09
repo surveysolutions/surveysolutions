@@ -22,21 +22,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry registry;
-        private readonly IEnumeratorSettings settings;
 
         private string variableName;
-        private string variableDescription;
+        private string variableLabel;
         private object variableValue;
 
         public VariableViewModel(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry registry,
-            IEnumeratorSettings settings)
+            ILiteEventRegistry registry)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.registry = registry;
-            this.settings = settings;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -44,26 +41,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            if (!this.IsVisible)
-                return;
-
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.Identity = entityIdentity;
-            variableDescription = questionnaire.GetVariableDescription(entityIdentity.Id);
-            variableName        = questionnaire.GetVariableName(entityIdentity.Id);
-            variableValue       = interview.GetVariableValueByOrDeeperRosterLevel(entityIdentity.Id, entityIdentity.RosterVector);
+            this.variableLabel  = questionnaire.GetVariableLabel(entityIdentity.Id);
+            this.variableName   = questionnaire.GetVariableName(entityIdentity.Id);
+            this.variableValue  = interview.GetVariableValueByOrDeeperRosterLevel(entityIdentity.Id, entityIdentity.RosterVector);
             this.RaisePropertyChanged(nameof(Text));
 
             this.registry.Subscribe(this, interviewId);
         }
 
         public string Text => this.variableName + ": " + (this.variableValue.ToString() ?? UIResources.VariableEmptyValue);
-        public string Description => this.variableDescription;
-        public bool IsShowDescription => !string.IsNullOrEmpty(this.variableDescription);
-
-        public bool IsVisible => settings.ShowVariables;
+        public string Label => this.variableLabel;
+        public bool HasLabel => !string.IsNullOrEmpty(this.variableLabel);
 
         public void Handle(VariablesChanged @event)
         {

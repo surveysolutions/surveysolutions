@@ -97,7 +97,7 @@ namespace WB.UI.Designer.Api
                 TypeOptions = variableView.TypeOptions,
                 Type = variableView.VariableData.Type,
                 breadcrumbs = variableView.Breadcrumbs,
-                description = variableView.VariableData.Description
+                description = variableView.VariableData.Label
             });
 
             return result;

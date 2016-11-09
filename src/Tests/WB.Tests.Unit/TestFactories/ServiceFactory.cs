@@ -56,6 +56,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -279,6 +280,15 @@ namespace WB.Tests.Unit.TestFactories
         public ISubstitionTextFactory SubstitionTextFactory()
         {
             return new SubstitionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
+        }
+
+        public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository,
+            IEnumeratorSettings settings)
+        {
+            return new InterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                settings ?? Mock.Of<IEnumeratorSettings>());
         }
     }
 }

@@ -746,7 +746,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return targetRoster;
         }
 
-        public string GetVariableDescription(Guid variableId) => this.GetVariable(variableId).Description;
+        public string GetVariableLabel(Guid variableId) => this.GetVariable(variableId).Label;
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
 

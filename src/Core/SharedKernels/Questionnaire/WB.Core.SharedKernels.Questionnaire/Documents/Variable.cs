@@ -16,11 +16,11 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
                 this.Type = variableData.Type;
                 this.Name = variableData.Name;
                 this.Expression = variableData.Expression;
-                this.Description = variableData.Description;
+                this.Label = variableData.Label;
             }
         }
 
-        public string Description { get; set; }
+        public string Label { get; set; }
         public Guid PublicKey { get; set; }
         public VariableType Type { get; set; }
         public string Name { get; set; }
