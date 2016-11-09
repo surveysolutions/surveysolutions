@@ -15,11 +15,13 @@ namespace WB.Core.BoundedContexts.Designer.Commands
 
             if (!removeAllTags)
             {
+                sanitizer.AllowedTags.Clear();
                 sanitizer.AllowedTags.AddRange(new[]
                 {
                     "u", "s", "i", "b", "br", "font", "tt", "big", "strong", "small", "sup", "sub", "blockquote",
                     "cite", "dfn", "p", "h1", "em"
                 });
+                sanitizer.AllowedAttributes.Clear();
                 sanitizer.AllowedAttributes.AddRange(new[] {"color", "size"});
             }
             else
