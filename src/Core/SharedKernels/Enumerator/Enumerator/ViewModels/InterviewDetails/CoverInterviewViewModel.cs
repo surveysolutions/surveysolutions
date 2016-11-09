@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -23,7 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ICommandService commandService;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IAnswerToStringService answerToStringService;
         protected readonly IPrincipal principal;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
@@ -37,7 +33,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             DynamicTextViewModel dynamicTextViewModel, 
             IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository, 
-            IAnswerToStringService answerToStringService, 
             IEntitiesListViewModelFactory entitiesListViewModelFactory, 
             IDynamicTextViewModelFactory dynamicTextViewModelFactory)
         {
@@ -48,7 +43,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name = dynamicTextViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.answerToStringService = answerToStringService;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
@@ -88,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Select(questionId => new CoverPrefilledQuestion
                 {
                     Question = this.CreateQuestionTitle(interviewId, new Identity(questionId, RosterVector.Empty), questionnaire.GetQuestionTitle(questionId)),
-                    Answer = this.GetAnswer(questionnaire, interview, questionId)
+                    Answer = interview.GetAnswerAsString(Identity.Create(questionId, RosterVector.Empty))
                 })
                 .ToList();
            
@@ -121,13 +115,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             await this.commandService.WaitPendingCommandsAsync();
             this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
-        }
-
-        private string GetAnswer(IQuestionnaire questionnaire, IStatefulInterview interview, Guid referenceToQuestionId)
-        {
-            var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestionId, RosterVector.Empty);
-            var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
-            return this.answerToStringService.AnswerToUIString(referenceToQuestionId, interviewAnswer, interview, questionnaire);
         }
     }
 }

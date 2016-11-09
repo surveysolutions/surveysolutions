@@ -245,7 +245,7 @@
     <Compile Include="Converters\QuestionCornerOptionBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionOptionBackgroundConverter.cs" />
     <Compile Include="Converters\QuestionStateStyle.cs" />
-    <Compile Include="Converters\RoleToColorConverter.cs" />
+    <Compile Include="Converters\IsCurrentUserCommentToColorConverter.cs" />
     <Compile Include="Converters\SectionStyleBackgroundConverter.cs" />
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />

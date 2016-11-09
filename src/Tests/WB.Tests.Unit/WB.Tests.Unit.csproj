@@ -727,8 +727,6 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_questionnaire_has_such_group_and_group_is_not_in_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_0.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_1_and_referenced_answers_are_on_roster_level_1.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_staticTexts_recursively.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_variable_value_for_question_in_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
@@ -1054,7 +1052,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_where_int_question_triggers_roster_and_answer_on_roster_titel_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_interviewer_entities.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\InterviewStatusTimeSpanDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_approved_by_hq_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_completed_event_recived.cs" />
