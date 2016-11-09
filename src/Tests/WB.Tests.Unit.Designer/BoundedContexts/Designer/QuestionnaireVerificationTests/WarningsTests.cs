@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
@@ -7,6 +8,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     [TestFixture]
     internal class WarningsTests
     {
+        [Test]
+        public void no_current_time_questions()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.DateTimeQuestion(),
+                })
+                .ExpectWarning("WB0221");
+
+        [Test]
+        public void current_time_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.DateTimeQuestion(isCurrentTime: true),
+                })
+                .ExpectNoWarning("WB0221");
+
         [Test]
         public void no_prefilled_questions()
             => Create.QuestionnaireDocumentWithOneChapter(new[]
@@ -155,7 +172,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0218");
 
         [Test]
-        public void questions_with_different_enablements()
+        public void consecutive_questions_with_different_enablements()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
                     Create.Question(enablementCondition: "x > 10"),
@@ -163,5 +180,118 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.Question(enablementCondition: "z > 10"),
                 })
                 .ExpectNoWarning("WB0218");
+
+        [Test]
+        public void consecutive_unconditional_single_option_questions_with_2_options()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2 }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 10, 20 }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 100, 200 }),
+                })
+                .ExpectWarning("WB0219");
+
+        [Test]
+        public void consecutive_unconditional_single_option_questions_with_3_options()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 3 }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 10, 20, 30 }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 100, 200, 300 }),
+                })
+                .ExpectNoWarning("WB0219");
+
+        [Test]
+        public void independent_unconditional_single_option_questions_with_2_options()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2 }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 10, 20 }),
+                    Create.Question(),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 100, 200 }),
+                })
+                .ExpectNoWarning("WB0219");
+
+        [Test]
+        public void consecutive_conditional_single_option_questions_with_2_options()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2 }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 10, 20 }, enablementCondition: "x > 0"),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 100, 200 }),
+                })
+                .ExpectNoWarning("WB0219");
+
+        [Test]
+        public void question_after_question_with_expression_referencing_it()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "x > 0"),
+                    Create.Question(variable: "x"),
+                })
+                .ExpectWarning("WB0220");
+
+        [Test]
+        public void question_after_static_text_with_expression_referencing_it()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.StaticText(validationConditions: new [] { Create.ValidationCondition(expression: "x > 0") }),
+                    Create.Question(variable: "x"),
+                })
+                .ExpectWarning("WB0220");
+
+        [Test]
+        public void question_after_group_with_expression_referencing_it()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Group(enablementCondition: "x > 0"),
+                    Create.Question(variable: "x"),
+                })
+                .ExpectWarning("WB0220");
+
+        [Test]
+        public void question_after_group_having_question_with_expression_referencing_it()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Group(children: new []
+                    {
+                        Create.Question(validationConditions: new [] { Create.ValidationCondition(expression: "x > 0") }),
+                    }),
+                    Create.Question(variable: "x"),
+                })
+                .ExpectWarning("WB0220");
+
+        [Test]
+        public void question_before_question_with_expression_referencing_it()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Question(variable: "x"),
+                    Create.Question(enablementCondition: "x > 0"),
+                })
+                .ExpectNoWarning("WB0220");
+
+        [Test]
+        public void used_rowindex_inside_multioption_based_roster()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.MultipleOptionsQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111"), children: new []
+                    {
+                        Create.Question(enablementCondition: "@rowindex > 2"),
+                    }),
+                })
+                .ExpectWarning("WB0222");
+
+        [Test]
+        public void used_rowcode_inside_multioption_based_roster()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.MultipleOptionsQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111"), children: new []
+                    {
+                        Create.Question(enablementCondition: "@rowcode > 2"),
+                    }),
+                })
+                .ExpectNoWarning("WB0222");
     }
 }

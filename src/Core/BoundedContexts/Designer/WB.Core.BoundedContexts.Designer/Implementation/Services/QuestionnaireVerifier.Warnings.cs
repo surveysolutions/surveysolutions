@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
             Warning<IQuestion>(VariableLableMoreThan120Characters, "WB0217", VerificationMessages.WB0217_VariableLableMoreThan120Characters),
-            WarningForCollection(ConsecutiveIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveIdenticalEnablementConditions),
+            WarningForCollection(ConsecutiveQuestionsWithIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions),
 
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return result;
         }
 
-        private static IEnumerable<QuestionnaireNodeReference[]> ConsecutiveIdenticalEnablementConditions(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireNodeReference[]> ConsecutiveQuestionsWithIdenticalEnablementConditions(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<IQuestion>()
                 .GroupBy(question => new
