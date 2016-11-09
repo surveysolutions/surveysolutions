@@ -1,0 +1,24 @@
+{
+  "name": "Headquarters",
+  "authors": [
+    "The World Bank"
+  ],
+  "description": "Survey managment tool",
+  "keywords": [
+    "survey",
+    "managment"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "bootstrap-sass": "^3.3.7"
+  }
+}
