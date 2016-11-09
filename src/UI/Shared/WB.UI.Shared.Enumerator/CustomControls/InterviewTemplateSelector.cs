@@ -97,13 +97,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
             }
 
-            var variableViewModel = source as VariableViewModel;
-            if (variableViewModel != null && !variableViewModel.IsVisible)
-            {
-                return UnknownViewType;
-            }
-
-
             return EntityTemplates.ContainsKey(typeOfViewModel)
                 ? EntityTemplates[typeOfViewModel]
                 : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] : UnknownViewType;

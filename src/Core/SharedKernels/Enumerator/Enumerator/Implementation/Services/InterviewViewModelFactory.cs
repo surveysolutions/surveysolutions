@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -51,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IEnumeratorSettings settings;
 
         private readonly Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>> EntityTypeToViewModelMap =
             new Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>>
@@ -79,14 +81,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.VariableModel, Load<VariableViewModel>},
             };
 
-        private static T Load<T>() where T : class => Mvx.Resolve<T>();
+        private static T Load<T>() where T : class => ServiceLocator.Current.GetInstance<T>();
 
         public InterviewViewModelFactory(
             IQuestionnaireStorage questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository)
+            IStatefulInterviewRepository interviewRepository,
+            IEnumeratorSettings settings)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.settings = settings;
         }
 
         public IEnumerable<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
@@ -123,11 +127,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             IReadOnlyList<Guid> groupWithoutNestedChildren = questionnaire.GetAllUnderlyingInterviewerEntities(groupIdentity.Id);
 
-            IEnumerable<IInterviewEntityViewModel> viewmodels = groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
-                identity: new Identity(questionnaireEntity, groupIdentity.RosterVector),
-                entityModelType: GetEntityModelType(questionnaireEntity, questionnaire),
-                interviewId: interviewId,
-                navigationState: navigationState)).ToList();
+            IEnumerable<IInterviewEntityViewModel> viewmodels = groupWithoutNestedChildren
+                .Where(entityId => !questionnaire.HasVariable(entityId) || this.settings.ShowVariables)
+                .Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
+                    identity: new Identity(questionnaireEntity, groupIdentity.RosterVector),
+                    entityModelType: GetEntityModelType(questionnaireEntity, questionnaire),
+                    interviewId: interviewId,
+                    navigationState: navigationState))
+                .ToList();
 
             return viewmodels;
         }
