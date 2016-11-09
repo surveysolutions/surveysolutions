@@ -1,6 +1,7 @@
-﻿using Ganss.XSS;
+﻿using System.Web;
+using Ganss.XSS;
 
-namespace WB.UI.Shared.Web.Extensions
+namespace WB.Infrastructure.Native.Sanitizer
 {
     public class WbHtmlSanitizer : HtmlSanitizer
     {
@@ -10,8 +11,8 @@ namespace WB.UI.Shared.Web.Extensions
             var parentNode = tag.Parent;
             if (parentNode.Owner == null) return;
 
-            string innerText = System.Web.HttpUtility.HtmlDecode(tag.TextContent.Replace("&#65533;",""));
-            string innerHtml = System.Web.HttpUtility.HtmlDecode(tag.InnerHtml.Replace("&#65533;",""));
+            string innerText = HttpUtility.HtmlDecode(tag.TextContent.Replace("&#65533;",""));
+            string innerHtml = HttpUtility.HtmlDecode(tag.InnerHtml.Replace("&#65533;",""));
             if (!string.IsNullOrWhiteSpace(innerText) && innerText == innerHtml)
             {
                 var text = parentNode.Owner.CreateTextNode(innerText);

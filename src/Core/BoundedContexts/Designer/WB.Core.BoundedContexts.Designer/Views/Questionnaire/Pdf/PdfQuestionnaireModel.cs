@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.UI.Shared.Web.Extensions;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {

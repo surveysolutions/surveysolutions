@@ -581,9 +581,11 @@ namespace WB.Tests.Unit.TestFactories
             bool isPrefilled = false,
             bool hideIfDisabled = false,
             bool useFormatting = false,
+            string questionText = null,
             IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
             => new NumericQuestion
             {
+                QuestionText = questionText ?? "text",
                 QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
