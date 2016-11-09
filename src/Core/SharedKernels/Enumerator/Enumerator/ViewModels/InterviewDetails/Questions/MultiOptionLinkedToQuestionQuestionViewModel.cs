@@ -4,12 +4,11 @@ using System.Linq;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -20,9 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<LinkedOptionsChanged>,
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
-        private readonly IAnswerToStringService answerToStringService;
         private Guid linkedToQuestionId;
-        private readonly IQuestionnaireStorage questionnaireRepository;
         private HashSet<Guid> parentRosterIds;
 
         public MultiOptionLinkedToQuestionQuestionViewModel(
@@ -30,17 +27,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToStringService answerToStringService,
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher, 
-            IQuestionnaireStorage questionnaireRepository)
-            : base(
-                questionState, answering, instructionViewModel, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
+            : base(questionState, answering, instructionViewModel, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
                 mainThreadDispatcher)
         {
-            this.answerToStringService = answerToStringService;
-            this.questionnaireRepository = questionnaireRepository;
         }
 
         protected override void InitFromModel(IQuestionnaire questionnaire)
@@ -53,23 +45,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected override IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions()
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
+            var linkedQuestion = interview.GetLinkedMultiOptionQuestion(this.questionIdentity);
 
-            LinkedMultiOptionAnswer thisQuestionAnswers = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
-            IEnumerable<BaseInterviewAnswer> linkedToQuestionAnswers =
-                interview.FindAnswersOfReferencedQuestionForLinkedQuestion(this.linkedToQuestionId, this.questionIdentity);
+            var answeredOptions = linkedQuestion.GetAnswer()?.Select(x => new RosterVector(x))?.ToArray() ??
+                                  new RosterVector[0];
 
-            List<MultiOptionLinkedQuestionOptionViewModel> options = new List<MultiOptionLinkedQuestionOptionViewModel>();
-            foreach (var answer in linkedToQuestionAnswers)
-            {
-                var option = this.BuildOption(questionnaire, this.linkedToQuestionId, answer, thisQuestionAnswers);
-
-                if (option != null)
-                {
-                    options.Add(option);
-                }
-            }
-            return options;
+            foreach (var linkedOption in linkedQuestion.Options)
+                yield return this.CreateOptionViewModel(linkedOption, answeredOptions);
         }
 
         public void Handle(LinkedOptionsChanged @event)
@@ -97,47 +79,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private MultiOptionLinkedQuestionOptionViewModel BuildOption(IQuestionnaire questionnaire,
-            Guid linkedToQuestionId,
-            BaseInterviewAnswer linkedToAnswer,
-            LinkedMultiOptionAnswer linkedMultiOptionAnswer)
-        {
-            var isChecked = linkedMultiOptionAnswer != null &&
-                            linkedMultiOptionAnswer.IsAnswered &&
-                            linkedMultiOptionAnswer.Answers.Any(x => x.Identical(linkedToAnswer.RosterVector));
-
-            if (!linkedToAnswer.IsAnswered && !isChecked)
+        private MultiOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector[] answeredOptions)
+            => new MultiOptionLinkedQuestionOptionViewModel(this)
             {
-                return null;
-            }
-
-            var title = this.BuildOptionTitle(questionnaire, linkedToQuestionId, linkedToAnswer);
-
-            var option = new MultiOptionLinkedQuestionOptionViewModel(this)
-            {
-                Title = title,
-                Value = linkedToAnswer.RosterVector,
-                Checked = isChecked,
-                QuestionState = this.questionState
+                Title = this.BuildOptionTitle(linkedOption),
+                Value = linkedOption,
+                Checked = answeredOptions.Contains(linkedOption),
+                QuestionState = this.questionState,
+                CheckedOrder = Array.FindIndex(answeredOptions, x => x.Identical(linkedOption)) + 1
             };
-            if (this.areAnswersOrdered && isChecked)
-            {
-                int selectedItemIndex = Array.FindIndex(linkedMultiOptionAnswer.Answers, x => x.Identical(linkedToAnswer.RosterVector)) + 1;
-                option.CheckedOrder = selectedItemIndex;
-            }
 
-            return option;
-        }
-
-        private string BuildOptionTitle(IQuestionnaire questionnaire, Guid linkedToQuestionId, BaseInterviewAnswer linkedToAnswer)
+        private string BuildOptionTitle(RosterVector linkedOption)
         {
-            string answerAsTitle = this.answerToStringService.AnswerToUIString(linkedToQuestionId, linkedToAnswer, interview, questionnaire);
+            var sourceQuestionIdentity = Identity.Create(this.linkedToQuestionId, linkedOption);
+
+            string answerAsTitle = this.interview.GetAnswerAsString(sourceQuestionIdentity);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 
             IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
                 interview
-                    .GetParentRosterTitlesWithoutLast(linkedToAnswer.Id, linkedToAnswer.RosterVector)
+                    .GetParentRosterTitlesWithoutLast(sourceQuestionIdentity)
                     .Skip(currentRosterLevel);
 
             string rosterPrefixes = string.Join(": ", parentRosterTitlesWithoutLastOneAndFirstKnown);

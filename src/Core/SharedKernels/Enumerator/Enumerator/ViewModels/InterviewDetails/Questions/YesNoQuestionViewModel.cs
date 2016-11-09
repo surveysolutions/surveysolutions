@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
@@ -13,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -112,10 +110,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateQuestionOptions()
         {
             var interview = this.interviewRepository.Get(interviewIdAsString);
-            var answerModel = interview.GetYesNoAnswer(Identity);
+            var answerModel = interview.GetYesNoQuestion(this.Identity);
 
             var newOptions = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, answerModel))
+                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()))
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
@@ -132,17 +130,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.RaisePropertyChanged(() => Options);
         }
 
-        private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, YesNoAnswer answerModel)
+        private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, AnsweredYesNoOption[] checkedYesNoAnswerOptions)
         {
-            var isExistAnswer = answerModel.Answers != null && answerModel.Answers.Any(a => a.OptionValue == model.Value);
+            var isExistAnswer = checkedYesNoAnswerOptions != null && checkedYesNoAnswerOptions.Any(a => a.OptionValue == model.Value);
             var isSelected = isExistAnswer 
-                ? answerModel.Answers.First(a => a.OptionValue == model.Value).Yes 
+                ? checkedYesNoAnswerOptions.First(a => a.OptionValue == model.Value).Yes 
                 : (bool?) null;
             var yesAnswerCheckedOrder = isExistAnswer && this.areAnswersOrdered
-                ? Array.IndexOf(answerModel.Answers.Where(am => am.Yes).Select(am => am.OptionValue).ToArray(), model.Value) + 1
+                ? Array.IndexOf(checkedYesNoAnswerOptions.Where(am => am.Yes).Select(am => am.OptionValue).ToArray(), model.Value) + 1
                 : (int?)null;
             var answerCheckedOrder = isExistAnswer && this.areAnswersOrdered
-                ? Array.IndexOf(answerModel.Answers.Select(am => am.OptionValue).ToArray(), model.Value) + 1
+                ? Array.IndexOf(checkedYesNoAnswerOptions.Select(am => am.OptionValue).ToArray(), model.Value) + 1
                 : (int?)null;
 
             var optionViewModel = new YesNoQuestionOptionViewModel(this, this.questionState)
@@ -170,17 +168,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
             {
-                var answerModel = interview.GetYesNoAnswer(Identity);
-                var answeredYesNoOption = answerModel.Answers.FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
+                var answerModel = interview.GetYesNoQuestion(this.Identity);
+                var answeredYesNoOption = answerModel.GetAnswer().FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
                 changedModel.Selected = answeredYesNoOption?.Yes;
                 return;
             }
 
             if (this.isRosterSizeQuestion && (!changedModel.Selected.HasValue || !changedModel.Selected.Value))
             {
-                var answerModel = interview.GetYesNoAnswer(Identity);
+                var answerModel = interview.GetYesNoQuestion(this.Identity);
 
-                var backendYesAnswersCount = answerModel?.Answers?.Count(a => a.Yes) ?? 0;
+                var backendYesAnswersCount = answerModel?.GetAnswer()?.Count(a => a.Yes) ?? 0;
                 var UIYesAnswersCount = this.Options.Count(o => o.YesSelected);
 
                 if (backendYesAnswersCount > UIYesAnswersCount)
@@ -220,74 +218,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
-
-        // TODO: delete this method if KP-6577 is verified
-        public async Task ToggleAnswerAsyncOld(YesNoQuestionOptionViewModel changedModel)
-        {
-            List<YesNoQuestionOptionViewModel> allSelectedOptions =
-                this.areAnswersOrdered
-                ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.AnswerCheckedOrder).ToList() 
-                : this.Options.Where(x => x.Selected.HasValue).ToList();
-
-            var interview = this.interviewRepository.Get(interviewIdAsString);
-
-            int countYesSelectedOptions = allSelectedOptions.Count(o => o.YesSelected);
-
-            if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
-            {
-                var answerModel = interview.GetYesNoAnswer(Identity);
-                var answeredYesNoOption = answerModel.Answers.FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
-                changedModel.Selected = answeredYesNoOption?.Yes;
-                return;
-            }
-
-            if (this.isRosterSizeQuestion && (!changedModel.Selected.HasValue || !changedModel.Selected.Value))
-            {
-                var answerModel = interview.GetYesNoAnswer(Identity);
-
-                var backendYesAnswersCount = answerModel?.Answers?.Count(a => a.Yes) ?? 0;
-                var UIYesAnswersCount = this.Options.Count(o => o.YesSelected);
-
-                if (backendYesAnswersCount > UIYesAnswersCount)
-                {
-                    var amountOfRostersToRemove = 1;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                    if (!(await this.userInteraction.ConfirmAsync(message)))
-                    {
-                        changedModel.Selected = true;
-                        return;
-                    }
-                }
-            }
-
-            YesNoAnswer actualAnswerModel = interview.GetYesNoAnswer(this.Identity);
-
-            var selectedValuesWithoutJustChanged = actualAnswerModel.Answers?.Except(x => x.OptionValue == changedModel.Value) ?? Enumerable.Empty<AnsweredYesNoOption>();
-
-            var selectedValuesWithJustChanged
-                = changedModel.Selected.HasValue
-                    ? selectedValuesWithoutJustChanged.Union(new AnsweredYesNoOption(changedModel.Value, changedModel.Selected.Value).ToEnumerable()).ToArray()
-                    : selectedValuesWithoutJustChanged.ToArray();
-
-            var command = new AnswerYesNoQuestion(
-                this.interviewId,
-                this.userId,
-                this.Identity.Id,
-                this.Identity.RosterVector,
-                DateTime.UtcNow,
-                selectedValuesWithJustChanged);
-
-            try
-            {
-                await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
-            }
-            catch (InterviewException ex)
-            {
-                this.QuestionState.Validity.ProcessException(ex);
-            }
-        }
-
+        
         public void Dispose()
         {
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;

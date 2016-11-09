@@ -66,22 +66,6 @@
   <ItemGroup>
     <Compile Include="Aggregates\IStatefulInterview.cs" />
     <Compile Include="DataTransferObjects\InterviewSnapshotDto.cs" />
-    <Compile Include="Entities\Interview\BaseInterviewAnswer.cs" />
-    <Compile Include="Entities\Interview\DateTimeAnswer.cs" />
-    <Compile Include="Entities\Interview\GpsCoordinatesAnswer.cs" />
-    <Compile Include="Entities\Interview\IntegerNumericAnswer.cs" />
-    <Compile Include="Entities\Interview\InterviewComment.cs" />
-    <Compile Include="Entities\Interview\InterviewEnablementState.cs" />
-    <Compile Include="Entities\Interview\InterviewRoster.cs" />
-    <Compile Include="Entities\Interview\LinkedMultiOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\LinkedSingleOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\MultimediaAnswer.cs" />
-    <Compile Include="Entities\Interview\MultiOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\RealNumericAnswer.cs" />
-    <Compile Include="Entities\Interview\SingleOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\TextAnswer.cs" />
-    <Compile Include="Entities\Interview\TextListAnswer.cs" />
-    <Compile Include="Entities\Interview\YesNoAnswer.cs" />
     <Compile Include="Events\InterviewAnswersFromSyncPackageRestored.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
@@ -90,7 +74,6 @@
     <Compile Include="Implementation\Repositories\TranslationsStorage.cs" />
     <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
-    <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Services\AsyncRunner.cs" />
     <Compile Include="Implementation\Services\BaseViewModelNavigationService.cs" />
     <Compile Include="Implementation\Services\EntitiesListViewModelFactory.cs" />
@@ -190,7 +173,6 @@
       <DependentUpon>UIResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
-    <Compile Include="Services\IAnswerToStringService.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="Services\IUserInteractionService.cs" />
     <Compile Include="Services\IUserInterfaceStateService.cs" />

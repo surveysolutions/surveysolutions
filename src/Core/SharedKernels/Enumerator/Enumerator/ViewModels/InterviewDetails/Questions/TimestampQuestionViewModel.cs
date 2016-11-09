@@ -61,10 +61,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry.Subscribe(this, interviewId);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetDateTimeAnswer(entityIdentity);
+            var answerModel = interview.GetDateTimeQuestion(entityIdentity);
             if (answerModel.IsAnswered)
             {
-                this.SetToView(answerModel.Answer.Value);
+                this.SetToView(answerModel.GetAnswer());
             }
         }
 

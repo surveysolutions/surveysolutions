@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
+            var sourceInterviewTree = this.interviewState;
             var treeInvariants = new InterviewTreeInvariants(sourceInterviewTree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);

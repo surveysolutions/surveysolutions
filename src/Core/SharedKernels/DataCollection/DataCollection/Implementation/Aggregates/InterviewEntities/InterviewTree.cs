@@ -38,12 +38,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string InterviewId { get; }
         public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
+        public List<AnswerComment> AnswerComments { get; set; }
         
         public InterviewTreeQuestion GetQuestion(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeQuestion;
 
         internal InterviewTreeGroup GetGroup(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
+    
+        internal InterviewTreeRoster GetRoster(Identity identity)
+            => this.GetNodeByIdentity(identity) as InterviewTreeRoster;
 
         internal InterviewTreeRoster GetRoster(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeRoster;
@@ -57,18 +61,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IEnumerable<InterviewTreeQuestion> FindQuestions(Guid questionId)
             => this.FindEntity(questionId).OfType<InterviewTreeQuestion>();
 
+        public IEnumerable<InterviewTreeStaticText> FindStaticTexts()
+            => this.nodesCache.Values.OfType<InterviewTreeStaticText>();
+
+        public IEnumerable<InterviewTreeStaticText> FindStaticTexts(Identity parentGroup)
+            => this.nodesCache.Values.OfType<InterviewTreeStaticText>()
+                .Where(staticText => staticText.Parents.Any(parent => parent.Identity.Equals(parentGroup)));
+
         public IEnumerable<InterviewTreeQuestion> FindQuestions()
             => this.nodesCache.Values.OfType<InterviewTreeQuestion>();
+
+        public IEnumerable<InterviewTreeQuestion> FindQuestions(Identity parentGroup)
+            => this.nodesCache.Values.OfType<InterviewTreeQuestion>()
+                .Where(question => question.Parents.Any(parent => parent.Identity.Equals(parentGroup)));
 
         public IEnumerable<InterviewTreeRoster> FindRosters()
             => this.nodesCache.Values.OfType<InterviewTreeRoster>();
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
-        {
-            return this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value);
-        }
+            => this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value);
 
-        private IInterviewTreeNode GetNodeByIdentity(Identity identity)
+        public IInterviewTreeNode GetNodeByIdentity(Identity identity)
         {
             // identity should not be null here, looks suspicious
             if (identity == null) return null;
@@ -387,6 +400,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         Identity Identity { get; }
         IInterviewTreeNode Parent { get; }
+        IEnumerable<IInterviewTreeNode> Parents { get; }
         IReadOnlyCollection<IInterviewTreeNode> Children { get; }
 
         bool IsDisabled();
@@ -418,6 +432,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Identity Identity { get; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
+
+        public IEnumerable<IInterviewTreeNode> Parents { get; private set; }
+
         IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
         public virtual void SetTree(InterviewTree tree)
@@ -425,7 +442,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Tree = tree;
         }
 
-        void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
+
+        void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent)
+        {
+            this.Parent = parent;
+            this.Parents = this.GetParents(parent).Reverse();
+        }
+
+        private IEnumerable<IInterviewTreeNode> GetParents(IInterviewTreeNode nearestParent)
+        {
+            while (nearestParent != null)
+            {
+                yield return nearestParent;
+                nearestParent = nearestParent.Parent;
+            }
+        }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
 

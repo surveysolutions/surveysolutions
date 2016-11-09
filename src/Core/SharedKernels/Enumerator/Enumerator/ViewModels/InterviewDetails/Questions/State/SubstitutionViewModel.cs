@@ -29,7 +29,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
-        private readonly IAnswerToStringService answerToStringService;
         private readonly IVariableToUIStringService variableToUiStringService;
         private readonly IRosterTitleSubstitutionService rosterTitleSubstitutionService;
         private string interviewId;
@@ -40,14 +39,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireRepository,
             ISubstitutionService substitutionService,
-            IAnswerToStringService answerToStringService,
             IVariableToUIStringService variableToUiStringService,
             IRosterTitleSubstitutionService rosterTitleSubstitutionService)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.substitutionService = substitutionService;
-            this.answerToStringService = answerToStringService;
             this.variableToUiStringService = variableToUiStringService;
             this.rosterTitleSubstitutionService = rosterTitleSubstitutionService;
         }
@@ -125,8 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var substitution in this.substitutionVariables.ByQuestions)
             {
-                var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitution.Id, this.entityIdentity.RosterVector);
-                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitution.Id, baseInterviewAnswer, interview, questionnaire) : null;
+                string answerString = interview.GetAnswerAsString(Identity.Create(substitution.Id, this.entityIdentity.RosterVector));
 
                 textWithReplacedSubstitutions = this.substitutionService.ReplaceSubstitutionVariable(
                     textWithReplacedSubstitutions, substitution.Name, string.IsNullOrEmpty(answerString) ? this.substitutionService.DefaultSubstitutionText : answerString);

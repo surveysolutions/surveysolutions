@@ -26,8 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var interview = new Mock<IStatefulInterview>();
 
             interview.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);
-            interview.Setup(x => x.GetSingleOptionAnswer(questionIdentity)).Returns(childAnswer);
-            interview.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(parentOptionAnswer);
+            interview.Setup(x => x.GetSingleOptionQuestion(questionIdentity)).Returns(childAnswer);
+            interview.Setup(x => x.GetSingleOptionQuestion(parentIdentity)).Returns(parentOptionAnswer);
             interview.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 2, 1)).Returns(new CategoricalOption() { Title = "2", Value = 2, ParentValue = 1 });
             interview.Setup(x => x.GetOptionForQuestionWithFilter(questionIdentity, Moq.It.IsAny<string>(), 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
             interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
