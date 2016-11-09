@@ -1297,6 +1297,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No current time question was found. Consider recording the date of interview in your questionnaire..
+        /// </summary>
+        internal static string WB0221_NoCurrentTimeQuestions {
+            get {
+                return ResourceManager.GetString("WB0221_NoCurrentTimeQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {

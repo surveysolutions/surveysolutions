@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options),
             Warning<IConditional>(RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
             Warning<IValidatable>(RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
+            Warning(NoCurrentTimeQuestions, "WB0221", VerificationMessages.WB0221_NoCurrentTimeQuestions),
 
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
@@ -263,10 +264,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => !string.IsNullOrEmpty(condition.Expression) && condition.Expression.Length > 500;
 
         private static bool HasNoGpsQuestions(MultiLanguageQuestionnaireDocument questionnaire)
-            => !questionnaire.Find<IQuestion>(q => q.QuestionType == QuestionType.GpsCoordinates).Any();
+            => !questionnaire.Has<IQuestion>(q => q.QuestionType == QuestionType.GpsCoordinates);
 
         private static bool NoPrefilledQuestions(MultiLanguageQuestionnaireDocument questionnaire)
-            => !questionnaire.Find<IQuestion>(q => q.Featured).Any();
+            => !questionnaire.Has<IQuestion>(q => q.Featured);
+
+        private static bool NoCurrentTimeQuestions(MultiLanguageQuestionnaireDocument questionnaire)
+            => !questionnaire.Has<DateTimeQuestion>(q => q.IsTimestamp);
 
         private static bool CategoricalQuestionHasALotOfOptions(IQuestion question)
             => question.QuestionType == QuestionType.SingleOption
