@@ -1,9 +1,5 @@
 ﻿[
   {
-    "outputFile": "Content/markup.css",
-    "inputFile": "Content/markup.scss"
-  },
-  {
     "outputFile": "Dependencies/css/markup.css",
     "inputFile": "Dependencies/css/markup.scss"
   }
