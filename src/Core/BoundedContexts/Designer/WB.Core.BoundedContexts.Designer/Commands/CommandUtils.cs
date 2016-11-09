@@ -1,4 +1,5 @@
 ﻿using CsQuery.ExtensionMethods.Internal;
+using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.Core.BoundedContexts.Designer.Commands
