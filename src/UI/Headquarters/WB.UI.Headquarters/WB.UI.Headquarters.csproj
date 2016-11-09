@@ -452,8 +452,7 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\css\markup.css" />
-    <Content Include="Dependencies\dist\markup.css" />
+    <Content Include="Dependencies\build\markup.css" />
     <Content Include="Dependencies\gulpfile.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

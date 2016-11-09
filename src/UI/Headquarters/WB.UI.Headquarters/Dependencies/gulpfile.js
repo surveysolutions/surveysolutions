@@ -7,7 +7,13 @@
     sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
     cssnano = require('gulp-cssnano'),
+    util = require('gulp-util'),
+    debug = require('gulp-debug'),
     rename = require('gulp-rename');
+
+var config = {
+    production: !!util.env.production
+};
 
 gulp.task('styles', function () {
     var target = gulp.src('./css/markup.scss');
@@ -21,16 +27,21 @@ gulp.task('styles', function () {
     	.pipe(gulp.dest('./build'));
 });
 
-gulp.task('login', function () {
+gulp.task('login', ['styles'], function () {
     var target = gulp.src('../Views/Account/LogIn.cshtml');
-    var sources = gulp.src('./dist/markup-*.min.css', { read: false }).pipe(plugins.debug());
-    return target
-        .pipe(plugins.inject(sources, { relative: true }))
-    	.pipe(gulp.dest('../Views/Account/'));
+    var sources = gulp.src('./build/markup-*.min.css', { read: false });
+
+    if (config.production) {
+        return target
+            .pipe(plugins.inject(sources, { relative: true, name: 'markup' }))
+            .pipe(gulp.dest('../Views/Account/'));
+    }
+
+    return sources.pipe(debug());
 });
 
 gulp.task('clean', function () {
-    return gulp.src('build/*').pipe(plugins.clean());
+    return gulp.src('./build/*');//.pipe(plugins.clean());
 });
 
 gulp.task('default', ['clean'], function () {
