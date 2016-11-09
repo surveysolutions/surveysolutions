@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
@@ -276,7 +277,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             exportedHeaderItem.VariableName = question.StataExportCaption;
             exportedHeaderItem.Titles = new[]
-            { string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel };
+            {
+                string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText.RemoveHtmlTags() : question.VariableLabel
+            };
             exportedHeaderItem.ColumnNames = new string[] { question.StataExportCaption };
 
             exportedHeaderItem.Labels = new Dictionary<Guid, LabelItem>();
