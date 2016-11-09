@@ -63,6 +63,15 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [NoTransaction]
+        public ActionResult LogIn(string returnUrl)
+        {
+            this.ViewBag.ActivePage = MenuItem.Logon;
+            this.ViewBag.ReturnUrl = returnUrl;
+            return this.View();
+        }
+
+        [HttpGet]
+        [NoTransaction]
         public ActionResult LogOn(string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
