@@ -134,14 +134,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
-            var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
-            if (answerModel.IsAnswered)
+            var questionModel = interview.GetGpsQuestion(entityIdentity);
+            if (questionModel.IsAnswered)
             {
-                this.Answer = new GpsLocation(answerModel.Accuracy.GetValueOrDefault(),
-                    answerModel.Altitude.GetValueOrDefault(),
-                    answerModel.Latitude.GetValueOrDefault(),
-                    answerModel.Longitude.GetValueOrDefault(),
-                    DateTimeOffset.MinValue);
+                var gpsAnswer = questionModel.GetAnswer();
+
+                this.Answer = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
+                    gpsAnswer.Longitude, DateTimeOffset.MinValue);
             }
         }
 

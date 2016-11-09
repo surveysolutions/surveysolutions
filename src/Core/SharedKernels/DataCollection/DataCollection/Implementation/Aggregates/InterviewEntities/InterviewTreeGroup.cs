@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public SubstitionText Title { get; private set; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
+        public IEnumerable<IInterviewTreeNode> Parents { get; private set; }
+
         public IReadOnlyCollection<IInterviewTreeNode> Children => this.children;
 
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree)
@@ -92,7 +94,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public RosterVector RosterVector => this.Identity.RosterVector;
 
-        void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
+        void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent)
+        {
+            this.Parent = parent;
+            this.Parents = this.GetParents(parent).Reverse();
+        }
+
+        private IEnumerable<IInterviewTreeNode> GetParents(IInterviewTreeNode nearestParent)
+        {
+            while (nearestParent != null)
+            {
+                yield return nearestParent;
+                nearestParent = nearestParent.Parent;
+            }
+        }
 
         public void AddChild(IInterviewTreeNode child)
         {

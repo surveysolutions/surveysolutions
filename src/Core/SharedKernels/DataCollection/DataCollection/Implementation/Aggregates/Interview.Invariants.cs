@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -14,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        private void ValidatePrefilledQuestions(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null, InterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
+        private void ValidatePrefilledQuestions(InterviewTree tree, IQuestionnaire questionnaire, Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, RosterVector rosterVector = null, bool applyStrongChecks = true)
         {
             var currentRosterVector = rosterVector ?? (decimal[])RosterVector.Empty;
             foreach (KeyValuePair<Guid, AbstractAnswer> answerToFeaturedQuestion in answersToFeaturedQuestions)
@@ -38,12 +37,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 answeredQuestion, tree, applyStrongChecks);
                         else
                             this.CheckNumericRealQuestionInvariants(questionId, currentRosterVector, ((NumericRealAnswer)answer).Value, questionnaire,
-                                answeredQuestion, currentInterviewState, tree, applyStrongChecks);
+                                answeredQuestion, tree, applyStrongChecks);
                         break;
 
                     case QuestionType.DateTime:
-                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion,
-                            currentInterviewState, tree, applyStrongChecks);
+                        this.CheckDateTimeQuestionInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks);
                         break;
 
                     case QuestionType.SingleOption:
@@ -62,14 +60,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         }
                         break;
                     case QuestionType.QRBarcode:
-                        this.CheckQRBarcodeInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, tree, applyStrongChecks);
+                        this.CheckQRBarcodeInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks);
                         break;
                     case QuestionType.GpsCoordinates:
-                        this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState, tree, applyStrongChecks);
+                        this.CheckGpsCoordinatesInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, tree, applyStrongChecks);
                         break;
                     case QuestionType.TextList:
-                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, currentInterviewState,
-                            ((TextListAnswer)answer).ToTupleArray(), tree, applyStrongChecks);
+                        this.CheckTextListInvariants(questionId, currentRosterVector, questionnaire, answeredQuestion, ((TextListAnswer)answer).ToTupleArray(), tree, applyStrongChecks);
                         break;
 
                     default:
@@ -127,7 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, double answer,
            IQuestionnaire questionnaire,
-           Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree, bool applyStrongChecks = true)
+           Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
 
@@ -144,7 +141,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckDateTimeQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree, bool applyStrongChecks = true)
+            Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
 
@@ -279,8 +276,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckTextListInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
-            InterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, InterviewTree tree, bool applyStrongChecks = true)
+        private void CheckTextListInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion, Tuple<decimal, string>[] answers, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
 
@@ -307,8 +303,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckGpsCoordinatesInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
-            InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree, bool applyStrongChecks = true)
+        private void CheckGpsCoordinatesInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
 
@@ -323,7 +318,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckQRBarcodeInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-         Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, InterviewTree tree, bool applyStrongChecks = true)
+         Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
 
@@ -373,30 +368,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Decimal values should be unique for question {0}. InterviewId: {1}",
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
             }
-        }
-
-        protected bool DoesRosterInstanceExist(IReadOnlyInterviewStateDependentOnAnswers state, RosterVector rosterVector, Guid[] parentRosterIdsStartingFromTop)
-        {
-            for (int indexOfRosterVectorElement = 0; indexOfRosterVectorElement < rosterVector.Length; indexOfRosterVectorElement++)
-            {
-                decimal rosterInstanceId = rosterVector[indexOfRosterVectorElement];
-                Guid rosterGroupId = parentRosterIdsStartingFromTop[indexOfRosterVectorElement];
-
-                int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
-                decimal[] rosterGroupOuterScopeRosterVector = rosterVector.Shrink(rosterGroupOuterScopeRosterLevel);
-                IEnumerable<decimal> rosterInstanceIds = state.GetRosterInstanceIds(rosterGroupId, rosterGroupOuterScopeRosterVector);
-
-                var rosterInstanceExists = rosterInstanceIds.Contains(rosterInstanceId);
-                if (!rosterInstanceExists)
-                    return false;
-            }
-
-            return true;
-        }
-
-        protected static bool DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(RosterVector rosterVector, Guid[] parentRosterGroups)
-        {
-            return rosterVector.Length == parentRosterGroups.Length;
         }
 
         private void ThrowIfQuestionTypeIsNotOneOfExpected(Guid questionId, IQuestionnaire questionnaire,

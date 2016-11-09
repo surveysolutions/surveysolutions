@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
-                   && _.GetTextListAnswer(questionIdentity) == textListAnswer);
+                   && _.GetTextListQuestion(questionIdentity) == textListAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 

@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                     var rosterInstance = interview.GetRoster(itemIdentity);
                         
-                    var title = this.GenerateRosterTitle(groupTitle, rosterInstance.Title);
+                    var title = this.GenerateRosterTitle(groupTitle, rosterInstance.RosterTitle);
                     var breadCrumb = Mvx.Resolve<BreadCrumbItemViewModel>();
                     breadCrumb.Init(this.interviewId, itemIdentity, title, this.navigationState);
                     breadCrumbs.Add(breadCrumb);

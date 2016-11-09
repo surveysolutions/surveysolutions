@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId
-                   && _.GetSingleOptionAnswer(questionIdentity) == singleOptionAnswer);
+                   && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 

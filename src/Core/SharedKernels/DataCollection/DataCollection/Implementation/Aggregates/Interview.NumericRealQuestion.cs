@@ -15,8 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
-            this.CheckNumericRealQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion, this.interviewState, sourceInterviewTree);
+            var sourceInterviewTree = this.interviewState;
+            this.CheckNumericRealQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion, sourceInterviewTree);
             
             var changedInterviewTree = sourceInterviewTree.Clone();
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };

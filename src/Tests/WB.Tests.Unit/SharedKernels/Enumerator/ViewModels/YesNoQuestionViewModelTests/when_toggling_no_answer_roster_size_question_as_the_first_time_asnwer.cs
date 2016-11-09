@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             var yesNoAnswer = Create.Entity.YesNoAnswer(questionGuid, Empty.RosterVector);
            
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoAnswer(questionId) == yesNoAnswer);
+            var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoQuestion(questionId) == yesNoAnswer);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             interviewRepository = new Mock<IStatefulInterviewRepository>();
