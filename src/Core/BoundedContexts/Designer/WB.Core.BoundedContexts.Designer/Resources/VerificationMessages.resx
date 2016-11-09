@@ -570,7 +570,10 @@
   <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
     <value>Variable label is too long (more than 120 chars) and will be truncated in SPSS file export.</value>
   </data>
-  <data name="WB0218_ConsecutiveIdenticalEnablementConditions" xml:space="preserve">
+  <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
     <value>Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section.</value>
+  </data>
+  <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+    <value>Multiple consecutive unconditional single choice options with 2 options. Consider one multiple choice question.</value>
   </data>
 </root>

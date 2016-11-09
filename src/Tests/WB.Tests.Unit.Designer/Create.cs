@@ -192,7 +192,7 @@ namespace WB.Tests.Unit.Designer
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer,
-            bool preFilled = false, bool hideIfDisabled = false)
+            bool preFilled = false, bool hideIfDisabled = false, bool isCurrentTime = false)
         {
             return new DateTimeQuestion("Question DT")
             {
@@ -205,7 +205,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
-                Featured = preFilled
+                Featured = preFilled,
+                IsTimestamp = isCurrentTime,
             };
         }
 
