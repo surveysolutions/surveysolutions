@@ -911,7 +911,7 @@ namespace WB.Tests.Unit.Designer
 
             public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
             {
-                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file");
+                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file", null);
             }
 
             internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
