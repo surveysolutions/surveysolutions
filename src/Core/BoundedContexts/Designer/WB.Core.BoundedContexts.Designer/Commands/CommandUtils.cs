@@ -1,6 +1,5 @@
 ﻿using CsQuery.ExtensionMethods.Internal;
-using WB.Infrastructure.Native.Sanitizer;
-using WB.UI.Shared.Web.Extensions;
+using Ganss.XSS;
 
 namespace WB.Core.BoundedContexts.Designer.Commands
 {
@@ -11,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands
             if (string.IsNullOrWhiteSpace(html))
                 return html;
 
-            var sanitizer = new WbHtmlSanitizer();
+            var sanitizer = new HtmlSanitizer {KeepChildNodes = true};
 
             if (!removeAllTags)
             {
