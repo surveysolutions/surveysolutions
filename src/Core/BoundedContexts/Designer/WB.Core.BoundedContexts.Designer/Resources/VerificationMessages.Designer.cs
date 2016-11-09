@@ -1288,6 +1288,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question mentioned in an expression is located later in the questionnaire..
+        /// </summary>
+        internal static string WB0220_QuestionFromExpressionLocatedLater {
+            get {
+                return ResourceManager.GetString("WB0220_QuestionFromExpressionLocatedLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
