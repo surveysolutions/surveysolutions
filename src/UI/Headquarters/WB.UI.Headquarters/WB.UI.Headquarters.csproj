@@ -452,8 +452,6 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\markup.css" />
-    <Content Include="Dependencies\gulpfile.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
@@ -517,10 +515,6 @@
     <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx" />
-    <Content Include="Dependencies\bower.json" />
-    <Content Include="Dependencies\package.json" />
-    <Content Include="Dependencies\css\markup.scss" />
-    <Content Include="Dependencies\.bowerrc" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1506,7 +1500,6 @@
   <ItemGroup>
     <Folder Include="API\Attributes\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Dependencies\js\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>
