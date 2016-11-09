@@ -6,17 +6,17 @@
         {
         }
 
-        public VariableData(VariableType type, string name, string expression, string description)
+        public VariableData(VariableType type, string name, string expression, string label)
         {
             this.Type = type;
             this.Name = name;
             this.Expression = expression;
-            this.Description = description;
+            this.Label = label;
         }
 
         public VariableType Type { get; set; }
         public string Name { get; set; }
         public string Expression { get; set; }
-        public string Description { get; set; }
+        public string Label { get; set; }
     }
 }

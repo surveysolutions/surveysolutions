@@ -10,7 +10,7 @@
 
   <TextView
     style="@style/Interview_Variable_Description"
-    local:MvxBind="Html Description; Visible IsShowDescription" />
+    local:MvxBind="Html Label; Visible HasLabel" />
 
   <View style="@style/Interview_Entity_Divider" />
 </LinearLayout>

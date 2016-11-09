@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
             questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Type.ShouldEqual(variableType);
 
         It should_change_variable_description = () =>
-          questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Description.ShouldEqual(description);
+          questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Label.ShouldEqual(description);
 
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

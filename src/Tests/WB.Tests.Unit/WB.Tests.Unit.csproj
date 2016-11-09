@@ -491,6 +491,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTreeEventPublisherTests.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_ordered_roster_size_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\Services\InterviewViewModelFactoryTests\InterviewViewModelFactoryTest.cs" />
     <Compile Include="SharedKernels\Enumerator\SqliteStorageTests.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\CompositeCollectionInflationServiceTests\CompositeCollectionInflationServiceTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_option_by_value.cs" />
