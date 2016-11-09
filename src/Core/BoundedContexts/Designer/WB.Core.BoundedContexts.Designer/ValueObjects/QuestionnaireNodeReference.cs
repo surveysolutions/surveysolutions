@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public static QuestionnaireNodeReference CreateForTranslation(Guid translationId)
             => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Translation, translationId);
 
-        public static QuestionnaireNodeReference CreateFrom(IComposite entity, 
+        public static QuestionnaireNodeReference CreateFrom(IQuestionnaireEntity entity,
             QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None,
             int? indexOfEntityInProperty = null)
         {

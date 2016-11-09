@@ -40,6 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IQuestion>(VariableLableMoreThan120Characters, "WB0217", VerificationMessages.WB0217_VariableLableMoreThan120Characters),
             WarningForCollection(ConsecutiveQuestionsWithIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions),
             WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options),
+            Warning<IConditional>(RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
+            Warning<IValidatable>(RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
 
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
@@ -52,6 +54,39 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.ValidationConditionRefersToAFutureQuestion,
             this.EnablementConditionRefersToAFutureQuestion
         };
+
+        private static bool RowIndexInMultiOptionBasedRoster(IConditional entity, MultiLanguageQuestionnaireDocument questionnaire)
+            => UsesRowIndex(entity)
+            && IsInsideMultiOptionBasedRoster(entity, questionnaire);
+
+        private static bool RowIndexInMultiOptionBasedRoster(IValidatable entity, MultiLanguageQuestionnaireDocument questionnaire)
+            => UsesRowIndex(entity)
+            && IsInsideMultiOptionBasedRoster(entity, questionnaire);
+
+        private static bool UsesRowIndex(IConditional entity)
+            => entity.ConditionExpression?.Contains("@rowindex") == true;
+
+        private static bool UsesRowIndex(IValidatable entity)
+            => entity.ValidationConditions.Any(condition => condition.Expression.Contains("@rowindex"));
+
+        private static bool IsInsideMultiOptionBasedRoster(IQuestionnaireEntity entity, MultiLanguageQuestionnaireDocument questionnaire)
+            => entity.UnwrapReferences(x => x.GetParent()).Any(parent => IsMultiOptionBasedRoster(parent, questionnaire));
+
+        private static bool IsMultiOptionBasedRoster(IQuestionnaireEntity entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var group = entity as IGroup;
+
+            if (group == null)
+                return false;
+
+            if (!group.IsRoster)
+                return false;
+
+            if (group.RosterSizeQuestionId == null)
+                return false;
+
+            return questionnaire.Find<IMultyOptionsQuestion>(group.RosterSizeQuestionId.Value) != null;
+        }
 
         private static bool VariableLableMoreThan120Characters(IQuestion question)
             => (question.VariableLabel?.Length ?? 0) > 120;
@@ -319,12 +354,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
             Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
-            where TEntity : class, IComposite
+            where TEntity : class, IQuestionnaireEntity
         {
             return questionnaire =>
                questionnaire
                    .Find<TEntity>(x => hasError(x, questionnaire))
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TReferencedEntity>(
+            Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
+            where TEntity : class, IComposite
+            where TReferencedEntity : class, IComposite
+        {
+            return questionnaire =>
+                from entity in questionnaire.Find<TEntity>(_ => true)
+                let verificationResult = verifyEntity(entity, questionnaire)
+                where verificationResult.HasErrors
+                select QuestionnaireVerificationMessage.Warning(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(

@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.Composite;
+﻿using System.Collections.Generic;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -21,6 +22,12 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             => (entity as IQuestion)?.QuestionText
             ?? (entity as IStaticText)?.Text
             ?? (entity as IGroup)?.Title;
+
+        public static string GetEnablingCondition(this IQuestionnaireEntity entity)
+            => (entity as IConditional)?.ConditionExpression;
+
+        public static IEnumerable<ValidationCondition> GetValidationConditions(this IQuestionnaireEntity entity)
+            => (entity as IValidatable)?.ValidationConditions;
 
         public static string GetVariable(this IQuestionnaireEntity entity)
             => (entity as IQuestion)?.StataExportCaption
