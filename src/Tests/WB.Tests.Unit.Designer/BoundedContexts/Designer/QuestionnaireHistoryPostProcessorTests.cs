@@ -599,7 +599,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            var command = new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, "");
+            var command = new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, "", null);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act

@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         void SaveMeta(Guid attachmentId, Guid questionnaireId, string contentId, string fileName);
         AttachmentContent GetContentDetails(string contentId);
         void CloneMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId);
-        void Delete(Guid attachmentId);
+        void DeleteAllByQuestionnaireId(Guid questionnaireId);
         List<AttachmentMeta> GetAttachmentsByQuestionnaire(Guid questionnaireId);
         AttachmentMeta GetAttachmentMeta(Guid attachmentId);
         AttachmentContent GetContent(string contentId);

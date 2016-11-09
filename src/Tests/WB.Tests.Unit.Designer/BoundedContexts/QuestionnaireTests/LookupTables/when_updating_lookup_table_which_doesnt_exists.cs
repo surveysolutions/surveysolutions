@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 {
+    [Ignore("not removing but creating a new")]
     internal class when_updating_lookup_table_which_doesnt_exists : QuestionnaireTestsContext
     {
         Establish context = () =>

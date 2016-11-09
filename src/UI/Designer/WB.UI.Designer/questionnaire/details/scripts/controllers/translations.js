@@ -125,6 +125,10 @@
             }
 
             $scope.saveTranslation = function (translation) {
+
+                translation.oldTranslationId = translation.translationId;
+                translation.translationId = utilityService.guid();
+
                 commandService.updateTranslation($state.params.questionnaireId, translation).success(function () {
                     translation.initialTranslation = angular.copy(translation);
                 }).then(translation.form.$setPristine());

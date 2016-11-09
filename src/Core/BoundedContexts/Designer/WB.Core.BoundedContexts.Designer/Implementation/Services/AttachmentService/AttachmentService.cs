@@ -24,18 +24,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             this.attachmentMetaStorage = attachmentMetaStorage;
         }
         
-        public void Delete(Guid attachmentId)
+        public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            var dbAttachment = this.attachmentMetaStorage.GetById(attachmentId);
-
-            if (dbAttachment != null)
+            var questionnaireAttachments = this.attachmentMetaStorage.Query(metas => metas.Where(meta => meta.QuestionnaireId == questionnaireId)).ToList();
+            foreach (var questionnaireAttachment in questionnaireAttachments)
             {
-                this.attachmentMetaStorage.Remove(attachmentId);
+                this.attachmentMetaStorage.Remove(questionnaireAttachment.AttachmentId);
 
-                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(metas => metas.Count(meta => meta.ContentId == dbAttachment.ContentId));
+                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(metas => metas.Count(meta => meta.ContentId == questionnaireAttachment.ContentId));
                 if (countOfAttachmentContentReferences == 0)
                 {
-                    this.attachmentContentStorage.Remove(dbAttachment.ContentId);
+                    this.attachmentContentStorage.Remove(questionnaireAttachment.ContentId);
                 }
             }
         }

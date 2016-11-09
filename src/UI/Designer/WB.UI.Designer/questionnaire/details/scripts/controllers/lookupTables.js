@@ -69,6 +69,10 @@
                 lookupTable.form.$setDirty();
             }
             $scope.saveLookupTable = function (lookupTable) {
+
+                lookupTable.oldItemId = lookupTable.itemId;
+                lookupTable.itemId = utilityService.guid();
+
                 commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
                     lookupTable.initialLookupTable = angular.copy(lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);

@@ -119,7 +119,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         if (translationErrors.Any())
                             throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
 
-                        this.Delete(questionnaireId, translationId);
                         var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
                         HashSet<Guid> idsOfAllQuestionnaireEntities =
                             new HashSet<Guid>(questionnaire.Children.TreeToEnumerable(x => x.Children).Select(x => x.PublicKey));
@@ -196,10 +195,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        public void Delete(Guid questionnaireId, Guid translationId)
+        public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
             var storedTranslations = this.translations.Query(_ => _
-                .Where(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId)
+                .Where(x => x.QuestionnaireId == questionnaireId)
                 .ToList());
             this.translations.Remove(storedTranslations);
         }

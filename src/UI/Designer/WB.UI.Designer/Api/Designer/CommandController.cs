@@ -203,6 +203,7 @@ namespace WB.UI.Designer.Api
                 command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);
                 if (model.File != null && model.File.Buffer?.Length > 0)
                 {
+                    command.TranslationId = command.TranslationId;
                     this.translationsService.Store(command.QuestionnaireId,
                         command.TranslationId,
                         model.File.Buffer);

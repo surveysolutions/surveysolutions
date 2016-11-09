@@ -36,7 +36,8 @@
                     var command = {
                         questionnaireId: questionnaireId,
                         attachmentId: attachment.attachmentId,
-                        attachmentName: attachment.name
+                        attachmentName: attachment.name,
+                        oldAttachmentId: attachment.oldAttachmentId
                     };
 
                     var fileName = "";
@@ -69,7 +70,8 @@
                         questionnaireId: questionnaireId,
                         lookupTableId: lookupTable.itemId,
                         lookupTableName: lookupTable.name,
-                        lookupTableFileName: lookupTable.fileName
+                        lookupTableFileName: lookupTable.fileName,
+                        oldLookupTableId: lookupTable.oldItemId
                     };
 
                     return Upload.upload({
@@ -104,6 +106,7 @@
                     var command = {
                         questionnaireId: questionnaireId,
                         translationId: translation.translationId,
+                        oldTranslationId: translation.oldTranslationId,
                         name: translation.name
                     };
 
@@ -180,7 +183,7 @@
                         }
                     };
 
-                    var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
+                    var isPrefilledScopeSelected = question.questionScope === 'Prefilled';
                     command.isPreFilled = isPrefilledScopeSelected;
                     command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
 
@@ -225,7 +228,7 @@
                         command.maxAnswerCount = question.maxAnswerCount;
                         break;
                     }
-                    var questionType = question.type == "MultyOption" ? "MultiOption" : question.type; // we have different name in enum and in command. Correct one is 'Multi' but we cant change it in enum
+                    var questionType = question.type === "MultyOption" ? "MultiOption" : question.type; // we have different name in enum and in command. Correct one is 'Multi' but we cant change it in enum
                     var commandName = "Update" + questionType + "Question";
 
                     return commandCall(commandName, command);

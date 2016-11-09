@@ -12,13 +12,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             attachmentContentStorage.Store(Create.AttachmentContent(), contentHash);
 
             attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId, contentHash, questionnaireId: questionnaireId), attachmentId);
-            attachmentMetaStorage.Store(Create.AttachmentMeta(otherAttachmentId, contentHash, questionnaireId), otherAttachmentId);
+            attachmentMetaStorage.Store(Create.AttachmentMeta(otherAttachmentId, contentHash, otherQuestionnaireId), otherAttachmentId);
 
             attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
         };
 
         Because of = () =>
-            attachmentService.Delete(attachmentId);
+            attachmentService.DeleteAllByQuestionnaireId(questionnaireId);
 
         It should_delete_attachment_meta = () =>
             attachmentMetaStorage.GetById(attachmentId).ShouldBeNull();
@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         private static AttachmentService attachmentService;
         private static readonly string contentHash = "prev_hash";
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid otherQuestionnaireId = Guid.Parse("21111111111111111111111111111111");
         private static readonly Guid otherAttachmentId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static readonly TestPlainStorage<AttachmentContent> attachmentContentStorage = new TestPlainStorage<AttachmentContent>();

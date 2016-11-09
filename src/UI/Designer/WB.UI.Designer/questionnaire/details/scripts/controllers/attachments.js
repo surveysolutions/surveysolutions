@@ -173,6 +173,10 @@
             }
 
             $scope.saveAttachment = function (attachment) {
+
+                attachment.oldAttachmentId = attachment.attachmentId;
+                attachment.attachmentId = utilityService.guid();
+
                 commandService.updateAttachment($state.params.questionnaireId, attachment).success(function () {
                     attachment.initialAttachment = angular.copy(attachment);
                     attachment.form.$setPristine();
