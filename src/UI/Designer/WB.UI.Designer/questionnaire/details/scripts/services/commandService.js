@@ -319,7 +319,7 @@
                             expression: variable.expression,
                             name: variable.variable,
                             type: variable.type,
-                            description: variable.description
+                            label: variable.label
                         }
                     }
 
