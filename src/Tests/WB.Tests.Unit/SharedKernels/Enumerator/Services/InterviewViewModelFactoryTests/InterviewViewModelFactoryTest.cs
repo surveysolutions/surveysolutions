@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
     public class InterviewViewModelFactoryTest
     {
         [Test]
-        public void When_GetEntities_with_settings_dont_show_variables_Then_should_return_all_entities_exsept_variables()
+        public void When_GetEntities_with_settings_dont_show_variables_Then_should_return_all_entities_except_variables()
         {
             //arrange
             var interviewId = Guid.Parse("11111111111111111111111111111111");
