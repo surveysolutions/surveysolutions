@@ -11,10 +11,7 @@ using WB.Core.Infrastructure.CommandBus;
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
 {
     internal class ResourcesPostProcessor : 
-        ICommandPostProcessor<Questionnaire, DeleteQuestionnaire>,
-        ICommandPostProcessor<Questionnaire, DeleteAttachment>,
-        ICommandPostProcessor<Questionnaire, DeleteTranslation>,
-        ICommandPostProcessor<Questionnaire, DeleteLookupTable>
+        ICommandPostProcessor<Questionnaire, DeleteQuestionnaire>
     {
         private IAttachmentService attachmentService => ServiceLocator.Current.GetInstance<IAttachmentService>();
         private ILookupTableService lookupTableService => ServiceLocator.Current.GetInstance<ILookupTableService>();
@@ -22,31 +19,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command)
         {
-            var questionnaire = aggregate.QuestionnaireDocument;
-
-            foreach (var attachment in questionnaire.Attachments)
-            {
-                attachmentService.Delete(attachment.AttachmentId);
-            }
-
-            foreach (var lookupTable in questionnaire.LookupTables)
-            {
-                this.lookupTableService.DeleteLookupTableContent(command.QuestionnaireId, lookupTable.Key);
-            }
-
-            foreach (var translation in questionnaire.Translations)
-            {
-                this.translationsService.Delete(command.QuestionnaireId, translation.Id);
-            }
+            this.translationsService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
+            this.lookupTableService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
+            this.attachmentService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
         }
-
-        public void Process(Questionnaire aggregate, DeleteAttachment command)
-            => this.attachmentService.Delete(command.AttachmentId);
-
-        public void Process(Questionnaire aggregate, DeleteTranslation command)
-            => this.translationsService.Delete(command.QuestionnaireId, command.TranslationId);
-
-        public void Process(Questionnaire aggregate, DeleteLookupTable command)
-            => this.lookupTableService.DeleteLookupTableContent(command.QuestionnaireId, command.LookupTableId);
     }
 }
