@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -27,11 +27,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             public string CommentCaption  { get; set; }
 
-            public UserRoles UserRole { get; set; }
+            public bool IsCurrentUserComment { get; set; }
         }
 
         private readonly IStatefulInterviewRepository interviewRepository;
-
+        private IStatefulInterview interview;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
 
@@ -52,8 +52,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string interviewId;
         private Identity questionIdentity;
 
-        public Identity Identity { get; private set; }
-
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
@@ -62,26 +60,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId;
             this.questionIdentity = entityIdentity;
 
-            var interview = this.interviewRepository.Get(interviewId);
-            var comments = interview.GetQuestionComments(entityIdentity) ?? new List<QuestionComment>();
-
-            comments.Select(ToViewModel).ForEach(x => Comments.Add(x));
+            this.interview = this.interviewRepository.Get(interviewId);
+            this.UpdateCommentsFromInterview();
 
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
         }
 
-        private CommentViewModel ToViewModel(QuestionComment comment)
+        private void UpdateCommentsFromInterview()
+        {
+            var comments = interview.GetQuestionComments(this.questionIdentity) ?? new List<AnswerComment>();
+
+            comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
+        }
+
+        private CommentViewModel ToViewModel(AnswerComment comment)
         {
             var isCurrentUserComment = this.principal.CurrentUserIdentity.UserId == comment.UserId;
-            var isAuthorityComment = this.authorituesRoles.Contains(comment.UserRole);
+            var isSupervisorComment = this.interview.SupervisorId == comment.UserId;
 
             return new CommentViewModel
             {
                 Comment = comment.Comment,
-                UserRole = comment.UserRole,
+                IsCurrentUserComment = isCurrentUserComment,
                 CommentCaption = isCurrentUserComment 
                 ? UIResources.Interview_Comment_Interviewer_Caption
-                : (isAuthorityComment
+                : (isSupervisorComment
                     ? UIResources.Interview_Supervisor_Comment_Caption
                     : UIResources.Interview_Other_Comment_Caption)
             };
@@ -121,14 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public ObservableCollection<CommentViewModel> Comments { get; } = new ObservableCollection<CommentViewModel>();
-
-        private readonly HashSet<UserRoles> authorituesRoles = new HashSet<UserRoles>{ UserRoles.Administrator, UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Supervisor};
-
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand InterviewerCommentChangeCommand
-        {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(async () => await this.SendCommentQuestionCommandAsync())); }
-        }
+        public IMvxAsyncCommand InterviewerCommentChangeCommand => new MvxAsyncCommand(this.SendCommentQuestionCommandAsync);
 
         private async Task SendCommentQuestionCommandAsync()
         {
@@ -141,8 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     commentTime: DateTime.UtcNow,
                     comment: this.InterviewerComment));
 
-            if (!string.IsNullOrWhiteSpace(this.InterviewerComment))
-                Comments.Add(ToViewModel(new QuestionComment(this.InterviewerComment, this.principal.CurrentUserIdentity.UserId, UserRoles.Operator)));
+            this.UpdateCommentsFromInterview();
 
             this.InterviewerComment = "";
             this.IsCommentInEditMode = false;
@@ -154,9 +149,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.IsCommentInEditMode = true;
         }
 
-        protected virtual void OnCommentsInputShown()
-        {
-            this.CommentsInputShown?.Invoke(this, EventArgs.Empty);
-        }
+        protected virtual void OnCommentsInputShown() => this.CommentsInputShown?.Invoke(this, EventArgs.Empty);
     }
 }

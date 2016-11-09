@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             var multiOptionAnswer = Create.Entity.MultiOptionAnswer(questionGuid, Empty.RosterVector);
             multiOptionAnswer.SetAnswers(new[] { 2m });
 
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionAnswer(questionId) == multiOptionAnswer);
+            var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionQuestion(questionId) == multiOptionAnswer);
 
             var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(questionnaire);
             var interviewRepository = Stub<IStatefulInterviewRepository>.Returning(interview);

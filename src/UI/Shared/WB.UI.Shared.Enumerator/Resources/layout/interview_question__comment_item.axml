@@ -5,9 +5,9 @@
    style="@style/Interview_Question_Comment_Item">
    <TextView
        style="@style/Interview_Question_Comments_InterviewerTitle"
-       local:MvxBind="Text CommentCaption;  TextColor RoleToColor(UserRole)" />
+       local:MvxBind="Text CommentCaption;  TextColor IsCurrentUserCommentToColor(IsCurrentUserComment)" />
    <TextView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       local:MvxBind="Text Comment;  TextColor RoleToColor(UserRole)" />
+       local:MvxBind="Text Comment;  TextColor IsCurrentUserCommentToColor(IsCurrentUserComment)" />
 </LinearLayout>
