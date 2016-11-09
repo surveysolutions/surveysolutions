@@ -1272,9 +1272,18 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section..
         /// </summary>
-        internal static string WB0218_ConsecutiveIdenticalEnablementConditions {
+        internal static string WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions {
             get {
-                return ResourceManager.GetString("WB0218_ConsecutiveIdenticalEnablementConditions", resourceCulture);
+                return ResourceManager.GetString("WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple consecutive unconditional single choice options with 2 options. Consider one multiple choice question..
+        /// </summary>
+        internal static string WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options {
+            get {
+                return ResourceManager.GetString("WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options", resourceCulture);
             }
         }
         
