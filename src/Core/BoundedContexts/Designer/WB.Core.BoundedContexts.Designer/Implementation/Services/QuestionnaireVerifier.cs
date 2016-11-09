@@ -1726,7 +1726,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             || entity is IStaticText
             || entity is IGroup;
 
-        private static QuestionnaireNodeReference CreateReference(IComposite entity)
+        private static QuestionnaireNodeReference CreateReference(IQuestionnaireEntity entity)
         {
             return QuestionnaireNodeReference.CreateFrom(entity);
         }

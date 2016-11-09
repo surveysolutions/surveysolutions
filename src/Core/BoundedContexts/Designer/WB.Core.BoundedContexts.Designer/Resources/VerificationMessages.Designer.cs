@@ -1288,11 +1288,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question mentioned in an expression is located later in the questionnaire..
+        ///   Looks up a localized string similar to Using @rowindex with a multi-choice roster may be unstable. Consider using @rowcode instead..
         /// </summary>
-        internal static string WB0220_QuestionFromExpressionLocatedLater {
+        internal static string WB0220_RowIndexInMultiOptionBasedRoster {
             get {
-                return ResourceManager.GetString("WB0220_QuestionFromExpressionLocatedLater", resourceCulture);
+                return ResourceManager.GetString("WB0220_RowIndexInMultiOptionBasedRoster", resourceCulture);
             }
         }
         
