@@ -223,54 +223,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0219");
 
         [Test]
-        public void question_after_question_with_expression_referencing_it()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Question(enablementCondition: "x > 0"),
-                    Create.Question(variable: "x"),
-                })
-                .ExpectWarning("WB0220");
-
-        [Test]
-        public void question_after_static_text_with_expression_referencing_it()
-            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
-                {
-                    Create.StaticText(validationConditions: new [] { Create.ValidationCondition(expression: "x > 0") }),
-                    Create.Question(variable: "x"),
-                })
-                .ExpectWarning("WB0220");
-
-        [Test]
-        public void question_after_group_with_expression_referencing_it()
-            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
-                {
-                    Create.Group(enablementCondition: "x > 0"),
-                    Create.Question(variable: "x"),
-                })
-                .ExpectWarning("WB0220");
-
-        [Test]
-        public void question_after_group_having_question_with_expression_referencing_it()
-            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
-                {
-                    Create.Group(children: new []
-                    {
-                        Create.Question(validationConditions: new [] { Create.ValidationCondition(expression: "x > 0") }),
-                    }),
-                    Create.Question(variable: "x"),
-                })
-                .ExpectWarning("WB0220");
-
-        [Test]
-        public void question_before_question_with_expression_referencing_it()
-            => Create.QuestionnaireDocumentWithOneChapter(new[]
-                {
-                    Create.Question(variable: "x"),
-                    Create.Question(enablementCondition: "x > 0"),
-                })
-                .ExpectNoWarning("WB0220");
-
-        [Test]
         public void used_rowindex_inside_multioption_based_roster()
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
@@ -280,7 +232,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         Create.Question(enablementCondition: "@rowindex > 2"),
                     }),
                 })
-                .ExpectWarning("WB0222");
+                .ExpectWarning("WB0220");
 
         [Test]
         public void used_rowcode_inside_multioption_based_roster()
@@ -292,6 +244,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         Create.Question(enablementCondition: "@rowcode > 2"),
                     }),
                 })
-                .ExpectNoWarning("WB0222");
+                .ExpectNoWarning("WB0220");
     }
 }
