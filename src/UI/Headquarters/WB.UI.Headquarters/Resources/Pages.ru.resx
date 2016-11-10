@@ -570,4 +570,10 @@
   <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
     <value>[По умолчанию]</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Логин</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
 </root>

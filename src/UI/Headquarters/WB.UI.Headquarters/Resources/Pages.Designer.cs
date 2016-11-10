@@ -979,6 +979,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string Login {
+            get {
+                return ResourceManager.GetString("Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please log in.
         /// </summary>
         public static string LogOn_Legend {
@@ -1137,6 +1146,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PackagesInfo_UserName {
             get {
                 return ResourceManager.GetString("PackagesInfo_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
             }
         }
         
