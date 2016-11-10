@@ -183,6 +183,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static IEnumerable<QuestionnaireNodeReference[]> ConsecutiveQuestionsWithIdenticalEnablementConditions(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<IQuestion>()
+                .Where(question => !string.IsNullOrWhiteSpace(question.ConditionExpression))
                 .GroupBy(question => new
                 {
                     Enablement = question.ConditionExpression,
