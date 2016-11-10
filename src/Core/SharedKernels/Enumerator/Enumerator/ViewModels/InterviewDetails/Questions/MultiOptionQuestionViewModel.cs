@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateQuestionOptions()
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
-            var answerOnMultiOptionQuestion = interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer();
+            var answerOnMultiOptionQuestion = interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer()?.ToDecimals()?.ToArray();
             var optionViewModels = this.filteredOptionsViewModel.GetOptions()
                 .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion))
                 .ToList();

@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var textListQuestion = interview.GetTextListQuestion(entityIdentity);
             if (textListQuestion.IsAnswered)
             {
-                var answerViewModels = textListQuestion.GetAnswer().Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
+                var answerViewModels = textListQuestion.GetAnswer().ToTupleArray().Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
 
                 answerViewModels.ForEach(answerViewModel => this.Answers.Add(answerViewModel));
             }
