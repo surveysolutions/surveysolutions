@@ -18,8 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid QuestionnaireId { get; }
 
         string Title { get; }
-
-        Guid? ResponsibleId { get; }
+        
+        Translation Translation { get; }
 
         [Obsolete("This method is for import service only and should be removed at all.")]
         IQuestion GetQuestionByStataCaption(string stataCaption);
@@ -63,6 +63,12 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText);
 
         CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue);
+
+        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter);
+
+        CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText);
+
+        CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 

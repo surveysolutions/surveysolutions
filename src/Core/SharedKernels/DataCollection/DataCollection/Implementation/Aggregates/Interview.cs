@@ -249,7 +249,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.SetQuestionnaireProperties(command.QuestionnaireId, command.Version);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(command.QuestionnaireId, command.Version, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(command.QuestionnaireId, command.Version, null);
 
             var state = new InterviewStateDependentOnAnswers();
 
@@ -298,7 +298,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, null);
 
             var state = new InterviewStateDependentOnAnswers();
 
@@ -329,7 +329,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, null);
             this.SetQuestionnaireProperties(questionnaireIdentity.QuestionnaireId, questionnaire.Version);
 
             var state = new InterviewStateDependentOnAnswers();
@@ -365,7 +365,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, language: this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
             var changedInterviewTree = sourceInterviewTree.Clone();
@@ -661,7 +661,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId);
 
-            this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
+            this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, null);
 
             var isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
 

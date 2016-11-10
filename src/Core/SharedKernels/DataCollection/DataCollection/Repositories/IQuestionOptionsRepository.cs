@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
     public interface IQuestionOptionsRepository
     {
         IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity,
-            IQuestion questionId, int? parentQuestionValue, string filter, Guid? translationId);
+            Guid questionId, int? parentQuestionValue, string filter, Translation translationId);
 
         CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity,
-            IQuestion questionId, string optionText, Guid? translationId);
+            Guid questionId, string optionText, Translation translationId);
 
         CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
-            IQuestion questionId, decimal optionValue, Guid? translationId);
+            Guid questionId, decimal optionValue, Translation translationId);
     }
 }
