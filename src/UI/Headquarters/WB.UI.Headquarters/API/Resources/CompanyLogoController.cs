@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,7 +14,8 @@ namespace WB.UI.Headquarters.API.Resources
     public class CompanyLogoController : ApiController
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;
-        private const int defaultImageSizeToScale = 156;
+        private const int defaultImageHeightToScale = 329;
+        private const int defaultImageWidthToScale = 365;
 
         public CompanyLogoController(IPlainKeyValueStorage<CompanyLogo> logoStorage)
         {
@@ -29,7 +31,7 @@ namespace WB.UI.Headquarters.API.Resources
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new ByteArrayContent(GetTrasformedContent(companyLogo, defaultImageSizeToScale))
+                    Content = new ByteArrayContent(GetTrasformedContent(companyLogo, defaultImageHeightToScale, defaultImageWidthToScale))
                 };
 
                 response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("image/png");
@@ -40,18 +42,21 @@ namespace WB.UI.Headquarters.API.Resources
             return Request.CreateResponse(HttpStatusCode.NoContent);
         }
 
-        private static byte[] GetTrasformedContent(byte[] source, int? sizeToScale = null)
+        private static byte[] GetTrasformedContent(byte[] source, int? height = null, int? width = null)
         {
-            if (!sizeToScale.HasValue) return source;
+            if (!height.HasValue || !width.HasValue) return source;
 
             //later should handle video and produce image preview 
             using (var outputStream = new MemoryStream())
             {
                 ImageBuilder.Current.Build(source, outputStream, new ResizeSettings
                 {
-                    MaxWidth = sizeToScale.Value,
-                    MaxHeight = sizeToScale.Value,
-                    Format = "png"
+                    MaxWidth = height.Value,
+                    MaxHeight = width.Value,
+                    Format = "png",
+                    Mode = FitMode.Pad,
+                    PaddingColor = Color.Transparent,
+                    Anchor = ContentAlignment.MiddleCenter
                 });
 
                 return outputStream.ToArray();

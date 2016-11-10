@@ -6327,13 +6327,24 @@ input.wb-checkbox {
 .left-column #log-in {
   text-align: left; }
 
-#placeholder {
+img#placeholder {
   width: 365.5px;
   height: 329px;
-  background: url("../img/HQ-login-3_05.png") no-repeat;
-  background-size: 365.5px 329px;
+  /**/
   font-size: 0;
-  line-height: 0; }
+  line-height: 0;
+  position: relative; }
+  img#placeholder:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff url("../img/HQ-login-3_05.png") no-repeat;
+    background-size: 365.5px 329px; }
 
 .navbar .retina-world-bank {
   width: 270px;
