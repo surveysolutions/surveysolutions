@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -18,21 +18,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public readonly IOptionsRepository optionsRepository;
 
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity,
-            IQuestion question, int? parentQuestionValue, string filter, Guid? translationId)
+            Guid questionId, int? parentQuestionValue, string filter, Translation translation)
         {
-            return optionsRepository.GetFilteredQuestionOptions(qestionnaireIdentity, question.PublicKey, parentQuestionValue, filter, translationId);
+            return optionsRepository.GetFilteredQuestionOptions(qestionnaireIdentity, questionId, parentQuestionValue, filter, translation.Id);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity,
-             IQuestion question, string optionText, Guid? translationId)
+             Guid questionId, string optionText, Translation translation)
         {
-            return optionsRepository.GetQuestionOption(qestionnaireIdentity, question.PublicKey, optionText, translationId);
+            return optionsRepository.GetQuestionOption(qestionnaireIdentity, questionId, optionText, translation.Id);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
-            IQuestion question, decimal optionValue, Guid? translationId)
+            Guid questionId, decimal optionValue, Translation translation)
         {
-            return optionsRepository.GetQuestionOptionByValue(qestionnaireIdentity, question.PublicKey, optionValue, translationId);
+            return optionsRepository.GetQuestionOptionByValue(qestionnaireIdentity, questionId, optionValue, translation.Id);
         }
     }
 }

@@ -42,8 +42,7 @@ namespace WB.Tests.Integration
 
             Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
             Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
-
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository());
+            
         }
 
         internal static class Stub<T> where T : class

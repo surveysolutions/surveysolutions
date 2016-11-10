@@ -60,9 +60,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             Mock<IOptionsRepository> optionsRepository = new Mock<IOptionsRepository>();
 
-            optionsRepository
+            /*optionsRepository
                 .Setup(x => x.GetQuestionOptions(questionnaireId, questionId))
-                .Returns(options);
+                .Returns(options);*/
 
             optionsRepository
                 .Setup(x => x.GetQuestionOption(questionnaireId, questionId, It.IsAny<string>(), It.IsAny<Guid>()))

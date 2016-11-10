@@ -10,18 +10,19 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IOptionsRepository
     {
-        IReadOnlyList<CategoricalOption> GetQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId);
+        IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, 
+            Guid questionId, int? parentValue, string filter, Guid? translationId);
 
-        IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId,
-            int? parentValue, string filter, Guid? translationId);
+        CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, 
+            string optionText, Guid? translationId);
 
-        CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionText, Guid? translationId);
-
-        CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, decimal optionValue, Guid? translationId);
+        CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, 
+            decimal optionValue, Guid? translationId);
 
         void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId);
 
-        void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireId, Guid questionId, List<Answer> answers, List<TranslationDto> optionsTranslations);
+        void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireId, Guid questionId, 
+            List<Answer> answers, List<TranslationDto> optionsTranslations);
 
         void StoreOptions(List<OptionView> options);
 

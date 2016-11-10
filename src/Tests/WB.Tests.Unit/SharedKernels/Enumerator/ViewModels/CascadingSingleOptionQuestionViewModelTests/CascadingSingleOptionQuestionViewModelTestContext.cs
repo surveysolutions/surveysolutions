@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.V10;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -60,11 +59,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         protected static IOptionsRepository SetupOptionsRepositoryForQuestionnaire(Guid questionId, QuestionnaireIdentity questionnaireIdentity = null)
         {
             var optionsRepository = new Mock<IOptionsRepository>();
-
-            optionsRepository
-                .Setup(x => x.GetQuestionOptions(questionnaireIdentity ?? questionnaireId, questionId))
-                .Returns(Options);
-
             return optionsRepository.Object;
         }
 
