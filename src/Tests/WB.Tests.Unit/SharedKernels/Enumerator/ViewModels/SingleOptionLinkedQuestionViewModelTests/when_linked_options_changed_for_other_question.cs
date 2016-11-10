@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
@@ -34,10 +34,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             linkedOptionTextInInterview = "answer in init";
             IStatefulInterview interview = Substitute.For<IStatefulInterview>();
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
-                     .Returns(new List<BaseInterviewAnswer> { Create.Entity.TextAnswer(linkedOptionTextInInterview) });
+                     .Returns(new List<BaseInterviewAnswer> { Create.Entity.InterviewTreeTextQuestion(linkedOptionTextInInterview) });
 
             interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.Entity.RosterVector(1))
-                     .Returns(Create.Entity.TextAnswer("answer in event"));
+                     .Returns(Create.Entity.InterviewTreeTextQuestion("answer in event"));
 
             IQuestionnaire questionnaire = 
                 SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);

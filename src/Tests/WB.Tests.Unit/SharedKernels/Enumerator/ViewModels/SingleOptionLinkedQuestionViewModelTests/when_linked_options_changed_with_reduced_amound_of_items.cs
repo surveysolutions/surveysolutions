@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
@@ -35,16 +33,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                   .Returns(new List<BaseInterviewAnswer>
                   {
-                      Create.Entity.TextAnswer("one",
+                      Create.Entity.InterviewTreeTextQuestion("one",
                         questionId: linkSourceQuestionId.Id,
                         rosterVector: Create.Entity.RosterVector(1)),
-                       Create.Entity.TextAnswer("two",
+                       Create.Entity.InterviewTreeTextQuestion("two",
                         questionId: linkSourceQuestionId.Id,
                         rosterVector: Create.Entity.RosterVector(2))
                   });
 
             interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.Entity.RosterVector(1))
-                     .Returns(Create.Entity.TextAnswer("one"));
+                     .Returns(Create.Entity.InterviewTreeTextQuestion("one"));
 
             IQuestionnaire questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
 
@@ -56,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                  .Returns(new List<BaseInterviewAnswer>
                  {
-                      Create.Entity.TextAnswer("one",
+                      Create.Entity.InterviewTreeTextQuestion("one",
                         questionId: linkSourceQuestionId.Id,
                         rosterVector: Create.Entity.RosterVector(1)),
                  });

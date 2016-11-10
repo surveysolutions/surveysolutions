@@ -2,10 +2,8 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
-using WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewModelTests
@@ -18,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
             
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
-                   && _.GetTextQuestion(questionIdentity) == new TextAnswer());
+                   && _.GetTextQuestion(questionIdentity) == Create.Entity.InterviewTreeTextQuestion(""));
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
