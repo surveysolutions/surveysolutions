@@ -12,6 +12,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public long QuestionnaireVersion { set; get; }
 
         public bool ReceivedByInterviewer { get; set; }
-        public bool CanAssingToOtherTeam { get; set; }
     }
 }
