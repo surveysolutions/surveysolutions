@@ -37,21 +37,23 @@ function CleanBinAndObjFolders() {
 
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
-function BuildNewDesigner(){
-    Write-Host "##teamcity[blockOpened name='Building updated designer files']"
-    Write-Host "##teamcity[progressStart 'Building updated designer files']"
+function BuildStatiContent($targetLocation){
+    Write-Host "##teamcity[blockOpened name='Building static files']"
+    Write-Host "##teamcity[progressStart 'Building static files']"
 
-    $installCommand = "npm install"
-    $targetLocation = "src\UI\Designer\WB.UI.Designer\questionnaire"
     Write-Host "Pushing location to $targetLocation"
     Push-Location -Path $targetLocation
     Write-Host $installCommand
-    iex $installCommand #install node js dependencies
-    &gulp | Write-Host #will execute script gulpfile.js in questionnaire folder
+	#install node js dependencies
+    &npm install
+	#install bower packages
+	&bower install
+	#will execute script gulpfile.js in target folder
+    &gulp --production | Write-Host 
     Pop-Location
 
-    Write-Host "##teamcity[progressFinish 'Building updated designer files']"
-    Write-Host "##teamcity[blockClosed name='Building updated designer files']"
+    Write-Host "##teamcity[progressFinish 'Building static files']"
+    Write-Host "##teamcity[blockClosed name='Building static files']"
 }
 function CheckPrerequisites() {
     Write-Host "##teamcity[blockOpened name='Checking prerequisities']"
