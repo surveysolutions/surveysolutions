@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 

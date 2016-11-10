@@ -9,7 +9,7 @@ using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using It = Machine.Specifications.It;
 
@@ -32,10 +32,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var linkedAnswerRosterVector = new decimal[]{1, 1};
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(secondRosterTitlQuestionId, Arg.Any<Identity>())
                 .Returns(new List<BaseInterviewAnswer> {
-                    Create.Entity.TextAnswer("hamster", secondRosterTitlQuestionId, linkedAnswerRosterVector),
-                    Create.Entity.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{1, 2}), 
-                    Create.Entity.TextAnswer("hamster", secondRosterTitlQuestionId, new decimal[]{2, 1}),
-                    Create.Entity.TextAnswer("parrot", secondRosterTitlQuestionId, new decimal[]{2, 2})
+                    Create.Entity.InterviewTreeTextQuestion("hamster", secondRosterTitlQuestionId, linkedAnswerRosterVector),
+                    Create.Entity.InterviewTreeTextQuestion("parrot", secondRosterTitlQuestionId, new decimal[]{1, 2}), 
+                    Create.Entity.InterviewTreeTextQuestion("hamster", secondRosterTitlQuestionId, new decimal[]{2, 1}),
+                    Create.Entity.InterviewTreeTextQuestion("parrot", secondRosterTitlQuestionId, new decimal[]{2, 2})
                 });
 
             interview.GetParentRosterTitlesWithoutLast(TODO)

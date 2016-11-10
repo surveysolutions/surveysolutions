@@ -4,7 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
