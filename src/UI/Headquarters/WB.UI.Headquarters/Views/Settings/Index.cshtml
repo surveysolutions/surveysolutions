@@ -67,7 +67,7 @@
 <div class="clearfix"></div>
 <div class="row-fluid">
     <div class="well well-sm col-sm-6">
-        <form action="@Url.Action("UpdateLogo", "Settings")" method="post" enctype="multipart/form-data" class="col-sm-6">
+        <form action="@Url.Action("UpdateLogo", "Settings")" method="post" enctype="multipart/form-data" class="col-sm-5">
             <div class="form-group">
                 <label for="notificationText">@Settings.Logo: </label>
 
@@ -75,7 +75,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
         </form>
-        <div class="col-sm-6">
+        <div class="col-sm-7">
             <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" />
         </div>
     </div>
