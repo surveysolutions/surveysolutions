@@ -50,12 +50,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         }
 
         [Test]
-        public void should_clear_GPS_location_question_id()
-        {
-            dashboardItem.LocationQuestionId.ShouldBeNull();
-        }
-
-        [Test]
         public void should_clear_GPS_location_latitude() =>
             dashboardItem.LocationLatitude.ShouldBeNull();
 
