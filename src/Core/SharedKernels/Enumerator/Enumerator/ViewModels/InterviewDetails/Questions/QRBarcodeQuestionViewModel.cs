@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var qrBarcodeQuestion = interview.GetQRBarcodeQuestion(entityIdentity);
             if (qrBarcodeQuestion.IsAnswered)
             {
-                this.Answer = qrBarcodeQuestion.GetAnswer();
+                this.Answer = qrBarcodeQuestion.GetAnswer().DecodedText;
             }
 
             this.eventRegistry.Subscribe(this, interviewId);

@@ -157,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity);
 
             foreach (var linkedOption in linkedQuestion.Options)
-                yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer());
+                yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue);
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)

@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var linkedQuestion = interview.GetLinkedMultiOptionQuestion(this.questionIdentity);
 
-            var answeredOptions = linkedQuestion.GetAnswer()?.Select(x => new RosterVector(x))?.ToArray() ??
+            var answeredOptions = linkedQuestion.GetAnswer()?.ToDecimalArrayArray()?.Select(x => new RosterVector(x))?.ToArray() ??
                                   new RosterVector[0];
 
             foreach (var linkedOption in linkedQuestion.Options)
