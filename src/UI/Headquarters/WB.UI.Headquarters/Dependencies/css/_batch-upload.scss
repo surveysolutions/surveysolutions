@@ -1,0 +1,27 @@
+.text-page{
+	font: 14px/16px "RobotoRegular";
+}
+.prefilled-data-info{
+	@extend .text-page;
+	margin-bottom: 60px;
+	p{
+		margin-bottom: 20px;
+	}
+	a{
+		&.list-required-prefilled-data{
+			display: block;
+			margin-top: 30px;
+		}
+	}
+}
+.selection-box a{
+	@extend %uppercase-font;
+    display: block;
+    margin-top: 40px;
+}
+.btn-file input{
+	display: none;
+}
+main .flex-row{
+	margin-bottom: 40px;
+}
