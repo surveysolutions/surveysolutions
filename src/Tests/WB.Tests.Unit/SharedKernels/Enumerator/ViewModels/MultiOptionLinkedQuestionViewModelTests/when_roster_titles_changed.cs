@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             interview.GetParentRosterTitlesWithoutLast(TODO)
                 .Returns(new List<string> { "title" });
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkToQuestionId, questionIdentity)
-                .Returns(new[] { Create.Entity.TextAnswer("subtitle", linkToQuestionId, Create.Entity.RosterVector(1, 1)) });
+                .Returns(new[] { Create.Entity.InterviewTreeTextQuestion("subtitle", linkToQuestionId, Create.Entity.RosterVector(1, 1)) });
 
             viewModel = CreateViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
             viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.Other.NavigationState());

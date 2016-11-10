@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -25,9 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.FindAnswersOfReferencedQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[]
                     {
-                        Create.Entity.TextAnswer("answer1"),
-                        Create.Entity.TextAnswer(null),
-                        Create.Entity.TextAnswer("answer2"),
+                        Create.Entity.InterviewTreeTextQuestion("answer1"),
+                        Create.Entity.InterviewTreeTextQuestion(null),
+                        Create.Entity.InterviewTreeTextQuestion("answer2"),
                     }
                 && _.Answers == new Dictionary<string, BaseInterviewAnswer>());
 
