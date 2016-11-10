@@ -43,10 +43,11 @@ try {
 	RunTests $BuildConfiguration
 
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
-	BuildNewDesigner
+	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire"
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
+	BuildStatiContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies"
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
