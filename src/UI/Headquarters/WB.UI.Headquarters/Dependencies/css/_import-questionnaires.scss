@@ -1,0 +1,119 @@
+@import "two-column-form";
+@import "add-interviews";
+.radio{
+  input.wb-radio{
+    display: none;
+    & ~ label .tick {
+      @extend %tick;
+      background-position: -215px 0;
+    } 
+    &:checked ~ label{
+      color:  $gray_text;
+      font-weight: bold;
+      .tick {
+        background-position: -245px 0;
+      }
+    } 
+    &:disabled ~ label .tick {
+      background-position: -215px 0;
+    } 
+    &:checked:disabled ~ label .tick {
+      background-position: -215px 0;
+    } 
+  }
+  label{
+    padding: 0;
+    color: $gray_light;
+    font-weight: normal;
+  }
+}
+
+main{
+  .page-header{
+    padding-bottom: 0;
+    margin: 0;
+    border: none;
+     .page-title{
+          @extend %instructions;
+      }
+    .maintenance-mode{
+      @extend %instructions;
+      display: none;
+      .message-try-again{
+        color: $red_error; 
+      }
+    }
+    .back-link{
+      text-transform: uppercase;
+      font: 12.5px/14px "TrebuchetMSBold";
+    }
+  }
+  .two-columns-form{
+    .left-column{
+      text-align: center;
+      
+      p{
+        @include font(17px, 22px);
+        color: $gray_light;
+        margin-bottom: 0;
+
+        a{
+          color: $gray_light;
+          text-decoration: underline;
+
+          &:hover{
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+}
+.questionnaire-statistics {
+  margin-bottom: 30px;
+  ul{
+    font: 14px/16px "TrebuchetMS";
+    list-style: none;
+    padding: 0;
+    color: $gray_info;
+    overflow: hidden;
+    li{
+      margin-bottom: 6px;
+      a{
+        font-style: italic;
+        text-decoration: underline;
+
+        &:hover, &:focus{
+          text-decoration: none;
+        }
+      }
+    }
+    .questionnaire-content li{
+      float: left;
+      margin-right: 10px;
+      margin-bottom: 0;
+    }
+  }
+}
+#import-questionnaire-form{
+  .form-group{
+    margin-bottom: 0;
+  }
+  .questionnaire-versioning{
+    margin-bottom: 65px;
+    margin-top: 15px;
+  }
+}
+.flex-block{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .block{
+    display: flex;
+    flex-grow:1;
+    flex-direction:column;
+  }
+}
+.radio{
+  margin: 0;
+}

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -15,14 +18,20 @@
     <link rel='apple-touch-icon-precomposed' sizes='72x72' href='img/identity/favicon-hq-72x72.png'>
     <link rel='apple-touch-icon-precomposed' href='img/identity/favicon-hq.png'>
 
-    <!-- markup:css -->
-    <link rel="stylesheet" href="../../Dependencies/build/markup.css">
+    <!-- cssLibs:css -->
     <!-- endinject -->
 
-    <!-- libs:js -->
-    <script type="text/javascript" href="../../Dependencies/build/libs.js"></script>
+    <!-- cssApp:css -->
+    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
     <!-- endinject -->
-   
+
+    <!-- jsLibs:js -->
+    <script  type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
+    <!-- endinject -->
+
+    <!-- jsApp:js -->
+    <!-- endinject -->
+
     <script>
       $(document).ready(function(){
           $("#hide").click(function(){

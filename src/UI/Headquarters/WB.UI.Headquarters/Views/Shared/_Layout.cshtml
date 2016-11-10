@@ -30,7 +30,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 @if (User.IsInRole(UserRoles.Administrator.ToString()))
-            {
+                {
                     <a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">@Users.Admin</a>
                 }
                 else if (User.IsInRole(UserRoles.Headquarter.ToString()))

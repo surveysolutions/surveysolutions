@@ -16,8 +16,10 @@ var config = {
     loginDir: '../Views/Account/',
     loginPath: '../Views/Account/LogIn.cshtml',
     cssSource: './css/markup.scss',
-    cssInjectSectionName: 'markup',
-    jsInjectSectionName: 'libs'
+    cssAppInject: 'cssApp',
+    cssLibsInject: 'cssLibs',
+    jsAppInject: 'jsApp',
+    jsLibsInject: 'jsLibs'
 };
 
 gulp.task('styles', function () {
@@ -33,7 +35,6 @@ gulp.task('styles', function () {
 
 gulp.task('bowerJs', function () {
     return gulp.src(mainBowerFiles('**/*.js'))
-        .pipe(debug())
         .pipe(plugins.ngAnnotate())
       	.pipe(concat('libs.js'))
         .pipe(gulp.dest(config.buildDir))
@@ -43,19 +44,34 @@ gulp.task('bowerJs', function () {
     	.pipe(gulp.dest(config.buildDir));
 });
 
-gulp.task('login', ['styles', 'bowerJs'], function () {
+gulp.task('bowerCss', function () {
+    return gulp.src(mainBowerFiles('**/*.css'))
+        .pipe(autoprefixer('last 2 version'))
+        .pipe(concat('libs.css'))
+        .pipe(gulp.dest(config.buildDir))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(cssnano())
+        .pipe(plugins.rev())
+    	.pipe(gulp.dest(config.buildDir));
+});
+
+gulp.task('login', ['styles', 'bowerCss', 'bowerJs'], function () {
     var target = gulp.src(config.loginPath);
-    var cssMarkup = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
-    var jsLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
+    var cssApp = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
+    var jsApp = gulp.src(config.buildDir + '/app-*.min.js', { read: false });
+    var jsLibs = gulp.src(config.buildDir + '/libs-*.min.js', { read: false });
+    var cssLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
 
     if (config.production) {
         return target
-            .pipe(plugins.inject(cssMarkup, { relative: true, name: config.cssInjectSectionName }))
-            .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsInjectSectionName }))
+            .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }))
+            .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }))
+            .pipe(plugins.inject(jsApp, { relative: true, name: config.jsAppInject }))
+            .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }))
             .pipe(gulp.dest(config.loginDir));
     }
 
-    return cssMarkup.pipe(debug());
+    return util.noop();
 });
 
 gulp.task('clean', function () {
@@ -63,5 +79,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('styles', 'bowerJs', 'login');
+    gulp.start('styles', 'bowerCss', 'bowerJs', 'login');
 });
