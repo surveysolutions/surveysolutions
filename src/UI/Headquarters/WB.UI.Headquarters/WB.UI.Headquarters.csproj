@@ -452,8 +452,8 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\libs.js" />
-    <Content Include="Dependencies\build\markup.css" />
+	<Content Include="Dependencies\build\*.js" />
+    <Content Include="Dependencies\build\*.css" />
     <Content Include="Dependencies\fonts\RobotoBold.svg" />
     <Content Include="Dependencies\fonts\RobotoItalic.svg" />
     <Content Include="Dependencies\fonts\RobotoLight.svg" />
