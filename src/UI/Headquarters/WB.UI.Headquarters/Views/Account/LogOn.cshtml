@@ -1,47 +1,138 @@
-﻿@using System.Web.Optimization
-@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿@using Microsoft.Practices.ServiceLocation
+@using WB.Core.Infrastructure.Versions
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Headquarters.Resources
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
-@model LogOnModel
+@using WB.UI.Shared.Web.Extensions
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
 @{
-    Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
-    ViewBag.Title = Pages.LogOn_Title;
+    Layout = null;
+    var modelState = ViewContext.ViewData.ModelState;
 }
-@section scripts
-{
-    @Scripts.Render("~/validate")
-}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HQ Login</title>
 
-<div style="margin-top: 40px;">
-    @Html.BootstrapValidationSummary(Pages.LogOn_UnsuccessfulLogin)
-</div>
+    @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
 
-<div class="well form-signin">
-    @using (Html.BeginForm("LogOn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
-    {
-        <fieldset>
-            <legend>
-                @Pages.LogOn_Legend
-            </legend>
-            <div class="form-group">
-                @Html.LabelFor(m => m.UserName, new { @class = "control-label col-sm-4" })
-                <div class="col-sm-8">
-                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autocomplete = "off" })
-                    @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "help-block" })
+    <!-- cssLibs:css -->
+    <!-- endinject -->
+    <!-- cssApp:css -->
+    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
+    <!-- endinject -->
+</head>
+<body>
+    <header>
+        <div class="container-fluid">
+            <nav class="navbar navbar-fixed-top" role="navigation">
+                <div class="container-fluid ">
+                    <div class="row flex-row">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                            <div class="centered-box-table">
+                                <div class="centered-box-table-cell">
+                                    <a class="brand" href="http://www.worldbank.org">
+                                        <div class="retina-world-bank">World Bank Group</div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-lg-offset-9 col-md-1 col-md-offset-8 col-sm-2 col-sm-offset-6 col-xs-4 col-xs-offset-2">
+                            <div class="centered-box-table">
+                                <div class="centered-box-table-cell">
+                                    <a href="http://docs.mysurvey.solutions/headquarters.pdf" title="Help" target="_blank" class="help">
+                                        Help
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container-fluid">
+            <div class="row two-columns-form">
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
+                    <div class="centered-box-table">
+                        <div class="centered-box-table-cell">
+                            @using (Html.BeginForm("LogOn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "log-in", @class = "log-in" }))
+                            {
+                                <div class="retina headquarter">Survey Solutions Headquarters</div>
+                                if (!modelState.IsValid)
+                                {
+                                    <div class="form-error">
+                                        <p>
+                                            @Pages.LogOn_UnsuccessfulLogin
+                                            @foreach (var error in modelState.Keys.SelectMany(key => modelState[key].Errors))
+                                            {
+                                            <span>@error.ErrorMessage</span>
+                                            }
+                                        </p>
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autocomplete = "off" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off" })
+                                </div>
+                                @*<div class="form-group">
+                                    <input class="wb-checkbox" id="stay-logged-in" type="checkbox" />
+                                    <label for="stay-logged-in">
+                                        <span class="tick"></span>Stay logged in
+                                    </label>
+                                </div>*@
+                                <div class="form-actions">
+                                    <button class="btn btn-success btn-lg" type="submit">@Pages.LogOn_LogIn</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Password, new { @class = "control-label col-sm-4" })
-                <div class="col-sm-8">
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off" })
-                    @Html.ValidationMessageFor(m => m.Password, null, new { @class = "help-block" })
+                <div class="col-md-4 col-sm-6 col-xs-12 right-column">
+                    <div class="centered-box-table">
+                        <div class="centered-box-table-cell">
+                            <div id="placeholder">Company Name</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
-        <div class="form-group">
-            <div class="col-sm-offset-4 col-sm-8">
-                <button class="btn btn-primary btn-lg" type="submit">@Pages.LogOn_LogIn</button>
             </div>
         </div>
-    }
-</div>
+    </main>
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="text-left">
+            &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
+        </div>
+        <div class="text-left">
+            @(ServiceLocator.Current.GetInstance<IProductVersion>())
+            @if (AppSettings.IsDebugBuilded)
+            {
+                <span id="build-config">[.NET Debug]</span>
+            }
+
+            @if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                <span id="compile-config" style="color: red">Web Debug</span>
+            }
+            <span>|</span>
+            <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
+        </div>
+    </div>
+</footer>
+
+
+@Html.Partial("Clickjacking")
+    <!-- jsLibs:js -->
+    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
+    <!-- endinject -->
+
+    <!-- jsApp:js -->
+    <!-- endinject -->
+</body>
+</html>

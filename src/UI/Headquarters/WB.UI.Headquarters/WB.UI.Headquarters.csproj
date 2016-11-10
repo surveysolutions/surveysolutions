@@ -816,7 +816,7 @@
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\ControlPanel\RestoreAllDeletedQuestionnaireProjections.cshtml" />
     <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
-    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
@@ -885,7 +885,7 @@
     <Content Include="Scripts\spin.min.js.map" />
     <Content Include="Views\Interview\CommentTemplatePartialView.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
-    <Content Include="Views\Account\LogIn.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
