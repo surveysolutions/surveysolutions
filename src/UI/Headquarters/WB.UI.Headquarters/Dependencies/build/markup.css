@@ -6052,11 +6052,12 @@ input.wb-checkbox {
     .two-columns-form .left-column img {
       margin-bottom: 25px; }
   .two-columns-form .right-column {
-    padding: 28px 41px;
+    padding: 10px 8% 10px 3%;
     border-left: 2px solid #dbdfe2; }
   .two-columns-form .log-in .form-error {
     margin-bottom: 20px;
-    margin-bottom: 35px; }
+    margin-bottom: 35px;
+    display: none; }
     .two-columns-form .log-in .form-error p {
       line-height: 21px;
       color: #e74924; }
@@ -6072,7 +6073,7 @@ input.wb-checkbox {
         color: #2a81cb;
         font-family: "ufonts_com_lucidaconsole"; }
     .two-columns-form .log-in .form-group .form-control {
-      width: 90%;
+      width: 100%;
       height: 42px;
       max-width: 395px;
       border-width: 2px;
@@ -6260,11 +6261,12 @@ input.wb-checkbox {
     .two-columns-form .left-column img {
       margin-bottom: 25px; }
   .two-columns-form .right-column {
-    padding: 28px 41px;
+    padding: 10px 8% 10px 3%;
     border-left: 2px solid #dbdfe2; }
   .two-columns-form .log-in .form-error {
     margin-bottom: 20px;
-    margin-bottom: 35px; }
+    margin-bottom: 35px;
+    display: none; }
     .two-columns-form .log-in .form-error p {
       line-height: 21px;
       color: #e74924; }
@@ -6280,7 +6282,7 @@ input.wb-checkbox {
         color: #2a81cb;
         font-family: "ufonts_com_lucidaconsole"; }
     .two-columns-form .log-in .form-group .form-control {
-      width: 90%;
+      width: 100%;
       height: 42px;
       max-width: 395px;
       border-width: 2px;
@@ -6328,12 +6330,12 @@ input.wb-checkbox {
   text-align: left; }
 
 img#placeholder {
-  width: 365.5px;
+  width: 365px;
   height: 329px;
-  /**/
   font-size: 0;
   line-height: 0;
-  position: relative; }
+  position: relative;
+  display: block; }
   img#placeholder:after {
     content: " ";
     display: block;
@@ -6344,7 +6346,7 @@ img#placeholder {
     width: 100%;
     height: 100%;
     background: #fff url("../img/HQ-login-3_05.png") no-repeat;
-    background-size: 365.5px 329px; }
+    background-size: 365px 329px; }
 
 .navbar .retina-world-bank {
   width: 270px;
@@ -6391,7 +6393,7 @@ img#placeholder {
 @media (max-width: 880px) {
   .left-column #log-in {
     text-align: center; }
-  #placeholder {
+  img#placeholder {
     display: none; }
   .retina.headquarter {
     display: inline-block; }
