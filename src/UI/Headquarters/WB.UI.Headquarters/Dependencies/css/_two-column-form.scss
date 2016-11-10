@@ -1,122 +1,121 @@
 input.wb-checkbox{
-  display: none;
-  & ~ label .tick {
-    @extend %tick;
-    background-position: -5px 0;
-  }
-  &:checked ~ label .tick {
-    background-position: -65px 0;
-  }
-  &:disabled ~ label .tick {
-    background-position: -30px 0;
-  }
-  &:checked:disabled ~ label .tick {
-    background-position: -90px 0;
-  }
+    display: none;
+    & ~ label .tick {
+        @extend %tick;
+        background-position: -5px 0;
+    }
+    &:checked ~ label .tick {
+        background-position: -65px 0;
+    }
+    &:disabled ~ label .tick {
+        background-position: -30px 0;
+    }
+    &:checked:disabled ~ label .tick {
+        background-position: -90px 0;
+    }
 }
 .btn-success{
-  font: 12px/14px "TrebuchetMSBold";
-  background-color: $green_btn;
-  outline: none;
-  text-transform: uppercase;
+    font: 12px/14px "TrebuchetMSBold";
+    background-color: $green_btn;
+    outline: none;
+    text-transform: uppercase;
 }
 .btn-lg{
-  padding: 12px 15px;
+    padding: 12px 15px;
 }
 .two-columns-form, .flex-row{
-  display: flex;
+    display: flex;
 }
 .two-columns-form{
-  margin-top: 115px;
+    margin-top: 115px;
   
-  .left-column{
-    padding: 10px 3% 10px 8%;
-    img{
-      margin-bottom: 25px;
+    .left-column{
+        padding: 10px 3% 10px 8%;
+        img{
+            margin-bottom: 25px;
+        }
     }
-  }
-  .right-column{
-    padding: 28px 41px;
-    border-left: 2px solid $gray_form;
-  }
-  .log-in{
-    .form-error{
-      margin-bottom: 20px;
-      margin-bottom: 35px;
-      p{
-        line-height: 21px;
-        color: $red_error; 
-      }
+    .right-column{
+        padding: 10px 8% 10px 3%;
+        border-left: 2px solid $gray_form;
     }
-    .form-group{
-      margin-bottom: 10px;
-      label{
-        @include font(13px, 15px);
-        font-weight: normal;
-        padding-top: 6px;
-        span{
-          color: $blue;
-          font-family: "ufonts_com_lucidaconsole";
+    .log-in{
+        .form-error{
+            margin-bottom: 20px;
+            margin-bottom: 35px;
+            display: none;
+            p{
+                line-height: 21px;
+                color: $red_error; 
+            }
         }
-      }
-      .form-control{
-        @include size(90%, 42px);
-        max-width: 395px;
-        border-width: 2px;
-        border-color: $gray-form;
-        &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-          font-style: italic;
-        }
-        &::-moz-placeholder { /* Firefox 19+ */
-          font-style: italic;
-        }
-        &:-ms-input-placeholder { /* IE 10+ */
-          font-style: italic;
-        }
-        &:-moz-placeholder { /* Firefox 18- */
-          font-style: italic;
-        }
-      } 
-    } 
-  }
+        .form-group{
+            margin-bottom: 10px;
+            label{
+                @include font(13px, 15px);
+                font-weight: normal;
+                padding-top: 6px;
+                span{
+                    color: $blue;
+                    font-family: "ufonts_com_lucidaconsole";
+                }
+            }
+            .form-control{
+                @include size(100%, 42px);
+                max-width: 395px;
+                border-width: 2px;
+                border-color: $gray-form;
+                &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+                    font-style: italic;
+                }
+                &::-moz-placeholder { /* Firefox 19+ */
+                    font-style: italic;
+                }
+                &:-ms-input-placeholder { /* IE 10+ */
+                    font-style: italic;
+                }
+                &:-moz-placeholder { /* Firefox 18- */
+                    font-style: italic;
+                }
+            } 
+        } 
+    }
 }
 .centered-box-table{
-  display: table;
-  @include size(100%, 100%);
-  .centered-box-table-cell{
-    display: table-cell;
-    vertical-align: middle;
-  }
+    display: table;
+    @include size(100%, 100%);
+    .centered-box-table-cell{
+        display: table-cell;
+        vertical-align: middle;
+    }
 }
 .breadcrumb{
-  background-color: transparent;
-  margin: 0;
-  padding: 0;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
   
-  li a{
-    @extend %gray-uppercase;
-  } 
+    li a{
+        @extend %gray-uppercase;
+    } 
 }
 @media (max-width: $screen-sm-min){
-  html body main {
-    .flex-row, .two-columns-form{
-      display: block;
-      margin-top: 30px;
-      .right-column, .left-column{
-        padding: 10px 3%;
-        border: none;
-      }
-      .log-in{
-        .form-group .form-control{
-          width: 75%;
-          display: inline-block;
+    html body main {
+        .flex-row, .two-columns-form{
+            display: block;
+            margin-top: 30px;
+            .right-column, .left-column{
+                padding: 10px 3%;
+                border: none;
+            }
+            .log-in{
+                .form-group .form-control{
+                    width: 75%;
+                    display: inline-block;
+                }
+            }
         }
-      }
-    }
-    .centered-box-table{
-      text-align: center;
-    }
-  }
-  
-  
+        .centered-box-table{
+            text-align: center;
+        }
+    } 
 }
