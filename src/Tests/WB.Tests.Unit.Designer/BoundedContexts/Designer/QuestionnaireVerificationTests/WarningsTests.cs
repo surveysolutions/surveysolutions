@@ -161,6 +161,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectWarning("WB0218");
 
         [Test]
+        public void consecutive_questions_with_same_empty_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "   "),
+                    Create.Question(enablementCondition: "   "),
+                    Create.Question(enablementCondition: "   "),
+                })
+                .ExpectNoWarning("WB0218");
+
+        [Test]
         public void independent_questions_with_same_enablement()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
