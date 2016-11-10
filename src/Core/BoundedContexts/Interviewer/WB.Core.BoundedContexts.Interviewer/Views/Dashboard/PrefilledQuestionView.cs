@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public string QuestionText { get; set; }
         public string Answer { get; set; }
         public Guid InterviewId { get; set; }
+        public int? SortIndex { get; set; }
     }
 }

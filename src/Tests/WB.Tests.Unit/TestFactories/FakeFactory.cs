@@ -50,6 +50,7 @@ namespace WB.Tests.Unit.TestFactories
             var repository = new Mock<IQuestionnaireStorage>();
             IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
             repository.SetReturnsDefault(plainQuestionnaire);
+            repository.SetReturnsDefault(questionnaire);
             return repository.Object;
         }
 
