@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var singleOptionQuestion = interview.GetSingleOptionQuestion(this.questionIdentity);
 
             List<SingleOptionQuestionOptionViewModel> singleOptionQuestionOptionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, isSelected: singleOptionQuestion.IsAnswered && model.Value == singleOptionQuestion.GetAnswer()))
+                .Select(model => this.ToViewModel(model, isSelected: singleOptionQuestion.IsAnswered && model.Value == singleOptionQuestion.GetAnswer().SelectedValue))
                 .ToList();
 
             this.Options.ForEach(x => x.DisposeIfDisposable());

@@ -221,7 +221,6 @@
     </Compile>
     <Compile Include="Events\Interview\PictureQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QRBarcodeQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionsDisabled.cs" />
