@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.Designer
                 UserName = userName,
             };
 
-        public static Answer Answer(string answer, decimal? value = null, string stringValue = null, decimal? parentValue = null)
+        public static Answer Answer(string answer = "answer option", decimal? value = null, string stringValue = null, decimal? parentValue = null)
         {
             return new Answer()
             {
@@ -150,6 +150,12 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
+            => Create.Group(
+                title: title,
+                groupId: sectionId,
+                children: children);
+
+        public static Group Subsection(string title = "Subsection X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
             => Create.Group(
                 title: title,
                 groupId: sectionId,
@@ -727,7 +733,7 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
-            Guid? linkedToRosterId = null, List<Answer> answers = null)
+            Guid? linkedToRosterId = null, List<Answer> answers = null, bool isPrefilled = false, bool isComboBox = false)
         {
             return new SingleQuestion
             {
@@ -742,7 +748,9 @@ namespace WB.Tests.Unit.Designer
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 Answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
-                LinkedFilterExpression = linkedFilterExpression
+                LinkedFilterExpression = linkedFilterExpression,
+                Featured = isPrefilled,
+                IsFilteredCombobox = isComboBox,
             };
         }
 
