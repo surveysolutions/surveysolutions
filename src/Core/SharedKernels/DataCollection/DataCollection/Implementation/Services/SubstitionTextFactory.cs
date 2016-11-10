@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 byRosters.Add(new SubstitutionVariable
                 {
                     Name = this.substitutionService.RosterTitleSubstitutionReference,
-                    Id = questionnaire.GetRostersFromTopToSpecifiedQuestion(identity.Id).Last()
+                    Id = questionnaire.GetRostersFromTopToSpecifiedEntity(identity.Id).Last()
                 });
             }
             
