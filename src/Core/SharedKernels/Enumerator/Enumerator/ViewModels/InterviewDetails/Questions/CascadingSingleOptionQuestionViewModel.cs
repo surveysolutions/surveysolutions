@@ -109,14 +109,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var parentSingleOptionQuestion = interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
             if (parentSingleOptionQuestion.IsAnswered)
             {
-                this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer();
+                this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
 
             var singleOptionQuestion = interview.GetSingleOptionQuestion(entityIdentity);
             if (singleOptionQuestion.IsAnswered)
             {
                 var answerOption = this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity,
-                    singleOptionQuestion.GetAnswer(), (int?)this.answerOnParentQuestion);
+                    singleOptionQuestion.GetAnswer().SelectedValue, (int?)this.answerOnParentQuestion);
 
                 this.selectedObject = this.CreateFormattedOptionModel(answerOption);
                 this.ResetTextInEditor = this.selectedObject.OriginalText;
@@ -358,7 +358,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var parentSingleOptionQuestion = this.interview.GetSingleOptionQuestion(this.parentQuestionIdentity);
                 if (parentSingleOptionQuestion.IsAnswered)
                 {
-                    this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer();
+                    this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
                     this.UpdateSuggestionsList(string.Empty);
                 }              
             }

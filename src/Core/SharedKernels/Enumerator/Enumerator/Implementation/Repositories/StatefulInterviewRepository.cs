@@ -39,18 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
             var interviewAggregateRootId = Guid.Parse(interviewId);
 
-            var statefullInterview = (StatefulInterview)this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), interviewAggregateRootId, progress, cancellationToken);
-
-            if (statefullInterview == null) return null;
-
-            if (!statefullInterview.HasLinkedOptionsChangedEvents)
-            {
-                statefullInterview.MigrateLinkedOptionsToFiltered();
-                this.eventBus.CommitUncommittedEvents(statefullInterview, null);
-                statefullInterview.MarkChangesAsCommitted();
-            }
-
-            return statefullInterview;
+            return (StatefulInterview)this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), interviewAggregateRootId, progress,
+                        cancellationToken);
         }
     }
 }

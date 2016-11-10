@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (singleOptionQuestion.IsAnswered)
             {
-                var selectedValue = singleOptionQuestion.GetAnswer();
+                var selectedValue = singleOptionQuestion.GetAnswer().SelectedValue;
                 var answerOption = ToViewModel(this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, selectedValue));
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;

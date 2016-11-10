@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionModel = interview.GetGpsQuestion(entityIdentity);
             if (questionModel.IsAnswered)
             {
-                var gpsAnswer = questionModel.GetAnswer();
+                var gpsAnswer = questionModel.GetAnswer().Value;
 
                 this.Answer = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
                     gpsAnswer.Longitude, DateTimeOffset.MinValue);

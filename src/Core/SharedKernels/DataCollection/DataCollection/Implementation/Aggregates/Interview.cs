@@ -26,10 +26,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
 
-        protected Guid questionnaireId;
-        protected long questionnaireVersion;
-        protected string language;
-
         public override Guid EventSourceId
         {
             get { return base.EventSourceId; }
@@ -156,9 +152,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
 
             var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
-            this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty);
-            
             var changedInterviewTree = sourceInterviewTree.Clone();
+
+            this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty);
 
             var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
             foreach (var answer in prefilledQuestionsWithAnswers)
@@ -185,7 +181,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, language: null);
             this.SetQuestionnaireProperties(questionnaireIdentity.QuestionnaireId, questionnaire.Version);
             
-            var sourceInterviewTree = this.delta = this.BuildInterviewTree(questionnaire);
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
             var changedInterviewTree = sourceInterviewTree.Clone();
             
             //apply events
