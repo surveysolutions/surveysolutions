@@ -579,7 +579,6 @@ namespace WB.Tests.Integration
             Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null)
         {
             var interview = new StatefulInterview(
-                Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.SubstitionTextFactory());
@@ -889,7 +888,6 @@ namespace WB.Tests.Integration
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 new SubstitutionService(),
-                new AnswerToStringService(),
                 new VariableToUIStringService(),
                 rosterTitleSubstitutionService ?? Create.FakeRosterTitleSubstitutionService());
 
