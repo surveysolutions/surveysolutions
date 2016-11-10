@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -113,7 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetYesNoQuestion(this.Identity);
 
             var newOptions = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()))
+                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray()))
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
@@ -169,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
             {
                 var answerModel = interview.GetYesNoQuestion(this.Identity);
-                var answeredYesNoOption = answerModel.GetAnswer().FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
+                var answeredYesNoOption = answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
                 changedModel.Selected = answeredYesNoOption?.Yes;
                 return;
             }
@@ -178,7 +179,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var answerModel = interview.GetYesNoQuestion(this.Identity);
 
-                var backendYesAnswersCount = answerModel?.GetAnswer()?.Count(a => a.Yes) ?? 0;
+                var backendYesAnswersCount = answerModel?.GetAnswer()?.ToAnsweredYesNoOptions()?.Count(a => a.Yes) ?? 0;
                 var UIYesAnswersCount = this.Options.Count(o => o.YesSelected);
 
                 if (backendYesAnswersCount > UIYesAnswersCount)

@@ -192,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var interview = this.interviewRepository.Get(this.interviewId);
             
-            this.Answer = interview.GetTextQuestion(this.questionIdentity).GetAnswer();
+            this.Answer = interview.GetTextQuestion(this.questionIdentity).GetAnswer()?.Value;
         }
 
         public void Handle(TextQuestionAnswered @event)

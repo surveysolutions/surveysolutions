@@ -79,7 +79,6 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IUserBrowseViewFactory>().To<UserBrowseViewFactory>();
             this.Kernel.Bind<IUserWebViewFactory>().To<UserWebViewFactory>();
             
-            this.Kernel.Bind<IReadOnlyInterviewStateDependentOnAnswers>().To<InterviewStateDependentOnAnswers>();
             this.Kernel.Bind<IBackupManager>().To<DefaultBackupManager>();
             this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
 

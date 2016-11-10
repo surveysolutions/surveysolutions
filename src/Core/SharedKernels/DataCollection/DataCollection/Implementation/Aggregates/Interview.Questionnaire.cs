@@ -9,14 +9,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        protected IQuestionnaire GetQuestionnaireOrThrow(Guid id, long version, string questionnaireLanguage)
-        {
-            var questionnaireIdentity = new QuestionnaireIdentity(id, version);
+        protected Guid questionnaireId;
+        protected long questionnaireVersion;
+        protected string language;
+        public string Language => this.language;
 
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, questionnaireLanguage);
+        private QuestionnaireIdentity questionnaireIdentity;
+        public QuestionnaireIdentity QuestionnaireIdentity
+            => this.questionnaireIdentity ?? (this.questionnaireIdentity = new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion));
+
+        public string QuestionnaireId => this.QuestionnaireIdentity.ToString();
+
+        protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(
+            this.QuestionnaireIdentity.QuestionnaireId,
+            this.QuestionnaireIdentity.Version,
+            this.Language);
+
+        protected IQuestionnaire GetQuestionnaireOrThrow(Guid id, long version, string language)
+        {
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(new QuestionnaireIdentity(id, version), language);
 
             if (questionnaire == null)
-                throw new InterviewException($"Questionnaire '{questionnaireIdentity}' was not found. InterviewId {EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
+                throw new InterviewException($"Questionnaire '{new QuestionnaireIdentity(id, version)}' was not found. InterviewId {EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
 
             return questionnaire;
         }
