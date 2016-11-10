@@ -522,8 +522,6 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_regular_single_option.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_cloning_questionnaire_with_translations.cs" />
     <Compile Include="SharedKernels\Enumerator\OptionsRepositoryTests\OptionsRepositoryTests.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_timestamp_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_date_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_with_disabled_invalid_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_comments_.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_comments_from_restored_interview_state_from_sync_package.cs" />
@@ -698,10 +696,6 @@
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_not_selected_no_option_code.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_not_selected_yes_option_code.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\YesNoAnswersTestContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_decimal_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_linked_on_roster_title_single_option_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_yesno_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_use_formatting_numeric_integer_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title_in_static_text.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewRepositoryTests\StatefulInterviewRepositoryNUnitTests.cs" />
@@ -734,10 +728,6 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_1_disabled_and_1_enabled_questions_in_fixed_roster_with_3_instances.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\AnswerToStringServiceTestsContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_linked_single_option_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_single_option_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_filtered_single_option_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\MaskTextTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_making_text_after_setting_mask.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_making_text_for_not_filled_mask.cs" />
