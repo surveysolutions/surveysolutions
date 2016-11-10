@@ -14,7 +14,7 @@ var config = {
     production: !!util.env.production,
     buildDir: './build',
     loginDir: '../Views/Account/',
-    loginPath: '../Views/Account/LogIn.cshtml',
+    loginPath: '../Views/Account/LogOn.cshtml',
     cssSource: './css/markup.scss',
     cssAppInject: 'cssApp',
     cssLibsInject: 'cssLibs',
