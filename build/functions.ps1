@@ -15,7 +15,7 @@ function CleanFolders($Filter) {
     Write-Host "##teamcity[blockOpened name='$Filter']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    $folders = Get-ChildItem -Filter $Filter -Recurse -ErrorAction SilentlyContinue | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } | %{ GetPathRelativeToCurrectLocation $_.FullName }
+    $folders = Get-ChildItem -Filter $Filter -Recurse -ErrorAction SilentlyContinue | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } | ?{ $_.FullName -notmatch 'vendor' }  | %{ GetPathRelativeToCurrectLocation $_.FullName }
 
     if ($folders -ne $null) {
         foreach ($folder in $folders) {
