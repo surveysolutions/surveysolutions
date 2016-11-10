@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
@@ -10,8 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using it = Moq.It;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
@@ -33,10 +31,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             @event = Create.Event.AnswersRemoved(Create.Entity.Identity("11111111111111111111111111111111", RosterVector.Empty)).ToPublishedEvent();
 
             var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer =>
-            writer.GetById(it.IsAny<string>()) == dashboardItem);
+            writer.GetById(It.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
-                .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
+                .Setup(storage => storage.Store(It.IsAny<InterviewView>()))
                 .Callback<InterviewView>((view) => dashboardItem = view);
 
             var questionnaire = Mock.Of<IQuestionnaire>(q => q.IsPrefilled(gpsQuestionId) == true);
@@ -46,19 +44,18 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, questionnaireStorage: plainQuestionnaireRepository);
 
             denormalizer.Handle(@event);
-
         }
 
         [Test]
         public void should_clear_GPS_location_latitude() =>
-            dashboardItem.LocationLatitude.ShouldBeNull();
+            Assert.That(dashboardItem.LocationLatitude, Is.Null);
 
         [Test]
         public void should_clear_GPS_location_longitude() =>
-            dashboardItem.LocationLongitude.ShouldBeNull();
+            Assert.That(dashboardItem.LocationLongitude, Is.Null);
 
-        private static InterviewerDashboardEventHandler denormalizer;
-        private static IPublishedEvent<AnswersRemoved> @event;
-        private static InterviewView dashboardItem;
+        static InterviewerDashboardEventHandler denormalizer;
+        static IPublishedEvent<AnswersRemoved> @event;
+        static InterviewView dashboardItem;
     }
 }
