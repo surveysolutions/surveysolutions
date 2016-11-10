@@ -21,26 +21,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage = optionsStorage;
         }
-        [Obsolete("Since V 5.10")]
-        public IReadOnlyList<CategoricalOption> GetQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId)
-        {
-            var questionnaireIdAsString = questionnaireId.ToString();
-            var questionIdAsString = questionId.FormatGuid();
-
-            var categoricalQuestionOptions = this.optionsStorage
-                .Where(x => x.QuestionnaireId == questionnaireIdAsString && 
-                            x.QuestionId == questionIdAsString)
-                .Select(x => new CategoricalOption
-                {
-                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt32(x.ParentValue) : (int?)null,
-                    Value = Convert.ToInt32(x.Value),
-                    Title = x.Title
-                })
-                .OrderBy(x => x.Title)
-                .ToReadOnlyCollection();
-
-            return categoricalQuestionOptions;
-        }
 
         public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, 
             int? parentValue, string filter, Guid? translationId)

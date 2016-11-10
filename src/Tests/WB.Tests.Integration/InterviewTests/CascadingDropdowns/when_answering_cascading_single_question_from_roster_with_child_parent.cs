@@ -55,7 +55,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     );
 
                 Interview interview = SetupInterview(questionnaire);
-
+                
                 interview.AnswerSingleOptionQuestion(actorId, parentSingleOptionQuestionId, RosterVector.Empty, DateTime.Now, 1);
 
                 using (var eventContext = new EventContext())

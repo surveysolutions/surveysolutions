@@ -40,12 +40,6 @@ namespace WB.Tests.Integration
                 .Setup(locator => locator.GetInstance<IFileSystemAccessor>())
                 .Returns(fileSystemIoAccessor);
 
-            var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
-
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
-                .Returns(questionOptionsRepository);
-
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
 

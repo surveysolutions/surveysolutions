@@ -13,6 +13,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -134,6 +135,10 @@ namespace WB.Tests.Integration.InterviewTests
             
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
+
+
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(questionnaireRepository);
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
             var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
 

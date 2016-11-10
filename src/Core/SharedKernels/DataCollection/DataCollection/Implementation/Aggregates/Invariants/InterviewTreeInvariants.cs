@@ -1,14 +1,19 @@
 using System;
 using System.Linq;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants
 {
     internal class InterviewTreeInvariants
     {
+        private IQuestionOptionsRepository questionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
+
         public InterviewTreeInvariants(InterviewTree interviewTree)
         {
             this.InterviewTree = interviewTree;
@@ -64,15 +69,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         }
 
         public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer,
-            IQuestionnaire questionnaire) // TODO: KP-7836 get rid of questionnaire here and use options repository an injected service
+            QuestionnaireIdentity questionnaireId, Translation translation) 
         {
             var question = this.InterviewTree.GetQuestion(cascadingQuestionIdentity);
 
             if (!question.IsCascading)
                 return;
 
-            int answerParentValue = questionnaire.GetCascadingParentValue(cascadingQuestionIdentity.Id, answer);
+            var answerOption = questionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
+                cascadingQuestionIdentity.Id, answer, translation);
 
+            if (!answerOption.ParentValue.HasValue)
+                throw new QuestionnaireException(
+                    $"Answer option has no parent value. Option value: {answer}, Question id: '{cascadingQuestionIdentity.Id}'.");
+
+            int answerParentValue = answerOption.ParentValue.Value;
             var parentQuestion = question.AsCascading.GetCascadingParentQuestion();
 
             if (!parentQuestion.IsAnswered)
