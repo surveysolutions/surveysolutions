@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private InterviewGpsCoordinatesView GetInterviewLocation(InterviewView interview)
         {
-            if (interview.LocationQuestionId.HasValue)
+            if (interview.LocationQuestionId.HasValue && interview.LocationLatitude.HasValue && interview.LocationLongitude.HasValue)
             {
                 return new InterviewGpsCoordinatesView
                 {
