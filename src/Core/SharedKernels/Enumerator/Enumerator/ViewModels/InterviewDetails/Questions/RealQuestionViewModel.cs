@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var doubleQuestion = interview.GetDoubleQuestion(entityIdentity);
             if (doubleQuestion.IsAnswered)
             {
-                this.Answer = (decimal)doubleQuestion.GetAnswer();
+                this.Answer = doubleQuestion.GetAnswer().Value;
             }
         }
 

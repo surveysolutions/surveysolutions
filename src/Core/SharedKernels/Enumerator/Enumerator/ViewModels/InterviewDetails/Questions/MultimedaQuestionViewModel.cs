@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var multimediaQuestion = interview.GetMultimediaQuestion(entityIdentity);
             if (multimediaQuestion.IsAnswered)
             {
-                this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, multimediaQuestion.GetAnswer());
+                this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, multimediaQuestion.GetAnswer().FileName);
             }
 
             this.eventRegistry.Subscribe(this, interviewId);

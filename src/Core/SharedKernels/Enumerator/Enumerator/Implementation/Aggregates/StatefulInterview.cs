@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
@@ -25,26 +22,97 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 {
     internal class StatefulInterview : Interview, IStatefulInterview
     {
-        private IQuestionnaire cachedQuestionnaire = null;
-        
         public StatefulInterview(IQuestionnaireStorage questionnaireRepository,
-                                 IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider)
+                                 IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
+                                 ISubstitionTextFactory substitionTextFactory)
+            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitionTextFactory)
         {
         }
 
         #region Apply
 
-        protected new void Apply(InterviewOnClientCreated @event)
+        protected void Apply(InterviewOnClientCreated @event)
         {
-            base.Apply(@event);
+            this.questionnaireId = @event.QuestionnaireId;
+            this.questionnaireVersion = @event.QuestionnaireVersion;
+
             this.CreatedOnClient = true;
             this.InterviewerId = @event.UserId;
+            
+            this.delta = this.BuildInterviewTree(this.GetQuestionnaireOrThrow());
+            this.interviewState = this.delta.Clone();
         }
 
-        public new void Apply(InterviewSynchronized @event)
+        public void Apply(InterviewSynchronized @event)
         {
-            base.Apply(@event);
+            this.questionnaireId = @event.InterviewData.QuestionnaireId;
+            this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
+            this.properties.Status = @event.InterviewData.Status;
+            this.properties.WasCompleted = @event.InterviewData.WasCompleted;
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
+            this.interviewState = sourceInterviewTree.Clone();
+            
+            var orderedRosters = @event.InterviewData.RosterGroupInstances
+                .SelectMany(x => x.Value)
+                .OrderBy(x => x.OuterScopeRosterVector.Length)
+                .ToList();
+
+            foreach (var rosterDto in orderedRosters)
+            {
+                Guid? parentGroupId = questionnaire.GetParentGroup(rosterDto.RosterId);
+                if (!parentGroupId.HasValue) continue;
+
+                Identity parentGroupIdentity = Identity.Create(parentGroupId.Value, rosterDto.OuterScopeRosterVector);
+                RosterIdentity rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector,
+                    rosterDto.RosterInstanceId, rosterDto.SortIndex);
+
+                InterviewTreeRoster roster = this.interviewState.GetRosterManager(rosterIdentity.GroupId)
+                    .CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
+
+                roster.SetRosterTitle(rosterDto.RosterTitle);
+            }
+
+            foreach (var question in @event.InterviewData.Answers)
+                this.interviewState.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
+
+            foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
+                this.interviewState.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector)).Disable();
+
+            foreach (var disabledQuestion in @event.InterviewData.DisabledQuestions)
+                this.interviewState.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector)).Disable();
+
+            foreach (var invalidQuestion in @event.InterviewData.FailedValidationConditions)
+                this.interviewState.GetQuestion(invalidQuestion.Key).MarkAsInvalid(invalidQuestion.Value);
+
+            foreach (var disabledStaticText in @event.InterviewData.DisabledStaticTexts)
+                this.interviewState.GetStaticText(disabledStaticText).Disable();
+
+            foreach (var invalidStaticText in @event.InterviewData.InvalidStaticTexts)
+                this.interviewState.GetStaticText(invalidStaticText.Key).MarkAsInvalid(invalidStaticText.Value);
+
+            foreach (var validStaticText in @event.InterviewData.ValidStaticTexts)
+                this.interviewState.GetStaticText(validStaticText).MarkAsValid();
+
+            foreach (var variable in @event.InterviewData.Variables)
+                this.interviewState.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector)).SetValue(variable.Value);
+
+            foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
+                this.interviewState.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector)).Disable();
+
+            foreach (var linkedQuestion in @event.InterviewData.LinkedQuestionOptions)
+                this.interviewState.GetQuestion(Identity.Create(linkedQuestion.Key.Id, linkedQuestion.Key.InterviewItemRosterVector)).AsLinked.SetOptions(linkedQuestion.Value);
+
+            this.interviewState.AnswerComments = @event.InterviewData.Answers
+                .SelectMany(answerDto => answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)))
+                .ToList();
+
+            base.UpdateRosterTitles(this.interviewState, questionnaire);
+            base.UpdateExpressionState(sourceInterviewTree, this.interviewState, this.ExpressionProcessorStatePrototype);
+
+            this.delta = this.interviewState.Clone();
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
             this.SupervisorId = @event.InterviewData.SupervisorId;
@@ -109,13 +177,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public bool HasLinkedOptionsChangedEvents { get; private set; } = false;
         public Guid? SupervisorId { get; private set; }
         public Guid? InterviewerId { get; private set; }
-
-        private QuestionnaireIdentity questionnaireIdentity;
-
-        public QuestionnaireIdentity QuestionnaireIdentity
-            => this.questionnaireIdentity ?? (this.questionnaireIdentity = new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion));
-
-        public string QuestionnaireId => this.QuestionnaireIdentity.ToString();
+        
         public InterviewStatus Status => this.properties.Status;
         public Guid Id => this.EventSourceId;
         public string InterviewerCompleteComment { get; private set; }
@@ -123,8 +185,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public string GetAnswerAsString(Identity questionIdentity)
             => this.interviewState.GetQuestion(questionIdentity).GetAnswerAsString();
-
-        public string Language => this.language;
 
         public bool HasErrors { get; private set; }
 
@@ -137,12 +197,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsQRBarcode;
         public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsTextList;
         public InterviewTreeSingleLinkedOptionQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsSingleLinkedOption;
-        public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsMultiOption;
+        public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsMultiFixedOption;
         public InterviewTreeMultiLinkedOptionQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsMultiLinkedOption;
         public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsInteger;
         public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsDouble;
         public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsText;
-        public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsSingleOption;
+        public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsSingleFixedOption;
         public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsYesNo;
 
         #region Command handlers
@@ -167,304 +227,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
-            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-
+            new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
+            
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
-
-            this.delta = this.interviewState.Clone();
         }
-
-        [Obsolete("it should be removed when all clients has version 5.7 or higher")]
-        public void MigrateLinkedOptionsToFiltered()
-        {
-            //IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            //var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
-
-            //var linkedQuestionOptionsChanges = this.CreateChangedLinkedOptions(
-            //    expressionProcessorState,
-            //    this.interviewState,
-            //    questionnaire, null,
-            //    null, null, null).ToArray();
-
-            //this.ApplyEvent(new LinkedOptionsChanged(linkedQuestionOptionsChanges));
-        }
-
-        //protected IEnumerable<ChangedLinkedOptions> CreateChangedLinkedOptions(
-        //    ILatestInterviewExpressionState interviewExpressionState,
-        //    IQuestionnaire questionnaire,
-        //    List<AnswerChange> interviewByAnswerChanges,
-        //    EnablementChanges enablementChanges,
-        //    RosterCalculationData rosterCalculationData,
-        //    Dictionary<Identity, string> rosterInstancesWithAffectedTitles)
-        //{
-        //    var currentLinkedOptions = currentState.LinkedQuestionOptions;
-
-        //    var updatedState = currentState.Clone();
-
-        //    if (enablementChanges != null)
-        //        updatedState.ApplyEnablementChanges(enablementChanges);
-
-        //    if (rosterCalculationData != null)
-        //        updatedState.ApplyRosterData(rosterCalculationData);
-
-        //    if (rosterInstancesWithAffectedTitles != null)
-        //    {
-        //        updatedState.ChangeRosterTitles(
-        //            rosterInstancesWithAffectedTitles.Select(
-        //                r =>
-        //                    new ChangedRosterInstanceTitleDto(
-        //                        new RosterInstance(r.Key.Id, r.Key.RosterVector.WithoutLast().ToArray(), r.Key.RosterVector.Last()), r.Value)).ToArray());
-        //    }
-        //    if (interviewByAnswerChanges != null)
-        //    {
-        //        foreach (var interviewByAnswerChange in interviewByAnswerChanges)
-        //        {
-        //            string questionKey =
-        //                ConversionHelper.ConvertIdAndRosterVectorToString(interviewByAnswerChange.QuestionId,
-        //                    interviewByAnswerChange.RosterVector);
-        //            updatedState.AnswersSupportedInExpressions[questionKey] = interviewByAnswerChange.Answer;
-        //            updatedState.AnsweredQuestions.Add(questionKey);
-        //        }
-        //    }
-        //    var newCurrentLinkedOptions = GetLinkedQuestionOptionsChanges(interviewExpressionState, updatedState, questionnaire);
-
-        //    foreach (var linkedQuestionConditionalExecutionResult in newCurrentLinkedOptions)
-        //    {
-        //        Identity instanceOfTheLinkedQuestionsQuestions = linkedQuestionConditionalExecutionResult.Key;
-        //        RosterVector[] optionsForLinkedQuestion = linkedQuestionConditionalExecutionResult.Value;
-
-        //        var linkedQuestionId = instanceOfTheLinkedQuestionsQuestions.Id;
-        //        var referencedEntityId = questionnaire.IsQuestionLinkedToRoster(linkedQuestionId)
-        //            ? questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestionId)
-        //            : questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId);
-
-        //        var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(referencedEntityId, instanceOfTheLinkedQuestionsQuestions, questionnaire);
-
-        //        var changedOptionAvaliableForInstanceOfTheQuestion = optionsForLinkedQuestion.Where(o => rosterVectorToStartFrom.SequenceEqual(o.Take(rosterVectorToStartFrom.Length))).ToArray();
-
-        //        var questionIdentity = new Identity(instanceOfTheLinkedQuestionsQuestions.Id, instanceOfTheLinkedQuestionsQuestions.RosterVector);
-        //        if (!currentLinkedOptions.ContainsKey(questionIdentity))
-        //        {
-        //            yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
-        //            continue;
-        //        }
-
-        //        var presentLinkedOptions = currentLinkedOptions[questionIdentity];
-
-        //        bool hasNumberOfOptionsChanged = presentLinkedOptions.Length !=
-        //                                        changedOptionAvaliableForInstanceOfTheQuestion.Length;
-
-        //        bool doesNewOptionsListContainOptionsWhichWasNotPresentBefore =
-        //            changedOptionAvaliableForInstanceOfTheQuestion.Any(o => !presentLinkedOptions.Contains(o));
-
-        //        if (hasNumberOfOptionsChanged || doesNewOptionsListContainOptionsWhichWasNotPresentBefore)
-        //            yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
-        //    }
-        //}
-
-        //private Dictionary<Identity, RosterVector[]> GetLinkedQuestionOptionsChanges(
-        //    ILatestInterviewExpressionState interviewExpressionState,
-        //    IQuestionnaire questionnaire)
-        //{
-        //    if (!interviewExpressionState.AreLinkedQuestionsSupported())
-        //        return this.CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(updatedState, questionnaire);
-
-        //    var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
-
-        //    if (processLinkedQuestionFilters == null)
-        //        return new Dictionary<Identity, RosterVector[]>();
-
-        //    if (processLinkedQuestionFilters.LinkedQuestionOptions.Count == 0)
-        //        return processLinkedQuestionFilters.LinkedQuestionOptionsSet;
-
-        //    //old v7 options handling 
-        //    var linkedOptions = new Dictionary<Identity, RosterVector[]>();
-
-        //    foreach (var linkedQuestionOption in processLinkedQuestionFilters.LinkedQuestionOptions)
-        //    {
-        //        IEnumerable<Identity> linkedQuestionInstances =
-        //            this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, linkedQuestionOption.Key, new decimal[0], questionnaire);
-        //        linkedQuestionInstances.ForEach(x => linkedOptions.Add(x, linkedQuestionOption.Value));
-        //    }
-
-        //    return linkedOptions;
-        //}
-
-        //private Dictionary<Identity, RosterVector[]> CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(IQuestionnaire questionnaire)
-        //{
-        //    var questionsLinkedOnRoster = questionnaire.GetQuestionsLinkedToRoster();
-        //    var questionsLinkedOnQuestion = questionnaire.GetQuestionsLinkedToQuestion();
-        //    if (!questionsLinkedOnRoster.Any() && !questionsLinkedOnQuestion.Any())
-        //        return new Dictionary<Identity, RosterVector[]>();
-
-        //    var result = new Dictionary<Identity, RosterVector[]>();
-        //    foreach (var questionLinkedOnRoster in questionsLinkedOnRoster)
-        //    {
-        //        var rosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionLinkedOnRoster);
-        //        IEnumerable<Identity> targetRosters =
-        //            this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(updatedState,
-        //                new[] { rosterId }, new decimal[0], questionnaire).ToArray();
-
-        //        var optionRosterVectors =
-        //            targetRosters.Where(
-        //                r =>
-        //                    !updatedState.IsGroupDisabled(r) && !string.IsNullOrEmpty(updatedState.GetRosterTitle(r.Id, r.RosterVector)))
-        //                .Select(r => r.RosterVector)
-        //                .ToArray();
-
-        //        IEnumerable<Identity> linkedQuestionInstances =
-        //            this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, questionLinkedOnRoster, new decimal[0], questionnaire);
-
-        //        foreach (var linkedQuestionInstance in linkedQuestionInstances)
-        //        {
-        //            result.Add(linkedQuestionInstance, optionRosterVectors);
-        //        }
-        //    }
-
-        //    foreach (var questionLinkedOnQuestion in questionsLinkedOnQuestion)
-        //    {
-        //        var referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionLinkedOnQuestion);
-        //        IEnumerable<Identity> targetQuestions =
-        //            this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState,
-        //                referencedQuestionId, new decimal[0], questionnaire);
-
-        //        var optionRosterVectors =
-        //            targetQuestions.Where(q => !updatedState.IsQuestionDisabled(q) && updatedState.GetAnswer(q) != null)
-        //                .Select(q => q.RosterVector)
-        //                .ToArray();
-
-        //        IEnumerable<Identity> linkedQuestionInstances =
-        //           this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, questionLinkedOnQuestion, new decimal[0], questionnaire);
-
-        //        foreach (var linkedQuestionInstance in linkedQuestionInstances)
-        //        {
-        //            result.Add(linkedQuestionInstance, optionRosterVectors);
-        //        }
-        //    }
-        //    return result;
-        //}
-
-        ///// <remarks>
-        ///// If roster vector should be extended, result will be a set of vectors depending on roster count of corresponding groups.
-        ///// </remarks>
-        //protected static IEnumerable<RosterVector> ExtendRosterVector(RosterVector rosterVector, int length, Guid[] rosterGroupsStartingFromTop)
-        //{
-        //    if (length < rosterVector.Length)
-        //        throw new ArgumentException(string.Format(
-        //            "Cannot extend vector with length {0} to smaller length {1}.", rosterVector.Length, length));
-
-        //    if (length == rosterVector.Length)
-        //    {
-        //        yield return rosterVector;
-        //        yield break;
-        //    }
-
-        //    var outerVectorsForExtend = GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop, rosterVector);
-
-        //    foreach (var outerVectorForExtend in outerVectorsForExtend)
-        //    {
-        //        IEnumerable<decimal> rosterInstanceIds = state.GetRosterInstanceIds(rosterGroupsStartingFromTop.Last(), outerVectorForExtend);
-        //        foreach (decimal rosterInstanceId in rosterInstanceIds)
-        //        {
-        //            yield return ((RosterVector)outerVectorForExtend).ExtendWithOneCoordinate(rosterInstanceId);
-        //        }
-        //    }
-        //}
-
-        //private static IEnumerable<decimal[]> GetOuterVectorForParentRoster(
-        //    Guid[] rosterGroupsStartingFromTop, RosterVector rosterVector)
-        //{
-        //    if (rosterGroupsStartingFromTop.Length <= 1 || rosterGroupsStartingFromTop.Length - 1 == rosterVector.Length)
-        //    {
-        //        yield return rosterVector;
-        //        yield break;
-        //    }
-
-        //    var indexOfPreviousRoster = rosterGroupsStartingFromTop.Length - 2;
-
-        //    var previousRoster = rosterGroupsStartingFromTop[rosterVector.Length];
-        //    var previousRosterInstances = state.GetRosterInstanceIds(previousRoster, rosterVector);
-        //    foreach (var previousRosterInstance in previousRosterInstances)
-        //    {
-        //        var extendedRoster = rosterVector.ExtendWithOneCoordinate(previousRosterInstance);
-        //        if (indexOfPreviousRoster == rosterVector.Length)
-        //        {
-        //            yield return extendedRoster;
-        //            continue;
-        //        }
-        //        foreach (var nextVector in GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop, extendedRoster))
-        //        {
-        //            yield return nextVector;
-        //        }
-        //    }
-        //}
-        //protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(IEnumerable<Guid> entityIds, RosterVector rosterVector, IQuestionnaire questionnare)
-        //   => entityIds.SelectMany(entityId =>
-        //       this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(entityId, rosterVector, questionnare));
-
-        //protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
-        //    Guid entityId,
-        //    RosterVector rosterVector,
-        //    IQuestionnaire questionnare)
-        //{
-        //    int vectorRosterLevel = rosterVector.Length;
-        //    int entityRosterLevel = questionnare.GetRosterLevelForEntity(entityId);
-
-        //    if (entityRosterLevel < vectorRosterLevel)
-        //        throw new InterviewException(string.Format(
-        //            "Entity {0} expected to have roster level not upper than {1} but it is {2}. InterviewId: {3}",
-        //            FormatQuestionForException(entityId, questionnare), vectorRosterLevel, entityRosterLevel, EventSourceId));
-
-        //    Guid[] parentRosterGroupsStartingFromTop =
-        //        questionnare.GetRostersFromTopToSpecifiedEntity(entityId).ToArray();
-
-        //    IEnumerable<RosterVector> entityRosterVectors = ExtendRosterVector(state,
-        //        rosterVector, entityRosterLevel, parentRosterGroupsStartingFromTop);
-
-        //    return entityRosterVectors.Select(entityRosterVector => new Identity(entityId, entityRosterVector));
-        //}
-
-        //protected IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(IEnumerable<Guid> groupIds, RosterVector rosterVector, IQuestionnaire questionnaire)
-        //    => groupIds.SelectMany(groupId =>
-        //        this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(groupId, rosterVector, questionnaire));
-
-        //protected IEnumerable<Identity> GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(
-        //    Guid groupId, RosterVector rosterVector, IQuestionnaire questionnaire)
-        //{
-        //    int vectorRosterLevel = rosterVector.Length;
-        //    int groupRosterLevel = questionnaire.GetRosterLevelForGroup(groupId);
-
-        //    if (groupRosterLevel < vectorRosterLevel)
-        //        throw new InterviewException(string.Format(
-        //            "Question {0} expected to have roster level not upper than {1} but it is {2}. InterviewId: {3}",
-        //            FormatQuestionForException(groupId, questionnaire), vectorRosterLevel, groupRosterLevel, EventSourceId));
-
-        //    Guid[] parentRosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(groupId).ToArray();
-
-        //    IEnumerable<RosterVector> groupRosterVectors = ExtendRosterVector(state,
-        //        rosterVector, groupRosterLevel, parentRosterGroupsStartingFromTop);
-
-        //    return groupRosterVectors.Select(groupRosterVector => new Identity(groupId, groupRosterVector));
-        //}
-
-        //protected Identity GetInstanceOfGroupWithSameAndUpperRosterLevelOrThrow(Guid groupId, RosterVector rosterVector, IQuestionnaire questionnaire)
-        //{
-        //    int vectorRosterLevel = rosterVector.Length;
-
-        //    int groupRosterLevel = questionnaire.GetRosterLevelForGroup(groupId);
-
-        //    if (groupRosterLevel > vectorRosterLevel)
-        //        throw new InterviewException(string.Format(
-        //            "Group {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
-        //            FormatGroupForException(groupId, questionnaire), vectorRosterLevel, groupRosterLevel, this.EventSourceId));
-
-        //    decimal[] groupRosterVector = rosterVector.Shrink(groupRosterLevel);
-
-        //    return new Identity(groupId, groupRosterVector);
-        //}
 
         #endregion
 
@@ -625,13 +391,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
 
         public int CountCommentedQuestions() => this.GetCommentedBySupervisorQuestionsInInterview().Count();
-        
-        private IQuestionnaire GetQuestionnaireOrThrow()
-        {
-            return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetQuestionnaireOrThrow(
-                this.QuestionnaireIdentity.QuestionnaireId,
-                this.QuestionnaireIdentity.Version,
-                this.Language));
-        }
+
+        private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
+            => new AnswerComment(
+                userId: commentDto.UserId,
+                commentTime: commentDto.Date,
+                comment: commentDto.Text,
+                questionIdentity: Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
     }
 }
