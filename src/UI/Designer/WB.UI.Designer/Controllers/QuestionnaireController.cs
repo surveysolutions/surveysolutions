@@ -209,7 +209,6 @@ namespace WB.UI.Designer.Controllers
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
             QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
-            questionnairePublicListViewModels.ChangeHistory.ForEach(x => { x.CommandId = Guid.NewGuid(); }); 
 
             return this.View(questionnairePublicListViewModels);
         }
