@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             if (!question.IsCascading)
                 return;
 
-            var answerOption = questionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
+            var answerOption = this.questionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
                 cascadingQuestionIdentity.Id, answer, translation);
 
             if (!answerOption.ParentValue.HasValue)
