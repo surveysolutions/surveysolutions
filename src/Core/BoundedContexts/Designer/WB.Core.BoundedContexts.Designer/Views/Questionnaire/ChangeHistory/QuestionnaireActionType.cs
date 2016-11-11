@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         Replace,
         GroupBecameARoster,
         RosterBecameAGroup,
-        ReplaceAllTexts
+        ReplaceAllTexts,
+        RestoreVersion,
     }
 }

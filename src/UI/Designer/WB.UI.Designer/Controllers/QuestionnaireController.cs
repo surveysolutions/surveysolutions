@@ -181,11 +181,27 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public ActionResult Revert(Guid id, Guid commandId)
+        [ActionName("RestoreVersion")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Revert(Guid id, Guid historyReferanceId)
         {
-            // TODO: KP-8105 add command here
-            string sid = id.FormatGuid();
-            return RedirectToAction("Details", new { id = sid });
+            QuestionnaireView model = this.GetQuestionnaire(id);
+
+            if (model != null)
+            {
+                if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
+                {
+                    this.Error("You don't  have permissions to restore version of this questionnaire.");
+                }
+                else
+                {
+                    var command = new RestoreVersionQuestionnaire(model.PublicKey, historyReferanceId, UserHelper.WebUser.UserId);
+                    this.commandService.Execute(command);
+
+                    this.Success($"Questionnaire \"{model.Title}\" successfully restored.");
+                }
+            }
+            return this.Redirect(this.Request.UrlReferrer.ToString());
         }
 
         [AllowAnonymous]
