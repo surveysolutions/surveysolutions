@@ -13,7 +13,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(TextView control, string value)
         {
-            control.TextFormatted = Html.FromHtml(value ?? String.Empty);
+            control.SetText(Html.FromHtml(value ?? String.Empty), TextView.BufferType.Spannable);
+            //don't use
+            //control.TextFormatted = Html.FromHtml(value ?? String.Empty);
+            //height is wrong calculated
         }
     }
 }
