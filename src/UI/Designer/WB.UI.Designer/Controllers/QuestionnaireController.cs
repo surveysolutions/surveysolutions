@@ -194,7 +194,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    var command = new RestoreVersionQuestionnaire(model.PublicKey, historyReferenceId, UserHelper.WebUser.UserId);
+                    var command = new RevertVersionQuestionnaire(model.PublicKey, historyReferenceId, UserHelper.WebUser.UserId);
                     this.commandService.Execute(command);
 
                     this.Success($"Questionnaire \"{model.Title}\" successfully restored.");

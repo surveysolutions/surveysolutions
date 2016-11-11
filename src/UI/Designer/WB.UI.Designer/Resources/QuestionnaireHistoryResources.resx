@@ -162,6 +162,9 @@
   <data name="replaced" xml:space="preserve">
     <value>replaced</value>
   </data>
+  <data name="reverted" xml:space="preserve">
+    <value>reverted</value>
+  </data>
   <data name="unknown" xml:space="preserve">
     <value>unknown</value>
   </data>
