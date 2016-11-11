@@ -25,6 +25,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Interview() { }
 
         protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
+        public Guid? SupervisorId { get; private set; }
+        public Guid? InterviewerId { get; private set; }
 
         public override Guid EventSourceId
         {
@@ -44,7 +46,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (this.expressionProcessorStatePrototype == null)
                 {
-                    this.expressionProcessorStatePrototype = this.expressionProcessorStatePrototypeProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion);
+                    this.expressionProcessorStatePrototype = this.expressionProcessorStatePrototypeProvider.GetExpressionState(
+                            this.QuestionnaireIdentity.QuestionnaireId, this.QuestionnaireIdentity.Version);
+
                     this.expressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
                 }
 
@@ -77,12 +81,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.substitionTextFactory = substitionTextFactory;
         }
 
-        private void SetQuestionnaireProperties(Guid questionnaireId, long questionnaireVersion)
-        {
-            this.questionnaireId = questionnaireId;
-            this.questionnaireVersion = questionnaireVersion;
-        }
-
         #region StaticMethods
 
         private static AnswerComment ToAnswerComment(CommentSynchronizationDto answerComment,
@@ -100,11 +98,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewWithPreloadedData(CreateInterviewWithPreloadedData command)
         {
-            this.SetQuestionnaireProperties(command.QuestionnaireId, command.Version);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.Version);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(command.QuestionnaireId, command.Version, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
+            var sourceInterviewTree = this.changedInterview;
             var changedInterviewTree = sourceInterviewTree.Clone();
 
             var orderedData = command.PreloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
@@ -128,7 +126,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             //apply events
-            this.ApplyEvent(new InterviewFromPreloadedDataCreated(command.UserId, questionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewFromPreloadedDataCreated(command.UserId,
+                this.QuestionnaireIdentity.QuestionnaireId, this.QuestionnaireIdentity.Version));
 
             this.ApplyTreeDiffChanges(userId: command.UserId, questionnaire: questionnaire,
                 sourceInterviewTree: sourceInterviewTree, changedInterviewTree: changedInterviewTree,
@@ -147,11 +146,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
             Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
-            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
+            var sourceInterviewTree = this.changedInterview;
             var changedInterviewTree = sourceInterviewTree.Clone();
 
             this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty);
@@ -176,31 +175,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, language: null);
-            this.SetQuestionnaireProperties(questionnaireIdentity.QuestionnaireId, questionnaire.Version);
-            
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
-            var changedInterviewTree = sourceInterviewTree.Clone();
-            
-            //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
-
-            changedInterviewTree.ActualizeTree();
-
-            this.ApplyTreeDiffChanges(userId: userId, questionnaire: questionnaire,
-                sourceInterviewTree: sourceInterviewTree, changedInterviewTree: changedInterviewTree,
-                changedQuestionIdentities: new List<Identity>());
-
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-
-            this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
-        }
-
         //todo should respect changes calculated in ExpressionState
         public void ReevaluateSynchronizedInterview()
         {
@@ -212,7 +186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             
-            var sourceInterviewTree = this.interviewState;
+            var sourceInterviewTree = this.changedInterview;
             var changedInterviewTree = sourceInterviewTree.Clone();
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
@@ -240,21 +214,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             IReadOnlyCollection<string> availableLanguages = questionnaire.GetTranslationLanguages();
 
             if (command.Language != null)
             {
                 if (availableLanguages.All(language => language != command.Language))
                     throw new InterviewException(
-                        $"Questionnaire does not have translation. Language: {command.Language}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
+                        $"Questionnaire does not have translation. Language: {command.Language}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {this.QuestionnaireIdentity}.");
             }
-
-            var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
             
             this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
 
-            var sourceInterviewTree = this.interviewState;
+            var targetQuestionnaire = this.GetQuestionnaireOrThrow();
+
+            var sourceInterviewTree = this.changedInterview;
             var changedInterviewTree = sourceInterviewTree.Clone();
 
             this.UpdateRosterTitles(changedInterviewTree, targetQuestionnaire);
@@ -266,9 +240,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
-            var treeInvariants = new InterviewTreeInvariants(this.interviewState);
+            var treeInvariants = new InterviewTreeInvariants(this.changedInterview);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
@@ -280,9 +254,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
-            var treeInvariants = new InterviewTreeInvariants(this.interviewState);
+            var treeInvariants = new InterviewTreeInvariants(this.changedInterview);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
@@ -294,9 +268,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
-            var treeInvariants = new InterviewTreeInvariants(this.interviewState);
+            var treeInvariants = new InterviewTreeInvariants(this.changedInterview);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
@@ -443,7 +417,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var commentedAnswers = (
                 from answerDto in interviewDto.Answers
                 from answerComment in answerDto.AllComments
-                where !this.interviewState.AnswerComments.Contains(ToAnswerComment(answerComment, answerDto))
+                where !this.changedInterview.AnswerComments.Contains(ToAnswerComment(answerComment, answerDto))
                 select new
                 {
                     UserId = answerComment.UserId,
@@ -496,14 +470,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus, IEvent[] synchronizedEvents, bool createdOnClient)
         {
-            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId);
-
-            this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
-
+            
             var isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
 
             if (isInterviewNeedToBeCreated)
@@ -535,7 +507,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool valid,
             bool createdOnClient)
         {
-            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -583,12 +555,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         protected bool HasInvalidAnswers()
-            => this.interviewState.FindQuestions().Any(question => !question.IsValid && !question.IsDisabled());
+            => this.changedInterview.FindQuestions().Any(question => !question.IsValid && !question.IsDisabled());
 
         protected bool HasInvalidStaticTexts
-            => this.interviewState.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
+            => this.changedInterview.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
 
-        private void ApplyTreeDiffChanges(Guid userId, InterviewTree changedInterviewTree, IQuestionnaire questionnaire,
+        protected void ApplyTreeDiffChanges(Guid userId, InterviewTree changedInterviewTree, IQuestionnaire questionnaire,
             List<Identity> changedQuestionIdentities, InterviewTree sourceInterviewTree)
         {
             var expressionProcessorState = this.GetClonedExpressionState();
