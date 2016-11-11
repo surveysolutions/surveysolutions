@@ -47,7 +47,7 @@
                             <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
                             <td>@listViewModel.Timestamp.ToString("s")</td>
                             <td>
-                                @if (true)
+                                @if (listViewModel.HasRevertTo)
                                 {
                                     <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
                                 }
