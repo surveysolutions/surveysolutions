@@ -919,9 +919,10 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
             }
 
-            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
+            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, 
+                string lookupTableName = "table", Guid? oldLookupTableId = null)
             {
-                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file", null);
+                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file", oldLookupTableId);
             }
 
             internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
@@ -935,9 +936,10 @@ namespace WB.Tests.Unit.Designer
                 return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
             }
             
-            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)
+            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, 
+                Guid responsibleId, string attachmentName, Guid? oldAttachmentId = null)
             {
-                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId, null);
+                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId, oldAttachmentId);
             }
 
             public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
@@ -959,9 +961,10 @@ namespace WB.Tests.Unit.Designer
                 return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, null));
             }
 
-            public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, Guid responsibleId)
+            public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, 
+                Guid responsibleId, Guid? oldTranslationId = null)
             {
-                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name, null);
+                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name, oldTranslationId);
             }
 
             public static DeleteTranslation DeleteTranslation(Guid questionnaireId, Guid translationId, Guid responsibleId)
