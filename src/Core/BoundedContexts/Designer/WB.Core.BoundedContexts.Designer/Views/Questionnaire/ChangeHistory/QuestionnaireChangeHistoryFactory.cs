@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -30,24 +31,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var questionnaireId = id.FormatGuid();
 
-            var count = questionnaireChangeHistoryStorage.Query(
-                    _ =>
+            var count = questionnaireChangeHistoryStorage.Query(_ =>
                         _.Count(h => h.QuestionnaireId == questionnaireId));
 
             var questionnaireHistory =
-                questionnaireChangeHistoryStorage.Query(
-                    _ =>
+                questionnaireChangeHistoryStorage.Query(_ =>
                         _.Where(h => h.QuestionnaireId == questionnaireId)
                             .OrderByDescending(h => h.Sequence)
                             .Skip((page - 1)*pageSize)
-                            .Take(pageSize).ToArray());
+                            .Take(pageSize)
+                            .ToArray());
+            var historyItemIds = questionnaireHistory.Select(x => x.QuestionnaireChangeRecordId).ToArray();
+
+            var hasHistory = questionnaireChangeHistoryStorage
+                                 .Query(_ => _.Where(x => historyItemIds.Contains(x.QuestionnaireChangeRecordId) && x.ResultingQuestionnaireDocument != null)
+                                              .Select(x => x.QuestionnaireChangeRecordId)
+                                              .ToList().ToHashSet());
             
             return new QuestionnaireChangeHistory(id, questionnaire.Title,
-                questionnaireHistory.Select(h => CreateQuestionnaireChangeHistoryWebItem(questionnaire, h))
+                questionnaireHistory.Select(h => CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, hasHistory))
                     .ToList(), page, count, pageSize);
         }
 
-        private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire, QuestionnaireChangeRecord questionnaireChangeRecord)
+        private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire, 
+            QuestionnaireChangeRecord questionnaireChangeRecord, 
+            HashSet<string> recordWithRevertAvaialbe)
         {
             var references =
                 questionnaireChangeRecord.References.Select(
@@ -64,6 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeRecord.TargetItemType,
                 questionnaireChangeRecord.TargetItemNewTitle,
                 questionnaireChangeRecord.AffectedEntriesCount,
+                recordWithRevertAvaialbe.Contains(questionnaireChangeRecord.QuestionnaireChangeRecordId),
                 references);
         }
 
