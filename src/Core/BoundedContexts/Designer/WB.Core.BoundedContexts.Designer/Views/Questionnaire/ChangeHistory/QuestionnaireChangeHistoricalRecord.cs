@@ -6,6 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     public class QuestionnaireChangeHistoricalRecord
     {
         public QuestionnaireChangeHistoricalRecord(
+            string id,
             string userName, 
             DateTime timestamp,
             QuestionnaireActionType actionType,
@@ -17,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             int? affectedEntries,
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences)
         {
+            this.Id = id;
             UserName = userName;
             Timestamp = timestamp;
             ActionType = actionType;
@@ -28,6 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.TargetNewTitle = targetNewTitle;
             this.AffectedEntries = affectedEntries;
         }
+
+        public string Id { get; private set; }
 
         public string UserName { get; private set; }
         public DateTime Timestamp { get; private set; }
@@ -41,6 +45,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public int? AffectedEntries { get; private set; }
 
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; private set; }
-        public Guid? CommandId { get; set; }
     }
 }
