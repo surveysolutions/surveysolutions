@@ -516,7 +516,7 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnireHistotyVersionsService histotyVersionsService = null)
         {
             return new Questionnaire(
                 Mock.Of<ILogger>(),
@@ -527,7 +527,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
-                Mock.Of<IQuestionnireHistotyVersionsService>());
+                histotyVersionsService ?? Mock.Of<IQuestionnireHistotyVersionsService>());
         }
 
 
@@ -1037,6 +1037,11 @@ namespace WB.Tests.Unit.Designer
             public static DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId)
             {
                 return new DeleteQuestionnaire(questionnaireId, responsibleId);
+            }
+
+            public static RestoreVersionQuestionnaire RestoreVersionQuestionnaire(Guid questionnaireId, Guid historyReferanceId, Guid responsibleId)
+            {
+                return new RestoreVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             }
         }
 
