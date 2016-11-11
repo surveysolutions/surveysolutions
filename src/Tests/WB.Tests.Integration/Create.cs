@@ -748,7 +748,8 @@ namespace WB.Tests.Integration
             return new PostgresReadSideKeyValueStorage<TEntity>(
                 sessionProvider ?? Mock.Of<ISessionProvider>(),
                 postgreConnectionSettings ?? new PostgreConnectionSettings(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(),
+                Mock.Of<IEntitySerializer<TEntity>>());
         }
 
         public static ISessionFactory SessionFactory(string connectionString, IEnumerable<Type> painStorageEntityMapTypes)

@@ -35,8 +35,12 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
                 set.Lazy(CollectionLazy.NoLazy);
                 set.Cascade(Cascade.All | Cascade.DeleteOrphans);
                 set.Inverse(true);
-            },
-             relation => relation.OneToMany());
+            }, relation => relation.OneToMany());
+
+            Property(x => x.ResultingQuestionnaireDocument, mapping =>
+            {
+                mapping.Lazy(true);
+            });
         }   
     }
 

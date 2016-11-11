@@ -18,6 +18,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Infrastructure.Native.Storage;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
@@ -1035,6 +1036,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
+            Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(new EntitySerializer<QuestionnaireDocument>());
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId);
             

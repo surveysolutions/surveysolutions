@@ -10,6 +10,7 @@ namespace WB.Core.Infrastructure.CommandBus
     {
         private readonly List<Type> validators = new List<Type>();
         private readonly List<Type> postProcessors = new List<Type>();
+        private readonly List<Type> preProcessors = new List<Type>();
 
         public CommandHandlerConfiguration<TAggregate, TCommand> ValidatedBy<TValidator>() 
             where TValidator : ICommandValidator<TAggregate, TCommand>
@@ -25,8 +26,17 @@ namespace WB.Core.Infrastructure.CommandBus
             return this;
         }
 
+        public CommandHandlerConfiguration<TAggregate, TCommand> PreProcessBy<TPostProcessor>()
+            where TPostProcessor : ICommandPreProcessor<TAggregate, TCommand>
+        {
+            this.preProcessors.Add(typeof(TPostProcessor));
+            return this;
+        }
+
         public List<Type> GetValidators() => this.validators;
 
         public List<Type> GetPostProcessors() => this.postProcessors;
+
+        public List<Type> GetPreProcessors() => this.preProcessors;
     }
 }
