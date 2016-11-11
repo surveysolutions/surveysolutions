@@ -432,12 +432,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0224");
 
         [Test]
-        public void single_option_with_10_options_in_combobox_mode()
+        public void single_option_with_9_options_in_combobox_mode()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
                     Create.SingleOptionQuestion(isComboBox: true, answers: new List<Answer>
                     {
-                        Create.Answer(),
                         Create.Answer(),
                         Create.Answer(),
                         Create.Answer(),
@@ -452,12 +451,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectWarning("WB0225");
 
         [Test]
-        public void single_option_with_10_options_in_regular_mode()
+        public void single_option_with_9_options_in_regular_mode()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
                     Create.SingleOptionQuestion(isComboBox: false, answers: new List<Answer>
                     {
-                        Create.Answer(),
                         Create.Answer(),
                         Create.Answer(),
                         Create.Answer(),
@@ -472,11 +470,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0225");
 
         [Test]
-        public void single_option_with_9_options_in_combobox_mode()
+        public void single_option_with_10_options_in_combobox_mode()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
                     Create.SingleOptionQuestion(isComboBox: true, answers: new List<Answer>
                     {
+                        Create.Answer(),
                         Create.Answer(),
                         Create.Answer(),
                         Create.Answer(),
