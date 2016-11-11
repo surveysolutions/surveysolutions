@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
         ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>,
-        ICommandPostProcessor<Questionnaire, RestoreVersionQuestionnaire>
+        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -801,14 +801,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 );
         }
 
-        public void Process(Questionnaire aggregate, RestoreVersionQuestionnaire command)
+        public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
         {
             AddQuestionnaireChangeItem(command.QuestionnaireId,
                 command.ResponsibleId,
-                QuestionnaireActionType.RestoreVersion,
+                QuestionnaireActionType.Revert,
                 QuestionnaireItemType.Questionnaire,
                 command.QuestionnaireId,
-                command.HistoryReferanceId.ToString(), 
+                aggregate.QuestionnaireDocument.Title,
                 aggregate.QuestionnaireDocument);
         }
     }

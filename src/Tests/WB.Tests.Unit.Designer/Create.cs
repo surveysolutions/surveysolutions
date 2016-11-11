@@ -1039,9 +1039,9 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteQuestionnaire(questionnaireId, responsibleId);
             }
 
-            public static RestoreVersionQuestionnaire RestoreVersionQuestionnaire(Guid questionnaireId, Guid historyReferanceId, Guid responsibleId)
+            public static RevertVersionQuestionnaire RevertVersionQuestionnaire(Guid questionnaireId, Guid historyReferanceId, Guid responsibleId)
             {
-                return new RestoreVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
+                return new RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             }
         }
 

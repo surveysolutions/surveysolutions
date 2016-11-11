@@ -286,7 +286,7 @@
     <Compile Include="Commands\Questionnaire\ImportQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\ReplaceTextsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\RestoreVersionQuestionnaire.cs" />
+    <Compile Include="Commands\Questionnaire\RevertVersionQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\AddStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />

@@ -367,6 +367,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to reverted.
+        /// </summary>
+        public static string reverted {
+            get {
+                return ResourceManager.GetString("reverted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revert to this version.
         /// </summary>
         public static string RevertToThisVersion {
