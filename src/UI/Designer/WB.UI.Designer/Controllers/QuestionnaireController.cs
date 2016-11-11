@@ -180,6 +180,14 @@ namespace WB.UI.Designer.Controllers
             return this.Redirect(this.Request.UrlReferrer.ToString());
         }
 
+        [HttpPost]
+        public ActionResult Revert(Guid id, Guid commandId)
+        {
+            // TODO: KP-8105 add command here
+            string sid = id.FormatGuid();
+            return RedirectToAction("Details", new { id = sid });
+        }
+
         [AllowAnonymous]
         public ActionResult ExpressionGeneration(Guid? id)
         {
@@ -200,7 +208,9 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
-            var questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+            QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+            questionnairePublicListViewModels.ChangeHistory.ForEach(x => { x.CommandId = Guid.NewGuid(); }); 
+
             return this.View(questionnairePublicListViewModels);
         }
 

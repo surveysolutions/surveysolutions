@@ -41,5 +41,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public int? AffectedEntries { get; private set; }
 
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; private set; }
+        public Guid? CommandId { get; set; }
     }
 }

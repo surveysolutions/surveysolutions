@@ -1,14 +1,6 @@
 ﻿@using System.Web.Mvc.Html
-@using Main.Core.Documents
-@using Main.Core.Entities.Composite
-@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 @using WB.Core.GenericSubdomains.Portable
-@using WB.Core.GenericSubdomains.Utils
-@using WB.UI.Designer.BootstrapSupport
 @using WB.UI.Designer.BootstrapSupport.HtmlHelpers
-@using WB.UI.Designer.Extensions
-@using WB.UI.Designer.Models
-@using WB.UI.Designer.Utils
 @using WB.UI.Designer.Resources
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory.QuestionnaireChangeHistory
 
@@ -17,22 +9,24 @@
 }
 @section Scripts {
     @Scripts.Render("~/list")
+    <script src="~/questionnaire/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 }
 <div id="edit-form" style="position: static;">
     <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">@Html.ActionLink(QuestionnaireHistoryResources.Edit, "Details", "Questionnaire", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title</h3>
 </div>
-    <table id="questionnaire-table-header" class="table  table-header">
-        <thead>
-            <tr>
-                <th>
-                    @QuestionnaireHistoryResources.Change
-                </th>
-                <th>@QuestionnaireHistoryResources.UserName</th>
-                <th>@QuestionnaireHistoryResources.Timestamp</th>
-            </tr>
-        </thead>
-    </table>
-    <div id="table-content-holder" style="top: 77px;">
+<table id="questionnaire-table-header" class="table  table-header">
+    <thead>
+        <tr>
+            <th>
+                @QuestionnaireHistoryResources.Change
+            </th>
+            <th>@QuestionnaireHistoryResources.UserName</th>
+            <th>@QuestionnaireHistoryResources.Timestamp</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+<div id="table-content-holder" style="top: 77px;">
     <div class="scroller-container">
         @if (Model == null || Model.ChangeHistory.Count == 0)
         {
@@ -51,17 +45,57 @@
                                 @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
                             </td>
                             <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
-                            <td>@listViewModel.Timestamp</td>
+                            <td>@listViewModel.Timestamp.ToString("s")</td>
+                            <td>
+                                @if (listViewModel.CommandId.HasValue)
+                                {
+                                    <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.CommandId')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
+                                }
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
             @Html.Pager(rows.PageIndex + 1, rows.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new
-            {
-                page = x,
-                id = Model.Id
-            }), 2)
+       {
+           page = x,
+           id = Model.Id
+       }), 2)
         }
     </div>
 </div>
 
+@section Modal {
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">@QuestionnaireHistoryResources.Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Raw(string.Format(QuestionnaireHistoryResources.ResetQuestionnaireToThis, "<span id=\"version\">?</span>"))
+                </div>
+                <div class="modal-footer">
+                    @using (Html.BeginForm("Revert", "Questionnaire", FormMethod.Post))
+                    {
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        @Html.Hidden("id", @Model.Id)
+                        @Html.Hidden("commandId", null, new { id = "commandId" })
+                        <button type="submit" class="btn btn-primary" id="confirmRevertBtn">Revert</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        window.confirmRevert = function (date, revertId) {
+            $('#version').text(date);
+            $('#commandId').val(revertId);
+            $('#myModal').modal('show');
+        }
+    });
+</script>
