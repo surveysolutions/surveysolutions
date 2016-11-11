@@ -69,12 +69,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                             var expectedRosterIdentity = expectedRosterIdentities[index];
                             if (actualRosterIdentities.Contains(expectedRosterIdentity))
                                 continue;
-                            this.AddChild(rosterManager.CreateRoster(this.Identity, expectedRosterIdentity, index));
+                            var expectedRoster = rosterManager.CreateRoster(this.Identity, expectedRosterIdentity, index);
+                            this.AddChild(expectedRoster);
+                            expectedRoster.ActualizeChildren();
                         }
 
                         break;
-                    case QuestionnaireReferenceType.StaticText:
                     case QuestionnaireReferenceType.SubSection:
+                        var subSectionIdentity = new Identity(childEntityId, this.RosterVector);
+                        if (!HasChild(subSectionIdentity))
+                        {
+                            var subSection = Tree.CreateSubSection(subSectionIdentity);
+                            this.AddChild(subSection);
+                            subSection.ActualizeChildren();
+                        }
+                        break;
+                    case QuestionnaireReferenceType.StaticText:
                     case QuestionnaireReferenceType.Variable:
                     case QuestionnaireReferenceType.Question:
                         var entityIdentity = new Identity(childEntityId, this.RosterVector);
@@ -128,8 +138,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void RemoveChild(Identity identity)
         {
-            var nodesToRemove = this.children.Where(x => x.Identity.Equals(identity)).ToArray();
-            nodesToRemove.ForEach(nodeToRemove => this.children.Remove(nodeToRemove));
+            var nodeToRemove = this.children.Find(child=>child.Identity == identity);
+            if (nodeToRemove != null) this.children.Remove(nodeToRemove);
 
             Tree?.ProcessRemovedNodeByIdentity(identity);
         }
