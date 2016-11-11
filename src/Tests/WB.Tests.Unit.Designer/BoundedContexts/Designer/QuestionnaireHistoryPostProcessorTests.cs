@@ -159,12 +159,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 return this.Fluent;
             }
 
-            public FluentSyntax QuestionnaireDocumentIsImportedByHistoryPostProcessor()
+            public FluentSyntax QuestionnaireDocumentIsImportedByHistoryPostProcessor(Questionnaire questionnire = null)
             {
                 HistoryPostProcessor historyPostProcessor = this.Context.HistoryPostProcessor;
                 QuestionnaireDocument questionnaireDocument = this.Context.QuestionnaireDocument;
 
-                historyPostProcessor.Process(null,
+                historyPostProcessor.Process(questionnire,
                     Create.Command.ImportQuestionnaire(questionnaireDocument: questionnaireDocument));
 
                 return this.Fluent;
@@ -298,6 +298,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             QuestionnaireDocument questionnaireDocument;
             HistoryPostProcessor historyPostProcessor;
             InMemoryKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage;
+            var questionnaire = Create.Questionnaire();
 
             Given().ServiceLocator().
                 And.QuestionnaireChangeRecordStorage().
@@ -316,9 +317,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                         Create.Question(questionId: notRemovedQuestionId),
                     }),
                 }).
-                And.QuestionnaireDocumentIsImportedByHistoryPostProcessor();
+                And.QuestionnaireDocumentIsImportedByHistoryPostProcessor(questionnaire);
 
-            var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
 
             // when
