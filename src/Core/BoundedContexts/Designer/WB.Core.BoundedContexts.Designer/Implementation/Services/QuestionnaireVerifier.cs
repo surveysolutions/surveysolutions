@@ -468,7 +468,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IComposite questionnaireItem = roster.GetParent();
             while (questionnaireItem != null)
             {
-                if (IsGroup(questionnaireItem) && IsRoster((IGroup) questionnaireItem))
+                if (IsRoster(questionnaireItem))
                 {
                     parentCountMultiplier = CalculateRosterInstancesCountAndUpdateCache((IGroup) questionnaireItem, rosterPropagationCounts, questionnaire);
                     break;
@@ -1183,7 +1183,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             int rosterLevel = 0;
             while (questionnaireItem != null)
             {
-                if (IsGroup(questionnaireItem) && IsRoster((IGroup)questionnaireItem))
+                if (IsRoster(questionnaireItem))
                     rosterLevel++;
 
                 questionnaireItem = questionnaireItem.GetParent();
