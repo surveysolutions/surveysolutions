@@ -87,21 +87,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
        
         public void ActualizeTree()
         {
-            var itemsQueue = new Queue<IInterviewTreeNode>(Sections);
-
-            while (itemsQueue.Count > 0)
-            {
-                var currentItem = itemsQueue.Dequeue();
-                if (!(currentItem is InterviewTreeGroup))
-                    continue;
-                var currentGroup = currentItem as InterviewTreeGroup;
-                currentGroup.ActualizeChildren();
-
-                foreach (var childItem in currentGroup.Children)
-                {
-                    itemsQueue.Enqueue(childItem);
-                }
-            }
+            foreach (var treeSection in this.Sections)
+                treeSection.ActualizeChildren();
         }
 
         public void RemoveNode(Identity identity)

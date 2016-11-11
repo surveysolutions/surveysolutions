@@ -9,28 +9,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        protected Guid questionnaireId;
-        protected long questionnaireVersion;
-        protected string language;
-        public string Language => this.language;
+        public string Language { get; private set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
+        public string QuestionnaireId => this.QuestionnaireIdentity?.ToString();
 
-        private QuestionnaireIdentity questionnaireIdentity;
-        public QuestionnaireIdentity QuestionnaireIdentity
-            => this.questionnaireIdentity ?? (this.questionnaireIdentity = new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion));
-
-        public string QuestionnaireId => this.QuestionnaireIdentity.ToString();
-
-        protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(
-            this.QuestionnaireIdentity.QuestionnaireId,
-            this.QuestionnaireIdentity.Version,
-            this.Language);
-
-        protected IQuestionnaire GetQuestionnaireOrThrow(Guid id, long version, string language)
+        protected IQuestionnaire GetQuestionnaireOrThrow()
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(new QuestionnaireIdentity(id, version), language);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.QuestionnaireIdentity, this.Language);
 
             if (questionnaire == null)
-                throw new InterviewException($"Questionnaire '{new QuestionnaireIdentity(id, version)}' was not found. InterviewId {EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
+                throw new InterviewException($"Questionnaire '{this.QuestionnaireIdentity}' was not found. InterviewId {EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
 
             return questionnaire;
         }
@@ -60,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             itemsCount = itemsCount > 200 ? 200 : itemsCount;
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             if (!questionnaire.IsSupportFilteringForOptions(question.Id))
                 return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter).Take(itemsCount).ToList();
@@ -71,13 +59,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value);
         }
 
         public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText);
 
             if (filteredOption == null)

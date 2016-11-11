@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.IsQuestionYesNo(questionId))
             {
-                throw new InterviewException($"Question {questionId} has Yes/No type, but command is sent to Multiopions type. questionnaireId: {this.questionnaireId}, interviewId {this.EventSourceId}");
+                throw new InterviewException($"Question {questionId} has Yes/No type, but command is sent to Multiopions type. questionnaireId: {this.QuestionnaireId}, interviewId {this.EventSourceId}");
             }
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
