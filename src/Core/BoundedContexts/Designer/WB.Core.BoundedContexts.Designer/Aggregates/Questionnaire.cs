@@ -3658,7 +3658,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
-        public void RestoreVersion(RestoreVersionQuestionnaire command)
+        public void RevertVersion(RevertVersionQuestionnaire command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 

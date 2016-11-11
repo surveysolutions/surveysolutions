@@ -10,10 +10,10 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
-    internal class RestoreVersionTests : QuestionnaireTestsContext
+    internal class RevertVersionTests : QuestionnaireTestsContext
     {
         [Test]
-        public void RestoreVersion_When_question_version_specified_Then_should_restore_questionnire()
+        public void RevertVersion_When_question_version_specified_Then_should_restore_questionnire()
         {
             // Arrange
             Guid responsibleId = Guid.NewGuid();
@@ -25,17 +25,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var histotyVersionsService = Mock.Of<IQuestionnireHistotyVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
             var questionnaire = Create.Questionnaire(histotyVersionsService: histotyVersionsService);
             questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, null);
-            var command = Create.Command.RestoreVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
+            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             
             // Act
-            questionnaire.RestoreVersion(command);
+            questionnaire.RevertVersion(command);
 
             // Assert
             Assert.That(questionnaire.QuestionnaireDocument, Is.EqualTo(oldQuestionnireDocument));
         }
 
         [Test]
-        public void RestoreVersion_When_shared_person_try_to_restore_questionnire_Then_should_restore_questionnire()
+        public void RevertVersion_When_shared_person_try_to_restore_questionnire_Then_should_restore_questionnire()
         {
             // Arrange
             Guid ownerId = Guid.NewGuid();
@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var histotyVersionsService = Mock.Of<IQuestionnireHistotyVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
             var questionnaire = Create.Questionnaire(histotyVersionsService: histotyVersionsService);
             questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, new[] { new SharedPerson() { Id = sharedPersonId} });
-            var command = Create.Command.RestoreVersionQuestionnaire(questionnaireId, historyReferanceId, sharedPersonId);
+            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, sharedPersonId);
             
             // Act
-            questionnaire.RestoreVersion(command);
+            questionnaire.RevertVersion(command);
 
             // Assert
             Assert.That(questionnaire.QuestionnaireDocument, Is.EqualTo(oldQuestionnireDocument));
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
 
         [Test]
-        public void RestoreVersion_When_person_without_permissions_do_revert_Then_should_throw_exception()
+        public void RevertVersion_When_person_without_permissions_do_revert_Then_should_throw_exception()
         {
             // Arrange
             Guid responsibleId = Guid.NewGuid();
@@ -72,10 +72,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var histotyVersionsService = Mock.Of<IQuestionnireHistotyVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
             var questionnaire = Create.Questionnaire(histotyVersionsService: histotyVersionsService);
             questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, null);
-            var command = Create.Command.RestoreVersionQuestionnaire(questionnaireId, historyReferanceId, personWhitoutPermissions);
+            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, personWhitoutPermissions);
 
             // Act
-            var exception = Catch.Exception(() => questionnaire.RestoreVersion(command));
+            var exception = Catch.Exception(() => questionnaire.RevertVersion(command));
 
             // Assert
             Assert.That(exception, Is.Not.Null);
