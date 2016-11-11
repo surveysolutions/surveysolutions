@@ -200,7 +200,8 @@ namespace WB.UI.Designer.Controllers
                     this.Success($"Questionnaire \"{model.Title}\" successfully restored.");
                 }
             }
-            return this.Redirect(this.Request.UrlReferrer.ToString());
+            string sid = id.FormatGuid();
+            return this.RedirectToAction("Details", new {id =  sid});
         }
 
         [AllowAnonymous]
