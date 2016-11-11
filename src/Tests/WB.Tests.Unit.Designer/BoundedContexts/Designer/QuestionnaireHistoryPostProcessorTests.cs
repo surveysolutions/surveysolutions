@@ -23,7 +23,7 @@ using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
-    [TestOf(typeof(ListViewPostProcessor))]
+    [TestOf(typeof(HistoryPostProcessor))]
     [TestFixture]
     public class QuestionnaireHistoryPostProcessorTests
     {
