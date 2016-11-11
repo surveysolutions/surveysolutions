@@ -2,6 +2,7 @@
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -20,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public QuestionnaireDocument GetByHistoryVersion(Guid historyReferanceId)
         {
-            var questionnaireChangeRecord = this.questionnaireChangeItemStorage.GetById(historyReferanceId);
+            var questionnaireChangeRecord = this.questionnaireChangeItemStorage.GetById(historyReferanceId.FormatGuid());
             if (questionnaireChangeRecord == null)
                 return null;
 

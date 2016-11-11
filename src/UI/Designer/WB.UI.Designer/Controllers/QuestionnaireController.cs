@@ -181,10 +181,9 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        [ActionName("RestoreVersion")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Revert(Guid id, Guid historyReferanceId)
+        public ActionResult Revert(Guid id, Guid commandId)
         {
+            var historyReferenceId = commandId;
             QuestionnaireView model = this.GetQuestionnaire(id);
 
             if (model != null)
@@ -195,7 +194,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    var command = new RestoreVersionQuestionnaire(model.PublicKey, historyReferanceId, UserHelper.WebUser.UserId);
+                    var command = new RestoreVersionQuestionnaire(model.PublicKey, historyReferenceId, UserHelper.WebUser.UserId);
                     this.commandService.Execute(command);
 
                     this.Success($"Questionnaire \"{model.Title}\" successfully restored.");
