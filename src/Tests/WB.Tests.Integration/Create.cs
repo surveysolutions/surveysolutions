@@ -67,6 +67,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using Configuration = NHibernate.Cfg.Configuration;
 
@@ -749,7 +750,7 @@ namespace WB.Tests.Integration
                 sessionProvider ?? Mock.Of<ISessionProvider>(),
                 postgreConnectionSettings ?? new PostgreConnectionSettings(),
                 Mock.Of<ILogger>(),
-                Mock.Of<IEntitySerializer<TEntity>>());
+                new EntitySerializer<TEntity>());
         }
 
         public static ISessionFactory SessionFactory(string connectionString, IEnumerable<Type> painStorageEntityMapTypes)
