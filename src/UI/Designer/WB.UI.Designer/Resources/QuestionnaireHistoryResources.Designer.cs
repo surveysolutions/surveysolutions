@@ -133,6 +133,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to created.
         /// </summary>
         public static string created {
@@ -345,6 +354,24 @@ namespace WB.UI.Designer.Resources {
         public static string replaced {
             get {
                 return ResourceManager.GetString("replaced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset questionnaire to version at {0}?.
+        /// </summary>
+        public static string ResetQuestionnaireToThis {
+            get {
+                return ResourceManager.GetString("ResetQuestionnaireToThis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revert to this version.
+        /// </summary>
+        public static string RevertToThisVersion {
+            get {
+                return ResourceManager.GetString("RevertToThisVersion", resourceCulture);
             }
         }
         

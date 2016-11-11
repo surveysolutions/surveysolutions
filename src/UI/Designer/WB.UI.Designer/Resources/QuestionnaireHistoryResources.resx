@@ -267,4 +267,13 @@
   <data name="TextsReplaced" xml:space="preserve">
     <value>All '{0}' were replaced with '{1}'. {2} entries affected</value>
   </data>
+  <data name="RevertToThisVersion" xml:space="preserve">
+    <value>Revert to this version</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ResetQuestionnaireToThis" xml:space="preserve">
+    <value>Reset questionnaire to version at {0}?</value>
+  </data>
 </root>
