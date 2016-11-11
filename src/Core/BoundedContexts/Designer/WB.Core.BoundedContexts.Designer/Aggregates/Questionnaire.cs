@@ -3658,8 +3658,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
-        public void RestoreVersion(Guid historyReferanceId)
+        public void RestoreVersion(RestoreVersionQuestionnaire command)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            var historyReferanceId = command.HistoryReferanceId;
             var questionnire = questionnireHistotyVersionsService.GetByHistoryVersion(historyReferanceId);
             if (questionnire == null)
                 throw new ArgumentException($"Questionnire {Id} of version {historyReferanceId} didn't find");
