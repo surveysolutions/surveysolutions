@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
         ICommandPostProcessor<Questionnaire, UpdateCascadingComboboxOptions>,
-        ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>
+        ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>,
+        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -299,5 +300,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteLookupTable command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateCascadingComboboxOptions command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
+            => this.Update(command.QuestionnaireId.FormatGuid(), aggregate.QuestionnaireDocument.Title, aggregate.QuestionnaireDocument.IsPublic);
     }
 }
