@@ -33,27 +33,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         protected void Apply(InterviewOnClientCreated @event)
         {
-            this.questionnaireId = @event.QuestionnaireId;
-            this.questionnaireVersion = @event.QuestionnaireVersion;
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId,
+                @event.QuestionnaireVersion);
 
             this.CreatedOnClient = true;
-            this.InterviewerId = @event.UserId;
-            
-            this.delta = this.BuildInterviewTree(this.GetQuestionnaireOrThrow());
-            this.interviewState = this.delta.Clone();
+            this.properties.InterviewerId = @event.UserId;
+
+            this.sourceInterview = this.changedInterview.Clone();
         }
 
         public void Apply(InterviewSynchronized @event)
         {
-            this.questionnaireId = @event.InterviewData.QuestionnaireId;
-            this.questionnaireVersion = @event.InterviewData.QuestionnaireVersion;
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.InterviewData.QuestionnaireId,
+                @event.InterviewData.QuestionnaireVersion);
+
             this.properties.Status = @event.InterviewData.Status;
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire);
-            this.interviewState = sourceInterviewTree.Clone();
+            var sourceInterviewTree = this.changedInterview.Clone();
             
             var orderedRosters = @event.InterviewData.RosterGroupInstances
                 .SelectMany(x => x.Value)
@@ -69,55 +68,55 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 RosterIdentity rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector,
                     rosterDto.RosterInstanceId, rosterDto.SortIndex);
 
-                InterviewTreeRoster roster = this.interviewState.GetRosterManager(rosterIdentity.GroupId)
+                InterviewTreeRoster roster = this.changedInterview.GetRosterManager(rosterIdentity.GroupId)
                     .CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
 
                 roster.SetRosterTitle(rosterDto.RosterTitle);
             }
 
             foreach (var question in @event.InterviewData.Answers)
-                this.interviewState.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
+                this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
 
             foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
-                this.interviewState.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector)).Disable();
+                this.changedInterview.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector)).Disable();
 
             foreach (var disabledQuestion in @event.InterviewData.DisabledQuestions)
-                this.interviewState.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector)).Disable();
+                this.changedInterview.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector)).Disable();
 
             foreach (var invalidQuestion in @event.InterviewData.FailedValidationConditions)
-                this.interviewState.GetQuestion(invalidQuestion.Key).MarkAsInvalid(invalidQuestion.Value);
+                this.changedInterview.GetQuestion(invalidQuestion.Key).MarkAsInvalid(invalidQuestion.Value);
 
             foreach (var disabledStaticText in @event.InterviewData.DisabledStaticTexts)
-                this.interviewState.GetStaticText(disabledStaticText).Disable();
+                this.changedInterview.GetStaticText(disabledStaticText).Disable();
 
             foreach (var invalidStaticText in @event.InterviewData.InvalidStaticTexts)
-                this.interviewState.GetStaticText(invalidStaticText.Key).MarkAsInvalid(invalidStaticText.Value);
+                this.changedInterview.GetStaticText(invalidStaticText.Key).MarkAsInvalid(invalidStaticText.Value);
 
             foreach (var validStaticText in @event.InterviewData.ValidStaticTexts)
-                this.interviewState.GetStaticText(validStaticText).MarkAsValid();
+                this.changedInterview.GetStaticText(validStaticText).MarkAsValid();
 
             foreach (var variable in @event.InterviewData.Variables)
-                this.interviewState.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector)).SetValue(variable.Value);
+                this.changedInterview.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector)).SetValue(variable.Value);
 
             foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
-                this.interviewState.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector)).Disable();
+                this.changedInterview.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector)).Disable();
 
             foreach (var linkedQuestion in @event.InterviewData.LinkedQuestionOptions)
-                this.interviewState.GetQuestion(Identity.Create(linkedQuestion.Key.Id, linkedQuestion.Key.InterviewItemRosterVector)).AsLinked.SetOptions(linkedQuestion.Value);
+                this.changedInterview.GetQuestion(Identity.Create(linkedQuestion.Key.Id, linkedQuestion.Key.InterviewItemRosterVector)).AsLinked.SetOptions(linkedQuestion.Value);
 
-            this.interviewState.AnswerComments = @event.InterviewData.Answers
+            this.changedInterview.AnswerComments = @event.InterviewData.Answers
                 .SelectMany(answerDto => answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)))
                 .ToList();
 
-            base.UpdateRosterTitles(this.interviewState, questionnaire);
-            base.UpdateExpressionState(sourceInterviewTree, this.interviewState, this.ExpressionProcessorStatePrototype);
-
-            this.delta = this.interviewState.Clone();
+            base.UpdateRosterTitles(this.changedInterview, questionnaire);
+            base.UpdateExpressionState(sourceInterviewTree, this.changedInterview, this.ExpressionProcessorStatePrototype);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
-            this.SupervisorId = @event.InterviewData.SupervisorId;
-            this.InterviewerId = @event.InterviewData.UserId;
+            this.properties.SupervisorId = @event.InterviewData.SupervisorId;
+            this.properties.InterviewerId = @event.InterviewData.UserId;
             this.SupervisorRejectComment = @event.InterviewData.Comments;
+
+            this.sourceInterview = this.changedInterview.Clone();
         }
 
         public void Apply(InterviewAnswersFromSyncPackageRestored @event) { }
@@ -131,13 +130,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public new void Apply(SubstitutionTitlesChanged @event)
         {
             foreach (var @group in @event.Groups)
-                this.interviewState.GetGroup(@group).ReplaceSubstitutions();
+                this.changedInterview.GetGroup(@group).ReplaceSubstitutions();
 
             foreach (var @question in @event.Questions)
-                this.interviewState.GetQuestion(@question).ReplaceSubstitutions();
+                this.changedInterview.GetQuestion(@question).ReplaceSubstitutions();
 
             foreach (var @staticText in @event.StaticTexts)
-                this.interviewState.GetStaticText(@staticText).ReplaceSubstitutions();
+                this.changedInterview.GetStaticText(@staticText).ReplaceSubstitutions();
         }
 
         public new void Apply(InterviewCompleted @event)
@@ -174,9 +173,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         #endregion
 
+        private InterviewTree sourceInterview;
         public bool HasLinkedOptionsChangedEvents { get; private set; } = false;
-        public Guid? SupervisorId { get; private set; }
-        public Guid? InterviewerId { get; private set; }
         
         public InterviewStatus Status => this.properties.Status;
         public Guid Id => this.EventSourceId;
@@ -184,28 +182,53 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public string SupervisorRejectComment { get; private set; }
 
         public string GetAnswerAsString(Identity questionIdentity)
-            => this.interviewState.GetQuestion(questionIdentity).GetAnswerAsString();
+            => this.changedInterview.GetQuestion(questionIdentity).GetAnswerAsString();
 
         public bool HasErrors { get; private set; }
 
         public bool IsCompleted { get; private set; }
 
-        public InterviewTreeRoster GetRoster(Identity identity) => this.interviewState.GetRoster(identity);
-        public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsGps;
-        public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsDateTime;
-        public InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsMultimedia;
-        public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsQRBarcode;
-        public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsTextList;
-        public InterviewTreeSingleLinkedOptionQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsSingleLinkedOption;
-        public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsMultiFixedOption;
-        public InterviewTreeMultiLinkedOptionQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsMultiLinkedOption;
-        public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsInteger;
-        public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsDouble;
-        public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsText;
-        public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsSingleFixedOption;
-        public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.interviewState.GetQuestion(identity).AsYesNo;
+        public InterviewTreeRoster GetRoster(Identity identity) => this.changedInterview.GetRoster(identity);
+        public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsGps;
+        public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsDateTime;
+        public InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultimedia;
+        public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsQRBarcode;
+        public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsTextList;
+        public InterviewTreeSingleLinkedOptionQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsSingleLinkedOption;
+        public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultiFixedOption;
+        public InterviewTreeMultiLinkedOptionQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultiLinkedOption;
+        public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsInteger;
+        public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsDouble;
+        public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsText;
+        public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsSingleFixedOption;
+        public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsYesNo;
 
         #region Command handlers
+
+        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
+        {
+            this.QuestionnaireIdentity = questionnaireIdentity;
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var sourceInterviewTree = this.changedInterview;
+            var changedInterviewTree = sourceInterviewTree.Clone();
+
+            //apply events
+            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
+
+            changedInterviewTree.ActualizeTree();
+
+            this.ApplyTreeDiffChanges(userId: userId, questionnaire: questionnaire,
+                sourceInterviewTree: sourceInterviewTree, changedInterviewTree: changedInterviewTree,
+                changedQuestionIdentities: new List<Identity>());
+
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+
+            this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+        }
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
@@ -215,7 +238,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
-            this.ApplyEvents(this.delta, this.interviewState, userId);
+            this.ApplyEvents(this.sourceInterview, this.changedInterview, userId);
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
@@ -227,6 +250,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(synchronizedInterview.QuestionnaireId, synchronizedInterview.QuestionnaireVersion);
+
             new InterviewPropertiesInvariants(this.properties).ThrowIfInterviewHardDeleted();
             
             this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
@@ -234,10 +259,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         #endregion
 
-        public bool HasGroup(Identity group) => this.interviewState.GetGroup(group) != null;
+        public bool HasGroup(Identity group) => this.changedInterview.GetGroup(group) != null;
 
         public string GetRosterTitle(Identity rosterIdentity)
-            => this.interviewState.GetRoster(rosterIdentity)?.RosterTitle;
+            => this.changedInterview.GetRoster(rosterIdentity)?.RosterTitle;
 
         public object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector)
         {
@@ -245,7 +270,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 var variableIdentity = new Identity(variableId, variableRosterVector);
 
-                var variable = this.interviewState.GetVariable(variableIdentity);
+                var variable = this.changedInterview.GetVariable(variableIdentity);
                 if (variable != null) return variable.Value;
 
                 if (variableRosterVector.Length == 0) break;
@@ -257,22 +282,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
 
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity)
-            => this.interviewState.GetQuestion(questionIdentity).Parents
+            => this.changedInterview.GetQuestion(questionIdentity).Parents
                 .OfType<InterviewTreeRoster>()
                 .Select(roster => roster.RosterTitle);
 
         public IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Identity rosterIdentity)
-            => this.interviewState.GetRoster(rosterIdentity).Parents
+            => this.changedInterview.GetRoster(rosterIdentity).Parents
                 .OfType<InterviewTreeRoster>()
                 .Select(roster => roster.RosterTitle);
 
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
         public int CountAnsweredQuestionsInInterview()
-            => this.interviewState.FindQuestions().Count(question => !question.IsDisabled() && question.IsAnswered());
+            => this.changedInterview.FindQuestions().Count(question => !question.IsDisabled() && question.IsAnswered());
 
         public int CountActiveQuestionsInInterview()
-            => this.interviewState.FindQuestions().Count(question => !question.IsDisabled());
+            => this.changedInterview.FindQuestions().Count(question => !question.IsDisabled());
 
         public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
 
@@ -280,36 +305,36 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             => this.GetEnabledInvalidStaticTexts().Concat(this.GetEnabledInvalidQuestions());
 
         private IEnumerable<Identity> GetEnabledInvalidStaticTexts()
-            => this.interviewState.FindStaticTexts()
+            => this.changedInterview.FindStaticTexts()
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
                 .Select(staticText => staticText.Identity);
 
         private IEnumerable<Identity> GetEnabledInvalidQuestions()
-            => this.interviewState.FindQuestions()
+            => this.changedInterview.FindQuestions()
                 .Where(question => !question.IsDisabled() && !question.IsValid)
                 .Select(question => question.Identity);
 
         public int CountEnabledQuestions(Identity group)
-            => this.interviewState.FindQuestions(group).Count(question => !question.IsDisabled());
+            => this.changedInterview.FindQuestions(group).Count(question => !question.IsDisabled());
 
         public int CountEnabledAnsweredQuestions(Identity group)
-            => this.interviewState.FindQuestions(group).Count(question => !question.IsDisabled() && question.IsAnswered());
+            => this.changedInterview.FindQuestions(group).Count(question => !question.IsDisabled() && question.IsAnswered());
 
         public int CountEnabledInvalidQuestionsAndStaticTexts(Identity group)
-            => this.interviewState.FindQuestions(group).Count(question => !question.IsDisabled() && !question.IsValid) +
-               this.interviewState.FindStaticTexts(group).Count(staticText => !staticText.IsDisabled() && !staticText.IsValid);
+            => this.changedInterview.FindQuestions(group).Count(question => !question.IsDisabled() && !question.IsValid) +
+               this.changedInterview.FindStaticTexts(group).Count(staticText => !staticText.IsDisabled() && !staticText.IsValid);
 
         public bool HasEnabledInvalidQuestionsAndStaticTexts(Identity group)
             => this.CountEnabledInvalidQuestionsAndStaticTexts(group) > 0;
 
         public bool HasUnansweredQuestions(Identity group) 
-            => this.interviewState.FindQuestions(group).Any(question => !question.IsDisabled() && !question.IsAnswered());
+            => this.changedInterview.FindQuestions(group).Any(question => !question.IsDisabled() && !question.IsAnswered());
 
         public IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
-            var commentedEnabledInterviewerQuestionIds = this.interviewState.AnswerComments
+            var commentedEnabledInterviewerQuestionIds = this.changedInterview.AnswerComments
                   .Where(x => x.UserId != this.InterviewerId)
                   .Select(x => x.QuestionIdentity)
                   .Where(this.IsEnabled)
@@ -338,15 +363,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
 
         public Identity GetParentGroup(Identity groupOrQuestion)
-            => this.interviewState.GetNodeByIdentity(groupOrQuestion).Parent.Identity;
+            => this.changedInterview.GetNodeByIdentity(groupOrQuestion).Parent.Identity;
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
-            => this.interviewState.GetGroup(groupIdentity).Children
+            => this.changedInterview.GetGroup(groupIdentity).Children
                 .OfType<InterviewTreeQuestion>()
                 .Select(question => question.Identity);
 
         public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
-            => this.interviewState.FindRosters()
+            => this.changedInterview.FindRosters()
                 .Where(roster => roster.Identity.Id == rosterId && roster.Parent.Identity.Equals(parentIdentity))
                 .Select(roster => roster.Identity)
                 .ToList();
@@ -357,29 +382,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(groupOrRoster => groupOrRoster.Identity);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
-            => this.interviewState.GetGroup(group).Children.OfType<InterviewTreeGroup>();
+            => this.changedInterview.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
 
         public bool IsValid(Identity identity)
-            => (this.interviewState.GetQuestion(identity)?.IsValid ?? false) ||
-               (this.interviewState.GetStaticText(identity)?.IsValid ?? false);
+            => (this.changedInterview.GetQuestion(identity)?.IsValid ?? false) ||
+               (this.changedInterview.GetStaticText(identity)?.IsValid ?? false);
 
         public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
-            => this.interviewState.GetQuestion(questionId)?.FailedValidations ?? 
-               this.interviewState.GetStaticText(questionId)?.FailedValidations;
+            => this.changedInterview.GetQuestion(questionId)?.FailedValidations ?? 
+               this.changedInterview.GetStaticText(questionId)?.FailedValidations;
 
-        public bool IsEnabled(Identity entityIdentity) => !this.interviewState.GetNodeByIdentity(entityIdentity).IsDisabled();
+        public bool IsEnabled(Identity entityIdentity) => !this.changedInterview.GetNodeByIdentity(entityIdentity).IsDisabled();
 
         public bool CreatedOnClient { get; private set; } = false;
 
         public bool WasAnswered(Identity entityIdentity)
         {
-            var question = this.interviewState.GetQuestion(entityIdentity);
+            var question = this.changedInterview.GetQuestion(entityIdentity);
 
-            return !question.IsDisabled() && question.IsAnswered();
+            return question != null && !question.IsDisabled() && question.IsAnswered();
         }
 
         public IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity)
-            => this.interviewState.AnswerComments.Where(comment => comment.QuestionIdentity.Equals(entityIdentity));
+            => this.changedInterview.AnswerComments.Where(comment => comment.QuestionIdentity.Equals(entityIdentity));
 
         List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);
