@@ -133,6 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
+        private readonly IQuestionnireHistotyVersionsService questionnireHistotyVersionsService;
         private int affectedByReplaceEntries;
 
         #endregion
@@ -145,7 +146,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IKeywordsProvider variableNameValidator, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
-            ITranslationsService translationService)
+            ITranslationsService translationService,
+            IQuestionnireHistotyVersionsService questionnireHistotyVersionsService)
         {
             this.logger = logger;
             this.clock = clock;
@@ -155,6 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationService = translationService;
+            this.questionnireHistotyVersionsService = questionnireHistotyVersionsService;
         }
 
         #region Questionnaire command handlers
@@ -3654,5 +3657,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #endregion
+
+        public void RestoreVersion(Guid historyReferanceId)
+        {
+            var questionnire = questionnireHistotyVersionsService.GetByHistoryVersion(historyReferanceId);
+            if (questionnire == null)
+                throw new ArgumentException($"Questionnire {Id} of version {historyReferanceId} didn't find");
+
+            this.innerDocument = questionnire;
+        }
     }
 }

@@ -520,7 +520,8 @@ namespace WB.Tests.Unit.Designer
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>());
+                Mock.Of<ITranslationsService>(),
+                Mock.Of<IQuestionnireHistotyVersionsService>());
         }
 
 
@@ -534,7 +535,8 @@ namespace WB.Tests.Unit.Designer
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>());
+                Mock.Of<ITranslationsService>(),
+                Mock.Of<IQuestionnireHistotyVersionsService>());
             questionnaire.Initialize(Guid.NewGuid(), document, new List<SharedPerson> {Create.SharedPerson(responsible)});
             return questionnaire;
         }
