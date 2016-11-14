@@ -21,12 +21,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                     {
                         Create.NumericIntegerQuestion(id: numericId, variable: "n1"),
                         Create.Roster(rosterId: r1Id, variable: "r1", rosterSizeQuestionId: numericId,
-                            rosterSizeSourceType: RosterSizeSourceType.Question,
+                            rosterType: RosterSizeSourceType.Question,
                             children: new IComposite[]
                             {
                                 Create.NumericIntegerQuestion(id: numericNestedRosterId, variable: "r1n1"),
                                 Create.Roster(rosterId: r1r1, variable: "r1r1",
-                                    rosterSizeSourceType: RosterSizeSourceType.Question,
+                                    rosterType: RosterSizeSourceType.Question,
                                     rosterSizeQuestionId: numericNestedRosterId, children: new IComposite[]
                                     {
                                         Create.TextQuestion(questionId: Guid.NewGuid(), variable: "r1r1t1",
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                                     })
                             }),
                         Create.Roster(rosterId: r2Id, variable: "r2", rosterSizeQuestionId: numericId,
-                            rosterSizeSourceType: RosterSizeSourceType.Question,
+                            rosterType: RosterSizeSourceType.Question,
                             children: new IComposite[]
                             {
                                 Create.NumericIntegerQuestion(id: Guid.NewGuid(), variable: "r2n1")

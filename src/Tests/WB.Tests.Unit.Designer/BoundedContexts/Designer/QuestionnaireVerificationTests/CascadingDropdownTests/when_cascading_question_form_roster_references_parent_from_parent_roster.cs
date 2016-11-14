@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaire = Create.QuestionnaireDocument(
                 children: Create.Roster(
                     variable: "roster1",
-                    rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
+                    rosterType: RosterSizeSourceType.FixedTitles,
                     fixedTitles: new[] { "a", "b" },
                     children: new List<IComposite>
                     {
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         }),
                         Create.Roster(
                             variable: "roster2",
-                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
+                            rosterType: RosterSizeSourceType.FixedTitles,
                             fixedTitles: new[] { "a", "b" },
                             children: new List<IComposite>
                             {

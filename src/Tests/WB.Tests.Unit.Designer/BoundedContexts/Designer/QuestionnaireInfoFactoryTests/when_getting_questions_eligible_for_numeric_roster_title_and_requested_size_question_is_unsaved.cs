@@ -20,11 +20,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         Establish context = () =>
         {
             questionnaireView = Create.QuestionnaireDocument(Guid.NewGuid(),
-                Create.Roster(roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new List<IComposite>()
+                Create.Roster(roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterType: RosterSizeSourceType.Question, children: new List<IComposite>()
                 {
                     Create.TextQuestion(rosterTitleQuestionId),
                 }),
-                Create.Roster(roster2Id, rosterSizeQuestionId: otherRosterSizeQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new List<IComposite>()
+                Create.Roster(roster2Id, rosterSizeQuestionId: otherRosterSizeQuestionId, rosterType: RosterSizeSourceType.Question, children: new List<IComposite>()
                 {
                     Create.TextQuestion(childTitleQuestionId),
                 }),

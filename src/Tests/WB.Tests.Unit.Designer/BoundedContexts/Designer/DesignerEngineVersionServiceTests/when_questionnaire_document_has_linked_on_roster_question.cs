@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             questionnaire = Create.QuestionnaireDocument(questionnaireId,
                 Create.Group(groupId: groupId, children: new IComposite[]
                 {
-                    Create.Roster(rosterId: rosterId, variable: "fixed_roster", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new string[] {"1", "2"}, enablementCondition: "roster condition"),
+                    Create.Roster(rosterId: rosterId, variable: "fixed_roster", rosterType: RosterSizeSourceType.FixedTitles, fixedTitles: new string[] {"1", "2"}, enablementCondition: "roster condition"),
                     Create.SingleQuestion(id: questionId, variable: "linkedToRoster", linkedToRosterId: rosterId)
                 }));
 
