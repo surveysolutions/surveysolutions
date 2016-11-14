@@ -100,6 +100,25 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public static bool operator !=(RosterScope a, RosterScope b)
             => !(a == b);
 
+        public RosterScope Shrink(int targetLength)
+        {
+            if (targetLength == 0)
+                return Empty;
+
+            if (targetLength == this.Length)
+                return this;
+
+            if (targetLength > this.Length)
+                throw new ArgumentException($"Cannot shrink roster scope {this} with length {this.Length} to bigger length {targetLength}.");
+
+            return this.Coordinates.Take(targetLength).ToArray();
+        }
+
+        public RosterScope Extend(Guid coordinate)
+        {
+            return new RosterScope(new List<Guid>(this.Coordinates) { coordinate });
+        }
+
         public bool IsParentScopeFor(RosterScope rosterScope)
         {
             return rosterScope.Length > this.Length && this.SequenceEqual(rosterScope.Take(this.Length));

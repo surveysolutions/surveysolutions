@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         };
 
         Because of = () =>
-            result = factory.GetRosterEditView(questionnaireId, rosterId);
+            result = factory.GetRosterEditView(questionnaireId, g3Id);
 
         It should_return_empty_grouped_list_of_multi_questions = () =>
             result.NotLinkedMultiOptionQuestions.Count.ShouldEqual(0);
@@ -76,6 +76,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static QuestionnaireDocument questionnaireView;
         private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
-        private static Guid rosterId = g3Id;
     }
 }

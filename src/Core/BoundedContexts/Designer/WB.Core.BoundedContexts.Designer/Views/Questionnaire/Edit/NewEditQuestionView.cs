@@ -10,8 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         public NewEditQuestionView()
         {
-            this.SourceOfLinkedEntities = new List<DropdownQuestionView>();
-            this.SourceOfSingleQuestions = new List<DropdownQuestionView>();
+            this.SourceOfLinkedEntities = new List<DropdownEntityView>();
+            this.SourceOfSingleQuestions = new List<DropdownEntityView>();
             this.ValidationConditions = new List<ValidationCondition>();
         }
 
@@ -49,8 +49,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public string CascadeFromQuestionId { get; set; }
 
-        public List<DropdownQuestionView> SourceOfLinkedEntities { get; set; }
-        public List<DropdownQuestionView> SourceOfSingleQuestions { get; set; }
+        public List<DropdownEntityView> SourceOfLinkedEntities { get; set; }
+        public List<DropdownEntityView> SourceOfSingleQuestions { get; set; }
 
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] AllQuestionScopeOptions { get; set; }
