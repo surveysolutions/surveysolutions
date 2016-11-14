@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
+    [DebuggerDisplay("{ToString()}")]
     public class RosterVector : IEnumerable<decimal>
     {
         private int? cachedHashCode = null;

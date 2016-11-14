@@ -2,9 +2,6 @@ using System;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -12,26 +9,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeEntity,
         IDisposable
     {
-        private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IQuestionnaireStorage questionnaireRepository;
-
         public event EventHandler ShowComments;
 
         public DynamicTextViewModel Title { get; }
         public EnablementViewModel Enablement { get; }
 
-        public Identity Identity => this.questionIdentity;
+        public Identity Identity { get; private set; }
 
-        private Identity questionIdentity;
         public QuestionHeaderViewModel(
-            IQuestionnaireStorage questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository,
             DynamicTextViewModel dynamicTextViewModel,
             EnablementViewModel enablementViewModel)
         {
-            this.questionnaireRepository = questionnaireRepository;
-            this.interviewRepository = interviewRepository;
-
             this.Enablement = enablementViewModel;
             this.Title = dynamicTextViewModel;
         }
@@ -41,12 +29,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
-            this.questionIdentity = questionIdentity;
+            this.Identity = questionIdentity;
 
-            var interview = this.interviewRepository.Get(interviewId);
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            
-            this.Title.Init(interviewId, questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id));
+            this.Title.Init(interviewId, questionIdentity);
             this.Enablement.Init(interviewId, questionIdentity);
         }
 

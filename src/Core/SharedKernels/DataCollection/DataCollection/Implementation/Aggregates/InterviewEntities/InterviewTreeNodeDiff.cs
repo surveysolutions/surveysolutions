@@ -112,9 +112,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 if (IsNodeRemoved) return false;
                 if (this.ChangedNode.IsValid) return false;
-                var changedMessages = this.ChangedNode.MessagesWithSubstitions.Select(x => x.Text).ToArray();
+                var changedMessages = this.ChangedNode.ValidationMessages.Select(x => x.Text).ToArray();
                 if (this.IsNodeAdded && !changedMessages.Any()) return false;
-                var sourceMessages = this.SourceNode?.MessagesWithSubstitions.Select(x => x.Text).ToArray() ?? new string[0];
+                var sourceMessages = this.SourceNode?.ValidationMessages.Select(x => x.Text).ToArray() ?? new string[0];
                 return !changedMessages.SequenceEqual(sourceMessages);
             }
         }
@@ -205,9 +205,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 if (IsNodeRemoved) return false;
                 if (this.ChangedNode.IsValid) return false;
-                var changedMessages = this.ChangedNode.MessagesWithSubstitions.Select(x => x.Text).ToArray();
+                var changedMessages = this.ChangedNode.ValidationMessages.Select(x => x.Text).ToArray();
                 if (this.IsNodeAdded && !changedMessages.Any()) return false;
-                var sourceMessages = this.SourceNode?.MessagesWithSubstitions.Select(x => x.Text).ToArray() ?? new string[0];
+                var sourceMessages = this.SourceNode?.ValidationMessages.Select(x => x.Text).ToArray() ?? new string[0];
                 return !changedMessages.SequenceEqual(sourceMessages);
             }
         }

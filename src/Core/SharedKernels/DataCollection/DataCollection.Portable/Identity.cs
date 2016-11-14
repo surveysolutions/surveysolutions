@@ -1,12 +1,13 @@
 using System;
 using System.Diagnostics;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
     /// <summary>
     /// Full identity of group or question: id and roster vector.
     /// </summary>
-    [DebuggerDisplay("Identity {Id} {RosterVector}")]
+    [DebuggerDisplay("{ToString()}")]
     public sealed class Identity
     {
         private int? hashCode;
@@ -38,11 +39,6 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static Identity Create(Guid id, RosterVector rosterVector) => new Identity(id, rosterVector);
 
-        public override string ToString()
-        {
-            return ConversionHelper.ConvertIdentityToString(this);
-        }
-
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -65,5 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
         public static bool operator !=(Identity a, Identity b) => !(a == b);
+
+        public override string ToString() => $"{this.Id.FormatGuid()}{this.RosterVector}";
     }
 }
