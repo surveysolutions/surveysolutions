@@ -22,10 +22,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public QuestionnaireInfoFactory.SelectOption[] RosterTypeOptions { get; set; }
 
-        public List<DropdownQuestionView> NumericIntegerQuestions { get; set; }
-        public List<DropdownQuestionView> NumericIntegerTitles { get; set; }
-        public List<DropdownQuestionView> NotLinkedMultiOptionQuestions { get; set; }
-        public List<DropdownQuestionView> TextListsQuestions { get; set; }
+        public List<DropdownEntityView> NumericIntegerQuestions { get; set; }
+        public List<DropdownEntityView> NumericIntegerTitles { get; set; }
+        public List<DropdownEntityView> NotLinkedMultiOptionQuestions { get; set; }
+        public List<DropdownEntityView> TextListsQuestions { get; set; }
         public Breadcrumb[] Breadcrumbs { get; set; }
     }
 }
