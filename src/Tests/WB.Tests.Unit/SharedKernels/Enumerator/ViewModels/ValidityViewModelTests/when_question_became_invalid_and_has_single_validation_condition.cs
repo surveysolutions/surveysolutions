@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
             var interview = Substitute.For<IStatefulInterview>();
-            interview.GetFailedValidationConditions(questionIdentity)
+            interview.GetFailedValidationMessages(questionIdentity)
                 .Returns(failedValidationConditions);
             interview.WasAnswered(questionIdentity).Returns(true);
 
