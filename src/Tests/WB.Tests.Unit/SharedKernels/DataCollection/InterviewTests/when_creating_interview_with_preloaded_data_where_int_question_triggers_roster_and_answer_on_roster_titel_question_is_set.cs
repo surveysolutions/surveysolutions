@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_InterviewFromPreloadedDataCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewFromPreloadedDataCreated>();
 
-        It should_raise_valid_TextQuestionAnswered_event = () =>
+        It should_raise_valid_NumericIntegerQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<NumericIntegerQuestionAnswered>(@event
                 => @event.Answer == prefilledIntQuestionAnswer && @event.QuestionId == prefilledIntQuestion);
 
