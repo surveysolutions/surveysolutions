@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         bool IsValid(Identity identity);
 
-        IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId);
+        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId);
 
         bool IsEnabled(Identity entityIdentity);
 
@@ -68,6 +68,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity);
 
         string GetRosterTitle(Identity rosterIdentity);
+
+        string GetTitleText(Identity entityIdentity);
 
         IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity);
 

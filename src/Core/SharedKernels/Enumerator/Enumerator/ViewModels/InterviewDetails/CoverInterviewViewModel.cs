@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Where(questionId => questionnaire.GetQuestionType(questionId) != QuestionType.GpsCoordinates)
                 .Select(questionId => new CoverPrefilledQuestion
                 {
-                    Question = this.CreateQuestionTitle(interviewId, new Identity(questionId, RosterVector.Empty), questionnaire.GetQuestionTitle(questionId)),
+                    Question = this.CreateQuestionTitle(interviewId, new Identity(questionId, RosterVector.Empty)),
                     Answer = interview.GetAnswerAsString(Identity.Create(questionId, RosterVector.Empty))
                 })
                 .ToList();
@@ -98,11 +98,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.SupervisorNote = interview.GetLastSupervisorComment();
         }
 
-        private DynamicTextViewModel CreateQuestionTitle(string interviewId, Identity entityIdentity, string textWithSubstitutions)
+        private DynamicTextViewModel CreateQuestionTitle(string interviewId, Identity entityIdentity)
         {
             var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
 
-            title.Init(interviewId, entityIdentity, textWithSubstitutions);
+            title.Init(interviewId, entityIdentity);
 
             return title;
         }

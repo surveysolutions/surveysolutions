@@ -24,7 +24,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class EnumerationStageViewModel : MvxViewModel,
-        ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<AnswersDeclaredInvalid>,
         ILiteEventHandler<StaticTextsDeclaredInvalid>,
         IDisposable
@@ -43,7 +42,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ISubstitutionService substitutionService;
         private readonly IEnumeratorSettings settings;
         readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMessenger messenger;
@@ -55,7 +53,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private NavigationState navigationState;
 
         IStatefulInterview interview;
-        private IQuestionnaire questionnaire;
         string interviewId;
 
         public DynamicTextViewModel Name { get; }
@@ -64,7 +61,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             IUserInterfaceStateService userInterfaceStateService,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher,
@@ -76,7 +72,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.substitutionService = substitutionService;
             this.eventRegistry = eventRegistry;
             this.userInterfaceStateService = userInterfaceStateService;
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
@@ -94,7 +89,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.interviewId = interviewId;
             this.interview = this.interviewRepository.Get(interviewId);
-            this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.navigationState = navigationState;
             this.Items = new CompositeCollection<ICompositeEntity>();
@@ -109,17 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
         {
-            if (this.questionnaire.IsRosterGroup(groupIdentity.Id))
-            {
-                string rosterTitle = this.questionnaire.GetGroupTitle(groupIdentity.Id);
-                var fullRosterName = this.substitutionService.GenerateRosterName(rosterTitle, this.interview.GetRosterTitle(groupIdentity));
-                this.Name.Init(this.interviewId, groupIdentity, fullRosterName);
-            }
-            else
-            {
-                var groupTitle = this.questionnaire.GetGroupTitle(groupIdentity.Id);
-                this.Name.Init(this.interviewId, groupIdentity, groupTitle);
-            }
+            this.Name.Init(this.interviewId, groupIdentity);
 
             this.LoadFromModel(groupIdentity);
             this.SetScrollTo(anchoredElementIdentity);
@@ -134,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
                 {
                     ICompositeEntity childItem = (this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo)) ??
-                                                  (ICompositeEntity) this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x. Identity.Equals(scrollTo))) ??
+                                                  (ICompositeEntity) this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo))) ??
                                                  this.Items.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
                     anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
@@ -178,24 +162,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private IList<IInterviewEntityViewModel> InterviewEntities { get; set; }
-
-        public void Handle(RosterInstancesTitleChanged @event)
-        {
-            if (this.navigationState.CurrentGroup == null)
-                return;
-
-            foreach (ChangedRosterInstanceTitleDto rosterInstance in @event.ChangedInstances)
-            {
-                if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
-                {
-                    var fullRosterName = this.substitutionService.GenerateRosterName(
-                        this.questionnaire.GetGroupTitle(this.navigationState.CurrentGroup.Id),
-                        this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
-
-                    this.Name.ChangeText(fullRosterName);
-                }
-            }
-        }
 
         public void Handle(AnswersDeclaredInvalid @event)
         {

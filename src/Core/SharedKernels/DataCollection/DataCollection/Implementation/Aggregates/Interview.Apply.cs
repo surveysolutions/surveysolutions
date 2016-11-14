@@ -2,6 +2,7 @@
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -257,7 +258,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(FlagRemovedFromAnswer @event) { }
 
-        public virtual void Apply(SubstitutionTitlesChanged @event) { }
+        public virtual void Apply(SubstitutionTitlesChanged @event)
+        {
+            foreach (var @group in @event.Groups)
+                this.changedInterview.GetGroup(@group).ReplaceSubstitutions();
+
+            foreach (var staticText in @event.StaticTexts)
+                this.changedInterview.GetStaticText(staticText).ReplaceSubstitutions();
+
+            foreach (var question in @event.Questions)
+                this.changedInterview.GetQuestion(question).ReplaceSubstitutions();
+        }
 
         public virtual void Apply(GroupPropagated @event)
         {
@@ -288,24 +299,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(RosterInstancesAdded @event)
         {
-            var questionnaire = this.GetQuestionnaireOrThrow();
-
             foreach (var instance in @event.Instances)
             {
-                var parentGroup = questionnaire.GetParentGroup(instance.GroupId);
-                if (!parentGroup.HasValue) continue;
-
-                var parentGroupIdentity = Identity.Create(parentGroup.Value, instance.OuterRosterVector);
-                var rosterIdentity = instance.GetIdentity();
-
-                var addedRoster = this.changedInterview.GetRosterManager(instance.GroupId)
-                        .CreateRoster(parentGroupIdentity, rosterIdentity, instance.SortIndex ?? 0);
-                this.changedInterview.GetGroup(parentGroupIdentity).AddChild(addedRoster);
-                addedRoster.ActualizeChildren();
-
+                var rosterIdentity = new RosterIdentity(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
+                this.AddRosterToChangedTree(rosterIdentity);
                 this.ExpressionProcessorStatePrototype.AddRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
             }
-            
         }
 
         public virtual void Apply(RosterInstancesRemoved @event)
@@ -382,6 +381,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).RemoveAnswer();
             this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(@event.QuestionId, @event.RosterVector));
+        }
+
+        protected void AddRosterToChangedTree(RosterIdentity rosterIdentity)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var parentGroup = questionnaire.GetParentGroup(rosterIdentity.GroupId);
+            if (!parentGroup.HasValue) return;
+
+            var parentGroupIdentity = Identity.Create(parentGroup.Value, rosterIdentity.OuterRosterVector);
+
+            var addedRoster = this.changedInterview.GetRosterManager(rosterIdentity.GroupId)
+                .CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
+            this.changedInterview.GetGroup(parentGroupIdentity).AddChild(addedRoster);
+            addedRoster.ActualizeChildren();
         }
     }
 }
