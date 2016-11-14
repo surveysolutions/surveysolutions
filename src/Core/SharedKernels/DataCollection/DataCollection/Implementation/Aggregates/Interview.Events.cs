@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
             var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
+            this.ApplyRosterEvents(changedRosters);
             this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
             this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
-            this.ApplyRosterEvents(changedRosters);
             this.ApplyEnablementEvents(diff);
             this.ApplyValidityEvents(diff);
             this.ApplyVariableEvents(changedVariables);
