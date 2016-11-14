@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -9,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
         public InterviewTreeQuestion(Identity identity,
@@ -22,10 +24,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             bool isDecimal,
             Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null,
-            SubstitionText[] messages = null)
+            SubstitionText[] validationMessages = null)
             : base(identity)
         {
-            this.MessagesWithSubstitions = messages ?? new SubstitionText[0];
+            this.ValidationMessages = validationMessages ?? new SubstitionText[0];
             this.Title = title;
             this.VariableName = variableName;
 
@@ -101,10 +103,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public SubstitionText Title { get; private set; }
 
-        public SubstitionText[] MessagesWithSubstitions { get; private set; }
-
         public SubstitionText[] ValidationMessages { get; private set; }
-
+        
         public string VariableName { get; }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
@@ -181,7 +181,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
-        public override string ToString() => $"Question ({this.Identity}) '{this.Title}'";
+        public override string ToString()
+            => $"Question {this.Identity} '{this.Title}'. " +
+               $"{(this.IsAnswered() ? $"Answer = '{this.GetAnswerAsString()}'" : "No answer")}. " +
+               $"{(this.IsDisabled() ? "Disabled" : "Enabled")}. " +
+               $"{(this.IsValid ? "Valid" : "Invalid")}";
 
         public void CalculateLinkedOptions()
         {
@@ -332,7 +336,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsCascading) clonedQuestion.AsCascading = this.AsCascading.Clone(clonedQuestion);
 
             clonedQuestion.Title = this.Title?.Clone();
-            clonedQuestion.MessagesWithSubstitions = this.MessagesWithSubstitions.Select(x => x.Clone()).ToArray();
+            clonedQuestion.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
             clonedQuestion.FailedValidations = this.FailedValidations?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
@@ -344,7 +348,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
-            foreach (var messagesWithSubstition in MessagesWithSubstitions)
+            foreach (var messagesWithSubstition in this.ValidationMessages)
             {
                 messagesWithSubstition.ReplaceSubstitutions();
             }
@@ -354,7 +358,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             base.SetTree(tree);
             this.Title?.SetTree(tree);
-            foreach (var messagesWithSubstition in MessagesWithSubstitions)
+            foreach (var messagesWithSubstition in this.ValidationMessages)
             {
                 messagesWithSubstition.SetTree(tree);
             }
@@ -362,6 +366,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     }
 
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeDateTimeQuestion
     {
         private DateTimeAnswer answer;
@@ -378,8 +383,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeDateTimeQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeDateTimeQuestion Clone() => (InterviewTreeDateTimeQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeGpsQuestion
     {
         private GpsAnswer answer;
@@ -397,8 +405,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeGpsQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeGpsQuestion Clone() => (InterviewTreeGpsQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeMultimediaQuestion
     {
         private MultimediaAnswer answer;
@@ -416,8 +427,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeMultimediaQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeMultimediaQuestion Clone() => (InterviewTreeMultimediaQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeIntegerQuestion
     {
         private NumericIntegerAnswer answer;
@@ -435,8 +449,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeIntegerQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeIntegerQuestion Clone() => (InterviewTreeIntegerQuestion)this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeDoubleQuestion
     {
         private NumericRealAnswer answer;
@@ -454,8 +471,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeDoubleQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeDoubleQuestion Clone() => (InterviewTreeDoubleQuestion)this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeQRBarcodeQuestion
     {
         private QRBarcodeAnswer answer;
@@ -472,8 +492,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeQRBarcodeQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeQRBarcodeQuestion Clone() => (InterviewTreeQRBarcodeQuestion)this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeTextQuestion
     {
         private TextAnswer answer;
@@ -491,8 +514,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeTextQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeTextQuestion Clone() => (InterviewTreeTextQuestion)this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeYesNoQuestion
     {
         private YesNoAnswer answer;
@@ -520,8 +546,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public InterviewTreeYesNoQuestion Clone() => (InterviewTreeYesNoQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeTextListQuestion
     {
         private TextListAnswer answer;
@@ -555,8 +584,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public InterviewTreeTextListQuestion Clone() => (InterviewTreeTextListQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSingleOptionQuestion
     {
         private CategoricalFixedSingleOptionAnswer answer;
@@ -576,8 +608,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool EqualByAnswer(InterviewTreeSingleOptionQuestion question) => question?.answer == this.answer;
 
         public InterviewTreeSingleOptionQuestion Clone() => (InterviewTreeSingleOptionQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeMultiOptionQuestion
     {
         private CategoricalFixedMultiOptionAnswer answer;
@@ -604,8 +639,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public InterviewTreeMultiOptionQuestion Clone() => (InterviewTreeMultiOptionQuestion) this.MemberwiseClone();
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSingleLinkedOptionQuestion : InterviewTreeLinkedQuestion
     {
         private CategoricalLinkedSingleOptionAnswer answer;
@@ -629,8 +667,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clone.SetOptions(this.Options);
             return clone;
         }
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeMultiLinkedOptionQuestion : InterviewTreeLinkedQuestion
     {
         private CategoricalLinkedMultiOptionAnswer answer;
@@ -663,8 +704,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clone.SetOptions(this.Options);
             return clone;
         }
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public abstract class InterviewTreeLinkedQuestion
     {
         public Guid LinkedSourceId { get; private set; }
@@ -674,8 +718,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.LinkedSourceId = linkedSourceId;
             this.CommonParentRosterIdForLinkedQuestion = commonParentRosterIdForLinkedQuestion;
-            //Interview state returns null if linked question has no options
-            // if (linkedOptions == null) throw new ArgumentNullException(nameof(linkedOptions));
 
             this.Options = linkedOptions?.ToList() ?? new List<RosterVector>();
         }
@@ -686,8 +728,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.Options = options.ToList();
         }
+
+        public override string ToString() => $"{this.LinkedSourceId.FormatGuid()} -> {string.Join(", ", this.Options)}";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeCascadingQuestion
     {
         private InterviewTreeQuestion question;
@@ -714,6 +759,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clone.question = question;
             return clone;
         }
+
+        public override string ToString() => string.Join(", ", this.GetCascadingParentQuestion()?.GetAnswer());
     }
 
 }

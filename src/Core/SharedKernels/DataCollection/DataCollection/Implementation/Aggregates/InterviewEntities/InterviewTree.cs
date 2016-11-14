@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -183,9 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private static bool IsRosterTitleChanged(InterviewTreeRosterDiff diffByRoster)
             => diffByRoster != null && diffByRoster.IsRosterTitleChanged;
 
-        public override string ToString()
-            => $"Tree ({this.InterviewId})" + Environment.NewLine
-            + string.Join(Environment.NewLine, this.Sections.Select(section => section.ToString().PrefixEachLine("  ")));
+        public override string ToString() => $"Tree ({this.InterviewId})";
 
         public InterviewTree Clone()
         {
@@ -219,9 +218,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
             SubstitionText title = textFactory.CreateText(questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id), questionnaire);
 
-            SubstitionText[] messages = questionnaire.GetValidationMessages(questionIdentity.Id)
+            SubstitionText[] validationMessages = questionnaire.GetValidationMessages(questionIdentity.Id)
                 .Select(x => textFactory.CreateText(questionIdentity, x, questionnaire))
-                .Where(x => x.HasSubstitutions)
                 .ToArray();
 
 
@@ -260,7 +258,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 cascadingParentQuestionId: cascadingParentQuestionId, isYesNo: isYesNoQuestion,
                 isDecimal: isDecimalQuestion, linkedSourceId: sourceForLinkedQuestion,
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
-                messages: messages);
+                validationMessages: validationMessages);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
@@ -295,11 +293,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static InterviewTreeStaticText CreateStaticText(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity staticTextIdentity)
         {
             SubstitionText title = textFactory.CreateText(staticTextIdentity, questionnaire.GetStaticText(staticTextIdentity.Id), questionnaire);
-            SubstitionText[] messages = questionnaire.GetValidationMessages(staticTextIdentity.Id)
+            SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticTextIdentity.Id)
                 .Select(x => textFactory.CreateText(staticTextIdentity, x, questionnaire))
-                .Where(x => x.HasSubstitutions)
                 .ToArray();
-            return new InterviewTreeStaticText(staticTextIdentity, title, messages);
+            return new InterviewTreeStaticText(staticTextIdentity, title, validationMessages);
         }
 
         public RosterManager GetRosterManager(Guid rosterId)
@@ -417,8 +414,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public IEnumerable<IInterviewTreeNode> Parents { get; private set; }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
         public virtual void SetTree(InterviewTree tree)
@@ -461,6 +460,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         Question = 30,
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class QuestionnaireItemReference
     {
         public QuestionnaireItemReference(QuestionnaireReferenceType type, Guid id)
@@ -472,6 +472,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Guid Id { get; set; }
 
         public QuestionnaireReferenceType Type { get; set; }
+
+        public override string ToString() => $"{Type} {Id.FormatGuid()}";
     }
 
     public class RosterNodeDescriptor
