@@ -133,6 +133,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption {Value = RosterType.Numeric.ToString(), Text = Roster.RosterType_Numeric}
         };
 
+        private static readonly string BreadcrumbSeparator = " / ";
+
         public QuestionnaireInfoFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IExpressionProcessor expressionProcessor)
@@ -530,10 +532,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 if (document.IsRoster(entity))
                 {
                     var roster = entity as Group;
-                    var rosterPlaceholder = this.CreateRosterDropdownView(document, roster);
-                    result.Add(rosterPlaceholder);
-
-                    var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder, document);
+                    var rosterTitlePlaceholder = this.CreateRosterDropdownView(roster, document);
                     result.Add(rosterTitlePlaceholder);
                 }
 
@@ -558,33 +557,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 }
             }
 
-            return result;
+            return CreateGroupedList(result);
         }
 
-        private DropdownEntityView CreateRosterTitlePlaceholder(IGroup roster,
-            DropdownEntityView rosterPlaceholder, ReadOnlyQuestionnaireDocument document)
+        private DropdownEntityView CreateRosterDropdownView(IGroup roster, ReadOnlyQuestionnaireDocument document)
         {
             var rosterTitlePlaceholder = new DropdownEntityView
             {
                 Title = string.Format(Roster.RosterTitle, roster.Title),
                 Id = roster.PublicKey.FormatGuid(),
                 IsSectionPlaceHolder = false,
-                Breadcrumbs = rosterPlaceholder.Title,
+                Breadcrumbs = this.GetBreadcrumbsAsString(document, roster) + BreadcrumbSeparator + roster.Title,
                 Type = this.rosterType,
                 VarName = roster.VariableName,
                 QuestionType = document.GetRosterSourceType(roster, document)
             };
             return rosterTitlePlaceholder;
-        }
-
-        private DropdownEntityView CreateRosterDropdownView(ReadOnlyQuestionnaireDocument document, IGroup roster)
-        {
-            var rosterPlaceholder = new DropdownEntityView
-            {
-                Title = this.GetBreadcrumbsAsString(document, roster),
-                IsSectionPlaceHolder = true
-            };
-            return rosterPlaceholder;
         }
 
         private DropdownEntityView CreateQuestionDropdownView(ReadOnlyQuestionnaireDocument document, IQuestion question)
@@ -669,11 +657,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     VarName = q.StataExportCaption
                 }).ToArray();
 
+            return CreateGroupedList(questions);
+        }
 
-            var groupedQuestionsList = questions.GroupBy(x => x.Breadcrumbs);
+        private static List<DropdownEntityView> CreateGroupedList(IEnumerable<DropdownEntityView> dropdownItems)
+        {
+            var groupedList = dropdownItems.GroupBy(x => x.Breadcrumbs);
             var result = new List<DropdownEntityView>();
 
-            foreach (var brief in groupedQuestionsList)
+            foreach (var brief in groupedList)
             {
                 var sectionPlaceholder = new DropdownEntityView
                 {
@@ -716,7 +708,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private string GetBreadcrumbsAsString(ReadOnlyQuestionnaireDocument document, IComposite question)
         {
-            return string.Join(" / ", GetBreadcrumbs(document, question).Select(x => x.Title));
+            return string.Join(BreadcrumbSeparator, GetBreadcrumbs(document, question).Select(x => x.Title));
         }
     }
 }
