@@ -777,6 +777,7 @@
     <EmbeddedResource Include="Properties\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\VerificationMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
