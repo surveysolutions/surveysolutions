@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             foreach (string error in errors)
             {
                 var errorViewModel = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-                errorViewModel.Init(this.interviewId, this.entityIdentity, error);
+                errorViewModel.InitAsStatic(error);
 
                 this.ValidationErrors.Add(errorViewModel);
             }

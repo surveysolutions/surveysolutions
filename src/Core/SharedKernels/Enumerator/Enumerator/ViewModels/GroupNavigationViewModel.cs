@@ -72,16 +72,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        public bool IsRoster
-        {
-            get { return isRoster; }
-            set
-            {
-                isRoster = value;
-                this.RaisePropertyChanged();
-            }
-        }
-
         private string navigationItemTitle;
         public string NavigationItemTitle
         {
@@ -89,10 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set { this.RaiseAndSetIfChanged(ref this.navigationItemTitle, value); }
         }
 
-        public IMvxCommand NavigateCommand
-        {
-            get { return new MvxCommand(async () => await this.NavigateAsync()); }
-        }
+        public IMvxAsyncCommand NavigateCommand => new MvxAsyncCommand(this.NavigateAsync);
 
         protected GroupNavigationViewModel() {}
 
@@ -132,8 +119,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             else
             {
-                this.groupOrSectionToNavigateIdentity = this.GetParentGroupOrRosterIdentity();
-                this.IsRoster = questionnaire.IsRosterGroup(this.groupOrSectionToNavigateIdentity.Id);
+                this.groupOrSectionToNavigateIdentity = interview.GetParentGroup(this.Identity);
+                this.isRoster = questionnaire.IsRosterGroup(this.groupOrSectionToNavigateIdentity.Id);
                 this.RosterInstanceTitle = interview.GetRosterTitle(this.groupOrSectionToNavigateIdentity);
                 this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
             }
@@ -150,19 +137,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             this.NavigateToGroupState?.UpdateFromGroupModel();
             this.RaisePropertyChanged(() => this.NavigateToGroupState);
-        }
-
-        private Identity GetParentGroupOrRosterIdentity()
-        {
-            var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
-
-            Guid parentId = questionnaire.GetParentGroup(this.Identity.Id).Value;
-            int rosterLevelOfParent = questionnaire.GetRosterLevelForGroup(parentId);
-
-            RosterVector parentRosterVector = this.Identity.RosterVector.Shrink(rosterLevelOfParent);
-
-            return new Identity(parentId, parentRosterVector);
         }
 
         private void SetGroupsStates()
@@ -216,13 +190,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 case NavigationGroupType.InsideGroupOrRoster:
                 case NavigationGroupType.Section:
-                    var interview = this.interviewRepository.Get(interviewId);
-                    var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-                    var textWithSubstitutions = questionnaire.GetGroupTitle(this.groupOrSectionToNavigateIdentity.Id);
-
                     this.Title.Dispose();
-                    this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity, textWithSubstitutions);
-
+                    this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
                     return;
                 case NavigationGroupType.LastSection:
                     this.Title.InitAsStatic(UIResources.Interview_CompleteScreen_ButtonText);
@@ -287,10 +256,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (!this.isRoster) return;
 
-            foreach (var changedInstance in @event.ChangedInstances.Where(changedInstance => this.groupOrSectionToNavigateIdentity.Equals(changedInstance.RosterInstance.GetIdentity())))
-            {
+            var changedInstance =
+                @event.ChangedInstances.FirstOrDefault(x => this.groupOrSectionToNavigateIdentity.Equals(x.RosterInstance.GetIdentity()));
+
+            if (changedInstance != null)
                 this.RosterInstanceTitle = changedInstance.Title;
-            }
         }
 
         public void Handle(GroupsDisabled @event)
