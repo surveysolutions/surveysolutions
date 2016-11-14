@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             appDomainContext = AppDomainContext.Create();
         };
 
-        private Because of = () =>
+        Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 var parentSingleOptionQuestionId = Guid.Parse("00000000000000000000000000000000");

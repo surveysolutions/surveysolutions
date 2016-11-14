@@ -170,10 +170,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             this.ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
-            treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(answeredQuestion, selectedValue, questionnaire);
 
             if (applyStrongChecks)
             {
+                treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(answeredQuestion, selectedValue, questionnaire);
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
