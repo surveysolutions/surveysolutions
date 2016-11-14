@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.ElementAt(2).Id.ShouldEqual(childTitleQuestionId.FormatGuid());
 
         private static QuestionnaireInfoFactory factory;
-        private static List<DropdownQuestionView> result;
+        private static List<DropdownEntityView> result;
         private static QuestionnaireDocument questionnaireView;
         private static readonly Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
         private static string questionnaireId = "11111111111111111111111111111111";
