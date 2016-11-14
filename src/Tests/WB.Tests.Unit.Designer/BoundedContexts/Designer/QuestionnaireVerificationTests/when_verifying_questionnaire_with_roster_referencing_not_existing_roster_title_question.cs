@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.NumericIntegerQuestion(id: rosterSizeQuestionId),
 
                     Create.Roster(
-                        rosterSizeSourceType: RosterSizeSourceType.Question,
+                        rosterType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         rosterTitleQuestionId: notExistingQuestionId),
                 }),

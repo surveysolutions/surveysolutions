@@ -1,6 +1,8 @@
 using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
@@ -16,7 +18,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         Establish context = () =>
         {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaireView = CreateRosterWithNoTrigger();
+            questionnaireView = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: docId, chapterId: g1Id, children: new IComposite[]
+            {
+                Create.Roster(rosterId:g2Id, title:"Roster 1.1", rosterSizeQuestionId: q2Id, rosterTitleQuestionId: q3Id, rosterType: RosterSizeSourceType.Question)
+            });
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaireView);
@@ -42,6 +47,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static QuestionnaireDocument questionnaireView;
         private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
-        private static Guid rosterId = multiOptionRoster;
+        private static Guid rosterId = g2Id;
     }
 }

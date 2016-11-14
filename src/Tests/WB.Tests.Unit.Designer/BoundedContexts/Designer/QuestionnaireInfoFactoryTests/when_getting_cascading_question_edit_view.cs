@@ -1,13 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -17,7 +20,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         Establish context = () =>
         {
             questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            questionnaireView = CreateQuestionnaireDocumentWithCascadingQuestions();
+            questionnaireView = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: docId, chapterId: g1Id, children: new IComposite[]
+            {
+                Create.Roster(rosterId: g2Id, title: "Roster", fixedRosterTitles: new[] {new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")}, children: new List<IComposite>
+                {
+                    Create.NumericIntegerQuestion(q4Id, "int", title: "Integer 1"),
+                    Create.SingleQuestion(q5Id, "linked_question", linkedToQuestionId: q4Id, title: "linked"),
+                }),
+                Create.SingleQuestion(q1Id, "list_question", title: "cascading_question"),
+                Create.SingleQuestion(q2Id, "list_question", title: "cascading_question_2", cascadeFromQuestionId: q1Id),
+                Create.SingleQuestion(q3Id, "list_question", title: "cascading_question_3", cascadeFromQuestionId: q2Id),
+            });
             questionDetailsReaderMock
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaireView);

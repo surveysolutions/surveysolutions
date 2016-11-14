@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             Guid staticTextId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
-                Create.Roster(rosterId: rosterId, variable: "fixed_roster", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new string[] {"1", "2"}),
+                Create.Roster(rosterId: rosterId, variable: "fixed_roster", rosterType: RosterSizeSourceType.FixedTitles, fixedTitles: new string[] {"1", "2"}),
                 Create.SingleQuestion(id: questionId, variable: "linkedToRoster", linkedFilter: "@current.@rowcode != @rowcode", linkedToRosterId: rosterId)
             });
             designerEngineVersionService = Create.DesignerEngineVersionService();

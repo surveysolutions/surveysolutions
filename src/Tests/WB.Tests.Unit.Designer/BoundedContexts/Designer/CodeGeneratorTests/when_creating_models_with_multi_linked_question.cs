@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 Create.Chapter(children: new IComposite[]
                 {
                     Create.MultyOptionsQuestion(Id.gA, variable: "multiLinked",  linkedToQuestionId: Id.gC, validationExpression: "multiLinked validation", enablementCondition: "multiLinked condition"),
-                    Create.Roster(rosterId: Id.gB, variable: "fixed_roster", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new string[] {"1", "2"}, enablementCondition: "roster condition", children: new IComposite[]
+                    Create.Roster(rosterId: Id.gB, variable: "fixed_roster", rosterType: RosterSizeSourceType.FixedTitles, fixedTitles: new string[] {"1", "2"}, enablementCondition: "roster condition", children: new IComposite[]
                     {
                         Create.TextQuestion(questionId: Id.gC, variable: "linkedSource")
                     })
