@@ -1,10 +1,11 @@
-using System;
+using System.Diagnostics;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
+    [DebuggerDisplay("{ToString()}")]
     public class SubstitionText
     {
         private readonly Identity identity;

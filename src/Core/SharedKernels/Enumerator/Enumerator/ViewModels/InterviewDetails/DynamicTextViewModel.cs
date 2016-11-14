@@ -2,32 +2,39 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class DynamicTextViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<SubstitutionTitlesChanged>,
-        ILiteEventHandler<VariablesChanged>,
+        ILiteEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
         private static readonly Regex HtmlRemovalRegex = new Regex("<.*?>");
 
         private readonly ILiteEventRegistry eventRegistry;
-        private readonly SubstitutionViewModel substitutionViewModel;
+        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly ISubstitutionService substitutionService;
 
         public DynamicTextViewModel(
             ILiteEventRegistry eventRegistry,
-            SubstitutionViewModel substitutionViewModel)
+            IStatefulInterviewRepository interviewRepository,
+            ISubstitutionService substitutionService)
         {
             this.eventRegistry = eventRegistry;
-            this.substitutionViewModel = substitutionViewModel;
+            this.interviewRepository = interviewRepository;
+            this.substitutionService = substitutionService;
         }
 
+        private string interviewId;
         private Identity identity;
+        private bool isRoster;
 
         public void InitAsStatic(string textWithoutSubstitutions)
         {
@@ -37,25 +44,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.PlainText = textWithoutSubstitutions;
         }
 
-        public void Init(string interviewId, Identity entityIdentity, string textWithSubstitutions)
+        public void Init(string interviewId, Identity entityIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
+            this.interviewId = interviewId;
             this.identity = entityIdentity;
 
-            this.substitutionViewModel.Init(interviewId, entityIdentity, textWithSubstitutions);
+            var interview = this.interviewRepository.Get(this.interviewId);
+            this.isRoster = interview.GetRoster(this.identity) != null;
 
-            this.RefreshTexts();
+            this.UpdateText();
 
             this.eventRegistry.Subscribe(this, interviewId);
-        }
-
-        public void ChangeText(string textWithSubstitutions)
-        {
-            this.substitutionViewModel.ChangeText(textWithSubstitutions);
-
-            this.RefreshTexts();
         }
 
         private string htmlText;
@@ -77,19 +79,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry.Unsubscribe(this);
         }
 
-        public void Handle(VariablesChanged @event)
-        {
-            // this is needed because update is not published if variable changes
-
-            bool shouldUpdateTexts =
-                this.substitutionViewModel.HasVariablesInText(
-                    @event.ChangedVariables.Select(variable => variable.Identity));
-
-            if (!shouldUpdateTexts) return;
-
-            this.RefreshTexts();
-        }
-
         public void Handle(SubstitutionTitlesChanged @event)
         {
             bool shouldUpdateTexts =
@@ -99,12 +88,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (!shouldUpdateTexts) return;
 
-            this.RefreshTexts();
+            this.UpdateText();
         }
 
-        private void RefreshTexts()
+        public void Handle(RosterInstancesTitleChanged @event)
         {
-            this.HtmlText = this.substitutionViewModel.ReplaceSubstitutions();
+            if (!this.isRoster) return;
+
+            if (!@event.ChangedInstances.Any(x => x.RosterInstance.GetIdentity().Equals(this.identity)))
+                return;
+
+            this.UpdateText();
+        }
+
+        private void UpdateText()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId);
+
+            var titleText = interview.GetTitleText(this.identity);
+
+            this.HtmlText = this.isRoster
+                ? $"{titleText} - {interview.GetRosterTitle(this.identity) ?? this.substitutionService.DefaultSubstitutionText}"
+                : titleText;
+
             this.PlainText = RemoveHtmlTags(this.HtmlText);
         }
 

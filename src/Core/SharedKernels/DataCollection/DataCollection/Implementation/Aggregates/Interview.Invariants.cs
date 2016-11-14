@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             this.ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
             treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(answeredQuestion, selectedValue, 
-                new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion), questionnaire.Translation);
+                this.QuestionnaireIdentity, questionnaire.Translation);
 
             if (applyStrongChecks)
             {

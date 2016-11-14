@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         #region Apply
 
-        protected void Apply(InterviewOnClientCreated @event)
+        public void Apply(InterviewOnClientCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId,
                 @event.QuestionnaireVersion);
@@ -50,8 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.properties.Status = @event.InterviewData.Status;
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
             var sourceInterviewTree = this.changedInterview.Clone();
             
             var orderedRosters = @event.InterviewData.RosterGroupInstances
@@ -61,17 +59,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             foreach (var rosterDto in orderedRosters)
             {
-                Guid? parentGroupId = questionnaire.GetParentGroup(rosterDto.RosterId);
-                if (!parentGroupId.HasValue) continue;
-
-                Identity parentGroupIdentity = Identity.Create(parentGroupId.Value, rosterDto.OuterScopeRosterVector);
-                RosterIdentity rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector,
-                    rosterDto.RosterInstanceId, rosterDto.SortIndex);
-
-                InterviewTreeRoster roster = this.changedInterview.GetRosterManager(rosterIdentity.GroupId)
-                    .CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
-
-                roster.SetRosterTitle(rosterDto.RosterTitle);
+                var rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector, rosterDto.RosterInstanceId, rosterDto.SortIndex);
+                this.AddRosterToChangedTree(rosterIdentity);
+                this.changedInterview.GetRoster(rosterIdentity.ToIdentity()).SetRosterTitle(rosterDto.RosterTitle);
             }
 
             foreach (var question in @event.InterviewData.Answers)
@@ -105,10 +95,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.changedInterview.GetQuestion(Identity.Create(linkedQuestion.Key.Id, linkedQuestion.Key.InterviewItemRosterVector)).AsLinked.SetOptions(linkedQuestion.Value);
 
             this.changedInterview.AnswerComments = @event.InterviewData.Answers
-                .SelectMany(answerDto => answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)))
-                .ToList();
-
-            base.UpdateRosterTitles(this.changedInterview, questionnaire);
+                ?.SelectMany(answerDto => answerDto.AllComments?.Select(commentDto => ToAnswerComment(answerDto, commentDto)))
+                ?.ToList() ?? new List<AnswerComment>();
+            
             base.UpdateExpressionState(sourceInterviewTree, this.changedInterview, this.ExpressionProcessorStatePrototype);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
@@ -119,7 +108,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.sourceInterview = this.changedInterview.Clone();
         }
 
-        public void Apply(InterviewAnswersFromSyncPackageRestored @event) { }
+        public void Apply(InterviewAnswersFromSyncPackageRestored @event)
+        {
+            
+        }
 
         public new void Apply(LinkedOptionsChanged @event)
         {
@@ -264,6 +256,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public string GetRosterTitle(Identity rosterIdentity)
             => this.changedInterview.GetRoster(rosterIdentity)?.RosterTitle;
 
+        public string GetTitleText(Identity entityIdentity)
+        {
+            var question = this.changedInterview.GetQuestion(entityIdentity);
+            if (question != null) return question.Title.Text;
+
+            var group = this.changedInterview.GetGroup(entityIdentity);
+            if(group != null) return group.Title.Text;
+
+            var staticText = this.changedInterview.GetStaticText(entityIdentity);
+            if (staticText != null) return staticText.Title.Text;
+
+            return string.Empty;
+        }
+
         public object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector)
         {
             do
@@ -388,9 +394,30 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             => (this.changedInterview.GetQuestion(identity)?.IsValid ?? false) ||
                (this.changedInterview.GetStaticText(identity)?.IsValid ?? false);
 
-        public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
-            => this.changedInterview.GetQuestion(questionId)?.FailedValidations ?? 
-               this.changedInterview.GetStaticText(questionId)?.FailedValidations;
+        public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId)
+        {
+            var question = this.changedInterview.GetQuestion(questionOrStaticTextId);
+            if (question?.FailedValidations != null)
+            {
+                var questionValidationMassages = question.ValidationMessages
+                    .Select(substitutionText => substitutionText.Text)
+                    .ToList();
+
+                return question.FailedValidations.Select((failedValidation, index) => questionValidationMassages.ElementAt(index));
+            }
+
+            var staticText =  this.changedInterview.GetStaticText(questionOrStaticTextId);
+            if (staticText?.FailedValidations != null)
+            {
+                var staticTextValidationMassages = staticText.ValidationMessages
+                    .Select(substitutionText => substitutionText.Text)
+                    .ToList();
+
+                return staticText.FailedValidations.Select((failedValidation, index) => staticTextValidationMassages.ElementAt(index));
+            }
+
+            return Enumerable.Empty<string>();
+        }
 
         public bool IsEnabled(Identity entityIdentity) => !this.changedInterview.GetNodeByIdentity(entityIdentity).IsDisabled();
 
