@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -54,25 +55,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     case QuestionnaireReferenceType.Roster:
                         var rosterId = childEntityId;
                         var rosterManager = Tree.GetRosterManager(rosterId);
-                        List<Identity> expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
-                        var actualRosterIdentities = GetActualIdentitiesById(rosterId);
 
-                        foreach (var actualRosterIdentity in actualRosterIdentities)
-                        {
-                            if (expectedRosterIdentities.Contains(actualRosterIdentity))
-                                continue;
-                            this.RemoveChild(actualRosterIdentity);
-                        }
+                        var expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
+                        var actualRosterIdentities = this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
 
-                        for (int index = 0; index < expectedRosterIdentities.Count; index++)
+                        var rostersToRemove = actualRosterIdentities.Except(expectedRosterIdentities);
+                        var rostersToAdd = expectedRosterIdentities.Except(actualRosterIdentities);
+
+                        foreach (var rosterToRemove in rostersToRemove)
+                            this.RemoveChild(rosterToRemove);
+
+                        foreach (var rosterToAdd in rostersToAdd)
                         {
-                            var expectedRosterIdentity = expectedRosterIdentities[index];
-                            if (actualRosterIdentities.Contains(expectedRosterIdentity))
-                                continue;
-                            var expectedRoster = rosterManager.CreateRoster(this.Identity, expectedRosterIdentity, index);
+                            var expectedRoster = rosterManager.CreateRoster(this.Identity, rosterToAdd,
+                                expectedRosterIdentities.IndexOf(rosterToAdd));
+
                             this.AddChild(expectedRoster);
-                            expectedRoster.ActualizeChildren();
                         }
+
+                        foreach (var expectedRoster in expectedRosterIdentities)
+                            this.children.OfType<InterviewTreeRoster>().Single(x => x.Identity.Equals(expectedRoster)).ActualizeChildren();
 
                         break;
                     case QuestionnaireReferenceType.SubSection:
@@ -95,11 +97,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         break;
                 }
             }
-        }
-
-        private List<Identity> GetActualIdentitiesById(Guid rosterId)
-        {
-            return this.Children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
         }
 
         public RosterVector RosterVector => this.Identity.RosterVector;
@@ -183,6 +180,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
         public InterviewTreeSubSection(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) 
@@ -190,15 +188,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public override string ToString() => $"SubSection ({this.Identity})" + Environment.NewLine + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
+        public override string ToString() => $"SubSection {this.Identity} '{this.Title}'. " +
+                                             $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSection : InterviewTreeGroup
     {
         public InterviewTreeSection(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }
 
-        public override string ToString() => $"Section ({this.Identity})" + Environment.NewLine + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
+        public override string ToString() => $"Section {this.Identity} '{this.Title}'. " +
+                                             $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
     }
 }

@@ -1,21 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeStaticText : InterviewTreeLeafNode
     {
         public SubstitionText Title { get; private set; }
 
-        public SubstitionText[] MessagesWithSubstitions { get; private set; }
+        public SubstitionText[] ValidationMessages { get; private set; }
 
-        public InterviewTreeStaticText(Identity identity, SubstitionText title, SubstitionText[] messages = null)
+        public InterviewTreeStaticText(Identity identity, SubstitionText title, SubstitionText[] validationMessages = null)
             : base(identity)
         {
             this.Title = title;
-            this.MessagesWithSubstitions = messages ?? new SubstitionText[0];
+            this.ValidationMessages = validationMessages ?? new SubstitionText[0];
         }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
@@ -28,19 +30,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void MarkAsValid()
             => this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
 
-        public override string ToString() => $"Text ({this.Identity})";
+        public override string ToString()
+            => $"StaticText {Identity} '{Title}'. " +
+               $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. " +
+               $"{(this.IsValid ? "Valid" : "Invalid")}";
+
         public override IInterviewTreeNode Clone()
         {
             var clone = (InterviewTreeStaticText)this.MemberwiseClone();
             clone.Title = this.Title?.Clone();
-            clone.MessagesWithSubstitions = this.MessagesWithSubstitions.Select(x => x.Clone()).ToArray();
+            clone.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
             return clone;
         }
 
         public override void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
-            foreach (var messagesWithSubstition in MessagesWithSubstitions)
+            foreach (var messagesWithSubstition in this.ValidationMessages)
             {
                 messagesWithSubstition.ReplaceSubstitutions();
             }
@@ -49,7 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             base.SetTree(tree);
             this.Title?.SetTree(tree);
-            foreach (var messagesWithSubstition in MessagesWithSubstitions)
+            foreach (var messagesWithSubstition in this.ValidationMessages)
             {
                 messagesWithSubstition.SetTree(tree);
             }
