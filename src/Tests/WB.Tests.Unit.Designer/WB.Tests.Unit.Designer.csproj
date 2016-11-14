@@ -408,6 +408,7 @@
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_content_and_unexpected_content.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_content.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_already_existing_attachment_content.cs" />
+    <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_inside_group.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\AddVariableHandlerTests\when_adding_variable_to_chapter.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_filtered_linked_question.cs" />
