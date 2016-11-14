@@ -65,9 +65,6 @@ namespace WB.Tests.Integration
             Func<SideBarSectionViewModel> sideBarSectionViewModel = ()
                 => new SideBarSectionViewModel(
                     interviewsRepository,
-                    questionnaireRepository,
-                    new SubstitutionService(),
-                    new LiteEventRegistry(),
                     sideBarSectionViewModelsFactory,
                     Mock.Of<IMvxMessenger>(),
                     Create.DynamicTextViewModel(

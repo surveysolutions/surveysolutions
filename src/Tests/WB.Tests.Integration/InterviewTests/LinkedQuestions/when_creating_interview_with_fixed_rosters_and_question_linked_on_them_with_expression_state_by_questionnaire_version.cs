@@ -35,20 +35,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         }),
                 });
 
-                var result = new InvokeResults();
+                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument, false);
 
-                using (var eventContext = new EventContext())
+                var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
+
+                return new InvokeResults
                 {
-                    ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument, false);
-
-                    var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
-                    
-                    var options = interview.FindReferencedRostersForLinkedQuestion(roster2Id, Create.Identity(linkedToQuestionId, RosterVector.Empty)).ToList();
-
-                    result.OptionsCountForLinkedToRosterQuestion = options.Count();
-                }
-
-                return result;
+                    OptionsCountForLinkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Identity.Create(linkedToQuestionId, RosterVector.Empty)).Options.Count
+                };
             });
 
         It should_return_4_options_for_linked_question = () =>
