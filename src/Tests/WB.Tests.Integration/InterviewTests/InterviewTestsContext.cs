@@ -103,24 +103,22 @@ namespace WB.Tests.Integration.InterviewTests
             IEnumerable<object> events = null, 
             ILatestInterviewExpressionState precompiledState = null, 
             bool useLatestEngine = true,
-            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null)
+            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null,
+            QuestionnaireIdentity questionnaireIdentity = null)
         {
-            Guid questionnaireId = questionnaireDocument.PublicKey;
+            questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
 
             ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument, useLatestEngine);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
             var interview = Create.StatefulInterview(
-                questionnaireId: questionnaireId,
-                questionnaireRepository: questionnaireRepository,
+                questionnaireIdentity,
                 expressionProcessorStatePrototypeProvider: statePrototypeProvider,
-                answersOnPrefilledQuestions: answersOnPrefilledQuestions);
-
-            interview.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, 1);
+                answersOnPrefilledQuestions: answersOnPrefilledQuestions,
+                questionnaireRepository: Create.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument));
+            
             ApplyAllEvents(interview, events);
 
             return interview;
