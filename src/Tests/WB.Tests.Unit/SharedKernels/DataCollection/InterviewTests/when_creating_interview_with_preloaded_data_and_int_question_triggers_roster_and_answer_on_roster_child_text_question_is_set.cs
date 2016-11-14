@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
@@ -27,9 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 new[]
                 {
                     new PreloadedLevelDto(new decimal[0],
-                        new Dictionary<Guid, object> {{prefilledIntQuestionId, prefilledIntQuestionAnswer}}),
+                        new Dictionary<Guid, AbstractAnswer> { { prefilledIntQuestionId, NumericIntegerAnswer.FromInt(prefilledIntQuestionAnswer) } }),
                     new PreloadedLevelDto(new decimal[] {0},
-                        new Dictionary<Guid, object> {{prefilledTextQuestionId, prefilledTextQuestionAnswer}})
+                        new Dictionary<Guid, AbstractAnswer> {{prefilledTextQuestionId, TextAnswer.FromString(prefilledTextQuestionAnswer) }})
                 });
 
             answersTime = new DateTime(2013, 09, 01);
