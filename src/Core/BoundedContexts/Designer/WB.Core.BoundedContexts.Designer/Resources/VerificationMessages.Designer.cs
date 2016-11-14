@@ -1108,6 +1108,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked question references a list question from wrong level..
+        /// </summary>
+        internal static string WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope {
+            get {
+                return ResourceManager.GetString("WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {

@@ -2310,6 +2310,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool typeOfLinkedQuestionIsNotSupported = !(
                 linkedToQuestion.QuestionType == QuestionType.DateTime ||
                     linkedToQuestion.QuestionType == QuestionType.Numeric ||
+                    linkedToQuestion.QuestionType == QuestionType.TextList ||
                     linkedToQuestion.QuestionType == QuestionType.Text);
 
             if (typeOfLinkedQuestionIsNotSupported)
