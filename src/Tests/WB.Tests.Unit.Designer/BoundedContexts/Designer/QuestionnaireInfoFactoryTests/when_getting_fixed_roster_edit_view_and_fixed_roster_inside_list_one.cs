@@ -5,10 +5,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -41,17 +39,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         It should_return_grouped_list_of_integer_questions_with_one_pair = () =>
             result.TextListsQuestions.Count.ShouldEqual(4);
 
-        It should_return_list_questions_at_1_with_id_equals_q1Id = () =>
-            result.TextListsQuestions.ElementAt(1).Id.ShouldContainOnly(q1Id.FormatGuid());
+        It should_return_list_questions_at_3_with_id_equals_q1Id = () =>
+            result.TextListsQuestions.ElementAt(3).Id.ShouldEqual(q1Id.FormatGuid());
 
-        It should_return_list_questions_at_1_with_q1_title = () =>
-            result.TextListsQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q1Id).QuestionText);
+        It should_return_list_questions_at_3_with_q1_title = () =>
+            result.TextListsQuestions.ElementAt(3).Title.ShouldEqual(GetQuestion(q1Id).QuestionText);
 
-        It should_return_list_questions_at_3_with_id_equals_q2Id = () =>
-            result.TextListsQuestions.ElementAt(3).Id.ShouldContainOnly(q2Id.FormatGuid());
+        It should_return_list_questions_at_1_with_id_equals_q2Id = () =>
+            result.TextListsQuestions.ElementAt(1).Id.ShouldEqual(q2Id.FormatGuid());
 
-        It should_return_list_questions_at_3_with_q2_title = () =>
-            result.TextListsQuestions.ElementAt(3).Title.ShouldContainOnly(GetQuestion(q2Id).QuestionText);
+        It should_return_list_questions_at_1_with_q2_title = () =>
+            result.TextListsQuestions.ElementAt(1).Title.ShouldEqual(GetQuestion(q2Id).QuestionText);
 
         private static IGroup GetGroup(Guid groupId)
         {

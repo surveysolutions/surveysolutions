@@ -250,36 +250,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 RosterSizeSource = RosterSizeSourceType.Question,
                 RosterSizeQuestionId = q2Id
             };
-            return new QuestionnaireDocument()
+            return Create.QuestionnaireDocument(children: new List<IComposite>
             {
-                Children = new List<IComposite>()
+                Create.Group(groupId: g1Id, title: "Chapter", children : new List<IComposite>
                 {
                     new Group()
                     {
-                        PublicKey = g1Id,
-                        Title = "Chapter",
+                        PublicKey = multiOptionRoster,
+                        Title = "list_roster",
+                        VariableName = "list_roster",
+                        IsRoster = true,
+                        RosterSizeSource = RosterSizeSourceType.Question,
+                        RosterSizeQuestionId = q1Id,
                         Children = new List<IComposite>()
                         {
-                            new Group()
-                            {
-                                PublicKey = multiOptionRoster,
-                                Title = "list_roster",
-                                VariableName = "list_roster",
-                                IsRoster = true,
-                                RosterSizeSource = RosterSizeSourceType.Question,
-                                RosterSizeQuestionId = q1Id,
-                                Children = new List<IComposite>()
-                                {
-                                    (shouldReplaceFixedRosterWithListOne? listNestedRoster : fixedNestedRoster),
+                            (shouldReplaceFixedRosterWithListOne? listNestedRoster : fixedNestedRoster),
 
-                                    Create.TextListQuestion(q2Id, variable:"list_question", title: "list_question_inside_roster", maxAnswerCount: 16),
-                                }.ToReadOnlyCollection()
-                            },
-                            Create.TextListQuestion(q1Id, variable:"list_question", title: "list_question"),
+                            Create.TextListQuestion(q2Id, variable:"list_question", title: "list_question_inside_roster", maxAnswerCount: 16),
                         }.ToReadOnlyCollection()
-                    }
-                }.ToReadOnlyCollection()
-            };
+                    },
+                    Create.TextListQuestion(q1Id, variable:"list_question", title: "list_question"),
+                })
+            });
         }
 
         protected static Guid g1Id = Guid.Parse("11111111111111111111111111111111");
