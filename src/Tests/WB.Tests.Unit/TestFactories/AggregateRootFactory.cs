@@ -58,13 +58,10 @@ namespace WB.Tests.Unit.TestFactories
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
-                Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                interviewExpressionStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
-                Create.Service.SubstitionTextFactory())
-            {
-                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, questionnaireVersion ?? 1),
-            };
+                interviewExpressionStatePrototypeProvider ??
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                Create.Service.SubstitionTextFactory());
 
             statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
 
@@ -76,13 +73,9 @@ namespace WB.Tests.Unit.TestFactories
             questionnaireId = questionnaireId ?? Guid.NewGuid();
 
             var statefulInterview = new StatefulInterview(
-                Mock.Of<ILogger>(),
                 Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
-                Create.Service.SubstitionTextFactory())
-            {
-                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
-            };
+                Create.Service.SubstitionTextFactory());
 
             statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
 

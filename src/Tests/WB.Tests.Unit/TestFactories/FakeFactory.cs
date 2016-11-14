@@ -54,17 +54,6 @@ namespace WB.Tests.Unit.TestFactories
             return repository.Object;
         }
 
-        public IRosterTitleSubstitutionService RosterTitleSubstitutionService()
-        {
-            var rosterTitleSubstitutionService = Mock.Of<IRosterTitleSubstitutionService>();
-
-            Mock.Get(rosterTitleSubstitutionService)
-                .Setup(x => x.Substitute(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<string>()))
-                .Returns<string, Identity, string>((title, id, interviewId) => title);
-
-            return rosterTitleSubstitutionService;
-        }
-
         public ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)
             => Mock.Of<ISnapshotStore>(_
                 => _.GetSnapshot(aggregateRootId, It.IsAny<int>()) == snapshot);
