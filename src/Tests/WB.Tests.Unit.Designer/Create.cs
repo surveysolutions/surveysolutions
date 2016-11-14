@@ -358,7 +358,7 @@ namespace WB.Tests.Unit.Designer
 
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
+            string variable = null, string validationMessage = null, string title = null, QuestionScope scope = QuestionScope.Interviewer
             , bool hideIfDisabled = false)
         {
             return new MultimediaQuestion("Question T")
@@ -371,7 +371,7 @@ namespace WB.Tests.Unit.Designer
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                QuestionText = text
+                QuestionText = title
             };
         }
 
@@ -455,6 +455,17 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+
+        public static Answer Option(int code, string text = null, string parentValue = null, Guid? id = null)
+        {
+            return new Answer
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                AnswerText = text ?? "text",
+                ParentValue = parentValue,
+                AnswerCode = code
+            };
+        }
 
         public static Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
         {
@@ -695,7 +706,7 @@ namespace WB.Tests.Unit.Designer
             string enablementCondition = null,
             string[] fixedTitles = null,
             IEnumerable<IComposite> children = null,
-            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+            RosterSizeSourceType rosterType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null)
@@ -708,9 +719,9 @@ namespace WB.Tests.Unit.Designer
                 children: children);
 
             group.IsRoster = true;
-            group.RosterSizeSource = rosterSizeSourceType;
+            group.RosterSizeSource = rosterType;
 
-            if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
+            if (rosterType == RosterSizeSourceType.FixedTitles)
             {
                 if (fixedRosterTitles == null)
                 {

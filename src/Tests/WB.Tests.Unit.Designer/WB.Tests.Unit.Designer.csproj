@@ -770,7 +770,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one_that_was_fixed_previously.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_group_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_group_edit_view_and_group_is_absent.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_group_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_multi_roster_edit_view.cs" />

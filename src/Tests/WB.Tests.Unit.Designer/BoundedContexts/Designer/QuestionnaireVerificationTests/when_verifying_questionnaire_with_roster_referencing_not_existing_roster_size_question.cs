@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.Question(),
 
                     Create.Roster(
-                        rosterSizeSourceType: RosterSizeSourceType.Question,
+                        rosterType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: notExistingQuestionId),
                 }),
             });

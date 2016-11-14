@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.SourceOfLinkedEntities.Count.ShouldEqual(9);
 
         It should_replace_guids_in_condition_expressions_for_var_names = () =>
-            result.EnablementCondition.ShouldEqual("[q1] > 25");
+            result.EnablementCondition.ShouldEqual("q1 > 25");
 
         It should_return_grouped_list_of_multi_questions_with_one_pair_and_key_equals_ = () =>
             result.SourceOfLinkedEntities.Select(x => x.Title).ShouldContain(linkedQuestionsKey1);
