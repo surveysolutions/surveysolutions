@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.DateTime,
             QuestionType.Numeric,
             QuestionType.Text,
+            QuestionType.TextList
         };
 
         private static readonly HashSet<QuestionType> WhiteListOfQuestionTypes = new HashSet<QuestionType>
@@ -173,7 +174,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
 
             Error<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
-            Error<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
+            Error<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsPrefilled, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
             Error<IMultyOptionsQuestion>(RosterSizeMultiOptionQuestionShouldBeLimited, "WB0082", VerificationMessages.WB0082_RosterSizeMultiOptionQuestionShouldBeLimited),
             Error<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And60(q,document, GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options), "WB0100", VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200),
             Error<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
@@ -1535,11 +1536,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var linkedQuestions = questionnaire.Find<IQuestion>(
-                question => question.LinkedToQuestionId.HasValue);
+            var linkedQuestions = questionnaire.Find<IQuestion>(question => question.LinkedToQuestionId.HasValue);
 
             foreach (var linkedQuestion in linkedQuestions)
             {
+                
                 var sourceQuestion = questionnaire.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
 
                 if (sourceQuestion == null)
@@ -1555,10 +1556,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                var isSourceQuestionInsideRosterGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsRoster);
-                if (!isSourceQuestionInsideRosterGroup)
+                if (sourceQuestion.QuestionType == QuestionType.TextList)
                 {
-                    yield return LinkedQuestionReferenceQuestionNotUnderRosterGroup(linkedQuestion, sourceQuestion);
+                    var linkedRosterScope = questionnaire.Questionnaire.GetRosterScope(linkedQuestion.PublicKey);
+                    var sourceRosterScope = questionnaire.Questionnaire.GetRosterScope(sourceQuestion.PublicKey);
+                    if (sourceRosterScope.IsSameOrParentScopeFor(linkedRosterScope))
+                    {
+                        yield return LinkedQuestionReferenceTextListQuestionFromWrongScope(linkedQuestion, sourceQuestion);
+                    }
+                }
+                else
+                {
+                    var isSourceQuestionInsideRosterGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsRoster);
+                    if (!isSourceQuestionInsideRosterGroup)
+                    {
+                        yield return LinkedQuestionReferenceQuestionNotUnderRosterGroup(linkedQuestion, sourceQuestion);
+                    }
                 }
             }
 
@@ -1751,7 +1764,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private static bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool CategoricalMultianswerQuestionIsPrefilled(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question);
         }
@@ -1864,6 +1877,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static QuestionnaireVerificationMessage LinkedQuestionReferenceQuestionNotUnderRosterGroup(IQuestion linkedQuestion, IQuestion sourceQuestion)
             => QuestionnaireVerificationMessage.Error("WB0013",
                 VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup,
+                CreateReference(linkedQuestion),
+                CreateReference(sourceQuestion));
+
+        private static QuestionnaireVerificationMessage LinkedQuestionReferenceTextListQuestionFromWrongScope(IQuestion linkedQuestion, IQuestion sourceQuestion)
+            => QuestionnaireVerificationMessage.Error("WB0116",
+                VerificationMessages.WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
 
