@@ -302,6 +302,7 @@
     <Compile Include="Implementation\Repositories\UserRepository.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
+    <Compile Include="ValueObjects\RosterScope.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
