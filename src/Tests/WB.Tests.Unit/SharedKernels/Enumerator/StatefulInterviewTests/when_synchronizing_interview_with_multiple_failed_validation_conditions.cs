@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
 
-        It should_return_failed_condition_indexes = () => interview.GetFailedValidationConditions(questionIdentity).Count.ShouldEqual(2);
+        It should_return_failed_condition_indexes = () => interview.GetFailedValidationMessages(questionIdentity).Count.ShouldEqual(2);
 
         It should_return_failed_condition_indexes_from_events = () => 
-            interview.GetFailedValidationConditions(questionIdentity).ShouldEachConformTo(c => FailedCondtionsFromSync.Contains(c));
+            interview.GetFailedValidationMessages(questionIdentity).ShouldEachConformTo(c => FailedCondtionsFromSync.Contains(c));
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;

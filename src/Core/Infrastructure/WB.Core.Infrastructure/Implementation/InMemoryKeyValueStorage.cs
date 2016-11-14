@@ -5,8 +5,15 @@ namespace WB.Core.Infrastructure.Implementation
 {
     public class InMemoryKeyValueStorage<TEntity> : IPlainKeyValueStorage<TEntity> where TEntity : class
     {
-        private readonly Dictionary<string,TEntity> inMemoryStorage = new Dictionary<string, TEntity>(); 
-        
+        private readonly Dictionary<string,TEntity> inMemoryStorage = new Dictionary<string, TEntity>();
+
+        public InMemoryKeyValueStorage() { }
+
+        public InMemoryKeyValueStorage(Dictionary<string, TEntity> initialState)
+        {
+            this.inMemoryStorage = initialState;
+        }
+
         public TEntity GetById(string id)
         {
             if (this.inMemoryStorage.ContainsKey(id))

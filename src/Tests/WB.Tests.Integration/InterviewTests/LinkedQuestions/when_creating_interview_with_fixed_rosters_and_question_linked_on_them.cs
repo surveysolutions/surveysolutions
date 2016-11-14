@@ -34,18 +34,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                         }),
                 });
 
-                var result = new InvokeResults();
+                var interview = SetupStatefullInterview(questionnaireDocument);
 
-                using (var eventContext = new EventContext())
+                return new InvokeResults
                 {
-                    var interview = SetupStatefullInterview(questionnaireDocument);
-
-                    var options = interview.FindReferencedRostersForLinkedQuestion(roster2Id, Create.Identity(linkedToQuestionId, RosterVector.Empty)).ToList();
-
-                    result.OptionsCountForLinkedToRosterQuestion = options.Count();
-                }
-
-                return result;
+                    OptionsCountForLinkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Identity.Create(linkedToQuestionId, RosterVector.Empty)).Options.Count
+                };
             });
 
         It should_return_2_options_for_linked_question = () =>
