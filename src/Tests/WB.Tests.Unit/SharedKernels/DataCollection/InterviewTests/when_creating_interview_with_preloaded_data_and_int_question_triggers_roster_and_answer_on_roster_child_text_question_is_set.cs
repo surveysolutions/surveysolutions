@@ -2,50 +2,45 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_creating_interview_with_preloaded_data_where_int_question_triggers_roster_and_answer_on_roster_titel_question_is_set : InterviewTestsContext
+    internal class when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_text_question_is_set : InterviewTestsContext
     {
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            prefilledIntQuestion = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            prefilledIntQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             rosterGroupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             prefilledIntQuestionAnswer = 1;
 
-            rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
-            rosterTitleQuestionAnswer = "a";
+            prefilledTextQuestionId = Guid.Parse("22222222222222222222222222222222");
+            prefilledTextQuestionAnswer = "a";
             preloadedDataDto = new PreloadedDataDto(
                 new[]
                 {
                     new PreloadedLevelDto(new decimal[0],
-                        new Dictionary<Guid, object> {{prefilledIntQuestion, prefilledIntQuestionAnswer}}),
+                        new Dictionary<Guid, object> {{prefilledIntQuestionId, prefilledIntQuestionAnswer}}),
                     new PreloadedLevelDto(new decimal[] {0},
-                        new Dictionary<Guid, object> {{rosterTitleQuestionId, rosterTitleQuestionAnswer}})
+                        new Dictionary<Guid, object> {{prefilledTextQuestionId, prefilledTextQuestionAnswer}})
                 });
 
             answersTime = new DateTime(2013, 09, 01);
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.NumericIntegerQuestion(id: prefilledIntQuestion),
+                Create.Entity.NumericIntegerQuestion(id: prefilledIntQuestionId),
 
-                Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: prefilledIntQuestion, rosterTitleQuestionId: rosterTitleQuestionId, children: new IComposite[]
+                Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: prefilledIntQuestionId, rosterTitleQuestionId: prefilledTextQuestionId, children: new IComposite[]
                 {
-                    Create.Entity.TextQuestion(questionId: rosterTitleQuestionId)
+                    Create.Entity.TextQuestion(questionId: prefilledTextQuestionId)
                 }),
             }));
 
@@ -57,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto, answersTime, supervisorId, null));
+                interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto, answersTime, supervisorId, null));
 
         Cleanup stuff = () =>
         {
@@ -66,15 +61,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         It should_raise_InterviewFromPreloadedDataCreated_event = () =>
-            eventContext.ShouldContainEvent<InterviewFromPreloadedDataCreated>();
+                eventContext.ShouldContainEvent<InterviewFromPreloadedDataCreated>();
 
-        It should_raise_valid_NumericIntegerQuestionAnswered_event = () =>
-            eventContext.ShouldContainEvent<NumericIntegerQuestionAnswered>(@event
-                => @event.Answer == prefilledIntQuestionAnswer && @event.QuestionId == prefilledIntQuestion);
+        It should_raise_valid_TextQuestionAnswered_event = () =>
+            eventContext.ShouldContainEvent<TextQuestionAnswered>(@event
+                => @event.Answer == prefilledTextQuestionAnswer && @event.QuestionId == prefilledTextQuestionId);
 
         It should_raise_RosterInstancesTitleChanged_event = () =>
-           eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event
-               => @event.ChangedInstances[0].Title == rosterTitleQuestionAnswer && @event.ChangedInstances[0].RosterInstance.GroupId == rosterGroupId);
+            eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event
+                => @event.ChangedInstances[0].Title == prefilledTextQuestionAnswer && @event.ChangedInstances[0].RosterInstance.GroupId == rosterGroupId);
 
 
         private static EventContext eventContext;
@@ -84,10 +79,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static DateTime answersTime;
         private static Guid supervisorId;
         private static Guid rosterGroupId;
-        private static Guid prefilledIntQuestion;
+        private static Guid prefilledIntQuestionId;
         private static int prefilledIntQuestionAnswer;
-        private static Guid rosterTitleQuestionId;
-        private static string rosterTitleQuestionAnswer;
+        private static Guid prefilledTextQuestionId;
+        private static string prefilledTextQuestionAnswer;
         private static Interview interview;
     }
 }
