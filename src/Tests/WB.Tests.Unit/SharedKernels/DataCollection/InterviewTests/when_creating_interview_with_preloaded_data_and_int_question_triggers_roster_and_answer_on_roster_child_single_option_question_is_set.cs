@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_text_question_is_set : InterviewTestsContext
+    internal class when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_single_option_question_is_set : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -21,15 +21,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterGroupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             prefilledIntQuestionAnswer = 1;
 
-            prefilledTextQuestionId = Guid.Parse("22222222222222222222222222222222");
-            prefilledTextQuestionAnswer = "a";
+            prefilledSingleOptionQuestionId = Guid.Parse("22222222222222222222222222222222");
+            prefilledSingleOptionQuestionAnswer = 3;
             preloadedDataDto = new PreloadedDataDto(
                 new[]
                 {
                     new PreloadedLevelDto(new decimal[0],
                         new Dictionary<Guid, object> {{prefilledIntQuestionId, prefilledIntQuestionAnswer}}),
                     new PreloadedLevelDto(new decimal[] {0},
-                        new Dictionary<Guid, object> {{prefilledTextQuestionId, prefilledTextQuestionAnswer}})
+                        new Dictionary<Guid, object> {{prefilledSingleOptionQuestionId, prefilledSingleOptionQuestionAnswer}})
                 });
 
             answersTime = new DateTime(2013, 09, 01);
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
                 Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: prefilledIntQuestionId, children: new IComposite[]
                 {
-                    Create.Entity.TextQuestion(questionId: prefilledTextQuestionId)
+                    Create.Entity.SingleOptionQuestion(questionId: prefilledSingleOptionQuestionId)
                 }),
             }));
 
@@ -63,9 +63,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_InterviewFromPreloadedDataCreated_event = () =>
                 eventContext.ShouldContainEvent<InterviewFromPreloadedDataCreated>();
 
-        It should_raise_valid_TextQuestionAnswered_event = () =>
-            eventContext.ShouldContainEvent<TextQuestionAnswered>(@event
-                => @event.Answer == prefilledTextQuestionAnswer && @event.QuestionId == prefilledTextQuestionId);
+        It should_raise_valid_SingleOptionQuestionAnswered_event = () =>
+            eventContext.ShouldContainEvent<SingleOptionQuestionAnswered>(@event
+                => @event.SelectedValue == prefilledSingleOptionQuestionAnswer && @event.QuestionId == prefilledSingleOptionQuestionId);
 
         private static EventContext eventContext;
         private static Guid userId;
@@ -76,8 +76,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid rosterGroupId;
         private static Guid prefilledIntQuestionId;
         private static int prefilledIntQuestionAnswer;
-        private static Guid prefilledTextQuestionId;
-        private static string prefilledTextQuestionAnswer;
+        private static Guid prefilledSingleOptionQuestionId;
+        private static decimal prefilledSingleOptionQuestionAnswer;
         private static Interview interview;
     }
 }
