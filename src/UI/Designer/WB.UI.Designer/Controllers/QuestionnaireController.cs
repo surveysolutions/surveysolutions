@@ -24,6 +24,7 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 
@@ -224,6 +225,13 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
+            bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.UserHelper.WebUser.UserId);
+            if (!hasAccess)
+            {
+                this.Error(ErrorMessages.NoAccessToQuestionnaire);
+                return this.RedirectToAction("Index");
+            }
+
             QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
 
             return this.View(questionnairePublicListViewModels);
