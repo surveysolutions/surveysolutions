@@ -9,6 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_getting_invalid_interview_entities_recursively : StatefulInterviewTestsContext
     {
         Establish context = () =>

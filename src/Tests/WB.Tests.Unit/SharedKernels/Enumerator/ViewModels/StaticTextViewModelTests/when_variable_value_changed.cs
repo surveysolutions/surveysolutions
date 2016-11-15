@@ -19,6 +19,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_variable_value_changed : StaticTextViewModelTestsContext
     {
         Establish context = () =>

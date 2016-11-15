@@ -17,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFactoryTests
 {
+    [Ignore("KP-8159")]
     [TestOf(typeof(InterviewViewModelFactory))]
     [TestFixture]
     public class InterviewViewModelFactoryTest

@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
+    [Ignore("KP-8159")]
     internal class when_answering_question_that_change_options_list_of_linked_that_is_two_levels_upper_than_source_question_that_is_in_nested_rosterss : InterviewTestsContext
     {
         Establish context = () =>

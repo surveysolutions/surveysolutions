@@ -14,6 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_setting_ResetTextInEditor_in_null : CascadingSingleOptionQuestionViewModelTestContext
     {
         private Establish context = () =>
