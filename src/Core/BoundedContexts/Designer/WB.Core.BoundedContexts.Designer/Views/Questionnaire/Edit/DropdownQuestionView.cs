@@ -1,6 +1,8 @@
+using System;
+
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
-    public struct DropdownQuestionView
+    public struct DropdownEntityView
     {
         public bool IsSectionPlaceHolder;
         public string Id;
@@ -9,5 +11,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string Type;
         public string VarName;
         public string QuestionType;
+
+        public override string ToString()
+        {
+            return (this.IsSectionPlaceHolder? "+--" : $"`--{this.Breadcrumbs}.") + $"{this.Title} ({this.VarName})";
+        }
     }
 }

@@ -1108,6 +1108,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked question references a list question from wrong level..
+        /// </summary>
+        internal static string WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope {
+            get {
+                return ResourceManager.GetString("WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {
@@ -1302,6 +1311,51 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0221_NoCurrentTimeQuestions {
             get {
                 return ResourceManager.GetString("WB0221_NoCurrentTimeQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single-choice question is marked as prefilled. Consider using a text question..
+        /// </summary>
+        internal static string WB0222_SingleOptionPrefilled {
+            get {
+                return ResourceManager.GetString("WB0222_SingleOptionPrefilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section contains less than five questions. Consider joining with other sections..
+        /// </summary>
+        internal static string WB0223_SectionWithLessThan5Questions {
+            get {
+                return ResourceManager.GetString("WB0223_SectionWithLessThan5Questions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many sub-sections at one level. Consider hierarchical layout..
+        /// </summary>
+        internal static string WB0224_TooManySubsectionsAtOneLevel {
+            get {
+                return ResourceManager.GetString("WB0224_TooManySubsectionsAtOneLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop-down menu (filtered combobox) contains less than 10 elements. Consider switching to a standard single choice representation..
+        /// </summary>
+        internal static string WB0225_ComboBoxWithLessThan10Elements {
+            get {
+                return ResourceManager.GetString("WB0225_ComboBoxWithLessThan10Elements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading combo box questions have the same parent question..
+        /// </summary>
+        internal static string WB0226_SameCascadingParentQuestion {
+            get {
+                return ResourceManager.GetString("WB0226_SameCascadingParentQuestion", resourceCulture);
             }
         }
         

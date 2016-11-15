@@ -24,6 +24,7 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 
@@ -180,6 +181,30 @@ namespace WB.UI.Designer.Controllers
             return this.Redirect(this.Request.UrlReferrer.ToString());
         }
 
+        [HttpPost]
+        public ActionResult Revert(Guid id, Guid commandId)
+        {
+            var historyReferenceId = commandId;
+            QuestionnaireView model = this.GetQuestionnaire(id);
+
+            if (model != null)
+            {
+                if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
+                {
+                    this.Error("You don't  have permissions to restore version of this questionnaire.");
+                }
+                else
+                {
+                    var command = new RevertVersionQuestionnaire(model.PublicKey, historyReferenceId, UserHelper.WebUser.UserId);
+                    this.commandService.Execute(command);
+
+                    this.Success($"Questionnaire \"{model.Title}\" successfully restored.");
+                }
+            }
+            string sid = id.FormatGuid();
+            return this.RedirectToAction("Details", new {id =  sid});
+        }
+
         [AllowAnonymous]
         public ActionResult ExpressionGeneration(Guid? id)
         {
@@ -200,7 +225,15 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
-            var questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+            bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.UserHelper.WebUser.UserId);
+            if (!hasAccess)
+            {
+                this.Error(ErrorMessages.NoAccessToQuestionnaire);
+                return this.RedirectToAction("Index");
+            }
+
+            QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+
             return this.View(questionnairePublicListViewModels);
         }
 

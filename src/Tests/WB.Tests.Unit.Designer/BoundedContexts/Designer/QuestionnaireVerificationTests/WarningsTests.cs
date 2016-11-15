@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandlerTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -73,6 +76,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 })
                 .ExpectNoWarning("WB0211")
                 .AndWarning("WB0264");
+
+        [Test]
+        public void no_single_option_prefilled_questions()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Question(),
+                })
+                .ExpectNoWarning("WB0222");
+
+        [Test]
+        public void single_option_prefilled_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.SingleOptionQuestion(isPrefilled: true),
+                })
+                .ExpectWarning("WB0222");
 
         [Test]
         public void no_barcode_questions()
@@ -149,6 +168,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.Question(title: "Question 2"),
                 })
                 .ExpectNoWarning("WB0266");
+
+        [Test]
+        public void cascading_questions_with_same_cascade_parent()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                })
+                .ExpectWarning("WB0226");
+
+        [Test]
+        public void cascading_questions_with_different_cascade_parents()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(questionId: Guid.Parse("22222222222222222222222222222222")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("22222222222222222222222222222222")),
+                })
+                .ExpectNoWarning("WB0226");
 
         [Test]
         public void consecutive_questions_with_same_enablement()
@@ -255,5 +295,219 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     }),
                 })
                 .ExpectNoWarning("WB0220");
+
+        [Test]
+        public void section_with_4_questions_and_other_big_section()
+            => Create.QuestionnaireDocument(children: new IComposite[]
+                {
+                    Create.Section(children: new []
+                    {
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                    }),
+                    Create.Section(children: new []
+                    {
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                    }),
+                })
+                .ExpectWarning("WB0223");
+
+        [Test]
+        public void section_with_5_questions_and_other_big_section()
+            => Create.QuestionnaireDocument(children: new IComposite[]
+                {
+                    Create.Section(children: new []
+                    {
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                    }),
+                    Create.Section(children: new []
+                    {
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                    }),
+                })
+                .ExpectNoWarning("WB0223");
+
+        [Test]
+        public void section_with_4_questions_and_no_other_sections()
+            => Create.QuestionnaireDocument(children: new IComposite[]
+                {
+                    Create.Section(children: new []
+                    {
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                    }),
+                })
+                .ExpectNoWarning("WB0223");
+
+        [Test]
+        public void section_with_10_subsections_at_one_level()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                })
+                .ExpectWarning("WB0224");
+
+        [Test]
+        public void section_with_10_subsections_at_one_level_inside_other_subsection()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Subsection(children: new []
+                    {
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                    }),
+                })
+                .ExpectWarning("WB0224");
+
+        [Test]
+        public void section_with_9_subsections_at_one_level_inside_other_subsection()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Subsection(children: new []
+                    {
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                    }),
+                })
+                .ExpectNoWarning("WB0224");
+
+        [Test]
+        public void section_with_10_subsections_at_different_levels()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Subsection(children: new []
+                    {
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                    }),
+                    Create.Subsection(children: new []
+                    {
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                        Create.Subsection(),
+                    }),
+                })
+                .ExpectNoWarning("WB0224");
+
+        [Test]
+        public void section_with_9_subsections_at_one_level()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                    Create.Subsection(),
+                })
+                .ExpectNoWarning("WB0224");
+
+        [Test]
+        public void single_option_with_9_options_in_combobox_mode()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(isComboBox: true, answers: new List<Answer>
+                    {
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                    }),
+                })
+                .ExpectWarning("WB0225");
+
+        [Test]
+        public void single_option_with_9_options_in_regular_mode()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(isComboBox: false, answers: new List<Answer>
+                    {
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                    }),
+                })
+                .ExpectNoWarning("WB0225");
+
+        [Test]
+        public void single_option_with_10_options_in_combobox_mode()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(isComboBox: true, answers: new List<Answer>
+                    {
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                        Create.Answer(),
+                    }),
+                })
+                .ExpectNoWarning("WB0225");
     }
 }

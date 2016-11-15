@@ -148,7 +148,7 @@
     <script type="text/ng-template" id="linkTemplate.html">
         <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
             <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
-            <label for="linkedEntitySource">Bind to question from roster group</label>
+            <label for="linkedEntitySource">Bind to list question or question from roster group</label>
             <div class="btn-group" uib-dropdown>
                 <button class="btn dropdown-toggle" uib-dropdown-toggle id="linkedEntitySource" type="button">
                     <span class="select-placeholder" ng-if="(activeQuestion.linkedToEntity.title || '') == ''">Select question</span>

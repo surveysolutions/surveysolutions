@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.Designer
                 UserName = userName,
             };
 
-        public static Answer Answer(string answer, decimal? value = null, string stringValue = null, decimal? parentValue = null)
+        public static Answer Answer(string answer = "answer option", decimal? value = null, string stringValue = null, decimal? parentValue = null)
         {
             return new Answer()
             {
@@ -150,6 +150,12 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
+            => Create.Group(
+                title: title,
+                groupId: sectionId,
+                children: children);
+
+        public static Group Subsection(string title = "Subsection X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
             => Create.Group(
                 title: title,
                 groupId: sectionId,
@@ -352,7 +358,7 @@ namespace WB.Tests.Unit.Designer
 
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
+            string variable = null, string validationMessage = null, string title = null, QuestionScope scope = QuestionScope.Interviewer
             , bool hideIfDisabled = false)
         {
             return new MultimediaQuestion("Question T")
@@ -365,7 +371,7 @@ namespace WB.Tests.Unit.Designer
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                QuestionText = text
+                QuestionText = title
             };
         }
 
@@ -450,6 +456,17 @@ namespace WB.Tests.Unit.Designer
         }
 
 
+        public static Answer Option(int code, string text = null, string parentValue = null, Guid? id = null)
+        {
+            return new Answer
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                AnswerText = text ?? "text",
+                ParentValue = parentValue,
+                AnswerCode = code
+            };
+        }
+
         public static Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
         {
             return new Answer
@@ -510,7 +527,7 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnireHistotyVersionsService histotyVersionsService = null)
         {
             return new Questionnaire(
                 Mock.Of<ILogger>(),
@@ -520,7 +537,8 @@ namespace WB.Tests.Unit.Designer
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>());
+                Mock.Of<ITranslationsService>(),
+                histotyVersionsService ?? Mock.Of<IQuestionnireHistotyVersionsService>());
         }
 
 
@@ -534,7 +552,8 @@ namespace WB.Tests.Unit.Designer
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>());
+                Mock.Of<ITranslationsService>(),
+                Mock.Of<IQuestionnireHistotyVersionsService>());
             questionnaire.Initialize(Guid.NewGuid(), document, new List<SharedPerson> {Create.SharedPerson(responsible)});
             return questionnaire;
         }
@@ -687,7 +706,7 @@ namespace WB.Tests.Unit.Designer
             string enablementCondition = null,
             string[] fixedTitles = null,
             IEnumerable<IComposite> children = null,
-            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+            RosterSizeSourceType rosterType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null)
@@ -700,9 +719,9 @@ namespace WB.Tests.Unit.Designer
                 children: children);
 
             group.IsRoster = true;
-            group.RosterSizeSource = rosterSizeSourceType;
+            group.RosterSizeSource = rosterType;
 
-            if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
+            if (rosterType == RosterSizeSourceType.FixedTitles)
             {
                 if (fixedRosterTitles == null)
                 {
@@ -725,7 +744,7 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
-            Guid? linkedToRosterId = null, List<Answer> answers = null)
+            Guid? linkedToRosterId = null, List<Answer> answers = null, bool isPrefilled = false, bool isComboBox = false)
         {
             return new SingleQuestion
             {
@@ -740,7 +759,9 @@ namespace WB.Tests.Unit.Designer
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 Answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
-                LinkedFilterExpression = linkedFilterExpression
+                LinkedFilterExpression = linkedFilterExpression,
+                Featured = isPrefilled,
+                IsFilteredCombobox = isComboBox,
             };
         }
 
@@ -909,9 +930,10 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
             }
 
-            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
+            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, 
+                string lookupTableName = "table", Guid? oldLookupTableId = null)
             {
-                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file", null);
+                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file", oldLookupTableId);
             }
 
             internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
@@ -925,9 +947,10 @@ namespace WB.Tests.Unit.Designer
                 return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
             }
             
-            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)
+            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, 
+                Guid responsibleId, string attachmentName, Guid? oldAttachmentId = null)
             {
-                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId, null);
+                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId, oldAttachmentId);
             }
 
             public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
@@ -949,9 +972,10 @@ namespace WB.Tests.Unit.Designer
                 return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, null));
             }
 
-            public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, Guid responsibleId)
+            public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, 
+                Guid responsibleId, Guid? oldTranslationId = null)
             {
-                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name, null);
+                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name, oldTranslationId);
             }
 
             public static DeleteTranslation DeleteTranslation(Guid questionnaireId, Guid translationId, Guid responsibleId)
@@ -1027,6 +1051,11 @@ namespace WB.Tests.Unit.Designer
             public static DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId)
             {
                 return new DeleteQuestionnaire(questionnaireId, responsibleId);
+            }
+
+            public static RevertVersionQuestionnaire RevertVersionQuestionnaire(Guid questionnaireId, Guid historyReferanceId, Guid responsibleId)
+            {
+                return new RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             }
         }
 

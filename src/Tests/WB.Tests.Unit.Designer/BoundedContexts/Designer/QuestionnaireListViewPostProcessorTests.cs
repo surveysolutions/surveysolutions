@@ -235,6 +235,40 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     questionnaireIdFormatted, listViewItem.Title, ShareType.Edit, It.IsAny<string>(), command.Email), Times.Once);
         }
 
+        [Test]
+        public void When_RevertVersionQuestionnaire_command()
+        {
+            // arrange
+            Guid questionnaireId    = Guid.Parse("11111111111111111111111111111111");
+            Guid historyReferanceId = Guid.Parse("22222222222222222222222222222222");
+            Guid responsibleId      = Guid.Parse("33333333333333333333333333333333");
+            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
+
+            AssemblyContext.SetupServiceLocator();
+            var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
+            listViewItemsStorage.Store(new QuestionnaireListViewItem
+            {
+                QuestionnaireId = questionnaireId.FormatGuid(),
+                Title = "old title",
+                IsPublic = true
+            }, questionnaireId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
+
+            var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, "reverted title");
+            questionnaireDocument.IsPublic = false;
+            var questionnaire = Create.Questionnaire(responsibleId, questionnaireDocument);
+
+            var listViewPostProcessor = CreateListViewPostProcessor();
+            // act
+            listViewPostProcessor.Process(questionnaire, command);
+
+            // assert
+            var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireId.FormatGuid());
+            Assert.That(questionnaireListViewItem, Is.Not.Null);
+            Assert.That(questionnaireListViewItem.Title, Is.EqualTo("reverted title"));
+            Assert.That(questionnaireListViewItem.IsPublic, Is.False);
+        }
+
         private static ListViewPostProcessor CreateListViewPostProcessor() => new ListViewPostProcessor();
     }
 }

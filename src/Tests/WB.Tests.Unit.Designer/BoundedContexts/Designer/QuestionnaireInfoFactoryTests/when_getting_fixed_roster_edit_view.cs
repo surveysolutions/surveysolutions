@@ -5,10 +5,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -93,16 +91,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.NumericIntegerQuestions.Where(x => x.IsSectionPlaceHolder).Select(x => x.Title).ShouldContainOnly("Group 1", "Group 2");
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_ids_contains_only_q1Id = () =>
-            result.NumericIntegerQuestions.ElementAt(1).Id.ShouldContainOnly(numericQuestionId.FormatGuid());
+            result.NumericIntegerQuestions.ElementAt(1).Id.ShouldEqual(numericQuestionId.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_titles_contains_only_q1_title = () =>
-            result.NumericIntegerQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(numericQuestionId).QuestionText);
+            result.NumericIntegerQuestions.ElementAt(1).Title.ShouldEqual(GetQuestion(numericQuestionId).QuestionText);
 
         It should_return_integer_questions_in_group_with_key__Group_2__with_ids_contains_only_q1Id = () =>
-            result.NumericIntegerQuestions.ElementAt(3).Id.ShouldContainOnly(q6Id.FormatGuid());
+            result.NumericIntegerQuestions.ElementAt(3).Id.ShouldEqual(q6Id.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__Group_2__with_titles_contains_only_q1_title = () =>
-            result.NumericIntegerQuestions.ElementAt(3).Title.ShouldContainOnly(GetQuestion(q6Id).QuestionText);
+            result.NumericIntegerQuestions.ElementAt(3).Title.ShouldEqual(GetQuestion(q6Id).QuestionText);
 
         It should_return_grouped_list_of_integer_questions_with_one_pair = () =>
             result.TextListsQuestions.Count.ShouldEqual(0);
@@ -122,7 +120,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static QuestionnaireDocument questionnaireView;
         private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
-        private static Guid rosterId = fixedRoster;
+        private static Guid rosterId = g3Id;
         private static string textListGroupKey = "Group 1 / Roster 1.1 / Roster 1.1.1";
     }
 }

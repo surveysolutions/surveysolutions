@@ -582,4 +582,22 @@
   <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
     <value>No current time question was found. Consider recording the date of interview in your questionnaire.</value>
   </data>
+  <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+    <value>Single-choice question is marked as prefilled. Consider using a text question.</value>
+  </data>
+  <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+    <value>Section contains less than five questions. Consider joining with other sections.</value>
+  </data>
+  <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+    <value>Too many sub-sections at one level. Consider hierarchical layout.</value>
+  </data>
+  <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+    <value>Drop-down menu (filtered combobox) contains less than 10 elements. Consider switching to a standard single choice representation.</value>
+  </data>
+  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+    <value>Linked question references a list question from wrong level.</value>
+  </data>
+  <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+    <value>Cascading combo box questions have the same parent question.</value>
+  </data>
 </root>

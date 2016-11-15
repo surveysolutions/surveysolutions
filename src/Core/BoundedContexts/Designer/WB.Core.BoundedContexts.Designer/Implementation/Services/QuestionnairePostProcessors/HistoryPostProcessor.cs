@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -70,7 +71,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, AddLookupTable>,
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
-        ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>
+        ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>,
+        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -81,6 +83,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage
             => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
 
+        private IQuestionnireHistotyVersionsService questionnireHistotyVersionsService 
+            => ServiceLocator.Current.GetInstance<IQuestionnireHistotyVersionsService>();
+
         #region Questionnaire
 
         public void Process(Questionnaire aggregate, CreateQuestionnaire command)
@@ -88,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, command.ResponsibleId);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Questionnaire, command.QuestionnaireId, command.Title);
+                QuestionnaireItemType.Questionnaire, command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, UpdateQuestionnaire command)
@@ -99,7 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
                 QuestionnaireActionType.Update,
-                QuestionnaireItemType.Questionnaire, command.QuestionnaireId, command.Title);
+                QuestionnaireItemType.Questionnaire, command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument);
         }
 
         private void UpdateQuestionnaireTitleIfNeed(Guid questionnaireId, string title)
@@ -122,7 +127,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, questionnaire.CreatedBy,
                 QuestionnaireActionType.Delete, QuestionnaireItemType.Questionnaire, command.QuestionnaireId,
-                questionnaire.GroupsState[command.QuestionnaireId]);
+                questionnaire.GroupsState[command.QuestionnaireId], aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, CloneQuestionnaire command)
@@ -136,7 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, creatorId, QuestionnaireActionType.Clone,
                 QuestionnaireItemType.Questionnaire,
-                command.QuestionnaireId, command.Title, linkToQuestionnaire);
+                command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument, linkToQuestionnaire);
         }
 
         public void Process(Questionnaire aggregate, ImportQuestionnaire command)
@@ -144,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.Source.CreatedBy.Value,
                 questionnaireStateTacker == null ? QuestionnaireActionType.Import : QuestionnaireActionType.Replace, QuestionnaireItemType.Questionnaire,
-                command.QuestionnaireId, command.Source.Title);
+                command.QuestionnaireId, command.Source.Title, aggregate.QuestionnaireDocument);
 
             this.UpdateFullQuestionnaireState(command.Source, command.QuestionnaireId, command.Source.CreatedBy ?? Guid.Empty);
         }
@@ -153,11 +158,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         #region Shared persons
         public void Process(Questionnaire aggregate, AddSharedPersonToQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId));
+                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId), null);
 
         public void Process(Questionnaire aggregate, RemoveSharedPersonFromQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
-                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId));
+                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId), null);
 
         #endregion
 
@@ -168,10 +173,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddOrUpdateStaticTextState(command.QuestionnaireId, command.EntityId, staticTextTitle, command.ParentId);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.StaticText, command.EntityId, staticTextTitle);
+                QuestionnaireItemType.StaticText, command.EntityId, staticTextTitle, aggregate.QuestionnaireDocument);
 
             if (command.Index.HasValue)
-                this.MoveEntity(command.QuestionnaireId, command.EntityId, command.ParentId, command.ResponsibleId);
+                this.MoveEntity(command.QuestionnaireId, command.EntityId, command.ParentId, command.ResponsibleId, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, UpdateStaticText command)
@@ -180,7 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddOrUpdateStaticTextState(command.QuestionnaireId, command.EntityId, staticTextTitle, parentId: null);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-                QuestionnaireItemType.StaticText, command.EntityId, staticTextTitle);
+                QuestionnaireItemType.StaticText, command.EntityId, staticTextTitle, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteStaticText command)
@@ -190,7 +195,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaire.StaticTextState.TryGetValue(command.EntityId, out staticTitle);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
-                QuestionnaireItemType.StaticText, command.EntityId, staticTitle);
+                QuestionnaireItemType.StaticText, command.EntityId, staticTitle, aggregate.QuestionnaireDocument);
 
             questionnaire.Parents.Remove(command.EntityId);
             questionnaire.StaticTextState.Remove(command.EntityId);
@@ -198,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         }
 
         public void Process(Questionnaire aggregate, MoveStaticText command)
-            => this.MoveEntity(command.QuestionnaireId, command.EntityId, command.TargetEntityId, command.ResponsibleId);
+            => this.MoveEntity(command.QuestionnaireId, command.EntityId, command.TargetEntityId, command.ResponsibleId, aggregate.QuestionnaireDocument);
         #endregion
 
         #region Variables
@@ -208,10 +213,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddOrUpdateVariableState(command.QuestionnaireId, command.EntityId, variableName, command.ParentId);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Variable, command.EntityId, variableName);
+                QuestionnaireItemType.Variable, command.EntityId, variableName, aggregate.QuestionnaireDocument);
 
             if (command.Index.HasValue)
-                this.MoveEntity(command.QuestionnaireId, command.EntityId, command.ParentId, command.ResponsibleId);
+                this.MoveEntity(command.QuestionnaireId, command.EntityId, command.ParentId, command.ResponsibleId, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, UpdateVariable command)
@@ -220,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddOrUpdateVariableState(command.QuestionnaireId, command.EntityId, variableName, parentId: null);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-                QuestionnaireItemType.Variable, command.EntityId, variableName);
+                QuestionnaireItemType.Variable, command.EntityId, variableName, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteVariable command)
@@ -230,7 +235,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaire.VariableState.TryGetValue(command.EntityId, out variableName);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
-                QuestionnaireItemType.Variable, command.EntityId, variableName);
+                QuestionnaireItemType.Variable, command.EntityId, variableName, aggregate.QuestionnaireDocument);
 
             questionnaire.Parents.Remove(command.EntityId);
             questionnaire.VariableState.Remove(command.EntityId);
@@ -238,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         }
 
         public void Process(Questionnaire aggregate, MoveVariable command)
-            => this.MoveEntity(command.QuestionnaireId, command.EntityId, command.TargetEntityId, command.ResponsibleId);
+            => this.MoveEntity(command.QuestionnaireId, command.EntityId, command.TargetEntityId, command.ResponsibleId, aggregate.QuestionnaireDocument);
         #endregion
 
         #region Macroses
@@ -247,19 +252,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddOrUpdateMacroState(command.QuestionnaireId, command.MacroId, string.Empty);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Macro, command.MacroId, "Empty macro added");
+                QuestionnaireItemType.Macro, command.MacroId, "Empty macro added", aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, UpdateMacro command)
         {
             this.AddOrUpdateMacroState(command.QuestionnaireId, command.MacroId, command.Name);
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-                QuestionnaireItemType.Macro, command.MacroId, command.Name);
+                QuestionnaireItemType.Macro, command.MacroId, command.Name, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteMacro command)
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.MacroState, command.MacroId,
-                QuestionnaireItemType.Macro, command.ResponsibleId);
+                QuestionnaireItemType.Macro, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
         #endregion
 
@@ -268,19 +273,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             this.AddOrUpdateLookupTableState(command.QuestionnaireId, command.LookupTableId, string.Empty);
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.LookupTable, command.LookupTableId, "Empty lookup table added");
+                QuestionnaireItemType.LookupTable, command.LookupTableId, "Empty lookup table added", aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, UpdateLookupTable command)
         {
             this.AddOrUpdateLookupTableState(command.QuestionnaireId, command.LookupTableId, command.LookupTableName);
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-                QuestionnaireItemType.LookupTable, command.LookupTableId, command.LookupTableName);
+                QuestionnaireItemType.LookupTable, command.LookupTableId, command.LookupTableName, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteLookupTable command)
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.LookupState,
-                command.LookupTableId, QuestionnaireItemType.LookupTable, command.ResponsibleId);
+                command.LookupTableId, QuestionnaireItemType.LookupTable, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
         #endregion
 
@@ -291,12 +296,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 parentId: null, setAction: (s, id, title) => s.AttachmentState[id] = title);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-                QuestionnaireItemType.Attachment, command.AttachmentId, command.AttachmentName);
+                QuestionnaireItemType.Attachment, command.AttachmentId, command.AttachmentName, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteAttachment command)
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.AttachmentState, command.AttachmentId,
-                QuestionnaireItemType.Attachment, command.ResponsibleId);
+                QuestionnaireItemType.Attachment, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
         #endregion
 
@@ -307,12 +312,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 parentId: null, setAction: (s, id, title) => s.TranslationState[id] = title);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-                QuestionnaireItemType.Translation, command.TranslationId, command.Name);
+                QuestionnaireItemType.Translation, command.TranslationId, command.Name, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteTranslation command)
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.TranslationState, command.TranslationId,
-                QuestionnaireItemType.Translation, command.ResponsibleId);
+                QuestionnaireItemType.Translation, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
         #endregion
 
@@ -323,12 +328,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddOrUpdateGroupState(command.QuestionnaireId, command.GroupId, groupTitle, command.ParentGroupId);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Group, command.GroupId, groupTitle);
+                QuestionnaireItemType.Group, command.GroupId, groupTitle, aggregate.QuestionnaireDocument);
 
-            this.UpdateRoster(command.QuestionnaireId, command.IsRoster, command.GroupId, command.ResponsibleId);
+            this.UpdateRoster(command.QuestionnaireId, command.IsRoster, command.GroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
             if (command.Index.HasValue)
-                this.MoveEntity(command.QuestionnaireId, command.GroupId, command.ParentGroupId, command.ResponsibleId);
+                this.MoveEntity(command.QuestionnaireId, command.GroupId, command.ParentGroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, UpdateGroup command)
@@ -340,9 +345,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
                 questionnaire.GroupsState.ContainsKey(command.GroupId)
                     ? QuestionnaireItemType.Group
-                    : QuestionnaireItemType.Roster, command.GroupId, groupTitle);
+                    : QuestionnaireItemType.Roster, command.GroupId, groupTitle, aggregate.QuestionnaireDocument);
 
-            this.UpdateRoster(command.QuestionnaireId, command.IsRoster, command.GroupId, command.ResponsibleId);
+            this.UpdateRoster(command.QuestionnaireId, command.IsRoster, command.GroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteGroup command)
@@ -357,16 +362,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 questionnaire.RosterState.TryGetValue(command.GroupId, out groupTitle);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
-                isGroup ? QuestionnaireItemType.Group : QuestionnaireItemType.Roster, command.GroupId, groupTitle);
+                isGroup ? QuestionnaireItemType.Group : QuestionnaireItemType.Roster, command.GroupId, groupTitle, aggregate.QuestionnaireDocument);
 
             questionnaire.RemoveCascadely(command.GroupId);
             this.questionnaireStateTackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
         }
 
         public void Process(Questionnaire aggregate, MoveGroup command)
-            => this.MoveEntity(command.QuestionnaireId, command.GroupId, command.TargetGroupId, command.ResponsibleId);
+            => this.MoveEntity(command.QuestionnaireId, command.GroupId, command.TargetGroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
-        private void UpdateRoster(Guid questionnaireId, bool isRoster, Guid groupId, Guid responsibleId)
+        private void UpdateRoster(Guid questionnaireId, bool isRoster, Guid groupId, Guid responsibleId, QuestionnaireDocument questionnaireDocument)
         {
             if (isRoster)
             {
@@ -381,11 +386,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
                 this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
                 this.AddQuestionnaireChangeItem(questionnaireId, responsibleId,
-                    QuestionnaireActionType.GroupBecameARoster, QuestionnaireItemType.Group, groupId, groupTitle);
+                    QuestionnaireActionType.GroupBecameARoster, QuestionnaireItemType.Group, groupId, groupTitle, questionnaireDocument);
 
                 var rosterTitle = questionnaire.RosterState[groupId];
                 this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Update,
-                    QuestionnaireItemType.Roster, groupId, rosterTitle);
+                    QuestionnaireItemType.Roster, groupId, rosterTitle, questionnaireDocument);
             }
             else
             {
@@ -401,7 +406,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
                 this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
                 this.AddQuestionnaireChangeItem(questionnaireId, responsibleId,
-                    QuestionnaireActionType.RosterBecameAGroup, QuestionnaireItemType.Roster, groupId, rosterTitle);
+                    QuestionnaireActionType.RosterBecameAGroup, QuestionnaireItemType.Roster, groupId, rosterTitle, questionnaireDocument);
             }
         }
         #endregion
@@ -478,7 +483,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             var linkToEntity = this.CreateQuestionnaireChangeReference(entityType, sourceEntityId, entityTitle);
             this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Clone, entityType,
-                targetEntityId, entityTitle, linkToEntity);
+                targetEntityId, entityTitle, aggregate.QuestionnaireDocument, linkToEntity);
         }
         #endregion
 
@@ -489,10 +494,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddOrUpdateQuestionState(command.QuestionnaireId, command.QuestionId, questionTitle, command.ParentGroupId);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Question, command.QuestionId, questionTitle);
+                QuestionnaireItemType.Question, command.QuestionId, questionTitle, aggregate.QuestionnaireDocument);
 
             if (command.Index.HasValue)
-                this.MoveEntity(command.QuestionnaireId, command.QuestionId, command.ParentGroupId, command.ResponsibleId);
+                this.MoveEntity(command.QuestionnaireId, command.QuestionId, command.ParentGroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteQuestion command)
@@ -502,7 +507,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaire.QuestionsState.TryGetValue(command.QuestionId, out questionTitle);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
-                QuestionnaireItemType.Question, command.QuestionId, questionTitle);
+                QuestionnaireItemType.Question, command.QuestionId, questionTitle, aggregate.QuestionnaireDocument);
 
             questionnaire.Parents.Remove(command.QuestionId);
             questionnaire.QuestionsState.Remove(command.QuestionId);
@@ -510,30 +515,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         }
 
         public void Process(Questionnaire aggregate, MoveQuestion command)
-            => this.MoveEntity(command.QuestionnaireId, command.QuestionId, command.TargetGroupId, command.ResponsibleId);
+            => this.MoveEntity(command.QuestionnaireId, command.QuestionId, command.TargetGroupId, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
-        public void Process(Questionnaire aggregate, UpdateMultimediaQuestion command) => this.AddQuestionChanges(command);
-        public void Process(Questionnaire aggregate, UpdateDateTimeQuestion command) => this.AddQuestionChanges(command);
-        public void Process(Questionnaire aggregate, UpdateNumericQuestion command) => this.AddQuestionChanges(command);
-        public void Process(Questionnaire aggregate, UpdateQRBarcodeQuestion command) => this.AddQuestionChanges(command);
-        public void Process(Questionnaire aggregate, UpdateGpsCoordinatesQuestion command) => this.AddQuestionChanges(command);
-        public void Process(Questionnaire aggregate, UpdateTextListQuestion command) => this.AddQuestionChanges(command);
-        public void Process(Questionnaire aggregate, UpdateTextQuestion command) => this.AddQuestionChanges(command);
-        public void Process(Questionnaire aggregate, UpdateMultiOptionQuestion command) => this.AddQuestionChanges(command);
-        public void Process(Questionnaire aggregate, UpdateSingleOptionQuestion command)=> this.AddQuestionChanges(command);
+        public void Process(Questionnaire aggregate, UpdateMultimediaQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateDateTimeQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateNumericQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateQRBarcodeQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateGpsCoordinatesQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateTextListQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateTextQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateMultiOptionQuestion command) => this.AddQuestionChanges(aggregate, command);
+        public void Process(Questionnaire aggregate, UpdateSingleOptionQuestion command)=> this.AddQuestionChanges(aggregate, command);
 
-        private void AddQuestionChanges(AbstractUpdateQuestionCommand command)
+        private void AddQuestionChanges(Questionnaire aggregate, AbstractUpdateQuestionCommand command)
         {
             var questionTitle = command.VariableName ?? command.Title;
 
             this.AddOrUpdateQuestionState(command.QuestionnaireId, command.QuestionId, questionTitle, parentId: null);
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-                QuestionnaireItemType.Question, command.QuestionId, questionTitle);
+                QuestionnaireItemType.Question, command.QuestionId, questionTitle, aggregate.QuestionnaireDocument);
         }
 
         #endregion
 
-        private void MoveEntity(Guid questionnaireId, Guid entityId, Guid? targetGroupOrRosterId, Guid responsibleId)
+        private void MoveEntity(Guid questionnaireId, Guid entityId, Guid? targetGroupOrRosterId, Guid responsibleId, QuestionnaireDocument questionnaireDocument)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
 
@@ -584,17 +589,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             }
 
             this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Move, movedItemType,
-                entityId, moveditemTitle, moveReferences.ToArray());
+                entityId, moveditemTitle, questionnaireDocument, moveReferences.ToArray());
         }
 
-        private void AddQuestionnaireChangeItem(
-            Guid questionnaireId,
-            Guid responsibleId,
-            QuestionnaireActionType actionType,
-            QuestionnaireItemType targetType,
-            Guid targetId,
-            string targetTitle,
-            params QuestionnaireChangeReference[] references)
+        private void AddQuestionnaireChangeItem(Guid questionnaireId, Guid responsibleId, QuestionnaireActionType actionType, QuestionnaireItemType targetType, Guid targetId, string targetTitle, QuestionnaireDocument questionnaireDocument, params QuestionnaireChangeReference[] references)
         {
             AddQuestionnaireChangeItem(questionnaireId,
                 responsibleId,
@@ -604,6 +602,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 targetTitle,
                 null,
                 null,
+                questionnaireDocument,
                 references);
         }
 
@@ -616,6 +615,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             string targetTitle,
             string targetNewTitle,
             int? affecedEntries,
+            QuestionnaireDocument questionnaireDocument,
             params QuestionnaireChangeReference[] references)
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
@@ -643,6 +643,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             references.ForEach(r => r.QuestionnaireChangeRecord = questionnaireChangeItem);
             questionnaireChangeItem.References = references.ToHashSet();
+            questionnaireChangeItem.ResultingQuestionnaireDocument = questionnireHistotyVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
 
             this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
         }
@@ -720,7 +721,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void DeleteItemFromStateAndUpdateHistory(Guid questionnaireId,
             Func<QuestionnaireStateTracker, Dictionary<Guid, string>> state, Guid itemId, QuestionnaireItemType itemType,
-            Guid responsibleId)
+            Guid responsibleId, QuestionnaireDocument questionnaireDocument)
         {
             QuestionnaireStateTracker questionnaire = this.questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
 
@@ -729,7 +730,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             state(questionnaire).TryGetValue(itemId, out itemName);
 
             this.AddQuestionnaireChangeItem(questionnaireId, responsibleId, QuestionnaireActionType.Delete, itemType,
-                itemId, itemName);
+                itemId, itemName, questionnaireDocument);
 
             questionnaire.Parents.Remove(itemId);
             state(questionnaire).Remove(itemId);
@@ -794,9 +795,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 QuestionnaireItemType.Questionnaire, 
                 command.QuestionnaireId,
                 command.SearchFor,
-                command.ReplaceWith,
-                aggregate.GetLastReplacedEntriesCount()
+                command.ReplaceWith, 
+                aggregate.GetLastReplacedEntriesCount() ,
+                aggregate.QuestionnaireDocument
                 );
+        }
+
+        public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
+        {
+            AddQuestionnaireChangeItem(command.QuestionnaireId,
+                command.ResponsibleId,
+                QuestionnaireActionType.Revert,
+                QuestionnaireItemType.Questionnaire,
+                command.QuestionnaireId,
+                aggregate.QuestionnaireDocument.Title,
+                aggregate.QuestionnaireDocument);
         }
     }
 }

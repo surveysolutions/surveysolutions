@@ -221,6 +221,8 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return QuestionnaireHistoryResources.imported;
                 case QuestionnaireActionType.Replace:
                     return QuestionnaireHistoryResources.replaced;
+                case QuestionnaireActionType.Revert:
+                    return QuestionnaireHistoryResources.reverted;
             }
             return QuestionnaireHistoryResources.unknown;
         }

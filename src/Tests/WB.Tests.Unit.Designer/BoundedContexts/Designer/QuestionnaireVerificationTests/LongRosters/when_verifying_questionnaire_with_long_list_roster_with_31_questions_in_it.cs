@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.Chapter(children: new IComposite[]
                 {
                     Create.TextListQuestion(questionId, maxAnswerCount: 80),
-                    Create.Roster(rosterId, rosterSizeQuestionId: questionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: childQuestions)
+                    Create.Roster(rosterId, rosterSizeQuestionId: questionId, rosterType: RosterSizeSourceType.Question, children: childQuestions)
                 })
             });
 
