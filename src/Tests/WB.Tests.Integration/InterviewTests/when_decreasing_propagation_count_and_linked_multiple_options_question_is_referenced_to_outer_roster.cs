@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_decreasing_propagation_count_and_linked_multiple_options_question_is_referenced_to_outer_roster : InterviewTestsContext
     {
         Establish context = () =>

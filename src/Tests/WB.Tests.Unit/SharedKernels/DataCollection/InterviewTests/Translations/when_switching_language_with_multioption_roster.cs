@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 {
+    [Ignore("KP-8159")]
     internal class when_switching_language_with_multioption_roster : InterviewTestsContext
     {
         Establish context = () =>

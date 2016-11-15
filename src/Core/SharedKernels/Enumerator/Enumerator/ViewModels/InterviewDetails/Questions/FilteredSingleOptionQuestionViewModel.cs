@@ -117,12 +117,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpdateOptionsState()
         {
-            var answerModel = this.interview.GetSingleOptionAnswer(questionIdentity);
+            var singleOptionQuestion = this.interview.GetSingleOptionQuestion(this.questionIdentity);
 
-            if (answerModel.IsAnswered)
+            if (singleOptionQuestion.IsAnswered)
             {
-                var selectedValue = answerModel.Answer;
-                var answerOption = ToViewModel(this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, (int)selectedValue.Value));
+                var selectedValue = singleOptionQuestion.GetAnswer().SelectedValue;
+                var answerOption = ToViewModel(this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, selectedValue));
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;

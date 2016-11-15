@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
+    [DebuggerDisplay("Variable {Identity}. Value = {Value}")]
     public class InterviewTreeVariable : InterviewTreeLeafNode
     {
         public object Value { get; private set; }

@@ -1,43 +1,32 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Entities.Composite;
-using Moq;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_initializing_and_roster_title_is_used : StaticTextViewModelTestsContext
     {
         Establish context = () =>
         {
+            rosterTitleAnswerValue = "answer";
             staticTextWithSubstitutionToRosterTitleId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var questionnaireMock = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
-            {
-                Create.Entity.StaticText(publicKey: staticTextWithSubstitutionToRosterTitleId, text: "uses %rostertitle%")
-            }));  
+            var questionnaire= Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children:
+                Create.Entity.FixedRoster(
+                    fixedRosterTitles: new[] {new FixedRosterTitle(1, rosterTitleAnswerValue)}, children: new[]
+                    {
+                        Create.Entity.StaticText(publicKey: staticTextWithSubstitutionToRosterTitleId,
+                            text: "uses %rostertitle%")
+                    })));
 
-            var interview = Mock.Of<IStatefulInterview>();
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire);
+            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire));
 
-            rosterTitleAnswerValue = "answer";
-            var rosterTitleSubstitutionService = new Mock<IRosterTitleSubstitutionService>();
-            rosterTitleSubstitutionService.Setup(x => x.Substitute(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<string>()))
-                .Returns<string, Identity, string>((title, id, interviewId) => title.Replace("%rostertitle%", rosterTitleAnswerValue));
-
-            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
-            questionnaireRepository.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaireMock);
-
-            var interviewRepository = new Mock<IStatefulInterviewRepository>();
-            interviewRepository.SetReturnsDefault(interview);
-
-            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, rosterTitleSubstitutionService: rosterTitleSubstitutionService.Object);
+            viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
         };
 
         Because of = () => 

@@ -39,6 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
         }
 
         [Test]
+        [Ignore("KP-8159")]
         public void When_StatefullInterview_doesnt_have_at_least_one_LinkedOptionsChanged_event_Then_Event_store_should_no_be_updated()
         {
             var liteEventBusMock = new Mock<ILiteEventBus>();

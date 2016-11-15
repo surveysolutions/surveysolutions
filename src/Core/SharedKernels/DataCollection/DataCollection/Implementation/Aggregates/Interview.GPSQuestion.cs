@@ -14,11 +14,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
-            CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState, sourceInterviewTree);
+            var sourceInterviewTree = this.changedInterview;
+            CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, sourceInterviewTree);
           
             var changedInterviewTree = sourceInterviewTree.Clone();
 

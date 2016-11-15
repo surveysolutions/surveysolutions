@@ -8,6 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_getting_variable_value_for_question_in_roster : StatefulInterviewTestsContext
     {
         Establish context = () =>

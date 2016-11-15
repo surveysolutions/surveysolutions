@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Nito.AsyncEx.Synchronous;
-using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_linked_options_changed_for_other_question : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
-            linkSourceQuestionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
-            linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+            linkSourceQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            linkedQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
+            var interviewerId = Guid.Parse("77777777777777777777777777777777");
 
             eventData = new[]
             {
@@ -32,18 +29,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             };
 
             linkedOptionTextInInterview = "answer in init";
-            IStatefulInterview interview = Substitute.For<IStatefulInterview>();
-            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
-                     .Returns(new List<BaseInterviewAnswer> { Create.Entity.TextAnswer(linkedOptionTextInInterview) });
 
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.Entity.RosterVector(1))
-                     .Returns(Create.Entity.TextAnswer("answer in event"));
+            var questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId, linkSourceQuestionId);
 
-            IQuestionnaire questionnaire = 
-                SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
-            
-                viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
-            viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
+            StatefulInterview interview = Setup.StatefulInterview(questionnaire);
+
+            interview.AnswerTextQuestion(interviewerId, linkSourceQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, linkedOptionTextInInterview);
+
+            viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
+            viewModel.Init(interviewId, Identity.Create(linkedQuestionId, RosterVector.Empty), Create.Other.NavigationState());
         };
 
         Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));
@@ -53,8 +47,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         It should_not_modify_option_title = () => viewModel.Options.First().Title.ShouldEqual(linkedOptionTextInInterview);
 
         static SingleOptionLinkedQuestionViewModel viewModel;
-        static Identity linkSourceQuestionId;
-        static Identity linkedQuestionId;
+        static Guid linkSourceQuestionId;
+        static Guid linkedQuestionId;
         static string interviewId;
         static ChangedLinkedOptions[] eventData;
         static string linkedOptionTextInInterview;

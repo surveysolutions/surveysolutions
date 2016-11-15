@@ -2,59 +2,38 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     [DebuggerDisplay("Title = {Title}, Id = {SectionIdentity}")]
-    public class SideBarSectionViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<RosterInstancesTitleChanged>,
-        IDisposable
+    public class SideBarSectionViewModel : MvxNotifyPropertyChanged, IDisposable
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly ISubstitutionService substitutionService;
-        private readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
 
         public DynamicTextViewModel Title { get; }
 
         private string interviewId;
-        QuestionnaireIdentity questionnaireId;
 
         private SideBarSectionsViewModel root;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
-            IQuestionnaireStorage questionnaireRepository,
-            ISubstitutionService substitutionService,
-            ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory,
             IMvxMessenger messenger,
             DynamicTextViewModel dynamicTextViewModel)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.questionnaireRepository = questionnaireRepository;
-            this.substitutionService = substitutionService;
-            this.eventRegistry = eventRegistry;
             this.modelsFactory = modelsFactory;
             this.messenger = messenger;
 
@@ -71,12 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             NavigationState navigationState)
         {
             this.interviewId = interviewId;
-
-            this.eventRegistry.Subscribe(this, interviewId);
             
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            this.questionnaireId = interview.QuestionnaireIdentity;
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
             this.root = root;
@@ -85,18 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.HasChildren = interview.GetEnabledSubgroups(navigationIdentity.TargetGroup).Any();
             this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
             this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
-            var groupId = navigationIdentity.TargetGroup.Id;
-            var groupTitle = questionnaire.GetGroupTitle(groupId);
-            if (questionnaire.IsRosterGroup(groupId))
-            {
-                string rosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
-                var rosterFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
-                this.Title.Init(interviewId, this.SectionIdentity, rosterFullName);
-            }
-            else
-            {
-                this.Title.Init(interviewId, this.SectionIdentity, groupTitle);
-            }
+            this.Title.Init(interviewId, this.SectionIdentity);
             if (this.Parent != null)
             {
                 this.IsSelected = this.Parent.IsSelected;
@@ -125,8 +89,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             NavigationState navigationState, ScreenType screenType, string screenTitle)
         {
             this.interviewId = interviewId;
-
-            this.eventRegistry.Subscribe(this, interviewId);
 
             this.Parent = null;
             this.HasChildren = false;
@@ -304,26 +266,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public SideBarSectionViewModel Parent { get; set; }
 
-        public void Handle(RosterInstancesTitleChanged @event)
-        {
-            if (ScreenType == ScreenType.Complete || ScreenType == ScreenType.Cover)
-                return;
-
-            var myChangedInstance = @event.ChangedInstances.SingleOrDefault(x => x.RosterInstance.GetIdentity().Equals(this.SectionIdentity));
-            if (myChangedInstance != null)
-            {
-                var interview = this.statefulInterviewRepository.Get(this.interviewId);
-                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireId, interview.Language);
-                if (questionnaire == null) throw new Exception("questionnaire is null");
-
-                string groupTitle = questionnaire.GetGroupTitle(this.SectionIdentity.Id);
-                string rosterTitle = myChangedInstance.Title;
-
-                string rosterFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);
-                this.Title.ChangeText(rosterFullName);
-            }
-        }
-
         public void RemoveMe()
         {
             this.RefreshHasChildrenFlag();
@@ -335,7 +277,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;
             this.NavigationState.BeforeScreenChanged -= this.OnBeforeScreenChanged;
             this.Title.Dispose();
-            this.eventRegistry.Unsubscribe(this);
         }
 
         public void RefreshHasChildrenFlag()

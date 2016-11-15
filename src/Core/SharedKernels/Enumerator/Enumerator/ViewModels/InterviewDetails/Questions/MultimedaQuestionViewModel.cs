@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -86,10 +85,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
-            MultimediaAnswer multimediaAnswer = interview.GetMultimediaAnswer(entityIdentity);
-            if (multimediaAnswer.IsAnswered)
+            var multimediaQuestion = interview.GetMultimediaQuestion(entityIdentity);
+            if (multimediaQuestion.IsAnswered)
             {
-                this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.PictureFileName);
+                this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, multimediaQuestion.GetAnswer().FileName);
             }
 
             this.eventRegistry.Subscribe(this, interviewId);

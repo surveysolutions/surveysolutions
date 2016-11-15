@@ -6,7 +6,7 @@
   <LinearLayout style="@style/Interview_Group"
                 android:background="@drawable/question_background_answered">
     <Button style="@style/Interview_Group_Button"
-            local:MvxBind="TextFormatted SpannableGroupTitle(IsRoster, GroupTitle.PlainText, RosterInstanceTitle); Enabled Enablement.Enabled;"/>
+            local:MvxBind="TextFormatted SpannableGroupTitle(GroupTitle.PlainText, RosterInstanceTitle); Enabled Enablement.Enabled;"/>
   </LinearLayout>
 
   <LinearLayout android:layout_width="match_parent"

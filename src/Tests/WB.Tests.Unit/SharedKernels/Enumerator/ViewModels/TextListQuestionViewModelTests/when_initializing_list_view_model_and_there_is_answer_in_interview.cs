@@ -5,8 +5,9 @@ using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -16,15 +17,16 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_initializing_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {
-            var textListAnswer = Mock.Of<TextListAnswer>(_ => _.Answers == savedAnswers && _.IsAnswered == true);
+            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer().ToTupleArray() == savedAnswers && _.IsAnswered == true);
             
             var interview = Mock.Of<IStatefulInterview>(_ 
                 => _.QuestionnaireId == questionnaireId
-                   && _.GetTextListAnswer(questionIdentity) == textListAnswer);
+                   && _.GetTextListQuestion(questionIdentity) == textListAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 

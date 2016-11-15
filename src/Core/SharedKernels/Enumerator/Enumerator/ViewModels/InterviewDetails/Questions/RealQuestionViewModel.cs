@@ -117,16 +117,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetRealNumericAnswer(entityIdentity);
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.UseFormatting = questionnaire.ShouldUseFormatting(entityIdentity.Id);
             this.CountOfDecimalPlaces = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(entityIdentity.Id);
 
-            if (answerModel.IsAnswered)
+            var doubleQuestion = interview.GetDoubleQuestion(entityIdentity);
+            if (doubleQuestion.IsAnswered)
             {
-                this.Answer = answerModel.Answer;
+                this.Answer = doubleQuestion.GetAnswer().Value;
             }
         }
 

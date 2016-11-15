@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -41,9 +42,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 Create.Entity.CategoricalQuestionOption(5, "item5"),
             });
 
-            var yesNoAnswer = Create.Entity.YesNoAnswer(questionGuid, Empty.RosterVector);
+            var yesNoAnswer = Create.Entity.InterviewTreeYesNoQuestion(new AnsweredYesNoOption[] {});
            
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoAnswer(questionId) == yesNoAnswer);
+            var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoQuestion(questionId) == yesNoAnswer);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             interviewRepository = new Mock<IStatefulInterviewRepository>();

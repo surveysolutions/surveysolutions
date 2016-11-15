@@ -165,7 +165,6 @@
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IInterviewExpressionStateUpgrader.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ILatestInterviewExpressionState.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateUpgrader.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IReadOnlyInterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewPropertiesInvariants.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewTreeInvariants.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
@@ -222,7 +221,6 @@
     </Compile>
     <Compile Include="Events\Interview\PictureQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QRBarcodeQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionsDisabled.cs" />
@@ -240,7 +238,6 @@
     </Compile>
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterCalculationData.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterIdentity.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />

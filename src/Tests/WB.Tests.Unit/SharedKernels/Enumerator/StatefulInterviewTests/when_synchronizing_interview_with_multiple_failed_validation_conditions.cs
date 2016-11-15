@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
@@ -9,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_synchronizing_interview_with_multiple_failed_validation_conditions : StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -48,10 +50,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
 
-        It should_return_failed_condition_indexes = () => interview.GetFailedValidationConditions(questionIdentity).Count.ShouldEqual(2);
+        It should_return_failed_condition_indexes = () => interview.GetFailedValidationMessages(questionIdentity).Count().ShouldEqual(2);
 
-        It should_return_failed_condition_indexes_from_events = () => 
-            interview.GetFailedValidationConditions(questionIdentity).ShouldEachConformTo(c => FailedCondtionsFromSync.Contains(c));
+        It should_return_failed_condition_indexes_from_events = () =>
+            interview.GetFailedValidationMessages(questionIdentity)
+                .Select((massage, indexOfMessage) => indexOfMessage)
+                .ShouldEachConformTo(c => FailedCondtionsFromSync.Select(x => x.FailedConditionIndex).Contains(c));
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;

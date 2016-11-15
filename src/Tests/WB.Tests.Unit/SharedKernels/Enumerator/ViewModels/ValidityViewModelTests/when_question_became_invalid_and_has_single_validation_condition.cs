@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTests
 {
+    [Ignore("KP-8159")]
     [Subject(typeof(ValidityViewModel))]
     public class when_question_became_invalid_and_has_single_validation_condition
     {
@@ -24,18 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 {
                     new ValidationCondition {Expression = "validation 1", Message = "message 1"},
                 }));
-
-            failedValidationConditions = new List<FailedValidationCondition>
-            {
-                new FailedValidationCondition(0)
-            };
-
+            
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
-            var interview = Substitute.For<IStatefulInterview>();
-            interview.GetFailedValidationConditions(questionIdentity)
-                .Returns(failedValidationConditions);
-            interview.WasAnswered(questionIdentity).Returns(true);
+            var interview = Setup.StatefulInterview(questionnaire);
 
             var statefulInterviewRepository = Substitute.For<IStatefulInterviewRepository>();
             statefulInterviewRepository.Get(null).ReturnsForAnyArgs(interview);
@@ -53,7 +46,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 {
                     {
                         questionIdentity,
-                        failedValidationConditions
+                        new List<FailedValidationCondition>
+                        {
+                            new FailedValidationCondition(0)
+                        }
                     }
                 }));
         };
@@ -66,6 +62,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
 
         static ValidityViewModel viewModel;
         static Identity questionIdentity;
-        static List<FailedValidationCondition> failedValidationConditions;
     }
 }
