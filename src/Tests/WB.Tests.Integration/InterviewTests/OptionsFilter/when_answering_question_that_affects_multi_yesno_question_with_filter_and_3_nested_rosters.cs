@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
+    [Ignore("KP-8159")]
     internal class when_answering_question_that_affects_multi_yesno_question_with_filter_and_3_nested_rosters : InterviewTestsContext
     {
         Establish context = () =>

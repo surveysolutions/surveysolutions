@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
+    [Ignore("KP-8159")]
     internal class when_removing_numeric_roster_instance_with_nested_multi_roster : InterviewTestsContext
     {
         Establish context = () =>
