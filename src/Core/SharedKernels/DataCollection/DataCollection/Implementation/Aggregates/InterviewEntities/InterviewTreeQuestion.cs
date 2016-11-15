@@ -155,6 +155,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return false;
         }
 
+        private string GetTypeAsText()
+        {
+            if (this.IsText) return "Text";
+            if (this.IsInteger) return "Integer";
+            if (this.IsDouble) return "Double";
+            if (this.IsDateTime) return "DateTime";
+            if (this.IsMultimedia) return "Multimedia";
+            if (this.IsQRBarcode) return "QRBarcode";
+            if (this.IsGps) return "Gps";
+            if (this.IsSingleFixedOption) return "SingleFixedOption";
+            if (this.IsSingleLinkedOption) return "SingleLinkedOption";
+            if (this.IsMultiFixedOption) return "MultiFixedOption";
+            if (this.IsMultiLinkedOption) return "MultiLinkedOption";
+            if (this.IsYesNo) return "YesNo";
+            if (this.IsTextList) return "TextList";
+
+            return "no type";
+        }
+
         public void SetAnswer(AbstractAnswer answer)
         {
             if (answer == null)
@@ -182,7 +201,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString()
-            => $"Question {this.Identity} '{this.Title}'. " +
+            => $"{GetTypeAsText()} Question {this.Identity} '{this.Title}'. " +
                $"{(this.IsAnswered() ? $"Answer = '{this.GetAnswerAsString()}'" : "No answer")}. " +
                $"{(this.IsDisabled() ? "Disabled" : "Enabled")}. " +
                $"{(this.IsValid ? "Valid" : "Invalid")}";

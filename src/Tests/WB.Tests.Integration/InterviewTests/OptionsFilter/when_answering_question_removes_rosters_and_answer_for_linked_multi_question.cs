@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
-    [Ignore("KP-8159")]
     internal class when_answering_question_removes_rosters_and_answer_for_linked_multi_question : InterviewTestsContext
     {
         Establish context = () =>

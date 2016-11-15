@@ -184,7 +184,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private static bool IsRosterTitleChanged(InterviewTreeRosterDiff diffByRoster)
             => diffByRoster != null && diffByRoster.IsRosterTitleChanged;
 
-        public override string ToString() => $"Tree ({this.InterviewId})";
+        //public override string ToString() => $"Tree ({this.InterviewId})";
+
+        public override string ToString()
+           => $"Tree ({this.InterviewId})" + Environment.NewLine
+           + string.Join(Environment.NewLine, this.Sections.Select(section => section.ToString().PrefixEachLine("  ")));
+
 
         public InterviewTree Clone()
         {

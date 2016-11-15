@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    [Ignore("KP-8159")]
     internal class when_decreasing_roster_row_count_and_linked_question_has_reference_on_it : InterviewTestsContext
     {
         Establish context = () =>
