@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     Create.Roster(roster2Id, variable:"r2", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                     {
                         Create.Roster(roster3Id, variable:"fixed_nested_r", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                            fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]
+                            fixedTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
                         {
                             Create.Roster(roster4Id, variable:"num_nested2_r", rosterSizeQuestionId: q3Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                             {

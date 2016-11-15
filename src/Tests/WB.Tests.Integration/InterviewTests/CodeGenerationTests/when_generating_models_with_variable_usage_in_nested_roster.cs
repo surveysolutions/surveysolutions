@@ -30,9 +30,9 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 var assetsTitles = new[]
                 {
-                    Create.FixedRosterTitle(1, "TV"),
-                    Create.FixedRosterTitle(2, "Microwave"),
-                    Create.FixedRosterTitle(3, "Cleaner")
+                    Create.FixedTitle(1, "TV"),
+                    Create.FixedTitle(2, "Microwave"),
+                    Create.FixedTitle(3, "Cleaner")
                 };
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         Create.Variable(id: variableId, type: VariableType.Boolean, variableName: "num",
                             expression: "q1>5"),
                         Create.Roster(rosterId, variable: "assets",
-                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
+                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: assetsTitles,
                             enablementCondition: "num.GetValueOrDefault()")
                     }),
                 });

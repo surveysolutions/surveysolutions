@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.Roster(topRosterId,
                         variable: "varRoster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedTitles: new[] { "a", "b" },
+                        obsoleteFixedTitles: new[] { "a", "b" },
                         children: new List<IComposite>
                         {
                             Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,

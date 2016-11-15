@@ -42,6 +42,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.sourceInterview = this.changedInterview.Clone();
         }
 
+        public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
+        {
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+
+            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
+        }
+
         public void Apply(InterviewSynchronized @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.InterviewData.QuestionnaireId,
@@ -51,21 +60,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
 
             var sourceInterviewTree = this.changedInterview.Clone();
-            
-            var orderedRosters = @event.InterviewData.RosterGroupInstances
-                .SelectMany(x => x.Value)
-                .OrderBy(x => x.OuterScopeRosterVector.Length)
-                .ToList();
 
-            foreach (var rosterDto in orderedRosters)
+            var maxRosterDepth = @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Select(x => x.OuterScopeRosterVector.Length).DefaultIfEmpty(0).Max();
+            var maxQuestionDepth = @event.InterviewData.Answers.Select(x => x.QuestionRosterVector.Length).DefaultIfEmpty(0).Max();
+
+            int maxDepth = Math.Max(maxRosterDepth, maxQuestionDepth);
+
+            for (int i = 0; i <= maxDepth; i++)
             {
-                var rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector, rosterDto.RosterInstanceId, rosterDto.SortIndex);
-                this.AddRosterToChangedTree(rosterIdentity);
-                this.changedInterview.GetRoster(rosterIdentity.ToIdentity()).SetRosterTitle(rosterDto.RosterTitle);
-            }
+                foreach (var question in @event.InterviewData.Answers.Where(x => x.QuestionRosterVector.Length == i))
+                    this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
 
-            foreach (var question in @event.InterviewData.Answers)
-                this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
+                foreach (var rosterDto in @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Where(x => x.OuterScopeRosterVector.Length == i))
+                {
+                    var rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector, rosterDto.RosterInstanceId, rosterDto.SortIndex);
+                    this.AddRosterToChangedTree(rosterIdentity);
+                    this.changedInterview.GetRoster(rosterIdentity.ToIdentity()).SetRosterTitle(rosterDto.RosterTitle);
+                }
+            }
 
             foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
                 this.changedInterview.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector)).Disable();

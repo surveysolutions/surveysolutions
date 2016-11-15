@@ -162,8 +162,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 FixedRosterTitles = new[]
                                           {
-                                              Create.FixedRosterTitle(1, "Roster X-1"),
-                                              Create.FixedRosterTitle(2, "Roster X-2")
+                                              Create.FixedTitle(1, "Roster X-1"),
+                                              Create.FixedTitle(2, "Roster X-2")
                                           },
                 Children = varNames.Select(varName => new TextQuestion(varName)
                 {
@@ -206,8 +206,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                                 FixedRosterTitles =   new[]
                                           {
-                                              Create.FixedRosterTitle(1, "Roster X-1"),
-                                              Create.FixedRosterTitle(2, "Roster X-2")
+                                              Create.FixedTitle(1, "Roster X-1"),
+                                              Create.FixedTitle(2, "Roster X-2")
                                           },
                                 Children = new List<IComposite>()
                                 {
