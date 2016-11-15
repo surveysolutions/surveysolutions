@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_completing_interview_with_disabled_invalid_question_and_static_text : StatefulInterviewTestsContext
     {
         Establish context = () =>

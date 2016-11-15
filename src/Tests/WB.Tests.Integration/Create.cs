@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using Humanizer;
 using Main.Core.Documents;
@@ -27,6 +28,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -42,6 +44,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -49,6 +52,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -60,6 +65,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -574,20 +580,19 @@ namespace WB.Tests.Integration
             return factoryMock.Object;
         }
 
-        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null,
+        public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null)
         {
             var interview = new StatefulInterview(
-                Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.SubstitionTextFactory());
 
             interview.CreateInterview(
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
-                1,
+                questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                questionnaireIdentity?.Version ?? 1,
                 new Guid("D222D222D222D222D222D222D222D222"),
                 answersOnPrefilledQuestions ?? new Dictionary<Guid, AbstractAnswer>(),
                 new DateTime(2012, 12, 20),
@@ -883,44 +888,20 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static SubstitutionViewModel SubstitutionViewModel(
-            IStatefulInterviewRepository interviewRepository = null,
-            IQuestionnaireStorage questionnaireRepository = null,
-            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
-            => new SubstitutionViewModel(
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                new SubstitutionService(),
-                new AnswerToStringService(),
-                new VariableToUIStringService(),
-                rosterTitleSubstitutionService ?? Create.FakeRosterTitleSubstitutionService());
-
-        private static IRosterTitleSubstitutionService FakeRosterTitleSubstitutionService()
-        {
-            var rosterTitleSubstitutionService = Mock.Of<IRosterTitleSubstitutionService>();
-
-            Mock.Get(rosterTitleSubstitutionService)
-                .Setup(x => x.Substitute(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<string>()))
-                .Returns<string, Identity, string>((title, id, interviewId) => title);
-
-            return rosterTitleSubstitutionService;
-        }
-
         public static LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
 
         public static DynamicTextViewModel DynamicTextViewModel(
             ILiteEventRegistry registry = null,
-            SubstitutionViewModel substitutionViewModel = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IQuestionnaireStorage questionnaireRepository = null,
-            IRosterTitleSubstitutionService rosterTitleSubstitutionService = null)
+            IQuestionnaireStorage questionnaireRepository = null)
             => new DynamicTextViewModel(
                 registry ?? Create.LiteEventRegistry(),
-                substitutionViewModel ?? Create.SubstitutionViewModel(
-                    interviewRepository: interviewRepository,
-                    questionnaireRepository: questionnaireRepository,
-                    rosterTitleSubstitutionService: rosterTitleSubstitutionService));
+                interviewRepository: interviewRepository,
+                substitutionService: Create.SubstitutionService());
+
+        public static ISubstitutionService SubstitutionService()
+            => new SubstitutionService();
 
         public static CategoricalOption CategoricalOption(int value, string title, int? parentValue = null)
         {
@@ -940,5 +921,33 @@ namespace WB.Tests.Integration
                     new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
                 }
             };
+
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
+            => Create.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity,
+                Create.PlainQuestionnaire(questionnaireDocument));
+
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
+            => Create.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity,
+                Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
+
+        private static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
+            => Stub<IQuestionnaireStorage>.Returning(questionnaire);
+
+        private static IQuestionnaireStorage QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
+            => Mock.Of<IQuestionnaireStorage>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.PlainQuestionnaire(questionnaireDocument)
+                && repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument
+                && repository.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument);
+
+        public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
+            => Create.PlainQuestionnaire(document: questionnaireDocument);
+
+        public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
+            => new PlainQuestionnaire(document, version);
     }
 }

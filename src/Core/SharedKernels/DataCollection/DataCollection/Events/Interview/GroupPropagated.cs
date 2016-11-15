@@ -3,6 +3,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
+    [Obsolete("Since v6.0")]
     public class GroupPropagated : InterviewPassiveEvent
     {
         public Guid GroupId { get; private set; }

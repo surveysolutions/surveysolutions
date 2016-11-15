@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_roster_title_substitution_is_used : QuestionHeaderViewModelTestsContext
     {
         Establish context = () =>
@@ -26,9 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var interview = Mock.Of<IStatefulInterview>();
 
             rosterTitleAnswerValue = "answer";
-            var rosterTitleSubstitutionService = new Mock<IRosterTitleSubstitutionService>();
-            rosterTitleSubstitutionService.Setup(x => x.Substitute(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<string>()))
-                .Returns<string, Identity, string>((title, id, interviewId) => title.Replace("%rostertitle%", rosterTitleAnswerValue));
+            //var rosterTitleSubstitutionService = new Mock<IRosterTitleSubstitutionService>();
+            //rosterTitleSubstitutionService.Setup(x => x.Substitute(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<string>()))
+            //    .Returns<string, Identity, string>((title, id, interviewId) => title.Replace("%rostertitle%", rosterTitleAnswerValue));
 
             var questionnaireRepository = new Mock<IQuestionnaireStorage>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
 
-            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, rosterTitleSubstitutionService: rosterTitleSubstitutionService.Object);
+            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object);
         };
 
         Because of = () => 

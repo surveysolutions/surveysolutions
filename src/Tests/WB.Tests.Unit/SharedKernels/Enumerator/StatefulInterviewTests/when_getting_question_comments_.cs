@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_getting_question_comments_from_restored_from_sync_package_interview : StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -43,12 +45,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             comments = interview.GetQuestionComments(Create.Entity.Identity(questionId, rosterVector));
 
         It should_return_4_commens = () =>
-            comments.Count.ShouldEqual(4);
+            comments.Count().ShouldEqual(4);
 
         It should_merge_first_2_comments_in_one_comment_from_supervisor = () =>
         {
             var comment = comments.ElementAt(0);
-            comment.UserRole.ShouldEqual(UserRoles.Supervisor);
             comment.UserId.ShouldEqual(supervisorId);
             comment.Comment.ShouldEqual($"First line{Environment.NewLine}Second line");
         };
@@ -56,7 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_return_second_comment_from_interviewer = () =>
         {
             var comment = comments.ElementAt(1);
-            comment.UserRole.ShouldEqual(UserRoles.Operator);
             comment.UserId.ShouldEqual(interviewerId);
             comment.Comment.ShouldEqual("Hello world!");
         };
@@ -64,7 +64,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_return_HQ_comment_on_3_position = () =>
         {
             var comment = comments.ElementAt(2);
-            comment.UserRole.ShouldEqual(UserRoles.Headquarter);
             comment.UserId.ShouldEqual(hqId);
             comment.Comment.ShouldEqual("hi there!");
         };
@@ -72,13 +71,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_merge_last_2_comments_in_one_comment_from_inerviewer = () =>
         {
             var comment = comments.ElementAt(3);
-            comment.UserRole.ShouldEqual(UserRoles.Operator);
             comment.UserId.ShouldEqual(interviewerId);
             comment.Comment.ShouldEqual($"First line{Environment.NewLine}Second line");
         };
 
         private static StatefulInterview interview;
-        private static List<QuestionComment> comments;
+        private static IEnumerable<AnswerComment> comments;
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static readonly decimal[] rosterVector = new decimal[] { 1m, 0m };
         private static readonly Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

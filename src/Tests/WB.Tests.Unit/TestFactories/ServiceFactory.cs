@@ -67,9 +67,6 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class ServiceFactory
     {
-        public IAnswerToStringService AnswerToStringService()
-            => new AnswerToStringService();
-
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
 
         public AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)

@@ -1,38 +1,48 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal class when_getting_question_answer : StatefulInterviewTestsContext
+    [Ignore("KP-8159")]
+    internal class when_getting_answer_on_text_question_from_fixed_roster : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            textQuestionIdentity = Identity.Create(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Entity.RosterVector(0));
 
-            questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var targetRosterVector = new[] {0m};
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new[]
+            {
+                Create.Entity.FixedRoster(fixedRosterTitles: new []{ Create.Entity.FixedRosterTitle(1, "fixter fixed title")}, children: new []
+                {
+                    Create.Entity.TextQuestion(textQuestionIdentity.Id)
+                })
+            }));
 
-            var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetRosterLevelForQuestion(questionId) == 1);
             IQuestionnaireStorage questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(Create.Event.TextQuestionAnswered(questionId, targetRosterVector, "answer"));
         };
 
-        Because of = () => answerValue = interview.FindBaseAnswerByOrDeeperRosterLevel(questionId, new decimal[]{0m, 1m});
+        Because of = () => interview.AnswerTextQuestion(Guid.NewGuid(), textQuestionIdentity.Id, textQuestionIdentity.RosterVector,
+                    DateTime.UtcNow, answerOnTextQuestionInFidexRoster);
 
-        It should_reduce_roster_vector_to_find_target_question_answer = () => ((TextAnswer)answerValue).Answer.ShouldEqual("answer");
+        It should_reduce_roster_vector_to_find_target_question_answer =
+            () => interview.GetTextQuestion(textQuestionIdentity)
+                    .GetAnswer()
+                    .Value.ShouldEqual(answerOnTextQuestionInFidexRoster);
 
         private static StatefulInterview interview;
-        private static Guid questionId;
-        private static BaseInterviewAnswer answerValue;
+        private static Identity textQuestionIdentity;
         private static Guid questionnaireId;
+        private static string answerOnTextQuestionInFidexRoster = "answer";
     }
 }
 

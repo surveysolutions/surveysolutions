@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -38,13 +39,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string InterviewId { get; }
         public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
+        public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
         
         public InterviewTreeQuestion GetQuestion(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeQuestion;
 
         internal InterviewTreeGroup GetGroup(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
-
+    
         internal InterviewTreeRoster GetRoster(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeRoster;
 
@@ -57,18 +59,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IEnumerable<InterviewTreeQuestion> FindQuestions(Guid questionId)
             => this.FindEntity(questionId).OfType<InterviewTreeQuestion>();
 
+        public IEnumerable<InterviewTreeStaticText> FindStaticTexts()
+            => this.nodesCache.Values.OfType<InterviewTreeStaticText>();
+
+        public IEnumerable<InterviewTreeStaticText> FindStaticTexts(Identity parentGroup)
+            => this.nodesCache.Values.OfType<InterviewTreeStaticText>()
+                .Where(staticText => staticText.Parents.Any(parent => parent.Identity.Equals(parentGroup)));
+
         public IEnumerable<InterviewTreeQuestion> FindQuestions()
             => this.nodesCache.Values.OfType<InterviewTreeQuestion>();
+
+        public IEnumerable<InterviewTreeQuestion> FindQuestions(Identity parentGroup)
+            => this.nodesCache.Values.OfType<InterviewTreeQuestion>()
+                .Where(question => question.Parents.Any(parent => parent.Identity.Equals(parentGroup)));
 
         public IEnumerable<InterviewTreeRoster> FindRosters()
             => this.nodesCache.Values.OfType<InterviewTreeRoster>();
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
-        {
-            return this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value);
-        }
+            => this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value);
 
-        private IInterviewTreeNode GetNodeByIdentity(Identity identity)
+        public IInterviewTreeNode GetNodeByIdentity(Identity identity)
         {
             // identity should not be null here, looks suspicious
             if (identity == null) return null;
@@ -77,21 +88,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
        
         public void ActualizeTree()
         {
-            var itemsQueue = new Queue<IInterviewTreeNode>(Sections);
-
-            while (itemsQueue.Count > 0)
-            {
-                var currentItem = itemsQueue.Dequeue();
-                if (!(currentItem is InterviewTreeGroup))
-                    continue;
-                var currentGroup = currentItem as InterviewTreeGroup;
-                currentGroup.ActualizeChildren();
-
-                foreach (var childItem in currentGroup.Children)
-                {
-                    itemsQueue.Enqueue(childItem);
-                }
-            }
+            foreach (var treeSection in this.Sections)
+                treeSection.ActualizeChildren();
         }
 
         public void RemoveNode(Identity identity)
@@ -186,9 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private static bool IsRosterTitleChanged(InterviewTreeRosterDiff diffByRoster)
             => diffByRoster != null && diffByRoster.IsRosterTitleChanged;
 
-        public override string ToString()
-            => $"Tree ({this.InterviewId})" + Environment.NewLine
-            + string.Join(Environment.NewLine, this.Sections.Select(section => section.ToString().PrefixEachLine("  ")));
+        public override string ToString() => $"Tree ({this.InterviewId})";
 
         public InterviewTree Clone()
         {
@@ -222,9 +218,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
             SubstitionText title = textFactory.CreateText(questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id), questionnaire);
 
-            SubstitionText[] messages = questionnaire.GetValidationMessages(questionIdentity.Id)
+            SubstitionText[] validationMessages = questionnaire.GetValidationMessages(questionIdentity.Id)
                 .Select(x => textFactory.CreateText(questionIdentity, x, questionnaire))
-                .Where(x => x.HasSubstitutions)
                 .ToArray();
 
 
@@ -263,7 +258,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 cascadingParentQuestionId: cascadingParentQuestionId, isYesNo: isYesNoQuestion,
                 isDecimal: isDecimalQuestion, linkedSourceId: sourceForLinkedQuestion,
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
-                messages: messages);
+                validationMessages: validationMessages);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
@@ -298,11 +293,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static InterviewTreeStaticText CreateStaticText(InterviewTree tree, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, Identity staticTextIdentity)
         {
             SubstitionText title = textFactory.CreateText(staticTextIdentity, questionnaire.GetStaticText(staticTextIdentity.Id), questionnaire);
-            SubstitionText[] messages = questionnaire.GetValidationMessages(staticTextIdentity.Id)
+            SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticTextIdentity.Id)
                 .Select(x => textFactory.CreateText(staticTextIdentity, x, questionnaire))
-                .Where(x => x.HasSubstitutions)
                 .ToArray();
-            return new InterviewTreeStaticText(staticTextIdentity, title, messages);
+            return new InterviewTreeStaticText(staticTextIdentity, title, validationMessages);
         }
 
         public RosterManager GetRosterManager(Guid rosterId)
@@ -348,8 +342,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         
         public void ProcessRemovedNodeByIdentity(Identity identity)
         {
+            if (!this.nodesCache.ContainsKey(identity)) return;
+
             var nodesToRemove =
-                 this.nodesCache[identity].TreeToEnumerable<IInterviewTreeNode>(node => node.Children)
+                 this.nodesCache[identity].TreeToEnumerable(node => node.Children)
                     .Select(x => x.Identity)
                     .Union(new[] {identity});
 
@@ -387,6 +383,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         Identity Identity { get; }
         IInterviewTreeNode Parent { get; }
+        IEnumerable<IInterviewTreeNode> Parents { get; }
         IReadOnlyCollection<IInterviewTreeNode> Children { get; }
 
         bool IsDisabled();
@@ -418,6 +415,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Identity Identity { get; }
         public InterviewTree Tree { get; private set; }
         public IInterviewTreeNode Parent { get; private set; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        public IEnumerable<IInterviewTreeNode> Parents { get; private set; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
         public virtual void SetTree(InterviewTree tree)
@@ -425,7 +427,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Tree = tree;
         }
 
-        void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent) => this.Parent = parent;
+
+        void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent)
+        {
+            this.Parent = parent;
+            this.Parents = this.GetParents(parent).Reverse();
+        }
+
+        private IEnumerable<IInterviewTreeNode> GetParents(IInterviewTreeNode nearestParent)
+        {
+            while (nearestParent != null)
+            {
+                yield return nearestParent;
+                nearestParent = nearestParent.Parent;
+            }
+        }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
 
@@ -446,6 +462,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         Question = 30,
     }
 
+    [DebuggerDisplay("{ToString()}")]
     public class QuestionnaireItemReference
     {
         public QuestionnaireItemReference(QuestionnaireReferenceType type, Guid id)
@@ -457,6 +474,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public Guid Id { get; set; }
 
         public QuestionnaireReferenceType Type { get; set; }
+
+        public override string ToString() => $"{Type} {Id.FormatGuid()}";
     }
 
     public class RosterNodeDescriptor

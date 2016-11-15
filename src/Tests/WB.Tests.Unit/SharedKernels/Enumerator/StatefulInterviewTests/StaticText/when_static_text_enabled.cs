@@ -5,6 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticText
 {
+    [Ignore("KP-8159")]
     internal class when_static_text_enabled : StatefulInterviewTestsContext
     {
         Establish context = () =>

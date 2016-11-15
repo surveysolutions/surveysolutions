@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -23,20 +24,18 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var id = new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id, children: new[]
+                var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id, children: new IComposite[]
                 {
-                    Create.Chapter(children: new IComposite[]
-                    {
-                        Create.TextQuestion(variable: "test", id :questionId, validationExpression: "Quest.IRnd() > 2"),
-                        Create.Variable(id:variableId, type:VariableType.Double, variableName:"v1", expression:"Quest.IRnd()")
-                    }),
+                    Create.TextQuestion(variable: "test", id: questionId, validationExpression: "Quest.IRnd() > 2"),
+                    Create.Variable(id: variableId, type: VariableType.Double, variableName: "v1", expression: "Quest.IRnd()")
                 });
 
                 var userId = Guid.NewGuid();
-                var interview = CreateEmptyInterview(questionnaireDocument);
+                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument);
                 
                 using (var eventContext = new EventContext())
                 {
+                    var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
                     interview.AnswerTextQuestion(userId, questionId, Empty.RosterVector, DateTime.Now, "test");
 
                     return new InvokeResult

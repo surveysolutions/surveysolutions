@@ -89,10 +89,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
-            var answerModel = interview.GetQRBarcodeAnswer(entityIdentity);
-            if (answerModel.IsAnswered)
+            var qrBarcodeQuestion = interview.GetQRBarcodeQuestion(entityIdentity);
+            if (qrBarcodeQuestion.IsAnswered)
             {
-                this.Answer = answerModel.Answer;
+                this.Answer = qrBarcodeQuestion.GetAnswer().DecodedText;
             }
 
             this.eventRegistry.Subscribe(this, interviewId);

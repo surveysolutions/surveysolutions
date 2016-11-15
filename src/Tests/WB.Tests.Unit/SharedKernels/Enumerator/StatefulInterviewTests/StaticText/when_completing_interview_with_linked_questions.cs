@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticText
 {
+    [Ignore("KP-8159")]
     internal class when_completing_interview_with_linked_questions : StatefulInterviewTestsContext
     {
         Establish context = () =>

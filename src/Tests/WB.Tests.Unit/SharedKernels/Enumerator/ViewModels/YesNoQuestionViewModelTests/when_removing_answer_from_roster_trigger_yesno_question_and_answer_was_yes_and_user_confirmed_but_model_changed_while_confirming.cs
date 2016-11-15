@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -43,13 +44,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 Create.Entity.CategoricalQuestionOption(5, "item5"),
             });
 
-            var yesNoAnswer = Create.Entity.YesNoAnswer(questionGuid, Empty.RosterVector);
-            yesNoAnswer.SetAnswers(new[]
+            var yesNoAnswer = Create.Entity.InterviewTreeYesNoQuestion(new[]
             {
                 new AnsweredYesNoOption(5, true), // last option set to yes
             });
 
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoAnswer(questionId) == yesNoAnswer);
+            var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoQuestion(questionId) == yesNoAnswer);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
@@ -62,10 +62,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             userInteractionServiceMock
                 .Setup(_ => _.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()))
                 .Returns(Task.FromResult(true))
-                .Callback(() => yesNoAnswer.SetAnswers(new []
+                .Callback(() => yesNoAnswer.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(new []
                 {
                     new AnsweredYesNoOption(3, true) // option 3 was set to yes while user was thinking on his answer
-                }));
+                })));
 
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,

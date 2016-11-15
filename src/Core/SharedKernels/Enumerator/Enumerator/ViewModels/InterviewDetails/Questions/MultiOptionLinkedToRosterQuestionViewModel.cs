@@ -4,10 +4,10 @@ using System.Linq;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -48,63 +48,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected override IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions()
         {
-            LinkedMultiOptionAnswer thisQuestionAnswers = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
+            var linkedQuestion = interview.GetLinkedMultiOptionQuestion(this.questionIdentity);
 
-            IEnumerable<InterviewRoster> referencedRosters =
-            interview.FindReferencedRostersForLinkedQuestion(this.linkedToRosterId, this.questionIdentity);
+            var answeredOptions = linkedQuestion.GetAnswer()?.ToDecimalArrayArray()?.Select(x => new RosterVector(x))?.ToArray() ??
+                                  new RosterVector[0];
 
-            List<MultiOptionLinkedQuestionOptionViewModel> options = new List<MultiOptionLinkedQuestionOptionViewModel>();
-            foreach (var referencedRoster in referencedRosters)
-            {
-                var option = this.BuildOption(referencedRoster, thisQuestionAnswers);
-
-                if (option != null)
-                {
-                    options.Add(option);
-                }
-            }
-            return options;
+            foreach (var linkedOption in linkedQuestion.Options)
+                yield return this.CreateOptionViewModel(linkedOption, answeredOptions);
         }
 
-        private MultiOptionLinkedQuestionOptionViewModel BuildOption(
-            InterviewRoster referencedRoster,
-            LinkedMultiOptionAnswer linkedMultiOptionAnswer)
-        {
-        
-            var isChecked = linkedMultiOptionAnswer != null &&
-                            linkedMultiOptionAnswer.IsAnswered &&
-                            linkedMultiOptionAnswer.Answers.Any(x => x.Identical(referencedRoster.RosterVector));
-
-            var title = this.BuildOptionTitle(referencedRoster);
-
-            var option = new MultiOptionLinkedQuestionOptionViewModel(this)
+        private MultiOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector[] answeredOptions)
+            => new MultiOptionLinkedQuestionOptionViewModel(this)
             {
-                Title = title,
-                Value = referencedRoster.RosterVector,
-                Checked = isChecked,
-                QuestionState = this.questionState
+                Title = this.BuildOptionTitle(linkedOption),
+                Value = linkedOption,
+                Checked = answeredOptions.Contains(linkedOption),
+                QuestionState = this.questionState,
+                CheckedOrder = Array.FindIndex(answeredOptions, x => x.Identical(linkedOption)) + 1
             };
-            if (this.areAnswersOrdered && isChecked)
-            {
-                int selectedItemIndex = Array.FindIndex(linkedMultiOptionAnswer.Answers, x => x.Identical(referencedRoster.RosterVector)) + 1;
-                option.CheckedOrder = selectedItemIndex;
-            }
 
-            return option;
-        }
-
-        private string BuildOptionTitle(InterviewRoster referencedRoster)
+        private string BuildOptionTitle(RosterVector linkedOption)
         {
+            var sourceRosterIdentity = Identity.Create(this.linkedToRosterId, linkedOption);
+            var sourceRoster = this.interview.GetRoster(sourceRosterIdentity);
+
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 
             IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
                interview
-                   .GetParentRosterTitlesWithoutLastForRoster(referencedRoster.Id, referencedRoster.RosterVector)
+                   .GetParentRosterTitlesWithoutLastForRoster(sourceRosterIdentity)
                    .Skip(currentRosterLevel);
 
             string rosterPrefixes = string.Join(": ", parentRosterTitlesWithoutLastOneAndFirstKnown);
 
-            return string.IsNullOrEmpty(rosterPrefixes) ? referencedRoster.Title : string.Join(": ", rosterPrefixes, referencedRoster.Title);
+            return string.IsNullOrEmpty(rosterPrefixes) ? sourceRoster.RosterTitle : string.Join(": ", rosterPrefixes, sourceRoster);
         }
 
         public void Handle(LinkedOptionsChanged @event)
