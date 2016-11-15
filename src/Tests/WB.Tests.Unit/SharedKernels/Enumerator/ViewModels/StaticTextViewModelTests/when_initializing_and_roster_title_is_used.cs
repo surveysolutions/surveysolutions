@@ -7,6 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_initializing_and_roster_title_is_used : StaticTextViewModelTestsContext
     {
         Establish context = () =>

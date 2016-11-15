@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_looking_for_options_of_linked_question_which_linked_on_nested_roster_question : StatefulInterviewTestsContext
     {
         Establish context = () =>

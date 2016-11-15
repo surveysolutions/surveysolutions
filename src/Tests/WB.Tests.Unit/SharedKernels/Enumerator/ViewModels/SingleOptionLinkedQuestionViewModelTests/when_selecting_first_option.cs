@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_selecting_first_option : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>

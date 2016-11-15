@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 {
+    [Ignore("KP-8159")]
     internal class when_switching_language_with_numeric_roster_having_title_question : InterviewTestsContext
     {
         Establish context = () =>

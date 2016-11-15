@@ -19,6 +19,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_editing_item_in_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
     {
         Establish context = () =>

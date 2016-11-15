@@ -17,6 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_substitution_title_changed : StaticTextViewModelTestsContext
     {
         Establish context = () =>

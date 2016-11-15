@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitutions
 {
+    [Ignore("KP-8159")]
     internal class when_fixed_roster_has_substitution : InterviewTestsContext
     {
         Establish context = () =>

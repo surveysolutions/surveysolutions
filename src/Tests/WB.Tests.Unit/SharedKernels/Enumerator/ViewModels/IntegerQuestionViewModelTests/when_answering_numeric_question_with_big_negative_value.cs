@@ -9,6 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_answering_numeric_question_with_big_negative_value : IntegerQuestionViewModelTestContext
     {
         Establish context = () =>

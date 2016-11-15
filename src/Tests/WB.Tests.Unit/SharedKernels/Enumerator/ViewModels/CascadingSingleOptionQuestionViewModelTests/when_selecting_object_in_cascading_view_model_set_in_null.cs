@@ -13,6 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_selecting_object_in_cascading_view_model_set_in_null : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
