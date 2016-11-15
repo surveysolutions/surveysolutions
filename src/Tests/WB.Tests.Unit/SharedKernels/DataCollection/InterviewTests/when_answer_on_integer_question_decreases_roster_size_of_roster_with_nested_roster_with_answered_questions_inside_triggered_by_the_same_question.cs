@@ -9,7 +9,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_answer_on_integer_question_decreases_roster_size_of_roster_with_nested_roster_with_answered_questions_inside_triggered_by_the_same_question : InterviewTestsContext
     {
         Establish context = () =>
