@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -20,16 +18,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         {
             var questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(questionId, linkedToQuestionId);
 
-            var interview = Mock.Of<IStatefulInterview>(_
-                => _.FindAnswersOfReferencedQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[]
-                {
-                    Create.Entity.InterviewTreeTextQuestion("answer1"),
-                    Create.Entity.InterviewTreeTextQuestion("answer2"),
-                }
-                && _.Answers == new Dictionary<string, BaseInterviewAnswer>());
+            var interview = Setup.StatefulInterview(questionnaire);
+            var interviewerId = Guid.Parse("77777777777777777777777777777777");
+
+            interview.AnswerTextQuestion(interviewerId, linkedToQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, "answer1");
+            interview.AnswerTextQuestion(interviewerId, linkedToQuestionId, Create.Entity.RosterVector(2), DateTime.UtcNow, "answer2");
 
             viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(
-                questionnaire: questionnaire,
+                questionnaire: Create.Entity.PlainQuestionnaire(questionnaire),
                 interview: interview,
                 answering: answeringMock.Object);
 
