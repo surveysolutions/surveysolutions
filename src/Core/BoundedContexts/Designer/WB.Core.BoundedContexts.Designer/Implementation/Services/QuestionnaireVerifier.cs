@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -275,8 +276,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             
         }
 
-        public IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireDocument questionnaire)
+        public IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireView questionnaireView)
         {
+            var questionnaire = questionnaireView.Source;
+
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
 
             List<ReadOnlyQuestionnaireDocument> translatedQuestionnaires = new List<ReadOnlyQuestionnaireDocument>();
@@ -307,9 +310,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
         }
 
-        public IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireDocument questionnaire)
+        public IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireView questionnaireView)
         {
-            return this.Verify(questionnaire).Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
+            return this.Verify(questionnaireView).Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(MultiLanguageQuestionnaireDocument questionnaire)

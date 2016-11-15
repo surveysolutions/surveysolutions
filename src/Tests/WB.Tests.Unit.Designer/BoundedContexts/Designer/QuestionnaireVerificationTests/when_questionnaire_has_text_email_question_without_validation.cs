@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => errors = verifier.Verify(questionnaire);
+        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_return_WB0254_warning = () => errors.ShouldContainWarning("WB0254", "Use function IsValidEmail() to validate email address.");
 

@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -10,10 +13,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         private IEnumerable<ICompositeView> children;
 
-        public QuestionnaireView(QuestionnaireDocument doc)
+        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPerson> sharedPersons)
         {
             this.Source = doc;
+            this.SharedPersons = sharedPersons.ToReadOnlyCollection();
         }
+
+        public QuestionnaireDocument Source { get; }
+        public IReadOnlyCollection<SharedPerson> SharedPersons { get; }
 
         public IEnumerable<ICompositeView> Children
         {
@@ -25,57 +32,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
         }
 
-        public Guid? CreatedBy
-        {
-            get
-            {
-                return this.Source.CreatedBy;
-            }
-        }
+        public Guid? CreatedBy => this.Source.CreatedBy;
 
-        public DateTime CreationDate
-        {
-            get
-            {
-                return this.Source.CreationDate;
-            }
-        }
+        public Guid PublicKey => this.Source.PublicKey;
 
-        public DateTime LastEntryDate
-        {
-            get
-            {
-                return this.Source.LastEntryDate;
-            }
-        }
+        public string Title => this.Source.Title;
 
-        public Guid? Parent { get; set; }
-
-        public Guid PublicKey
-        {
-            get
-            {
-                return this.Source.PublicKey;
-            }
-        }
-
-        public QuestionnaireDocument Source { get; private set; }
-
-        public string Title
-        {
-            get
-            {
-                return this.Source.Title;
-            }
-        }
-
-        public bool IsPublic
-        {
-            get
-            {
-                return this.Source.IsPublic;
-            }
-        }
+        public bool IsPublic => this.Source.IsPublic;
     }
 }
 

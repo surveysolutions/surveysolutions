@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            messages = verifier.CheckForErrors(questionnaire);
+            messages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_have_0_error = () =>
             messages.Count().ShouldEqual(0);

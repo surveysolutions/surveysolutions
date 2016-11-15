@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => errors = verifier.Verify(questionnaire);
+        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_return_WB0253_warning = () => errors.ShouldContainWarning("WB0253", "Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format.");
 

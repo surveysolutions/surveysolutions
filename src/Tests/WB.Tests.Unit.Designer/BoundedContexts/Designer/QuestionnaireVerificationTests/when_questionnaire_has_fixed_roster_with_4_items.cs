@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            messages = verifier.Verify(questionnaire);
+            messages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_not_return_message_WB0207 = () =>
             messages.ShouldNotContainMessage("WB0207");

@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 
         public static QuestionnaireView CreateQuestionnaireView(QuestionnaireDocument questionnaireDocument1)
         {
-            return new QuestionnaireView(questionnaireDocument1);
+            return Create.QuestionnaireView(questionnaireDocument1);
         }
 
         public static QuestionnaireInfoView CreateQuestionnaireInfoView()
