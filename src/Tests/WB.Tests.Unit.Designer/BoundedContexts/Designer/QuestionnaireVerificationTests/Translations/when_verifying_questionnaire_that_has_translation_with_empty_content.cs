@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verifier = CreateQuestionnaireVerifier(questionnaireTranslator: questionnaireTranslator);
         };
 
-        Because of = () => verificationMessages = verifier.Verify(questionnaire);
+        Because of = () => verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
 
         It should_return_WB0257_error = () => 

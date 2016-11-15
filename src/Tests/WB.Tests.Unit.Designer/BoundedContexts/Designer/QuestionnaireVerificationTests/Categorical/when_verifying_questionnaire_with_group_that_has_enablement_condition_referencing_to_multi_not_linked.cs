@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            resultErrors = verifier.CheckForErrors(questionnaire);
+            resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_have_no_errors = () =>
            resultErrors.ShouldBeEmpty();

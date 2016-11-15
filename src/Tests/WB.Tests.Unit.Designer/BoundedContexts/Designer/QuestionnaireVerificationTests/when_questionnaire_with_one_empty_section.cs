@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () => 
-            errors = verifier.Verify(questionnaire);
+            errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_not_return_WB0202_warning = () => 
             errors.GetWarning("WB0202").ShouldBeNull();

@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_error_with_code__WB0003__ = () =>
             verificationMessages.GetError("WB0003").ShouldNotBeNull();

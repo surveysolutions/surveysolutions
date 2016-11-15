@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
         };
 
-        Because of = () => errors = verifier.Verify(questionnaire);
+        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_return_WB0251_warning = () => errors.ShouldContainWarning("WB0251", "Enablement condition refers to a future question. Consider reversing the order.");
 

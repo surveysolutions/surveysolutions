@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_not_return_message_with_code_WB0016 = () =>
             verificationMessages.GetMessage("WB0016").ShouldEqual(null);
