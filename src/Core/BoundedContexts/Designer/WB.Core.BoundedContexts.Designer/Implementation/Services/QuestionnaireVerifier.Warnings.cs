@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(NotSingleSectionWithLessThan5Questions, "WB0223", VerificationMessages.WB0223_SectionWithLessThan5Questions),
             Warning<IGroup>(TooManySubsectionsAtOneLevel, "WB0224", VerificationMessages.WB0224_TooManySubsectionsAtOneLevel),
             Warning<SingleQuestion>(ComboBoxWithLessThan10Elements, "WB0225", VerificationMessages.WB0225_ComboBoxWithLessThan10Elements),
+            WarningForCollection(SameCascadingParentQuestion, "WB0226", VerificationMessages.WB0226_SameCascadingParentQuestion),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -228,6 +229,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => questionnaire
                 .Find<IQuestion>()
                 .GroupBy(question => question.QuestionText)
+                .Where(grouping => grouping.Count() > 1)
+                .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
+
+        private static IEnumerable<QuestionnaireNodeReference[]> SameCascadingParentQuestion(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire
+                .Find<SingleQuestion>(question => question.CascadeFromQuestionId.HasValue)
+                .GroupBy(question => question.CascadeFromQuestionId)
                 .Where(grouping => grouping.Count() > 1)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
