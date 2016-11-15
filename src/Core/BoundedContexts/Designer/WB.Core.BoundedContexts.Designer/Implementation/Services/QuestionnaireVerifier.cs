@@ -1563,7 +1563,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     var linkedRosterScope = questionnaire.Questionnaire.GetRosterScope(linkedQuestion.PublicKey);
                     var sourceRosterScope = questionnaire.Questionnaire.GetRosterScope(sourceQuestion.PublicKey);
-                    if (linkedRosterScope.IsSameOrParentScopeFor(sourceRosterScope))
+                    if (!sourceRosterScope.IsSameOrParentScopeFor(linkedRosterScope))
                     {
                         yield return LinkedQuestionReferenceTextListQuestionFromWrongScope(linkedQuestion, sourceQuestion);
                     }
