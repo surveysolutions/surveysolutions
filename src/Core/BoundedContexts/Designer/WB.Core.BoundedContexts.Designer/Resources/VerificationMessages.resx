@@ -597,4 +597,7 @@
   <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
     <value>Linked question references a list question from wrong level.</value>
   </data>
+  <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+    <value>Cascading combo box questions have the same parent question.</value>
+  </data>
 </root>

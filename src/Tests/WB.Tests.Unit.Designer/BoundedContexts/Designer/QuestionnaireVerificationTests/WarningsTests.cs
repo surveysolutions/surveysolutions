@@ -170,6 +170,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0266");
 
         [Test]
+        public void cascading_questions_with_same_cascade_parent()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                })
+                .ExpectWarning("WB0226");
+
+        [Test]
+        public void cascading_questions_with_different_cascade_parents()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(questionId: Guid.Parse("22222222222222222222222222222222")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("22222222222222222222222222222222")),
+                })
+                .ExpectNoWarning("WB0226");
+
+        [Test]
         public void consecutive_questions_with_same_enablement()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
