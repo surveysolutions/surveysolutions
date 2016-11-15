@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            var titleText = interview.GetTitleText(this.identity);
+            var titleText = interview.GetTitleText(this.identity) ?? "";
 
             this.HtmlText = this.isRoster
                 ? $"{titleText} - {interview.GetRosterTitle(this.identity) ?? this.substitutionService.DefaultSubstitutionText}"

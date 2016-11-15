@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             interviewId = "interviewId";
             userId = Guid.NewGuid();
 
-            var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.Answer == 3 && _.IsAnswered == true);
+            var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer().SelectedValue == 3 && _.IsAnswered == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireIdentity == questionnaireId

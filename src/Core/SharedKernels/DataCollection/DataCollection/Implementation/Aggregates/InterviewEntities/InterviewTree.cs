@@ -342,8 +342,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         
         public void ProcessRemovedNodeByIdentity(Identity identity)
         {
+            if (!this.nodesCache.ContainsKey(identity)) return;
+
             var nodesToRemove =
-                 this.nodesCache[identity].TreeToEnumerable<IInterviewTreeNode>(node => node.Children)
+                 this.nodesCache[identity].TreeToEnumerable(node => node.Children)
                     .Select(x => x.Identity)
                     .Union(new[] {identity});
 

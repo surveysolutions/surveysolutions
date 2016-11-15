@@ -36,9 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var substitutedVariable2Name = "var2";
             var substitutedVariable1Identity = new Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             var substitutedVariable2Identity = new Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
-
-            var answer = new TextAnswer();
-            answer.SetAnswer("new value");
+            
             var interview = Mock.Of<IStatefulInterview>(x =>
                 x.GetVariableValueByOrDeeperRosterLevel(substitutedVariable1Identity.Id, substitutedVariable1Identity.RosterVector) == changedVariables[0].NewValue &&
                 x.GetVariableValueByOrDeeperRosterLevel(substitutedVariable2Identity.Id, substitutedVariable2Identity.RosterVector) == changedVariables[1].NewValue);
