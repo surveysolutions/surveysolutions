@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         Answer = a.Answer,
                         Question = a.Title,
                         Type = a.Type
-                    }),
+                    }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
