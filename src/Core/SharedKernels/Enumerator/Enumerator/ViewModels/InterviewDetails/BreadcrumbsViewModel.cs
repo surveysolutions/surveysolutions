@@ -4,10 +4,8 @@ using System.Collections.ObjectModel;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -16,7 +14,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly ILiteEventRegistry eventRegistry;
         private NavigationState navigationState;
         private string interviewId;
 
