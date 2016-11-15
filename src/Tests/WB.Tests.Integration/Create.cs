@@ -483,12 +483,12 @@ namespace WB.Tests.Integration
             string title = "Roster X",
             string variable = null, 
             string enablementCondition = null,
-            string[] fixedTitles = null, 
+            string[] obsoleteFixedTitles = null, 
             IEnumerable<IComposite> children = null, 
             RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
-            FixedRosterTitle[] fixedRosterTitles = null)
+            FixedRosterTitle[] fixedTitles = null)
         {
             Group group = Create.Group(
                 id: id,
@@ -501,15 +501,15 @@ namespace WB.Tests.Integration
             group.RosterSizeSource = rosterSizeSourceType;
             if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
             {
-                if (fixedRosterTitles == null)
+                if (fixedTitles == null)
                 {
                     group.FixedRosterTitles =
-                        (fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"}).Select(
-                            (x, i) => Create.FixedRosterTitle(i, x)).ToArray();
+                        (obsoleteFixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"}).Select(
+                            (x, i) => Create.FixedTitle(i, x)).ToArray();
                 }
                 else
                 {
-                    group.FixedRosterTitles = fixedRosterTitles;
+                    group.FixedRosterTitles = fixedTitles;
                 }
             }
             group.RosterSizeQuestionId = rosterSizeQuestionId;
@@ -716,7 +716,7 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static FixedRosterTitle FixedRosterTitle(decimal value, string title = null)
+        public static FixedRosterTitle FixedTitle(decimal value, string title = null)
         {
             return new FixedRosterTitle(value, title ?? ("Roster " + value));
         }

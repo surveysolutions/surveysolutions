@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         {
                             Create.Roster(id: rosterId, variable: "fixed_roster",
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedTitles: new string[] {"1", "2", "3"}),
+                                obsoleteFixedTitles: new string[] {"1", "2", "3"}),
                             Create.SingleOptionQuestion(questionId: questionId, variable: "a",
                                 linkedToRosterId: rosterId, linkedFilterExpression: "((string)null).Length>0"),
 

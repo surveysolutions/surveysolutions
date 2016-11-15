@@ -37,52 +37,24 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var commonRosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var parentLinkedSourceRosterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                 var linkedSourceRosterId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-                var parentLinkedRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
                 var linkedRosterId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Create.Roster(
-                        id: commonRosterId, variable: "common_roster",
-                        rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedRosterTitles: new FixedRosterTitle[] {
-                            Create.FixedRosterTitle(1, "Common 1"),
-                            Create.FixedRosterTitle(2, "Common 2") },
-                        children: new IComposite[] {
-                            Create.Roster(
-                                id: parentLinkedSourceRosterId,
-                                rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new FixedRosterTitle[] {
-                                    Create.FixedRosterTitle(3, "Roster 1"),
-                                    Create.FixedRosterTitle(4, "Roster 2") },
-                                variable: "parent_linked_source_roster",
-                                children: new IComposite[]
-                                {
-                                    Create.Roster(
-                                        id: linkedSourceRosterId,
-                                        rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedRosterTitles: new FixedRosterTitle[] {
-                                            Create.FixedRosterTitle(5, "Roster 1"),
-                                            Create.FixedRosterTitle(6, "Roster 2") },
-                                        variable: "linked_source_roster",
-                                        children: new IComposite[]
-                                        {
-                                            Create.NumericIntegerQuestion(sourceQuestionId, variable: "source"),
-                                            Create.Roster(
-                                                id: linkedRosterId,
-                                                rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                                fixedRosterTitles: new FixedRosterTitle[] {
-                                                    Create.FixedRosterTitle(7, "Item 1"),
-                                                    Create.FixedRosterTitle(8, "Item 2") },
-                                                variable: "linked_roster",
-                                                children: new IComposite[]
-                                                {
-                                                    Create.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
-                                                }),
-                                            Create.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
-                                        }),
-                                })
-                        })
-                    );
+                Create.Roster(id: commonRosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) }, children: new IComposite[] 
+                {
+                    Create.Roster(id: parentLinkedSourceRosterId, fixedTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },  children: new IComposite[]
+                    {
+                        Create.Roster(id: linkedSourceRosterId, fixedTitles: new [] { Create.FixedTitle(5), Create.FixedTitle(6) }, children: new IComposite[]
+                        {
+                            Create.NumericIntegerQuestion(sourceQuestionId, variable: "source"),
+                            Create.Roster(id: linkedRosterId, fixedTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) }, children: new IComposite[]
+                            {
+                                Create.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
+                            }),
+                            Create.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
+                        }),
+                    })
+                }));
 
                 var result = new InvokeResults();
 

@@ -25,12 +25,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     Create.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked"),
                     Create.Roster(id: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
-                        fixedRosterTitles: new[] {Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)},
+                        fixedTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)},
                         children: new IComposite[]
                         {
                             Create.Roster(id: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                                 variable: "r2", enablementCondition: "@rowcode == 1",
-                                fixedRosterTitles: new[] {Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)})
+                                fixedTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)})
                         }),
                 });
 

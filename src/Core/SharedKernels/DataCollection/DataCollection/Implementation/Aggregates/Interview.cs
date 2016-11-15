@@ -462,15 +462,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment));
         }
 
-        public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
-        {
-            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-
-            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
-        }
-
         public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus, IEvent[] synchronizedEvents, bool createdOnClient)
         {

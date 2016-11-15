@@ -47,16 +47,16 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 
                 var assetsTitles = new[]
                 {
-                    Create.FixedRosterTitle(1, "TV"),
-                    Create.FixedRosterTitle(2, "Microwave"),
-                    Create.FixedRosterTitle(3, "Cleaner")
+                    Create.FixedTitle(1, "TV"),
+                    Create.FixedTitle(2, "Microwave"),
+                    Create.FixedTitle(3, "Cleaner")
                 };
                 var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
                         Create.Roster(rosterId, variable: "assets",
-                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
+                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: assetsTitles,
                             children: new[]
                             {
                                 Create.NumericRealQuestion(id: questionB, variable: "p",

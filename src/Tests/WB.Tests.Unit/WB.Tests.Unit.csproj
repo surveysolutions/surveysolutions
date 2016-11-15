@@ -1261,7 +1261,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_qr_barcode_question_which_is_absent.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_qr_barcode_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_qr_barcode_question_with_incorrect_roster_vector.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_and_interview_restored_after_synch_and_contains_answer_on_not_linked_multioption_question_and_qu___.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_1_with_a_half.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_with_allowed_3_decimal_places_but_answer_has_4_decimal_places.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
