@@ -283,10 +283,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+
+            if (this.properties.Status == InterviewStatus.Created)
+            {
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            }
         }
 
         public void AssignInterviewer(Guid userId, Guid interviewerId, DateTime assignTime)
@@ -298,7 +302,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
-            if (!this.properties.WasCompleted && this.properties.Status != InterviewStatus.InterviewerAssigned)
+            if (!this.properties.WasCompleted && this.properties.Status == InterviewStatus.SupervisorAssigned)
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }

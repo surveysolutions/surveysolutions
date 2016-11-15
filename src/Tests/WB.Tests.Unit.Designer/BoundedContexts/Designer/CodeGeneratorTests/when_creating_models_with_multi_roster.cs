@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                         Create.Option("1", "Option 1"),
                         Create.Option("2", "Option 2")
                     }),
-                    Create.Roster(rosterId: Id.gA, variable: "multi_roster", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: Id.g1, enablementCondition: "roster condition", children: new IComposite[]
+                    Create.Roster(rosterId: Id.gA, variable: "multi_roster", rosterType: RosterSizeSourceType.Question, rosterSizeQuestionId: Id.g1, enablementCondition: "roster condition", children: new IComposite[]
                     {
                     })
                 })

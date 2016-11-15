@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.Questionnaire.Documents
@@ -22,6 +23,9 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             => (entity as IQuestion)?.QuestionText
             ?? (entity as IStaticText)?.Text
             ?? (entity as IGroup)?.Title;
+
+        public static IEnumerable<IQuestionnaireEntity> GetDescendants(this IGroup group)
+            => group.Children.TreeToEnumerable(child => child.Children);
 
         public static string GetEnablingCondition(this IQuestionnaireEntity entity)
             => (entity as IConditional)?.ConditionExpression;

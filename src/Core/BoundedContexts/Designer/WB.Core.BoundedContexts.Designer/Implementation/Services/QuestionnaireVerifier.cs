@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.DateTime,
             QuestionType.Numeric,
             QuestionType.Text,
+            QuestionType.TextList
         };
 
         private static readonly HashSet<QuestionType> WhiteListOfQuestionTypes = new HashSet<QuestionType>
@@ -173,7 +174,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
 
             Error<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
-            Error<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
+            Error<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsPrefilled, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
             Error<IMultyOptionsQuestion>(RosterSizeMultiOptionQuestionShouldBeLimited, "WB0082", VerificationMessages.WB0082_RosterSizeMultiOptionQuestionShouldBeLimited),
             Error<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And60(q,document, GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options), "WB0100", VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200),
             Error<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
@@ -265,7 +266,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool RosterHasPropagationExededLimit(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (!IsRosterGroup(roster))
+            if (!IsRoster(roster))
                 return false;
 
             Dictionary<Guid, long> rosterPropagationCounts = new Dictionary<Guid, long>();
@@ -334,7 +335,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var group = questionnaire.Find<IGroup>(id);
 
-            return IsRosterGroup(group)
+            return IsRoster(group)
                 ? QuestionnaireVerificationReferenceType.Roster
                 : QuestionnaireVerificationReferenceType.Group;
         }
@@ -468,7 +469,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IComposite questionnaireItem = roster.GetParent();
             while (questionnaireItem != null)
             {
-                if (IsGroup(questionnaireItem) && IsRosterGroup((IGroup) questionnaireItem))
+                if (IsRoster(questionnaireItem))
                 {
                     parentCountMultiplier = CalculateRosterInstancesCountAndUpdateCache((IGroup) questionnaireItem, rosterPropagationCounts, questionnaire);
                     break;
@@ -689,7 +690,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster)
         {
-            if (!IsRosterGroup(roster))
+            if (!IsRoster(roster))
                 return false;
 
             return roster.VariableName != null && keywordsProvider.GetAllReservedKeywords().Contains(roster.VariableName.ToLower());
@@ -1027,7 +1028,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool GroupHasNestedRosters(IGroup @group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var findInGroup = questionnaire.FindInGroup<IGroup>(@group.PublicKey);
-            return findInGroup.Any(IsRosterGroup);
+            return findInGroup.Any(IsRoster);
         }
 
         private static bool GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles(IGroup group)
@@ -1058,7 +1059,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (rosterTitleQuestion == null)
                 return true;
 
-            if (!GetAllParentGroupsForQuestion(rosterTitleQuestion, questionnaire).Any(IsRosterGroup))
+            if (!GetAllParentGroupsForQuestion(rosterTitleQuestion, questionnaire).Any(IsRoster))
                 return true;
 
             Guid[] rosterScopeForGroup = GetAllRosterSizeQuestionsAsVector(group, questionnaire);
@@ -1172,7 +1173,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool RosterHasRosterLevelMoreThan4(IGroup roster)
         {
-            if (!IsRosterGroup(roster))
+            if (!IsRoster(roster))
                 return false;
 
             return GetRosterLevel(roster) > 4;
@@ -1183,7 +1184,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             int rosterLevel = 0;
             while (questionnaireItem != null)
             {
-                if (IsGroup(questionnaireItem) && IsRosterGroup((IGroup)questionnaireItem))
+                if (IsRoster(questionnaireItem))
                     rosterLevel++;
 
                 questionnaireItem = questionnaireItem.GetParent();
@@ -1254,7 +1255,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
+            return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRoster);
         }
 
         private static bool QuestionWithOptionsFilterCannotBePrefilled(IQuestion question)
@@ -1451,7 +1452,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static EntityVerificationResult<IComposite> RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (!IsRosterGroup(roster))
+            if (!IsRoster(roster))
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
@@ -1535,11 +1536,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var linkedQuestions = questionnaire.Find<IQuestion>(
-                question => question.LinkedToQuestionId.HasValue);
+            var linkedQuestions = questionnaire.Find<IQuestion>(question => question.LinkedToQuestionId.HasValue);
 
             foreach (var linkedQuestion in linkedQuestions)
             {
+                
                 var sourceQuestion = questionnaire.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
 
                 if (sourceQuestion == null)
@@ -1555,10 +1556,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                var isSourceQuestionInsideRosterGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsRosterGroup);
-                if (!isSourceQuestionInsideRosterGroup)
+                if (sourceQuestion.QuestionType == QuestionType.TextList)
                 {
-                    yield return LinkedQuestionReferenceQuestionNotUnderRosterGroup(linkedQuestion, sourceQuestion);
+                    var linkedRosterScope = questionnaire.Questionnaire.GetRosterScope(linkedQuestion.PublicKey);
+                    var sourceRosterScope = questionnaire.Questionnaire.GetRosterScope(sourceQuestion.PublicKey);
+                    if (sourceRosterScope.IsSameOrParentScopeFor(linkedRosterScope))
+                    {
+                        yield return LinkedQuestionReferenceTextListQuestionFromWrongScope(linkedQuestion, sourceQuestion);
+                    }
+                }
+                else
+                {
+                    var isSourceQuestionInsideRosterGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsRoster);
+                    if (!isSourceQuestionInsideRosterGroup)
+                    {
+                        yield return LinkedQuestionReferenceQuestionNotUnderRosterGroup(linkedQuestion, sourceQuestion);
+                    }
                 }
             }
 
@@ -1751,7 +1764,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private static bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool CategoricalMultianswerQuestionIsPrefilled(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question);
         }
@@ -1867,6 +1880,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
 
+        private static QuestionnaireVerificationMessage LinkedQuestionReferenceTextListQuestionFromWrongScope(IQuestion linkedQuestion, IQuestion sourceQuestion)
+            => QuestionnaireVerificationMessage.Error("WB0116",
+                VerificationMessages.WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope,
+                CreateReference(linkedQuestion),
+                CreateReference(sourceQuestion));
+
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
             QuestionnaireNodeReference reference;
@@ -1936,10 +1955,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !questionnaire.Find<IQuestion>(_ => true).Any();
         }
 
-        private static bool IsRosterGroup(IGroup group)
-        {
-            return group.IsRoster;
-        }
+        private static bool IsRoster(IQuestionnaireEntity entity) => (entity as IGroup)?.IsRoster ?? false;
 
         private static bool IsGroup(IComposite questionnaireItem)
         {
@@ -1981,7 +1997,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             Guid[] rosterSizeQuestions =
                 GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(nearestGroup, questionnaire)
-                    .Where(IsRosterGroup)
+                    .Where(IsRoster)
                     .Select(g => g.RosterSizeQuestionId ?? g.PublicKey)
                     .ToArray();
 

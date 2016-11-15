@@ -408,6 +408,7 @@
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_content_and_unexpected_content.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_content.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_already_existing_attachment_content.cs" />
+    <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_inside_group.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\AddVariableHandlerTests\when_adding_variable_to_chapter.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_filtered_linked_question.cs" />
@@ -445,6 +446,7 @@
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_static_text_with_attachment_and_client_version_is_11.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_question_and_isemailvalid_usage.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question.cs" />
+    <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_deleting_lookup_tables_by_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_very_big_decimal_rowcode_that_can_be_converted_to_long.cs" />
     <Compile Include="BoundedContexts\Designer\MoveVariableHandlerTests\when_moving_variable_and_entity_does_not_exists.cs" />
     <Compile Include="BoundedContexts\Designer\MoveVariableHandlerTests\when_moving_variable_and_all_parameters_specified.cs" />
@@ -452,6 +454,7 @@
     <Compile Include="BoundedContexts\Designer\PdfFactoryTests\when_load_and_shared_persons_contains_requested_user.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_questions_eligible_for_numeric_roster_title_and_requested_size_question_is_saved_size_question_for_requested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_questions_eligible_for_numeric_roster_title_and_requested_size_question_is_unsaved.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_question_view_for_linked_questions_from_different_levels.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_variable_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_variable_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_and_no_shared_persons.cs" />
@@ -565,6 +568,7 @@
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_group_with_questions_into_group.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\CopyPasteTests\when_pasting_variable_after_question.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\InitializeTests.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\RevertVersionTests.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Translations\when_adding_or_updating_translation_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Translations\when_adding_or_updating_translation_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Translations\when_cloning_questionnaire_with_translation.cs" />
@@ -768,7 +772,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_fixed_roster_edit_view_and_fixed_roster_inside_list_one_that_was_fixed_previously.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_group_edit_view.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_group_edit_view_and_group_is_absent.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_group_edit_view_and_questionnaire_is_absent.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_multi_roster_edit_view.cs" />

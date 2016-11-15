@@ -286,6 +286,7 @@
     <Compile Include="Commands\Questionnaire\ImportQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\ReplaceTextsCommand.cs" />
+    <Compile Include="Commands\Questionnaire\RevertVersionQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\AddStaticText.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />
@@ -300,6 +301,8 @@
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Implementation\Repositories\UserRepository.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
+    <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
+    <Compile Include="ValueObjects\RosterScope.cs" />
     <Compile Include="Services\IFindReplaceService.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
@@ -587,6 +590,7 @@
     </Compile>
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
+    <Compile Include="Services\IQuestionnireHistotyVersionsService.cs" />
     <Compile Include="Services\IRecipientNotifier.cs" />
     <Compile Include="Translations\InvalidExcelFileException.cs" />
     <Compile Include="Translations\ITranslationsService.cs" />
@@ -773,6 +777,7 @@
     <EmbeddedResource Include="Properties\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\VerificationMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>

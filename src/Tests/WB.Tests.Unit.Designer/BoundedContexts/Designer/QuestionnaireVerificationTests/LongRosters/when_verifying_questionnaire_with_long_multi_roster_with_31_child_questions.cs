@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.Chapter(children: new IComposite[]
                 {
                     Create.MultyOptionsQuestion(questionId, options: options, maxAllowedAnswers: 79),
-                    Create.Roster(rosterId, rosterSizeQuestionId: questionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[] {
+                    Create.Roster(rosterId, rosterSizeQuestionId: questionId, rosterType: RosterSizeSourceType.Question, children: new IComposite[] {
                         Create.Group(children: childQuestions)
                     })
                 })

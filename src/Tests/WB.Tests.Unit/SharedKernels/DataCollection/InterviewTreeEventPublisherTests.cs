@@ -229,10 +229,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             interview.ApplyEvents(sourceTree, changedTree, responsibleId);
             //assert
             Assert.AreEqual(2, listOfPublishedEvents.Count);
-            Assert.IsAssignableFrom<AnswersRemoved>(listOfPublishedEvents[0]);
-            Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[1]);
+            Assert.IsAssignableFrom<AnswersRemoved>(listOfPublishedEvents[1]);
+            Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
 
-            var answersRemovedEvent = ((AnswersRemoved)listOfPublishedEvents[0]);
+            var answersRemovedEvent = ((AnswersRemoved)listOfPublishedEvents[1]);
             Assert.AreEqual(2, answersRemovedEvent.Questions.Length);
             Assert.AreEqual(rosterQuestionIdentity.Id, answersRemovedEvent.Questions[0].Id);
             Assert.AreEqual(rosterQuestionIdentity.RosterVector, answersRemovedEvent.Questions[0].RosterVector);
@@ -240,7 +240,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(nestedRosterQuestionIdentity.Id, answersRemovedEvent.Questions[1].Id);
             Assert.AreEqual(nestedRosterQuestionIdentity.RosterVector, answersRemovedEvent.Questions[1].RosterVector);
 
-            var rosterInstancesRemovedEvent = ((RosterInstancesRemoved)listOfPublishedEvents[1]);
+            var rosterInstancesRemovedEvent = ((RosterInstancesRemoved)listOfPublishedEvents[0]);
             Assert.AreEqual(2, rosterInstancesRemovedEvent.Instances.Length);
             Assert.AreEqual(rosterIdentity.Id, rosterInstancesRemovedEvent.Instances[0].GroupId);
             Assert.AreEqual(rosterIdentity.RosterVector.Shrink(), rosterInstancesRemovedEvent.Instances[0].OuterRosterVector);
