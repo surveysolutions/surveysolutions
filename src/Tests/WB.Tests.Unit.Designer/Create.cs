@@ -685,7 +685,7 @@ namespace WB.Tests.Unit.Designer
             => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid() });
 
         public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument)
-            => new QuestionnaireView(questionnaireDocument);
+            => new QuestionnaireView(questionnaireDocument, new SharedPerson[]{});
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
