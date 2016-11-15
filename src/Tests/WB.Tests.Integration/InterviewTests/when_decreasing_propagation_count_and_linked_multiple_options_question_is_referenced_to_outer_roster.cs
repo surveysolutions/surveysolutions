@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -13,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_decreasing_propagation_count_and_linked_multiple_options_question_is_referenced_to_outer_roster : InterviewTestsContext
     {
         Establish context = () =>

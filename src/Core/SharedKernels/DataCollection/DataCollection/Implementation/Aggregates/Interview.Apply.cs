@@ -372,7 +372,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var identity in @event.Questions)
             {
-                this.changedInterview.GetQuestion(identity).RemoveAnswer();
+                // can be removed from removed roster. No need for this event anymore
+                this.changedInterview.GetQuestion(identity)?.RemoveAnswer();
                 this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(identity.Id, identity.RosterVector));
             }
         }
@@ -395,7 +396,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var addedRoster = this.changedInterview.GetRosterManager(rosterIdentity.GroupId)
                 .CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
             this.changedInterview.GetGroup(parentGroupIdentity).AddChild(addedRoster);
-            addedRoster.ActualizeChildren();
+            addedRoster.ActualizeChildren(skipRosters: true);
         }
     }
 }
