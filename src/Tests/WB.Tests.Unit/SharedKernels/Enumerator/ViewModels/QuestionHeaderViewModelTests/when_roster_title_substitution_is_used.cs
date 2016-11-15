@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
             var interview = Mock.Of<IStatefulInterview>();
 
-            //rosterTitleAnswerValue = "answer";
+            rosterTitleAnswerValue = "answer";
             //var rosterTitleSubstitutionService = new Mock<IRosterTitleSubstitutionService>();
             //rosterTitleSubstitutionService.Setup(x => x.Substitute(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<string>()))
             //    .Returns<string, Identity, string>((title, id, interviewId) => title.Replace("%rostertitle%", rosterTitleAnswerValue));
