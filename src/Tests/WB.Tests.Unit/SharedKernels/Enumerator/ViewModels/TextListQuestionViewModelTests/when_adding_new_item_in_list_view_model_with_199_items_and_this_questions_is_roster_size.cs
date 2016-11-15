@@ -19,6 +19,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_adding_new_item_in_list_view_model_with_199_items_and_this_questions_is_roster_size : TextListQuestionViewModelTestContext
     {
         Establish context = () =>

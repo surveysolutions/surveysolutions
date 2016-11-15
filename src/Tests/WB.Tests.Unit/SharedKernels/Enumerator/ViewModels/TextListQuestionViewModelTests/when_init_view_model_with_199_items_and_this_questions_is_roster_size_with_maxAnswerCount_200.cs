@@ -16,6 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_init_view_model_with_199_items_and_this_questions_is_roster_size_with_maxAnswerCount_200 : TextListQuestionViewModelTestContext
     {
         Establish context = () =>

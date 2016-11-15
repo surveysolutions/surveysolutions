@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_roster_titles_changed : MultiOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>

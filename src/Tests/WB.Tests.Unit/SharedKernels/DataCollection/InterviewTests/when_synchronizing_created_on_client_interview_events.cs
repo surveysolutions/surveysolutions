@@ -16,6 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_synchronizing_created_on_client_interview_events : InterviewTestsContext
     {
         Establish context = () =>

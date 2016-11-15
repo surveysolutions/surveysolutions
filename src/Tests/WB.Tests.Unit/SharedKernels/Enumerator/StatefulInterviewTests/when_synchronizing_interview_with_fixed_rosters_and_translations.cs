@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_synchronizing_interview_with_fixed_rosters: StatefulInterviewTestsContext
     {
         Establish context = () =>

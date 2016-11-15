@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_roster_title_changed : SideBarSectionViewModelTestsContext
     {
         Establish context = () =>

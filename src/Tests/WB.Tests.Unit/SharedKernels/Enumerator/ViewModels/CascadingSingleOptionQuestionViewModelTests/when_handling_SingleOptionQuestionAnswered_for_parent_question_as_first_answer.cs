@@ -14,6 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
