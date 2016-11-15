@@ -181,7 +181,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(GroupsEnabled @event)
         {
             foreach (var groupIdentity in @event.Groups)
-                this.changedInterview.GetGroup(groupIdentity).Enable();
+                this.changedInterview.GetGroup(groupIdentity)?.Enable();
 
             this.ExpressionProcessorStatePrototype.EnableGroups(@event.Groups);
         }
@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(VariablesEnabled @event)
         {
             foreach (var variableIdentity in @event.Variables)
-                this.changedInterview.GetVariable(variableIdentity).Enable();
+                this.changedInterview.GetVariable(variableIdentity)?.Enable();
 
             this.ExpressionProcessorStatePrototype.EnableVariables(@event.Variables);
         }
@@ -222,7 +222,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(QuestionsEnabled @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.changedInterview.GetQuestion(questionIdentity).Enable();
+                this.changedInterview.GetQuestion(questionIdentity)?.Enable();
 
             this.ExpressionProcessorStatePrototype.EnableQuestions(@event.Questions);
         }
@@ -230,7 +230,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(StaticTextsEnabled @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.changedInterview.GetStaticText(staticTextIdentity).Enable();
+                this.changedInterview.GetStaticText(staticTextIdentity)?.Enable();
             
             this.ExpressionProcessorStatePrototype.EnableStaticTexts(@event.StaticTexts);
         }

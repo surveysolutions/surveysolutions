@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
 
-        It should_return_empty_failed_condition_indexes = () => interview.GetFailedValidationMessages(questionIdentity).Count.ShouldEqual(0);
+        It should_return_empty_failed_condition_indexes = () => interview.GetFailedValidationMessages(questionIdentity).Count().ShouldEqual(0);
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;

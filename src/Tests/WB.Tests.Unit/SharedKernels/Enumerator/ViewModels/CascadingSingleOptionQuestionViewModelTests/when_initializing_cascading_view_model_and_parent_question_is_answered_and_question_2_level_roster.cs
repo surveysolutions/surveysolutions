@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -17,8 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         Establish context = () =>
         {
             SetUp();
-            var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == false);
-            var parentOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 1);
+            var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == false);
+            var parentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == true && _.GetAnswer().SelectedValue == 1);
 
             StatefulInterviewMock.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);
             StatefulInterviewMock.Setup(x => x.GetSingleOptionQuestion(questionIdentity)).Returns(singleOptionAnswer);

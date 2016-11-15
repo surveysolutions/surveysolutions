@@ -40,8 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 Create.Entity.CategoricalQuestionOption(5, "item5"),
             });
 
-            var yesNoAnswer = Create.Entity.YesNoAnswer(questionGuid, Empty.RosterVector);
-            yesNoAnswer.SetAnswers(new[]
+            var yesNoAnswer = Create.Entity.InterviewTreeYesNoQuestion(new[]
             {
                 new AnsweredYesNoOption(5, true),
                 new AnsweredYesNoOption(1, false),

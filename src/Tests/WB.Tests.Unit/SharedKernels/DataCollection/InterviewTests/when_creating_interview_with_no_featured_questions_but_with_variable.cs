@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Spec;
 using NSubstitute;
@@ -11,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
@@ -50,8 +49,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ =>
                 _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == expressionState);
 
-            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository,
-                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository,
+                interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
         };
 
         Because of = () =>
@@ -83,7 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId;
         private static Guid responsibleSupervisorId;
         private static Guid variableId;
-        private static Interview interview;
+        private static StatefulInterview interview;
         private static QuestionnaireIdentity questionnaireIdentity;
     }
 }

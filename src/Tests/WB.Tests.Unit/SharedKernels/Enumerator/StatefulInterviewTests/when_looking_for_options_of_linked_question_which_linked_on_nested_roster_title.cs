@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
-using NSubstitute;
+using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -14,60 +13,53 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            linkedQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-            linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
-            newOptionsEvent = new[] {
-                new ChangedLinkedOptions(linkedQuestionIdentity,
-                                         new []
-                                         {
-                                             Create.Entity.RosterVector(1,1),
-                                             Create.Entity.RosterVector(2,1),
-                                             Create.Entity.RosterVector(1,2),
-                                             Create.Entity.RosterVector(2,2)
-                                         })
-            };
-            var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            nestedRosterId = Guid.NewGuid();
-            IQuestionnaire questionnaire = Substitute.For<IQuestionnaire>();
-            questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestionId)
-                .Returns(nestedRosterId);
-            questionnaire.GetRostersFromTopToSpecifiedGroup(nestedRosterId)
-                .Returns(new[] { rosterId, nestedRosterId });
-
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new decimal[0], 1, 1));
-            interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new decimal[0], 2, 2));
-
-            interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterId, new decimal[] { 1 }, 1, 1));
-            interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterId, new decimal[] { 1 }, 2, 2));
-            interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterId, new decimal[] { 2 }, 1, 1));
-            interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterId, new decimal[] { 2 }, 2, null));
-            
-            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.Entity.RosterVector(1, 1), "a"));
-            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.Entity.RosterVector(1, 2), "b"));
-            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.Entity.RosterVector(2, 1), "a"));
-            interview.Apply(Create.Event.RosterInstancesTitleChanged(nestedRosterId, Create.Entity.RosterVector(2, 2), "b"));
-            interview.Apply(Create.Event.LinkedOptionsChanged(newOptionsEvent));
+            questionnaireRepository =
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
+                    Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                    {
+                        Create.Entity.FixedRoster(
+                            fixedRosterTitles:
+                                new[]
+                                {
+                                    new FixedRosterTitle(1, "first fixed roster"),
+                                    new FixedRosterTitle(2, "second fixed roster")
+                                },
+                            children: new[]
+                            {
+                                Create.Entity.FixedRoster(rosterId: sourceOfLinkedToRosterId,
+                                    fixedRosterTitles:
+                                        new[]
+                                        {
+                                            new FixedRosterTitle(1, "first NESTED fixed roster"),
+                                            new FixedRosterTitle(2, "second NESTED fixed roster")
+                                        },
+                                    children: new[]
+                                    {
+                                        Create.Entity.NumericIntegerQuestion(sourceOfLinkedToRosterId)
+                                    })
+                            }),
+                        Create.Entity.MultyOptionsQuestion(linkedToQuestionIdentity.Id, linkedToRosterId: sourceOfLinkedToRosterId)
+                    })));
         };
 
-        Because of = () => rosters = interview.FindReferencedRostersForLinkedQuestion(nestedRosterId, linkedQuestionIdentity).ToArray();
+        Because of = () => interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
         It should_order_options_by_roster_sort_index_at_first = () =>
         {
-            rosters.Select(a => a.RosterVector.First()).ToArray().ShouldEqual(new decimal[] { 1, 1, 2, 2 });
+            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity)
+            .Options.Select(a => a.First()).ToArray().ShouldEqual(new decimal[] { 1, 1, 2, 2 });
         };
 
         It should_order_options_by_nested_roster_sort_index_in_scope_of_parent_roster = () =>
         {
-            rosters.Select(a => a.RosterVector.Last()).ToArray().ShouldEqual(new decimal[] { 1, 2, 1, 2 });
+            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity)
+            .Options.Select(a => a.Last()).ToArray().ShouldEqual(new decimal[] { 1, 2, 1, 2 });
         };
 
-        static StatefulInterview interview;
-        static Guid linkedQuestionId;
-        static Guid nestedRosterId;
-        static ChangedLinkedOptions[] newOptionsEvent;
-        static Identity linkedQuestionIdentity;
-        static InterviewRoster[] rosters;
+        private static IQuestionnaireStorage questionnaireRepository;
+        private static StatefulInterview interview;
+        private static Guid questionnaireId = Guid.Parse("44444444444444444444444444444444");
+        private static Identity linkedToQuestionIdentity = Identity.Create(Guid.Parse("33333333333333333333333333333333"), Create.Entity.RosterVector(0));
+        private static Guid sourceOfLinkedToRosterId = Guid.Parse("22222222222222222222222222222222");
     }
 }
