@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         QuestionnaireView Load(QuestionnaireViewInputModel input);
 
         bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
+
+        bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
     }
 
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
@@ -54,6 +56,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaireListItem.IsPublic)
+                return true;
+
+            return false;
+        }
+
+        public bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId)
+        {
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            if (questionnaire == null || questionnaire.IsDeleted)
+                return false;
+
+            if (questionnaire.CreatedBy == userId)
+                return true;
+
+            var sharedPersons = sharedPersonsStorage.GetById(questionnaireId.FormatGuid())?.SharedPersons ?? new List<SharedPerson>();
+            if (sharedPersons.Any(x => x.Id == userId))
                 return true;
 
             return false;
