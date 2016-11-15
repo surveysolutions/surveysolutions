@@ -10,6 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_getting_answer_on_text_question_from_fixed_roster : StatefulInterviewTestsContext
     {
         Establish context = () =>

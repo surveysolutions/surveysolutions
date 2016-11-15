@@ -14,6 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_restore_interview_with_disabled_static_text : InterviewTestsContext
     {
         Establish context = () =>

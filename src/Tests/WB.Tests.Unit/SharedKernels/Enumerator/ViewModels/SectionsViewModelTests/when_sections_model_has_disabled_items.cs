@@ -13,6 +13,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_sections_model_has_disabled_items : SectionsViewModelTestContext
     {
         Establish context = () =>

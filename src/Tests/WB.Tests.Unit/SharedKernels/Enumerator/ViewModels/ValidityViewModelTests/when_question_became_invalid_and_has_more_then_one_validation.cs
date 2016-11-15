@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTests
 {
+    [Ignore("KP-8159")]
     [Subject(typeof(ValidityViewModel))]
     public class when_question_became_invalid_and_has_more_then_one_validation
     { 

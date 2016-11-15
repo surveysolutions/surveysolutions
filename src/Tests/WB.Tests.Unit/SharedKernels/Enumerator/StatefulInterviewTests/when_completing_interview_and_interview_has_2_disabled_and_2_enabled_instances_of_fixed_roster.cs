@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_completing_interview_and_interview_has_2_disabled_and_2_enabled_instances_of_fixed_roster
     {
         Establish context = () =>
