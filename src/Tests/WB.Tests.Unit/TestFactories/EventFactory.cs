@@ -276,5 +276,20 @@ namespace WB.Tests.Unit.TestFactories
                         rosterGroupId,
                         outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
                         rosterInstanceId: fullRosterVector.Last())).ToArray());
+
+        public SupervisorAssigned SupervisorAssigned(Guid userId, Guid supervisorId)
+            => new SupervisorAssigned(userId, supervisorId);
+
+        public InterviewerAssigned InterviewerAssigned(Guid userId, Guid interviewerId, DateTime? assignTime)
+            => new InterviewerAssigned(userId, interviewerId, assignTime);
+
+        public InterviewApproved InterviewApproved(Guid userId, string comment = null, DateTime? approveTime = null)
+            => new InterviewApproved(userId, comment, approveTime);
+
+        public InterviewRejectedByHQ InterviewRejectedByHQ(Guid userId, string comment = null)
+            => new InterviewRejectedByHQ(userId, comment);
+
+        public InterviewRejected InterviewRejected(Guid userId, string comment = null, DateTime? rejectTime = null)
+            => new InterviewRejected(userId, comment, rejectTime);
     }
 }
