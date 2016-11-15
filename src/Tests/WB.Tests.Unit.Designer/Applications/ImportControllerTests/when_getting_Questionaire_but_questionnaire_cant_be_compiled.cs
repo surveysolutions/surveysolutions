@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                      _.GetListOfNewFeaturesForClient(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>()) == new[] { "New questionnaire feature" });
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
-                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationMessage[0]);
+                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireView>()) == new QuestionnaireVerificationMessage[0]);
 
             string generatedAssembly;
             var expressionProcessorGenerator = Mock.Of<IExpressionProcessorGenerator>(

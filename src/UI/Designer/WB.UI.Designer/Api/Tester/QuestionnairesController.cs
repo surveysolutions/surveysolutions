@@ -62,7 +62,7 @@ namespace WB.UI.Designer.Api.Tester
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
 
-            if (this.questionnaireVerifier.CheckForErrors(questionnaireView.Source).Any())
+            if (this.questionnaireVerifier.CheckForErrors(questionnaireView).Any())
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }

@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 _.GetListOfNewFeaturesForClient(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>()) == new string[0]);
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
-                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>()) ==
+                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireView>()) ==
                      new[] {Create.VerificationError("code", "message") });
 
             importController = CreateImportController(membershipUserService: membershipUserService,

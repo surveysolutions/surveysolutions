@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 .Throws<NullReferenceException>();
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
-                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationMessage[0]);
+                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireView>()) == new QuestionnaireVerificationMessage[0]);
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,

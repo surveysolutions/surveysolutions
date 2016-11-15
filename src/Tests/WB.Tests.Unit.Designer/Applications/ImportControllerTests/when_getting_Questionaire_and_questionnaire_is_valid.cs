@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             var expressionsEngineVersionService = Setup.DesignerEngineVersionService();
            
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
-                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>()) == new QuestionnaireVerificationMessage[0]);
+                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireView>()) == new QuestionnaireVerificationMessage[0]);
 
             var expressionProcessorGenerator = Mock.Of<IExpressionProcessorGenerator>(
                 _ =>

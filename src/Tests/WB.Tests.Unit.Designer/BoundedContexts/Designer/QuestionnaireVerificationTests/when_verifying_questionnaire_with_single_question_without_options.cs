@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_not_return_messages_with_code__WB0072__and__WB0073 = () =>
             verificationMessages.Select(x => x.Code).ShouldNotContain("WB0072", "WB0073");

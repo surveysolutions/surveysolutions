@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_contain_error_WB0068 = () =>
             verificationMessages.ShouldContainError("WB0068");

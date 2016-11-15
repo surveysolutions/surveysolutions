@@ -38,7 +38,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
         {
             var doc = GetQuestionnaireDocument(input);
-            return doc == null ? null : new QuestionnaireView(doc);
+            var sharedPersons = this.GetSharedPersons(input.QuestionnaireId);
+            return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
         public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var sharedPersons = sharedPersonsStorage.GetById(questionnaireId.FormatGuid())?.SharedPersons ?? new List<SharedPerson>();
+            var sharedPersons = this.GetSharedPersons(questionnaireId);
             if (sharedPersons.Any(x => x.Id == userId))
                 return true;
 
@@ -75,6 +76,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 return true;
 
             return false;
+        }
+
+        private List<SharedPerson> GetSharedPersons(Guid questionnaireId)
+        {
+            var sharedPersons = this.sharedPersonsStorage.GetById(questionnaireId.FormatGuid())?.SharedPersons ??
+                new List<SharedPerson>();
+            return sharedPersons;
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)
