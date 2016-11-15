@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
     {
         Establish context = () =>
         {
-            var textListAnswer = Mock.Of<TextListAnswer>(_ => _.IsAnswered == false);
+            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.IsAnswered == false);
 
             var interview = Mock.Of<IStatefulInterview>(_ => _.QuestionnaireId == questionnaireId
                 && _.GetTextListQuestion(questionIdentity) == textListAnswer);

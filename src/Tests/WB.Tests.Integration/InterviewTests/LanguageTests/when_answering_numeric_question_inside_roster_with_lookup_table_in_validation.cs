@@ -51,18 +51,18 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     Create.FixedRosterTitle(2, "Microwave"),
                     Create.FixedRosterTitle(3, "Cleaner")
                 };
-                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new[]
-                {
-                    Create.Chapter(children: new IComposite[]
+                var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > price[1].min && a < price[1].max"),
-                        Create.Roster(rosterId, variable: "assets", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
-                            children: new []
+                        Create.Roster(rosterId, variable: "assets",
+                            rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles,
+                            children: new[]
                             {
-                                Create.NumericRealQuestion(id: questionB, variable: "p", validationExpression: "p.InRange(price[@rowcode].min, price[@rowcode].max)")
+                                Create.NumericRealQuestion(id: questionB, variable: "p",
+                                    validationExpression: "p.InRange(price[@rowcode].min, price[@rowcode].max)")
                             })
-                    }),
-                });
+                    });
 
                 questionnaire.LookupTables.Add(lookupId, Create.LookupTable("price"));
 

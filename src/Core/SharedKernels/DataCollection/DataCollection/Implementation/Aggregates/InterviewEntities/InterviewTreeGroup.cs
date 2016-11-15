@@ -74,17 +74,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         }
 
                         foreach (var expectedRoster in expectedRosterIdentities)
-                            this.children.OfType<InterviewTreeRoster>().Single(x => x.Identity.Equals(expectedRoster)).ActualizeChildren();
-
+                        {
+                            this.children.OfType<InterviewTreeRoster>()
+                                .Where(x => x.Identity.Equals(expectedRoster))
+                                .ForEach(roster => roster.ActualizeChildren());
+                        }
                         break;
                     case QuestionnaireReferenceType.SubSection:
                         var subSectionIdentity = new Identity(childEntityId, this.RosterVector);
-                        if (!HasChild(subSectionIdentity))
+                        var subSection = this.children.OfType<InterviewTreeGroup>()
+                            .FirstOrDefault(x => x.Identity.Equals(subSectionIdentity));
+
+                        if (subSection == null)
                         {
-                            var subSection = Tree.CreateSubSection(subSectionIdentity);
+                            subSection = Tree.CreateSubSection(subSectionIdentity);
                             this.AddChild(subSection);
-                            subSection.ActualizeChildren();
                         }
+
+                        subSection.ActualizeChildren();
                         break;
                     case QuestionnaireReferenceType.StaticText:
                     case QuestionnaireReferenceType.Variable:
