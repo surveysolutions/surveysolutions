@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             IVariableToUIStringService variableToUiStringService)
         {
             this.Text = text;
+            this.originalText = text;
             this.identity = identity;
             this.substitutionService = substitutionService;
             this.variableToUiStringService = variableToUiStringService;
@@ -37,6 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.tree = interviewTree;
         }
 
+        private readonly string originalText;
         public string Text { get; private set; }
 
         public bool HasSubstitutions => this.substitutionVariables!= null &&
@@ -52,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return;
             }
 
-            var textWithReplacedSubstitutions = this.Text;
+            var textWithReplacedSubstitutions = this.originalText;
             foreach (var substitution in this.substitutionVariables.ByRosters)
             {
                 var roster = this.tree.FindEntityInQuestionBranch(substitution.Id, identity) as InterviewTreeRoster;

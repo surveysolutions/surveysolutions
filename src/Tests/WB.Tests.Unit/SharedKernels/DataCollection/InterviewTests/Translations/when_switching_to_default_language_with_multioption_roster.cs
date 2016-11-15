@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 {
-    [Ignore("KP-8159")]
     internal class when_switching_to_default_language_with_multioption_roster : InterviewTestsContext
     {
         Establish context = () =>
@@ -22,30 +21,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             rosterSizeQuestion = Guid.Parse("11111111111111111111111111111111");
 
             var nonTranslatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion,
-                    options: new List<Answer>
-                    {
-                        Create.Entity.Answer("title1", 1)
-                    }),
-                Create.Entity.Roster(
-                    rosterId: rosterId,
-                    rosterSizeSourceType: RosterSizeSourceType.Question,
-                    rosterSizeQuestionId: rosterSizeQuestion
-                    ));
+                Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion, options: new List<Answer> { Create.Entity.Answer("title1", 1) }),
+                Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion));
 
-            nonTranslatedQuestionnaire.Translations.Add(
-                    Create.Entity.Translation(translationId, targetLanguage));
+            nonTranslatedQuestionnaire.Translations.Add(Create.Entity.Translation(translationId, targetLanguage));
 
-            var translatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion,
-                    options: new List<Answer>
-                    {
-                        Create.Entity.Answer("тайтл1", 1)
-                    }),
-                Create.Entity.Roster(
-                    rosterId: rosterId,
-                    rosterSizeSourceType: RosterSizeSourceType.Question,
-                    rosterSizeQuestionId: rosterSizeQuestion
-                    ));
+            var translatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion, options: new List<Answer> { Create.Entity.Answer("тайтл1", 1) }),
+                Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion));
 
             IQuestionnaire nonTranslatedPlainQuestionnaire = Create.Entity.PlainQuestionnaire(nonTranslatedQuestionnaire);
             IQuestionnaire translatedPlainQuestionnaire = Create.Entity.PlainQuestionnaire(translatedQuestionnaire);
@@ -54,9 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == nonTranslatedPlainQuestionnaire &&
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), targetLanguage) == translatedPlainQuestionnaire);
 
-            interview = Create.AggregateRoot.Interview(
-                questionnaireRepository: questionnaires
-                );
+            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaires);
 
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty, DateTime.Now, new [] {1});
             interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));

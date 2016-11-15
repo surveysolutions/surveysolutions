@@ -13,7 +13,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewDetailsViewFactoryTests
 {
-    [Ignore("KP-8159")]
     internal class when_getting_interview_details_and_questionnaire_has_filtered_categorical_question : InterviewDetailsViewFactoryTestsContext
     {
         Establish context = () =>
