@@ -15,6 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_invoking_ValueChangeCommand_and_there_is_match_in_options_list : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>

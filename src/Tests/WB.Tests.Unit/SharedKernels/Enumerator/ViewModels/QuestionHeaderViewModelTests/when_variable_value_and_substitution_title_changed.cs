@@ -8,6 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_variable_value_and_substitution_title_changed : QuestionHeaderViewModelTestsContext
     {
         Establish context = () =>
