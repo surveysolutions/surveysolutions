@@ -172,8 +172,8 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public VerificationResult Verify(Guid id)
         {
-            var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            var questionnaireView = this.GetQuestionnaire(id);
+            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireView).ToArray();
             
             var verificationErrors = verificationMessagesAndWarning
                 .Where(x => x.MessageLevel > VerificationMessageLevel.Warning)
@@ -185,8 +185,8 @@ namespace WB.UI.Designer.Api
                 .Take(MaxVerificationErrors - verificationErrors.Length)
                 .ToArray();
 
-            VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
-            VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireDocument);
+            VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireView.Source);
+            VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireView.Source);
 
             return new VerificationResult
             {

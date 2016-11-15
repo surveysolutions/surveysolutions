@@ -108,7 +108,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 });
             }
 
-            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView.Source).ToArray();
+            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView).ToArray();
 
             if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {

@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IQuestionnaireVerifier
     {
-        IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireDocument questionnaire);
-        IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireDocument questionnaire);
+        IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireView questionnaireView);
+        IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireView questionnaireView);
     }
 }
