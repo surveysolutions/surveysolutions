@@ -4,7 +4,6 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.Su
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -33,6 +32,11 @@ namespace WB.Tests.Unit.TestFactories
                 textFactory ?? textFactoryMock.Object);
 
             interview.SetId(interviewId ?? Guid.NewGuid());
+
+            interview.Apply(Create.Event.InterviewCreated(
+                questionnaireId: questionnaireId?.QuestionnaireId ?? Guid.NewGuid(),
+                questionnaireVersion: questionnaireId?.Version ?? 1));
+
             return interview;
         }
 
