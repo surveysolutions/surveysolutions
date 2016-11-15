@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
@@ -9,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -49,7 +51,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 SearchBy = data.SearchBy
             };
 
-            return this.allInterviewsViewFactory.Load(input);
+            var allInterviews = this.allInterviewsViewFactory.Load(input);
+
+            allInterviews.Items.ForEach(x => x.FeaturedQuestions.ForEach(y => y.Question = y.Question.RemoveHtmlTags()));
+
+            return allInterviews;
         }
 
         [HttpPost]
@@ -68,7 +74,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ViewerId = this.GlobalInfo.GetCurrentUser().Id
             };
 
-            return this.teamInterviewViewFactory.Load(input);
+            var teamInterviews =  this.teamInterviewViewFactory.Load(input);
+
+            teamInterviews.Items.ForEach(x => x.FeaturedQuestions.ForEach(y => y.Question = y.Question.RemoveHtmlTags()));
+
+            return teamInterviews;
         }
 
         [HttpPost]
