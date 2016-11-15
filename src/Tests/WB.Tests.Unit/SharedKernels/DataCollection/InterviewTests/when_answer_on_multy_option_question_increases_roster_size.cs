@@ -20,7 +20,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_answer_on_multy_option_question_increases_roster_size : InterviewTestsContext
     {
         Establish context = () =>

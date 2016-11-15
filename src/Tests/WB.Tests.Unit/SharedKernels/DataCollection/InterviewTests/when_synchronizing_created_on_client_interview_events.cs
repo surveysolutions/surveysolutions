@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_synchronizing_created_on_client_interview_events : InterviewTestsContext
     {
         Establish context = () =>
