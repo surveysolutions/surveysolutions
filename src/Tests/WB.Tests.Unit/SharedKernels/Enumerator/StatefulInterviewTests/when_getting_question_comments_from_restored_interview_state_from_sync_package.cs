@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_getting_commented_by_supervisor_questions_from_restored_from_sync_package_interview : StatefulInterviewTestsContext
     {
         Establish context = () =>

@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInflationServiceTests
 {
+    [Ignore("KP-8159")]
     [TestFixture]
     internal class CompositeCollectionInflationServiceTests: MvxIoCSupportingTest
     {
