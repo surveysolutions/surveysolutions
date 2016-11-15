@@ -12,13 +12,14 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_variable_value_changed : StaticTextViewModelTestsContext
     {
         Establish context = () =>
@@ -37,9 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var substitutedVariable2Name = "var2";
             var substitutedVariable1Identity = new Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             var substitutedVariable2Identity = new Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
-
-            var answer = new TextAnswer();
-            answer.SetAnswer("new value");
+            
             var interview = Mock.Of<IStatefulInterview>(x =>
                 x.GetVariableValueByOrDeeperRosterLevel(substitutedVariable1Identity.Id, substitutedVariable1Identity.RosterVector) == changedVariables[0].NewValue &&
                 x.GetVariableValueByOrDeeperRosterLevel(substitutedVariable2Identity.Id, substitutedVariable2Identity.RosterVector) == changedVariables[1].NewValue);

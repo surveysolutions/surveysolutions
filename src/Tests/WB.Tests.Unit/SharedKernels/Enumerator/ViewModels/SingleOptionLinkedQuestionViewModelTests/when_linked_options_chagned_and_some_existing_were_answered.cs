@@ -9,62 +9,36 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_linked_options_chagned_and_some_existing_were_answered : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
-            linkSourceQuestionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Entity.RosterVector(1));
+            linkSourceQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
+            interviewerId = Guid.Parse("77777777777777777777777777777777");
+            
+            var questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId);
 
-            eventData = new[]
-            {
-                new ChangedLinkedOptions(linkedQuestionId, 
-                    new[]
-                    {
-                        Create.Entity.RosterVector(1),
-                        Create.Entity.RosterVector(2),
-                        Create.Entity.RosterVector(3)
-                    }),
-            };
+            interview = Setup.StatefulInterview(questionnaire);
 
-            IStatefulInterview interview = Substitute.For<IStatefulInterview>();
-            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
-                  .Returns(new List<BaseInterviewAnswer>
-                  {
-                      Create.Entity.TextAnswer("two", 
-                        questionId: linkSourceQuestionId.Id, 
-                        rosterVector: Create.Entity.RosterVector(2))
-                  });
+            interview.AnswerTextQuestion(interviewerId, linkSourceQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, "one");
+            interview.AnswerTextQuestion(interviewerId, linkSourceQuestionId, Create.Entity.RosterVector(2), DateTime.UtcNow, "two");
+            interview.AnswerTextQuestion(interviewerId, linkSourceQuestionId, Create.Entity.RosterVector(3), DateTime.UtcNow, "three");
 
-            IQuestionnaire questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
-
-            viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
+            viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
             viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
             viewModel.Options.First().Selected = true;
-
-            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
-                 .Returns(new List<BaseInterviewAnswer>
-                 {
-                      Create.Entity.TextAnswer("one",
-                        questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Entity.RosterVector(1)),
-                      Create.Entity.TextAnswer("two",
-                        questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Entity.RosterVector(2)),
-                        Create.Entity.TextAnswer("three",
-                        questionId: linkSourceQuestionId.Id,
-                        rosterVector: Create.Entity.RosterVector(3))
-                 });
         };
 
-        Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));
+        Because of = () => interview.AnswerSingleOptionLinkedQuestion(interviewerId, linkedQuestionId.Id, linkedQuestionId.RosterVector, DateTime.UtcNow, Create.Entity.RosterVector(1));
 
         It should_not_remove_existing_selected_option = () => viewModel.Options.Second().Selected.ShouldBeTrue();
 
@@ -73,9 +47,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         It should_add_all_options_from_event = () => viewModel.Options.Count.ShouldEqual(3);
 
         static SingleOptionLinkedQuestionViewModel viewModel;
-        static Identity linkSourceQuestionId;
+        static Guid linkSourceQuestionId;
         static Identity linkedQuestionId;
         static string interviewId;
-        static ChangedLinkedOptions[] eventData;
+        static StatefulInterview interview;
+        static Guid interviewerId;
     }
 }

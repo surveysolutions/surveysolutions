@@ -1,25 +1,26 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
+    [Ignore("KP-8159")]
     internal class when_answering_long_roster_size_numeric_question_with_201_and_question_was_answered : IntegerQuestionViewModelTestContext
     {
         Establish context = () =>
         {
             SetUp();
 
-            var integerNumericAnswer = Mock.Of<IntegerNumericAnswer>(_ => _.IsAnswered == true && _.Answer == 1);
+            var integerNumericAnswer = Mock.Of<InterviewTreeIntegerQuestion>(_ => _.IsAnswered == true && _.GetAnswer().Value == 1);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
-                   && _.GetIntegerNumericAnswer(questionIdentity) == integerNumericAnswer);
+                   && _.GetIntegerQuestion(questionIdentity) == integerNumericAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 

@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (isInvalidAnswer && !wasError)
                 {
-                    var validationMessages = this.GetValidationMessages(interview).ToList();
+                    var validationMessages = interview.GetFailedValidationMessages(this.questionIdentity);
 
                     this.Error.Caption = UIResources.Validity_Answered_Invalid_ErrorCaption;
                     this.Error.ChangeValidationErrors(validationMessages);
@@ -97,23 +97,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.IsInvalid = isInvalidAnswer || wasError;
             });
         }
-
-        private IEnumerable<string> GetValidationMessages(IStatefulInterview interview)
-        {
-            IReadOnlyList<FailedValidationCondition> failedConditions = interview.GetFailedValidationConditions(this.questionIdentity);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            var validationMessages = failedConditions.Select(x =>
-            {
-                var validationMessage = questionnaire.GetValidationMessage(this.questionIdentity.Id, x.FailedConditionIndex);
-                if (questionnaire.HasMoreThanOneValidationRule(this.questionIdentity.Id))
-                {
-                    validationMessage += $" [{x.FailedConditionIndex + 1}]";
-                }
-                return validationMessage;
-            });
-            return validationMessages;
-        }
-
 
         public void Handle(AnswersDeclaredValid @event)
         {

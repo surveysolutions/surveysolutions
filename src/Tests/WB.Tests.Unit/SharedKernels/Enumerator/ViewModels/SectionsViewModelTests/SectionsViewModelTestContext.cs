@@ -42,14 +42,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             Func<SideBarSectionViewModel> sideBarSectionViewModel = () =>
             {
                 var barSectionViewModel = new SideBarSectionViewModel(interviewsRepository.Object,
-                    questionnaireRepository.Object,
-                    Create.Service.SubstitutionService(),
-                    Create.Service.LiteEventRegistry(),
                     Stub.SideBarSectionViewModelsFactory(),
                     Mock.Of<IMvxMessenger>(),
                     Create.ViewModel.DynamicTextViewModel(
-                        interviewRepository: interviewsRepository.Object,
-                        questionnaireRepository: questionnaireRepository.Object));
+                        interviewRepository: interviewsRepository.Object));
                 barSectionViewModel.NavigationState = Create.Other.NavigationState(); 
                 return barSectionViewModel;
             };

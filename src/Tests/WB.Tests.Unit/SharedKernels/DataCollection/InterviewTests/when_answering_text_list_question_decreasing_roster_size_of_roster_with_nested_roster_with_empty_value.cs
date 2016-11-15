@@ -16,6 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster_with_empty_value : InterviewTestsContext
     {
         private Establish context = () =>

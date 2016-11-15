@@ -31,7 +31,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -142,13 +141,8 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 "some questionnaire");
 
-        public DateTimeAnswer DateTimeAnswer(Identity answerIdentity, DateTime answer)
-        {
-            var model = new DateTimeAnswer(answerIdentity.Id, answerIdentity.RosterVector);
-
-            model.SetAnswer(answer);
-            return model;
-        }
+        public InterviewTreeDateTimeQuestion InterviewTreeDateTimeQuestion(DateTime answer)
+            => new InterviewTreeDateTimeQuestion(answer);
 
         public DateTimeQuestion DateTimeQuestion(
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -263,15 +257,8 @@ namespace WB.Tests.Unit.TestFactories
                 id ?? Guid.NewGuid(),
                 rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty);
 
-        public IntegerNumericAnswer IntegerNumericAnswer(Identity answerIdentity = null, int answer = 42)
-        {
-            answerIdentity = answerIdentity ?? Create.Entity.Identity();
-
-            var model = new IntegerNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);
-
-            model.SetAnswer(answer);
-            return model;
-        }
+        public InterviewTreeIntegerQuestion InterviewTreeIntegerQuestion(int answer = 42)
+            => new InterviewTreeIntegerQuestion(answer);
 
         public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()
             => new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", () => new byte[0]);
@@ -379,15 +366,6 @@ namespace WB.Tests.Unit.TestFactories
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 301);
-
-        public InterviewRoster InterviewRoster(Guid? rosterId = null, decimal[] rosterVector = null, string rosterTitle = "titile")
-            => new InterviewRoster
-            {
-                Id = rosterId ?? Guid.NewGuid(),
-                IsDisabled = false,
-                RosterVector = rosterVector ?? new decimal[0],
-                Title = rosterTitle
-            };
 
         public InterviewStatuses InterviewStatuses(Guid? interviewid = null, Guid? questionnaireId = null, 
             long? questionnaireVersion = null, params InterviewCommentedStatus[] statuses)
@@ -530,8 +508,8 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionText = text
             };
 
-        public MultiOptionAnswer MultiOptionAnswer(Guid questionId, decimal[] rosterVector)
-            => new MultiOptionAnswer(questionId, rosterVector);
+        public InterviewTreeMultiOptionQuestion InterviewTreeMultiOptionQuestion(decimal[] answer)
+            => new InterviewTreeMultiOptionQuestion(answer);
 
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null,
@@ -775,14 +753,8 @@ namespace WB.Tests.Unit.TestFactories
         public ReadSideSettings ReadSideSettings()
             => new ReadSideSettings(readSideVersion: 0);
 
-        public RealNumericAnswer RealNumericAnswer(Identity answerIdentity = null, double answer = 42.42)
-        {
-            answerIdentity = answerIdentity ?? Create.Entity.Identity(Guid.NewGuid(), Core.SharedKernels.DataCollection.RosterVector.Empty);
-            var model = new RealNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);
-
-            model.SetAnswer(answer);
-            return model;
-        }
+        public InterviewTreeDoubleQuestion InterviewTreeDoubleQuestion(double answer = 42.42)
+            => new InterviewTreeDoubleQuestion(answer);
 
         public Group Roster(
             Guid? rosterId = null,
@@ -907,20 +879,8 @@ namespace WB.Tests.Unit.TestFactories
                 validationConditions ?? new List<ValidationCondition>(),
                 attachmentName);
 
-        public TextAnswer TextAnswer(string answer)
-            => Create.Entity.TextAnswer(answer, null, null);
-
-        public TextAnswer TextAnswer(string answer, Guid? questionId, decimal[] rosterVector)
-        {
-            var textAnswer = new TextAnswer(questionId ?? Guid.NewGuid(), rosterVector ?? Empty.RosterVector);
-
-            if (answer != null)
-            {
-                textAnswer.SetAnswer(answer);
-            }
-
-            return textAnswer;
-        }
+        public InterviewTreeTextQuestion InterviewTreeTextQuestion(string answer)
+            => new InterviewTreeTextQuestion(answer);
 
         public TextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false)
@@ -1056,11 +1016,10 @@ namespace WB.Tests.Unit.TestFactories
         public VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
             => new VariableValueLabel(value, label);
 
-        public YesNoAnswer YesNoAnswer(Guid questionId, decimal[] rosterVector)
-            => new YesNoAnswer(questionId, rosterVector);
-
         public YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
             => new YesNoAnswers(allOptionCodes, yesNoAnswersOnly);
+        public InterviewTreeYesNoQuestion InterviewTreeYesNoQuestion(AnsweredYesNoOption[] answer)
+            => new InterviewTreeYesNoQuestion(answer);
 
         public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, int[] answers = null, bool ordered = false)
             => Create.Entity.MultipleOptionsQuestion(

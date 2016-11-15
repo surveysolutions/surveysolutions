@@ -77,15 +77,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetTextListAnswer(entityIdentity);
-
+            
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(this.questionIdentity.Id);
             this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(this.questionIdentity.Id);
 
-            if (answerModel.IsAnswered)
+            var textListQuestion = interview.GetTextListQuestion(entityIdentity);
+            if (textListQuestion.IsAnswered)
             {
-                var answerViewModels = answerModel.Answers.Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
+                var answerViewModels = textListQuestion.GetAnswer().ToTupleArray().Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
 
                 answerViewModels.ForEach(answerViewModel => this.Answers.Add(answerViewModel));
             }

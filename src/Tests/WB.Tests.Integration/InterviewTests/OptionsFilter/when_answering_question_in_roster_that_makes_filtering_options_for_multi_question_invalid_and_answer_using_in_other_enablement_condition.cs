@@ -62,8 +62,8 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                     result.QuestionsQ5Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q5Id));
 
-                    result.QuestionqQ4HasEmptyAnswer = eventContext.GetEvents<MultipleOptionsQuestionAnswered>().Count(x => x.QuestionId == q4Id && x.SelectedValues.Length == 0) == 1;
-                    result.QuestionqQ2HasEmptyAnswer = eventContext.AnyEvent<MultipleOptionsQuestionAnswered>(x => x.QuestionId == q2Id && x.SelectedValues.Length == 0);
+                    result.QuestionqQ4HasEmptyAnswer = eventContext.GetSingleEvent<AnswersRemoved>().Questions.Any(x => x.Id == q4Id);
+                    result.QuestionqQ2HasEmptyAnswer = eventContext.GetSingleEvent<AnswersRemoved>().Questions.Any(x => x.Id == q2Id);
                 }
 
                 return result;

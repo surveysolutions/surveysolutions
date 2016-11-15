@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeRoster : InterviewTreeGroup
     {
         public InterviewTreeRoster(Identity identity,
@@ -57,8 +58,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsFixed => this.AsFixed != null;
 
         public override string ToString()
-            => $"Roster ({this.Identity}) [{this.RosterTitle}]" + Environment.NewLine
-               + string.Join(Environment.NewLine, this.Children.Select(child => StringExtensions.PrefixEachLine(child.ToString(), "  ")));
+            => $"Roster {this.Identity} '{this.Title} - {this.RosterTitle ?? "[...]"}'. " +
+               $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
 
         public void SetRosterTitle(string rosterTitle)
         {

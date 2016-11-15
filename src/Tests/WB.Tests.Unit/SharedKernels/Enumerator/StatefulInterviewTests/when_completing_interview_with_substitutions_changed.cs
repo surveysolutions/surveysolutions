@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-8159")]
     internal class when_completing_interview_with_substitutions_changed : StatefulInterviewTestsContext
     {
         Establish context = () =>
