@@ -158,11 +158,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         #region Shared persons
         public void Process(Questionnaire aggregate, AddSharedPersonToQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId), aggregate.QuestionnaireDocument);
+                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId), null);
 
         public void Process(Questionnaire aggregate, RemoveSharedPersonFromQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
-                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId), aggregate.QuestionnaireDocument);
+                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId), null);
 
         #endregion
 
