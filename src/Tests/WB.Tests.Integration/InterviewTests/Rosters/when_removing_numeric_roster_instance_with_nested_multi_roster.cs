@@ -6,13 +6,10 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    [Ignore("KP-8159")]
     internal class when_removing_numeric_roster_instance_with_nested_multi_roster : InterviewTestsContext
     {
         Establish context = () =>
@@ -39,7 +36,6 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.NumericIntegerQuestion(id: rosterSizeIntQuestionId, variable:"numeric"),
-
                     Create.Roster(
                         id: numericRosterId, 
                         rosterSizeSourceType: RosterSizeSourceType.Question,
@@ -48,10 +44,10 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         children: new IComposite[]
                         {
                             Create.MultyOptionsQuestion(rosterSizeMultiQuestionId, variable: "multi", options: new List<Answer>
-                                    {
-                                        Create.Option(value: "1", text: "Hello"),
-                                        Create.Option(value: "2", text: "World")
-                                    }),
+                            {
+                                Create.Option(value: "1", text: "Hello"),
+                                Create.Option(value: "2", text: "World")
+                            }),
                             Create.Roster(
                                 id: nestedMultiRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.Question,

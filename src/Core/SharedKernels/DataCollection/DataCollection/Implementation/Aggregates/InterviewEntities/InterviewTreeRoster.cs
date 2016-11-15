@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -57,9 +58,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsMulti => this.AsMulti != null;
         public bool IsFixed => this.AsFixed != null;
 
+
+        private string GetTypeAsText()
+        {
+            if (this.IsNumeric) return "Numeric";
+            if (this.IsFixed) return "Fixed";
+            if (this.IsMulti) return "Multi";
+            if (this.IsYesNo) return "YesNo";
+            if (this.IsList) return "List";
+
+            return "no type";
+        }
         public override string ToString()
-            => $"Roster {this.Identity} '{this.Title} - {this.RosterTitle ?? "[...]"}'. " +
-               $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
+           => $"{this.GetTypeAsText()} Roster ({this.Identity}) [{this.RosterTitle}]" + Environment.NewLine
+              + string.Join(Environment.NewLine, this.Children.Select(child => StringExtensions.PrefixEachLine(child.ToString(), "  ")));
+
+        //public override string ToString()
+        //    => $"Roster {this.Identity} '{this.Title} - {this.RosterTitle ?? "[...]"}'. " +
+        //       $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
 
         public void SetRosterTitle(string rosterTitle)
         {
