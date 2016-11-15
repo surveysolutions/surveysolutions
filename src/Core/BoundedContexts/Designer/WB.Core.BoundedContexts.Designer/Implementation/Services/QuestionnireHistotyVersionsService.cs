@@ -32,6 +32,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public string GetResultingQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
+            if (questionnaireDocument == null)
+                return null;
+
             return entitySerializer.Serialize(questionnaireDocument);
         }
     }
