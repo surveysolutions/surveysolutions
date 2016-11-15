@@ -53,6 +53,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return new InterviewTreeNodeDiff(source, changed);
         }
+
+        public Identity Identity => this.ChangedNode?.Identity ?? this.SourceNode?.Identity;
     }
 
     public class InterviewTreeRosterDiff : InterviewTreeGroupDiff

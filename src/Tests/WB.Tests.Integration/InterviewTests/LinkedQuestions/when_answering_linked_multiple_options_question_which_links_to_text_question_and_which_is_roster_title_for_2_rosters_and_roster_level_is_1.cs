@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                             variable: "link_multi")
                     }),
                 Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
-                Create.Roster(id: linkedToRosterId, variable: "ros3", fixedRosterTitles: new [] { Create.FixedRosterTitle(0), Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)},
+                Create.Roster(id: linkedToRosterId, variable: "ros3", fixedTitles: new [] { Create.FixedTitle(0), Create.FixedTitle(1), Create.FixedTitle(2)},
                     children: new IComposite[]
                     {
                         Create.TextQuestion(id: linkedToQuestionId, variable: "link_source"),

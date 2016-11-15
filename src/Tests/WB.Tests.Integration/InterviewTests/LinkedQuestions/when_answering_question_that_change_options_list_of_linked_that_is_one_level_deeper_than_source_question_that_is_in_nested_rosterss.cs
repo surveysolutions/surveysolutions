@@ -28,13 +28,13 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.Roster(rosterId, variable:"r", fixedRosterTitles: new [] { Create.FixedRosterTitle(1),  Create.FixedRosterTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
+                    Create.Roster(rosterId, variable:"r", fixedTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                     {
                         Create.MultyOptionsQuestion(q1Id, variable: "q1", options: options),
                         Create.Roster(roster1Id, variable:"r1", rosterSizeQuestionId: q1Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
                         {
                             Create.NumericIntegerQuestion(q2Id, variable: "age"),
-                            Create.Roster(roster2Id, variable:"r2", fixedRosterTitles: new [] { Create.FixedRosterTitle(1),  Create.FixedRosterTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
+                            Create.Roster(roster2Id, variable:"r2", fixedTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                             {
                                 Create.SingleQuestion(q3Id, variable: "q3", linkedToQuestionId: q2Id, linkedFilter: "age > current.age")
                             }),

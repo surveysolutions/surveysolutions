@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -15,20 +16,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
-            var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
             var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.AreLinkedOptionsChanged).ToArray();
-            var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
             var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
-            this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
+            var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
+            var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+
+            this.NewApply(questionsWithChangedAnswer, changedRosters, responsibleId.Value);
+
             this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
-            this.ApplyRosterEvents(changedRosters);
             this.ApplyEnablementEvents(diff);
             this.ApplyValidityEvents(diff);
             this.ApplyVariableEvents(changedVariables);
             this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet);
             this.ApplySubstitutionEvents(diff);
         }
+
+        private void NewApply(InterviewTreeQuestionDiff[] questionsWithChangedAnswer, InterviewTreeRosterDiff[] changedRosters, Guid responsibleId)
+        {
+            var questionsRosterLevels = questionsWithChangedAnswer.Select(x => x.Identity.RosterVector).ToHashSet();
+            var rosterLevels = changedRosters.Select(x => x.Identity.RosterVector).ToHashSet();
+            var intersection = questionsRosterLevels.Intersect(rosterLevels).ToList();
+
+            if (intersection.Count == 0)
+            {
+                // this is for tests only
+                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
+                this.ApplyRosterEvents(changedRosters);
+            }
+            else
+            {
+                var maxDepth = Math.Max(questionsRosterLevels.Max(x => x.Length), rosterLevels.Select(x => x.Length).Max());
+                for (int i = 0; i <= maxDepth; i++)
+                {
+                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId);
+                    this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
+                }
+            }
+        }
+
 
         private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
         {

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -39,24 +40,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var structuralChanges = new StructuralChanges();
             interviewExpressionStateMock.Setup(x => x.GetStructuralChanges()).Returns(structuralChanges);
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-                => 
-                   _.HasGroup(rosterGroupId) == true
-                && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId }
-
-                 && _.HasGroup(nestedRosterGroupId) == true
-                && _.GetRosterLevelForGroup(nestedRosterGroupId) == 2
-                && _.GetRostersFromTopToSpecifiedGroup(nestedRosterGroupId) == new Guid[] { rosterGroupId, nestedRosterGroupId }
-                );
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.Roster(rosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedRosterTitle(1, "level 1")}, children: new IComposite[]
+                {
+                    Create.Entity.Roster(nestedRosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedRosterTitle(1, "level 2")})
+                })
+            }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
                 => _.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object);
 
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
-                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, 
+                questionnaireRepository: questionnaireRepository,
+                interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interviewSynchronizationDto =
                 Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
@@ -71,15 +70,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                 new InterviewItemId(nestedRosterGroupId, new decimal[] {1}),
                                 new[]
                                 {
-                                    new RosterSynchronizationDto(nestedRosterGroupId, new decimal[] {1}, 1, null,
-                                        string.Empty),
+                                    new RosterSynchronizationDto(nestedRosterGroupId, new decimal[] {1}, 1, null, "level 2"),
                                 }
                             },
                             {
                                 new InterviewItemId(rosterGroupId, new decimal[] {}),
                                 new[]
                                 {
-                                    new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1, null, string.Empty),
+                                    new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1, null, "level 1"),
                                 }
                             }
                         },
@@ -95,17 +93,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = null;
         };
 
-        Because of = () => interview.SynchronizeInterview(userId, interviewSynchronizationDto);
+        Because of = () => 
+            interview.SynchronizeInterview(userId, interviewSynchronizationDto);
 
         It should_raise_InterviewSynchronized_event = () =>
-            eventContext.ShouldContainEvent<InterviewSynchronized>(@event
-                => @event.InterviewData==interviewSynchronizationDto);
+            eventContext.ShouldContainEvent<InterviewSynchronized>(@event => @event.InterviewData==interviewSynchronizationDto);
 
         It should_add_first_roster_to_expression_state = () =>
-            interviewExpressionStateMock.Verify(x => x.AddRoster(rosterGroupId, new decimal[0], 1, null), Times.Once);
+            interviewExpressionStateMock.Verify(x => x.AddRoster(rosterGroupId, new decimal[0], 1, 0), Times.Once);
 
         It should_add_nested_roster_to_expression_state = () =>
-            interviewExpressionStateMock.Verify(x => x.AddRoster(nestedRosterGroupId, new decimal[]{1}, 1, null), Times.Once);
+            interviewExpressionStateMock.Verify(x => x.AddRoster(nestedRosterGroupId, new decimal[]{1}, 1, 0), Times.Once);
 
         It should_add_parent_roster_first = () =>
             rosterAddIndex[rosterGroupId].ShouldEqual(0);
@@ -114,7 +112,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            rosterAddIndex[nestedRosterGroupId].ShouldEqual(1);
 
         private static EventContext eventContext;
-        private static Interview interview;
+        private static StatefulInterview interview;
         private static Guid userId;
         private static Guid rosterGroupId;
         private static Guid nestedRosterGroupId;

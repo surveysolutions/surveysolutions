@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Roster(id: rosterId, variable: "ros", fixedTitles: new[] {"1", "2"},
+                    Create.Roster(id: rosterId, variable: "ros", obsoleteFixedTitles: new[] {"1", "2"},
                         children: new IComposite[]
                         {
                             Create.TextQuestion(id: sourceOfLinkQuestionId, variable:"txt")
