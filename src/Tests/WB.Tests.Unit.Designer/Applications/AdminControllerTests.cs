@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.Designer.Applications
             Guid templateId = Guid.NewGuid();
 
             var doc = new QuestionnaireDocument() {Title = "test"};
-            var view = new QuestionnaireView(doc);
+            var view = Create.QuestionnaireView(doc);
             this.questionnaireViewFactoryMock.Setup(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>())).Returns(view);
 
             this.ZipUtilsMock.Setup(x => x.Compress(Moq.It.IsAny<string>())).Returns(new MemoryStream());

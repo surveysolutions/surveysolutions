@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         Establish context = () =>
         {
             questionnaireDocument = CreateQuestionnaireDocument();
-            var questionnaireView = CreateQuestionnaireView(questionnaireDocument);
+            questionnaireView = CreateQuestionnaireView(questionnaireDocument);
 
             verificationMessages =  new QuestionnaireVerificationMessage[]
             {
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
             verifierMock
-                .Setup(x => x.Verify(questionnaireDocument))
+                .Setup(x => x.Verify(questionnaireView))
                 .Returns(allVerificationErrors);
 
             errorsMapperMock = new Mock<IVerificationErrorsMapper>();
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result = controller.Verify(questionnaireId);
 
         It should_call_verifier_once = () =>
-            verifierMock.Verify(x => x.Verify(questionnaireDocument), Times.Once);
+            verifierMock.Verify(x => x.Verify(questionnaireView), Times.Once);
 
         It should_call_errors_mapper_once = () =>
             errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument), Times.Once);
@@ -88,6 +88,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result.Warnings.ShouldEqual(mappedAndEnrichedVerificationWarnings);
 
         private static QuestionnaireDocument questionnaireDocument; 
+        private static QuestionnaireView questionnaireView; 
         private static Mock<IQuestionnaireVerifier> verifierMock ;
         private static Mock<IVerificationErrorsMapper> errorsMapperMock;
         private static QuestionnaireVerificationMessage[] verificationMessages;

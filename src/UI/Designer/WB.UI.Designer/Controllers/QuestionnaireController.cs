@@ -185,22 +185,17 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Revert(Guid id, Guid commandId)
         {
             var historyReferenceId = commandId;
-            QuestionnaireView model = this.GetQuestionnaire(id);
 
-            if (model != null)
+            bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.UserHelper.WebUser.UserId);
+            if (!hasAccess)
             {
-                if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
-                {
-                    this.Error("You don't  have permissions to restore version of this questionnaire.");
-                }
-                else
-                {
-                    var command = new RevertVersionQuestionnaire(model.PublicKey, historyReferenceId, UserHelper.WebUser.UserId);
-                    this.commandService.Execute(command);
-
-                    this.Success($"Questionnaire \"{model.Title}\" successfully restored.");
-                }
+                this.Error("You don't  have permissions to restore operation for this questionnaire.");
+                return this.RedirectToAction("Index");
             }
+
+            var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.UserHelper.WebUser.UserId);
+            this.commandService.Execute(command);
+
             string sid = id.FormatGuid();
             return this.RedirectToAction("Details", new {id =  sid});
         }

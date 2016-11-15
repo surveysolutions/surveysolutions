@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => errors = verifier.Verify(questionnaire);
+        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_contain_WB0210_warning = () => errors.ShouldContainWarning("WB0210");
 

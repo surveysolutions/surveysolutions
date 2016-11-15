@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         QuestionnaireView Load(QuestionnaireViewInputModel input);
 
         bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
+
+        bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
     }
 
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
@@ -36,10 +38,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
         {
             var doc = GetQuestionnaireDocument(input);
-            return doc == null ? null : new QuestionnaireView(doc);
+            var sharedPersons = this.GetSharedPersons(input.QuestionnaireId);
+            return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
         public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)
+        {
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            if (questionnaire == null || questionnaire.IsDeleted)
+                return false;
+
+            if (questionnaire.CreatedBy == userId)
+                return true;
+
+            var sharedPersons = this.GetSharedPersons(questionnaireId);
+            if (sharedPersons.Any(x => x.Id == userId))
+                return true;
+
+            var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+            if (questionnaireListItem.IsPublic)
+                return true;
+
+            return false;
+        }
+
+        public bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null || questionnaire.IsDeleted)
@@ -52,11 +75,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (sharedPersons.Any(x => x.Id == userId))
                 return true;
 
-            var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
-            if (questionnaireListItem.IsPublic)
-                return true;
-
             return false;
+        }
+
+        private List<SharedPerson> GetSharedPersons(Guid questionnaireId)
+        {
+            var sharedPersons = this.sharedPersonsStorage.GetById(questionnaireId.FormatGuid())?.SharedPersons ??
+                new List<SharedPerson>();
+            return sharedPersons;
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)

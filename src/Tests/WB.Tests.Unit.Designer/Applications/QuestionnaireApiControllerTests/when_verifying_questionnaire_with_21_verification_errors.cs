@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                     PublicKey = new Guid(),
                     Children = new IComposite[101].Select(_ => new TextQuestion() {PublicKey = new Guid()}).ToList<IComposite>().ToReadOnlyCollection()
                 });
-            var questionnaireView = CreateQuestionnaireView(questionnaireDocument);
+            questionnaireView = CreateQuestionnaireView(questionnaireDocument);
 
             verificationMessages = CreateQuestionnaireVerificationErrors(questionnaireDocument.Find<IComposite>(_ => true));
 
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
             verifierMock
-                .Setup(x => x.Verify(questionnaireDocument))
+                .Setup(x => x.Verify(questionnaireView))
                 .Returns(verificationMessages);
 
             controller = CreateQuestionnaireController(
@@ -51,7 +51,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
         It should_returned_errors_contains_specified_errors_count = () =>
             result.Errors.Sum(error => error.Errors.SelectMany(e => e.References).Count()).ShouldEqual(QuestionnaireController.MaxVerificationErrors);
 
-        private static QuestionnaireDocument questionnaireDocument; 
+        private static QuestionnaireDocument questionnaireDocument;
+        private static QuestionnaireView questionnaireView;
         private static Mock<IQuestionnaireVerifier> verifierMock ;
         private static QuestionnaireVerificationMessage[] verificationMessages;
         private static QuestionnaireController controller;
