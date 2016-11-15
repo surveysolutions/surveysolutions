@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         ILiteEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
-        private enum NavigationGroupType { Section, LastSection, InsideGroupOrRoster }
+
         public class GroupStatistics
         {
             public int EnabledQuestionsCount { get; set; }
@@ -41,8 +41,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private NavigationState navigationState;
 
         public Identity Identity { get; private set; }
+        public NavigationGroupType NavigationGroupType { get; private set; }
+
         private Identity groupOrSectionToNavigateIdentity;
-        private NavigationGroupType navigationGroupType;
         private readonly List<Identity> listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection = new List<Identity>();
 
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -122,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.groupOrSectionToNavigateIdentity = interview.GetParentGroup(this.Identity);
                 this.isRoster = questionnaire.IsRosterGroup(this.groupOrSectionToNavigateIdentity.Id);
                 this.RosterInstanceTitle = interview.GetRosterTitle(this.groupOrSectionToNavigateIdentity);
-                this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
+                this.NavigationGroupType = NavigationGroupType.ToParentGroup;
             }
 
             this.SetNavigationItemTitle();
@@ -141,9 +142,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void SetGroupsStates()
         {
-            switch (this.navigationGroupType)
+            switch (this.NavigationGroupType)
             {
-                case NavigationGroupType.InsideGroupOrRoster:
+                case NavigationGroupType.ToParentGroup:
                 case NavigationGroupType.Section:
                     this.navigateToGroupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
                     break;
@@ -181,14 +182,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 break;
             }
 
-            this.navigationGroupType = this.groupOrSectionToNavigateIdentity == null ? NavigationGroupType.LastSection : NavigationGroupType.Section;
+            this.NavigationGroupType = this.groupOrSectionToNavigateIdentity == null ? NavigationGroupType.LastSection : NavigationGroupType.Section;
         }
 
         private void SetNavigationItemTitle()
         {
-            switch (this.navigationGroupType)
+            switch (this.NavigationGroupType)
             {
-                case NavigationGroupType.InsideGroupOrRoster:
+                case NavigationGroupType.ToParentGroup:
                 case NavigationGroupType.Section:
                     this.Title.Dispose();
                     this.Title.Init(this.interviewId, this.groupOrSectionToNavigateIdentity);
@@ -211,9 +212,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private async Task NavigateAsync()
         {
             await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
-            switch (this.navigationGroupType)
+            switch (this.NavigationGroupType)
             {
-                case NavigationGroupType.InsideGroupOrRoster:
+                case NavigationGroupType.ToParentGroup:
                     this.navigationState.NavigateTo(
                         NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity,
                             anchoredElementIdentity: this.Identity));
@@ -246,7 +247,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void Handle(GroupsEnabled @event)
         {
-            if (this.navigationGroupType == NavigationGroupType.InsideGroupOrRoster) return;
+            if (this.NavigationGroupType == NavigationGroupType.ToParentGroup) return;
             if (!this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Intersect(@event.Groups).Any()) return;
 
             this.UpdateNavigation();
@@ -265,7 +266,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void Handle(GroupsDisabled @event)
         {
-            if (this.navigationGroupType == NavigationGroupType.InsideGroupOrRoster) return;
+            if (this.NavigationGroupType == NavigationGroupType.ToParentGroup) return;
             if (!@event.Groups.Contains(this.groupOrSectionToNavigateIdentity)) return;
 
             this.UpdateNavigation();
