@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
             viewModel.SectionIdentity = sectionIdentity;
         };
 
-        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: sectionIdentity.Id, 
+        Because of = () => viewModel.Title.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: sectionIdentity.Id, 
             rosterTitle: "rosterTitle", 
             outerRosterVector: Empty.RosterVector,
             instanceId: 0m));

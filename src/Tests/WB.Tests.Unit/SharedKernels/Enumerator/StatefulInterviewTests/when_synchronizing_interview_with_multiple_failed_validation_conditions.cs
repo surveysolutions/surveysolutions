@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
@@ -48,10 +49,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
 
-        It should_return_failed_condition_indexes = () => interview.GetFailedValidationMessages(questionIdentity).Count.ShouldEqual(2);
+        It should_return_failed_condition_indexes = () => interview.GetFailedValidationMessages(questionIdentity).Count().ShouldEqual(2);
 
-        It should_return_failed_condition_indexes_from_events = () => 
-            interview.GetFailedValidationMessages(questionIdentity).ShouldEachConformTo(c => FailedCondtionsFromSync.Contains(c));
+        It should_return_failed_condition_indexes_from_events = () =>
+            interview.GetFailedValidationMessages(questionIdentity)
+                .Select((massage, indexOfMessage) => indexOfMessage)
+                .ShouldEachConformTo(c => FailedCondtionsFromSync.Select(x => x.FailedConditionIndex).Contains(c));
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;
