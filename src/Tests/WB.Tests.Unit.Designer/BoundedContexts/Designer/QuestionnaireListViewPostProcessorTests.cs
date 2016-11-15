@@ -239,9 +239,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_RevertVersionQuestionnaire_command()
         {
             // arrange
-            Guid questionnaireId = Guid.NewGuid();
-            Guid historyReferanceId = Guid.NewGuid();
-            Guid responsibleId = Guid.NewGuid();
+            Guid questionnaireId    = Guid.Parse("11111111111111111111111111111111");
+            Guid historyReferanceId = Guid.Parse("22222222222222222222222222222222");
+            Guid responsibleId      = Guid.Parse("33333333333333333333333333333333");
             var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
 
             AssemblyContext.SetupServiceLocator();
