@@ -43,7 +43,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IConditional>(RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
             Warning<IValidatable>(RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
             Warning(NoCurrentTimeQuestions, "WB0221", VerificationMessages.WB0221_NoCurrentTimeQuestions),
+            Warning<SingleQuestion>(Prefilled, "WB0222", VerificationMessages.WB0222_SingleOptionPrefilled),
+            Warning<IGroup>(NotSingleSectionWithLessThan5Questions, "WB0223", VerificationMessages.WB0223_SectionWithLessThan5Questions),
+            Warning<IGroup>(TooManySubsectionsAtOneLevel, "WB0224", VerificationMessages.WB0224_TooManySubsectionsAtOneLevel),
+            Warning<SingleQuestion>(ComboBoxWithLessThan10Elements, "WB0225", VerificationMessages.WB0225_ComboBoxWithLessThan10Elements),
+            WarningForCollection(SameCascadingParentQuestion, "WB0226", VerificationMessages.WB0226_SameCascadingParentQuestion),
 
+            this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
+            this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
             Warning<IQuestion>(QuestionIsTooShort, "WB0255", VerificationMessages.WB0255_QuestionIsTooShort),
@@ -51,10 +58,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(MoreThan30PercentQuestionsAreText, "WB0265", VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText),
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
-
-            this.ValidationConditionRefersToAFutureQuestion,
-            this.EnablementConditionRefersToAFutureQuestion
         };
+
+        private static bool ComboBoxWithLessThan10Elements(SingleQuestion question)
+            => (question.IsFilteredCombobox ?? false)
+            && question.Answers.Count < 10;
+
+        private static bool TooManySubsectionsAtOneLevel(IGroup group)
+            => group.Children.Count(Subsection) >= 10;
+
+        private static bool Subsection(IComposite entity)
+            => entity is IGroup
+            && !IsSection(entity)
+            && !IsRoster(entity);
+
+        private static bool NotSingleSectionWithLessThan5Questions(IGroup group)
+            => IsSection(group)
+            && group.GetParent().Children.Count > 1
+            && group.GetDescendants().Count(Question) < 5;
+
+        private static bool Question(IQuestionnaireEntity entity) => entity is IQuestion;
+        private static bool Prefilled(IQuestion question) => question.Featured;
 
         private static bool RowIndexInMultiOptionBasedRoster(IConditional entity, MultiLanguageQuestionnaireDocument questionnaire)
             => UsesRowIndex(entity)
@@ -119,7 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return countOfQuestionsWithoutLabels > (countOfAllQuestions/2);
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> EnablementConditionRefersToAFutureQuestion(MultiLanguageQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> Warning_EnablementConditionRefersToAFutureQuestion_WB0251(MultiLanguageQuestionnaireDocument questionnaire)
         {
             var result = new List<QuestionnaireVerificationMessage>();
             var questionnairePlainStructure = questionnaire.GetAllEntitiesIdAndTypePairsInQuestionnaireFlowOrder().Select(e => e.Id).ToArray();
@@ -208,7 +232,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Where(grouping => grouping.Count() > 1)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
-        private IEnumerable<QuestionnaireVerificationMessage> ValidationConditionRefersToAFutureQuestion(
+        private static IEnumerable<QuestionnaireNodeReference[]> SameCascadingParentQuestion(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire
+                .Find<SingleQuestion>(question => question.CascadeFromQuestionId.HasValue)
+                .GroupBy(question => question.CascadeFromQuestionId)
+                .Where(grouping => grouping.Count() > 1)
+                .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
+
+        private IEnumerable<QuestionnaireVerificationMessage> Warning_ValidationConditionRefersToAFutureQuestion_WB0250(
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             var result=new List<QuestionnaireVerificationMessage>();
@@ -329,7 +360,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => group.IsRoster
             && !group.Children.Any();
 
-        private static bool IsSection(IGroup group) => group.GetParent().GetParent() == null;
+        private static bool IsSection(IQuestionnaireEntity entity) => entity.GetParent().GetParent() == null;
 
         private static bool IsFixedRoster(IGroup group) => group.IsRoster && (group.FixedRosterTitles?.Any() ?? false);
 

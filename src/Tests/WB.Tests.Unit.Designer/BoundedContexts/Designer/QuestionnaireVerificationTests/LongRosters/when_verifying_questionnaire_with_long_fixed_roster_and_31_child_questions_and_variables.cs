@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             {
                 Create.Chapter(children: new IComposite[]
                 {
-                    Create.Roster(rosterId, fixedRosterTitles: titles.ToArray(), rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: childQuestions)
+                    Create.Roster(rosterId, fixedRosterTitles: titles.ToArray(), rosterType: RosterSizeSourceType.FixedTitles, children: childQuestions)
                 })
             });
 

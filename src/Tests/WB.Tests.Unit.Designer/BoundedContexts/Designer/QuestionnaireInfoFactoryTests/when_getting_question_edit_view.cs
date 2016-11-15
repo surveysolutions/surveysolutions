@@ -5,10 +5,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -39,10 +37,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.Title.ShouldEqual(GetQuestion(questionId).QuestionText);
 
         It should_return_grouped_list_possible_linked_questions = () =>
-            result.SourceOfLinkedEntities.Count.ShouldEqual(9);
+            result.SourceOfLinkedEntities.Count.ShouldEqual(10);
 
         It should_replace_guids_in_condition_expressions_for_var_names = () =>
-            result.EnablementCondition.ShouldEqual("[q1] > 25");
+            result.EnablementCondition.ShouldEqual("q1 > 25");
 
         It should_return_grouped_list_of_multi_questions_with_one_pair_and_key_equals_ = () =>
             result.SourceOfLinkedEntities.Select(x => x.Title).ShouldContain(linkedQuestionsKey1);

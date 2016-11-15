@@ -125,7 +125,7 @@ namespace Main.Core.Entities.SubEntities
                 this.children.Add(itemToInsert);
             }
             else
-                this.children.Insert(index + 1, itemToInsert);
+                this.children.Insert(index, itemToInsert);
 
             itemToInsert.SetParent(this);
             itemToInsert.ConnectChildrenWithParent();

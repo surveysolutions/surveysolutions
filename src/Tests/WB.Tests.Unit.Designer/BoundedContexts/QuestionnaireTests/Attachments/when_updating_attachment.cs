@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
-            questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", responsibleId, ""));
+            questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, oldAttachmentId, "", responsibleId, ""));
 
-            updateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
+            updateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name, oldAttachmentId);
         };
 
 
@@ -36,5 +36,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static readonly Guid oldAttachmentId = Guid.Parse("1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 }

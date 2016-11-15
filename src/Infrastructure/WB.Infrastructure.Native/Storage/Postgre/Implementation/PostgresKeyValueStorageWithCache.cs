@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Caching;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -12,8 +13,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         static MemoryCache memoryCache = new MemoryCache(typeof(TEntity).Name + " K/V memory cache");
 
-        public PostgresKeyValueStorageWithCache(string connectionString, string schemaName, ILogger logger) 
-            : base(connectionString, schemaName, logger)
+        public PostgresKeyValueStorageWithCache(string connectionString, string schemaName, ILogger logger, IEntitySerializer<TEntity> serializer) 
+            : base(connectionString, schemaName, logger, serializer)
         {
         }
 

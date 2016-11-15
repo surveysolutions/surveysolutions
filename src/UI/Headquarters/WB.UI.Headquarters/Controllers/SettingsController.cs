@@ -73,6 +73,14 @@ namespace WB.UI.Headquarters.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult RemoveLogo()
+        {
+            this.logoStorage.Remove(CompanyLogo.StorageKey);
+            WriteToTempData(Alerts.SUCCESS, Settings.LogoUpdated);
+            return RedirectToAction("Index");
+        }
+
         private void ValidateImage(byte[] source)
         {
             using (var outputStream = new MemoryStream())

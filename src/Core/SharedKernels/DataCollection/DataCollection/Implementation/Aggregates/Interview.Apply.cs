@@ -324,6 +324,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(SupervisorAssigned @event)
         {
             this.properties.SupervisorId = @event.SupervisorId;
+            this.properties.InterviewerId = null;
         }
 
         public virtual void Apply(InterviewerAssigned @event)

@@ -7,6 +7,7 @@ using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -16,11 +17,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         protected readonly string connectionString;
         protected readonly string tableName;
         private readonly ILogger logger;
+        private readonly IEntitySerializer<TEntity> serializer;
 
-        public PostgresKeyValueStorage(string connectionString, string schemaName, ILogger logger)
+        public PostgresKeyValueStorage(string connectionString, string schemaName, ILogger logger, IEntitySerializer<TEntity> serializer)
         {
             this.connectionString = connectionString;
             this.logger = logger;
+            this.serializer = serializer;
 
             tableName = typeof(TEntity).Name.Pluralize();
             if (!string.IsNullOrWhiteSpace(schemaName))
@@ -45,7 +48,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             if (queryResult != null)
             {
-                return JsonConvert.DeserializeObject<TEntity>(queryResult, BackwardCompatibleJsonSerializerSettings);
+                return this.serializer.Deserialize(queryResult);
             }
 
             return null;
@@ -105,7 +108,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     : $"INSERT INTO {this.tableName} VALUES(:id, :value)";
 
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
-                string serializedValue = JsonConvert.SerializeObject(view, Formatting.None, BackwardCompatibleJsonSerializerSettings);
+                var serializedValue = this.serializer.Serialize(view);
                 var valueParameter = new NpgsqlParameter("value", NpgsqlDbType.Json) { Value = serializedValue };
 
                 upsertCommand.Parameters.Add(parameter);
@@ -165,7 +168,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     {
                         writer.StartRow();
                         writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
-                        var serializedValue = JsonConvert.SerializeObject(item.Item1, Formatting.None, BackwardCompatibleJsonSerializerSettings);
+                        var serializedValue = this.serializer.Serialize(item.Item1);
                         writer.Write(serializedValue, NpgsqlDbType.Json); // write value
                     }
                 }
@@ -199,15 +202,5 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
             }
         }
-
-        private static readonly JsonSerializerSettings BackwardCompatibleJsonSerializerSettings = new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.Auto,
-            DefaultValueHandling = DefaultValueHandling.Ignore,
-            MissingMemberHandling = MissingMemberHandling.Ignore,
-            NullValueHandling = NullValueHandling.Ignore,
-            FloatParseHandling = FloatParseHandling.Decimal,
-            Binder = new OldToNewAssemblyRedirectSerializationBinder()
-        };
     }
 }

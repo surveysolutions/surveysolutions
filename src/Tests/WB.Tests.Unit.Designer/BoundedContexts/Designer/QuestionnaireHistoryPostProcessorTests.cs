@@ -18,11 +18,12 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Infrastructure.Native.Storage;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
-    [TestOf(typeof(ListViewPostProcessor))]
+    [TestOf(typeof(HistoryPostProcessor))]
     [TestFixture]
     public class QuestionnaireHistoryPostProcessorTests
     {
@@ -158,13 +159,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 return this.Fluent;
             }
 
-            public FluentSyntax QuestionnaireDocumentIsImportedByHistoryPostProcessor()
+            public FluentSyntax QuestionnaireDocumentIsImportedByHistoryPostProcessor(Questionnaire questionnire = null)
             {
                 HistoryPostProcessor historyPostProcessor = this.Context.HistoryPostProcessor;
                 QuestionnaireDocument questionnaireDocument = this.Context.QuestionnaireDocument;
 
-                historyPostProcessor.Process(null,
+                historyPostProcessor.Process(questionnire,
                     Create.Command.ImportQuestionnaire(questionnaireDocument: questionnaireDocument));
+
+                return this.Fluent;
+            }
+
+            public FluentSyntax EntitySerializer<TEntity>() where  TEntity: class
+            {
+                Setup.InstanceToMockedServiceLocator<IEntitySerializer<TEntity>>(new EntitySerializer<TEntity>());
 
                 return this.Fluent;
             }
@@ -192,13 +200,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaireDocument = Create.QuestionnaireDocumentWithSharedPersons(questionnaireId, questionnaireOwner);
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
             var command = new CloneQuestionnaire(questionnaireId, "title", responsibleId, true,
-                Create.QuestionnaireDocumentWithSharedPersons(questionnaireId, questionnaireOwner));
+                questionnaireDocument);
             
             var historyPostProcessor = CreateHistoryPostProcessor();
 
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -236,6 +249,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            SetupEntitySerializer();
+
             var questionnaireDocument = new QuestionnaireDocument()
             {
                 Children = new List<IComposite>()
@@ -245,7 +260,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             };
 
             var questionnaire = Create.Questionnaire();
-
             questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
 
             var command = new CreateQuestionnaire(questionnaireId, "title", responsibleId, true);
@@ -281,15 +295,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Guid questionnaireId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             Guid removedGroupId = Guid.Parse("11111111111111111111111111111111");
             Guid notRemovedQuestionId = Guid.Parse("33333333333333333333333333333333");
+            QuestionnaireDocument questionnaireDocument;
             HistoryPostProcessor historyPostProcessor;
             InMemoryKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage;
+            var questionnaire = Create.Questionnaire();
 
             Given().ServiceLocator().
                 And.QuestionnaireChangeRecordStorage().
                 And.AccountDocumentStorage().
+                And.EntitySerializer<QuestionnaireDocument>().
                 And.QuestionnaireStateTrackerStorage(out questionnaireStateTrackerStorage).
                 And.HistoryPostProcessor(out historyPostProcessor).
-                And.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+                And.QuestionnaireDocument(out questionnaireDocument, id: questionnaireId, children: new IComposite[]
                 {
                     Create.Group(groupId: removedGroupId, children: new IComposite[]
                     {
@@ -300,10 +317,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                         Create.Question(questionId: notRemovedQuestionId),
                     }),
                 }).
-                And.QuestionnaireDocumentIsImportedByHistoryPostProcessor();
+                And.QuestionnaireDocumentIsImportedByHistoryPostProcessor(questionnaire);
+
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
 
             // when
-            historyPostProcessor.Process(null, Create.Command.DeleteGroup(questionnaireId: questionnaireId, groupId: removedGroupId));
+            historyPostProcessor.Process(questionnaire, Create.Command.DeleteGroup(questionnaireId: questionnaireId, groupId: removedGroupId));
 
             // then
             var questionnaireStateTracker = questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
@@ -325,15 +344,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Given().ServiceLocator().
                 And.QuestionnaireChangeRecordStorage(out historyStorage).
+                And.EntitySerializer<QuestionnaireDocument>().
                 And.AccountDocumentStorage().
                 And.AccountDocument(questionnaireOwner, ownerName).
                 And.QuestionnaireStateTrackerStorage().
                 And.QuestionnaireDocument(out questionnaireDocument, id: questionnaireId, title: questionnnaireTitle, userId: questionnaireOwner).
                 And.HistoryPostProcessor(out historyPostProcessor);
 
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
+
             // when
             var command = Create.Command.ImportQuestionnaire(questionnaireDocument: questionnaireDocument);
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // then
             var questionnaireHistoryItem = historyStorage.Query(historyItems
@@ -378,11 +401,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = new DeleteQuestionnaire(questionnaireId, responsibleId);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -428,11 +456,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = new DeleteAttachment(questionnaireId, attachmentId, responsibleId);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -476,11 +509,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = new UpdateQuestionnaire(questionnaireId, "title", true, responsibleId, false);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -517,12 +555,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName }, sharedWithId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = new AddSharedPersonToQuestionnaire(questionnaireId, sharedWithId, "", ShareType.Edit,
                 responsibleId);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -559,11 +602,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName }, sharedWithId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = new RemoveSharedPersonFromQuestionnaire(questionnaireId, sharedWithId, "", responsibleId);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -599,11 +647,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
+            SetupEntitySerializer();
             var command = new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, "", null);
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -639,11 +692,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = Create.Command.UpdateStaticText(questionnaireId, staticTextId, staticText, "", responsibleId, "");
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -679,11 +737,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = Create.Command.UpdateVariable(questionnaireId, variableId, VariableType.Boolean, variableName, "", responsibleId);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -719,6 +782,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
+            SetupEntitySerializer();
+
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
                 new QuestionnaireStateTracker
@@ -729,11 +794,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = Create.Command.UpdateGroup(questionnaireId, groupId, responsibleId, variableName: variable);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var questionnaireHistoryItem = historyStorage.Query(
@@ -769,6 +837,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
+            SetupEntitySerializer();
+
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
                 new QuestionnaireStateTracker
@@ -779,11 +849,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = Create.Command.UpdateGroup(questionnaireId, rosterId, responsibleId, variableName: variable, isRoster: true);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
 
@@ -845,6 +918,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
+            SetupEntitySerializer();
+
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
                 new QuestionnaireStateTracker
@@ -855,11 +930,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var command = Create.Command.UpdateGroup(questionnaireId, groupId, responsibleId, variableName: variable);
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, command);
+            historyPostProcessor.Process(questionnaire, command);
 
             // assert
             var updateRosterHistoryItem = historyStorage.Query(
@@ -921,6 +999,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
+
             var moveGroupCommand = Create.Command.MoveGroup(questionnaireId, groupId, responsibleId, targetGroupId);
             var moveStaticTextCommand = Create.Command.MoveStaticText(questionnaireId, staticTextId, responsibleId, targetGroupId);
             var moveVariableCommand = Create.Command.MoveVariable(questionnaireId, variableId, responsibleId, targetGroupId);
@@ -928,10 +1011,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             var historyPostProcessor = CreateHistoryPostProcessor();
             // act
-            historyPostProcessor.Process(null, moveGroupCommand);
-            historyPostProcessor.Process(null, moveStaticTextCommand);
-            historyPostProcessor.Process(null, moveVariableCommand);
-            historyPostProcessor.Process(null, moveQuestionCommand);
+            historyPostProcessor.Process(questionnaire, moveGroupCommand);
+            historyPostProcessor.Process(questionnaire, moveStaticTextCommand);
+            historyPostProcessor.Process(questionnaire, moveVariableCommand);
+            historyPostProcessor.Process(questionnaire, moveQuestionCommand);
 
             // assert
             var newHistoryItems = historyStorage.Query(historyItems => historyItems.ToArray());
@@ -971,6 +1054,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
+
+            SetupEntitySerializer();
 
             var questionnaireDocument = new QuestionnaireDocument()
             {
@@ -1035,6 +1120,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
+            SetupEntitySerializer();
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId);
             
@@ -1065,6 +1151,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(newHistoryItems[1].TargetItemTitle, Is.EqualTo("new title"));
         }
 
+        private void SetupEntitySerializer()
+        {
+            Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(new EntitySerializer<QuestionnaireDocument>());
+        }
 
         private static HistoryPostProcessor CreateHistoryPostProcessor() => Create.HistoryPostProcessor();
     }

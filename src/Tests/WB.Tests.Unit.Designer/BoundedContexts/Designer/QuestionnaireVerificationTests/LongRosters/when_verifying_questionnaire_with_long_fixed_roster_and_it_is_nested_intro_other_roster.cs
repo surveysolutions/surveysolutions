@@ -25,10 +25,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             {
                 Create.Chapter(children: new IComposite[]
                 {
-                    Create.Roster(roster2Id, fixedRosterTitles: new [] {Create.FixedRosterTitle(1, "Hello")}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
+                    Create.Roster(roster2Id, fixedRosterTitles: new [] {Create.FixedRosterTitle(1, "Hello")}, rosterType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                     {
                         Create.TextListQuestion(questionId, maxAnswerCount: 80),
-                        Create.Roster(rosterId, fixedRosterTitles: titles.ToArray(), rosterSizeSourceType: RosterSizeSourceType.FixedTitles)
+                        Create.Roster(rosterId, fixedRosterTitles: titles.ToArray(), rosterType: RosterSizeSourceType.FixedTitles)
                     })
                 })
             });

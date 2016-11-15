@@ -45,7 +45,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>());
+                Mock.Of<ITranslationsService>(),
+                Mock.Of<IQuestionnireHistotyVersionsService>());
             var persons = sharedPersons?.Select(id => new SharedPerson() {Id = id}) ?? new List<SharedPerson>();
             questAr.Initialize(questionnaire.PublicKey, questionnaire, persons);
             return questAr;
