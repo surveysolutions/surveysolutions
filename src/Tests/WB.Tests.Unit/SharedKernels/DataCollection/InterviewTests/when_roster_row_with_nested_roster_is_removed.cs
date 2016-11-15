@@ -9,7 +9,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_roster_row_with_nested_roster_is_removed : InterviewTestsContext
     {
         Establish context = () =>
