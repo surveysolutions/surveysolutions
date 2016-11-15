@@ -41,7 +41,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (YesNoQuestionViewModel), Resource.Layout.interview_question_yesno},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
-            {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
             {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
             {typeof (MultiOptionQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
@@ -63,7 +62,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             var typeOfViewModel = source.GetType();
 
-            if (typeOfViewModel.IsGenericType )
+            if (typeOfViewModel.IsGenericType)
             {
                 if (typeOfViewModel.GetGenericTypeDefinition() == typeof(OptionBorderViewModel<>))
                 {
@@ -94,6 +93,19 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
                     if (typeOfViewModel == typeof(StaticTextViewModel))
                         return Resource.Layout.interview_disabled_static_text;
+                }
+            }
+
+            if (source is GroupNavigationViewModel)
+            {
+                var groupViewModel = source as GroupNavigationViewModel;
+                if (groupViewModel.NavigationGroupType == NavigationGroupType.ToParentGroup)
+                {
+                    return Resource.Layout.interview_group_to_parent_navigation;
+                }
+                else
+                {
+                    return Resource.Layout.interview_group_navigation;
                 }
             }
 

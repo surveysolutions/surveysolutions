@@ -189,6 +189,7 @@
     <Compile Include="ViewModels\InterviewDetails\SingleInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\VariableViewModel.cs" />
+    <Compile Include="ViewModels\NavigationGroupType.cs" />
     <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\EnumerationStageViewModel.cs" />
