@@ -29,7 +29,7 @@
         var continueMessageTemplateId = "#confirm-continue-message-template";
       
         var eligibleSelectedItems = self.GetSelectedItemsAfterFilter(function (item) {
-            return item.Status() == 'SupervisorAssigned' && item.ResponsibleId() !== self.AssignTo().UserId;
+            return item.CanBeReassigned() && item.ResponsibleId() !== self.AssignTo().UserId;
         });
         
         var popupViewModel = {

@@ -70,6 +70,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     CanApprove = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
                     CanReject = x.Status == InterviewStatus.ApprovedBySupervisor,
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
+                    CanBeReassigned = x.Status == InterviewStatus.SupervisorAssigned
+                        || x.Status == InterviewStatus.InterviewerAssigned
+                        || x.Status == InterviewStatus.Completed
+                        || x.Status == InterviewStatus.RejectedBySupervisor
+                        || x.Status == InterviewStatus.RejectedByHeadquarters,
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     CreatedOnClient = x.WasCreatedOnClient,
