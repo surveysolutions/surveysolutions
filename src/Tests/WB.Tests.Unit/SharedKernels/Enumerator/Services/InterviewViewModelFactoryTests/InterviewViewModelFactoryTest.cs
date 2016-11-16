@@ -4,20 +4,15 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFactoryTests
 {
-    [Ignore("KP-8159")]
     [TestOf(typeof(InterviewViewModelFactory))]
     [TestFixture]
     public class InterviewViewModelFactoryTest
@@ -45,7 +40,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
             var settings = Mock.Of<IInterviewerSettings>(s => s.ShowVariables == false);
             var navigationState = Mock.Of<NavigationState>();
 
-            Setup.InstanceToMockedServiceLocator(Create.ViewModel.TextQuestionViewModel());
+            Setup.InstanceToMockedServiceLocator(
+                Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository,
+                    questionnaireStorage: questionnaireStorage));
 
             var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, settings);
             

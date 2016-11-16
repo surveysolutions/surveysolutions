@@ -1081,10 +1081,12 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public RosterSynchronizationDto RosterSynchronizationDto(Guid rosterId)
-        {
-            return new RosterSynchronizationDto(rosterId, new decimal[] {}, 0, 0, "roster title");
-        }
+        public RosterSynchronizationDto RosterSynchronizationDto(Guid rosterId,
+            RosterVector outerScopeRosterVector = null, decimal? rosterInstanceId = null, int? sortIndex = null,
+            string rosterTitle = null)
+            => new RosterSynchronizationDto(rosterId,
+                    outerScopeRosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    rosterInstanceId ?? 0, sortIndex ?? 0, "roster title");
 
         public MapReportPoint MapReportPoint(string id, double latitude, double longitude)
         {
