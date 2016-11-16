@@ -89,8 +89,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.QRBarcode
         };
 
+        private static class EntityVerificationResult
+        {
+            public static EntityVerificationResult<IQuestionnaireEntity> NoProblems()
+                => new EntityVerificationResult<IQuestionnaireEntity> { HasErrors = false };
+
+            public static EntityVerificationResult<TReferencedEntity> NoProblems<TReferencedEntity>()
+                where TReferencedEntity : class, IQuestionnaireEntity
+                => new EntityVerificationResult<TReferencedEntity> { HasErrors = false };
+
+            public static EntityVerificationResult<TReferencedEntity> Problems<TReferencedEntity>(IEnumerable<TReferencedEntity> entities)
+                where TReferencedEntity : class, IQuestionnaireEntity
+                => new EntityVerificationResult<TReferencedEntity> { HasErrors = true, ReferencedEntities = entities };
+
+            public static EntityVerificationResult<IQuestionnaireEntity> Problems(IQuestionnaireEntity entity, IEnumerable<IQuestionnaireEntity> entities)
+                => Problems(entity.ToEnumerable().Concat(entities));
+        }
+
         private struct EntityVerificationResult<TReferencedEntity>
-            where TReferencedEntity : class, IComposite
+            where TReferencedEntity : class, IQuestionnaireEntity
         {
             public bool HasErrors { get; set; }
             public IEnumerable<TReferencedEntity> ReferencedEntities { get; set; }
@@ -1435,8 +1452,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(expression))
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            IEnumerable<IComposite> incorrectReferencedQuestions = this.expressionProcessor
-                .GetIdentifiersUsedInExpression(macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values))
+            IEnumerable<IComposite> incorrectReferencedQuestions = this
+                .GetIdentifiersUsedInExpression(expression, questionnaire)
                 .Select(identifier => GetEntityByVariable(identifier, questionnaire))
                 .Where(referencedQuestion => referencedQuestion != null)
                 .Where(isReferencedQuestionIncorrect)
@@ -2086,6 +2103,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 ((entity is IQuestion) && isLinkedFilterExpressionLengthExeeded((IQuestion)entity)) ||
                 ((entity is IQuestion) && isOptionsFilterExpressionLengthExeeded((IQuestion)entity)) ||
                 ((entity is IVariable) && isVariableExpressionLengthExeeded((IVariable)entity))).Any();
+        }
+
+        private IEnumerable<string> GetIdentifiersUsedInExpression(string expression, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            string expressionWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
+
+            return this.expressionProcessor.GetIdentifiersUsedInExpression(expressionWithInlinedMacros);
         }
     }
 }
