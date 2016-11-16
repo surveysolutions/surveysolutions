@@ -1378,6 +1378,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond..
+        /// </summary>
+        internal static string WB0229_SupervisorQuestionInValidation {
+            get {
+                return ResourceManager.GetString("WB0229_SupervisorQuestionInValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {

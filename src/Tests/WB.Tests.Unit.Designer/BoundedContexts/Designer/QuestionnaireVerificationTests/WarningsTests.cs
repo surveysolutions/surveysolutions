@@ -5,7 +5,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandlerTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -202,6 +201,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("22222222222222222222222222222222")),
                 })
                 .ExpectNoWarning("WB0226");
+
+        [Test]
+        public void static_text_validation_references_supervisor_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Question(variable: "x", scope: QuestionScope.Supervisor),
+                    Create.StaticText(validationConditions: new[] { Create.ValidationCondition(expression: "x > 10") }),
+                })
+                .ExpectWarning("WB0229");
+
+        [Test]
+        public void question_validation_references_supervisor_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Question(variable: "x", scope: QuestionScope.Supervisor),
+                    Create.Question(validationConditions: new[] { Create.ValidationCondition(expression: "x > 10") }),
+                })
+                .ExpectWarning("WB0229");
+
+        [Test]
+        public void question_validation_references_interviewer_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Question(variable: "x", scope: QuestionScope.Interviewer),
+                    Create.Question(validationConditions: new[] { Create.ValidationCondition(expression: "x > 10") }),
+                })
+                .ExpectNoWarning("WB0229");
 
         [Test]
         public void consecutive_questions_with_same_enablement()
@@ -524,16 +550,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0225");
 
         [Test]
+        public void multi_option_with_options_1_2_4_5()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.MultipleOptionsQuestion(answers: new decimal[] { 1, 2, 4, 5 }),
+                })
+                .ExpectWarning("WB0228");
+
+        [Test]
         public void single_option_with_options_1_2_4_5()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
-                    Create.SingleOptionQuestion(answers: new List<Answer>
-                    {
-                        Create.Answer(value: 1),
-                        Create.Answer(value: 2),
-                        Create.Answer(value: 4),
-                        Create.Answer(value: 5),
-                    }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 4, 5 }),
                 })
                 .ExpectWarning("WB0228");
 
@@ -541,12 +569,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void single_option_with_options_1_4_5()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
-                    Create.SingleOptionQuestion(answers: new List<Answer>
-                    {
-                        Create.Answer(value: 1),
-                        Create.Answer(value: 4),
-                        Create.Answer(value: 5),
-                    }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 4, 5 }),
                 })
                 .ExpectNoWarning("WB0228");
 
@@ -554,14 +577,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void single_option_with_options_1_2_3_4_5()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
-                    Create.SingleOptionQuestion(answers: new List<Answer>
-                    {
-                        Create.Answer(value: 1),
-                        Create.Answer(value: 2),
-                        Create.Answer(value: 3),
-                        Create.Answer(value: 4),
-                        Create.Answer(value: 5),
-                    }),
+                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 3, 4, 5 }),
                 })
                 .ExpectNoWarning("WB0228");
     }

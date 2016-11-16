@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameCascadingParentQuestion, "WB0226", VerificationMessages.WB0226_SameCascadingParentQuestion),
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
             Warning<ICategoricalQuestion>(OmittedOptions, "WB0228", VerificationMessages.WB0228_OmittedOptions),
+            Warning<IValidatable, IQuestionnaireEntity>(this.SupervisorQuestionInValidation, "WB0229", VerificationMessages.WB0229_SupervisorQuestionInValidation),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -62,6 +63,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
+
+        private EntityVerificationResult<IQuestionnaireEntity> SupervisorQuestionInValidation(IValidatable validatable, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var supervisorQuestions = this
+                .GetReferencedQuestions(validatable, questionnaire)
+                .Where(question => question.QuestionScope == QuestionScope.Supervisor)
+                .ToList();
+
+            return supervisorQuestions.Count == 0
+                ? EntityVerificationResult.NoProblems()
+                : EntityVerificationResult.Problems(validatable, supervisorQuestions);
+        }
 
         private static bool OmittedOptions(ICategoricalQuestion question)
         {
@@ -197,12 +210,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 var entityIndex = questionnairePlainStructure.IndexOf(enitiesWithCondition.PublicKey);
                 var conditionExpression = ((IConditional)enitiesWithCondition).ConditionExpression;
 
-                var referencedQuestions = this.expressionProcessor
-                    .GetIdentifiersUsedInExpression(macrosSubstitutionService.InlineMacros(conditionExpression,
-                        questionnaire.Macros.Values))
-                    .Select(
-                        identifier => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier))
-                    .Where(referencedQuestion => referencedQuestion != null);
+                var referencedQuestions = this.GetReferencedQuestions(conditionExpression, questionnaire);
 
                 foreach (var referencedQuestion in referencedQuestions)
                 {
@@ -297,10 +305,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 var validationConditions = ((IValidatable) enitiesWithValidation).ValidationConditions;
                 foreach (var validationCondition in validationConditions)
                 {
-                    var referencedQuestions = this.expressionProcessor
-                        .GetIdentifiersUsedInExpression(macrosSubstitutionService.InlineMacros(validationCondition.Expression, questionnaire.Macros.Values))
-                        .Select(identifier => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier))
-                        .Where(referencedQuestion => referencedQuestion != null);
+                    var referencedQuestions = this.GetReferencedQuestions(validationCondition, questionnaire);
                     foreach (var referencedQuestion in referencedQuestions)
                     {
                         var indexOfReferencedQuestion =
@@ -441,14 +446,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TReferencedEntity>(
             Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
-            where TEntity : class, IComposite
-            where TReferencedEntity : class, IComposite
+            where TEntity : class, IQuestionnaireEntity
+            where TReferencedEntity : class, IQuestionnaireEntity
         {
             return questionnaire =>
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
-                select QuestionnaireVerificationMessage.Warning(code, message, verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
+                select QuestionnaireVerificationMessage.Warning(code, message, verificationResult.ReferencedEntities.Select(CreateReference).ToArray());
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
@@ -496,5 +501,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
+
+        private IEnumerable<IQuestion> GetReferencedQuestions(string expression, MultiLanguageQuestionnaireDocument questionnaire)
+            => this
+                .GetIdentifiersUsedInExpression(expression, questionnaire)
+                .Select(identifier => questionnaire.FirstOrDefault<IQuestion>(q => q.StataExportCaption == identifier))
+                .Where(referencedQuestion => referencedQuestion != null);
+
+        private IEnumerable<IQuestion> GetReferencedQuestions(ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
+            => this.GetReferencedQuestions(validationCondition.Expression, questionnaire);
+
+        private IEnumerable<IQuestion> GetReferencedQuestions(IValidatable validatable, MultiLanguageQuestionnaireDocument questionnaire)
+            => validatable
+                .ValidationConditions
+                .SelectMany(condition => this.GetReferencedQuestions(condition, questionnaire))
+                .Distinct();
     }
 }
