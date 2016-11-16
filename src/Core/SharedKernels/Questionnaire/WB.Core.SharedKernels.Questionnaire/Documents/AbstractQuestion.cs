@@ -15,7 +15,6 @@ namespace Main.Core.Entities.SubEntities
     {
         protected AbstractQuestion(string questionText = null, List<IComposite> children = null)
         {
-            this.Answers = new List<Answer>();
             this.validationConditions = new List<ValidationCondition>();
             this.Properties = new QuestionProperties(false, false);
             this.QuestionText = questionText;
@@ -23,7 +22,7 @@ namespace Main.Core.Entities.SubEntities
 
         public Order? AnswerOrder { get; set; }
 
-        public List<Answer> Answers { get; set; }
+        public List<Answer> Answers { get; set; } = new List<Answer>();
 
         [Obsolete("long time ago")]
         public bool Capital { get; set; }

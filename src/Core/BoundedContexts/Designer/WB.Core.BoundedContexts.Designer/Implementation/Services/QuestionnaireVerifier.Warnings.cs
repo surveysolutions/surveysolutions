@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -49,6 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<SingleQuestion>(ComboBoxWithLessThan10Elements, "WB0225", VerificationMessages.WB0225_ComboBoxWithLessThan10Elements),
             WarningForCollection(SameCascadingParentQuestion, "WB0226", VerificationMessages.WB0226_SameCascadingParentQuestion),
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
+            Warning<ICategoricalQuestion>(OmittedOptions, "WB0228", VerificationMessages.WB0228_OmittedOptions),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -61,10 +63,43 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
 
-        private static bool NotShared(MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool OmittedOptions(ICategoricalQuestion question)
         {
-            return !questionnaire.SharedPersons.Any();
+            int[] existingOptions = question.Answers
+                .Select(option => option.AnswerValue.ToIntOrNull())
+                .Where(value => value.HasValue)
+                .Select(value => value.Value)
+                .OrderBy(x => x)
+                .Distinct()
+                .ToArray();
+
+            if (existingOptions.Length == 0)
+                return false;
+
+            var minOption = existingOptions.Aggregate(Math.Min);
+            var maxOption = existingOptions.Aggregate(Math.Max);
+
+            int[] expectedOptions = Enumerable.Range(minOption, count: maxOption - minOption).ToArray();
+
+            int[] missingOptions = expectedOptions.Except(existingOptions).OrderBy(x => x).ToArray();
+
+            int firstIndex = 0;
+            int lastIndex = missingOptions.Length - 1;
+            for (int optionIndex = firstIndex; optionIndex <= lastIndex; optionIndex++)
+            {
+                var isStandaloneFromPrevious = optionIndex == firstIndex || missingOptions[optionIndex] - 1 != missingOptions[optionIndex - 1];
+                var isStandaloneFromNext = optionIndex == lastIndex || missingOptions[optionIndex] + 1 != missingOptions[optionIndex + 1];
+                bool isStandaloneMissingOption = isStandaloneFromPrevious && isStandaloneFromNext;
+
+                if (isStandaloneMissingOption)
+                    return true;
+            }
+
+            return false;
         }
+
+        private static bool NotShared(MultiLanguageQuestionnaireDocument questionnaire)
+            => !questionnaire.SharedPersons.Any();
 
         private static bool ComboBoxWithLessThan10Elements(SingleQuestion question)
             => (question.IsFilteredCombobox ?? false)

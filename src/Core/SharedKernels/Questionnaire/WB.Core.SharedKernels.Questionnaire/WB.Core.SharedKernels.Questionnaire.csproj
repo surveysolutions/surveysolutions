@@ -50,6 +50,7 @@
     <Compile Include="Documents\AbstractQuestion.cs" />
     <Compile Include="Documents\Answer.cs" />
     <Compile Include="Documents\AnswerExtentions.cs" />
+    <Compile Include="Documents\ICategoricalQuestion.cs" />
     <Compile Include="Documents\Translation.cs" />
     <Compile Include="Documents\Attachment.cs" />
     <Compile Include="Documents\CompositeException.cs" />
