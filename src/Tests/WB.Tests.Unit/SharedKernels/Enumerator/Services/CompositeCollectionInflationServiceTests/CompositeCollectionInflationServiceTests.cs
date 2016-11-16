@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInflationServiceTests
 {
-    [Ignore("KP-8159")]
     [TestFixture]
     internal class CompositeCollectionInflationServiceTests: MvxIoCSupportingTest
     {
@@ -29,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Arrange
             var enabledQuestionIdentity1 = new Identity(Guid.NewGuid(), RosterVector.Empty);
             var enabledQuestionIdentity2 = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextQuestion(enabledQuestionIdentity2.Id, instruction: "some instruction"),
                 Create.Entity.TextQuestion(enabledQuestionIdentity1.Id)
@@ -82,7 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Arrange
             var disabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
             var enabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextQuestion(enabledQuestionIdentity.Id, instruction: "some instruction"),
                 Create.Entity.TextQuestion(disabledQuestionIdentity.Id)
@@ -131,7 +130,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         {
             //Arrange
             var disabledQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextQuestion(disabledQuestionIdentity.Id, hideIfDisabled: true)
             }));
@@ -176,7 +175,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Arrange
             var invalidQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
             var validQuestionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextQuestion(validQuestionIdentity.Id),
                 Create.Entity.TextQuestion(invalidQuestionIdentity.Id)
@@ -224,7 +223,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Arrange
             var questionWithProgressIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
             var questionWithoutProgressIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextQuestion(questionWithoutProgressIdentity.Id),
                 Create.Entity.TextQuestion(questionWithProgressIdentity.Id)

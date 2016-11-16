@@ -39,27 +39,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
         }
 
         [Test]
-        [Ignore("KP-8159")]
-        public void When_StatefullInterview_doesnt_have_at_least_one_LinkedOptionsChanged_event_Then_Event_store_should_no_be_updated()
-        {
-            var liteEventBusMock = new Mock<ILiteEventBus>();
-
-            IQuestionnaire questionnaire = Substitute.For<IQuestionnaire>();
-
-            var statefulInterview = Create.AggregateRoot.StatefulInterview(userId: null, questionnaire: questionnaire);
-
-            var statefulInterviewRepository = CreateStatefulInterviewRepository(statefulInterview,
-                liteEventBusMock.Object);
-
-            var result = statefulInterviewRepository.Get(Guid.NewGuid().FormatGuid());
-
-            Assert.That(result, Is.EqualTo(statefulInterview));
-            Assert.That(result.HasLinkedOptionsChangedEvents, Is.True);
-            liteEventBusMock.Verify(x => x.CommitUncommittedEvents(statefulInterview, Moq.It.IsAny<string>()),
-                Times.Once);
-        }
-
-        [Test]
         public void When_getting_StatefullInterview_and_event_store_does_not_have_any_events_by_interview_Then_should_return_nullable_StatefullInterview()
         {
             var aggregateRootId = Guid.Parse("11111111111111111111111111111111");
