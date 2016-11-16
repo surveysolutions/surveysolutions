@@ -98,8 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         int CountActiveQuestionsInInterview();
 
         int CountInvalidEntitiesInInterview();
-
-        bool HasLinkedOptionsChangedEvents { get; }
+        
         Guid? SupervisorId { get;  }
         Guid? InterviewerId { get; }
 

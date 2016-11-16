@@ -69,7 +69,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             for (int i = 0; i <= maxDepth; i++)
             {
                 foreach (var question in @event.InterviewData.Answers.Where(x => x.QuestionRosterVector.Length == i))
-                    this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
+                {
+                    if (question.Answer == null) continue;
+
+                    this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector))
+                        .SetObjectAnswer(question.Answer);
+                }
 
                 foreach (var rosterDto in @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Where(x => x.OuterScopeRosterVector.Length == i))
                 {
@@ -125,12 +130,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             
         }
 
-        public new void Apply(LinkedOptionsChanged @event)
-        {
-            base.Apply(@event);
-            this.HasLinkedOptionsChangedEvents = true;
-        }
-
         public new void Apply(SubstitutionTitlesChanged @event)
         {
             foreach (var @group in @event.Groups)
@@ -178,7 +177,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         #endregion
 
         private InterviewTree sourceInterview;
-        public bool HasLinkedOptionsChangedEvents { get; private set; } = false;
         
         public InterviewStatus Status => this.properties.Status;
         public Guid Id => this.EventSourceId;
