@@ -182,6 +182,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0266");
 
         [Test]
+        public void non_consecutive_cascading_questions()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.Question(),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                })
+                .ExpectWarning("WB0230");
+
+        [Test]
+        public void consecutive_cascading_questions()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.SingleOptionQuestion(cascadeFromQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                })
+                .ExpectNoWarning("WB0230");
+
+        [Test]
         public void cascading_questions_with_same_cascade_parent()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
@@ -250,7 +269,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0218");
 
         [Test]
-        public void independent_questions_with_same_enablement()
+        public void non_consecutive_questions_with_same_enablement()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
                     Create.Question(enablementCondition: "x > 10"),
@@ -291,7 +310,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0219");
 
         [Test]
-        public void independent_unconditional_single_option_questions_with_2_options()
+        public void non_consecutive_unconditional_single_option_questions_with_2_options()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
                     Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2 }),
