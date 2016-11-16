@@ -12,7 +12,9 @@
     <script src="~/questionnaire/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 }
 <div id="edit-form" style="position: static;">
-    <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">@Html.ActionLink(QuestionnaireHistoryResources.Edit, "Details", "Questionnaire", new { id = Model.Id.FormatGuid() }, new { @class = "btn btn-default" }) @Model.Title</h3>
+    <h3 style="margin: 0; white-space: nowrap; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+        @Html.ActionLink(QuestionnaireHistoryResources.Edit, "Details", "Questionnaire", new {id = Model.Id.FormatGuid()}, new {@class = "btn btn-default"}) @Model.Title
+    </h3>
 </div>
 <table id="questionnaire-table-header" class="table  table-header">
     <thead>
@@ -22,7 +24,10 @@
             </th>
             <th>@QuestionnaireHistoryResources.UserName</th>
             <th>@QuestionnaireHistoryResources.Timestamp</th>
-            <th></th>
+            @if (!Model.ReadonlyMode)
+            {
+                <th></th>
+            }
         </tr>
     </thead>
 </table>
@@ -46,12 +51,15 @@
                             </td>
                             <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
                             <td>@listViewModel.Timestamp.ToString("s")</td>
-                            <td>
-                                @if (listViewModel.HasRevertTo)
-                                {
-                                    <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
-                                }
-                            </td>
+                            @if (!Model.ReadonlyMode)
+                            {
+                                <td>
+                                    @if (listViewModel.HasRevertTo)
+                                    {
+                                        <a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a>
+                                    }
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>

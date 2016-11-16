@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -37,7 +38,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
-                Mock.Of<ILookupTableService>());
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IQuestionnaireInfoViewFactory>());
         }
 
         protected static void SetControllerContextWithSession(Controller controller, string key, object value)

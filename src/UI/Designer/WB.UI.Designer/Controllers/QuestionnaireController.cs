@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -39,6 +40,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger logger;
+        private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
 
         public QuestionnaireController(
             ICommandService commandService,
@@ -48,7 +50,8 @@ namespace WB.UI.Designer.Controllers
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService, 
+            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -58,6 +61,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
             this.lookupTableService = lookupTableService;
+            this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
         }
 
         public ActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
@@ -226,8 +230,10 @@ namespace WB.UI.Designer.Controllers
                 this.Error(ErrorMessages.NoAccessToQuestionnaire);
                 return this.RedirectToAction("Index");
             }
+            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id.FormatGuid(), this.UserHelper.WebUser.UserId);
 
             QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+            questionnairePublicListViewModels.ReadonlyMode = questionnaireInfoView.IsReadOnlyForUser;
 
             return this.View(questionnairePublicListViewModels);
         }
