@@ -290,8 +290,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 translatedQuestionnaires.Add(new ReadOnlyQuestionnaireDocument(translatedQuestionnaireDocument, t.Name));
             });
 
-            var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(readOnlyQuestionnaireDocument,
-                translatedQuestionnaires.ToArray());
+            var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(
+                readOnlyQuestionnaireDocument,
+                translatedQuestionnaires.ToArray(),
+                questionnaireView.SharedPersons);
 
             var verificationMessagesByQuestionnaire =
                 (from verifier in this.AtomicVerifiers

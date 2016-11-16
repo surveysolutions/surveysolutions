@@ -587,15 +587,6 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireDocument QuestionnaireDocumentWithSharedPersons(Guid? id = null, Guid? createdBy = null, List<Guid> sharedPersons = null)
-        {
-            return new QuestionnaireDocument
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                CreatedBy = createdBy,
-            };
-        }
-
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X");
 
@@ -684,8 +675,8 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireView QuestionnaireView(Guid? createdBy)
             => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid() });
 
-        public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument)
-            => new QuestionnaireView(questionnaireDocument, new SharedPerson[]{});
+        public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument = null, IEnumerable<SharedPerson> sharedPersons = null)
+            => new QuestionnaireView(questionnaireDocument ?? Create.QuestionnaireDocument(), sharedPersons ?? Enumerable.Empty<SharedPerson>());
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 

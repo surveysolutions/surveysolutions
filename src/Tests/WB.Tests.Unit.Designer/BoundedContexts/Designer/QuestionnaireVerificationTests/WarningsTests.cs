@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandlerTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -11,6 +12,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     [TestFixture]
     internal class WarningsTests
     {
+        [Test]
+        public void no_shared_persons()
+            => Enumerable
+                .Empty<SharedPerson>()
+                .ExpectWarning("WB0227");
+
+        [Test]
+        public void shared_person()
+            => new[]
+                { Create.SharedPerson() }
+                .ExpectNoWarning("WB0227");
+
         [Test]
         public void no_current_time_questions()
             => Create.QuestionnaireDocumentWithOneChapter(new[]
