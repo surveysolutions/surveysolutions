@@ -1387,6 +1387,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nonconsecutive cascade questions. Consider laying the cascading questions one after another..
+        /// </summary>
+        internal static string WB0230_NonconsecutiveCascadings {
+            get {
+                return ResourceManager.GetString("WB0230_NonconsecutiveCascadings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {

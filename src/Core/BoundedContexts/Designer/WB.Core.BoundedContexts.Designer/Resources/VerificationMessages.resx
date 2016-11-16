@@ -609,4 +609,7 @@
   <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
     <value>Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond.</value>
   </data>
+  <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+    <value>Nonconsecutive cascade questions. Consider laying the cascading questions one after another.</value>
+  </data>
 </root>
