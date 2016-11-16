@@ -271,21 +271,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var orderedData = command.PreloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
             var changedQuestionIdentities = orderedData.SelectMany(x => x.Answers.Select(y => new Identity(y.Key, x.RosterVector))).ToList();
 
-            foreach (var preloadedLevel in orderedData)
+            for (int index = 0; index < orderedData.Length; index++)
             {
+                var preloadedLevel = orderedData[index];
                 var answersToFeaturedQuestions = preloadedLevel.Answers;
 
-                this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, state, false);
+                this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions,
+                    preloadedLevel.RosterVector, state, false);
 
                 var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(
-                    answersToFeaturedQuestion => new Identity(answersToFeaturedQuestion.Key, preloadedLevel.RosterVector),
+                    answersToFeaturedQuestion =>
+                        new Identity(answersToFeaturedQuestion.Key, preloadedLevel.RosterVector),
                     answersToFeaturedQuestion => answersToFeaturedQuestion.Value);
 
                 foreach (var answer in prefilledQuestionsWithAnswers)
                 {
                     changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
                 }
-                changedInterviewTree.ActualizeTree();
+
+                var isLastDataLevel = index == orderedData.Length - 1;
+                var nextDataLevelIsDeeperThanPrevious = preloadedLevel.RosterVector.Length != orderedData[Math.Min(index + 1, orderedData.Length - 1)].RosterVector.Length;
+                if (isLastDataLevel || nextDataLevelIsDeeperThanPrevious)
+                {
+                    changedInterviewTree.ActualizeTree();
+                }
             }
 
             //apply events
