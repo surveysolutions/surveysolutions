@@ -52,6 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
             Warning<ICategoricalQuestion>(OmittedOptions, "WB0228", VerificationMessages.WB0228_OmittedOptions),
             Warning<IValidatable, IQuestionnaireEntity>(this.SupervisorQuestionInValidation, "WB0229", VerificationMessages.WB0229_SupervisorQuestionInValidation),
+            Warning<ICategoricalQuestion>(NonconsecutiveCascadings, "WB0230", VerificationMessages.WB0230_NonconsecutiveCascadings),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -63,6 +64,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
+
+        private static bool NonconsecutiveCascadings(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+            => question.GetPrevious() != GetCascadeFromQuestion(question, questionnaire);
+
+        private static IQuestion GetCascadeFromQuestion(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+            => question.CascadeFromQuestionId != null
+                ? questionnaire.Questionnaire.Questionnaire.Find<IQuestion>(question.CascadeFromQuestionId.Value)
+                : null;
 
         private EntityVerificationResult<IQuestionnaireEntity> SupervisorQuestionInValidation(IValidatable validatable, MultiLanguageQuestionnaireDocument questionnaire)
         {
