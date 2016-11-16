@@ -16,10 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             eventContext = new EventContext();
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                => _.Version == questionnaireVersion);
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
+            var questionnaireRepository =
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(),
+                    Create.Entity.PlainQuestionnaire(
+                        Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.StaticText())));
+
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository, userId: userId);
         };
 
         Cleanup stuff = () =>
@@ -28,8 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = null;
         };
 
-        Because of = () =>
-           interview.SynchronizeInterviewEvents(userId, questionnaireId, questionnaireVersion,
+        Because of = () => interview.SynchronizeInterviewEvents(userId, questionnaireId, questionnaireVersion,
                InterviewStatus.Completed, eventsToPublish, true);
 
         It should_raise_InterviewOnClientCreated_event = () =>
