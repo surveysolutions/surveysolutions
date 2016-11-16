@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool OmittedOptions(ICategoricalQuestion question)
         {
-            int[] existingOptions = question.Answers
+            int[] existingOptions = (question.Answers ?? Enumerable.Empty<Answer>())
                 .Select(option => option.AnswerValue.ToIntOrNull())
                 .Where(value => value.HasValue)
                 .Select(value => value.Value)
