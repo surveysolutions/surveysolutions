@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.TestFactories
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
+            statefulInterview.Apply(new InterviewOnClientCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
 
             return statefulInterview;
         }
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.TestFactories
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
+            statefulInterview.Apply(new InterviewOnClientCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
 
             return statefulInterview;
         }
