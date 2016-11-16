@@ -1360,6 +1360,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback..
+        /// </summary>
+        internal static string WB0227_NotShared {
+            get {
+                return ResourceManager.GetString("WB0227_NotShared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
