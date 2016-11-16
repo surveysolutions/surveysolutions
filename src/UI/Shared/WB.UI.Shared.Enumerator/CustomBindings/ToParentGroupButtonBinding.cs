@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Android.Content.Res;
 using Android.Graphics;
 using Android.Graphics.Drawables;
+using Android.Support.V4.Content;
 using Android.Widget;
 using MvvmCross.Binding;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -39,7 +40,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     return Resource.Drawable.to_parent_group_completed;
 
                 case SimpleGroupStatus.Invalid:
-                    return Resource.Drawable.group_with_invalid_answers;
+                    return Resource.Drawable.to_parent_group_invalid;
 
                 default:
                     return Resource.Drawable.to_parent_group_started;
@@ -63,39 +64,46 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private Drawable GetArrawDrawable(SimpleGroupStatus status)
         {
-            Drawable drawable = null; // control.Resources.GetDrawable(Resource.Drawable.back_to_parent);
+            Drawable drawable;
 
             switch (status)
             {
                 case SimpleGroupStatus.Completed:
-                    drawable = Target.Resources.GetDrawable(Resource.Drawable.back_to_parent_completed);
+                    drawable = ContextCompat.GetDrawable(Target.Context, Resource.Drawable.back_to_parent_compeleted);
                     break;
                 case SimpleGroupStatus.Invalid:
+                    drawable = ContextCompat.GetDrawable(Target.Context, Resource.Drawable.back_to_parent_invalid);
                     break;
                 default:
-                    drawable = Target.Resources.GetDrawable(Resource.Drawable.back_to_parent);
+                    drawable = ContextCompat.GetDrawable(Target.Context, Resource.Drawable.back_to_parent);
                     break;
             }
 
-            return ScaleImage(drawable, Target.Resources.DisplayMetrics.ScaledDensity/2);
+            return ScaleImage(drawable);
         }
 
-        private Drawable ScaleImage(Drawable image, double scaleFactor)
+        private Drawable ScaleImage(Drawable image)
         {
-            if (!(image is BitmapDrawable)) {
+            if (!(image is BitmapDrawable))
+            {
                 return image;
             }
 
             Bitmap b = ((BitmapDrawable)image).Bitmap;
 
-            int sizeX = (int) Math.Round(image.IntrinsicWidth * scaleFactor, 0);
-            int sizeY = (int) Math.Round(image.IntrinsicHeight * scaleFactor, 0);
+            var desiredHeight = 35;
+            var aspectRatio = (double)b.Width/b.Height;
+            int sizeX = dpToPx((int)(desiredHeight * aspectRatio));
+            int sizeY = dpToPx(desiredHeight);
 
             Bitmap bitmapResized = Bitmap.CreateScaledBitmap(b, sizeX, sizeY, false);
 
             image = new BitmapDrawable(Target.Resources, bitmapResized);
-
             return image;
+        }
+        public static int dpToPx(int dp)
+        {
+            return (int)(dp * Resources.System.DisplayMetrics.Density);
         }
     }
 }
