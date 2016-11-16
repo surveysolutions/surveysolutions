@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void variable_label_length_121()
             => Create.QuestionnaireDocumentWithOneChapter(new[]
                 {
-                    Create.Question(variableLabel: new string(Enumerable.Range(1, 121).Select(x => 'a').ToArray())),
+                    Create.Question(variableLabel: new string(Enumerable.Repeat('a', 121).ToArray())),
                 })
                 .ExpectWarning("WB0217");
 
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void variable_label_length_120()
             => Create.QuestionnaireDocumentWithOneChapter(new[]
                 {
-                    Create.Question(variableLabel: new string(Enumerable.Range(1, 120).Select(x => 'a').ToArray())),
+                    Create.Question(variableLabel: new string(Enumerable.Repeat('a', 120).ToArray())),
                 })
                 .ExpectNoWarning("WB0217");
 
@@ -522,5 +522,47 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     }),
                 })
                 .ExpectNoWarning("WB0225");
+
+        [Test]
+        public void single_option_with_options_1_2_4_5()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(answers: new List<Answer>
+                    {
+                        Create.Answer(value: 1),
+                        Create.Answer(value: 2),
+                        Create.Answer(value: 4),
+                        Create.Answer(value: 5),
+                    }),
+                })
+                .ExpectWarning("WB0228");
+
+        [Test]
+        public void single_option_with_options_1_4_5()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(answers: new List<Answer>
+                    {
+                        Create.Answer(value: 1),
+                        Create.Answer(value: 4),
+                        Create.Answer(value: 5),
+                    }),
+                })
+                .ExpectNoWarning("WB0228");
+
+        [Test]
+        public void single_option_with_options_1_2_3_4_5()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.SingleOptionQuestion(answers: new List<Answer>
+                    {
+                        Create.Answer(value: 1),
+                        Create.Answer(value: 2),
+                        Create.Answer(value: 3),
+                        Create.Answer(value: 4),
+                        Create.Answer(value: 5),
+                    }),
+                })
+                .ExpectNoWarning("WB0228");
     }
 }
