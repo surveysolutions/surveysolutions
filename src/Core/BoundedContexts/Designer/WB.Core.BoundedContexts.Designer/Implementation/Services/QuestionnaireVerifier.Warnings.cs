@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(TooManySubsectionsAtOneLevel, "WB0224", VerificationMessages.WB0224_TooManySubsectionsAtOneLevel),
             Warning<SingleQuestion>(ComboBoxWithLessThan10Elements, "WB0225", VerificationMessages.WB0225_ComboBoxWithLessThan10Elements),
             WarningForCollection(SameCascadingParentQuestion, "WB0226", VerificationMessages.WB0226_SameCascadingParentQuestion),
+            Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -59,6 +60,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
+
+        private static bool NotShared(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return !questionnaire.SharedPersons.Any();
+        }
 
         private static bool ComboBoxWithLessThan10Elements(SingleQuestion question)
             => (question.IsFilteredCombobox ?? false)

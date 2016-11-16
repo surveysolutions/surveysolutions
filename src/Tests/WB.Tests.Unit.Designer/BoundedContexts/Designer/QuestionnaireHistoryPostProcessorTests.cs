@@ -202,7 +202,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             SetupEntitySerializer();
 
-            var questionnaireDocument = Create.QuestionnaireDocumentWithSharedPersons(questionnaireId, questionnaireOwner);
+            var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, userId: questionnaireOwner);
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
             var command = new CloneQuestionnaire(questionnaireId, "title", responsibleId, true,

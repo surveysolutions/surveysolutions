@@ -600,4 +600,7 @@
   <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
     <value>Cascading combo box questions have the same parent question.</value>
   </data>
+  <data name="WB0227_NotShared" xml:space="preserve">
+    <value>Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback.</value>
+  </data>
 </root>
