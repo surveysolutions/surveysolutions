@@ -1369,6 +1369,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Categorical question has nonconsecutive option codes. Check for omitted options..
+        /// </summary>
+        internal static string WB0228_OmittedOptions {
+            get {
+                return ResourceManager.GetString("WB0228_OmittedOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {

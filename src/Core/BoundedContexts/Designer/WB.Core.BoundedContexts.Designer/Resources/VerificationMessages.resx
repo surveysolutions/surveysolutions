@@ -603,4 +603,7 @@
   <data name="WB0227_NotShared" xml:space="preserve">
     <value>Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback.</value>
   </data>
+  <data name="WB0228_OmittedOptions" xml:space="preserve">
+    <value>Categorical question has nonconsecutive option codes. Check for omitted options.</value>
+  </data>
 </root>
