@@ -6,6 +6,7 @@ using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -17,12 +18,11 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_initializing_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {
-            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer().ToTupleArray() == savedAnswers && _.IsAnswered == true);
+            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer() == savedAnswers && _.IsAnswered == true);
             
             var interview = Mock.Of<IStatefulInterview>(_ 
                 => _.QuestionnaireId == questionnaireId
@@ -49,10 +49,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             answerViewModels.Count.ShouldEqual(5);
 
         It should_create_list_with_Values_same_as_in_saved_answers = () =>
-            answerViewModels.Select(x => x.Value).ShouldContainOnly(savedAnswers.Select(x=> x.Item1));
+            answerViewModels.Select(x => x.Value).ShouldContainOnly(savedAnswers.ToTupleArray().Select(x=> x.Item1));
 
         It should_create_list_with_Titles_same_as_in_saved_answers = () =>
-            answerViewModels.Select(x => x.Title).ShouldContainOnly(savedAnswers.Select(x => x.Item2));
+            answerViewModels.Select(x => x.Title).ShouldContainOnly(savedAnswers.ToTupleArray().Select(x => x.Item2));
 
         It should_not_contain_add_new_item_view_model = () =>
             listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
@@ -65,14 +65,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         private static readonly string interviewId = "Some interviewId";
         private static readonly string questionnaireId = "Questionnaire Id";
 
-        private static readonly Tuple<decimal, string>[] savedAnswers = new []
+        private static readonly TextListAnswer savedAnswers = TextListAnswer.FromTupleArray(new[]
         {
             new Tuple<decimal, string>(1m, "Answer 1"),
             new Tuple<decimal, string>(3m, "Answer 3"),
             new Tuple<decimal, string>(4m, "Answer 5"),
             new Tuple<decimal, string>(8m, "Answer 8"),
             new Tuple<decimal, string>(9m, "Answer 9"),
-        };
+        });
         private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();
     }
 }
