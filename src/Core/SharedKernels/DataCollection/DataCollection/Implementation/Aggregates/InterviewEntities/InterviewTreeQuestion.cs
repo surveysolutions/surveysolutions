@@ -572,6 +572,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeTextListQuestion
     {
+        public InterviewTreeTextListQuestion() { }
+
         private TextListAnswer answer;
 
         public InterviewTreeTextListQuestion(object answer)
@@ -579,8 +581,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = TextListAnswer.FromTupleArray(answer as Tuple<decimal, string>[]);
         }
 
-        public bool IsAnswered => this.answer != null;
-        public TextListAnswer GetAnswer() => this.answer;
+        public virtual bool IsAnswered => this.answer != null;
+        public virtual TextListAnswer GetAnswer() => this.answer;
         public void SetAnswer(TextListAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
