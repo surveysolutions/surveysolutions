@@ -606,4 +606,7 @@
   <data name="WB0228_OmittedOptions" xml:space="preserve">
     <value>Categorical question has nonconsecutive option codes. Check for omitted options.</value>
   </data>
+  <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+    <value>Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond.</value>
+  </data>
 </root>

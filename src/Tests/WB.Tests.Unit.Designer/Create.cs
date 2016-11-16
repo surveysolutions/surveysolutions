@@ -509,6 +509,7 @@ namespace WB.Tests.Unit.Designer
             string title= "Question X test",
             string instructions = null,
             bool isPrefilled = false,
+            QuestionScope scope = QuestionScope.Interviewer,
             params Answer[] answers)
         {
             return new TextQuestion(title)
@@ -524,6 +525,7 @@ namespace WB.Tests.Unit.Designer
                 Answers = answers.ToList(),
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 Featured = isPrefilled,
+                QuestionScope = scope,
             };
         }
 
@@ -1179,7 +1181,7 @@ namespace WB.Tests.Unit.Designer
 
             var attachmentServiceMock = Stub<IAttachmentService>.WithNotEmptyValues;
 
-            return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object,
+            return new QuestionnaireVerifier(expressionProcessor ?? Create.RoslynExpressionProcessor(),
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
