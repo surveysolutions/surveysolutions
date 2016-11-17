@@ -221,7 +221,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(question.Id, yesAnswersCount, questionnaire);
                 var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(question.Id);
-                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(question.Id, selectedValues.Length,
+                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(question.Id, yesAnswersCount,
                     questionnaire,
                     maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
