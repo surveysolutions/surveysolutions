@@ -14,12 +14,6 @@ input.wb-checkbox{
         background-position: -90px 0;
     }
 }
-.btn-success{
-    font: 12px/14px "TrebuchetMSBold";
-    background-color: $green_btn;
-    outline: none;
-    text-transform: uppercase;
-}
 .btn-lg{
     padding: 12px 15px;
 }
@@ -27,7 +21,13 @@ input.wb-checkbox{
     display: flex;
 }
 .two-columns-form{
-    margin-top: 115px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left:50%;
+    margin: 0;
+    @include translate(-50%,-50%);
+/*  margin-top: 115px; */
   
     .left-column{
         padding: 10px 3% 10px 8%;
@@ -114,8 +114,32 @@ input.wb-checkbox{
                 }
             }
         }
+        .two-columns-form{
+            width: auto;
+            position: relative;
+            top: 0;
+            left:0; 
+            @include translate(0,0);
+        }
         .centered-box-table{
             text-align: center;
         }
     } 
+}
+.login{
+    height: 100%;
+    main{
+        height: 100%;
+
+    }
+}
+@media (max-height: 800px){
+    .two-columns-form{
+        margin-top: 30px;
+        width: auto;
+        position: relative;
+        top: 0;
+        left:0; 
+        @include translate(0,0);
+    }
 }
