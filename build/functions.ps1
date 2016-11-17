@@ -76,7 +76,7 @@ function ShouldSolutionBeIgnored($Solution) {
 }
 
 function GetSolutionsToBuild() {
-    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse -ErrorAction SilentlyContinue | %{ GetPathRelativeToCurrectLocation $_.FullName }
+	$foundSolutions = Get-ChildItem -Filter *.sln -Recurse -ErrorAction SilentlyContinue | ?{ $_.FullName -notmatch 'Dependencies' }  | %{ GetPathRelativeToCurrectLocation $_.FullName }
     $solutionsToIgnore = $foundSolutions | ?{ ShouldSolutionBeIgnored $_ }
     $solutionsToBuild = $foundSolutions | ?{ -not (ShouldSolutionBeIgnored $_) }
 
