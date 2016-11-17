@@ -45,5 +45,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.TextListQuestion(q1Id, variable: "var1"),
                 Create.SingleQuestion(q2Id, variable: "var2", linkedToQuestionId: q1Id)
             }).ExpectNoError("WB0012");
+
+        [Test]
+        public void linked_to_TextList_question_has_options_filter()
+            => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.TextListQuestion(q1Id, variable: "var1"),
+                Create.SingleQuestion(q2Id, variable: "var2", linkedToQuestionId: q1Id, optionsFilter: "something")
+            }).ExpectCritical("WB0117");
+
+        [Test]
+        public void linked_to_TextList_question_has_linked_filter()
+            => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.TextListQuestion(q1Id, variable: "var1"),
+                Create.SingleQuestion(q2Id, variable: "var2", linkedToQuestionId: q1Id, linkedFilter: "something")
+            }).ExpectCritical("WB0117");
     }
 }

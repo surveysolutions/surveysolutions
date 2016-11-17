@@ -1117,6 +1117,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked to list question doen&apos;t support options filter.
+        /// </summary>
+        internal static string WB0117_LinkedToTextListQuestionDoesNotSupportFilters {
+            get {
+                return ResourceManager.GetString("WB0117_LinkedToTextListQuestionDoesNotSupportFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {
