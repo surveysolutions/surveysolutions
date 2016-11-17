@@ -40,6 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.properties.InterviewerId = @event.UserId;
 
             this.sourceInterview = this.changedInterview.Clone();
+
+            this.changedInterview.ActualizeTree();
         }
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
@@ -68,12 +70,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             for (int i = 0; i <= maxDepth; i++)
             {
-                foreach (var question in @event.InterviewData.Answers.Where(x => x.QuestionRosterVector.Length == i))
+                foreach (var question in @event.InterviewData.Answers .Where(questionWithAnswer => questionWithAnswer.Answer != null).Where(x => x.QuestionRosterVector.Length == i))
                 {
-                    if (question.Answer == null) continue;
-
-                    this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector))
-                        .SetObjectAnswer(question.Answer);
+                    this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
                 }
 
                 foreach (var rosterDto in @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Where(x => x.OuterScopeRosterVector.Length == i))
@@ -114,7 +113,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.changedInterview.AnswerComments = @event.InterviewData.Answers
                 ?.SelectMany(answerDto => answerDto.AllComments?.Select(commentDto => ToAnswerComment(answerDto, commentDto)))
                 ?.ToList() ?? new List<AnswerComment>();
-            
+
+            //base.ReplaceSubstitutions(this.changedInterview, this.GetQuestionnaireOrThrow(), changedQeustionIdentities);
+
             base.UpdateExpressionState(sourceInterviewTree, this.changedInterview, this.ExpressionProcessorStatePrototype);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
@@ -413,7 +414,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     .Select(substitutionText => substitutionText.Text)
                     .ToList();
 
-                return question.FailedValidations.Select((failedValidation, index) => questionValidationMassages.ElementAt(index));
+                return question.FailedValidations.Select((failedValidation) => questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex));
             }
 
             var staticText =  this.changedInterview.GetStaticText(questionOrStaticTextId);

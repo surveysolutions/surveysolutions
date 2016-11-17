@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -266,6 +267,17 @@ namespace WB.Tests.Unit
                 interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
                 eventSourcedRepository: Stub<IEventSourcedAggregateRootRepository>.Returning<IEventSourcedAggregateRoot>(interview),
                 merger: Stub<IInterviewDataAndQuestionnaireMerger>.Returning(interviewDetailsView));
+        }
+
+        internal static void ApplyInterviewEventsToViewModels(IEventSourcedAggregateRoot interview, ILiteEventRegistry eventRegistry, Guid interviewId)
+        {
+            foreach (var evnt in interview.GetUnCommittedChanges().Select(x => Create.Other.CommittedEvent(x, interviewId)))
+            {
+                foreach (var handler in eventRegistry.GetHandlers(evnt))
+                {
+                    handler.Invoke(evnt);
+                }
+            }
         }
     }
 }

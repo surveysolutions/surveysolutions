@@ -5,16 +5,19 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticText
 {
-    [Ignore("KP-8159")]
     internal class when_static_text_enabled : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
-            var plainQuestionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(
-                Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
-
             staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
+
+            var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                {
+                    Create.Entity.StaticText(staticTextIdentity.Id)
+                }));
+
+            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
         };
 
         Because of = () => statefulInterview.Apply(Create.Event.StaticTextsEnabled(staticTextIdentity));

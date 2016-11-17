@@ -9,7 +9,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_getting_invalid_interview_entities_recursively : StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -40,14 +39,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         Because of = () =>
             invalidEntitiesInInterview = interview.GetInvalidEntitiesInInterview();
 
-        It shouldreturn_3_entities_with_error = () =>
-          invalidEntitiesInInterview.Count().ShouldEqual(3);
+        It shouldreturn_2_entities_with_error = () =>
+          invalidEntitiesInInterview.Count().ShouldEqual(2);
 
         It should_contain_only_invalid_enabled_elements = () =>
             invalidEntitiesInInterview.ShouldContainOnly(
                 Create.Entity.Identity(staticText1Id),
-                Create.Entity.Identity(staticText2Id),
-                Create.Entity.Identity(questionId));
+                Create.Entity.Identity(staticText2Id));
 
         private static StatefulInterview interview;
         private static readonly Guid staticText1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
