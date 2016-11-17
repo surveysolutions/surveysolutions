@@ -113,8 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var preloadedLevel = orderedData[index];
                 var answersToFeaturedQuestions = preloadedLevel.Answers;
 
-                this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions,
-                    preloadedLevel.RosterVector, state, false);
+                this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, false);
 
                 var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(
                     answersToFeaturedQuestion =>
