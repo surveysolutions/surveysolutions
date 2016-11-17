@@ -10,7 +10,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_getting_answer_on_text_question_from_fixed_roster : StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -18,9 +17,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             textQuestionIdentity = Identity.Create(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Entity.RosterVector(0));
 
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children: new[]
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
             {
-                Create.Entity.FixedRoster(fixedRosterTitles: new []{ Create.Entity.FixedRosterTitle(1, "fixter fixed title")}, children: new []
+                Create.Entity.FixedRoster(fixedRosterTitles: new []{ Create.Entity.FixedRosterTitle(0, "fixter fixed title")}, children: new []
                 {
                     Create.Entity.TextQuestion(textQuestionIdentity.Id)
                 })

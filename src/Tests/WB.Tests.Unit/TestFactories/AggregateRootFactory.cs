@@ -58,7 +58,8 @@ namespace WB.Tests.Unit.TestFactories
             long? questionnaireVersion = null,
             Guid? userId = null,
             IQuestionnaireStorage questionnaireRepository = null,
-            IInterviewExpressionStatePrototypeProvider interviewExpressionStatePrototypeProvider = null)
+            IInterviewExpressionStatePrototypeProvider interviewExpressionStatePrototypeProvider = null,
+            bool shouldApplyOnClientCreatedEvent = true)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
@@ -67,7 +68,9 @@ namespace WB.Tests.Unit.TestFactories
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            statefulInterview.Apply(new InterviewOnClientCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
+            if (shouldApplyOnClientCreatedEvent)
+                statefulInterview.Apply(new InterviewOnClientCreated(userId ?? Guid.NewGuid(), questionnaireId.Value,
+                    questionnaireVersion ?? 1));
 
             return statefulInterview;
         }

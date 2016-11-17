@@ -1193,7 +1193,9 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections)
         {
-            return new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory(), sections);
+            var tree = new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
+            tree.SetSections(sections);
+            return tree;
         }
     }
 }
