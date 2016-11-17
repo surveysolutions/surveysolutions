@@ -277,6 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;
             this.NavigationState.BeforeScreenChanged -= this.OnBeforeScreenChanged;
             this.Title.Dispose();
+            this.Children?.ForEach(x => x.Dispose());
         }
 
         public void RefreshHasChildrenFlag()
