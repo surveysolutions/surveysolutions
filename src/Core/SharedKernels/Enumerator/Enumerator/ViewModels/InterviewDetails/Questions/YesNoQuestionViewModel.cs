@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     var amountOfRostersToRemove = 1;
                     var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                    if (!(await this.userInteraction.ConfirmAsync(message)))
+                    if (!await this.userInteraction.ConfirmAsync(message))
                     {
                         changedModel.Selected = true;
                         return;
