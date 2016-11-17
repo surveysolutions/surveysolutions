@@ -104,6 +104,12 @@ namespace WB.Tests.Unit.Designer
                 && message.Code == code);
         }
 
+        public static void ShouldNotContainError(this IEnumerable<QuestionnaireVerificationMessage> messages, string code)
+            => messages
+                .Where(m => m.MessageLevel == VerificationMessageLevel.General)
+                .Select(m => m.Code)
+                .ShouldNotContain(code);
+
         public static void ShouldNotContain(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
         {
