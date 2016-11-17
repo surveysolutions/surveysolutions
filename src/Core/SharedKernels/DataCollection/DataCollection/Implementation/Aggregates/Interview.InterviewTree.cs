@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         protected InterviewTree BuildInterviewTree(IQuestionnaire questionnaire)
         {
-            var tree = new InterviewTree(this.EventSourceId, questionnaire, this.substitionTextFactory, new List<InterviewTreeSection>());
+            var tree = new InterviewTree(this.EventSourceId, questionnaire, this.substitionTextFactory);
             var sections = this.BuildInterviewTreeSections(tree, questionnaire, this.substitionTextFactory).ToList();
 
             tree.SetSections(sections);

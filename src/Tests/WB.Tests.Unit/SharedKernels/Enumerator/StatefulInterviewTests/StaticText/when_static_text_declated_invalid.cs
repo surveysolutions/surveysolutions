@@ -4,10 +4,10 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticText
 {
-    [Ignore("KP-8159")]
     internal class when_static_text_declated_invalid: StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -15,13 +15,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
             staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(questionnaireId,
-                Create.Entity.Group(children: new List<IComposite>()
+            var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                 {
-                    Create.Entity.StaticText(staticTextIdentity.Id)
-                })));
-
-            var plainQuestionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+                    Create.Entity.StaticText(staticTextIdentity.Id,
+                        validationConditions:
+                            new List<Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()
+                            {
+                                new ValidationCondition("1=1", "invalid")
+                            })
+                }));
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
         };
 

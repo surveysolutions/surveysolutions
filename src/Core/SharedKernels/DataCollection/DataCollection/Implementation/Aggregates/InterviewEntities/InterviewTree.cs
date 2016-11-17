@@ -16,13 +16,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private Dictionary<Identity, IInterviewTreeNode> nodesCache = new Dictionary<Identity, IInterviewTreeNode>();
 
-        public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory, IEnumerable<InterviewTreeSection> sections)
+        public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, ISubstitionTextFactory textFactory)
         {
             this.InterviewId = interviewId.FormatGuid();
             this.questionnaire = questionnaire;
             this.textFactory = textFactory;
-
-            this.SetSections(sections);
         }
 
         public void SetSections(IEnumerable<InterviewTreeSection> sections)
