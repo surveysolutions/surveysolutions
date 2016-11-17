@@ -1580,6 +1580,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 if (sourceQuestion.QuestionType == QuestionType.TextList)
                 {
+                    if (!string.IsNullOrWhiteSpace(linkedQuestion.LinkedFilterExpression) ||
+                        !string.IsNullOrEmpty(linkedQuestion.Properties.OptionsFilterExpression))
+                    {
+                        yield return LinkedToTextListQuestionDoesNotSupportFilters(linkedQuestion);
+                    }
+
                     var linkedRosterScope = questionnaire.Questionnaire.GetRosterScope(linkedQuestion.PublicKey);
                     var sourceRosterScope = questionnaire.Questionnaire.GetRosterScope(sourceQuestion.PublicKey);
                     if (!sourceRosterScope.IsSameOrParentScopeFor(linkedRosterScope))
@@ -1907,6 +1913,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 VerificationMessages.WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
+
+        private static QuestionnaireVerificationMessage LinkedToTextListQuestionDoesNotSupportFilters(IQuestion linkedQuestion)
+           => QuestionnaireVerificationMessage.Critical("WB0117",
+               VerificationMessages.WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope,
+               CreateReference(linkedQuestion));
 
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {

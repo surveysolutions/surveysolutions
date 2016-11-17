@@ -612,4 +612,7 @@
   <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
     <value>Nonconsecutive cascade questions. Consider laying the cascading questions one after another.</value>
   </data>
+  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+    <value>Linked to list question doen't support options filter</value>
+  </data>
 </root>

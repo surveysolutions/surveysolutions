@@ -9,6 +9,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 {
     public static class ErrorsTestsExpectations
     {
+        public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectCritical(this QuestionnaireDocument questionnaire, string errorCode)
+           => Create
+               .QuestionnaireView(questionnaire)
+               .ExpectCritical(errorCode);
+
         public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectError(this QuestionnaireDocument questionnaire, string errorCode)
             => Create
                 .QuestionnaireView(questionnaire)
@@ -18,6 +23,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             => Create
                 .QuestionnaireView(sharedPersons: sharedPersons)
                 .ExpectError(errorCode);
+
+        public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectCritical(this QuestionnaireView questionnaireView, string errorCode)
+        {
+            // arrange
+            var verifier = Create.QuestionnaireVerifier();
+
+            // act
+            var messages = verifier.Verify(questionnaireView).ToList();
+
+            //assert
+            messages.ShouldContainCritical(errorCode);
+
+            return messages;
+        }
 
         public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectError(this QuestionnaireView questionnaireView, string errorCode)
         {
