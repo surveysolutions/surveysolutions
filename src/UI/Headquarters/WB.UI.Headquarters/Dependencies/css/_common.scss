@@ -252,16 +252,14 @@ html {
 	}
 }
 h2{
-	@extend %instructions;
-	font-size: 28px;
-	line-height: 30px;
+	font: 26px/28px "RobotoLight";
 	font-weight: normal;
 	margin-top: 0;
 	margin-bottom: 25px;
 }
 h3{
 	@include font(19px, 21px, "RobotoBold");
-	margin-bottom: 10px;
+	margin-top: 0;
 }
 @media (max-width: $screen-sm){
 	html body .container{
@@ -272,4 +270,67 @@ h3{
 		margin-right: auto;
 	}
 }
-	
+h4{
+	font: 22px/24px "RobotoLight";
+	margin-bottom: 22px;
+}
+h5{
+	@include font(14px, 16px);
+	margin-bottom: 15px;
+	font-weight: bold;
+} 
+.hold-transition *{
+ -webkit-transition: none !important;
+ -moz-transition: none !important;
+ -ms-transition: none !important;
+ -o-transition: none !important;
+} 
+.progress{
+	height: 10px;
+	.progress-bar{
+		border-radius: 4px;
+	}
+}
+.back-link{
+    text-transform: uppercase;
+    font: 12.5px/14px "TrebuchetMSBold";
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+.btn-success, .btn-primary{
+    font: 12px/14px "TrebuchetMSBold";
+    outline: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.btn-success{
+	background-color: $green_btn;
+}
+.btn-primary{
+	background-color: $blue;
+}
+.btn{
+	&:disabled{
+		background: $gray_info repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
+		border-color: transparent;	
+		&:hover, &:focus{
+			border-color: $gray_info;
+		}
+	}
+}
+@media (max-width: $screen-xs-min){
+	.breadcrumb li a, .breadcrumb > li + li:before{
+			padding: 0 2px;
+			font-size: 8px;
+			line-height: 10px;
+	}	
+}
+.error-text{
+	color: $red_error;
+}
+.success-text{
+	color: $green_btn;
+}
+.default-text{
+	color: $gray_form;
+}

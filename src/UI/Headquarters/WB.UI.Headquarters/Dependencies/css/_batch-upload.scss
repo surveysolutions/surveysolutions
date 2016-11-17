@@ -25,3 +25,109 @@
 main .flex-row{
 	margin-bottom: 40px;
 }
+.action-block{
+	margin-top: 20px;
+	.float-box{
+		width: 100%;
+		overflow: hidden;
+		.progress{
+			width: 66%;
+			float: left;
+			background-color: $gray_form;
+			margin-right: 30px;
+		}
+		
+		.btn{
+			padding: 8px 12px;
+			margin: 0 2px;
+			&:last-of-type{
+				margin-right: 20px;
+			}
+			&.cancel-uploading{
+				float: left;
+				@extend %gray-uppercase;
+				@extend %clean-btn;
+			}
+		}
+	}
+	h4 {
+		margin-bottom: 40px;
+		span{
+			display: block;
+		}
+	}
+	.back-link{
+		margin: 0 5px;
+	}
+	.btn-input{
+		margin-bottom: 40px;		
+	}
+	.error-block{
+		&:last-of-type{
+			margin-bottom: 30px;
+		}
+		h5{
+			margin: 20px 0 5px;
+		}
+		p{
+			margin: 3px;
+		}
+	}	
+}
+.processing-interview{
+	.progress-bar{
+		background-color: $green_btn;
+	}
+}
+.action-block.preloading-done-with-errors{
+	h4{
+		margin-bottom: 10px;
+	}
+	&>a{
+    	font: 14px/16px "TrebuchetMSBold";
+		display: inline-block;
+		margin-bottom: 40px;
+		width: 38%;
+	}
+}
+ .uploading-verifying, .verification-failed, 
+.verification-complete, .verification-complete-choose-supervisor,
+.processing-interview, .preloading-done, .preloading-done-with-errors{
+	display: none;
+	&.active-preloading{
+		display: block;
+	}
+} 
+@media (max-width: $screen-xs-min){
+	.action-block{
+		text-align: center;
+		.btn-input{
+			display: inline-block;
+		}
+		.float-box{
+			text-align: center;
+			.progress{
+				width: 100%;
+				float: none;
+			}
+			.btn{
+				&.cancel-uploading{
+					float: none;
+				}
+				margin: 15px 5px;
+			}
+		}
+		
+		.btn-input .dropdown-toggle{
+			width: 250px;
+		}
+		&.preloading-done-with-errors > a{
+			width: 60%;
+		}
+	}
+}
+@media (max-width: 400px){
+	.action-block .float-box .btn:last-of-type{
+		margin-right: 5px;
+	}
+}
