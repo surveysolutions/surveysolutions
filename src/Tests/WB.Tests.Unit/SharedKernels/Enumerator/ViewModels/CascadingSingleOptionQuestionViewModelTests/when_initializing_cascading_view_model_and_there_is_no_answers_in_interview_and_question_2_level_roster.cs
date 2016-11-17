@@ -9,7 +9,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_initializing_cascading_view_model_and_there_is_no_answers_in_interview_and_question_2_level_roster : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
@@ -26,8 +25,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
-
-            var optionsRepository = SetupOptionsRepositoryForQuestionnaire(questionIdentity.Id);
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,

@@ -36,6 +36,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -1196,6 +1197,11 @@ namespace WB.Tests.Unit.TestFactories
             var tree = new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
             tree.SetSections(sections);
             return tree;
+        }
+
+        public CategoricalFixedSingleOptionAnswer SingleOptionAnswer(int answer)
+        {
+            return CategoricalFixedSingleOptionAnswer.FromInt(answer);
         }
     }
 }
