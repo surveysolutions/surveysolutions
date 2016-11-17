@@ -14,7 +14,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_handling_SingleOptionQuestionAnswered_for_parent_question_as_first_answer : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
@@ -22,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             SetUp();
             var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == false);
             var parentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == false);
-            var secondParentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == true && _.GetAnswer().SelectedValue == 2);
+            var secondParentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(2));
 
             StatefulInterviewMock.Setup(x => x.Id).Returns(interviewGuid);
             StatefulInterviewMock.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);
@@ -36,7 +35,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 .Returns(Options.Where(x => x.ParentValue == 2).ToList());
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewGuid.FormatGuid()) == StatefulInterviewMock.Object);
-
             
             var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 

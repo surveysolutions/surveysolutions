@@ -13,14 +13,13 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_handling_AnswersRemoved_for_cascading_question : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
         {
             SetUp();
-            var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == true && _.GetAnswer().SelectedValue == 3);
-            var parentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == true && _.GetAnswer().SelectedValue == 1);
+            var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
+            var parentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(1));
 
             StatefulInterviewMock.Setup(x => x.Id).Returns(interviewGuid);
             StatefulInterviewMock.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);

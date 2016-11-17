@@ -612,6 +612,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSingleOptionQuestion
     {
+        public InterviewTreeSingleOptionQuestion(){ }
+
         private CategoricalFixedSingleOptionAnswer answer;
 
         public InterviewTreeSingleOptionQuestion(object answer)
@@ -619,9 +621,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = answer == null ? null : CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer));
         }
 
-        public bool IsAnswered => this.answer != null;
+        public virtual bool IsAnswered => this.answer != null;
 
-        public CategoricalFixedSingleOptionAnswer GetAnswer() => this.answer;
+        public virtual CategoricalFixedSingleOptionAnswer GetAnswer() => this.answer;
 
         public void SetAnswer(CategoricalFixedSingleOptionAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
