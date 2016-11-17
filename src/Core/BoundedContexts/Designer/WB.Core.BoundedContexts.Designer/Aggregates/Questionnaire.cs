@@ -2326,13 +2326,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
                     "Question that linked to another question can not be pre-filled");
             }
-
-            if (!this.IsUnderPropagatableGroup(linkedToQuestion))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
-                    "Question that you are linked to is not in the roster group");
-            }
         }
 
         private void ThrowIfLinkedCategoricalQuestionIsNotFilledByInterviewer(QuestionScope scope)
