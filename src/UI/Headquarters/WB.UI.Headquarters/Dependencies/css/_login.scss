@@ -5,7 +5,7 @@
     }
 }
 img#placeholder{
-    @include size(365px, 329px);
+    max-width: 365px;
     font-size: 0;
     line-height: 0;
     position: relative;

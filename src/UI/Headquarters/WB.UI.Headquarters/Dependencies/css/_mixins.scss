@@ -84,3 +84,17 @@
     letter-spacing: 1px;
     text-transform: uppercase;
 }
+%inactive{
+  opacity: 0; 
+  display: none;
+}
+%clean-btn{
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  &:hover, &:focus{
+    border: none;
+    background-color: transparent;
+  }
+}
