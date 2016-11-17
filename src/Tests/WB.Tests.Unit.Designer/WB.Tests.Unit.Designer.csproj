@@ -468,6 +468,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_integer_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_decimal_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_single_option_question_has_an_option_with_decimal_value.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\ErrorsTests.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\ErrorsTestsExpectations.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_31_child_questions_and_variables.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_31_child_questions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_it_is_nested_intro_other_roster.cs" />
@@ -510,8 +512,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_multi_roster_with_80_rows_and_missing_max_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_multi_roster_with_80_rows_and_nested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_with_incorrect_syntax_in_enablement_conditions_.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_reference_on_TextList_question_from_current_or_child_scope.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_reference_on_TextList_question_from_wrong_scope.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_not_existing_substitutions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_validation_message_that_references_self_in_substitution.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_condition_expression_and_without_name.cs" />
@@ -963,7 +963,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_where_roster_size_source_is_fixedtitles_and_number_of_titles_more_than_40.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_where_roster_size_source_is_question_that_does_not_have_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_multiquestion_and_max_allowed_answers.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_reference_on_MultiAnswer_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_reference_on_question_not_under_propagated_group.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_reference_on_question_of_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_question.cs" />
