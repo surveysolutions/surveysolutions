@@ -1109,7 +1109,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_is_too_long.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_not_unique.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_and_variable_name_start_with_digit.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_in_roster_group_that_used_as_roster_title_question.cs" />
@@ -1167,7 +1166,6 @@
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_not_unique.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_and_variable_name_start_with_digit.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_that_is_linked_and_prefilled.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_that_is_linked_and_referecing_question_not_under_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_that_is_linked_and_referencing_question_has_not_supported_type.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_that_is_linked_and_referencing_question_is_missing.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateSingleOptionQuestionHandlerTests\when_updating_single_option_question_that_is_linked_in_roster_group_that_used_as_roster_title_question.cs" />
