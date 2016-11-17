@@ -411,6 +411,7 @@
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_inside_group.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\AddVariableHandlerTests\when_adding_variable_to_chapter.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_linked_to_list_questions.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_fixed_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_gps_question.cs" />

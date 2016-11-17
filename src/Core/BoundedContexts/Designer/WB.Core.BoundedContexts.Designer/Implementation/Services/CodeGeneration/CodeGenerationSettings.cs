@@ -1,7 +1,6 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
