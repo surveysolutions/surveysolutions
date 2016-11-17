@@ -1916,7 +1916,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationMessage LinkedToTextListQuestionDoesNotSupportFilters(IQuestion linkedQuestion)
            => QuestionnaireVerificationMessage.Critical("WB0117",
-               VerificationMessages.WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope,
+               VerificationMessages.WB0117_LinkedToTextListQuestionDoesNotSupportFilters,
                CreateReference(linkedQuestion));
 
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
