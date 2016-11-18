@@ -228,7 +228,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 RosterVector = linkedOption,
                 Title = this.BuildOptionTitle(linkedOption),
                 Selected = linkedOption.Equals(answeredOption),
-                QuestionState = this.questionState,
+                QuestionState = this.questionState
             };
 
             optionViewModel.BeforeSelected += this.OptionSelected;

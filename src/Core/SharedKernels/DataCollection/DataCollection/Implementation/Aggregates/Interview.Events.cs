@@ -231,6 +231,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedOption.GetAnswer().ToDecimalArrayArray()));
                 }
+
+                if (changedQuestion.IsSingleLinkedToList)
+                {
+                    this.ApplyEvent(new SingleOptionQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleLinkedToList.GetAnswer().SelectedValue));
+                }
+
+                if (changedQuestion.IsMultiLinkedToList)
+                {
+                    this.ApplyEvent(new MultipleOptionsQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedToList.GetAnswer().ToDecimals().ToArray()));
+                }
             }
         }
 

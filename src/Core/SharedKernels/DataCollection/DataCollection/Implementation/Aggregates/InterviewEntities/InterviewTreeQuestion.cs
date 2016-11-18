@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Guid? cascadingParentQuestionId, 
             bool isYesNo, 
             bool isDecimal,
+            bool isLinkedToListQuestion,
             Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null,
             SubstitionText[] validationMessages = null)
@@ -35,7 +36,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 if (linkedSourceId.HasValue)
                 {
-                    this.AsSingleLinkedOption = new InterviewTreeSingleLinkedOptionQuestion(linkedOptions, answer, linkedSourceId.Value, commonParentRosterIdForLinkedQuestion);
+                    if (isLinkedToListQuestion)
+                    {
+                        this.AsSingleLinkedToList = new InterviewTreeSingleOptionLinkedToListQuestion(answer, linkedSourceId.Value);
+                    }
+                    else
+                        this.AsSingleLinkedOption = new InterviewTreeSingleLinkedToRosterQuestion(linkedOptions, answer,
+                            linkedSourceId.Value, commonParentRosterIdForLinkedQuestion);
                 }
                 else
                     this.AsSingleFixedOption = new InterviewTreeSingleOptionQuestion(answer);
@@ -47,7 +54,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     this.AsYesNo = new InterviewTreeYesNoQuestion(answer);
                 else if (linkedSourceId.HasValue)
                 {
-                    this.AsMultiLinkedOption = new InterviewTreeMultiLinkedOptionQuestion(linkedOptions, answer, linkedSourceId.Value, commonParentRosterIdForLinkedQuestion);
+                    if (isLinkedToListQuestion)
+                    {
+                        this.AsMultiLinkedToList = new InterviewTreeMultiOptionLinkedToListQuestion(answer, linkedSourceId.Value);
+                    }
+                    else
+                        this.AsMultiLinkedOption = new InterviewTreeMultiLinkedToRosterQuestion(linkedOptions, answer, linkedSourceId.Value, commonParentRosterIdForLinkedQuestion);
                 }
                 else
                     this.AsMultiFixedOption = new InterviewTreeMultiOptionQuestion(answer);
@@ -92,12 +104,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeGpsQuestion AsGps { get; private set; }
         public InterviewTreeDateTimeQuestion AsDateTime { get; private set; }
         public InterviewTreeMultiOptionQuestion AsMultiFixedOption { get; private set; }
-        public InterviewTreeMultiLinkedOptionQuestion AsMultiLinkedOption { get; private set; }
+        public InterviewTreeMultiLinkedToRosterQuestion AsMultiLinkedOption { get; private set; }
         public InterviewTreeYesNoQuestion AsYesNo { get; private set; }
-        public InterviewTreeSingleLinkedOptionQuestion AsSingleLinkedOption { get; private set; }
+        public InterviewTreeSingleLinkedToRosterQuestion AsSingleLinkedOption { get; private set; }
         public InterviewTreeSingleOptionQuestion AsSingleFixedOption { get; private set; }
 
-        public InterviewTreeLinkedQuestion AsLinked => this.IsSingleLinkedOption ? (InterviewTreeLinkedQuestion)this.AsSingleLinkedOption : this.AsMultiLinkedOption;
+        public InterviewTreeMultiOptionLinkedToListQuestion AsMultiLinkedToList { get; private set; }
+        public InterviewTreeSingleOptionLinkedToListQuestion AsSingleLinkedToList { get; private set; }
+
+        public InterviewTreeLinkedToListQuestion AsLinkedToList => this.IsSingleLinkedToList ? (InterviewTreeLinkedToListQuestion)this.AsSingleLinkedToList : this.AsMultiLinkedToList;
+        public InterviewTreeLinkedToRosterQuestion AsLinked => this.IsSingleLinkedOption ? (InterviewTreeLinkedToRosterQuestion)this.AsSingleLinkedOption : this.AsMultiLinkedOption;
 
         public InterviewTreeCascadingQuestion AsCascading { get; private set; }
 
@@ -133,6 +149,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsGps => this.AsGps != null;
         public bool IsMultimedia => this.AsMultimedia != null;
 
+        public bool IsMultiLinkedToList => this.AsMultiLinkedToList != null;
+        public bool IsSingleLinkedToList => this.AsSingleLinkedToList != null;
+
+        public bool IsLinkedToListQuestion => (this.IsMultiLinkedToList || this.IsSingleLinkedToList);
         public bool IsLinked => (this.IsMultiLinkedOption || this.IsSingleLinkedOption);
         public bool IsCascading => this.AsCascading != null;
 
@@ -151,6 +171,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiLinkedOption) return this.AsMultiLinkedOption.IsAnswered;
             if (this.IsYesNo) return this.AsYesNo.IsAnswered;
             if (this.IsTextList) return this.AsTextList.IsAnswered;
+            if (this.IsSingleLinkedToList) return this.AsSingleLinkedToList.IsAnswered;
+            if (this.IsMultiLinkedToList) return this.AsMultiLinkedToList.IsAnswered;
 
             return false;
         }
@@ -170,6 +192,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiLinkedOption) return "MultiLinkedOption";
             if (this.IsYesNo) return "YesNo";
             if (this.IsTextList) return "TextList";
+            if (this.IsSingleLinkedToList) return "SingleLinkedToList";
+            if (this.IsMultiLinkedToList) return "MultiLinkedToList";
 
             return "no type";
         }
@@ -195,6 +219,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.AsMultiLinkedOption?.SetAnswer((CategoricalLinkedMultiOptionAnswer) answer);
                 this.AsYesNo?.SetAnswer((YesNoAnswer) answer);
                 this.AsTextList?.SetAnswer((TextListAnswer) answer);
+
+                this.AsMultiLinkedToList?.SetAnswer((CategoricalFixedMultiOptionAnswer)answer);
+                this.AsSingleLinkedToList?.SetAnswer((CategoricalFixedSingleOptionAnswer)answer);
             }
         }
 
@@ -210,7 +237,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (!this.IsLinked) return;
 
-            InterviewTreeLinkedQuestion linkedQuestion = this.AsLinked;
+            InterviewTreeLinkedToRosterQuestion linkedQuestion = this.AsLinked;
 
             List<IInterviewTreeNode> sourceNodes = new List<IInterviewTreeNode>();
             var isQuestionOnTopLevelOrInDifferentRosterBranch = linkedQuestion.CommonParentRosterIdForLinkedQuestion == null;
@@ -234,6 +261,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .Select(x => x.Identity.RosterVector).ToArray();
             this.UpdateLinkedOptionsAndResetAnswerIfNeeded(options);
         }
+
+        public void CalculateLinkedToListOptions(bool resetAnswerOnOptionChange = true)
+        {
+            if (!this.IsLinkedToListQuestion) return;
+            InterviewTreeLinkedToListQuestion linkedToListQuestion = this.AsLinkedToList;
+
+            var refListQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
+            var options = refListQuestion?.AsTextList?.GetAnswer()?.Rows.Select(x => x.Value).ToArray() ?? new decimal[0];
+
+            var previousOptions = this.AsLinkedToList.Options;
+            this.AsLinkedToList.SetOptions(options);
+            if(resetAnswerOnOptionChange)
+            {
+                var optionsAreIdentical = previousOptions.SequenceEqual(options);
+                if (optionsAreIdentical) return;
+
+                if (this.IsMultiLinkedToList)
+                    this.AsMultiLinkedToList.RemoveAnswer();
+                else
+                    this.AsSingleLinkedToList.RemoveAnswer();
+            }
+        }
+
 
         [Obsolete("use SetAnswer instead")]
         public void SetObjectAnswer(object answer)
@@ -265,6 +315,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
             if (this.IsYesNo) { this.AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions((AnsweredYesNoOption[])answer)); return; }
             if (this.IsTextList) { this.AsTextList.SetAnswer(TextListAnswer.FromTupleArray((Tuple<decimal, string>[])answer)); return; }
+            if (this.IsSingleLinkedToList) { this.AsSingleLinkedToList.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
+            if (this.IsMultiLinkedToList) { this.AsMultiLinkedToList.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[])); return; }
         }
 
         public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null)
@@ -294,6 +346,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleFixedOption) return AnswerUtils.AnswerToString(Convert.ToDecimal(this.AsSingleFixedOption.GetAnswer()?.SelectedValue), getCategoricalAnswerOptionText);
             if (this.IsMultiFixedOption) return AnswerUtils.AnswerToString(this.AsMultiFixedOption.GetAnswer()?.ToDecimals()?.ToArray(), getCategoricalAnswerOptionText);
             if (this.IsYesNo) return AnswerUtils.AnswerToString(this.AsYesNo.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), getCategoricalAnswerOptionText);
+
+            if (this.IsSingleLinkedToList) return AnswerUtils.AnswerToString(Convert.ToDecimal(this.AsSingleLinkedToList.GetAnswer()?.SelectedValue), getCategoricalAnswerOptionText);
+            if (this.IsMultiLinkedToList) return AnswerUtils.AnswerToString(this.AsMultiLinkedToList.GetAnswer()?.ToDecimals()?.ToArray(), getCategoricalAnswerOptionText);
+
             return string.Empty;
         }
 
@@ -327,6 +383,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.AsMultiLinkedOption?.RemoveAnswer();
             this.AsYesNo?.RemoveAnswer();
             this.AsTextList?.RemoveAnswer();
+            this.AsMultiLinkedToList?.RemoveAnswer();
+            this.AsSingleLinkedToList?.RemoveAnswer();
         }
 
         public bool IsOnTheSameOrDeeperLevel(Identity questionIdentity)
@@ -353,6 +411,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiLinkedOption) clonedQuestion.AsMultiLinkedOption = this.AsMultiLinkedOption.Clone();
             if (this.IsSingleLinkedOption) clonedQuestion.AsSingleLinkedOption = this.AsSingleLinkedOption.Clone();
             if (this.IsCascading) clonedQuestion.AsCascading = this.AsCascading.Clone(clonedQuestion);
+
+            if (this.IsSingleLinkedToList) clonedQuestion.AsSingleLinkedToList = this.AsSingleLinkedToList.Clone();
+            if (this.IsMultiLinkedToList) clonedQuestion.AsMultiLinkedToList = this.AsMultiLinkedToList.Clone();
 
             clonedQuestion.Title = this.Title?.Clone();
             clonedQuestion.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
@@ -669,13 +730,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     }
 
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeSingleLinkedOptionQuestion : InterviewTreeLinkedQuestion
+    public class InterviewTreeSingleLinkedToRosterQuestion : InterviewTreeLinkedToRosterQuestion
     {
         public InterviewTreeSingleLinkedOptionQuestion() { }
 
         private CategoricalLinkedSingleOptionAnswer answer;
 
-        public InterviewTreeSingleLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
+        public InterviewTreeSingleLinkedToRosterQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
             : base(linkedOptions, linkedSourceId, commonParentRosterIdForLinkedQuestion)
         {
             this.answer = CategoricalLinkedSingleOptionAnswer.FromRosterVector(answer as RosterVector);
@@ -686,11 +747,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetAnswer(CategoricalLinkedSingleOptionAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeSingleLinkedOptionQuestion question) => question?.answer == this.answer;
+        public bool EqualByAnswer(InterviewTreeSingleLinkedToRosterQuestion question) => question?.answer == this.answer;
 
-        public InterviewTreeSingleLinkedOptionQuestion Clone()
+        public InterviewTreeSingleLinkedToRosterQuestion Clone()
         {
-            var clone = (InterviewTreeSingleLinkedOptionQuestion) this.MemberwiseClone();
+            var clone = (InterviewTreeSingleLinkedToRosterQuestion) this.MemberwiseClone();
             clone.SetOptions(this.Options);
             return clone;
         }
@@ -699,10 +760,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     }
 
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeMultiLinkedOptionQuestion : InterviewTreeLinkedQuestion
+    public class InterviewTreeMultiLinkedToRosterQuestion : InterviewTreeLinkedToRosterQuestion
     {
         private CategoricalLinkedMultiOptionAnswer answer;
-        public InterviewTreeMultiLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
+        public InterviewTreeMultiLinkedToRosterQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
             : base(linkedOptions, linkedSourceId, commonParentRosterIdForLinkedQuestion)
         {
             this.answer = CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answer as RosterVector[]);
@@ -714,7 +775,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void RemoveAnswer() => this.answer = null;
 
-        public bool EqualByAnswer(InterviewTreeMultiLinkedOptionQuestion question)
+        public bool EqualByAnswer(InterviewTreeMultiLinkedToRosterQuestion question)
         {
             if (question?.answer == null && this.answer == null)
                 return true;
@@ -725,9 +786,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return false;
         }
 
-        public InterviewTreeMultiLinkedOptionQuestion Clone()
+        public InterviewTreeMultiLinkedToRosterQuestion Clone()
         {
-            var clone = (InterviewTreeMultiLinkedOptionQuestion) this.MemberwiseClone();
+            var clone = (InterviewTreeMultiLinkedToRosterQuestion) this.MemberwiseClone();
             clone.SetOptions(this.Options);
             return clone;
         }
@@ -736,13 +797,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     }
 
     [DebuggerDisplay("{ToString()}")]
-    public abstract class InterviewTreeLinkedQuestion
+    public abstract class InterviewTreeLinkedToRosterQuestion
     {
         protected InterviewTreeLinkedQuestion() { }
         public Guid LinkedSourceId { get; private set; }
         public Identity CommonParentRosterIdForLinkedQuestion { get; private set; }
 
-        protected InterviewTreeLinkedQuestion(IEnumerable<RosterVector> linkedOptions, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
+        protected InterviewTreeLinkedToRosterQuestion(IEnumerable<RosterVector> linkedOptions, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
         {
             this.LinkedSourceId = linkedSourceId;
             this.CommonParentRosterIdForLinkedQuestion = commonParentRosterIdForLinkedQuestion;
@@ -758,6 +819,84 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public override string ToString() => $"{this.LinkedSourceId.FormatGuid()} -> {string.Join(", ", this.Options)}";
+    }
+
+    [DebuggerDisplay("{ToString()}")]
+    public class InterviewTreeLinkedToListQuestion
+    {
+        public Guid LinkedSourceId { get; protected set; }
+
+        public IReadOnlyCollection<decimal> Options { get; protected set; }
+
+        public void SetOptions(IEnumerable<decimal> options)
+        {
+            this.Options = options?.ToReadOnlyCollection() ?? new List<decimal>().ToReadOnlyCollection();
+        }
+    }
+    
+    [DebuggerDisplay("{ToString()}")]
+    public class InterviewTreeMultiOptionLinkedToListQuestion : InterviewTreeLinkedToListQuestion
+    {
+        public InterviewTreeMultiOptionLinkedToListQuestion(object answer, Guid linkedToQuestionId)
+        {
+            this.answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
+            this.Options = new List<decimal>();
+            LinkedSourceId = linkedToQuestionId;
+        }
+
+        private CategoricalFixedMultiOptionAnswer answer;
+        public bool IsAnswered => this.answer != null;
+        public CategoricalFixedMultiOptionAnswer GetAnswer() => this.answer;
+        public void SetAnswer(CategoricalFixedMultiOptionAnswer answer) => this.answer = answer;
+
+        public bool EqualByAnswer(InterviewTreeMultiOptionLinkedToListQuestion question)
+        {
+            if (question?.answer == null && this.answer == null)
+                return true;
+
+            if (question?.answer != null && this.answer != null)
+                return question.answer.CheckedValues.SequenceEqual(this.answer.CheckedValues);
+
+            return false;
+        }
+
+        public void RemoveAnswer() => this.answer = null;
+
+        public InterviewTreeMultiOptionLinkedToListQuestion Clone()
+        {
+            var clone = (InterviewTreeMultiOptionLinkedToListQuestion)this.MemberwiseClone();
+            clone.SetOptions(this.Options);
+            return clone;
+        }
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+    }
+
+    [DebuggerDisplay("{ToString()}")]
+    public class InterviewTreeSingleOptionLinkedToListQuestion : InterviewTreeLinkedToListQuestion
+    {
+        public InterviewTreeSingleOptionLinkedToListQuestion(object answer, Guid linkedToQuestionId)
+        {
+            this.answer = answer == null ? null : CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer));
+            this.Options = new List<decimal>();
+            LinkedSourceId = linkedToQuestionId;
+        }
+
+        private CategoricalFixedSingleOptionAnswer answer;
+        public bool IsAnswered => this.answer != null;
+        public CategoricalFixedSingleOptionAnswer GetAnswer() => this.answer;
+        public void SetAnswer(CategoricalFixedSingleOptionAnswer answer) => this.answer = answer;
+        public bool EqualByAnswer(InterviewTreeSingleOptionLinkedToListQuestion question) => question?.answer == this.answer;
+        public void RemoveAnswer() => this.answer = null;
+
+        public InterviewTreeSingleOptionLinkedToListQuestion Clone()
+        {
+            var clone = (InterviewTreeSingleOptionLinkedToListQuestion)this.MemberwiseClone();
+            clone.SetOptions(this.Options);
+            return clone;
+        }
+
+        public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
     }
 
     [DebuggerDisplay("{ToString()}")]

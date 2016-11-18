@@ -1180,7 +1180,8 @@ namespace WB.Tests.Unit.TestFactories
             Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
         {
             var titleWithSubstitutions = Create.Entity.SubstitionText(questionIdentity, title);
-            var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, cascadingParentQuestionId, isYesNo,  isDecimal, linkedSourceId);
+            var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
+                cascadingParentQuestionId, isYesNo,  isDecimal, false, linkedSourceId);
 
             if (isDisabled) question.Disable();
             return question;

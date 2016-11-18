@@ -81,13 +81,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(SingleOptionQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsSingleFixedOption.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
+            var question = this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
+
+            question.AsSingleFixedOption?.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
+            question.AsSingleLinkedToList?.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
+
             this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedValue);
         }
 
         public virtual void Apply(MultipleOptionsQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
+            var question =  this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
+            question.AsMultiFixedOption?.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
+            question.AsMultiLinkedToList?.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
+
             this.ExpressionProcessorStatePrototype.UpdateMultiOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedValues);
         }
 
@@ -110,6 +117,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(@event.Answers));
             this.ExpressionProcessorStatePrototype.UpdateTextListAnswer(@event.QuestionId, @event.RosterVector, @event.Answers);
+
+            //calculate referenced linked questions
+            CalculateLinkedToListOptionsOnTree(this.changedInterview, false);
         }
 
         public virtual void Apply(SingleOptionLinkedQuestionAnswered @event)

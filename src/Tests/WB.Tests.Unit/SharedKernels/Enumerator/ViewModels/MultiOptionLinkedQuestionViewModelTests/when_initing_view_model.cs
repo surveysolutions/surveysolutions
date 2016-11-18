@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
         It should_use_question_answer_as_title = () => questionViewModel.Options.Second().Title.ShouldEqual("answer2");
 
-        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
+        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
         static string interviewId;
         static Identity questionId;
     }
