@@ -7,7 +7,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_initializing_and_roster_title_is_used : StaticTextViewModelTestsContext
     {
         Establish context = () =>
@@ -15,16 +14,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             rosterTitleAnswerValue = "answer";
             staticTextWithSubstitutionToRosterTitleId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var questionnaire= Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children:
-                Create.Entity.FixedRoster(
-                    fixedTitles: new[] {new FixedRosterTitle(1, rosterTitleAnswerValue)}, children: new[]
-                    {
-                        Create.Entity.StaticText(publicKey: staticTextWithSubstitutionToRosterTitleId,
-                            text: "uses %rostertitle%")
-                    })));
+            var questionnaire= Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children:
+                Create.Entity.FixedRoster(fixedTitles: new[] {new FixedRosterTitle(1, rosterTitleAnswerValue)}, children: new[]
+                {
+                    Create.Entity.StaticText(publicKey: staticTextWithSubstitutionToRosterTitleId, text: "uses %rostertitle%")
+                })));
 
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire);
-            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire));
+            var statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
+            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
         };

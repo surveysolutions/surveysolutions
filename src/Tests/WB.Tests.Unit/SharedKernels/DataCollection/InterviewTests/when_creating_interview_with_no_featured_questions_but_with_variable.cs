@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository,
                 interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider,
-                shouldApplyOnClientCreatedEvent: false);
+                shouldBeInitialized: false);
         };
 
         Because of = () =>

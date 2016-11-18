@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.TestFactories
             Guid? userId = null,
             IQuestionnaireStorage questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider interviewExpressionStatePrototypeProvider = null,
-            bool shouldApplyOnClientCreatedEvent = true)
+            bool shouldBeInitialized = true)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
@@ -68,16 +68,15 @@ namespace WB.Tests.Unit.TestFactories
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            if (shouldApplyOnClientCreatedEvent)
+            if (shouldBeInitialized)
             {
                 statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid());
-                //statefulInterview.Apply(new InterviewOnClientCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
             }
 
             return statefulInterview;
         }
 
-        public StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null, IQuestionnaire questionnaire = null)
+        public StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null, IQuestionnaire questionnaire = null, bool shouldBeInitialized = true)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
 
@@ -86,8 +85,10 @@ namespace WB.Tests.Unit.TestFactories
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitionTextFactory());
 
-            statefulInterview.Apply(new InterviewOnClientCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
-
+            if (shouldBeInitialized)
+            {
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid());
+            }
             return statefulInterview;
         }
     }
