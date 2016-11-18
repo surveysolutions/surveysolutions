@@ -96,13 +96,11 @@ namespace WB.Tests.Unit.Designer
                 .Select(m => m.Code)
                 .ShouldNotContain(code);
 
-        public static void ShouldContainError(
-            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
-        {
-            verificationMessages.ShouldContain(message
-                => message.MessageLevel == VerificationMessageLevel.General
-                && message.Code == code);
-        }
+        public static void ShouldContainError(this IEnumerable<QuestionnaireVerificationMessage> messages, string code)
+            => messages
+                .Where(m => m.MessageLevel == VerificationMessageLevel.General)
+                .Select(m => m.Code)
+                .ShouldContain(code);
 
         public static void ShouldNotContainError(this IEnumerable<QuestionnaireVerificationMessage> messages, string code)
             => messages
