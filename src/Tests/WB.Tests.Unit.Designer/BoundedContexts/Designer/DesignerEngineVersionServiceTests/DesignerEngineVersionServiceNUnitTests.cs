@@ -76,5 +76,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 
             Assert.That(result, Is.EqualTo(13));
         }
+
+        [Test]
+        public void When_questionnaire_has_question_linked_to_question_should_return_version_18()
+        {
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                                        Create.Question(questionId: questionId, questionType: QuestionType.TextList), 
+                                        Create.MultyOptionsQuestion(linkedToQuestionId: questionId));
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(18));
+        }
     }
 }
