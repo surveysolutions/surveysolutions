@@ -33,14 +33,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         Because of = () =>
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, "answer 1");
 
-        It should_linked_single_question_from_roster1_has_2_option = () =>
+        It should_linked_single_question_from_roster1_has_2_options = () =>
         {
             interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0)))
                 .Options.Count.ShouldEqual(2);
             //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
         };
 
-        It should_linked_single_question_from_roster2_has_no_option = () =>
+        It should_linked_single_question_from_roster2_has_2_options = () =>
         {
             interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(1)))
                 .Options.Count.ShouldEqual(2);
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
         };
 
-        It should_linked_multi_question_from_roster2_has_no_options = () => {
+        It should_linked_multi_question_from_roster2_has_2_options = () => {
             interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(1)))
                 .Options.Count.ShouldEqual(2);
             //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
