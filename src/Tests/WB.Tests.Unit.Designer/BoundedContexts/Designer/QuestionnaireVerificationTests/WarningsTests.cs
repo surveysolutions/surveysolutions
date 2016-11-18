@@ -511,21 +511,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0224");
 
         [Test]
+        public void multi_option_with_21_options()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 21).ToList()),
+                })
+                .ExpectWarning("WB0231");
+
+        [Test]
+        public void multi_option_with_20_options()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 20).ToList()),
+                })
+                .ExpectNoWarning("WB0231");
+
+        [Test]
         public void single_option_with_9_options_in_combobox_mode()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
-                    Create.SingleOptionQuestion(isComboBox: true, answers: new List<Answer>
-                    {
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                    }),
+                    Create.SingleOptionQuestion(
+                        isComboBox: true,
+                        answers: Enumerable.Repeat(Create.Answer(), 9).ToList()),
                 })
                 .ExpectWarning("WB0225");
 
@@ -533,18 +540,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void single_option_with_9_options_in_regular_mode()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
-                    Create.SingleOptionQuestion(isComboBox: false, answers: new List<Answer>
-                    {
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                    }),
+                    Create.SingleOptionQuestion(
+                        isComboBox: false,
+                        answers: Enumerable.Repeat(Create.Answer(), 9).ToList()),
                 })
                 .ExpectNoWarning("WB0225");
 
@@ -552,19 +550,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void single_option_with_10_options_in_combobox_mode()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
-                    Create.SingleOptionQuestion(isComboBox: true, answers: new List<Answer>
-                    {
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                        Create.Answer(),
-                    }),
+                    Create.SingleOptionQuestion(
+                        isComboBox: true,
+                        answers: Enumerable.Repeat(Create.Answer(), 10).ToList()),
                 })
                 .ExpectNoWarning("WB0225");
 

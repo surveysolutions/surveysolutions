@@ -53,6 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<ICategoricalQuestion>(OmittedOptions, "WB0228", VerificationMessages.WB0228_OmittedOptions),
             Warning<IValidatable, IQuestionnaireEntity>(this.SupervisorQuestionInValidation, "WB0229", VerificationMessages.WB0229_SupervisorQuestionInValidation),
             Warning<ICategoricalQuestion>(NonconsecutiveCascadings, "WB0230", VerificationMessages.WB0230_NonconsecutiveCascadings),
+            Warning<MultyOptionsQuestion>(MoreThan20Options, "WB0231", VerificationMessages.WB0231_MultiOptionWithMoreThan20Options),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -64,6 +65,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
+
+        private static bool MoreThan20Options(ICategoricalQuestion question) => question.Answers.Count > 20;
 
         private static bool NonconsecutiveCascadings(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
             => question.GetPrevious() != GetCascadeFromQuestion(question, questionnaire);
