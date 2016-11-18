@@ -9,7 +9,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_answering_roster_size_numeric_question_with_negative_value_and_question_was_not_answered : IntegerQuestionViewModelTestContext
     {
         Establish context = () =>

@@ -1208,5 +1208,9 @@ namespace WB.Tests.Unit.TestFactories
         {
             return CategoricalLinkedSingleOptionAnswer.FromRosterVector(selectedValue);
         }
+
+        public NumericIntegerAnswer NumericIntegerAnswer(int i)
+            => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
+                    .NumericIntegerAnswer.FromInt(i);
     }
 }
