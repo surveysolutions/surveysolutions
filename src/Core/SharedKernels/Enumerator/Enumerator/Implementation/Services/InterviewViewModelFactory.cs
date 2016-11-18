@@ -44,7 +44,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             LinkedMultiOptionQuestionModel = 181,
             YesNoQuestionModel = 182,
             LinkedToRosterMultiOptionQuestionModel = 183,
-            
+
+            LinkedToListQuestionMultiOptionQuestionModel = 184,
+            LinkedToListQuestionSingleOptionQuestionModel = 185,
+
             GroupModel = 200,
             RosterModel = 201,
             StaticTextModel = 300,
@@ -65,12 +68,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.SingleOptionQuestionModel, Load<SingleOptionQuestionViewModel> },
                 { InterviewEntityType.LinkedSingleOptionQuestionModel, Load<SingleOptionLinkedQuestionViewModel> },
                 { InterviewEntityType.LinkedToRosterSingleOptionQuestionModel, Load<SingleOptionRosterLinkedQuestionViewModel> },
+                { InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel, Load<SingleOptionLinkedToListQuestionViewModel> },
                 { InterviewEntityType.LinkedToRosterMultiOptionQuestionModel, Load<MultiOptionLinkedToRosterQuestionViewModel> },
+                { InterviewEntityType.LinkedToListQuestionMultiOptionQuestionModel, Load<MultiOptionLinkedToListQuestionQuestionViewModel> },
                 { InterviewEntityType.FilteredSingleOptionQuestionModel, Load<FilteredSingleOptionQuestionViewModel> },
                 { InterviewEntityType.CascadingSingleOptionQuestionModel, Load<CascadingSingleOptionQuestionViewModel> },
                 { InterviewEntityType.DateTimeQuestionModel, Load<DateTimeQuestionViewModel> },
                 { InterviewEntityType.MultiOptionQuestionModel, Load<MultiOptionQuestionViewModel> },
-                { InterviewEntityType.LinkedMultiOptionQuestionModel, Load<MultiOptionLinkedToQuestionQuestionViewModel> },
+                { InterviewEntityType.LinkedMultiOptionQuestionModel, Load<MultiOptionLinkedToRosterQuestionQuestionViewModel> },
                 { InterviewEntityType.GpsCoordinatesQuestionModel, Load<GpsCoordinatesQuestionViewModel> },
                 { InterviewEntityType.MultimediaQuestionModel, Load<MultimedaQuestionViewModel> },
                 { InterviewEntityType.QRBarcodeQuestionModel, Load<QRBarcodeQuestionViewModel> },
@@ -154,8 +159,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     case QuestionType.SingleOption:
                         if (questionnaire.IsQuestionLinked(entityId))
                         {
-                            return InterviewEntityType.LinkedSingleOptionQuestionModel;
+                            return  questionnaire.IsLinkedToListQuestion(entityId)
+                                ? InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel 
+                                : InterviewEntityType.LinkedSingleOptionQuestionModel;
                         }
+
                         if (questionnaire.IsQuestionLinkedToRoster(entityId))
                         {
                             return InterviewEntityType.LinkedToRosterSingleOptionQuestionModel;
@@ -175,7 +183,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         }
                         if (questionnaire.IsQuestionLinked(entityId))
                         {
-                            return InterviewEntityType.LinkedMultiOptionQuestionModel;
+                            return questionnaire.IsLinkedToListQuestion(entityId)
+                                ? InterviewEntityType.LinkedToListQuestionMultiOptionQuestionModel
+                                : InterviewEntityType.LinkedMultiOptionQuestionModel;
                         }
                         return questionnaire.IsQuestionLinkedToRoster(entityId)
                             ? InterviewEntityType.LinkedToRosterMultiOptionQuestionModel

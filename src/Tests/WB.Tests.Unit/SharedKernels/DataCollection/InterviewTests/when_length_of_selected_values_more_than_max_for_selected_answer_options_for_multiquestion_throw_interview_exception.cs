@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -19,15 +20,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
+            var sectionId = Guid.Parse("1111111111111111111111111111111A");
             validatingQuestionId = Guid.Parse("11111111111111111111111111111111");
 
-
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.HasQuestion(validatingQuestionId) == true
-                    && _.GetQuestionType(validatingQuestionId) == QuestionType.MultyOption
-                    && _.GetMultiSelectAnswerOptionsAsValues(validatingQuestionId) == new decimal[] { 1, 2, 3, 4 }
-                    && _.GetMaxSelectedAnswerOptions(validatingQuestionId) == 2
-                );
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: sectionId, children: new IComposite[]
+            {
+                Create.Entity.MultipleOptionsQuestion(questionId: validatingQuestionId, answers: new [] { 1, 2, 3, 4 }, maxAllowedAnswers:2),
+                
+            }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new decimal[] { }, DateTime.Now, new [] { 1, 2, 3 }));
 
         It should_raise_MultipleOptionsQuestionAnswered_event_with_QuestionId_equal_to_validatingQuestionId = () =>
-            expectedException.ShouldBeOfExactType(typeof(InterviewException));
+            expectedException.ShouldBeOfExactType(typeof(AnswerNotAcceptedException));
 
         private static Exception expectedException;
         private static Guid validatingQuestionId;

@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     case QuestionType.SingleOption:
                         this.CheckSingleOptionQuestionInvariants(questionId, currentRosterVector, ((CategoricalFixedSingleOptionAnswer)answer).SelectedValue, questionnaire,
-                            answeredQuestion, tree, applyStrongChecks);
+                            answeredQuestion, tree, false ,applyStrongChecks);
                         break;
 
                     case QuestionType.MultyOption:
@@ -156,14 +156,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal selectedValue,
-            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree,
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree, bool isLinkedToList,
             bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
-            this.ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
+
+            if (isLinkedToList)
+            {
+                var linkedQuestionIdentity = new Identity(questionId, rosterVector);
+                treeInvariants.RequireLinkedToListOptionIsAvailable(linkedQuestionIdentity, selectedValue);
+            }
+            else
+                this.ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
 
             if (applyStrongChecks)
             {
@@ -175,14 +182,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckMultipleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, IReadOnlyCollection<int> selectedValues,
-            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree,
+            IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree, bool isLinkedToList,
             bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
-            this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
+
+            if (isLinkedToList)
+            {
+                var linkedQuestionIdentity = new Identity(questionId, rosterVector);
+                foreach (var selectedValue in selectedValues)
+                {
+                    treeInvariants.RequireLinkedToListOptionIsAvailable(linkedQuestionIdentity, selectedValue);
+                }
+            }
+            else
+                this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
 
             if (questionnaire.IsQuestionYesNo(questionId))
             {

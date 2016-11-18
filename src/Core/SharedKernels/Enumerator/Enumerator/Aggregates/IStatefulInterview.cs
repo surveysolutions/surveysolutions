@@ -39,11 +39,11 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         InterviewTreeTextListQuestion GetTextListQuestion(Identity identity);
 
-        InterviewTreeSingleLinkedOptionQuestion GetLinkedSingleOptionQuestion(Identity identity);
+        InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity);
 
         InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity);
 
-        InterviewTreeMultiLinkedOptionQuestion GetLinkedMultiOptionQuestion(Identity identity);
+        InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity);
 
         InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity);
 
@@ -54,6 +54,10 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity);
 
         InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity);
+
+        InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity);
+
+        InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity);
 
         bool HasGroup(Identity group);
 
@@ -119,5 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         string GetLastSupervisorComment();
 
         IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
+
+        InterviewTreeTextListQuestion FindTextListQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
     }
 }

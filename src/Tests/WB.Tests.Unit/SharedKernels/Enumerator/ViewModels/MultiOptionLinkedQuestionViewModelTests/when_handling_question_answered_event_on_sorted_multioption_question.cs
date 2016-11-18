@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         It should_put_answers_order_on_option2 = () => questionViewModel.Options.Second().CheckedOrder.ShouldEqual(1);
         It should_put_checked_on_checked_items = () => questionViewModel.Options.Count(x => x.Checked).ShouldEqual(2);
 
-        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
+        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
         static string interviewId;
         static Identity questionId;
     }

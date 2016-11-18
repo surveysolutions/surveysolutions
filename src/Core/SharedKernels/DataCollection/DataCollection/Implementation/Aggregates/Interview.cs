@@ -708,6 +708,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // backward compatibility if assembly cannot process linked questions
                 CalculateLinkedOptionsOnTree(tree);
             }
+
+            CalculateLinkedToListOptionsOnTree(tree);
         }
 
         [Obsolete("v 5.10, release 01 jul 16")]
@@ -726,6 +728,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
             {
                 linkedQuestion.CalculateLinkedOptions();
+            }
+        }
+
+        private static void CalculateLinkedToListOptionsOnTree(InterviewTree tree, bool resetAnswerOnOptionChange = true)
+        {
+            var linkedToListQuestions = tree.FindQuestions().Where(x => x.IsLinkedToListQuestion);
+            foreach (InterviewTreeQuestion linkedQuestion in linkedToListQuestions)
+            {
+                linkedQuestion.CalculateLinkedToListOptions(resetAnswerOnOptionChange);
             }
         }
 

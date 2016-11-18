@@ -197,14 +197,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultimedia;
         public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsQRBarcode;
         public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsTextList;
-        public InterviewTreeSingleLinkedOptionQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsSingleLinkedOption;
+        public InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsSingleLinkedOption;
         public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultiFixedOption;
-        public InterviewTreeMultiLinkedOptionQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultiLinkedOption;
+        public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultiLinkedOption;
         public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsInteger;
         public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsDouble;
         public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsText;
         public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsSingleFixedOption;
         public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsYesNo;
+
+        public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsSingleLinkedToList;
+        public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultiLinkedToList;
 
         #region Command handlers
 
@@ -296,6 +299,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             } while (variableRosterVector.Length >= 0);
 
             return null;
+        }
+
+        public InterviewTreeTextListQuestion FindTextListQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
+        {
+            return (this.changedInterview.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion)?.AsTextList;
         }
 
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity)

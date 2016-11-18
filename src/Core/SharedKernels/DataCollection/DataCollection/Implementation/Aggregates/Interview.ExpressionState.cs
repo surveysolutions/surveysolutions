@@ -186,6 +186,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     expressionState.UpdateLinkedMultiOptionAnswer(changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, changedQuestion.AsMultiLinkedOption.GetAnswer().ToDecimalArrayArray());
                 }
+
+                if (changedQuestion.IsSingleLinkedToList)
+                {
+                    expressionState.UpdateSingleOptionAnswer(changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsSingleLinkedToList.GetAnswer().SelectedValue);
+                }
+
+                if (changedQuestion.IsMultiLinkedToList)
+                {
+                    expressionState.UpdateMultiOptionAnswer(changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, changedQuestion.AsMultiLinkedToList.GetAnswer().ToDecimals().ToArray());
+                }
             }
         }
 
