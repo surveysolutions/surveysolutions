@@ -40,11 +40,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void linked_question_reference_on_TextList_question_from_wrong_scope()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Roster(r1Id, fixedRosterTitles: new [] { Create.FixedRosterTitle(1, "1")}, children: new IComposite[]
+                Create.Roster(r1Id, children: new IComposite[]
                 {
-                    Create.TextListQuestion(q1Id, variable: "var1"),
+                    Create.TextListQuestion(q1Id),
                 }),
-                Create.SingleQuestion(q2Id, variable: "var2", linkedToQuestionId: q1Id)
+                Create.SingleQuestion(q2Id, linkedToQuestionId: q1Id)
             }).ExpectError("WB0116");
 
 
@@ -52,12 +52,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void linked_question_reference_on_TextList_question_from_current_and_child_scope()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.TextListQuestion(q1Id, variable: "var1"),
-                Create.Roster(r1Id, fixedRosterTitles: new [] { Create.FixedRosterTitle(1, "1")}, children: new IComposite[]
+                Create.TextListQuestion(q1Id),
+                Create.Roster(r1Id, children: new IComposite[]
                 {
-                    Create.TextListQuestion(q2Id, variable: "var2"),
-                    Create.SingleQuestion(q3Id, variable: "var3", linkedToQuestionId: q1Id),
-                    Create.SingleQuestion(q4Id, variable: "var4", linkedToQuestionId: q2Id)
+                    Create.TextListQuestion(q2Id),
+                    Create.SingleQuestion(q3Id, linkedToQuestionId: q1Id),
+                    Create.SingleQuestion(q4Id, linkedToQuestionId: q2Id)
                 }),
             }).ExpectNoError("WB0116");
 
@@ -65,24 +65,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         public void linked_question_reference_on_TextList_question()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.TextListQuestion(q1Id, variable: "var1"),
-                Create.SingleQuestion(q2Id, variable: "var2", linkedToQuestionId: q1Id)
+                Create.TextListQuestion(q1Id),
+                Create.SingleQuestion(q2Id, linkedToQuestionId: q1Id)
             }).ExpectNoError("WB0012");
 
         [Test]
         public void linked_to_TextList_question_has_options_filter()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.TextListQuestion(q1Id, variable: "var1"),
-                Create.SingleQuestion(q2Id, variable: "var2", linkedToQuestionId: q1Id, optionsFilter: "something")
+                Create.TextListQuestion(q1Id),
+                Create.SingleQuestion(q2Id, linkedToQuestionId: q1Id, optionsFilter: "something")
             }).ExpectCritical("WB0117");
 
         [Test]
         public void linked_to_TextList_question_has_linked_filter()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.TextListQuestion(q1Id, variable: "var1"),
-                Create.SingleQuestion(q2Id, variable: "var2", linkedToQuestionId: q1Id, linkedFilter: "something")
+                Create.TextListQuestion(q1Id),
+                Create.SingleQuestion(q2Id, linkedToQuestionId: q1Id, linkedFilter: "something")
             }).ExpectCritical("WB0117");
     }
 }
