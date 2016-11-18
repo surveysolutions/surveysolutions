@@ -249,6 +249,41 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0229");
 
         [Test]
+        public void five_questions_with_same_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                })
+                .ExpectWarning("WB0232");
+
+        [Test]
+        public void four_questions_with_same_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                    Create.Question(enablementCondition: "x > 10"),
+                })
+                .ExpectNoWarning("WB0232");
+
+        [Test]
+        public void five_questions_with_same_empty_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "   "),
+                    Create.Question(enablementCondition: "   "),
+                    Create.Question(enablementCondition: "   "),
+                    Create.Question(enablementCondition: "   "),
+                    Create.Question(enablementCondition: "   "),
+                })
+                .ExpectNoWarning("WB0232");
+
+        [Test]
         public void consecutive_questions_with_same_enablement()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {

@@ -54,6 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IValidatable, IQuestionnaireEntity>(this.SupervisorQuestionInValidation, "WB0229", VerificationMessages.WB0229_SupervisorQuestionInValidation),
             Warning<ICategoricalQuestion>(NonconsecutiveCascadings, "WB0230", VerificationMessages.WB0230_NonconsecutiveCascadings),
             Warning<MultyOptionsQuestion>(MoreThan20Options, "WB0231", VerificationMessages.WB0231_MultiOptionWithMoreThan20Options),
+            WarningForCollection(FiveOrMoreQuestionsWithSameEnabling, "WB0232", VerificationMessages.WB0232_FiveOrMoreQuestionsWithSameEnabling),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -291,6 +292,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Find<IQuestion>()
                 .GroupBy(question => question.QuestionText)
                 .Where(grouping => grouping.Count() > 1)
+                .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
+
+        private static IEnumerable<QuestionnaireNodeReference[]> FiveOrMoreQuestionsWithSameEnabling(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire
+                .Find<IQuestion>()
+                .Where(question => !string.IsNullOrWhiteSpace(question.ConditionExpression))
+                .GroupBy(question => question.ConditionExpression)
+                .Where(grouping => grouping.Count() >= 5)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
         private static IEnumerable<QuestionnaireNodeReference[]> SameCascadingParentQuestion(MultiLanguageQuestionnaireDocument questionnaire)
