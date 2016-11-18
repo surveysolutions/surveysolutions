@@ -598,6 +598,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
         {
+            IReadOnlyCollection<Guid> entitiesDependentOnRosterTitle = questionnaire.GetEntitiesDependentOnServiceVariables();
+            if (entitiesDependentOnRosterTitle?.Any() ?? false)
+            {
+                foreach (var entityId in entitiesDependentOnRosterTitle)
+                    tree.FindEntity(entityId).ForEach(x => x.ReplaceSubstitutions());
+            }
+
             foreach (var questionIdentity in changedQuestionIdentities)
             {
                 var rosterLevel = questionIdentity.RosterVector.Length;

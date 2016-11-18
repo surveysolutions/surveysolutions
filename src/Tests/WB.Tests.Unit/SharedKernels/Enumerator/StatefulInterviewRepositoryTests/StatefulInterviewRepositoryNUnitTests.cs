@@ -1,13 +1,8 @@
 ﻿using System;
 using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTests
 {
@@ -23,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             var eventStore = Create.Fake.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
             var aggregateSnapshotter = Create.Fake.AggregateSnapshotter();
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.StaticText()));
-            Setup.InstanceToMockedServiceLocator(Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire));
+            Setup.InstanceToMockedServiceLocator(Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: false));
             var domaiRepository = Create.Service.DomainRepository(aggregateSnapshotter: aggregateSnapshotter, serviceLocator: ServiceLocator.Current);
             var aggregateRootRepository = Create.Service.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore,
                 eventStore: eventStore, repository: domaiRepository);
@@ -34,10 +29,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
 
             Assert.That(result, Is.EqualTo(null));
         }
-
-        private static StatefulInterviewRepository CreateStatefulInterviewRepository(StatefulInterview statefulInterview = null, ILiteEventBus liteEventBus = null)
-            => new StatefulInterviewRepository(
-                Stub<IEventSourcedAggregateRootRepository>.Returning<IEventSourcedAggregateRoot>(statefulInterview),
-                liteEventBus ?? Mock.Of<ILiteEventBus>());
     }
 }

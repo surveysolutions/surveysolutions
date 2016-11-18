@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId), questionnaire);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId,
-                questionnaireRepository: questionnaireRepository, shouldApplyOnClientCreatedEvent: false
+                questionnaireRepository: questionnaireRepository, shouldBeInitialized: false
                 );
 
             var answersDtos = new[]
