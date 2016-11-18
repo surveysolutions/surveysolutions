@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQuestions
 {
-    [Ignore("KP-8159")]
     internal class when_answering_linked_source_question_on_roster_level1_and_linked_question_is_on_level0 : StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -36,20 +35,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
         It should_linked_single_question_has_2_option = () =>
         {
-            //var answersToBeOptions = interview
-            //    .FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId, Create.Entity.Identity(linkedSingleQuestionId, RosterVector.Empty))
-            //    .ToList();
-
-            //answersToBeOptions.Count.ShouldEqual(2);
+            interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, RosterVector.Empty))
+                .Options.Count.ShouldEqual(2);
             //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
         };
 
         It should_linked_multi_question_has_2_options = () => {
-            //var answersToBeOptions = interview
-            //    .FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId, Create.Entity.Identity(linkedMultiQuestionId, RosterVector.Empty))
-            //    .ToList();
-
-            //answersToBeOptions.Count.ShouldEqual(2);
+            interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, RosterVector.Empty))
+                .Options.Count.ShouldEqual(2);
             //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
         };
 
