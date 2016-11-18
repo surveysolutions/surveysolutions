@@ -10,14 +10,13 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_answering_numeric_question_with_negative_value : IntegerQuestionViewModelTestContext
     {
         Establish context = () =>
         {
             SetUp();
 
-            var integerNumericAnswer = Mock.Of<InterviewTreeIntegerQuestion>(_ => _.IsAnswered == false);
+            var integerNumericAnswer = Mock.Of<InterviewTreeIntegerQuestion>(_ => _.IsAnswered == true && _.GetAnswer() == Create.Entity.NumericIntegerAnswer(3));
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId

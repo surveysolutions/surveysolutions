@@ -9,14 +9,13 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_answering_roster_size_numeric_question_with_big_value_and_question_has_no_set_MaxValue : IntegerQuestionViewModelTestContext
     {
         Establish context = () =>
         {
             SetUp();
 
-            var integerNumericAnswer = Mock.Of<InterviewTreeIntegerQuestion>(_ => _.IsAnswered == true && _.GetAnswer().Value == 1);
+            var integerNumericAnswer = Mock.Of<InterviewTreeIntegerQuestion>(_ => _.IsAnswered == true && _.GetAnswer() == Create.Entity.NumericIntegerAnswer(1));
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId

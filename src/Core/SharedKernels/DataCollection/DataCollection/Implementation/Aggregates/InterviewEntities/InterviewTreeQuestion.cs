@@ -455,13 +455,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         private NumericIntegerAnswer answer;
 
+        public InterviewTreeIntegerQuestion() { }
+
         public InterviewTreeIntegerQuestion(object answer)
         {
             this.answer = answer == null ? null : NumericIntegerAnswer.FromInt(Convert.ToInt32(answer));
         }
 
-        public bool IsAnswered => this.answer != null;
-        public NumericIntegerAnswer GetAnswer() => this.answer;
+        public virtual bool IsAnswered => this.answer != null;
+        public virtual NumericIntegerAnswer GetAnswer() => this.answer;
         public void SetAnswer(NumericIntegerAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
