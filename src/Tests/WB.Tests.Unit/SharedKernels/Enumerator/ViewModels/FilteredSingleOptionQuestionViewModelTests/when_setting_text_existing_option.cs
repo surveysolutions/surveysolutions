@@ -16,12 +16,11 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_setting_text_existing_option : FilteredSingleOptionQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
-            var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer().SelectedValue == 3);
+            var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             var option = new CategoricalOption() {Value = 1, Title = "dfdf" + answerValue };
 
             var interview = Mock.Of<IStatefulInterview>(_
