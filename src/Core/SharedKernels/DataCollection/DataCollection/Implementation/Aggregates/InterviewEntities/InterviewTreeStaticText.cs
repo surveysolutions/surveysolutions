@@ -22,12 +22,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
-        public void MarkAsInvalid(IEnumerable<FailedValidationCondition> failedValidations)
+        public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
         {
             if (failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
             this.FailedValidations = failedValidations.ToReadOnlyCollection();
         }
-        public void MarkAsValid()
+        public void MarkValid()
             => this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
 
         public override string ToString()

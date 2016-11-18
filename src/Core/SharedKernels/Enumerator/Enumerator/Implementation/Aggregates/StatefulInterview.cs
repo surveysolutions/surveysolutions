@@ -90,16 +90,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.changedInterview.GetQuestion(Identity.Create(disabledQuestion.Id, disabledQuestion.InterviewItemRosterVector)).Disable();
 
             foreach (var invalidQuestion in @event.InterviewData.FailedValidationConditions)
-                this.changedInterview.GetQuestion(invalidQuestion.Key).MarkAsInvalid(invalidQuestion.Value);
+                this.changedInterview.GetQuestion(invalidQuestion.Key).MarkInvalid(invalidQuestion.Value);
 
             foreach (var disabledStaticText in @event.InterviewData.DisabledStaticTexts)
                 this.changedInterview.GetStaticText(disabledStaticText).Disable();
 
             foreach (var invalidStaticText in @event.InterviewData.InvalidStaticTexts)
-                this.changedInterview.GetStaticText(invalidStaticText.Key).MarkAsInvalid(invalidStaticText.Value);
+                this.changedInterview.GetStaticText(invalidStaticText.Key).MarkInvalid(invalidStaticText.Value);
 
             foreach (var validStaticText in @event.InterviewData.ValidStaticTexts)
-                this.changedInterview.GetStaticText(validStaticText).MarkAsValid();
+                this.changedInterview.GetStaticText(validStaticText).MarkValid();
 
             foreach (var variable in @event.InterviewData.Variables)
                 this.changedInterview.GetVariable(Identity.Create(variable.Key.Id, variable.Key.InterviewItemRosterVector)).SetValue(variable.Value);

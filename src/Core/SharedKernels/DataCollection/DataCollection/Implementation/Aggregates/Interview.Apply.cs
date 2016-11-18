@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(AnswersDeclaredValid @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.changedInterview.GetQuestion(questionIdentity).MarkAsValid();
+                this.changedInterview.GetQuestion(questionIdentity).MarkValid();
 
             this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions);
         }
@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(AnswersDeclaredInvalid @event)
         {
             foreach (var failedValidationCondition in @event.FailedValidationConditions)
-                this.changedInterview.GetQuestion(failedValidationCondition.Key).MarkAsInvalid(failedValidationCondition.Value);
+                this.changedInterview.GetQuestion(failedValidationCondition.Key).MarkInvalid(failedValidationCondition.Value);
 
             if (@event.FailedValidationConditions.Count > 0)
             {
@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(StaticTextsDeclaredValid @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.changedInterview.GetStaticText(staticTextIdentity).MarkAsValid();
+                this.changedInterview.GetStaticText(staticTextIdentity).MarkValid();
             this.ExpressionProcessorStatePrototype.DeclareStaticTextValid(@event.StaticTexts);
         }
 
@@ -159,7 +159,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var staticTextIdentity in staticTextsConditions.Keys)
-                this.changedInterview.GetStaticText(staticTextIdentity).MarkAsInvalid(staticTextsConditions[staticTextIdentity]);
+                this.changedInterview.GetStaticText(staticTextIdentity).MarkInvalid(staticTextsConditions[staticTextIdentity]);
 
             this.ExpressionProcessorStatePrototype.ApplyStaticTextFailedValidations(staticTextsConditions);
         }
