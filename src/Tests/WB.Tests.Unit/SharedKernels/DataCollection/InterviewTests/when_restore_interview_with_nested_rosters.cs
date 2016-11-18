@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, 
                 questionnaireRepository: questionnaireRepository,
                 interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider,
-                shouldApplyOnClientCreatedEvent: false);
+                shouldBeInitialized: false);
 
             interviewSynchronizationDto =
                 Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
