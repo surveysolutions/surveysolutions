@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
 
-        private static bool MoreThan20Options(ICategoricalQuestion question) => question.Answers.Count > 20;
+        private static bool MoreThan20Options(ICategoricalQuestion question) => question.Answers?.Count > 20;
 
         private static bool NonconsecutiveCascadings(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
             => question.GetPrevious() != GetCascadeFromQuestion(question, questionnaire);
