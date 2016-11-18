@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
         It should_substitute_titles_all_roster_combinations = () => questionViewModel.Options.Count.ShouldEqual(4);
 
-        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
+        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
         static Identity linkedQuestionId;
     }
 }

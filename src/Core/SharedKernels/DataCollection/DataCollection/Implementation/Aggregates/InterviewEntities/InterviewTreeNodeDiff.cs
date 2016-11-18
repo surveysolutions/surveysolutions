@@ -154,6 +154,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (SourceNode.IsMultiLinkedOption) return !SourceNode.AsMultiLinkedOption.EqualByAnswer(ChangedNode.AsMultiLinkedOption);
                 if (SourceNode.IsYesNo) return !SourceNode.AsYesNo.EqualByAnswer(ChangedNode.AsYesNo);
                 if (SourceNode.IsTextList) return !SourceNode.AsTextList.EqualByAnswer(ChangedNode.AsTextList);
+                if (SourceNode.IsSingleLinkedToList) return !SourceNode.AsSingleLinkedToList.EqualByAnswer(ChangedNode.AsSingleLinkedToList);
+                if (SourceNode.IsMultiLinkedToList) return !SourceNode.AsMultiLinkedToList.EqualByAnswer(ChangedNode.AsMultiLinkedToList);
 
                 return false;
             }

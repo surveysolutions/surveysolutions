@@ -15,16 +15,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
             var sourceInterviewTree = this.changedInterview;
+            
+            var isLinkedToList = sourceInterviewTree.GetQuestion(answeredQuestion).IsLinkedToListQuestion;
 
-            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, 
-                        selectedValues, questionnaire, answeredQuestion, sourceInterviewTree);
+            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion, sourceInterviewTree, isLinkedToList);
 
             var changedInterviewTree = sourceInterviewTree.Clone();
-
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
-            changedInterviewTree.GetQuestion(answeredQuestion).AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
+
+            if (isLinkedToList)
+            {
+                changedInterviewTree.GetQuestion(answeredQuestion).AsMultiLinkedToList.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
+            }
+            else
+                changedInterviewTree.GetQuestion(answeredQuestion).AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
 
             changedInterviewTree.ActualizeTree();
 

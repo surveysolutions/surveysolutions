@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
         It should_prefix_option_with_parent_title = () => viewModel.Options.First().Title.ShouldEqual("title: subtitle");
 
-        static MultiOptionLinkedToQuestionQuestionViewModel viewModel;
+        static MultiOptionLinkedToRosterQuestionQuestionViewModel viewModel;
         static StatefulInterview interview;
         static Guid topRosterId;
         static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");

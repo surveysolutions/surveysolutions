@@ -235,6 +235,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionIdentity.Id);
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
+            var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionIdentity.Id);
 
             if (isLinkedToQuestion)
                 sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
@@ -261,7 +262,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 cascadingParentQuestionId: cascadingParentQuestionId, isYesNo: isYesNoQuestion,
                 isDecimal: isDecimalQuestion, linkedSourceId: sourceForLinkedQuestion,
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
-                validationMessages: validationMessages);
+                validationMessages: validationMessages, isLinkedToListQuestion: isLinkedToListQuestion);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)

@@ -68,6 +68,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
+        public void RequireLinkedToListOptionIsAvailable(Identity linkedQuestionIdentity, decimal option)
+        {
+            var question = this.InterviewTree.GetQuestion(linkedQuestionIdentity);
+
+            if (!question.IsLinkedToListQuestion)
+                return;
+
+            if (!question.AsLinkedToList.Options.Contains(option))
+                throw new InterviewException(
+                    $"Answer on linked to list question {question.FormatForException()} cannot be saved. " +
+                    $"Specified option {option} is absent. " +
+                    $"Available options: {string.Join(", ", question.AsLinked.Options)}. " +
+                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+        }
+
         public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer,
             QuestionnaireIdentity questionnaireId, Translation translation) 
         {

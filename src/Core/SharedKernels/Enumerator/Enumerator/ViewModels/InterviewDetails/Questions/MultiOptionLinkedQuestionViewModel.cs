@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public abstract class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
+        IMultiOptionQuestionViewModelToggleable,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IInterviewEntityViewModel,
         ICompositeQuestionWithChildren,
@@ -110,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasOptions => this.Options.Any();
 
-        public async Task ToggleAnswerAsync(MultiOptionLinkedQuestionOptionViewModel changedModel)
+        public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
         {
             List<MultiOptionLinkedQuestionOptionViewModel> allSelectedOptions =
                 this.areAnswersOrdered ?

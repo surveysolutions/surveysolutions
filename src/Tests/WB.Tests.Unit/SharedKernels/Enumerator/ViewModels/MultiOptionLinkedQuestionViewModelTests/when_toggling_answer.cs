@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             answering.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
                 c.QuestionId == questionId.Id && c.SelectedRosterVectors.Any(pv => pv.SequenceEqual(questionViewModel.Options.First().Value)))));
 
-        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
+        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
         static Identity questionId;
         static Mock<AnsweringViewModel> answering;
     }

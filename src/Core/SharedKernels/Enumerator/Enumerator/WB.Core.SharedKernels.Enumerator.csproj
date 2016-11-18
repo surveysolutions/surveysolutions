@@ -156,7 +156,11 @@
     <Compile Include="ViewModels\InterviewDetails\OptionTopBorderViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestion.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestionWithChildren.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\IMultiOptionQuestionViewModelToggleable.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\IQuestionStateViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToListQuestionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionOptionViewModelBase.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionLinkedToListQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\QuestionInstructionsViewModel.cs" />
@@ -215,7 +219,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\IntegerQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultimedaQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionOptionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToQuestionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\QRBarcodeQuestionViewModel.cs" />
