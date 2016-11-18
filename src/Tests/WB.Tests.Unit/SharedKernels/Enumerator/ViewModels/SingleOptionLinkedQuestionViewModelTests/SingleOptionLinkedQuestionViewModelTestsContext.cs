@@ -9,14 +9,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     [Subject(typeof(SingleOptionLinkedQuestionViewModel))]
     internal class SingleOptionLinkedQuestionViewModelTestsContext
     {
-        protected static QuestionnaireDocument SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(Guid questionId, Guid linkedToQuestionId)
-            => Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.SingleOptionQuestion(questionId, linkedToQuestionId: linkedToQuestionId),
-                Create.Entity.FixedRoster(fixedRosterTitles: new[]
-                {
-                    new FixedRosterTitle(1, "fixed title 1"),
-                    new FixedRosterTitle(2, "fixed title 2"),
-                    new FixedRosterTitle(3, "fixed title 3")
-                }));
     }
 }

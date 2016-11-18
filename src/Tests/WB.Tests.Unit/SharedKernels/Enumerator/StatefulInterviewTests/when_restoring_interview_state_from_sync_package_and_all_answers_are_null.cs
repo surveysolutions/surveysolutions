@@ -28,10 +28,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                     questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                     {
-                        Create.Entity.FixedRoster(fixedRosterIdentity.Id, fixedRosterTitles: new[] {new FixedRosterTitle(1, "fixed")},
+                        Create.Entity.FixedRoster(fixedRosterIdentity.Id, fixedTitles: new[] {new FixedRosterTitle(1, "fixed")},
                             children: new[]
                             {
-                                Create.Entity.FixedRoster(fixedNestedRosterIdentity.Id, fixedRosterTitles: new[] {new FixedRosterTitle(0, "fixed 2")},
+                                Create.Entity.FixedRoster(fixedNestedRosterIdentity.Id, fixedTitles: new[] {new FixedRosterTitle(0, "fixed 2")},
                                     children: new IComposite[]
                                     {
                                         Create.Entity.NumericIntegerQuestion(integerQuestionId),
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                                         Create.Entity.SingleOptionQuestion(singleOptionQuestionId),
                                         Create.Entity.MultyOptionsQuestion(linkedMultiOptionQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId),
                                         Create.Entity.SingleOptionQuestion(linkedSingleOptionQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId),
-                                        Create.Entity.FixedRoster(fixedNestedNestedRosterIdentity.Id, fixedRosterTitles: new[] {new FixedRosterTitle(3, "fixed 3")},
+                                        Create.Entity.FixedRoster(fixedNestedNestedRosterIdentity.Id, fixedTitles: new[] {new FixedRosterTitle(3, "fixed 3")},
                                             children: new[]
                                             {
                                                 Create.Entity.TextQuestion(sourceOfLinkedQuestionId)

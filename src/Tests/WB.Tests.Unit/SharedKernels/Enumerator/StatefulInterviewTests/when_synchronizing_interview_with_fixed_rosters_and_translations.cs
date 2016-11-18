@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id : questionnaireId,
                 children: Create.Entity.FixedRoster(
                     rosterId: rosterId, 
-                    fixedRosterTitles: new[] {new FixedRosterTitle(0, rosterTitle) },
+                    fixedTitles: new[] {new FixedRosterTitle(0, rosterTitle) },
                     children: new IComposite[]
                     {
                         Create.Entity.TextQuestion(questionId: substitutedQuestionId,

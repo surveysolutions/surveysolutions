@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var rosterId = Guid.NewGuid();
             questionnaire =
                 CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterId,
-                    fixedTitles: new[] {"a"}, title: rosterTitle));
+                    obsoleteFixedTitles: new[] {"a"}, title: rosterTitle));
             questionnaire.Title = questionnaireTitle;
             preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { "Id" }, new string[0][],
                 questionnaireTitle + ".csv");

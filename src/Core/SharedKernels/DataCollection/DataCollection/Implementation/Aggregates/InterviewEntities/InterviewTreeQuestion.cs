@@ -669,6 +669,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSingleLinkedOptionQuestion : InterviewTreeLinkedQuestion
     {
+        public InterviewTreeSingleLinkedOptionQuestion() { }
+
         private CategoricalLinkedSingleOptionAnswer answer;
 
         public InterviewTreeSingleLinkedOptionQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
@@ -677,8 +679,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = CategoricalLinkedSingleOptionAnswer.FromRosterVector(answer as RosterVector);
         }
 
-        public bool IsAnswered => this.answer != null;
-        public CategoricalLinkedSingleOptionAnswer GetAnswer() => this.answer;
+        public virtual bool IsAnswered => this.answer != null;
+        public virtual CategoricalLinkedSingleOptionAnswer GetAnswer() => this.answer;
         public void SetAnswer(CategoricalLinkedSingleOptionAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
 
@@ -734,6 +736,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public abstract class InterviewTreeLinkedQuestion
     {
+        protected InterviewTreeLinkedQuestion() { }
         public Guid LinkedSourceId { get; private set; }
         public Identity CommonParentRosterIdForLinkedQuestion { get; private set; }
 

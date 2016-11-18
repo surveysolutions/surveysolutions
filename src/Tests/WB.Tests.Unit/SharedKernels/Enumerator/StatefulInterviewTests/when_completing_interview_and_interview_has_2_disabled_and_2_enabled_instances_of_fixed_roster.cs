@@ -20,10 +20,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     rosterId: rosterId,
                     fixedRosterTitles: new[]
                     {
-                        Create.Entity.FixedRosterTitle(1, "FirstEnabled"),
-                        Create.Entity.FixedRosterTitle(2, "SecondEnabled"),
-                        Create.Entity.FixedRosterTitle(-3, "ThirdDisabled"),
-                        Create.Entity.FixedRosterTitle(-4, "FourthDisabled"),
+                        Create.Entity.FixedTitle(1, "FirstEnabled"),
+                        Create.Entity.FixedTitle(2, "SecondEnabled"),
+                        Create.Entity.FixedTitle(-3, "ThirdDisabled"),
+                        Create.Entity.FixedTitle(-4, "FourthDisabled"),
                     }),
             });
 

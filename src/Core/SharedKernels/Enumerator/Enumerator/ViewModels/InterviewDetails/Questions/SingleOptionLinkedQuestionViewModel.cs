@@ -287,7 +287,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             string answerAsTitle = this.interview.GetAnswerAsString(sourceQuestionIdentity);
 
-            int currentRosterLevel = this.Identity.RosterVector.Length;
+            int currentRosterLevel = sourceQuestionIdentity.RosterVector.Length;
 
             IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
                 interview

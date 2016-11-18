@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
@@ -12,12 +14,16 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_selecting_first_option : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
-            var questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(questionId, linkedToQuestionId);
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.SingleOptionQuestion(questionId, linkedToQuestionId: linkedToQuestionId),
+                Create.Entity.FixedRoster(fixedTitles: new[] { Create.Entity.FixedTitle(1), Create.Entity.FixedTitle(2), Create.Entity.FixedTitle(3) }, children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(linkedToQuestionId)
+                }));
 
             var interview = Setup.StatefulInterview(questionnaire);
             var interviewerId = Guid.Parse("77777777777777777777777777777777");

@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                         PublicKey = groupId,
                         IsRoster = false
                     },
-                    Create.Entity.FixedRoster(rosterId: fixedRosterId, fixedTitles: rosterFixedTitles, title:fixedRosterTitle)
+                    Create.Entity.FixedRoster(rosterId: fixedRosterId, obsoleteFixedTitles: rosterFixedTitles, title:fixedRosterTitle)
                 }.ToReadOnlyCollection()
             };
         }

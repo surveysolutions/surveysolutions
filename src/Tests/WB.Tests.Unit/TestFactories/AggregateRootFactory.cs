@@ -69,8 +69,10 @@ namespace WB.Tests.Unit.TestFactories
                 Create.Service.SubstitionTextFactory());
 
             if (shouldApplyOnClientCreatedEvent)
-                statefulInterview.Apply(new InterviewOnClientCreated(userId ?? Guid.NewGuid(), questionnaireId.Value,
-                    questionnaireVersion ?? 1));
+            {
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid());
+                //statefulInterview.Apply(new InterviewOnClientCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
+            }
 
             return statefulInterview;
         }

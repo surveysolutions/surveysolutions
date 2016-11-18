@@ -242,16 +242,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var sourceRosterIdentity = Identity.Create(this.linkedToRosterId, linkedOption);
             var sourceRoster = this.interview.GetRoster(sourceRosterIdentity);
 
-            int currentRosterLevel = this.questionIdentity.RosterVector.Length;
-
-            IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
-               interview
-                   .GetParentRosterTitlesWithoutLastForRoster(sourceRosterIdentity)
-                   .Skip(currentRosterLevel);
+            IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown = interview
+                .GetParentRosterTitlesWithoutLastForRoster(sourceRosterIdentity)
+                .ToList();
 
             string rosterPrefixes = string.Join(": ", parentRosterTitlesWithoutLastOneAndFirstKnown);
 
-            return string.IsNullOrEmpty(rosterPrefixes) ? sourceRoster.RosterTitle : string.Join(": ", rosterPrefixes, sourceRoster);
+            return string.IsNullOrEmpty(rosterPrefixes) 
+                ? sourceRoster.RosterTitle 
+                : string.Join(": ", rosterPrefixes, sourceRoster.RosterTitle);
         }
 
         public void Handle(AnswersRemoved @event)

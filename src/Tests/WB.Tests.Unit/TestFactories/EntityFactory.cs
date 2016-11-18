@@ -201,17 +201,17 @@ namespace WB.Tests.Unit.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null)
+        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> obsoleteFixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedTitles = null)
             => Create.Entity.Roster(
                 rosterId: rosterId,
                 children: children,
                 title: title,
                 variable: variable,
-                fixedRosterTitles: fixedRosterTitles,
-                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+                fixedRosterTitles: fixedTitles,
+                fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
-        public FixedRosterTitle FixedRosterTitle(decimal value, string title)
-            => new FixedRosterTitle(value, title);
+        public FixedRosterTitle FixedTitle(decimal value, string title = null)
+            => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
 
         public GeoPosition GeoPosition()
             => new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984, 4, 18)));
@@ -785,7 +785,7 @@ namespace WB.Tests.Unit.TestFactories
                 {
                     group.FixedRosterTitles =
                         (fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" }).Select(
-                            (x, i) => Create.Entity.FixedRosterTitle(i, x)).ToArray();
+                            (x, i) => Create.Entity.FixedTitle(i, x)).ToArray();
                 }
                 else
                 {
@@ -1202,6 +1202,11 @@ namespace WB.Tests.Unit.TestFactories
         public CategoricalFixedSingleOptionAnswer SingleOptionAnswer(int answer)
         {
             return CategoricalFixedSingleOptionAnswer.FromInt(answer);
+        }
+
+        public CategoricalLinkedSingleOptionAnswer LinkedSingleOptionAnswer(RosterVector selectedValue)
+        {
+            return CategoricalLinkedSingleOptionAnswer.FromRosterVector(selectedValue);
         }
     }
 }
