@@ -253,6 +253,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV9(expressionStateModel).TransformText());
                 case 16:
                 case 17:
+                case 18:
                     return new CodeGenerationSettings(
                         additionInterfaces: new[] { "IInterviewExpressionStateV10" },
                         namespaces: new[]
