@@ -5,9 +5,9 @@
                  local:MvxBind="HideKeyboardOnClick .">
   <Button style="@style/Interview_Previous_Group_Navigation_Button"
           android:drawablePadding="@dimen/button_shadow_margin"
-    local:MvxBind="
-      HideKeyboardOnClick .; 
-      Click NavigateCommand; 
-      ToParentButtonGroupStyle NavigateToGroupState; 
-      TextFormatted SpannableGroupTitle(IsRoster, Title.PlainText, RosterInstanceTitle)"/>
+          local:MvxBind="
+            HideKeyboardOnClick .; 
+            Click NavigateCommand; 
+            ToParentButtonGroupStyle NavigateToGroupState; 
+            TextFormatted SpannableGroupTitle(Title.PlainText, RosterInstanceTitle)"/>
 </LinearLayout>
