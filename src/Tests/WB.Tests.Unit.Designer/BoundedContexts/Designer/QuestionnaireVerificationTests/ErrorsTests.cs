@@ -14,6 +14,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private readonly Guid r1Id = Guid.Parse("99999999999999999999999999999999");
 
         [Test]
+        public void circular_reference_in_enablings()
+            => Create.QuestionnaireDocumentWithOneChapter(children: new[]
+                {
+                    Create.Question(variable: "x", enablementCondition: "y > 0"),
+                    Create.Question(variable: "y", enablementCondition: "x > 0"),
+                })
+                .ExpectError("WB0056");
+
+        [Test]
+        public void circular_reference_in_enablings_hidden_by_macro()
+            => Create.QuestionnaireDocumentWithOneChapter(
+                    macros: new[]
+                    {
+                        Create.Macro(name: "m", content: "x > 0"),
+                    },
+                    children: new[]
+                    {
+                        Create.Question(variable: "x", enablementCondition: "y > 0"),
+                        Create.Question(variable: "y", enablementCondition: "$m"),
+                    })
+                .ExpectError("WB0056");
+
+        [Test]
         public void linked_question_reference_on_TextList_question_from_wrong_scope()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {

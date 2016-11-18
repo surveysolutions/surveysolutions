@@ -610,29 +610,29 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(IEnumerable<IComposite> children)
-            => QuestionnaireDocumentWithOneChapter(null, null, null, null, children.ToArray());
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(IEnumerable<Macro> macros = null, IEnumerable<IComposite> children = null)
+            => QuestionnaireDocumentWithOneChapter(null, null, null, null, macros?.ToArray(), children?.ToArray() ?? new IComposite[] {});
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
-            => QuestionnaireDocumentWithOneChapter(null, null, null, null, children);
+            => QuestionnaireDocumentWithOneChapter(null, null, null, null, null, children);
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, chapterId, null, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, chapterId, null, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Attachment[] attachments = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, null, attachments, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, attachments, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Translation[] translations = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, null, null, translations, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, null, translations, null, children);
         }
         
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, 
-            Translation[] translations = null, params IComposite[] children)
+            Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
         {
             var result = new QuestionnaireDocument
             {
@@ -649,6 +649,11 @@ namespace WB.Tests.Unit.Designer
 
             result.Attachments.AddRange(attachments ?? new Attachment[0]);
             result.Translations.AddRange(translations ?? new Translation[0]);
+
+            foreach (var macro in macros ?? Enumerable.Empty<Macro>())
+            {
+                result.Macros[Guid.NewGuid()] = macro;
+            }
 
             return result;
         }
@@ -1187,7 +1192,7 @@ namespace WB.Tests.Unit.Designer
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
                 new DesignerEngineVersionService(),
-                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
+                macrosSubstitutionService ?? Create.MacrosSubstitutionService(),
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
                 topologicalSorter ?? Create.TopologicalSorter<string>(),
