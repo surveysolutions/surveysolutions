@@ -615,4 +615,7 @@
   <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
     <value>Linked to list question doen't support options filter</value>
   </data>
+  <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+    <value>Multichoice question contains too many (&gt;20) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible.</value>
+  </data>
 </root>
