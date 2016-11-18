@@ -5,5 +5,5 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   style="@style/Interview_Question_Errors_Details"
-  local:MvxBind="Text PlainText" />
+  local:MvxBind="Text HtmlText" />
 
