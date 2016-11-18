@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 Create.Entity.SingleOptionQuestion(questionId: linkedQuestionId, linkedToQuestionId: linkToQuestionId)
                 );
 
-            var newAnswer = Mock.Of<InterviewTreeSingleLinkedOptionQuestion>(_
+            var newAnswer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_
                 => _.IsAnswered == false
                    && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1) });
             var interview = Substitute.For<IStatefulInterview>();

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
 
-            var answer = Mock.Of<InterviewTreeSingleLinkedOptionQuestion>(_ 
+            var answer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_ 
                 => _.IsAnswered == true 
                 && _.GetAnswer() == Create.Entity.LinkedSingleOptionAnswer(Create.Entity.RosterVector(2))
                 && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2), Create.Entity.RosterVector(3)});
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
             viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
-            var newAnswer = Mock.Of<InterviewTreeSingleLinkedOptionQuestion>(_
+            var newAnswer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_
                => _.IsAnswered == false
                && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2) });
 
