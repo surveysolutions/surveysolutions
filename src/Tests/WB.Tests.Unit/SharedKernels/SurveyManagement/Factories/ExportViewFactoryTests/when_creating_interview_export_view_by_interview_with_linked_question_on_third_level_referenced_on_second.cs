@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Entity.FixedRoster(rosterId: rosterId, fixedTitles: new[] {"t1", "t2"},
+                Create.Entity.FixedRoster(rosterId: rosterId, obsoleteFixedTitles: new[] {"t1", "t2"},
                     children: new IComposite[]
                     {
                         new NumericQuestion()
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                             QuestionType = QuestionType.Numeric,
                             StataExportCaption = "q1"
                         },
-                        Create.Entity.FixedRoster(rosterId: nestedRosterId, fixedTitles: new[] {"n1", "n2"},
+                        Create.Entity.FixedRoster(rosterId: nestedRosterId, obsoleteFixedTitles: new[] {"n1", "n2"},
                             children: new IComposite[]
                             {
                                 new SingleQuestion()

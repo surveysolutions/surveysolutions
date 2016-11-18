@@ -26,12 +26,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
                 children: Create.Entity.FixedRoster(
                     rosterId: fixedRosterIdentity.Id,
-                    fixedRosterTitles: new[] { new FixedRosterTitle(1, "fixed") },
+                    fixedTitles: new[] { new FixedRosterTitle(1, "fixed") },
                     children: new IComposite[]
                     {
                         Create.Entity.FixedRoster(
                             rosterId: fixedNestedRosterIdentity.Id,
-                            fixedRosterTitles: new[] {new FixedRosterTitle(0, "nested fixed")},
+                            fixedTitles: new[] {new FixedRosterTitle(0, "nested fixed")},
                             children: new IComposite[]
                             {
                                 Create.Entity.NumericIntegerQuestion(questionIdentity.Id, validationConditions: new []

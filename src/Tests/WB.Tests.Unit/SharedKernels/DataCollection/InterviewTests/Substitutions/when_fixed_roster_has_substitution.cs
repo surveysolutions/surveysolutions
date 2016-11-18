@@ -19,8 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
                     rosterId: rosterId,
                     fixedRosterTitles: new[]
                     {
-                        Create.Entity.FixedRosterTitle(1, "one"),
-                        Create.Entity.FixedRosterTitle(2, "two")
+                        Create.Entity.FixedTitle(1, "one"),
+                        Create.Entity.FixedTitle(2, "two")
                     },
                     title: "Roster %subst%"));
 

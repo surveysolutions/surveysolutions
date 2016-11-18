@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -28,8 +26,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 _ => _.GetOptionsForQuestion(questionId, null, string.Empty) == options);
 
             var expressionState = new Mock<ILatestInterviewExpressionState>();
-
+            expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
             expressionState.Setup(_ => _.FilterOptionsForQuestion(questionIdentity, options)).Returns(options);
+            expressionState.Setup(_ => _.GetStructuralChanges()).Returns(new StructuralChanges());
 
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(
                 provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);

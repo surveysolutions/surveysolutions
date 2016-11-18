@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == expressionState);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository,
-                interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
+                interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider,
+                shouldApplyOnClientCreatedEvent: false);
         };
 
         Because of = () =>

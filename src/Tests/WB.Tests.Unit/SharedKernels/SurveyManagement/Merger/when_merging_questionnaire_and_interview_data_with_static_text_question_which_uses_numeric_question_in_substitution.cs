@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.FixedRoster(rosterId: groupId,
-                    fixedTitles: new[] {"a", "b", "c"},
+                    obsoleteFixedTitles: new[] {"a", "b", "c"},
                     children: new IComposite[]
                     {
                         new StaticText(staticTextWithSubstitutionId, "test %q1%", null, false, null),

@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     rosterId: rosterId,
                     fixedRosterTitles: new[]
                     {
-                        Create.Entity.FixedRosterTitle(1, "First"),
-                        Create.Entity.FixedRosterTitle(2, "Second"),
-                        Create.Entity.FixedRosterTitle(3, "Third"),
+                        Create.Entity.FixedTitle(1, "First"),
+                        Create.Entity.FixedTitle(2, "Second"),
+                        Create.Entity.FixedTitle(3, "Third"),
                     },
                     children: new IComposite[]
                     {

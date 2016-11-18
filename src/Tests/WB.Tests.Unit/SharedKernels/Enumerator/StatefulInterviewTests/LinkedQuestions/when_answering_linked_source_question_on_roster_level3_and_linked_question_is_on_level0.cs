@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
                     Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1, 2}),
                     Create.Entity.Roster(rosterId: roster2Id, rosterSizeQuestionId: nestedRosterSizeQuestionId, children: new IComposite[]
                     {
-                        Create.Entity.FixedRoster(roster3Id, fixedRosterTitles: new [] { Create.Entity.FixedRosterTitle(100, "Title 1"), Create.Entity.FixedRosterTitle(200, "Title 2") }, children: new IComposite[]
+                        Create.Entity.FixedRoster(roster3Id, fixedTitles: new [] { Create.Entity.FixedTitle(100, "Title 1"), Create.Entity.FixedTitle(200, "Title 2") }, children: new IComposite[]
                         {
                             Create.Entity.TextQuestion(questionId: sourceOfLinkedQuestionId)
                         })

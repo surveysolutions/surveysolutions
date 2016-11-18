@@ -35,11 +35,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.FixedRoster(rosterId: firstLevelRosterId,
-                    fixedTitles: new[] {"roster1", "roster2"},
+                    obsoleteFixedTitles: new[] {"roster1", "roster2"},
                     children: new IComposite[]
                     {
                         Create.Entity.FixedRoster(rosterId: secondLevelRosterId,
-                            fixedTitles: new[] {"t1", "t2"},
+                            obsoleteFixedTitles: new[] {"t1", "t2"},
                             children: new IComposite[]
                             {
                                 new NumericQuestion()
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                             })
                     }),
                 Create.Entity.FixedRoster(rosterId: parallelLevelRosterId,
-                    fixedTitles: new[] {"parallel roster1", "parallel roster1"},
+                    obsoleteFixedTitles: new[] {"parallel roster1", "parallel roster1"},
                     children: new IComposite[]
                     {
                         new SingleQuestion()

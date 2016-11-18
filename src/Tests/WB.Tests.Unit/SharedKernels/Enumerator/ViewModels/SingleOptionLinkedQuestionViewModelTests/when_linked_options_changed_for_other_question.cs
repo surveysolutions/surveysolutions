@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -9,7 +10,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_linked_options_changed_for_other_question : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
@@ -30,7 +30,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
             linkedOptionTextInInterview = "answer in init";
 
-            var questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId, linkSourceQuestionId);
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.SingleOptionQuestion(linkedQuestionId, linkedToQuestionId: linkSourceQuestionId),
+                Create.Entity.FixedRoster(fixedTitles: new[] { Create.Entity.FixedTitle(1), Create.Entity.FixedTitle(2), Create.Entity.FixedTitle(3) }, children: new[]
+                {
+                    Create.Entity.TextQuestion(linkSourceQuestionId)
+                }));
 
             StatefulInterview interview = Setup.StatefulInterview(questionnaire);
 
