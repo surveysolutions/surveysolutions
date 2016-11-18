@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.Roster(rosterId: roster1Id,
                     rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
                     {
-                        Create.Entity.Roster(rosterId: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.Entity.FixedRosterTitle(1, "Hello")})
+                        Create.Entity.Roster(rosterId: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.Entity.FixedTitle(1, "Hello")})
                     }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,

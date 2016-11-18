@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
                     {
                         Create.Entity.FixedRoster(
-                            fixedRosterTitles:
+                            fixedTitles:
                                 new[]
                                 {
                                     new FixedRosterTitle(1, "first fixed roster"),

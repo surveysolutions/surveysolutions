@@ -4,16 +4,17 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Nito.AsyncEx.Synchronous;
+using Moq;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    [Ignore("KP-8159")]
     internal class when_roster_title_for_linked_question_changed : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
@@ -24,6 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             var linkedQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             topRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             var questionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
+            var sourceIdentity = Create.Entity.Identity(linkToQuestionId, Create.Entity.RosterVector(1));
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextListQuestion(questionId: level1TriggerId),
@@ -38,11 +40,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 Create.Entity.SingleOptionQuestion(questionId: linkedQuestionId, linkedToQuestionId: linkToQuestionId)
                 );
 
+            var newAnswer = Mock.Of<InterviewTreeSingleLinkedOptionQuestion>(_
+                => _.IsAnswered == false
+                   && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1) });
             var interview = Substitute.For<IStatefulInterview>();
-            //interview.GetParentRosterTitlesWithoutLast(TODO)
-            //    .Returns(new List<string> {"title"});
-            //interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkToQuestionId, questionIdentity)
-            //    .Returns(new [] { Create.Entity.InterviewTreeTextQuestion("subtitle", linkToQuestionId, Create.Entity.RosterVector(1, 1))});
+
+            interview.GetLinkedSingleOptionQuestion(questionIdentity).Returns(newAnswer);
+            interview.GetAnswerAsString(sourceIdentity).Returns("subtitle");
+            interview.GetParentRosterTitlesWithoutLast(sourceIdentity).Returns(new string[] { "bla", "title" });
 
             viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
             viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.Other.NavigationState());

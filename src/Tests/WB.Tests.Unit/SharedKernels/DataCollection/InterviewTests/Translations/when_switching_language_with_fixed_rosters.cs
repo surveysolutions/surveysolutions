@@ -21,14 +21,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 
             var nonTranslatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(
                 rosterId: rosterId,
-                fixedTitles: new List<string> {"title1", "title2"}
+                obsoleteFixedTitles: new List<string> {"title1", "title2"}
                 ));
             nonTranslatedQuestionnaire.Translations.Add(
                     Create.Entity.Translation(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), targetLanguage));
 
             var translatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(
                 rosterId: rosterId,
-                fixedTitles: new List<string> { "тайтл1", "тайтл2" }
+                obsoleteFixedTitles: new List<string> { "тайтл1", "тайтл2" }
                 ));
 
             IQuestionnaire nonTranslatedPlainQuestionnaire = Create.Entity.PlainQuestionnaire(nonTranslatedQuestionnaire);

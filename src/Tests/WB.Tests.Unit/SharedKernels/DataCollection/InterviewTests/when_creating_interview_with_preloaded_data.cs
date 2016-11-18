@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextQuestion(questionId: prefilledQuestionId),
-                Create.Entity.FixedRoster(rosterId: fixedRosterGroup, fixedTitles: new string[]{}),
+                Create.Entity.FixedRoster(rosterId: fixedRosterGroup, obsoleteFixedTitles: new string[]{}),
             }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);

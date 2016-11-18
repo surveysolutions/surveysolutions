@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         PublicKey = Guid.NewGuid()
                     },
                     Create.Entity.FixedRoster(rosterId: rosterGroupId,
-                        fixedTitles: new[] {"a", "b"}, title: "Roster Group", variable: "Roster Group",
+                        obsoleteFixedTitles: new[] {"a", "b"}, title: "Roster Group", variable: "Roster Group",
                         children: new IComposite[]
                         {
                             new NumericQuestion()
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                             },
                             Create.Entity.FixedRoster(rosterId: nestedRosterId, title: "nestedRoster",
                                 variable:"nestedRoster",
-                                fixedTitles: new[] {"1", "2"},
+                                obsoleteFixedTitles: new[] {"1", "2"},
                                 children: new IComposite[]
                                 {
                                     new NumericQuestion()

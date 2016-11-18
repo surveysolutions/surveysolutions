@@ -29,10 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaire =
                 CreateQuestionnaireDocumentWithOneChapter(
                     Create.Entity.FixedRoster(rosterId: rosterId,
-                        fixedTitles: new[] {"a"}, title: rosterTitle, children: new IComposite[]
+                        obsoleteFixedTitles: new[] {"a"}, title: rosterTitle, children: new IComposite[]
                         {
                             Create.Entity.FixedRoster(rosterId: nestedRosterId,
-                                fixedTitles: new[] {"a"}, title: nestedRosterTitle)
+                                obsoleteFixedTitles: new[] {"a"}, title: nestedRosterTitle)
                         }));
 
             questionnaire.Title = questionnaireTitle;

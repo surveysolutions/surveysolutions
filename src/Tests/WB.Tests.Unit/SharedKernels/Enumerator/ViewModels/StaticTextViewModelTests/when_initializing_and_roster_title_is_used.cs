@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 
             var questionnaire= Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(children:
                 Create.Entity.FixedRoster(
-                    fixedRosterTitles: new[] {new FixedRosterTitle(1, rosterTitleAnswerValue)}, children: new[]
+                    fixedTitles: new[] {new FixedRosterTitle(1, rosterTitleAnswerValue)}, children: new[]
                     {
                         Create.Entity.StaticText(publicKey: staticTextWithSubstitutionToRosterTitleId,
                             text: "uses %rostertitle%")

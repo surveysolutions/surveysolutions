@@ -42,9 +42,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.Entity.Roster(rosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedRosterTitle(1, "level 1")}, children: new IComposite[]
+                Create.Entity.Roster(rosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedTitle(1, "level 1")}, children: new IComposite[]
                 {
-                    Create.Entity.Roster(nestedRosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedRosterTitle(1, "level 2")})
+                    Create.Entity.Roster(nestedRosterGroupId, fixedRosterTitles: new [] { Create.Entity.FixedTitle(1, "level 2")})
                 })
             }));
 
