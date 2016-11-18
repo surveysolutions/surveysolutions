@@ -1405,6 +1405,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multichoice question contains too many (&gt;20) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible..
+        /// </summary>
+        internal static string WB0231_MultiOptionWithMoreThan20Options {
+            get {
+                return ResourceManager.GetString("WB0231_MultiOptionWithMoreThan20Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
