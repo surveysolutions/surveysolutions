@@ -732,8 +732,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSingleLinkedToRosterQuestion : InterviewTreeLinkedToRosterQuestion
     {
-        public InterviewTreeSingleLinkedOptionQuestion() { }
-
         private CategoricalLinkedSingleOptionAnswer answer;
 
         public InterviewTreeSingleLinkedToRosterQuestion(IEnumerable<RosterVector> linkedOptions, object answer, Guid linkedSourceId, Identity commonParentRosterIdForLinkedQuestion)
@@ -799,7 +797,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public abstract class InterviewTreeLinkedToRosterQuestion
     {
-        protected InterviewTreeLinkedQuestion() { }
         public Guid LinkedSourceId { get; private set; }
         public Identity CommonParentRosterIdForLinkedQuestion { get; private set; }
 
