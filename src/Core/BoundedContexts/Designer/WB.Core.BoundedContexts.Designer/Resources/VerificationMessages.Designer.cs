@@ -1423,6 +1423,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nested roster with three or more degrees of nesting. Try avoiding such complex structures that might lead to problems in data collection..
+        /// </summary>
+        internal static string WB0233_NestedRosterDegree3OrMore {
+            get {
+                return ResourceManager.GetString("WB0233_NestedRosterDegree3OrMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {

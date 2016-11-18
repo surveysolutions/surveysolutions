@@ -366,6 +366,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0219");
 
         [Test]
+        public void roster_inside_roster()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Roster(children: new[]
+                    {
+                        Create.Roster(),
+                    }),
+                })
+                .ExpectNoWarning("WB0233");
+
+        [Test]
+        public void roster_inside_roster_inside_roster()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Roster(children: new[]
+                    {
+                        Create.Roster(children: new[]
+                        {
+                            Create.Roster(),
+                        }),
+                    }),
+                })
+                .ExpectWarning("WB0233");
+
+        [Test]
         public void used_rowindex_inside_multioption_based_roster()
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {

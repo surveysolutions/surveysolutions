@@ -55,6 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<ICategoricalQuestion>(NonconsecutiveCascadings, "WB0230", VerificationMessages.WB0230_NonconsecutiveCascadings),
             Warning<MultyOptionsQuestion>(MoreThan20Options, "WB0231", VerificationMessages.WB0231_MultiOptionWithMoreThan20Options),
             WarningForCollection(FiveOrMoreQuestionsWithSameEnabling, "WB0232", VerificationMessages.WB0232_FiveOrMoreQuestionsWithSameEnabling),
+            Warning<IGroup>(NestedRosterDegree3OrMore, "WB0233", VerificationMessages.WB0233_NestedRosterDegree3OrMore),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -66,6 +67,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
+
+        private static bool NestedRosterDegree3OrMore(IGroup group)
+            => group.IsRoster
+            && group.UnwrapReferences(x => x.GetParent() as IGroup).Count(x => x.IsRoster) >= 3;
 
         private static bool MoreThan20Options(ICategoricalQuestion question) => question.Answers?.Count > 20;
 
