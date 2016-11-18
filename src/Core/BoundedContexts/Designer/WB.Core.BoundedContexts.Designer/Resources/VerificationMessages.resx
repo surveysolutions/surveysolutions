@@ -618,4 +618,7 @@
   <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
     <value>Multichoice question contains too many (&gt;20) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible.</value>
   </data>
+  <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+    <value>Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency.</value>
+  </data>
 </root>

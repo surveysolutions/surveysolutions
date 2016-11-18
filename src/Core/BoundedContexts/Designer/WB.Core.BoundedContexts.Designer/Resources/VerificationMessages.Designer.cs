@@ -1414,6 +1414,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency..
+        /// </summary>
+        internal static string WB0232_FiveOrMoreQuestionsWithSameEnabling {
+            get {
+                return ResourceManager.GetString("WB0232_FiveOrMoreQuestionsWithSameEnabling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
