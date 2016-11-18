@@ -24,20 +24,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        It should_have_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_error_with_code__WB0007__ = () =>
+            resultErrors.ShouldContainError("WB0007");
 
-        It should_return_message_with_code__WB0007__ = () =>
-        resultErrors.Single().Code.ShouldEqual("WB0007");
+        It should_return_error__WB0007__with_one_references = () =>
+            resultErrors.GetError("WB0007").References.Count.ShouldEqual(1);
 
-        It should_return_message_with_one_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+        It should_return_error__WB0007__reference_with_type_Question = () =>
+            resultErrors.GetError("WB0007").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_message_reference_with_type_Question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_message_reference_with_id_of_multi_option_question = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(multiOptionQuestionId);
+        It should_return_error__WB0007__reference_with_id_of_multi_option_question = () =>
+            resultErrors.GetError("WB0007").References.First().Id.ShouldEqual(multiOptionQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
