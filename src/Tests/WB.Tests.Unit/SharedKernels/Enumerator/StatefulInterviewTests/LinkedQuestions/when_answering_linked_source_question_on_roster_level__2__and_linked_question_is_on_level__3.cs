@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQuestions
 {
-    [Ignore("KP-8159")]
     internal class when_answering_linked_source_question_on_roster_level__2__and_linked_question_is_on_level__3__ : StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -53,23 +52,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(0, 2), DateTime.UtcNow, "answer 0.2");
         };
 
-        It should_put__3__options_in_linked_single_question_from_roster__0_1_0__ = () =>
+        It should_put__2__options_in_linked_single_question_from_roster__0_1_0__ = () =>
         {
-            //var answersToBeOptions = interview
-            //    .FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId, Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0, 1, 0)))
-            //    .ToList();
-
-            //answersToBeOptions.Count.ShouldEqual(2);
+            interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0, 1, 0)))
+                .Options.Count.ShouldEqual(2);
             //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0.1", "answer 0.2");
         };
 
-        It should_put__0__options_in_linked_single_question_from_roster__1_1_0__ = () =>
+        It should_put__2__options_in_linked_single_question_from_roster__0_1_1__ = () =>
         {
-            //var answersToBeOptions = interview
-            //    .FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId, Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(1, 1, 0)))
-            //    .ToList();
-
-            //answersToBeOptions.ShouldBeEmpty();
+            interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0, 1, 1)))
+                .Options.Count.ShouldEqual(2);
+            //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0.1", "answer 0.2");
         };
 
         static StatefulInterview interview;
@@ -82,7 +76,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         static readonly Guid nestedRosterSizeQuestionId = Guid.Parse("55555555555555555555555555555555");
 
         static readonly Guid linkedSingleQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        static readonly Guid linkedMultiQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
         static readonly Guid sourceOfLinkedQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static readonly Guid interviewerId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
