@@ -621,4 +621,7 @@
   <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
     <value>Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency.</value>
   </data>
+  <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+    <value>Nested roster with three or more degrees of nesting. Try avoiding such complex structures that might lead to problems in data collection.</value>
+  </data>
 </root>
