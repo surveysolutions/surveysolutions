@@ -1526,19 +1526,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             foreach (var question in questionsWithConditions)
             {
                 if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
-                    dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression).ToArray());
+                    dependencies.Add(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.ConditionExpression, questionnaire).ToArray());
             }
 
             foreach (var question in questionsWithOptionsFilter)
             {
                 if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
-                    dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression).ToArray());
+                    dependencies.Add(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression, questionnaire).ToArray());
             }
 
             foreach (var variable in variables)
             {
                 if (variable.Name != null && !dependencies.ContainsKey(variable.Name))
-                    dependencies.Add(variable.Name, this.expressionProcessor.GetIdentifiersUsedInExpression(variable.Expression).ToArray());
+                    dependencies.Add(variable.Name, this.GetIdentifiersUsedInExpression(variable.Expression, questionnaire).ToArray());
             }
 
             var cycles = topologicalSorter.DetectCycles(dependencies);
