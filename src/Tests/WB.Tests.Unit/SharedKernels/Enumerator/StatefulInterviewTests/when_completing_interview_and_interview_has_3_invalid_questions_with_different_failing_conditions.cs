@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_completing_interview_and_interview_has_3_invalid_questions_with_different_failing_conditions
     {
         Establish context = () =>
