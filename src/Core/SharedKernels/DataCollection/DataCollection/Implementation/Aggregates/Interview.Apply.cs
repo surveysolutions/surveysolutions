@@ -144,16 +144,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(AnswersDeclaredInvalid @event)
         {
-            foreach (var failedValidationCondition in @event.FailedValidationConditions)
-                this.changedInterview.GetQuestion(failedValidationCondition.Key).MarkInvalid(failedValidationCondition.Value);
-
             if (@event.FailedValidationConditions.Count > 0)
             {
+                foreach (var failedValidationCondition in @event.FailedValidationConditions)
+                {
+                    if (failedValidationCondition.Value?.Count > 0)
+                        this.changedInterview.GetQuestion(failedValidationCondition.Key).MarkInvalid(failedValidationCondition.Value);
+                    else
+                        this.changedInterview.GetQuestion(failedValidationCondition.Key).MarkInvalid();
+                }
+
                 this.ExpressionProcessorStatePrototype.ApplyFailedValidations(@event.FailedValidationConditions);
             }
             else //handling of old events
             {
-                this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.FailedValidationConditions.Keys);
+                foreach (var invalidQuestionIdentity in @event.Questions)
+                    this.changedInterview.GetQuestion(invalidQuestionIdentity).MarkInvalid();
+
+                this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.Questions);
             }
         }
 
