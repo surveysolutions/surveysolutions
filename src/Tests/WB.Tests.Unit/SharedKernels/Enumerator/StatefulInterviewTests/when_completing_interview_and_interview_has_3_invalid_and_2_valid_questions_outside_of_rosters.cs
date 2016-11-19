@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_completing_interview_and_interview_has_3_invalid_and_2_valid_questions_outside_of_rosters
     {
         Establish context = () =>
@@ -55,16 +54,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.Identity(invalidQuestion1Id, RosterVector.Empty),
                 Create.Entity.Identity(invalidQuestion2Id, RosterVector.Empty),
                 Create.Entity.Identity(invalidQuestion3Id, RosterVector.Empty),
-            });
-
-        It should_raise_AnswersDeclaredValid_event = () =>
-            eventContext.ShouldContainEvent<AnswersDeclaredValid>();
-
-        It should_raise_AnswersDeclaredValid_event_with_ids_of_valid_questions_and_empty_roster_vectors = () =>
-            eventContext.GetEvent<AnswersDeclaredValid>().Questions.ShouldContainOnly(new[]
-            {
-                Create.Entity.Identity(validQuestion1Id, RosterVector.Empty),
-                Create.Entity.Identity(validQuestion2Id, RosterVector.Empty),
             });
 
         Cleanup stuff = () =>

@@ -123,7 +123,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         
         public string VariableName { get; }
 
-        public bool IsValid => !this.FailedValidations?.Any() ?? true;
+        public bool IsValid => !this.FailedValidations?.Any() ?? this.isValidWithoutFailedValidations;
+
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
 
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
@@ -132,8 +133,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.FailedValidations = failedValidations.ToReadOnlyCollection();
         }
 
+        [Obsolete("Since v6.0")]
+        private bool isValidWithoutFailedValidations = true;
+        [Obsolete("Since v6.0")]
+        public void MarkInvalid() => this.isValidWithoutFailedValidations = false;
+
         public void MarkValid()
-            => this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
+        {
+            this.isValidWithoutFailedValidations = true;
+            this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
+        }
 
         public bool IsDouble => this.AsDouble != null;
         public bool IsInteger => this.AsInteger != null;
