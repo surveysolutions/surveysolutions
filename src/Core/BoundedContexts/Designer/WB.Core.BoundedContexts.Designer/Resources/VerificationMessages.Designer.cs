@@ -1351,7 +1351,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drop-down menu (filtered combobox) contains less than 10 elements. Consider switching to a standard single choice representation..
+        ///   Looks up a localized string similar to Drop-down menu (combo box) contains less than 10 elements. Consider switching to a standard single choice representation..
         /// </summary>
         internal static string WB0225_ComboBoxWithLessThan10Elements {
             get {
@@ -1437,6 +1437,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0234_RosterInRosterWithSameSourceQuestion {
             get {
                 return ResourceManager.GetString("WB0234_RosterInRosterWithSameSourceQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The same long enablement condition is used in several questions. You might want to create a Boolean variable to simplify the code management..
+        /// </summary>
+        internal static string WB0235_FewQuestionsWithSameLongEnablement {
+            get {
+                return ResourceManager.GetString("WB0235_FewQuestionsWithSameLongEnablement", resourceCulture);
             }
         }
         
