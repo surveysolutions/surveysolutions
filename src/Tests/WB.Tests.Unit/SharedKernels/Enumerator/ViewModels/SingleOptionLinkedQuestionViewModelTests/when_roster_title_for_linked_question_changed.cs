@@ -37,8 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                         Create.Entity.TextQuestion(questionId: linkToQuestionId)
                     })
                 }),
-                Create.Entity.SingleOptionQuestion(questionId: linkedQuestionId, linkedToQuestionId: linkToQuestionId)
-                );
+                Create.Entity.SingleOptionQuestion(questionId: linkedQuestionId, linkedToQuestionId: linkToQuestionId));
 
             var newAnswer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_
                 => _.IsAnswered == false
@@ -47,13 +46,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
             interview.GetLinkedSingleOptionQuestion(questionIdentity).Returns(newAnswer);
             interview.GetAnswerAsString(sourceIdentity).Returns("subtitle");
-            interview.GetParentRosterTitlesWithoutLast(sourceIdentity).Returns(new string[] { "bla", "title" });
+            interview.GetLinkedOptionTitle(questionIdentity, Create.Entity.RosterVector(1)).Returns("title: subtitle");
 
             viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
             viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.Other.NavigationState());
         };
 
-        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
+        Because of = () => 
+            viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
 
         It should_refresh_list_of_options = () => viewModel.Options.Count.ShouldEqual(1);
 

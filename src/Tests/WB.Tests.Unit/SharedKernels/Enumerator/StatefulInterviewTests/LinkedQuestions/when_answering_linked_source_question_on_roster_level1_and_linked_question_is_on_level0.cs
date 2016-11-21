@@ -35,15 +35,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
         It should_linked_single_question_has_2_option = () =>
         {
-            interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, RosterVector.Empty))
-                .Options.Count.ShouldEqual(2);
-            //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
+            var identity = Create.Entity.Identity(linkedSingleQuestionId, RosterVector.Empty);
+
+            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(2);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0)).ShouldEqual("answer 0");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1)).ShouldEqual("answer 1");
         };
 
-        It should_linked_multi_question_has_2_options = () => {
-            interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, RosterVector.Empty))
-                .Options.Count.ShouldEqual(2);
-            //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
+        It should_linked_multi_question_has_2_options = () =>
+        {
+            var identity = Create.Entity.Identity(linkedMultiQuestionId, RosterVector.Empty);
+
+            interview.GetLinkedMultiOptionQuestion(identity).Options.Count.ShouldEqual(2);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0)).ShouldEqual("answer 0");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1)).ShouldEqual("answer 1");
         };
 
         static StatefulInterview interview;
