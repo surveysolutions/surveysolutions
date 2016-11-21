@@ -173,10 +173,8 @@ namespace WB.UI.Designer.Api.Headquarters
             if (questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
                 return true;
 
-            QuestionnaireSharedPersons questionnaireSharedPersons =
-                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = questionnaireView.PublicKey });
 
-            return (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId);
         }
     }
 }

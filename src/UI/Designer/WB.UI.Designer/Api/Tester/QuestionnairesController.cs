@@ -113,7 +113,7 @@ namespace WB.UI.Designer.Api.Tester
                 LastEntryDate = questionnaire.LastEntryDate,
                 Owner = questionnaire.CreatorName,
                 IsPublic = questionnaire.IsPublic || isAdmin,
-                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson == userId)
+                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.Id == userId)
             });
 
             var response = this.Request.CreateResponse(questionnaires);
@@ -129,10 +129,8 @@ namespace WB.UI.Designer.Api.Tester
             if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return true;
 
-            QuestionnaireSharedPersons questionnaireSharedPersons =
-                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = questionnaireView.PublicKey });
 
-            return (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId);
         }
     }
 }
