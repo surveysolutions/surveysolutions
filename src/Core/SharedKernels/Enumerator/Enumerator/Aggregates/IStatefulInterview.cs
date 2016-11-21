@@ -125,5 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
 
         InterviewTreeTextListQuestion FindTextListQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
+
+        string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
     }
 }

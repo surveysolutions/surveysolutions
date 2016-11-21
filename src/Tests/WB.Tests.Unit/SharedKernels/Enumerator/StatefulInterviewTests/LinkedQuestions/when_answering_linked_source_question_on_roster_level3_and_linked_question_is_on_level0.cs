@@ -14,9 +14,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId),
-                Create.Entity.Roster(rosterId: roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
+                Create.Entity.Roster(rosterId: roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterTitleQuestionId: numericTitleQuestionId, children: new IComposite[]
                 {
-                    Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1, 2}),
+                    Create.Entity.TextQuestion(questionId: numericTitleQuestionId),
+                    Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, textAnswers: new []{ Create.Entity.Option("1", "Multi 1"), Create.Entity.Option("2", "Multi 2") }  ),
                     Create.Entity.Roster(rosterId: roster2Id, rosterSizeQuestionId: nestedRosterSizeQuestionId, children: new IComposite[]
                     {
                         Create.Entity.FixedRoster(roster3Id, fixedTitles: new [] { Create.Entity.FixedTitle(100, "Title 1"), Create.Entity.FixedTitle(200, "Title 2") }, children: new IComposite[]
@@ -32,6 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
             interview.AnswerNumericIntegerQuestion(interviewerId, rosterSizeQuestionId, RosterVector.Empty, DateTime.UtcNow, 2);
+            interview.AnswerTextQuestion(interviewerId, numericTitleQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, "numeric 1");
+            interview.AnswerTextQuestion(interviewerId, numericTitleQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, "numeric 2");
             interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, new[] { 1, 2 });
             interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, new[] { 1, 2 });
 
@@ -48,15 +51,30 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
         It should_linked_single_question_has_7_options = () =>
         {
-            interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, RosterVector.Empty))
-                .Options.Count.ShouldEqual(7);
-            //"answer 0.1.100", "answer 0.1.200", "answer 0.2.100", "answer 0.2.200", "answer 1.3.100", "answer 1.3.200", "answer 1.4.100");
+            var identity = Create.Entity.Identity(linkedSingleQuestionId, RosterVector.Empty);
+
+            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(7);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 100)).ShouldEqual("numeric 1: Multi 1: Title 1: answer 0.1.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 200)).ShouldEqual("numeric 1: Multi 1: Title 2: answer 0.1.200");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 100)).ShouldEqual("numeric 1: Multi 2: Title 1: answer 0.2.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 200)).ShouldEqual("numeric 1: Multi 2: Title 2: answer 0.2.200");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 1, 100)).ShouldEqual("numeric 2: Multi 1: Title 1: answer 1.3.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 1, 200)).ShouldEqual("numeric 2: Multi 1: Title 2: answer 1.3.200");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 2, 100)).ShouldEqual("numeric 2: Multi 2: Title 1: answer 1.4.100");
+
         };
 
         It should_linked_multi_question_has_7_options = () => {
-            interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, RosterVector.Empty))
-                .Options.Count.ShouldEqual(7);
-            //    "answer 0.1.100", "answer 0.1.200", "answer 0.2.100", "answer 0.2.200", "answer 1.3.100", "answer 1.3.200", "answer 1.4.100");
+            var identity = Create.Entity.Identity(linkedMultiQuestionId, RosterVector.Empty);
+
+            interview.GetLinkedMultiOptionQuestion(identity).Options.Count.ShouldEqual(7);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 100)).ShouldEqual("numeric 1: Multi 1: Title 1: answer 0.1.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 200)).ShouldEqual("numeric 1: Multi 1: Title 2: answer 0.1.200");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 100)).ShouldEqual("numeric 1: Multi 2: Title 1: answer 0.2.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 200)).ShouldEqual("numeric 1: Multi 2: Title 2: answer 0.2.200");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 1, 100)).ShouldEqual("numeric 2: Multi 1: Title 1: answer 1.3.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 1, 200)).ShouldEqual("numeric 2: Multi 1: Title 2: answer 1.3.200");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 2, 100)).ShouldEqual("numeric 2: Multi 2: Title 1: answer 1.4.100");
         };
 
         static StatefulInterview interview;
@@ -67,6 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
         static readonly Guid rosterSizeQuestionId = Guid.Parse("44444444444444444444444444444444");
         static readonly Guid nestedRosterSizeQuestionId = Guid.Parse("55555555555555555555555555555555");
+        static readonly Guid numericTitleQuestionId = Guid.Parse("77777777777777777777777777777777");
 
         static readonly Guid linkedSingleQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         static readonly Guid linkedMultiQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

@@ -42,7 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(new[]
         {
             new ChangedLinkedOptions(linkedQuestionId, new[] { Create.Entity.RosterVector(1) })
-        }));
+        }));
+
 
         It should_synchronize_visible_options_with_event_data = () => viewModel.Options.Count.ShouldEqual(1);
         It should_keep_not_removed_options_as_they_were = () => viewModel.Options.First().Title.ShouldEqual("one");

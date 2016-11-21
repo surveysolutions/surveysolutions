@@ -35,28 +35,38 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
         It should_linked_single_question_from_roster1_has_2_options = () =>
         {
-            interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0)))
-                .Options.Count.ShouldEqual(2);
-            //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
+            var identity = Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0));
+
+            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(2);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0)).ShouldEqual("answer 0");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1)).ShouldEqual("answer 1");
         };
 
         It should_linked_single_question_from_roster2_has_2_options = () =>
         {
-            interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(1)))
-                .Options.Count.ShouldEqual(2);
-            //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
+            var identity = Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(1));
+            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(2);
+
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0)).ShouldEqual("answer 0");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1)).ShouldEqual("answer 1");
         };
 
-        It should_linked_multi_question_from_roster1_has_2_options = () => {
-            interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(0)))
-                .Options.Count.ShouldEqual(2);
-            
-            //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
+        It should_linked_multi_question_from_roster1_has_2_options = () =>
+        {
+            var identity = Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(0));
+            interview.GetLinkedMultiOptionQuestion(identity).Options.Count.ShouldEqual(2);
+
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0)).ShouldEqual("answer 0");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1)).ShouldEqual("answer 1");
         };
 
-        It should_linked_multi_question_from_roster2_has_2_options = () => {
-            interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(1)))
-                .Options.Count.ShouldEqual(2);
+        It should_linked_multi_question_from_roster2_has_2_options = () =>
+        {
+            var identity = Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(1));
+
+            interview.GetLinkedMultiOptionQuestion(identity).Options.Count.ShouldEqual(2);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0)).ShouldEqual("answer 0");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1)).ShouldEqual("answer 1");
             //answersToBeOptions.OfType<TextAnswer>().Select(x => x.Answer).ShouldContainOnly("answer 0", "answer 1");
         };
 
