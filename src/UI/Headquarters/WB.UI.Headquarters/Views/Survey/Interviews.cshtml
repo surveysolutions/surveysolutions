@@ -42,10 +42,10 @@
     <div class="form-inline">
         <div class="btn-group">
             <div class="input-group">
-                <input class="form-control" placeholder="Interviewer name" data-bind="typeahead: AssignTo, typeaheadOptions: {source: Users, displayText: function(item){return item.UserName}, afterSelect: function(){ $root.Assign(); }}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text"/>
-                <span data-bind="spinner: IsAssignToLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                <input class="form-control" placeholder="Interviewer name" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: function(){ $root.Assign(); }}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text"/>
+                <span data-bind="spinner: Users.IsAssignToLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                 <div class="input-group-btn">
-                    <button class="btn btn-default" data-bind="click: function(){ AssignTo(undefined);}, disable: IsNothingSelected"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    <button class="btn btn-default" data-bind="click: function(){ Users.AssignTo(undefined);}, disable: IsNothingSelected"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                 </div>
             </div>
         </div>
@@ -157,15 +157,33 @@
 </script>
     <script type="text/html" id="confirm-approve-template">
         @Html.Raw(string.Format(Interviews.ApproveConfirmMessage,
-            "<span class='text-normal' data-bind='text: length'></span>",
+            "<span class='text-normal' data-bind='text: items.length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-reject-template">
         @Html.Raw(string.Format(Interviews.RejectConfirmMessage,
-            "<span class='text-normal' data-bind='text: length'></span>",
+            "<span class='text-normal' data-bind='text: items.length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
+        <br />
+        <div class="btn-group">
+            <div class="input-group">
+                <input class="form-control reject-intervieweer" placeholder="@Common.Any" data-bind="typeahead: AssignTo, typeaheadOptions: {source: Users, displayText: function(item){return item.UserName}, afterSelect: AssignToInt }, valueupdate:'afterkeydown'" type="text" />
+                <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                <div class="input-group-btn" data-bind="click: function(){ alert('assign clear'); @*AssignTo(undefined);*@}">
+                    <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                </div>
+            </div>
+        </div>
+        
+        @*<script type="text/javascript">
+            $(function () {
+                alert('typeahead');
+                $(".reject-intervieweer").typeahead();
+            });
+            
+        </script>*@
     </script>
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Interviews.ContinueConfirmMessage
