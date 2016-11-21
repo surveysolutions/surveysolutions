@@ -6,5 +6,6 @@
         public bool CanApprove { get; set; }
         public bool CanReject { get; set; }
         public bool ReceivedByInterviewer { get; set; }
+        public bool IsNeedInterviewerAssign { get; set; }
     }
 }
