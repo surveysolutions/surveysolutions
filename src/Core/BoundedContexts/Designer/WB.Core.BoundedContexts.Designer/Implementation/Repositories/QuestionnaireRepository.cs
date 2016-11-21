@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
@@ -13,12 +14,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
     internal class QuestionnaireRepository : IPlainAggregateRootRepository<Questionnaire>
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> sharedPersonsStorage;
         private readonly IServiceLocator serviceLocator;
 
         public QuestionnaireRepository(IServiceLocator serviceLocator,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage)
+            IPlainStorageAccessor<QuestionnaireListViewItem> sharedPersonsStorage)
         {
             this.serviceLocator = serviceLocator;
             this.questionnaireStorage = questionnaireStorage;

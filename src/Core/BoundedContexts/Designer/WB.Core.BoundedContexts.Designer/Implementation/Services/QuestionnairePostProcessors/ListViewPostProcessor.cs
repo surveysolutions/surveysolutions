@@ -17,13 +17,11 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
@@ -79,9 +77,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
 
-        private IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage
-            => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireSharedPersons>>();
-
         private IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireListViewItem>>();
 
@@ -91,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void Create(QuestionnaireDocument document, bool shouldPreserveSharedPersons, 
             Guid? questionnaireId = null, string questionnaireTitle = null, Guid? createdBy = null,
-            bool? isPublic = null, DateTime? creationDate = null, IEnumerable<Guid> sharedPersonIds = null)
+            bool? isPublic = null, DateTime? creationDate = null)
         {
             var questionnaireIdValue = questionnaireId ?? document.PublicKey;
 
@@ -114,7 +109,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             if (!shouldPreserveSharedPersons)
                 questionnaireListViewItem.SharedPersons.Clear();
-            questionnaireListViewItem.SharedPersons.AddRange(sharedPersonIds ?? Enumerable.Empty<Guid>());
 
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireListViewItem.QuestionnaireId);
         }
@@ -171,20 +165,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
-            var questionnaireSharedPersons = this.sharedPersonsStorage.GetById(questionnaireListViewItem.QuestionnaireId);
-            if (questionnaireSharedPersons != null)
+            if (questionnaireListViewItem.SharedPersons.Any(x => x.Id == personId))
             {
-                var sharedPerson = questionnaireSharedPersons.SharedPersons.FirstOrDefault(x => x.Id == personId);
-                if (sharedPerson != null)
-                {
-                    questionnaireSharedPersons.SharedPersons.Remove(sharedPerson);
-                }
-
-                this.sharedPersonsStorage.Store(questionnaireSharedPersons, questionnaireListViewItem.QuestionnaireId);
+                var toRemove = questionnaireListViewItem.SharedPersons.Where(x => x.Id == personId);
+                toRemove.ForEach(x => questionnaireListViewItem.SharedPersons.Remove(x));
             }
-
-            if (questionnaireListViewItem.SharedPersons.Contains(personId))
-                questionnaireListViewItem.SharedPersons.Remove(personId);
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
@@ -198,23 +183,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
-            var questionnaireSharedPersons = this.sharedPersonsStorage.GetById(questionnaireListViewItem.QuestionnaireId) ??
-                                                  new QuestionnaireSharedPersons(questionnaireListViewItem.PublicId);
-
-            if (questionnaireSharedPersons.SharedPersons.All(x => x.Id != personId))
+            var sharedPerson = new SharedPerson
             {
-                questionnaireSharedPersons.SharedPersons.Add(new SharedPerson()
-                {
-                    Id = personId,
-                    Email = personEmail,
-                    ShareType = shareType
-                });
+                Id = personId,
+                Email = personEmail,
+                ShareType = shareType
+            };
+
+            if (questionnaireListViewItem.SharedPersons.All(x => x.Id != personId))
+            {
+                questionnaireListViewItem.SharedPersons.Add(sharedPerson);
             }
-
-            this.sharedPersonsStorage.Store(questionnaireSharedPersons, questionnaireListViewItem.QuestionnaireId);
-
-            if (!questionnaireListViewItem.SharedPersons.Contains(personId))
-                questionnaireListViewItem.SharedPersons.Add(personId);
 
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);

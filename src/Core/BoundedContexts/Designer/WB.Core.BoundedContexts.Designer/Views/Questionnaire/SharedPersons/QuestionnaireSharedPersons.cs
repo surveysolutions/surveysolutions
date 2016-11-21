@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
+    [Obsolete("KP-8160: Used only for migrations")]
     public class QuestionnaireSharedPersons
     {
         public Guid QuestionnaireId { get; private set; }

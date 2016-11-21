@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.PlainStorage;
@@ -38,15 +33,17 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
                     keyMap.Column(clm =>
                     {
                         clm.Name("QuestionnaireId");
-                        clm.Index("QuestionnaireListViewItem_SharedPersons");
                     });
                 });
                 m.Table("SharedPersons");
                 m.Lazy(CollectionLazy.NoLazy);
             },
-            r => r.Element(e =>
+            r => r.Component(e =>
             {
-                e.Column("SharedPersonId");
+                e.Property(x => x.Id);
+                e.Property(x => x.Email);
+                e.Property(x => x.IsOwner);
+                e.Property(x => x.ShareType);
             }));
         }
     }
