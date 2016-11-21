@@ -67,7 +67,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public int? MaxAllowedAnswers { get; set; }
 
-        public bool IsLinked { get; set; }
+        public bool IsLinkedToRoster { get; set; }
+
+        public bool IsLinkedToListQuestion { get; set; }
     }
 
     public class SingleQuestionSettings
@@ -76,7 +78,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public bool IsCascade { get; set; }
 
-        public bool IsLinked { get; set; }
+        public bool IsLinkedToRoster { get; set; }
+
+        public bool IsLinkedToListQuestion { get; set; }
     }
 
     public class InterviewQuestionCommentView
