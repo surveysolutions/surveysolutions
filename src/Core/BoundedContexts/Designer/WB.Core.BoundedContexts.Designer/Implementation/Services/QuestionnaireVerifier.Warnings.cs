@@ -57,6 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(FiveOrMoreQuestionsWithSameEnabling, "WB0232", VerificationMessages.WB0232_FiveOrMoreQuestionsWithSameEnabling),
             Warning<IGroup>(NestedRosterDegree3OrMore, "WB0233", VerificationMessages.WB0233_NestedRosterDegree3OrMore),
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
+            WarningForCollection(FewQuestionsWithSameLongEnablement, "WB0235", VerificationMessages.WB0235_FewQuestionsWithSameLongEnablement),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -68,6 +69,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
+
+        private static IEnumerable<QuestionnaireNodeReference[]> FewQuestionsWithSameLongEnablement(MultiLanguageQuestionnaireDocument questionnaire)
+            => questionnaire
+                .Find<IQuestion>()
+                .Where(question => !string.IsNullOrWhiteSpace(question.ConditionExpression))
+                .Where(question => question.ConditionExpression.Length >= 100)
+                .GroupBy(question => question.ConditionExpression)
+                .Where(grouping => grouping.Count() >= 3)
+                .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
         private static bool RosterInRosterWithSameSourceQuestion(IGroup group)
         {
