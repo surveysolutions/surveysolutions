@@ -157,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity);
 
             foreach (var linkedOption in linkedQuestion.Options)
-                yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue);
+                yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue, interview);
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
@@ -220,13 +220,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector answeredOption)
+        private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector answeredOption, IStatefulInterview interview)
         {
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel
             {
                 Enablement = this.questionState.Enablement,
                 RosterVector = linkedOption,
-                Title = this.BuildOptionTitle(linkedOption),
+                Title = interview.GetLinkedOptionTitle(this.Identity, linkedOption),
                 Selected = linkedOption.Equals(answeredOption),
                 QuestionState = this.questionState
             };
@@ -235,22 +235,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             optionViewModel.AnswerRemoved += this.RemoveAnswer;
 
             return optionViewModel;
-        }
-
-        private string BuildOptionTitle(RosterVector linkedOption)
-        {
-            var sourceRosterIdentity = Identity.Create(this.linkedToRosterId, linkedOption);
-            var sourceRoster = this.interview.GetRoster(sourceRosterIdentity);
-
-            IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown = interview
-                .GetParentRosterTitlesWithoutLastForRoster(sourceRosterIdentity)
-                .ToList();
-
-            string rosterPrefixes = string.Join(": ", parentRosterTitlesWithoutLastOneAndFirstKnown);
-
-            return string.IsNullOrEmpty(rosterPrefixes) 
-                ? sourceRoster.RosterTitle 
-                : string.Join(": ", rosterPrefixes, sourceRoster.RosterTitle);
         }
 
         public void Handle(AnswersRemoved @event)

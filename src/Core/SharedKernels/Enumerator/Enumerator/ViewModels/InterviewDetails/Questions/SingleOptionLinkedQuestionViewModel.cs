@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var linkedQuestion = interview.GetLinkedSingleOptionQuestion(this.Identity);
             
             foreach (var linkedOption in linkedQuestion.Options)
-                yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue);
+                yield return this.CreateOptionViewModel(linkedOption, linkedQuestion.GetAnswer()?.SelectedValue, interview);
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs) => await this.OptionSelectedAsync(sender);
@@ -264,13 +264,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector answeredOption)
+        private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector answeredOption, IStatefulInterview interview)
         {
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel
             {
                 Enablement = this.questionState.Enablement,
                 RosterVector = linkedOption,
-                Title = this.BuildOptionTitle(linkedOption),
+                Title = interview.GetLinkedOptionTitle(this.Identity, linkedOption),
                 Selected = linkedOption.Equals(answeredOption),
                 QuestionState = this.questionState,
             };
@@ -279,24 +279,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             optionViewModel.AnswerRemoved += this.RemoveAnswer;
 
             return optionViewModel;
-        }
-
-        private string BuildOptionTitle(RosterVector linkedOption)
-        {
-            var sourceQuestionIdentity = Identity.Create(this.linkedToQuestionId, linkedOption);
-
-            string answerAsTitle = this.interview.GetAnswerAsString(sourceQuestionIdentity);
-
-            int currentRosterLevel = sourceQuestionIdentity.RosterVector.Length;
-
-            IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
-                interview
-                    .GetParentRosterTitlesWithoutLast(sourceQuestionIdentity)
-                    .Skip(currentRosterLevel);
-
-            string rosterPrefixes = string.Join(": ", parentRosterTitlesWithoutLastOneAndFirstKnown);
-
-            return string.IsNullOrEmpty(rosterPrefixes) ? answerAsTitle : string.Join(": ", rosterPrefixes, answerAsTitle);
         }
     }
 }

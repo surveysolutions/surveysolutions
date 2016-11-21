@@ -29,7 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     this.AsFixed = new InterviewTreeFixedRoster();
                     break;
                 case RosterType.Numeric:
-                    this.AsNumeric = new InterviewTreeNumericRoster(rosterSizeQuestion.Value, rosterTitleQuestionIdentity);
+                    this.AsNumeric = new InterviewTreeNumericRoster(rosterSizeQuestion.Value,
+                        rosterTitleQuestionIdentity);
                     break;
                 case RosterType.YesNo:
                     this.AsYesNo = new InterviewTreeYesNoRoster(rosterSizeQuestion.Value);
@@ -58,8 +59,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsMulti => this.AsMulti != null;
         public bool IsFixed => this.AsFixed != null;
 
+        public Guid RosterSizeId
+        {
+            get
+            {
+                if (this.IsNumeric) return AsNumeric.RosterSizeQuestion;
+                if (this.IsMulti) return AsMulti.RosterSizeQuestion;
+                if (this.IsYesNo) return AsYesNo.RosterSizeQuestion;
+                if (this.IsList) return AsList.RosterSizeQuestion;
 
-        private string GetTypeAsText()
+                return Identity.Id;
+            }
+        }
+
+
+    private string GetTypeAsText()
         {
             if (this.IsNumeric) return "Numeric";
             if (this.IsFixed) return "Fixed";

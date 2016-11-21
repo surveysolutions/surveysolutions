@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -208,6 +209,41 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsSingleLinkedToList;
         public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.changedInterview.GetQuestion(identity).AsMultiLinkedToList;
+
+        public string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option)
+        {
+            var linkedQuestion = this.changedInterview.GetQuestion(linkedQuestionIdentity);
+            if (!linkedQuestion.IsLinked) return string.Empty;
+
+            Identity sourceIdentity = Identity.Create(linkedQuestion.AsLinked.LinkedSourceId, option);
+
+            IInterviewTreeNode sourceNode = changedInterview.GetNodeByIdentity(sourceIdentity);
+
+            string optionTitle = string.Empty;
+            if (sourceNode is InterviewTreeRoster)
+            {
+                var sourceRoster = sourceNode as InterviewTreeRoster;
+                optionTitle = sourceRoster.RosterTitle;
+            }
+            if (sourceNode is InterviewTreeQuestion)
+            {
+                var sourceQuestion = sourceNode as InterviewTreeQuestion;
+                optionTitle = sourceQuestion.GetAnswerAsString();
+            }
+
+            var sourceBreadcrumbsOfRosterTitles = sourceNode.Parents.OfType<InterviewTreeRoster>().ToArray();
+            var linkedBreadcrumbsOfRosterTitles = linkedQuestion.Parents.OfType<InterviewTreeRoster>().ToArray();
+            
+            var common = sourceBreadcrumbsOfRosterTitles.Zip(linkedBreadcrumbsOfRosterTitles, (x, y) => x.RosterSizeId.Equals(y.RosterSizeId) ? x : null).TakeWhile(x => x != null).Count();
+
+            string[] breadcrumbsOfRosterTitles = sourceBreadcrumbsOfRosterTitles.Skip(common).Select(x => x.RosterTitle).ToArray();
+
+            var breadcrumbs = string.Join(": ", breadcrumbsOfRosterTitles);
+
+            return breadcrumbsOfRosterTitles.Length > 1
+                ?  $"{breadcrumbs}: {optionTitle}"
+                : optionTitle;
+        }
 
         #region Command handlers
 

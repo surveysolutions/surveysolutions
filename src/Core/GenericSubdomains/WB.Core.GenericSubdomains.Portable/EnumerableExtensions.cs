@@ -9,8 +9,11 @@ namespace WB.Core.GenericSubdomains.Portable
     {
         public static IEnumerable<T> GetCommonPart<T>(this IEnumerable<T> vector1, IEnumerable<T> vector2)
             where T : struct
-        => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T? : null as T?).TakeWhile(x => x != null).Select(x => x.Value);
+            => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T? : null as T?).TakeWhile(x => x != null).Select(x => x.Value);
 
+        public static IEnumerable<T> GetCommonBeginning<T>(this IEnumerable<T> vector1, IEnumerable<T> vector2)
+            where T : class
+            => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T : null as T).TakeWhile(x => x != null).Select(x => x);
 
         public static IEnumerable<T> DistinctBy<T, TIdentity>(this IEnumerable<T> source, Func<T, TIdentity> keySelector)
         {
