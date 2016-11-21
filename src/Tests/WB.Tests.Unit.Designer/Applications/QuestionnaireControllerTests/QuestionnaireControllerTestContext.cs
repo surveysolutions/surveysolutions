@@ -27,7 +27,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             IQuestionnaireVerifier questionnaireVerifier = null,
             IQuestionnaireHelper questionnaireHelper = null,
             IQuestionnaireViewFactory questionnaireViewFactory = null,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory = null,
             ILogger logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null)
         {

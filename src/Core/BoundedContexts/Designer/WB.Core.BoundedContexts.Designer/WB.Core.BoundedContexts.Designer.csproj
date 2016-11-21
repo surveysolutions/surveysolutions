@@ -695,12 +695,6 @@
     <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersons.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\SharedPersons\QuestionnaireSharedPersonsInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\SharedPersons\SharedPerson.cs">
       <SubType>Code</SubType>
     </Compile>

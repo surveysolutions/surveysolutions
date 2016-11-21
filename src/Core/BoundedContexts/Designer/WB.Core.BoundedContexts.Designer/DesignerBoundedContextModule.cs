@@ -68,7 +68,6 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IQuestionnaireViewFactory>().To<QuestionnaireViewFactory>();
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
-            this.Bind<IQuestionnaireSharedPersonsFactory>().To<QuestionnaireSharedPersonsFactory>();
             this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
             this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
             this.Bind<ITranslationsService>().To<TranslationsService>();

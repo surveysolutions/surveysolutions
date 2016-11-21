@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Membership;
 
@@ -21,29 +20,23 @@ namespace WB.UI.Designer.Api.Headquarters
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
-        private readonly IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly IQuestionnaireHelper questionnaireHelper;
         protected readonly IDesignerEngineVersionService engineVersionService;
 
         public ImportControllerBase(
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
-            IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper, 
+            IExpressionProcessorGenerator expressionProcessorGenerator, 
             IDesignerEngineVersionService engineVersionService)
         {
             this.userHelper = userHelper;
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.questionnaireHelper = questionnaireHelper;
             this.engineVersionService = engineVersionService;
         }
 

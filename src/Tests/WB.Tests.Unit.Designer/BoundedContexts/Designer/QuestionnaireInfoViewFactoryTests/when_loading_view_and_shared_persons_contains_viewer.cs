@@ -5,8 +5,10 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -15,27 +17,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 {
     internal class when_loading_view_and_shared_persons_contains_viewer : QuestionnaireInfoViewFactoryContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var questionnaireInfoViewRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(
                 x => x.GetById(questionnaireId) == CreateQuestionnaireDocument(questionnaireId, questionnaireTitle));
 
-            var questionnaireSharedPersons = new QuestionnaireSharedPersons(Guid.Parse(questionnaireId));
-            questionnaireSharedPersons.SharedPersons.Add(new SharedPerson
+            var questionnaireListViewItemStorage = new InMemoryPlainStorageAccessor<QuestionnaireListViewItem>();
+            var questionnaireListViewItem = Create.QuestionnaireListViewItem();
+            questionnaireListViewItem.SharedPersons.Add(new SharedPerson
             {
                 Id = userId,
                 Email = userEmail,
                 IsOwner = false
             });
-            var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(
-                x => x.GetById(Moq.It.IsAny<string>()) == questionnaireSharedPersons);
+            questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
 
             var accountDocument = new User { Email = userEmail };
             var accountDocumentRepository = Mock.Of<IPlainStorageAccessor<User>>(
                 x => x.GetById(userId.FormatGuid()) == accountDocument);
 
             factory = CreateQuestionnaireInfoViewFactory(repository: questionnaireInfoViewRepository,
-                sharedWith: sharedPersonsRepository, accountsDocumentReader: accountDocumentRepository);
+                questionnaireListViewItemStorage: questionnaireListViewItemStorage, accountsDocumentReader: accountDocumentRepository);
         };
 
         Because of = () => view = factory.Load(questionnaireId, userId);

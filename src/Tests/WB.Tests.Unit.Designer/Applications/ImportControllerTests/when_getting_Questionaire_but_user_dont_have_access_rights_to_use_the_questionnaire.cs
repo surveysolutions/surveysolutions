@@ -4,7 +4,9 @@ using System.Web.Http;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Shared.Web.Membership;
@@ -26,12 +28,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) ==
                      Create.QuestionnaireView(questionnaireOwnerId));
 
-            var sharedPersonsViewFactory = Mock.Of<IQuestionnaireSharedPersonsFactory>(
-                    _ => _.Load(Moq.It.IsAny<QuestionnaireSharedPersonsInputModel>()) ==
-                         Create.QuestionnaireSharedPersons(questionnaireId));
-
             importController = CreateImportController(membershipUserService: membershipUserService,
-                questionnaireViewFactory: questionnaireViewFactory, sharedPersonsViewFactory: sharedPersonsViewFactory);
+                questionnaireViewFactory: questionnaireViewFactory);
         };
 
         Because of = () =>

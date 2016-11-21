@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.Attributes;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Membership;
 
@@ -38,14 +37,12 @@ namespace WB.UI.Designer.Api.Headquarters
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireHelper questionnaireHelper,
             IDesignerEngineVersionService engineVersionService,
             QuestionnaireDowngradeService downgradeService)
-            : base(userHelper, viewFactory, questionnaireViewFactory, sharedPersonsViewFactory,
-                questionnaireVerifier, expressionProcessorGenerator, questionnaireHelper, engineVersionService)
+            : base(userHelper, viewFactory, questionnaireViewFactory, 
+                questionnaireVerifier, expressionProcessorGenerator, engineVersionService)
         {
             this.zipUtils = zipUtils;
             this.downgradeService = downgradeService;
