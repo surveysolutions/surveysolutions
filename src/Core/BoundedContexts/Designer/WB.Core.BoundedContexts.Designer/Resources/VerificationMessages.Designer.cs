@@ -1432,6 +1432,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subordinate levels in a nested roster are based on the same parent question. Try revising, such rosters might lead to problems in data collection..
+        /// </summary>
+        internal static string WB0234_RosterInRosterWithSameSourceQuestion {
+            get {
+                return ResourceManager.GetString("WB0234_RosterInRosterWithSameSourceQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {

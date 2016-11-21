@@ -56,6 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<MultyOptionsQuestion>(MoreThan20Options, "WB0231", VerificationMessages.WB0231_MultiOptionWithMoreThan20Options),
             WarningForCollection(FiveOrMoreQuestionsWithSameEnabling, "WB0232", VerificationMessages.WB0232_FiveOrMoreQuestionsWithSameEnabling),
             Warning<IGroup>(NestedRosterDegree3OrMore, "WB0233", VerificationMessages.WB0233_NestedRosterDegree3OrMore),
+            Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -67,6 +68,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
+
+        private static bool RosterInRosterWithSameSourceQuestion(IGroup group)
+        {
+            if (group.IsRoster && group.RosterSizeQuestionId.HasValue)
+            {
+                return
+                    group.UnwrapReferences(x => x.GetParent() as IGroup)
+                        .Any(parent => parent != group && parent.IsRoster && parent.RosterSizeQuestionId == group.RosterSizeQuestionId);
+            }
+
+            return false;
+        }
 
         private static bool NestedRosterDegree3OrMore(IGroup group)
             => group.IsRoster
