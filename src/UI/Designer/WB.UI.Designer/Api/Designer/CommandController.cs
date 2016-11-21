@@ -197,16 +197,19 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage UpdateTranslation(TranslationModel model)
         {
             var commandType = typeof(AddOrUpdateTranslation).Name;
-            AddOrUpdateTranslation command;
+            AddOrUpdateTranslation command; 
             try
             {
                 command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);
                 if (model.File != null && model.File.Buffer?.Length > 0)
                 {
-                    command.TranslationId = command.TranslationId;
                     this.translationsService.Store(command.QuestionnaireId,
                         command.TranslationId,
                         model.File.Buffer);
+                }
+                else
+                {
+                    command.TranslationId = command.OldTranslationId.Value;
                 }
             }
             catch (FormatException e)
