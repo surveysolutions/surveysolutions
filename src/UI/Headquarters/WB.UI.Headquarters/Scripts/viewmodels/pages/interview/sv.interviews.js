@@ -99,14 +99,29 @@
 
         var filteredItems = self.GetSelectedItemsAfterFilter(function (item) { return item.CanReject(); });
         var isNeedShowAssignInterviewers = filteredItems.some(function (item) { return item.IsNeedInterviewerAssign(); });
+        var countReadyToReject = 0;
+        for (var i = 0; i < filteredItems.length; i++) {
+            countReadyToReject += (!filteredItems[i].IsNeedInterviewerAssign());
+        }
+        var countAllInterviewsToReject = filteredItems.length;
+        var countInterviewsToReject = ko.observable(countReadyToReject);
+
         var model = {
-            items: filteredItems,
+            CountInterviewsToReject: countInterviewsToReject,
             Users: self.CreateUsersViewModel(),
-            StoreInteviewer: function () { },
-            IsNeedShowAssignInterviewers: isNeedShowAssignInterviewers
+            StoreInteviewer: function () {
+                model.Users.AssignTo() == undefined
+                    ? countInterviewsToReject(countReadyToReject)
+                    : countInterviewsToReject(countAllInterviewsToReject);
+            },
+            IsNeedShowAssignInterviewers: isNeedShowAssignInterviewers,
+            ClearAssignTo: function () {
+                model.Users.AssignTo(undefined);
+                countInterviewsToReject(countReadyToReject);
+            }
         }
 
-        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
+        var messageHtml = $(messageTemplateId).html(); 
 
         if (filteredItems.length === 0) {
             bootbox.alert(messageHtml);
@@ -133,7 +148,7 @@
             }
         });
 
-        ko.applyBindings(model, $(".reject-intervieweer")[0]);
+        ko.applyBindings(model, $(".reject-interviewer")[0]);
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.SVInterviews, Supervisor.VM.InterviewsBase);
