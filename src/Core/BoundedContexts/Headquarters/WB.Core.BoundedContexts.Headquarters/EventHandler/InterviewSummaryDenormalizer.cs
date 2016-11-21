@@ -189,6 +189,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interview.TeamLeadId = @event.Payload.SupervisorId;
                 interview.TeamLeadName = supervisorName;
                 interview.IsAssignedToInterviewer = false;
+                interview.ReceivedByInterviewer = false;
             });
         }
 
