@@ -630,4 +630,7 @@
   <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
     <value>The same long enablement condition is used in several questions. You might want to create a Boolean variable to simplify the code management.</value>
   </data>
+  <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+    <value>The same long validation condition is used in several questions. You might want to create a Boolean variable to simplify the code management.</value>
+  </data>
 </root>

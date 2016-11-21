@@ -278,6 +278,48 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0235");
 
         [Test]
+        public void three_questions_with_same_long_validation()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition(new string(Enumerable.Repeat('x', 100).ToArray())) }),
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition(new string(Enumerable.Repeat('x', 100).ToArray())) }),
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition(new string(Enumerable.Repeat('x', 100).ToArray())) }),
+                })
+                .ExpectWarning("WB0236");
+
+        [Test]
+        public void questions_with_three_same_long_validations()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(validationConditions: new []
+                    {
+                        Create.ValidationCondition(new string(Enumerable.Repeat('x', 100).ToArray())),
+                        Create.ValidationCondition(new string(Enumerable.Repeat('x', 100).ToArray())),
+                        Create.ValidationCondition(new string(Enumerable.Repeat('x', 100).ToArray())),
+                    }),
+                })
+                .ExpectNoWarning("WB0236");
+
+        [Test]
+        public void two_questions_with_same_long_validation()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition(new string(Enumerable.Repeat('x', 100).ToArray())) }),
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition(new string(Enumerable.Repeat('x', 100).ToArray())) }),
+                })
+                .ExpectNoWarning("WB0236");
+
+        [Test]
+        public void three_questions_with_same_short_validation()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition(new string(Enumerable.Repeat('x', 10).ToArray())) }),
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition(new string(Enumerable.Repeat('x', 10).ToArray())) }),
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition(new string(Enumerable.Repeat('x', 10).ToArray())) }),
+                })
+                .ExpectNoWarning("WB0236");
+
+        [Test]
         public void five_questions_with_same_enablement()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
