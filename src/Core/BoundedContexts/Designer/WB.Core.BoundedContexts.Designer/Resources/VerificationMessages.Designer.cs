@@ -1450,6 +1450,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The same long validation condition is used in several questions. You might want to create a Boolean variable to simplify the code management..
+        /// </summary>
+        internal static string WB0236_FewQuestionsWithSameLongValidation {
+            get {
+                return ResourceManager.GetString("WB0236_FewQuestionsWithSameLongValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation condition #{0} refers to a future question. Consider reversing the order..
         /// </summary>
         internal static string WB0250_ValidationConditionRefersToAFutureQuestion {
