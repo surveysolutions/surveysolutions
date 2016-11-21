@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -215,6 +216,11 @@ namespace WB.Tests.Unit.TestFactories
         public SwitchTranslation SwitchTranslation(string language = null)
         {
             return new SwitchTranslation(Guid.Empty, language, Guid.NewGuid());
+        }
+
+        public CreateInterviewWithPreloadedData CreateInterviewWithPreloadedData(PreloadedLevelDto[] data = null)
+        {
+            return new CreateInterviewWithPreloadedData(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(data ?? new PreloadedLevelDto[0]), DateTime.Now, Guid.NewGuid(), null);
         }
     }
 }
