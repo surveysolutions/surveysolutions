@@ -188,6 +188,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interview.ResponsibleRole = UserRoles.Supervisor;
                 interview.TeamLeadId = @event.Payload.SupervisorId;
                 interview.TeamLeadName = supervisorName;
+                interview.IsAssignedToInterviewer = false;
             });
         }
 
@@ -267,6 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 interview.ResponsibleId = @event.Payload.InterviewerId;
                 interview.ResponsibleName = interviewerName;
                 interview.ResponsibleRole = UserRoles.Operator;
+                interview.IsAssignedToInterviewer = true;
 
                 interview.ReceivedByInterviewer = false;
             });
