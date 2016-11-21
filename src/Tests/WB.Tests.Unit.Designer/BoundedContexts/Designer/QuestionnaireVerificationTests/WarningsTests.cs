@@ -366,6 +366,38 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0219");
 
         [Test]
+        public void roster_inside_roster_with_same_source_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111"), children: new[]
+                    {
+                        Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                    }),
+                })
+                .ExpectWarning("WB0234");
+
+        [Test]
+        public void roster_near_roster_with_same_source_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                    Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                })
+                .ExpectNoWarning("WB0234");
+
+        [Test]
+        public void roster_inside_another_roster_but_with_same_source_question()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Roster(children: new[]
+                    {
+                        Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                    }),
+                    Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111")),
+                })
+                .ExpectNoWarning("WB0234");
+
+        [Test]
         public void roster_inside_roster()
             => Create.QuestionnaireDocumentWithOneChapter(new[]
                 {
