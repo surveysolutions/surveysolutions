@@ -624,4 +624,7 @@
   <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
     <value>Nested roster with three or more degrees of nesting. Try avoiding such complex structures that might lead to problems in data collection.</value>
   </data>
+  <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+    <value>Subordinate levels in a nested roster are based on the same parent question. Try revising, such rosters might lead to problems in data collection.</value>
+  </data>
 </root>
