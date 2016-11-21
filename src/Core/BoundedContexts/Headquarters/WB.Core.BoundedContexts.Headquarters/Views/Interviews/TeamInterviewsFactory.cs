@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                         || x.Status == InterviewStatus.RejectedBySupervisor,
                     CanApprove = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
                     CanReject = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
-                    IsNeedInterviewerAssign = true,
+                    IsNeedInterviewerAssign = !x.IsAssignedToInterviewer,
                     CreatedOnClient = x.WasCreatedOnClient,
                     ReceivedByInterviewer = x.ReceivedByInterviewer
                 }).ToList();

@@ -452,7 +452,7 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-	<Content Include="Dependencies\build\*.js" />
+    <Content Include="Dependencies\build\*.js" />
     <Content Include="Dependencies\build\*.css" />
     <Content Include="Dependencies\fonts\RobotoBold.svg" />
     <Content Include="Dependencies\fonts\RobotoItalic.svg" />
@@ -1361,6 +1361,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M003_RemoveFeedTables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M004_RemoveOldSyncTables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M006_AddSortOrderToFeaturedQuestions.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
