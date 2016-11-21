@@ -394,6 +394,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
         }
 
+        public void RejectToInterviewer(Guid userId, Guid interviewerId, string comment, DateTime rejectTime)
+        {
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
+                InterviewStatus.ApprovedBySupervisor,
+                InterviewStatus.RejectedByHeadquarters);
+
+            this.ApplyEvent(new InterviewRejected(userId, comment, rejectTime));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
+            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, rejectTime));
+        }
+
         public void HqApprove(Guid userId, string comment)
         {
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);

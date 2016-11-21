@@ -25,6 +25,7 @@
             removeFlagFromAnswer: "RemoveFlagFromAnswerCommand",
             approveInterviewCommand: "ApproveInterviewCommand",
             rejectInterviewCommand: "RejectInterviewCommand",
+            rejectInterviewToInterviewerCommand: "RejectInterviewToInterviewerCommand",
 
             hQApproveInterviewCommand: "HqApproveInterviewCommand",
             hQRejectInterviewCommand: "HqRejectInterviewCommand",
