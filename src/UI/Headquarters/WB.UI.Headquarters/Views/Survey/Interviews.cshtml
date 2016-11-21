@@ -162,26 +162,28 @@
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-reject-template">
-        @Html.Raw(string.Format(Interviews.RejectConfirmMessage,
-            "<span class='text-normal' data-bind='text: items.length'></span>",
-            InterviewStatus.Completed.ToLocalizeString(),
-            InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
-        <div data-bind="visible: IsNeedShowAssignInterviewers">
-            <br />
-            <br />
-            Some interviews don't have interviewers to receive it. Please select interviewer for assign this interviews on it.
-            <br />
-            <div class="btn-group">
-                <div class="input-group">
-                    <input class="form-control reject-intervieweer" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
-                    <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                    <div class="input-group-btn" data-bind="click: Users.ClearAssignTo">
-                        <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+        <div class='reject-interviewer'>
+            @Html.Raw(string.Format(Interviews.RejectConfirmMessage,
+                "<span class='text-normal' data-bind='text: CountInterviewsToReject'></span>",
+                InterviewStatus.Completed.ToLocalizeString(),
+                InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
+            <div data-bind="visible: IsNeedShowAssignInterviewers">
+                <br/>
+                <br/>
+                Some interviews don't have interviewers to receive it. Please select interviewer for assign this interviews on it.
+                <br/>
+                <div class="btn-group">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text"/>
+                        <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                        <div class="input-group-btn" data-bind="click: ClearAssignTo">
+                            <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <br />
+        <br/>
     </script>
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Interviews.ContinueConfirmMessage
