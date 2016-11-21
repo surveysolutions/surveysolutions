@@ -240,12 +240,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                     bool isQuestionsParentGroupDisabled = interviewLevel.DisabledGroups != null && IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
 
                     if (question.LinkedToQuestionId.HasValue)
-                        interviewEntity = this.interviewEntityViewFactory.BuildInterviewLinkedQuestionView(question, answeredQuestion,
-                            answersForTitleSubstitution,
-                            this.GetAvailableOptions(question, interviewLevel.RosterVector, interviewInfo, interviewLinkedQuestionOptions),
-                            isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);
+                        if(interviewInfo.Questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == question.LinkedToQuestionId.Value).QuestionType == QuestionType.TextList)
+                        {
+                            InterviewQuestion interviewQuestion = this.GetQuestion(question.LinkedToQuestionId.Value, interviewLevel, upperInterviewLevels);
+
+                            interviewEntity = this.interviewEntityViewFactory.BuildInterviewLinkedToListQuestionView(question, answeredQuestion,
+                                answersForTitleSubstitution, interviewQuestion?.Answer,
+                                isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);
+                        }
+                        else
+                            interviewEntity = this.interviewEntityViewFactory.BuildInterviewLinkedToRosterQuestionView(question, answeredQuestion,
+                                answersForTitleSubstitution,
+                                this.GetAvailableOptions(question, interviewLevel.RosterVector, interviewInfo, interviewLinkedQuestionOptions),
+                                isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);
                     else if (question.LinkedToRosterId.HasValue)
-                        interviewEntity = this.interviewEntityViewFactory.BuildInterviewLinkedQuestionView(question, answeredQuestion,
+                        interviewEntity = this.interviewEntityViewFactory.BuildInterviewLinkedToRosterQuestionView(question, answeredQuestion,
                             answersForTitleSubstitution,
                             this.GetAvailableOptionsForQuestionLinkedOnRoster(question, interviewLevel.RosterVector, interviewInfo, interviewLinkedQuestionOptions),
                             isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);

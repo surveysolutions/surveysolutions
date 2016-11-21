@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             for (int i = 0; i <= maxDepth; i++)
             {
-                foreach (var question in @event.InterviewData.Answers .Where(questionWithAnswer => questionWithAnswer.Answer != null).Where(x => x.QuestionRosterVector.Length == i))
+                foreach (var question in @event.InterviewData.Answers.Where(questionWithAnswer => questionWithAnswer.Answer != null).Where(x => x.QuestionRosterVector.Length == i))
                 {
                     this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
                 }

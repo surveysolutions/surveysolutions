@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
                     new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion));
 
-			if (questionnaire == null)
+            if (questionnaire == null)
                 throw new Exception("Questionnaire was not found");
             var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
             
@@ -279,12 +279,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         {
             var result = new Dictionary<InterviewItemId, RosterVector[]>();
 
-            var questionnaire =
-                this.questionnaireStorage.GetQuestionnaireDocument(
-                    new QuestionnaireIdentity(interview.QuestionnaireId,
-                        interview.QuestionnaireVersion));
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
+                new QuestionnaireIdentity(interview.QuestionnaireId,
+                interview.QuestionnaireVersion));
 
-            var linkedQuestions = questionnaire.Find<IQuestion>(q => q.LinkedToRosterId.HasValue || q.LinkedToQuestionId.HasValue).ToArray();
+            var linkedQuestions = questionnaire.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).ToList();
+
+            foreach (var question in questionnaire.Find<IQuestion>(q => q.LinkedToQuestionId.HasValue))
+            {
+                if(questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == question.LinkedToQuestionId.Value).QuestionType != QuestionType.TextList)
+                    linkedQuestions.Add(question);
+            }
+
             var interviewLinkedQuestionOptions = this.interviewLinkedQuestionOptionsStore.GetById(interview.InterviewId);
 
             foreach (var linkedQuestion in linkedQuestions)
