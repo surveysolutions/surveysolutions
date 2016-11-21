@@ -24,7 +24,7 @@
         var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsiblesUrl, usersToAssignUrl, $commandExecutionUrl);
         model.IsNothingSelected.subscribe(function (value) {
             if (value) {
-                model.AssignTo(undefined);
+                model.Users.AssignTo(undefined);
             }
         });
         ko.applyBindings(model);
@@ -45,7 +45,7 @@
                 <input class="form-control" placeholder="Interviewer name" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: function(){ $root.Assign(); }}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text"/>
                 <span data-bind="spinner: Users.IsAssignToLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                 <div class="input-group-btn">
-                    <button class="btn btn-default" data-bind="click: function(){ Users.AssignTo(undefined);}, disable: IsNothingSelected"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    <button class="btn btn-default" data-bind="click: Users.ClearAssignTo, disable: IsNothingSelected"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                 </div>
             </div>
         </div>
@@ -167,28 +167,23 @@
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
         <br />
-        <div class="btn-group">
+        <br />
+        Some interviews don't have interviewers to receive it. Please select interviewer for assign this interviews on it.
+        <br />
+        <div class="btn-group" data-bind="visible: IsNeedShowAssignInterviewers">
             <div class="input-group">
-                <input class="form-control reject-intervieweer" placeholder="@Common.Any" data-bind="typeahead: AssignTo, typeaheadOptions: {source: Users, displayText: function(item){return item.UserName}, afterSelect: AssignToInt }, valueupdate:'afterkeydown'" type="text" />
-                <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                <div class="input-group-btn" data-bind="click: function(){ alert('assign clear'); @*AssignTo(undefined);*@}">
+                <input class="form-control reject-intervieweer" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
+                <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                <div class="input-group-btn" data-bind="click: Users.ClearAssignTo">
                     <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                 </div>
             </div>
         </div>
-        
-        @*<script type="text/javascript">
-            $(function () {
-                alert('typeahead');
-                $(".reject-intervieweer").typeahead();
-            });
-            
-        </script>*@
+        <br />
     </script>
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Interviews.ContinueConfirmMessage
     </script>
-
 }
 
 @section filters
