@@ -502,6 +502,7 @@
     <Compile Include="SharedKernels\Enumerator\Services\InterviewViewModelFactoryTests\InterviewViewModelFactoryTest.cs" />
     <Compile Include="SharedKernels\Enumerator\SqliteStorageTests.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\CompositeCollectionInflationServiceTests\CompositeCollectionInflationServiceTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Preloading\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level0.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_option_by_value.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level__2__and_linked_question_is_on_level__3.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level1_and_linked_question_is_on_level0.cs" />
@@ -591,6 +592,7 @@
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_integer.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal_with_errors.cs" />
+    <Compile Include="TestFactories\PreloadedAnswer.cs" />
     <Compile Include="TestFactories\StorageFactory.cs" />
     <Compile Include="TestFactories\ServiceFactory.cs" />
     <Compile Include="TestFactories\FakeFactory.cs" />
