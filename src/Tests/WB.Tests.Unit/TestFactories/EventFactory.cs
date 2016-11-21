@@ -147,7 +147,7 @@ namespace WB.Tests.Unit.TestFactories
                 Create.Entity.Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty),
             });
 
-        public QuestionsEnabled QuestionsEnabled(Identity[] questions)
+        public QuestionsEnabled QuestionsEnabled(params Identity[] questions)
             => new QuestionsEnabled(questions);
 
         public QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
