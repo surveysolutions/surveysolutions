@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
@@ -25,11 +26,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
             var questionnaireDocument = Create.QuestionnaireDocument();
             var questionnaireSharedPersons = Create.QuestionnaireSharedPersons(questionnaireId);
             questionnaireSharedPersons.SharedPersons.Add(Create.SharedPerson(id: userId, email: userEmail));
-            var modificationStatisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser {Date = DateTime.Now};
 
             var accountsDocumentReader = Mock.Of<IPlainStorageAccessor<User>>(x => x.GetById(userId.FormatGuid()) == accountDocument);
             var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
-            var sharedPersonsRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireSharedPersons);
             var questionnaireChangeHistoryStorage = new InMemoryPlainStorageAccessor<QuestionnaireChangeRecord>();
             questionnaireChangeHistoryStorage.Store(
                 new QuestionnaireChangeRecord
@@ -39,9 +38,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
                     UserName = userName
                 }, "");
 
+            var questionnaireListItemStorage = new InMemoryPlainStorageAccessor<QuestionnaireListViewItem>();
+            questionnaireListItemStorage.Store(Create.QuestionnaireListViewItem(), questionnaireId.FormatGuid());
+
             factory = CreateFactory(accountsDocumentReader: accountsDocumentReader,
-                questionnaireStorage: questionnaireRepository, sharedPersonsStorage: sharedPersonsRepository,
-                questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage);
+                questionnaireStorage: questionnaireRepository, 
+                questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage,
+                questionnaireListViewItemStorage: questionnaireListItemStorage);
         };
 
         Because of = () =>

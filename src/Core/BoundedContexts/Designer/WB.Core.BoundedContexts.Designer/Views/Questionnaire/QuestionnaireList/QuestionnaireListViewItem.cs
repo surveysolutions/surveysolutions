@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual bool IsPublic { get; set; }
 
-        public virtual ISet<Guid> SharedPersons { get; set; } = new HashSet<Guid>();
+        public virtual ISet<SharedPerson> SharedPersons { get; set; } = new HashSet<SharedPerson>();
 
         public virtual string Owner { get; set; }
     }

@@ -22,16 +22,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
 
         public QuestionnaireViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
-            this.sharedPersonsStorage = sharedPersonsStorage;
             this.listItemStorage = listItemStorage;
         }
 
@@ -51,12 +48,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var sharedPersons = this.GetSharedPersons(questionnaireId);
-            if (sharedPersons.Any(x => x.Id == userId))
-                return true;
-
             var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaireListItem.IsPublic)
+                return true;
+
+            if (questionnaireListItem.SharedPersons.Any(x => x.Id == userId))
                 return true;
 
             return false;
@@ -71,7 +67,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var sharedPersons = sharedPersonsStorage.GetById(questionnaireId.FormatGuid())?.SharedPersons ?? new List<SharedPerson>();
+            var listViewItem = this.listItemStorage.GetById(questionnaireId);
+
+            var sharedPersons = listViewItem.SharedPersons;
             if (sharedPersons.Any(x => x.Id == userId))
                 return true;
 
@@ -80,9 +78,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private List<SharedPerson> GetSharedPersons(Guid questionnaireId)
         {
-            var sharedPersons = this.sharedPersonsStorage.GetById(questionnaireId.FormatGuid())?.SharedPersons ??
-                new List<SharedPerson>();
-            return sharedPersons;
+            var listViewItem = this.listItemStorage.GetById(questionnaireId);
+            var sharedPersons = listViewItem.SharedPersons;
+            return sharedPersons.ToList();
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)

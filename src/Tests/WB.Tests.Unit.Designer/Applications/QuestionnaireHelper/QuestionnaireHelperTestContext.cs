@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
@@ -10,14 +11,14 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
         protected static QuestionnaireListViewItem CreateNotDeletedQuestionnaire(Guid userGuid)
         {
             var listViewItem = new QuestionnaireListViewItem() { IsDeleted = false };
-            listViewItem.SharedPersons.Add(userGuid);
+            listViewItem.SharedPersons.Add(new SharedPerson {Id = userGuid});
             return listViewItem;
         }
 
         protected static QuestionnaireListViewItem CreateDeletedQuestionnaire(Guid userGuid)
         {
             var questionnaireListViewItem = new QuestionnaireListViewItem() { IsDeleted = true, };
-            questionnaireListViewItem.SharedPersons.Add(userGuid);
+            questionnaireListViewItem.SharedPersons.Add(new SharedPerson { Id = userGuid });
             return questionnaireListViewItem;
         }
 

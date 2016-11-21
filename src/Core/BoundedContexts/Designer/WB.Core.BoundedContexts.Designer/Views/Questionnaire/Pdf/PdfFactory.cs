@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly PdfSettings pdfSettings;
 
         public PdfFactory(
@@ -35,14 +34,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
             IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage, 
             PdfSettings pdfSettings)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
             this.accountsStorage = accountsStorage;
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
-            this.sharedPersonsStorage = sharedPersonsStorage;
             this.pdfSettings = pdfSettings;
         }
 
@@ -53,8 +50,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 return null;
             }
-            
-            var sharedPersons = sharedPersonsStorage.GetById(questionnaireId)?.SharedPersons ?? new List<SharedPerson>();
+
+            var listItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
+            var sharedPersons =  listItem.SharedPersons;
 
             var modificationStatisticsByUsers = questionnaireChangeHistoryStorage.Query(_ => _
                 .Where(x => x.QuestionnaireId == questionnaireId)
