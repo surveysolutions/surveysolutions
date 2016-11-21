@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using Moq;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
@@ -35,6 +36,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -1205,6 +1207,22 @@ namespace WB.Tests.Unit.TestFactories
             return CategoricalFixedSingleOptionAnswer.FromInt(answer);
         }
 
+        public CategoricalFixedMultiOptionAnswer MultiOptionAnswer(params int[] selectedOptions)
+        {
+            return CategoricalFixedMultiOptionAnswer.FromInts(selectedOptions);
+        }
+
+        
+        public TextListAnswer ListAnswer(params int[] answers)
+        {
+            return TextListAnswer.FromTextListAnswerRows(answers.Select(x => new TextListAnswerRow(x, $"answer #{x}")));
+        }
+
+        public TextAnswer TextQuestionAnswer(string answer)
+        {
+            return TextAnswer.FromString(answer);
+        }
+
         public CategoricalLinkedSingleOptionAnswer LinkedSingleOptionAnswer(RosterVector selectedValue)
         {
             return CategoricalLinkedSingleOptionAnswer.FromRosterVector(selectedValue);
@@ -1213,5 +1231,10 @@ namespace WB.Tests.Unit.TestFactories
         public NumericIntegerAnswer NumericIntegerAnswer(int i)
             => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
                     .NumericIntegerAnswer.FromInt(i);
+
+        public PreloadedLevelDto PreloadedLevelDto(RosterVector rosterVector, params PreloadedAnswer[] answeres)
+        {
+            return new PreloadedLevelDto(rosterVector, answeres.ToDictionary(answer => answer.Id, answer => answer.Answer));
+        }
     }
 }
