@@ -93,18 +93,14 @@ namespace WB.Tests.Unit
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
-            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
-                questionnaireIdentity,
-                Create.Entity.PlainQuestionnaire(questionnaireDocument));
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire((IQuestionnaire) Create.Entity.PlainQuestionnaire(questionnaireDocument));
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
-            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
-                questionnaireIdentity,
-                Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
 
-        private static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
+
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire)
             => Stub<IQuestionnaireStorage>.Returning(questionnaire);
 
         private static IQuestionnaireStorage QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)

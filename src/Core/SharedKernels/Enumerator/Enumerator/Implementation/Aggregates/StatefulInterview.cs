@@ -438,7 +438,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return Enumerable.Empty<string>();
         }
 
-        public bool IsEnabled(Identity entityIdentity) => !this.changedInterview.GetNodeByIdentity(entityIdentity).IsDisabled();
+        public bool IsEnabled(Identity entityIdentity)
+        {
+            var node = this.changedInterview.GetNodeByIdentity(entityIdentity);
+            // Not being disposed of ViewModels can try to update their state, but they can be removed from the tree already if roster was removed.
+            if (node == null) return false;
+            return !node.IsDisabled();
+        }
 
         public bool CreatedOnClient { get; private set; } = false;
 
