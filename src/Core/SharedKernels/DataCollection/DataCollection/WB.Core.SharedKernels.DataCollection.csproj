@@ -75,6 +75,7 @@
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
+    <Compile Include="Commands\Interview\RejectInterviewToInterviewerCommand.cs" />
     <Compile Include="Commands\Interview\SwitchTranslation.cs" />
     <Compile Include="Commands\Interview\UnapproveByHeadquartersCommand.cs" />
     <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />

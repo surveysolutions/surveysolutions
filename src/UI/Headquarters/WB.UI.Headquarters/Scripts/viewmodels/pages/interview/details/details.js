@@ -331,6 +331,9 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
     self.rejectInterview = function () {
         self.changeState(config.commands.rejectInterviewCommand);
     };
+    self.rejectInterviewToInterviewer = function () {
+        self.changeState(config.commands.rejectInterviewToInterviewerCommand);
+    };
     
     self.hQApproveInterview = function () {
         self.changeState(config.commands.hQApproveInterviewCommand);

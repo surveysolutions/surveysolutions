@@ -38,6 +38,12 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                 rejectCommand.RejectTime = DateTime.UtcNow;
             }
 
+            var rejectToInterviewerCommand = command as RejectInterviewToInterviewerCommand;
+            if (rejectToInterviewerCommand != null)
+            {
+                rejectToInterviewerCommand.RejectTime = DateTime.UtcNow;
+            }
+
             var assignCommand = command as AssignInterviewerCommand;
             if (assignCommand != null)
             {
