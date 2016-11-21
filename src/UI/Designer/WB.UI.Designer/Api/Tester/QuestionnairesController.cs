@@ -21,7 +21,6 @@ namespace WB.UI.Designer.Api.Tester
     {
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
-        private readonly IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
@@ -29,7 +28,6 @@ namespace WB.UI.Designer.Api.Tester
 
         public QuestionnairesController(IMembershipUserService userHelper,
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireListViewFactory viewFactory, 
@@ -37,7 +35,6 @@ namespace WB.UI.Designer.Api.Tester
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;

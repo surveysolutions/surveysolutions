@@ -24,7 +24,6 @@ namespace WB.UI.Designer.Api.Headquarters
     {
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
-        private readonly IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
@@ -34,7 +33,6 @@ namespace WB.UI.Designer.Api.Headquarters
 
         public HQQuestionnairesController(IMembershipUserService userHelper,
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireListViewFactory viewFactory, 
@@ -44,7 +42,6 @@ namespace WB.UI.Designer.Api.Headquarters
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
