@@ -720,6 +720,9 @@ namespace WB.Tests.Unit.TestFactories
                 Translations = translations.ToList()
             };
 
+        public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+            => this.QuestionnaireDocumentWithOneChapter(chapterId, null, children);
+
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
             => this.QuestionnaireDocumentWithOneChapter(null, null, children);
 
