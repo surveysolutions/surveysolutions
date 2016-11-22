@@ -1,14 +1,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     public static class WarningsTestsExpectations
     {
+        public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectWarning(this IQuestionnaireEntity entity, string warningCode)
+            => Create
+                .QuestionnaireDocumentWithOneChapter((IComposite)entity)
+                .ExpectWarning(warningCode);
+
         public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectWarning(this QuestionnaireDocument questionnaire, string warningCode)
             => Create
                 .QuestionnaireView(questionnaire)
@@ -40,6 +47,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             return messages;
         }
+
+        public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectNoWarning(this IQuestionnaireEntity entity, string warningCode)
+            => Create
+                .QuestionnaireDocumentWithOneChapter((IComposite) entity)
+                .ExpectNoWarning(warningCode);
 
         public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectNoWarning(this QuestionnaireDocument questionnaire, string warningCode)
             => Create

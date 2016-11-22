@@ -57,18 +57,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         [Test]
         public void variable_label_length_121()
-            => Create.QuestionnaireDocumentWithOneChapter(new[]
-                {
-                    Create.Question(variableLabel: new string(Enumerable.Repeat('a', 121).ToArray())),
-                })
+            => Create
+                .Question(variableLabel: new string(Enumerable.Repeat('a', 121).ToArray()))
                 .ExpectWarning("WB0217");
 
         [Test]
         public void variable_label_length_120()
-            => Create.QuestionnaireDocumentWithOneChapter(new[]
-                {
-                    Create.Question(variableLabel: new string(Enumerable.Repeat('a', 120).ToArray())),
-                })
+            => Create
+                .Question(variableLabel: new string(Enumerable.Repeat('a', 120).ToArray()))
                 .ExpectNoWarning("WB0217");
 
         [Test]
@@ -503,106 +499,80 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         [Test]
         public void logical_and_operator_in_question_enablement()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Question(enablementCondition: "x && y"),
-                })
+            => Create
+                .Question(enablementCondition: "x && y")
                 .ExpectNoWarning("WB0237");
 
         [Test]
         public void bitwise_and_operator_in_string_in_question_enablement()
-            => Create.QuestionnaireDocumentWithOneChapter(new[]
-                {
-                    Create.Question(enablementCondition: "x == '&'"),
-                })
+            => Create
+                .Question(enablementCondition: "x == '&'")
                 .ExpectNoWarning("WB0237");
 
         [Test]
         public void bitwise_and_operator_in_group_enablement()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Group(enablementCondition: "x & y"),
-                })
+            => Create
+                .Group(enablementCondition: "x & y")
                 .ExpectWarning("WB0237");
 
         [Test]
         public void bitwise_and_operator_in_question_validation()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Question(validationConditions: new [] { Create.ValidationCondition("x & y") }),
-                })
+            => Create
+                .Question(validationConditions: new [] { Create.ValidationCondition("x & y") })
                 .ExpectWarning("WB0237");
 
         [Test]
         public void logical_and_operator_in_question_validation()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Question(validationConditions: new [] { Create.ValidationCondition("x && y") }),
-                })
+            => Create
+                .Question(validationConditions: new [] { Create.ValidationCondition("x && y") })
                 .ExpectNoWarning("WB0237");
 
         [Test]
         public void bitwise_and_operator_in_static_text_validation()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.StaticText(validationConditions: new [] { Create.ValidationCondition("x & y") }),
-                })
+            => Create
+                .StaticText(validationConditions: new [] { Create.ValidationCondition("x & y") })
                 .ExpectWarning("WB0237");
 
         [Test]
         public void bitwise_or_operator_in_question_enablement()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Question(enablementCondition: "x | y"),
-                })
+            => Create
+                .Question(enablementCondition: "x | y")
                 .ExpectWarning("WB0238");
 
         [Test]
         public void logical_or_operator_in_question_enablement()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Question(enablementCondition: "x || y"),
-                })
+            => Create
+                .Question(enablementCondition: "x || y")
                 .ExpectNoWarning("WB0238");
 
         [Test]
         public void bitwise_or_operator_in_string_in_question_enablement()
-            => Create.QuestionnaireDocumentWithOneChapter(new[]
-                {
-                    Create.Question(enablementCondition: "x == '|'"),
-                })
+            => Create
+                .Question(enablementCondition: "x == '|'")
                 .ExpectNoWarning("WB0238");
 
         [Test]
         public void bitwise_or_operator_in_group_enablement()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Group(enablementCondition: "x | y"),
-                })
+            => Create
+                .Group(enablementCondition: "x | y")
                 .ExpectWarning("WB0238");
 
         [Test]
         public void bitwise_or_operator_in_question_validation()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Question(validationConditions: new [] { Create.ValidationCondition("x | y") }),
-                })
+            => Create
+                .Question(validationConditions: new [] { Create.ValidationCondition("x | y") })
                 .ExpectWarning("WB0238");
 
         [Test]
         public void logical_or_operator_in_question_validation()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.Question(validationConditions: new [] { Create.ValidationCondition("x || y") }),
-                })
+            => Create
+                .Question(validationConditions: new [] { Create.ValidationCondition("x || y") })
                 .ExpectNoWarning("WB0238");
 
         [Test]
         public void bitwise_or_operator_in_static_text_validation()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.StaticText(validationConditions: new [] { Create.ValidationCondition("x | y") }),
-                })
+            => Create
+                .StaticText(validationConditions: new [] { Create.ValidationCondition("x | y") })
                 .ExpectWarning("WB0238");
 
         [Test]
@@ -787,80 +757,62 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         [Test]
         public void multi_option_with_21_options()
-            => Create.QuestionnaireDocumentWithOneChapter(new[]
-                {
-                    Create.MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 21).ToList()),
-                })
+            => Create
+                .MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 21).ToList())
                 .ExpectWarning("WB0231");
 
         [Test]
         public void multi_option_with_20_options()
-            => Create.QuestionnaireDocumentWithOneChapter(new[]
-                {
-                    Create.MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 20).ToList()),
-                })
+            => Create
+                .MultipleOptionsQuestion(answersList: Enumerable.Repeat(Create.Answer(), 20).ToList())
                 .ExpectNoWarning("WB0231");
 
         [Test]
         public void single_option_with_9_options_in_combobox_mode()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.SingleOptionQuestion(
-                        isComboBox: true,
-                        answers: Enumerable.Repeat(Create.Answer(), 9).ToList()),
-                })
+            => Create
+                .SingleOptionQuestion(
+                    isComboBox: true,
+                    answers: Enumerable.Repeat(Create.Answer(), 9).ToList())
                 .ExpectWarning("WB0225");
 
         [Test]
         public void single_option_with_9_options_in_regular_mode()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.SingleOptionQuestion(
-                        isComboBox: false,
-                        answers: Enumerable.Repeat(Create.Answer(), 9).ToList()),
-                })
+            => Create
+                .SingleOptionQuestion(
+                    isComboBox: false,
+                    answers: Enumerable.Repeat(Create.Answer(), 9).ToList())
                 .ExpectNoWarning("WB0225");
 
         [Test]
         public void single_option_with_10_options_in_combobox_mode()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.SingleOptionQuestion(
-                        isComboBox: true,
-                        answers: Enumerable.Repeat(Create.Answer(), 10).ToList()),
-                })
+            => Create
+                .SingleOptionQuestion(
+                    isComboBox: true,
+                    answers: Enumerable.Repeat(Create.Answer(), 10).ToList())
                 .ExpectNoWarning("WB0225");
 
         [Test]
         public void multi_option_with_options_1_2_4_5()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.MultipleOptionsQuestion(answers: new decimal[] { 1, 2, 4, 5 }),
-                })
+            => Create
+                .MultipleOptionsQuestion(answers: new decimal[] { 1, 2, 4, 5 })
                 .ExpectWarning("WB0228");
 
         [Test]
         public void single_option_with_options_1_2_4_5()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 4, 5 }),
-                })
+            => Create
+                .SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 4, 5 })
                 .ExpectWarning("WB0228");
 
         [Test]
         public void single_option_with_options_1_4_5()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 4, 5 }),
-                })
+            => Create
+                .SingleOptionQuestion(answerCodes: new decimal[] { 1, 4, 5 })
                 .ExpectNoWarning("WB0228");
 
         [Test]
         public void single_option_with_options_1_2_3_4_5()
-            => Create.QuestionnaireDocumentWithOneChapter(new []
-                {
-                    Create.SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 3, 4, 5 }),
-                })
+            => Create
+                .SingleOptionQuestion(answerCodes: new decimal[] { 1, 2, 3, 4, 5 })
                 .ExpectNoWarning("WB0228");
     }
 }
