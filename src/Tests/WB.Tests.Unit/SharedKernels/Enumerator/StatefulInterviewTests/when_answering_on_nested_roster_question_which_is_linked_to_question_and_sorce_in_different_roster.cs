@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_answering_on_nested_roster_question_which_is_linked_to_question_and_sorce_in_different_roster : StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -60,22 +59,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         It should_linked_single_question_has_1_option = () =>
         {
-            //((TextAnswer) interview.FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId,
-            //    linkedSingleQuestionIdentity).First()).Answer.ShouldEqual(expectedLinkedOptionText);
+            interview.GetLinkedSingleOptionQuestion(linkedSingleQuestionIdentity)
+                .Options.ShouldContainOnly(Create.Entity.RosterVector(0, 1));
         };
 
         It should_linked_multi_question_has_1_option = () =>
         {
-            //((TextAnswer) interview.FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId,
-            //    linkedMultiQuestionIdentity).First()).Answer.ShouldEqual(expectedLinkedOptionText);
-        };
-
-        It should_set_empty_options_set_for_linked_question_from_unanswered_branch = () =>
-        {
-            //interview.FindAnswersOfReferencedQuestionForLinkedQuestion(
-            //    sourceOfLinkedQuestionId,
-            //    Create.Entity.Identity(linkedSingleQuestionIdentity.Id, Create.Entity.RosterVector(1)))
-            //    .ShouldBeEmpty();
+            interview.GetLinkedMultiOptionQuestion(linkedMultiQuestionIdentity)
+                .Options.ShouldContainOnly(Create.Entity.RosterVector(0, 1));
         };
 
         static StatefulInterview interview;

@@ -73,7 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 foreach (var question in @event.InterviewData.Answers.Where(questionWithAnswer => questionWithAnswer.Answer != null).Where(x => x.QuestionRosterVector.Length == i))
                 {
-                    this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector)).SetObjectAnswer(question.Answer);
+                    this.changedInterview.GetQuestion(Identity.Create(question.Id, question.QuestionRosterVector))
+                        .SetObjectAnswer(question.Answer);
                 }
 
                 foreach (var rosterDto in @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Where(x => x.OuterScopeRosterVector.Length == i))
@@ -115,7 +116,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 ?.SelectMany(answerDto => answerDto.AllComments?.Select(commentDto => ToAnswerComment(answerDto, commentDto)))
                 ?.ToList() ?? new List<AnswerComment>();
 
-            //base.ReplaceSubstitutions(this.changedInterview, this.GetQuestionnaireOrThrow(), changedQeustionIdentities);
+            base.ReplaceSubstitutions(this.changedInterview, this.GetQuestionnaireOrThrow(),
+                @event.InterviewData.Answers.Select(questionWithAnswer =>
+                    Identity.Create(questionWithAnswer.Id, questionWithAnswer.QuestionRosterVector)).ToList());
 
             base.UpdateExpressionState(sourceInterviewTree, this.changedInterview, this.ExpressionProcessorStatePrototype);
 
@@ -409,7 +412,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     HasInterviewerReply = this.HasSupervisorCommentInterviewerReply(x)
                 })
                 .OrderBy(x => x.HasInterviewerReply)
-                .Select(x => x.Id);
+                .Select(x => x.Id)
+                .Distinct();
 
             return orderedCommentedQuestions;
         }
@@ -458,7 +462,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     .Select(substitutionText => substitutionText.Text)
                     .ToList();
 
-                return question.FailedValidations.Select((failedValidation) => questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex));
+                if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
+
+                return question.FailedValidations.Select(failedValidation =>
+                    $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} " +
+                    $"[{failedValidation.FailedConditionIndex + 1}]");
+
             }
 
             var staticText =  this.changedInterview.GetStaticText(questionOrStaticTextId);
@@ -468,7 +477,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     .Select(substitutionText => substitutionText.Text)
                     .ToList();
 
-                return staticText.FailedValidations.Select((failedValidation, index) => staticTextValidationMassages.ElementAt(index));
+                if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
+
+                return question.FailedValidations.Select(failedValidation =>
+                    $"{staticTextValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} " +
+                    $"[{failedValidation.FailedConditionIndex + 1}]");
             }
 
             return Enumerable.Empty<string>();

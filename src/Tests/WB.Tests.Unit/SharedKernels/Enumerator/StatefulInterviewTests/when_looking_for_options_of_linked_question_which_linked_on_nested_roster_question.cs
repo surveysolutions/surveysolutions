@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_looking_for_options_of_linked_question_which_linked_on_nested_roster_question : StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -68,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static StatefulInterview interview;
         private static Guid interviewerId = Guid.Parse("55555555555555555555555555555555");
         private static Guid questionnaireId = Guid.Parse("44444444444444444444444444444444");
-        private static Identity linkedToQuestionIdentity = Identity.Create(Guid.Parse("33333333333333333333333333333333"), Create.Entity.RosterVector(0));
+        private static Identity linkedToQuestionIdentity = Identity.Create(Guid.Parse("33333333333333333333333333333333"), Create.Entity.RosterVector());
         private static Guid sourceOfLinkedQuestionId = Guid.Parse("22222222222222222222222222222222");
     }
 }

@@ -610,7 +610,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
         }
 
-        private void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        protected void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
         {
             IReadOnlyCollection<Guid> entitiesDependentOnRosterTitle = questionnaire.GetEntitiesDependentOnServiceVariables();
             if (entitiesDependentOnRosterTitle?.Any() ?? false)
