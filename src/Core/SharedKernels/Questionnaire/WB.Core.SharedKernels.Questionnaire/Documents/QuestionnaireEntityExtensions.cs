@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -23,6 +24,14 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             => (entity as IQuestion)?.QuestionText
             ?? (entity as IStaticText)?.Text
             ?? (entity as IGroup)?.Title;
+
+        public static IEnumerable<string> GetAllExpressions(this IQuestionnaireEntity entity)
+        {
+            var validations = (entity as IValidatable)?.ValidationConditions?.Select(validation => validation.Expression) ?? Enumerable.Empty<string>();
+            var conditions = (entity as IConditional)?.ConditionExpression.ToEnumerable();
+
+            return Enumerable.Concat(validations, conditions).Where(expression => expression != null);
+        }
 
         public static IEnumerable<IQuestionnaireEntity> GetDescendants(this IGroup group)
             => group.Children.TreeToEnumerable(child => child.Children);
