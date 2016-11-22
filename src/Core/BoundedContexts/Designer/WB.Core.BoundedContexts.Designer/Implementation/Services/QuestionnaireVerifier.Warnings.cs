@@ -41,8 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IQuestion>(VariableLableMoreThan120Characters, "WB0217", VerificationMessages.WB0217_VariableLableMoreThan120Characters),
             WarningForCollection(ConsecutiveQuestionsWithIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions),
             WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options),
-            Warning<IConditional>(RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
-            Warning<IValidatable>(RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
+            Warning<IQuestionnaireEntity>(this.RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
             Warning(NoCurrentTimeQuestions, "WB0221", VerificationMessages.WB0221_NoCurrentTimeQuestions),
             Warning<SingleQuestion>(Prefilled, "WB0222", VerificationMessages.WB0222_SingleOptionPrefilled),
             Warning<IGroup>(NotSingleSectionWithLessThan5Questions, "WB0223", VerificationMessages.WB0223_SectionWithLessThan5Questions),
@@ -59,8 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
             WarningForCollection(FewQuestionsWithSameLongEnablement, "WB0235", VerificationMessages.WB0235_FewQuestionsWithSameLongEnablement),
             WarningForCollection(FewQuestionsWithSameLongValidation, "WB0236", VerificationMessages.WB0236_FewQuestionsWithSameLongValidation),
-            Warning<IConditional>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAndOperator),
-            Warning<IValidatable>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAndOperator),
+            Warning<IQuestionnaireEntity>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAndOperator),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -73,12 +71,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
 
-        private bool BitwiseAnd(IConditional entity) => this.ContainsBitwiseAnd(entity.ConditionExpression);
-        private bool BitwiseAnd(IValidatable entity) => entity.ValidationConditions?.Any(this.ContainsBitwiseAnd) ?? false;
-        private bool ContainsBitwiseAnd(ValidationCondition validation) => this.ContainsBitwiseAnd(validation.Expression);
-
-        private bool ContainsBitwiseAnd(string expression)
-            => this.expressionProcessor.ContainsBitwiseAnd(expression);
+        private bool BitwiseAnd(IQuestionnaireEntity entity) => entity.GetAllExpressions().Any(this.expressionProcessor.ContainsBitwiseAnd);
 
         private static IEnumerable<QuestionnaireNodeReference[]> FewQuestionsWithSameLongValidation(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
@@ -196,19 +189,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool Question(IQuestionnaireEntity entity) => entity is IQuestion;
         private static bool Prefilled(IQuestion question) => question.Featured;
 
-        private static bool RowIndexInMultiOptionBasedRoster(IConditional entity, MultiLanguageQuestionnaireDocument questionnaire)
-            => UsesRowIndex(entity)
+        private bool RowIndexInMultiOptionBasedRoster(IQuestionnaireEntity entity, MultiLanguageQuestionnaireDocument questionnaire)
+            => this.UsesRowIndex(entity)
             && IsInsideMultiOptionBasedRoster(entity, questionnaire);
 
-        private static bool RowIndexInMultiOptionBasedRoster(IValidatable entity, MultiLanguageQuestionnaireDocument questionnaire)
-            => UsesRowIndex(entity)
-            && IsInsideMultiOptionBasedRoster(entity, questionnaire);
+        private bool UsesRowIndex(IQuestionnaireEntity entity) => entity.GetAllExpressions().Any(this.UsesRowIndex);
 
-        private static bool UsesRowIndex(IConditional entity)
-            => entity.ConditionExpression?.Contains("@rowindex") == true;
-
-        private static bool UsesRowIndex(IValidatable entity)
-            => entity.ValidationConditions.Any(condition => condition.Expression.Contains("@rowindex"));
+        private bool UsesRowIndex(string expression)
+        {
+            var identifiers = this.expressionProcessor.GetIdentifiersUsedInExpression(expression);
+            return identifiers.Contains("rowindex") || identifiers.Contains("@rowindex");
+        }
 
         private static bool IsInsideMultiOptionBasedRoster(IQuestionnaireEntity entity, MultiLanguageQuestionnaireDocument questionnaire)
             => entity.UnwrapReferences(x => x.GetParent()).Any(parent => IsMultiOptionBasedRoster(parent, questionnaire));
