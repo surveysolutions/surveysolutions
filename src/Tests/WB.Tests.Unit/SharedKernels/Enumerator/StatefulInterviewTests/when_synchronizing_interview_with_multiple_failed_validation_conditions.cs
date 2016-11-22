@@ -86,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         It should_return_empty_failed_condition_messages =
             () => interview.GetFailedValidationMessages(questionIdentity)
-                    .ShouldContainOnly(firstValidationMessage, thirdValidationMessage);
+                    .ShouldContainOnly($"{firstValidationMessage} [1]", $"{thirdValidationMessage} [3]");
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;

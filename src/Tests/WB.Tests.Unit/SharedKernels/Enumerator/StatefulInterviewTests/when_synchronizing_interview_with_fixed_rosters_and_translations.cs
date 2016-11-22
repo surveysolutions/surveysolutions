@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
+
     internal class when_synchronizing_interview_with_fixed_rosters: StatefulInterviewTestsContext
     {
         Establish context = () =>
@@ -43,18 +43,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             rosterSynchronizationDtoses.Add(Create.Entity.InterviewItemId(rosterId, Create.Entity.RosterVector(0)), rosters.ToArray());
 
             syncDto = Create.Entity.InterviewSynchronizationDto(questionnaireId, rosterGroupInstances: rosterSynchronizationDtoses);
-
-            eventContext = new EventContext();
         };
 
         Because of = () => interview.RestoreInterviewStateFromSyncPackage(Guid.Empty, syncDto);
 
         It should_recalculate_roster_titles = () => interview.GetTitleText(Identity.Create(substitutedQuestionId, Create.Entity.RosterVector(0))).ShouldEqual($"uses {rosterTitle}");
 
-        Cleanup things = () => eventContext.Dispose();
-
         static StatefulInterview interview;
-        static EventContext eventContext;
         static InterviewSynchronizationDto syncDto;
         static Guid substitutedQuestionId;
         static string rosterTitle;

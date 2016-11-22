@@ -4,34 +4,33 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_getting_commented_by_supervisor_questions_from_restored_from_sync_package_interview : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
-            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                =>  _.IsInterviewierQuestion(superQuestionId) == false
-                   && _.IsInterviewierQuestion(prefilledQuestionId) == false
-                   && _.IsInterviewierQuestion(hiddenQuestionId) == false
-                   && _.IsInterviewierQuestion(disabledQuestionId) == true
-                   && _.IsInterviewierQuestion(interQuestionId) == true
-                   && _.IsInterviewierQuestion(repliedByInterQuestionId) == true
-                   && _.GetParentGroup(repliedByInterQuestionId) == parentGroupId
-                   && _.GetParentGroup(interQuestionId) == parentGroupId
-                   && _.GetParentGroup(interFromMissingGroupQuestionId) == missingParentGroupId
-                   && _.HasGroup(parentGroupId) == true
-                   && _.HasGroup(missingParentGroupId) == false
-                   );
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new[]
+            {
+                Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(1)}, children: new[]
+                {
+                    Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(0)}, children: new[]
+                    {
+                        Create.Entity.NumericIntegerQuestion(superQuestionId, scope: QuestionScope.Supervisor),
+                        Create.Entity.NumericIntegerQuestion(prefilledQuestionId, isPrefilled: true),
+                        Create.Entity.NumericIntegerQuestion(hiddenQuestionId, scope: QuestionScope.Hidden),
+                        Create.Entity.NumericIntegerQuestion(disabledQuestionId),
+                        Create.Entity.NumericIntegerQuestion(interQuestionId),
+                        Create.Entity.NumericIntegerQuestion(repliedByInterQuestionId),
+                    })
+                })
+            });
 
-            interview = Create.AggregateRoot.StatefulInterview(
-                questionnaireId: questionnaireId,
-                questionnaireRepository: questionnaireRepository);
+            interview = Create.AggregateRoot.StatefulInterview(userId: userId,
+                questionnaireRepository: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
             var answersDtos = new[]
             {
@@ -40,8 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.AnsweredQuestionSynchronizationDto(hiddenQuestionId, rosterVector, 3, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(disabledQuestionId, rosterVector, 4, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
                 Create.Entity.AnsweredQuestionSynchronizationDto(repliedByInterQuestionId, rosterVector, 5, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor), Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Operator)),
-                Create.Entity.AnsweredQuestionSynchronizationDto(interQuestionId, rosterVector, 6, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor)),
-                Create.Entity.AnsweredQuestionSynchronizationDto(interFromMissingGroupQuestionId, rosterVector, 7, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor))
+                Create.Entity.AnsweredQuestionSynchronizationDto(interQuestionId, rosterVector, 6, Create.Entity.CommentSynchronizationDto(userRole: UserRoles.Supervisor))
             };
 
             interview.RestoreInterviewStateFromSyncPackage(userId, Create.Entity.InterviewSynchronizationDto(
@@ -71,9 +69,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static readonly Guid disabledQuestionId = Guid.Parse("00000000000000000000000000000006");
         private static readonly Guid interQuestionId = Guid.Parse("00000000000000000000000000000007");
         private static readonly Guid repliedByInterQuestionId = Guid.Parse("00000000000000000000000000000008");
-        private static readonly Guid interFromMissingGroupQuestionId = Guid.Parse("00000000000000000000000000000009");
-        private static readonly Guid parentGroupId = Guid.Parse("11111111111111111111111111111111");
-        private static readonly Guid missingParentGroupId = Guid.Parse("22222222222222222222222222222222");
         private static readonly decimal[] rosterVector = new decimal[] { 1m, 0m };
         private static readonly Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
