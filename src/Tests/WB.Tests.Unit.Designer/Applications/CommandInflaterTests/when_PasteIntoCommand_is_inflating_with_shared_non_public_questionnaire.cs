@@ -3,7 +3,9 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code.Implementation;
@@ -15,26 +17,24 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteIntoCommand_is_inflating_with_shared_non_public_questionnaire_but_shared : CommandInflaterTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var membershipUserService = Mock.Of<IMembershipUserService>(
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));
 
-            var questionnaire = CreateQuestionnaireDocument(questoinnaireId, questionnaiteTitle, ownerId, false);
+            var questionnaire = CreateQuestionnaireDocument(questionnaireId, questionnaiteTitle, ownerId, false);
             var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
                     => storage.GetById(it.IsAny<string>()) == questionnaire);
 
-            var shared = new QuestionnaireSharedPersons(questoinnaireId);
-            shared.SharedPersons.Add(new SharedPerson() {UserId = actionUserId});
+            var listStorage = new InMemoryPlainStorageAccessor<QuestionnaireListViewItem>();
+            var questionnaireListViewItem = Create.QuestionnaireListViewItem();
+            questionnaireListViewItem.SharedPersons.Add(Create.SharedPerson(actionUserId));
+            listStorage.Store(questionnaireListViewItem, questionnaireId);
 
-            var sharedPersons =
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(
-                    s => s.GetById(it.IsAny<string>()) == shared);
+            command = new PasteInto(questionnaireId, entityId, questionnaireId, pasteAfterId, entityId, actionUserId);
 
-            command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, actionUserId);
-
-            commandInflater = CreateCommandInflater(membershipUserService, documentStorage, sharedPersons);
+            commandInflater = CreateCommandInflater(membershipUserService, documentStorage, listStorage);
         };
 
         Because of = () =>
@@ -44,11 +44,11 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
            command.SourceDocument.ShouldNotBeNull();
 
         It should_questionnarie_id_as_provided = () =>
-            command.SourceDocument.PublicKey.ShouldEqual(questoinnaireId);
+            command.SourceDocument.PublicKey.ShouldEqual(questionnaireId);
 
         private static CommandInflater commandInflater;
         private static PasteInto command;
-        private static Guid questoinnaireId = Guid.Parse("13333333333333333333333333333333");
+        private static Guid questionnaireId = Guid.Parse("13333333333333333333333333333333");
 
         private static Guid entityId = Guid.Parse("23333333333333333333333333333333");
         private static Guid pasteAfterId = Guid.Parse("43333333333333333333333333333333");
