@@ -164,7 +164,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             // assert
             var questionnaireListViewItem = listViewItemsStorage.GetById(questionnaireIdFormatted);
             Assert.That(questionnaireListViewItem.SharedPersons, Is.Not.Null);
-            Assert.That(questionnaireListViewItem.SharedPersons.First().Id, Is.EqualTo(sharedWithUserId));
+            Assert.That(questionnaireListViewItem.SharedPersons.First().UserId, Is.EqualTo(sharedWithUserId));
             Assert.That(questionnaireListViewItem.SharedPersons.First().Email, Is.EqualTo(sharedWithEmail));
             Assert.That(questionnaireListViewItem.SharedPersons.First().IsOwner, Is.False);
             Assert.That(questionnaireListViewItem.SharedPersons.First().ShareType, Is.EqualTo(shareType));

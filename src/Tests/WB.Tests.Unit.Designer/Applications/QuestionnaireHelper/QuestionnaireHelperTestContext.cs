@@ -11,14 +11,14 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
         protected static QuestionnaireListViewItem CreateNotDeletedQuestionnaire(Guid userGuid)
         {
             var listViewItem = new QuestionnaireListViewItem() { IsDeleted = false };
-            listViewItem.SharedPersons.Add(new SharedPerson {Id = userGuid});
+            listViewItem.SharedPersons.Add(new SharedPerson {UserId = userGuid});
             return listViewItem;
         }
 
         protected static QuestionnaireListViewItem CreateDeletedQuestionnaire(Guid userGuid)
         {
             var questionnaireListViewItem = new QuestionnaireListViewItem() { IsDeleted = true, };
-            questionnaireListViewItem.SharedPersons.Add(new SharedPerson { Id = userGuid });
+            questionnaireListViewItem.SharedPersons.Add(new SharedPerson { UserId = userGuid });
             return questionnaireListViewItem;
         }
 

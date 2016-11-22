@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
                     => storage.GetById(it.IsAny<string>()) == questionnaire);
 
             var sharedPersons = new QuestionnaireSharedPersons(questoinnaireId);
-            sharedPersons.SharedPersons.Add(new SharedPerson() { Id = Guid.NewGuid() });
+            sharedPersons.SharedPersons.Add(new SharedPerson() { UserId = Guid.NewGuid() });
             var sharedPersonsStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(storage
                     => storage.GetById(it.IsAny<string>()) == sharedPersons);
 

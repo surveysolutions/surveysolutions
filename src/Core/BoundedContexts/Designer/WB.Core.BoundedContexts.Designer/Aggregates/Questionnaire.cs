@@ -64,8 +64,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private List<SharedPerson> sharedPersons = new List<SharedPerson>();
-        private IEnumerable<Guid> ReadOnlyUsersIds => sharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.Id);
-        private IEnumerable<Guid> SharedUsersIds => sharedPersons.Select(p => p.Id);
+        private IEnumerable<Guid> ReadOnlyUsersIds => sharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.UserId);
+        private IEnumerable<Guid> SharedUsersIds => sharedPersons.Select(p => p.UserId);
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
         public IEnumerable<SharedPerson> SharedPersons => this.sharedPersons;
@@ -1648,7 +1648,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.sharedPersons.Add(new SharedPerson()
             {
-                Id = personId,
+                UserId = personId,
                 ShareType = shareType,
                 Email = email,
             });
@@ -1665,7 +1665,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Couldn't remove user, because it doesn't exist in share list");
             }
 
-            this.sharedPersons.RemoveAll(sp => sp.Id == personId);
+            this.sharedPersons.RemoveAll(sp => sp.UserId == personId);
 
         }
 

@@ -85,9 +85,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 LastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).First(),
                 SharedPersons = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
                 {
-                    UserId = person.Id,
-                    Name = this.accountsStorage.GetById(person.Id.FormatGuid())?.UserName,
-                    Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.Id)?.Date
+                    UserId = person.UserId,
+                    Name = this.accountsStorage.GetById(person.UserId.FormatGuid())?.UserName,
+                    Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
                 }).Where(sharedPerson => sharedPerson.Name != requestedByUserName),
                 AllItems = allItems,
                 ItemsWithLongConditions = CollectEntitiesWithLongConditions(allItems, pdfSettings),

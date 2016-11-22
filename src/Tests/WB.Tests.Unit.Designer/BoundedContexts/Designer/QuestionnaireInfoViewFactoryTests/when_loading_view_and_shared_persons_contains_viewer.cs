@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             var questionnaireListViewItem = Create.QuestionnaireListViewItem();
             questionnaireListViewItem.SharedPersons.Add(new SharedPerson
             {
-                Id = userId,
+                UserId = userId,
                 Email = userEmail,
                 IsOwner = false
             });
