@@ -2,7 +2,6 @@
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -12,10 +11,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        private InterviewTree changedInterviewImpl;
-        protected InterviewTree changedInterview
-            => this.changedInterviewImpl ??
-               (this.changedInterviewImpl = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
+        private InterviewTree treeImpl;
+        protected InterviewTree Tree
+            => this.treeImpl ??
+               (this.treeImpl = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
 
         public virtual void Apply(InterviewReceivedByInterviewer @event)
         {
@@ -45,43 +44,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(TextQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsText.SetAnswer(TextAnswer.FromString(@event.Answer));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsText.SetAnswer(TextAnswer.FromString(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateTextAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
         public virtual void Apply(QRBarcodeQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(@event.Answer));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateQrBarcodeAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
         public virtual void Apply(PictureQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsMultimedia.SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsMultimedia.SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName));
             this.ExpressionProcessorStatePrototype.UpdateMediaAnswer(@event.QuestionId, @event.RosterVector, @event.PictureFileName);
         }
 
         public virtual void Apply(NumericRealQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsDouble.SetAnswer(NumericRealAnswer.FromDecimal(@event.Answer));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsDouble.SetAnswer(NumericRealAnswer.FromDecimal(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(@event.QuestionId, @event.RosterVector, (double)@event.Answer);
         }
 
         public virtual void Apply(NumericIntegerQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsInteger.SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsInteger.SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
         public virtual void Apply(DateTimeQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(@event.Answer));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(@event.Answer));
             this.ExpressionProcessorStatePrototype.UpdateDateAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
 
         public virtual void Apply(SingleOptionQuestionAnswered @event)
         {
-            var question = this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
+            var question = this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
 
             question.AsSingleFixedOption?.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
             question.AsSingleLinkedToList?.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
@@ -91,7 +90,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(MultipleOptionsQuestionAnswered @event)
         {
-            var question =  this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
+            var question =  this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector));
             question.AsMultiFixedOption?.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
             question.AsMultiLinkedToList?.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
 
@@ -100,13 +99,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(YesNoQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions));
             this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(@event.QuestionId, @event.RosterVector, YesNoAnswer.FromAnsweredYesNoOptions(@event.AnsweredOptions).ToYesNoAnswersOnly());
         }
 
         public virtual void Apply(GeoLocationQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsGps.SetAnswer(GpsAnswer.FromGeoPosition(new GeoPosition(
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsGps.SetAnswer(GpsAnswer.FromGeoPosition(new GeoPosition(
                     @event.Latitude, @event.Longitude, @event.Accuracy, @event.Altitude, @event.Timestamp)));
 
             this.ExpressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.RosterVector, @event.Latitude,
@@ -115,29 +114,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(TextListQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(@event.Answers));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(@event.Answers));
             this.ExpressionProcessorStatePrototype.UpdateTextListAnswer(@event.QuestionId, @event.RosterVector, @event.Answers);
 
             //calculate referenced linked questions
-            CalculateLinkedToListOptionsOnTree(this.changedInterview, false);
+            CalculateLinkedToListOptionsOnTree(this.Tree, false);
         }
 
         public virtual void Apply(SingleOptionLinkedQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsSingleLinkedOption.SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsSingleLinkedOption.SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(@event.SelectedRosterVector));
             this.ExpressionProcessorStatePrototype.UpdateLinkedSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVector);
         }
 
         public virtual void Apply(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsMultiLinkedOption.SetAnswer(CategoricalLinkedMultiOptionAnswer.FromDecimalArrayArray(@event.SelectedRosterVectors));
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsMultiLinkedOption.SetAnswer(CategoricalLinkedMultiOptionAnswer.FromDecimalArrayArray(@event.SelectedRosterVectors));
             this.ExpressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedRosterVectors);
         }
 
         public virtual void Apply(AnswersDeclaredValid @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.changedInterview.GetQuestion(questionIdentity).MarkValid();
+                this.Tree.GetQuestion(questionIdentity).MarkValid();
 
             this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions);
         }
@@ -149,9 +148,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var failedValidationCondition in @event.FailedValidationConditions)
                 {
                     if (failedValidationCondition.Value?.Count > 0)
-                        this.changedInterview.GetQuestion(failedValidationCondition.Key).MarkInvalid(failedValidationCondition.Value);
+                        this.Tree.GetQuestion(failedValidationCondition.Key).MarkInvalid(failedValidationCondition.Value);
                     else
-                        this.changedInterview.GetQuestion(failedValidationCondition.Key).MarkInvalid();
+                        this.Tree.GetQuestion(failedValidationCondition.Key).MarkInvalid();
                 }
 
                 this.ExpressionProcessorStatePrototype.ApplyFailedValidations(@event.FailedValidationConditions);
@@ -159,7 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             else //handling of old events
             {
                 foreach (var invalidQuestionIdentity in @event.Questions)
-                    this.changedInterview.GetQuestion(invalidQuestionIdentity).MarkInvalid();
+                    this.Tree.GetQuestion(invalidQuestionIdentity).MarkInvalid();
 
                 this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.Questions);
             }
@@ -168,7 +167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(StaticTextsDeclaredValid @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.changedInterview.GetStaticText(staticTextIdentity).MarkValid();
+                this.Tree.GetStaticText(staticTextIdentity).MarkValid();
             this.ExpressionProcessorStatePrototype.DeclareStaticTextValid(@event.StaticTexts);
         }
 
@@ -177,7 +176,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var staticTextIdentity in staticTextsConditions.Keys)
-                this.changedInterview.GetStaticText(staticTextIdentity).MarkInvalid(staticTextsConditions[staticTextIdentity]);
+                this.Tree.GetStaticText(staticTextIdentity).MarkInvalid(staticTextsConditions[staticTextIdentity]);
 
             this.ExpressionProcessorStatePrototype.ApplyStaticTextFailedValidations(staticTextsConditions);
         }
@@ -185,13 +184,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Apply(LinkedOptionsChanged @event)
         {
             foreach (var linkedQuestion in @event.ChangedLinkedQuestions)
-                this.changedInterview.GetQuestion(linkedQuestion.QuestionId).AsLinked.SetOptions(linkedQuestion.Options);
+                this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinked.SetOptions(linkedQuestion.Options);
         }
 
         public virtual void Apply(GroupsDisabled @event)
         {
             foreach (var groupIdentity in @event.Groups)
-                this.changedInterview.GetGroup(groupIdentity).Disable();
+                this.Tree.GetGroup(groupIdentity).Disable();
 
             this.ExpressionProcessorStatePrototype.DisableGroups(@event.Groups);
         }
@@ -199,7 +198,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(GroupsEnabled @event)
         {
             foreach (var groupIdentity in @event.Groups)
-                this.changedInterview.GetGroup(groupIdentity)?.Enable();
+                this.Tree.GetGroup(groupIdentity)?.Enable();
 
             this.ExpressionProcessorStatePrototype.EnableGroups(@event.Groups);
         }
@@ -207,7 +206,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(VariablesDisabled @event)
         {
             foreach (var variableIdentity in @event.Variables)
-                this.changedInterview.GetVariable(variableIdentity).Disable();
+                this.Tree.GetVariable(variableIdentity).Disable();
 
             this.ExpressionProcessorStatePrototype.DisableVariables(@event.Variables);
         }
@@ -215,7 +214,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(VariablesEnabled @event)
         {
             foreach (var variableIdentity in @event.Variables)
-                this.changedInterview.GetVariable(variableIdentity)?.Enable();
+                this.Tree.GetVariable(variableIdentity)?.Enable();
 
             this.ExpressionProcessorStatePrototype.EnableVariables(@event.Variables);
         }
@@ -224,7 +223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var changedVariableValueDto in @event.ChangedVariables)
             {
-                this.changedInterview.GetVariable(changedVariableValueDto.Identity).SetValue(changedVariableValueDto.NewValue);
+                this.Tree.GetVariable(changedVariableValueDto.Identity).SetValue(changedVariableValueDto.NewValue);
                 this.ExpressionProcessorStatePrototype.UpdateVariableValue(changedVariableValueDto.Identity, changedVariableValueDto.NewValue);
             }
         }
@@ -232,7 +231,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(QuestionsDisabled @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.changedInterview.GetQuestion(questionIdentity).Disable();
+                this.Tree.GetQuestion(questionIdentity).Disable();
 
             this.ExpressionProcessorStatePrototype.DisableQuestions(@event.Questions);
         }
@@ -240,7 +239,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(QuestionsEnabled @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.changedInterview.GetQuestion(questionIdentity)?.Enable();
+                this.Tree.GetQuestion(questionIdentity)?.Enable();
 
             this.ExpressionProcessorStatePrototype.EnableQuestions(@event.Questions);
         }
@@ -248,7 +247,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(StaticTextsEnabled @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.changedInterview.GetStaticText(staticTextIdentity)?.Enable();
+                this.Tree.GetStaticText(staticTextIdentity)?.Enable();
             
             this.ExpressionProcessorStatePrototype.EnableStaticTexts(@event.StaticTexts);
         }
@@ -256,15 +255,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(StaticTextsDisabled @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.changedInterview.GetStaticText(staticTextIdentity).Disable();
+                this.Tree.GetStaticText(staticTextIdentity).Disable();
 
             this.ExpressionProcessorStatePrototype.DisableStaticTexts(@event.StaticTexts);
         }
 
         public virtual void Apply(AnswerCommented @event)
         {
-            this.changedInterview.AnswerComments.Add(new AnswerComment(@event.UserId, @event.CommentTime, @event.Comment,
-                Identity.Create(@event.QuestionId, @event.RosterVector)));
+            var commentByQuestion = Identity.Create(@event.QuestionId, @event.RosterVector);
+
+            this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(new AnswerComment(@event.UserId, @event.CommentTime, @event.Comment,
+                commentByQuestion));
         }
 
         public virtual void Apply(FlagSetToAnswer @event) { }
@@ -279,13 +280,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(SubstitutionTitlesChanged @event)
         {
             foreach (var @group in @event.Groups)
-                this.changedInterview.GetGroup(@group).ReplaceSubstitutions();
+                this.Tree.GetGroup(@group).ReplaceSubstitutions();
 
             foreach (var staticText in @event.StaticTexts)
-                this.changedInterview.GetStaticText(staticText).ReplaceSubstitutions();
+                this.Tree.GetStaticText(staticText).ReplaceSubstitutions();
 
             foreach (var question in @event.Questions)
-                this.changedInterview.GetQuestion(question).ReplaceSubstitutions();
+                this.Tree.GetQuestion(question).ReplaceSubstitutions();
         }
 
         public virtual void Apply(GroupPropagated @event)
@@ -300,10 +301,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var rosterIdentity = new RosterIdentity(@event.GroupId, @event.OuterScopeRosterVector, i).ToIdentity();
 
-                var addedRoster = this.changedInterview.GetRosterManager(@event.GroupId)
+                var addedRoster = this.Tree.GetRosterManager(@event.GroupId)
                         .CreateRoster(parentGroupIdentity, rosterIdentity, i);
 
-                this.changedInterview.GetGroup(parentGroupIdentity).AddChild(addedRoster);
+                this.Tree.GetGroup(parentGroupIdentity).AddChild(addedRoster);
             }
 
             //expressionProcessorStatePrototype could also be changed but it's an old code.
@@ -312,7 +313,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(RosterInstancesTitleChanged @event)
         {
             foreach (var changedRosterTitle in @event.ChangedInstances)
-                this.changedInterview.GetRoster(changedRosterTitle.RosterInstance.GetIdentity()).SetRosterTitle(changedRosterTitle.Title);
+                this.Tree.GetRoster(changedRosterTitle.RosterInstance.GetIdentity()).SetRosterTitle(changedRosterTitle.Title);
         }
 
         public virtual void Apply(RosterInstancesAdded @event)
@@ -329,7 +330,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var instance in @event.Instances)
             {
-                this.changedInterview.RemoveNode(instance.GetIdentity());
+                this.Tree.RemoveNode(instance.GetIdentity());
                 this.ExpressionProcessorStatePrototype.RemoveRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId);
             }
         }
@@ -391,14 +392,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var identity in @event.Questions)
             {
                 // can be removed from removed roster. No need for this event anymore
-                this.changedInterview.GetQuestion(identity)?.RemoveAnswer();
+                this.Tree.GetQuestion(identity)?.RemoveAnswer();
                 this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(identity.Id, identity.RosterVector));
             }
         }
 
         public virtual void Apply(AnswerRemoved @event)
         {
-            this.changedInterview.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).RemoveAnswer();
+            this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).RemoveAnswer();
             this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(@event.QuestionId, @event.RosterVector));
         }
 
@@ -411,9 +412,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var parentGroupIdentity = Identity.Create(parentGroup.Value, rosterIdentity.OuterRosterVector);
 
-            var addedRoster = this.changedInterview.GetRosterManager(rosterIdentity.GroupId)
+            var addedRoster = this.Tree.GetRosterManager(rosterIdentity.GroupId)
                 .CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
-            this.changedInterview.GetGroup(parentGroupIdentity).AddChild(addedRoster);
+            this.Tree.GetGroup(parentGroupIdentity).AddChild(addedRoster);
             addedRoster.ActualizeChildren(skipRosters: true);
         }
     }

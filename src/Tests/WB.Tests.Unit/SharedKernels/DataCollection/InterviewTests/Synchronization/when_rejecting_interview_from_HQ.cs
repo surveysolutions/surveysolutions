@@ -31,14 +31,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             };
             interviewSynchronizationDto.Answers = new[]
             {
-                Create.Entity.AnsweredQuestionSynchronizationDto(commentedQuestionId, new decimal[] { }, "answer", comments: new CommentSynchronizationDto[] { answerComment })
+                Create.Entity.AnsweredQuestionSynchronizationDto(commentedQuestionId, new decimal[] { }, "answer", comments: new [] { answerComment })
             };
 
             synchronizationTime = DateTime.Now;
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(commentedQuestionId));
 
-            interview = CreateInterview(questionnaireRepository: questionnaireRepository);
+            interview = Setup.StatefulInterview(questionnaire);
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
