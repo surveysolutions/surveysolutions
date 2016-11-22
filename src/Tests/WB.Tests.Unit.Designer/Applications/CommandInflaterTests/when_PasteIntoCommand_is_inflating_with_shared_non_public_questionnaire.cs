@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             var listStorage = new InMemoryPlainStorageAccessor<QuestionnaireListViewItem>();
             var questionnaireListViewItem = Create.QuestionnaireListViewItem();
             questionnaireListViewItem.SharedPersons.Add(Create.SharedPerson(actionUserId));
-            listStorage.Store(questionnaireListViewItem, questionnaireId);
+            listStorage.Store(questionnaireListViewItem, questionnaireId.FormatGuid());
 
             command = new PasteInto(questionnaireId, entityId, questionnaireId, pasteAfterId, entityId, actionUserId);
 
