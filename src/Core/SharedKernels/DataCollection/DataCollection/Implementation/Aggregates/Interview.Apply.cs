@@ -13,8 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         private InterviewTree treeImpl;
         protected InterviewTree Tree
-            => this.treeImpl ??
-               (this.treeImpl = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
+            => this.treeImpl ?? (this.treeImpl = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
 
         public virtual void Apply(InterviewReceivedByInterviewer @event)
         {
