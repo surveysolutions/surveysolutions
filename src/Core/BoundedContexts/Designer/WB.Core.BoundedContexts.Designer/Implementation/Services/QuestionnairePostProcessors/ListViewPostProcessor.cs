@@ -167,7 +167,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == personId))
             {
-                var toRemove = questionnaireListViewItem.SharedPersons.Where(x => x.UserId == personId);
+                var toRemove = questionnaireListViewItem.SharedPersons.Where(x => x.UserId == personId).ToList();
                 toRemove.ForEach(x => questionnaireListViewItem.SharedPersons.Remove(x));
             }
 
