@@ -59,6 +59,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
             WarningForCollection(FewQuestionsWithSameLongEnablement, "WB0235", VerificationMessages.WB0235_FewQuestionsWithSameLongEnablement),
             WarningForCollection(FewQuestionsWithSameLongValidation, "WB0236", VerificationMessages.WB0236_FewQuestionsWithSameLongValidation),
+            Warning<IConditional>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAndOperator),
+            Warning<IValidatable>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAndOperator),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -70,6 +72,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
+
+        private bool BitwiseAnd(IConditional entity) => this.ContainsBitwiseAnd(entity.ConditionExpression);
+        private bool BitwiseAnd(IValidatable entity) => entity.ValidationConditions?.Any(this.ContainsBitwiseAnd) ?? false;
+        private bool ContainsBitwiseAnd(ValidationCondition validation) => this.ContainsBitwiseAnd(validation.Expression);
+
+        private bool ContainsBitwiseAnd(string expression)
+            => this.expressionProcessor.ContainsBitwiseAnd(expression);
 
         private static IEnumerable<QuestionnaireNodeReference[]> FewQuestionsWithSameLongValidation(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
@@ -546,7 +555,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
            Func<TEntity, bool> hasError, string code, string message)
-           where TEntity : class, IComposite
+           where TEntity : class, IQuestionnaireEntity
         {
             return questionnaire =>
                 questionnaire
