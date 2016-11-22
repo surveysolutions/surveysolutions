@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 categoricalTypes.Contains(questionView.QuestionType) &&
                 !string.IsNullOrEmpty(question.Properties.OptionsFilterExpression);
 
-            if (question.Answers != null && question.Answers.Count > 0)
+            if (question.Answers != null && questionView.Options == null)
             {
                 questionView.Options = question.Answers.Select(a => new QuestionOptionView
                 {
