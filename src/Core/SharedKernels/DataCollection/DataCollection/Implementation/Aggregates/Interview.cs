@@ -782,14 +782,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var parentGroup = questionnaire.GetParentGroup(rosterIdentity.GroupId);
-            if (!parentGroup.HasValue) return;
+            var parentGroupId = questionnaire.GetParentGroup(rosterIdentity.GroupId);
+            if (!parentGroupId.HasValue) return;
 
-            var parentGroupIdentity = Identity.Create(parentGroup.Value, rosterIdentity.OuterRosterVector);
+            var parentGroupIdentity = Identity.Create(parentGroupId.Value, rosterIdentity.OuterRosterVector);
 
-            var addedRoster = this.Tree.GetRosterManager(rosterIdentity.GroupId)
-                .CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
-            this.Tree.GetGroup(parentGroupIdentity).AddChild(addedRoster);
+            var rosterManager = this.Tree.GetRosterManager(rosterIdentity.GroupId);
+            InterviewTreeRoster addedRoster = rosterManager.CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
+
+            var parentGroup = this.Tree.GetGroup(parentGroupIdentity);
+            parentGroup.AddChild(addedRoster);
+            parentGroup.UpdateSortIndexesForRosters(rosterIdentity.GroupId, rosterManager);
             addedRoster.ActualizeChildren(skipRosters: true);
         }
     }
