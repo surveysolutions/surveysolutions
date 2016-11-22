@@ -53,9 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.registry.Subscribe(this, interviewId);
         }
 
-        public string Text
-            => $"{this.variableName} : " +
-               $"{(string.IsNullOrEmpty(this.variableValue?.ToString()) ? UIResources.VariableEmptyValue : this.variableValue?.ToString())}";
+        public string Text => $"{this.variableName} : {this.variableValue?.ToString() ?? UIResources.VariableEmptyValue}";
 
         public string Label => this.variableLabel;
         public bool HasLabel => !string.IsNullOrEmpty(this.variableLabel);
