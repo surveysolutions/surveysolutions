@@ -366,7 +366,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             state.ResponsibleId = @event.Payload.SupervisorId;
             state.SupervisorId = @event.Payload.SupervisorId;
             state.ResponsibleRole = UserRoles.Supervisor;
-            state.IsAssignedToInterviewer = false;
+            state.IsMissingAssignToInterviewer = true;
             return state;
         }
 
@@ -375,7 +375,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             state.ResponsibleId = @event.Payload.InterviewerId;
             state.ResponsibleRole = UserRoles.Operator;
             state.ReceivedByInterviewer = false;
-            state.IsAssignedToInterviewer = true;
+            state.IsMissingAssignToInterviewer = false;
 
             return state;
         }
