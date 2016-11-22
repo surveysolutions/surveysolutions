@@ -186,6 +186,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.Title.ReplaceSubstitutions();
         }
+
+        public void UpdateSortIndexesForRosters(Guid rosterId, RosterManager rosterManager)
+        {
+            if (rosterManager is MultiRosterManager)
+            {
+                var orderedIdentities = (rosterManager as MultiRosterManager).GetOrderedExpectedRostersIdentities(this.Identity);
+                for (int i = 0; i < orderedIdentities.Count; i++)
+                {
+                    var roster = this.Tree.GetRoster(orderedIdentities[i]);
+                    if (roster!=null) roster.SortIndex = i;
+                }
+                return;
+            }
+            if (rosterManager is YesNoRosterManager)
+            {
+                var orderedIdentities = (rosterManager as YesNoRosterManager).GetOrderedExpectedRostersIdentities(this.Identity);
+                for (int i = 0; i < orderedIdentities.Count; i++)
+                {
+                    var roster = this.Tree.GetRoster(orderedIdentities[i]);
+                    if (roster != null) roster.SortIndex = i;
+                }
+                return;
+            }
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
