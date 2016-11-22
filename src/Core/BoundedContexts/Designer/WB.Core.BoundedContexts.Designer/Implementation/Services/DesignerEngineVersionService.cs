@@ -153,7 +153,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     new QuestionnaireFeature
                     {
-                          HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.LinkedToQuestionId.HasValue).Any(),
+                          HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.LinkedToQuestionId.HasValue && 
+                                questionnaire.FirstOrDefault<AbstractQuestion>(x => x.PublicKey == q.LinkedToQuestionId).QuestionType == QuestionType.TextList).Any(),
                           Description = "Question linked to List question"
                     }
                 }
