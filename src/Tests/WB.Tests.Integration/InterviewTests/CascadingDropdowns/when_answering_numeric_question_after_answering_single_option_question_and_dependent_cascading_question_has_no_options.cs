@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    internal class when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer_and_it_is_enabled : InterviewTestsContext
+    internal class when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options : InterviewTestsContext
     {
         Establish context = () =>
         {
