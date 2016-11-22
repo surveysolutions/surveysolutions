@@ -555,6 +555,7 @@
     <Compile Include="BoundedContexts\Designer\TranslationServiceTests\when_storing_translation_with_4_lines_duplicated_3_times.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_variable_from_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_variable.cs" />
+    <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_illegal_tag.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateVariableHandlerTest\when_updating_variable_and_all_parameters_specified.cs" />
     <Compile Include="BoundedContexts\Designer\UserTests\when_updating_locked_user_and_specifying_is_locked_false.cs" />
     <Compile Include="BoundedContexts\Designer\UserTests\when_updating_not_confirmed_user_and_specifying_is_confirmed_true.cs" />
