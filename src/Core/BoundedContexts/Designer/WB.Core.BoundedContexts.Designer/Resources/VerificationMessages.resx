@@ -633,7 +633,10 @@
   <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
     <value>The same long validation condition is used in several questions. You might want to create a Boolean variable to simplify the code management.</value>
   </data>
-  <data name="WB0237_BitwiseAndOperator" xml:space="preserve">
+  <data name="WB0237_BitwiseAnd" xml:space="preserve">
     <value>&amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;.</value>
+  </data>
+  <data name="WB0238_BitwiseOr" xml:space="preserve">
+    <value>| is used in expression. Make sure you understand the difference between | and || operators. In most cases, use ||.</value>
   </data>
 </root>

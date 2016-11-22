@@ -1461,9 +1461,18 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to &amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;..
         /// </summary>
-        internal static string WB0237_BitwiseAndOperator {
+        internal static string WB0237_BitwiseAnd {
             get {
-                return ResourceManager.GetString("WB0237_BitwiseAndOperator", resourceCulture);
+                return ResourceManager.GetString("WB0237_BitwiseAnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to | is used in expression. Make sure you understand the difference between | and || operators. In most cases, use ||..
+        /// </summary>
+        internal static string WB0238_BitwiseOr {
+            get {
+                return ResourceManager.GetString("WB0238_BitwiseOr", resourceCulture);
             }
         }
         

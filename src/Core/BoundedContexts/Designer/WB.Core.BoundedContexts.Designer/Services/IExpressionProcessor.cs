@@ -9,5 +9,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression);
         bool ContainsBitwiseAnd(string expression);
+        bool ContainsBitwiseOr(string expression);
     }
 }

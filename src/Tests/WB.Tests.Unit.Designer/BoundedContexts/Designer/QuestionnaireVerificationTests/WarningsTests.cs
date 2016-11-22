@@ -550,6 +550,62 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectWarning("WB0237");
 
         [Test]
+        public void bitwise_or_operator_in_question_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "x | y"),
+                })
+                .ExpectWarning("WB0238");
+
+        [Test]
+        public void logical_or_operator_in_question_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(enablementCondition: "x || y"),
+                })
+                .ExpectNoWarning("WB0238");
+
+        [Test]
+        public void bitwise_or_operator_in_string_in_question_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Question(enablementCondition: "x == '|'"),
+                })
+                .ExpectNoWarning("WB0238");
+
+        [Test]
+        public void bitwise_or_operator_in_group_enablement()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Group(enablementCondition: "x | y"),
+                })
+                .ExpectWarning("WB0238");
+
+        [Test]
+        public void bitwise_or_operator_in_question_validation()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition("x | y") }),
+                })
+                .ExpectWarning("WB0238");
+
+        [Test]
+        public void logical_or_operator_in_question_validation()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.Question(validationConditions: new [] { Create.ValidationCondition("x || y") }),
+                })
+                .ExpectNoWarning("WB0238");
+
+        [Test]
+        public void bitwise_or_operator_in_static_text_validation()
+            => Create.QuestionnaireDocumentWithOneChapter(new []
+                {
+                    Create.StaticText(validationConditions: new [] { Create.ValidationCondition("x | y") }),
+                })
+                .ExpectWarning("WB0238");
+
+        [Test]
         public void used_rowindex_inside_multioption_based_roster()
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
