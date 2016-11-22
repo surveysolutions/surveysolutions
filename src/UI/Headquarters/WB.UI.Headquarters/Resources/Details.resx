@@ -117,48 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;.</value>
-  </data>
-  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;.</value>
-  </data>
-  <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;.</value>
-  </data>
-  <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>Apply on {0} interview(s) which Interviewer already received</value>
-  </data>
-  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; Only interviews that were not received by interviewers and are in status &lt;i&gt;{1}&lt;/i&gt; could be reassigned.</value>
-  </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>No responsible chosen on some interview(s). Please, choose responsible interviewer.</value>
-  </data>
-  <data name="ContinueConfirmMessage" xml:space="preserve">
-    <value>Do you want to continue?</value>
-  </data>
-  <data name="ContinueConfirmMessageHQ" xml:space="preserve">
-    <value>Do you want to continue?</value>
-  </data>
-  <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be deleted.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; You can delete interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;.</value>
-  </data>
-  <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;.</value>
-  </data>
-  <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;.</value>
-  </data>
-  <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;
-&lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;.</value>
+    <value>Interview has no responsible. Please, choose responsible interviewer</value>
   </data>
 </root>
