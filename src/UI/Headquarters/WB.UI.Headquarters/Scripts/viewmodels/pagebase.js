@@ -241,4 +241,24 @@
         var html = $(messageTemplate).html();
         return html;
     }
+
+    self.CreateUsersViewModel = function (usersToAssignUrl) {
+        var users = {};
+        users.IsAssignToLoading = ko.observable(false);
+        users.UsersToAssignUrl = usersToAssignUrl;
+        users.LoadUsers = function (query, sync, pageSize) {
+            users.IsAssignToLoading(true);
+            self.SendRequest(users.UsersToAssignUrl, { query: query, pageSize: pageSize }, function (response) {
+                sync(response.Users, response.TotalCountByQuery);
+            }, true, true, function () {
+                users.IsAssignToLoading(false);
+            });
+        }
+        users.StoreInteviewer = function() {};
+        users.ClearAssignTo = function () {
+            users.AssignTo(undefined);
+        }
+        users.AssignTo = ko.observable();
+        return users;
+    }
 };

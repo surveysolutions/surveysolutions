@@ -2,27 +2,7 @@
     Supervisor.VM.SVInterviews.superclass.constructor.apply(this, arguments);
     var self = this;
 
-    self.CreateUsersViewModel = function () {
-        var users = {};
-        users.IsAssignToLoading = ko.observable(false);
-        users.UsersToAssignUrl = usersToAssignUrl;
-        users.LoadUsers = function (query, sync, pageSize) {
-            users.IsAssignToLoading(true);
-            self.SendRequest(users.UsersToAssignUrl, { query: query, pageSize: pageSize }, function (response) {
-                sync(response.Users, response.TotalCountByQuery);
-            }, true, true, function () {
-                users.IsAssignToLoading(false);
-            });
-        }
-        users.ClearAssignTo = function() {
-            users.AssignTo(undefined);
-        }
-        users.AssignTo = ko.observable();
-        return users;
-    }
-
-    self.Users = self.CreateUsersViewModel();
-
+    self.Users = self.CreateUsersViewModel(usersToAssignUrl);
 
     self.CanAssignTo = ko.computed(function() {
         return !(self.IsNothingSelected && _.isUndefined(self.Users.AssignTo()));
@@ -108,7 +88,7 @@
 
         var model = {
             CountInterviewsToReject: countInterviewsToReject,
-            Users: self.CreateUsersViewModel(),
+            Users: self.CreateUsersViewModel(usersToAssignUrl),
             StoreInteviewer: function () {
                 model.Users.AssignTo() == undefined
                     ? countInterviewsToReject(countReadyToReject)
