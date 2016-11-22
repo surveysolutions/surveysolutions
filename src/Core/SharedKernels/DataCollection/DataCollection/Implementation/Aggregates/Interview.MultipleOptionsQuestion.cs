@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var sourceInterviewTree = this.changedInterview;
+            var sourceInterviewTree = this.Tree;
             
             var isLinkedToList = sourceInterviewTree.GetQuestion(answeredQuestion).IsLinkedToListQuestion;
 

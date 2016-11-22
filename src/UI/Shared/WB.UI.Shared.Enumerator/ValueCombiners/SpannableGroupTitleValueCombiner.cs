@@ -14,12 +14,12 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             string groupTitle = values[0]?.ToString() ?? string.Empty;
             string rosterTitle = values[1]?.ToString() ?? string.Empty;
 
-            var spinnableTitle = new SpannableString(groupTitle);
+            var spannableTitle = new SpannableString(groupTitle);
 
             if (!string.IsNullOrEmpty(rosterTitle))
-                spinnableTitle.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), groupTitle.Length - rosterTitle.Length, groupTitle.Length, SpanTypes.ExclusiveExclusive);
+                spannableTitle.SetSpan(new StyleSpan(TypefaceStyle.BoldItalic), groupTitle.Length - rosterTitle.Length, groupTitle.Length, SpanTypes.ExclusiveExclusive);
 
-            return spinnableTitle;
+            return spannableTitle;
         }
     }
 }
