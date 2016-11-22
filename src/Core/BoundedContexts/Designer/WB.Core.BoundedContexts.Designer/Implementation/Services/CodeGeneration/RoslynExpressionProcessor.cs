@@ -46,10 +46,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Any(IsBitwiseAndExpression);
         }
 
+        public bool ContainsBitwiseOr(string expression)
+        {
+            string code = WrapToClass(expression);
+
+            var tree = SyntaxFactory.ParseSyntaxTree(code);
+
+            return
+                tree
+                .GetRoot()
+                .ChildNodesAndTokens()
+                .TreeToEnumerable(_ => _.ChildNodesAndTokens())
+                .Any(IsBitwiseOrExpression);
+        }
+
         private static string WrapToClass(string expression) => $"class a {{ bool b() {{ return ({expression}); }} }} ";
 
         private static bool IsBitwiseAndExpression(SyntaxNodeOrToken nodeOrToken)
             => nodeOrToken.Kind() == SyntaxKind.BitwiseAndExpression;
+
+        private static bool IsBitwiseOrExpression(SyntaxNodeOrToken nodeOrToken)
+            => nodeOrToken.Kind() == SyntaxKind.BitwiseOrExpression;
 
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)
             => nodeOrToken.IsToken

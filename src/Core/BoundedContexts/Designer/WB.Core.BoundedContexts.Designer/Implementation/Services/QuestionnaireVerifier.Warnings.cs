@@ -58,7 +58,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
             WarningForCollection(FewQuestionsWithSameLongEnablement, "WB0235", VerificationMessages.WB0235_FewQuestionsWithSameLongEnablement),
             WarningForCollection(FewQuestionsWithSameLongValidation, "WB0236", VerificationMessages.WB0236_FewQuestionsWithSameLongValidation),
-            Warning<IQuestionnaireEntity>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAndOperator),
+            Warning<IQuestionnaireEntity>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAnd),
+            Warning<IQuestionnaireEntity>(this.BitwiseOr, "WB0238", VerificationMessages.WB0238_BitwiseOr),
 
             this.Warning_ValidationConditionRefersToAFutureQuestion_WB0250,
             this.Warning_EnablementConditionRefersToAFutureQuestion_WB0251,
@@ -72,6 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         };
 
         private bool BitwiseAnd(IQuestionnaireEntity entity) => entity.GetAllExpressions().Any(this.expressionProcessor.ContainsBitwiseAnd);
+        private bool BitwiseOr(IQuestionnaireEntity entity) => entity.GetAllExpressions().Any(this.expressionProcessor.ContainsBitwiseOr);
 
         private static IEnumerable<QuestionnaireNodeReference[]> FewQuestionsWithSameLongValidation(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
