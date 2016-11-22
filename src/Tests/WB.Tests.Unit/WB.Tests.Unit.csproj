@@ -490,6 +490,8 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering__NO__to_YesNo_roster_size_question_with_max_answers_set_to__1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\InterviewAssignTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_linked_to_List_question_and_answer_is_specified.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multi_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_featured_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_single_option_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_text_question_is_set.cs" />
@@ -512,6 +514,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level1.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_answering_on_nested_roster_question_which_is_linked_to_question_and_sorce_in_different_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_answering_on_nested_roster_question_which_is_linked_to_question_from_roster.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_options_for_linked_to_list_question_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_roster_trigger_is_multioption_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_fixed_roster_has_substitution.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Translations\when_switching_language_with_fixed_rosters.cs" />
