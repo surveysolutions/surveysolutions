@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -58,6 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.InterviewData.QuestionnaireId,
                 @event.InterviewData.QuestionnaireVersion);
+
+            this.sourceInterview = this.Tree.Clone();
 
             this.properties.Status = @event.InterviewData.Status;
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
@@ -122,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 @event.InterviewData.Answers.Select(questionWithAnswer =>
                     Identity.Create(questionWithAnswer.Id, questionWithAnswer.QuestionRosterVector)).ToList());
 
-            base.UpdateExpressionState(this.Tree, this.ExpressionProcessorStatePrototype);
+            base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
             this.properties.SupervisorId = @event.InterviewData.SupervisorId;
@@ -283,7 +284,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
-            this.ApplyEvents(this.Tree, userId);
+            this.ApplyEvents(this.sourceInterview, this.Tree, userId);
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));

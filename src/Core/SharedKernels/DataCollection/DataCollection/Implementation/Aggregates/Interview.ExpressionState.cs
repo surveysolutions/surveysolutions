@@ -7,8 +7,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     public partial class Interview
     {
         protected void UpdateExpressionState(InterviewTree changedInterview, ILatestInterviewExpressionState expressionState)
+            => this.UpdateExpressionState(this.Tree, changedInterview, expressionState);
+
+        protected void UpdateExpressionState(InterviewTree sourceInterview, InterviewTree changedInterview, ILatestInterviewExpressionState expressionState)
         {
-            var diff = this.Tree.Compare(changedInterview);
+            var diff = sourceInterview.Compare(changedInterview);
 
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
