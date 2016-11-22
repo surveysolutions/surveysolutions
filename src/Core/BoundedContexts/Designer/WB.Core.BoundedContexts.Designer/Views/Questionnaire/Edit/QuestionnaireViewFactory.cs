@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private List<SharedPerson> GetSharedPersons(Guid questionnaireId)
         {
-            var listViewItem = this.listItemStorage.GetById(questionnaireId);
+            var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
             var sharedPersons = listViewItem.SharedPersons;
             return sharedPersons.ToList();
         }
