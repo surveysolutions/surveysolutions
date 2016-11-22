@@ -110,7 +110,7 @@ namespace WB.UI.Designer.Api.Tester
                 LastEntryDate = questionnaire.LastEntryDate,
                 Owner = questionnaire.CreatorName,
                 IsPublic = questionnaire.IsPublic || isAdmin,
-                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.Id == userId)
+                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.UserId == userId)
             });
 
             var response = this.Request.CreateResponse(questionnaires);
@@ -127,7 +127,7 @@ namespace WB.UI.Designer.Api.Tester
                 return true;
 
 
-            return questionnaireView.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.UserId == this.userHelper.WebUser.UserId);
         }
     }
 }

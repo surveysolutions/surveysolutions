@@ -165,9 +165,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
             if (questionnaireListViewItem == null) return;
 
-            if (questionnaireListViewItem.SharedPersons.Any(x => x.Id == personId))
+            if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == personId))
             {
-                var toRemove = questionnaireListViewItem.SharedPersons.Where(x => x.Id == personId);
+                var toRemove = questionnaireListViewItem.SharedPersons.Where(x => x.UserId == personId);
                 toRemove.ForEach(x => questionnaireListViewItem.SharedPersons.Remove(x));
             }
 
@@ -185,12 +185,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             var sharedPerson = new SharedPerson
             {
-                Id = personId,
+                UserId = personId,
                 Email = personEmail,
                 ShareType = shareType
             };
 
-            if (questionnaireListViewItem.SharedPersons.All(x => x.Id != personId))
+            if (questionnaireListViewItem.SharedPersons.All(x => x.UserId != personId))
             {
                 questionnaireListViewItem.SharedPersons.Add(sharedPerson);
             }

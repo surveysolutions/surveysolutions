@@ -203,7 +203,7 @@ namespace WB.UI.Designer.Api.Headquarters
             if (questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
                 return true;
 
-            return questionnaireView.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.UserId == this.userHelper.WebUser.UserId);
         }
     }
 }

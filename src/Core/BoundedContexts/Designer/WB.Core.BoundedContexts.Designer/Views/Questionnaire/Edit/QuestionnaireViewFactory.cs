@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaireListItem.IsPublic)
                 return true;
 
-            if (questionnaireListItem.SharedPersons.Any(x => x.Id == userId))
+            if (questionnaireListItem.SharedPersons.Any(x => x.UserId == userId))
                 return true;
 
             return false;
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var listViewItem = this.listItemStorage.GetById(questionnaireId);
 
             var sharedPersons = listViewItem.SharedPersons;
-            if (sharedPersons.Any(x => x.Id == userId))
+            if (sharedPersons.Any(x => x.UserId == userId))
                 return true;
 
             return false;

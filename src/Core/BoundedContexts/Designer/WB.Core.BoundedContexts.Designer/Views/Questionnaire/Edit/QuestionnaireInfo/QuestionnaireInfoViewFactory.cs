@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             var sharedPersons = listItem.SharedPersons;
             
             if (questionnaireDocument.CreatedBy.HasValue &&
-                sharedPersons.All(x => x.Id != questionnaireDocument.CreatedBy))
+                sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
                 var owner = this.accountsStorage.GetById(questionnaireDocument.CreatedBy.Value.FormatGuid());
                 if (owner != null)
@@ -95,13 +95,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     sharedPersons.Add(new SharedPerson
                     {
                         Email = owner.Email,
-                        Id = questionnaireDocument.CreatedBy.Value,
+                        UserId = questionnaireDocument.CreatedBy.Value,
                         IsOwner = true
                     });
                 }
             }
 
-            var person = sharedPersons.FirstOrDefault(sharedPerson => sharedPerson.Id == viewerId);
+            var person = sharedPersons.FirstOrDefault(sharedPerson => sharedPerson.UserId == viewerId);
 
             questionnaireInfoView.SharedPersons = sharedPersons.ToList();
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);

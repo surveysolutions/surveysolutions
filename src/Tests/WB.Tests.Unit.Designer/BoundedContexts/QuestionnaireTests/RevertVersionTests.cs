@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             var histotyVersionsService = Mock.Of<IQuestionnireHistotyVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
             var questionnaire = Create.Questionnaire(histotyVersionsService: histotyVersionsService);
-            questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, new[] { new SharedPerson() { Id = sharedPersonId} });
+            questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, new[] { new SharedPerson() { UserId = sharedPersonId} });
             var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, sharedPersonId);
             
             // Act
