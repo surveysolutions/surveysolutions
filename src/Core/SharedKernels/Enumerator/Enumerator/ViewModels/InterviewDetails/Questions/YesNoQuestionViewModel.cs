@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var answerModel = interview.GetYesNoQuestion(this.Identity);
 
-                var backendYesAnswersCount = answerModel?.GetAnswer()?.ToAnsweredYesNoOptions()?.Count(a => a.Yes) ?? 0;
+                var backendYesAnswersCount = answerModel?.GetAnswer()?.CheckedOptions?.Count(a => a.Yes) ?? 0;
                 var UIYesAnswersCount = this.Options.Count(o => o.YesSelected);
 
                 if (backendYesAnswersCount > UIYesAnswersCount)

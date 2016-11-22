@@ -17,15 +17,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            var sourceInterviewTree = this.Tree;
-            CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, sourceInterviewTree);
+            this.CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.Tree);
           
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
 
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp);
             changedInterviewTree.GetQuestion(answeredQuestion).AsGps.SetAnswer(GpsAnswer.FromGeoPosition(answer));
-            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities);
         }
     }
 }

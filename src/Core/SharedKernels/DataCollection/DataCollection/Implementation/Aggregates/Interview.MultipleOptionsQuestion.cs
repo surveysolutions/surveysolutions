@@ -15,13 +15,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var sourceInterviewTree = this.Tree;
-            
-            var isLinkedToList = sourceInterviewTree.GetQuestion(answeredQuestion).IsLinkedToListQuestion;
 
-            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion, sourceInterviewTree, isLinkedToList);
+            var isLinkedToList = this.Tree.GetQuestion(answeredQuestion).IsLinkedToListQuestion;
 
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion, this.Tree, isLinkedToList);
+
+            var changedInterviewTree = this.Tree.Clone();
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
 
             if (isLinkedToList)
@@ -33,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities);
         }
     }
 }

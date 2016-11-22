@@ -62,8 +62,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.properties.Status = @event.InterviewData.Status;
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
 
-            var sourceInterviewTree = this.Tree.Clone();
-
             var maxRosterDepth = @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Select(x => x.OuterScopeRosterVector.Length).DefaultIfEmpty(0).Max();
             var maxQuestionDepth = @event.InterviewData.Answers.Select(x => x.QuestionRosterVector.Length).DefaultIfEmpty(0).Max();
 
@@ -88,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 foreach (var rosterDto in @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Where(x => x.OuterScopeRosterVector.Length == i))
                 {
                     var rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector, rosterDto.RosterInstanceId, rosterDto.SortIndex);
-                    this.AddRosterToChangedTree(rosterIdentity);
+                    this.AddRosterToTree(rosterIdentity);
                     this.Tree.GetRoster(rosterIdentity.ToIdentity()).SetRosterTitle(rosterDto.RosterTitle);
                 }
             }
@@ -124,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 @event.InterviewData.Answers.Select(questionWithAnswer =>
                     Identity.Create(questionWithAnswer.Id, questionWithAnswer.QuestionRosterVector)).ToList());
 
-            base.UpdateExpressionState(sourceInterviewTree, this.Tree, this.ExpressionProcessorStatePrototype);
+            base.UpdateExpressionState(this.Tree, this.ExpressionProcessorStatePrototype);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
             this.properties.SupervisorId = @event.InterviewData.SupervisorId;
@@ -259,8 +257,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.QuestionnaireIdentity = questionnaireIdentity;
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.Tree;
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
 
             //apply events
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
@@ -268,8 +265,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.ApplyTreeDiffChanges(userId: userId, questionnaire: questionnaire,
-                sourceInterviewTree: sourceInterviewTree, changedInterviewTree: changedInterviewTree,
+            this.ApplyTreeDiffChanges(userId: userId, questionnaire: questionnaire, changedInterviewTree: changedInterviewTree,
                 changedQuestionIdentities: new List<Identity>());
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
@@ -287,7 +283,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
-            this.ApplyEvents(this.sourceInterview, this.Tree, userId);
+            this.ApplyEvents(this.Tree, userId);
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
