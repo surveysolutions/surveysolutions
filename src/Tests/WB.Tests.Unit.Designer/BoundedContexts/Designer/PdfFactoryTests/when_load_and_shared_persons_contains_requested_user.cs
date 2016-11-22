@@ -20,12 +20,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
 {
     public class when_load_and_shared_persons_contains_requested_user : PdfFactoryTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var accountDocument = Create.AccountDocument(userName);
             var questionnaireDocument = Create.QuestionnaireDocument();
-            var questionnaireSharedPersons = Create.QuestionnaireSharedPersons(questionnaireId);
-            questionnaireSharedPersons.SharedPersons.Add(Create.SharedPerson(id: userId, email: userEmail));
 
             var accountsDocumentReader = Mock.Of<IPlainStorageAccessor<User>>(x => x.GetById(userId.FormatGuid()) == accountDocument);
             var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(x=>x.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
@@ -39,7 +37,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
                 }, "");
 
             var questionnaireListItemStorage = new InMemoryPlainStorageAccessor<QuestionnaireListViewItem>();
-            questionnaireListItemStorage.Store(Create.QuestionnaireListViewItem(), questionnaireId.FormatGuid());
+            var questionnaireListViewItem = Create.QuestionnaireListViewItem();
+            questionnaireListViewItem.SharedPersons.Add(Create.SharedPerson(id: userId, email: userEmail));
+            questionnaireListItemStorage.Store(questionnaireListViewItem, questionnaireId.FormatGuid());
 
             factory = CreateFactory(accountsDocumentReader: accountsDocumentReader,
                 questionnaireStorage: questionnaireRepository, 

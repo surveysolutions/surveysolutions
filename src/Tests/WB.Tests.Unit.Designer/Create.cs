@@ -669,11 +669,6 @@ namespace WB.Tests.Unit.Designer
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
-        public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId = null)
-        {
-            return new QuestionnaireSharedPersons(questionnaireId ?? Guid.NewGuid());
-        }
-
         public static QuestionnaireStateTracker QuestionnaireStateTacker()
         {
             return new QuestionnaireStateTracker();
