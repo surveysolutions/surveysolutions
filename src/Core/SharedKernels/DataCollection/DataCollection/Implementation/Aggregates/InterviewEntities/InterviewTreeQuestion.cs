@@ -117,6 +117,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeCascadingQuestion AsCascading { get; private set; }
 
+        public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
+
         public SubstitionText Title { get; private set; }
 
         public SubstitionText[] ValidationMessages { get; private set; }
@@ -429,6 +431,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clonedQuestion.FailedValidations = this.FailedValidations?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
+            clonedQuestion.AnswerComments = this.AnswerComments?
+                .Select(a => new AnswerComment(a.UserId, a.CommentTime, a.Comment, a.QuestionIdentity))
+                .ToList();
 
 
             return clonedQuestion;

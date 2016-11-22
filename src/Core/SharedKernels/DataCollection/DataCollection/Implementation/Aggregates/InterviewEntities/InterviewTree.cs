@@ -37,7 +37,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string InterviewId { get; }
         public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
-        public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
         
         public InterviewTreeQuestion GetQuestion(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeQuestion;

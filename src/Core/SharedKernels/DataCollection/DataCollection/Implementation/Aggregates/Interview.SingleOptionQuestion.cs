@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.changedInterview;
+            var sourceInterviewTree = this.Tree;
             var isLinkedToList = sourceInterviewTree.GetQuestion(answeredQuestion).IsLinkedToListQuestion;
             this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion, sourceInterviewTree, isLinkedToList);
 
