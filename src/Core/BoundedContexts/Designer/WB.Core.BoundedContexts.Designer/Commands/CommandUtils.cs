@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands
                 sanitizer.AllowedTags.AddRange(new[]
                 {
                     "u", "s", "i", "b", "br", "font", "tt", "big", "strong", "small", "sup", "sub", "blockquote",
-                    "cite", "dfn", "p", "h1", "em"
+                    "cite", "dfn", "p", "em"
                 });
                 sanitizer.AllowedAttributes.Clear();
                 sanitizer.AllowedAttributes.AddRange(new[] {"color", "size"});
