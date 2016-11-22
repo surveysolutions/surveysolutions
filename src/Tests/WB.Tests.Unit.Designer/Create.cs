@@ -1079,7 +1079,7 @@ namespace WB.Tests.Unit.Designer
         {
             return new SharedPerson
             {
-                Id = id ?? Guid.NewGuid(),
+                UserId = id ?? Guid.NewGuid(),
                 IsOwner = isOwner,
                 Email = email ?? "user@e.mail",
                 ShareType = shareType

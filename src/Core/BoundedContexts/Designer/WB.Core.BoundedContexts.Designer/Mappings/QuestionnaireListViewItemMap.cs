@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             },
             r => r.Component(e =>
             {
-                e.Property(x => x.Id);
+                e.Property(x => x.UserId);
                 e.Property(x => x.Email);
                 e.Property(x => x.IsOwner);
                 e.Property(x => x.ShareType);
