@@ -207,10 +207,6 @@ namespace WB.UI.Designer.Api
                         command.TranslationId,
                         model.File.Buffer);
                 }
-                else
-                {
-                    command.TranslationId = command.OldTranslationId.Value;
-                }
             }
             catch (FormatException e)
             {
