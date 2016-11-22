@@ -47,12 +47,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
 
 
         It should_question_title_have_removed_tags = () =>
-            viewModel.Items.SingleOrDefault(x => x.InterviewId == interviewId).FeaturedQuestions.First().Question.ShouldEqual("test");
+            viewModel.Items.SingleOrDefault(x => x.InterviewId == interviewId).FeaturedQuestions.First().Question.ShouldEqual("test &gt; 1");
 
         private static InterviewApiController controller;
         private static AllInterviewsView viewModel;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
 
-        private static string titleWithTags = "<i>test</i>";
+        private static string titleWithTags = "<i>test > 1</i>";
     }
 }
