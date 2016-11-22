@@ -19,6 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public bool CreatedOnClient { get; set; }
         public bool ReceivedByInterviewer { get; set; }
         public string CurrentLanguage { get; set; }
-        public bool IsAssignedToInterviewer { get; set; }
+        public bool IsMissingAssignToInterviewer { get; set; }
     }
 }

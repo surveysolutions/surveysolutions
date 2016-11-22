@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 Status = interview.Status,
                 ReceivedByInterviewer = interview.ReceivedByInterviewer,
                 CurrentTranslation = interview.CurrentLanguage,
-                IsAssignedToInterviewer = interview.IsAssignedToInterviewer
+                IsAssignedToInterviewer = !interview.IsMissingAssignToInterviewer
             };
         }
 
