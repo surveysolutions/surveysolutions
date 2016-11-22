@@ -1090,7 +1090,7 @@ namespace WB.Tests.Unit.TestFactories
             string rosterTitle = null)
             => new RosterSynchronizationDto(rosterId,
                     outerScopeRosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
-                    rosterInstanceId ?? 0, sortIndex ?? 0, "roster title");
+                    rosterInstanceId ?? 0, sortIndex ?? 0, rosterTitle ?? "roster title");
 
         public MapReportPoint MapReportPoint(string id, double latitude, double longitude)
         {

@@ -34,9 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public ObservableCollection<DynamicTextViewModel> ValidationErrors { get; } = new ObservableCollection<DynamicTextViewModel>();
-
-        public void SetValidationErrors(IEnumerable<string> errors) => this.ChangeValidationErrors(errors);
-
+        
         public void ChangeValidationErrors(IEnumerable<string> errors)
         {
             this.ValidationErrors.ForEach(x => x.Dispose());

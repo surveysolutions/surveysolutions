@@ -5,7 +5,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -13,7 +12,6 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTests
 {
-    [Ignore("KP-8159")]
     [Subject(typeof(ValidityViewModel))]
     public class when_question_became_invalid_and_has_single_validation_condition
     {
@@ -29,9 +27,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
             var interview = Setup.StatefulInterview(questionnaire);
+            interview.Apply(Create.Event.TextQuestionAnswered(questionIdentity.Id, questionIdentity.RosterVector, "text answer"));
+            interview.Apply(
+                Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
+                {
+                    {
+                        questionIdentity,
+                        new List<FailedValidationCondition>
+                        {
+                            new FailedValidationCondition(0)
+                        }
+                    }
+                }));
 
-            var statefulInterviewRepository = Substitute.For<IStatefulInterviewRepository>();
-            statefulInterviewRepository.Get(null).ReturnsForAnyArgs(interview);
+            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
 
             viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,

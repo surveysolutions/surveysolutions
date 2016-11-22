@@ -1,46 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("KP-8159")]
     internal class when_getting_enabled_subgroups : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
-            var questionnaire = Create.Entity.QuestionnaireDocument(
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 id: questionnaireId,
+                chapterId: selectedGroupIdentity.Id,
                 children: new IComposite[]
                 {
-                    Create.Entity.Group(
-                        groupId: selectedGroupIdentity.Id,
-                        children: new IComposite[]
+                    Create.Entity.FixedRoster(rosterId, fixedTitles:
+                        new[]
                         {
-                            Create.Entity.Roster(rosterId: rosterId),
-                            Create.Entity.Group(groupId: groupId)
-                        })
+                            Create.Entity.FixedTitle(rosterInstance2Id, "first roster"),
+                            Create.Entity.FixedTitle(rosterInstance1Id, "second roster")
+                        }),
+                    Create.Entity.Group(groupId: groupId)
                 });
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                new PlainQuestionnaire(questionnaire, 1));
-
-            statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId,
-                questionnaireRepository: questionnaireRepository);
-
-            statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId: rosterId,
-                rosterInstanceId: rosterInstance2Id, sortIndex: 1));
-            statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId: rosterId,
-                rosterInstanceId: rosterInstance1Id, sortIndex: 2));
+            statefulInterview = Setup.StatefulInterview(questionnaire);
         };
 
         Because of = () =>
@@ -50,16 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         };
 
         It should_contains_3_identities = () =>
-            enabledSubgroupsIds.Count().ShouldEqual(3);
-
-        It should_first_identity_be_rosterInstance2Id_instance_of_rosterId = () =>
-            enabledSubgroupsIds[0].ShouldEqual(new Identity(rosterId, new[]{rosterInstance2Id}));
-
-        It should_second_identity_be_rosterInstance1Id_instance_of_rosterId = () =>
-            enabledSubgroupsIds[1].ShouldEqual(new Identity(rosterId, new[] { rosterInstance1Id }));
-
-        It should_third_identity_be_groupId = () =>
-            enabledSubgroupsIds[2].ShouldEqual(new Identity(groupId, new decimal[0]));
+            enabledSubgroupsIds.ShouldContainOnly(new Identity(rosterId, new[] {rosterInstance2Id}),
+                new Identity(rosterId, new[] {rosterInstance1Id}), new Identity(groupId, new decimal[0]));
 
         static StatefulInterview statefulInterview;
         static readonly Identity selectedGroupIdentity = new Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
