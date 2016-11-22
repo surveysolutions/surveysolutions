@@ -534,6 +534,11 @@
     <EmbeddedResource Include="Resources\EnumNames.pt.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.pt.resx" />
+    <EmbeddedResource Include="Resources\Details.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Details.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.pt.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.pt.resx" />
     <EmbeddedResource Include="Resources\Pages.pt.resx" />
@@ -1483,6 +1488,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Details.Designer.cs">
+      <DependentUpon>Details.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Resources\Interviews.Designer.cs">
       <AutoGen>True</AutoGen>
