@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
         public static IEnumerable<string> GetAllExpressions(this IQuestionnaireEntity entity)
         {
             var validations = (entity as IValidatable)?.ValidationConditions?.Select(validation => validation.Expression) ?? Enumerable.Empty<string>();
-            var conditions = (entity as IConditional)?.ConditionExpression.ToEnumerable();
+            var conditions = (entity as IConditional)?.ConditionExpression.ToEnumerable() ?? Enumerable.Empty<string>();
 
             return Enumerable.Concat(validations, conditions).Where(expression => expression != null);
         }

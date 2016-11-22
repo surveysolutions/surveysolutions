@@ -47,17 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 }
             });
 
-            var expressionProcessor = new Mock<IExpressionProcessor>();
-
-            expressionProcessor
-                .Setup(x => x.GetIdentifiersUsedInExpression("a>0"))
-                .Returns(new[] { "a" });
-
-            expressionProcessor
-                .Setup(x => x.GetIdentifiersUsedInExpression("b>0"))
-                .Returns(new[] { "b" });
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
+            verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
