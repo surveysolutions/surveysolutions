@@ -258,7 +258,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (!this.isRoster) return;
 
             var changedInstance =
-                @event.ChangedInstances.FirstOrDefault(x => this.groupOrSectionToNavigateIdentity.Equals(x.RosterInstance.GetIdentity()));
+                @event.ChangedInstances.SingleOrDefault(x => this.groupOrSectionToNavigateIdentity.Equals(x.RosterInstance.GetIdentity()));
 
             if (changedInstance != null)
                 this.RosterInstanceTitle = changedInstance.Title;

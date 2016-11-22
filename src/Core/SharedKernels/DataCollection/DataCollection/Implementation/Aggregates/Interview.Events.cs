@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        public void ApplyEvents(InterviewTree sourceInterview, InterviewTree changedInterview, Guid? responsibleId = null)
+        public void ApplyEvents(InterviewTree changedInterview, Guid? responsibleId = null)
         {
-            var diff = sourceInterview.Compare(changedInterview);
+            var diff = this.Tree.Compare(changedInterview);
 
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();

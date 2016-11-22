@@ -321,7 +321,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var instance in @event.Instances)
             {
                 var rosterIdentity = new RosterIdentity(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
-                this.AddRosterToChangedTree(rosterIdentity);
+                this.AddRosterToTree(rosterIdentity);
                 this.ExpressionProcessorStatePrototype.AddRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
             }
         }
@@ -401,21 +401,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).RemoveAnswer();
             this.ExpressionProcessorStatePrototype.RemoveAnswer(new Identity(@event.QuestionId, @event.RosterVector));
-        }
-
-        protected void AddRosterToChangedTree(RosterIdentity rosterIdentity)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            var parentGroup = questionnaire.GetParentGroup(rosterIdentity.GroupId);
-            if (!parentGroup.HasValue) return;
-
-            var parentGroupIdentity = Identity.Create(parentGroup.Value, rosterIdentity.OuterRosterVector);
-
-            var addedRoster = this.Tree.GetRosterManager(rosterIdentity.GroupId)
-                .CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
-            this.Tree.GetGroup(parentGroupIdentity).AddChild(addedRoster);
-            addedRoster.ActualizeChildren(skipRosters: true);
         }
     }
 }

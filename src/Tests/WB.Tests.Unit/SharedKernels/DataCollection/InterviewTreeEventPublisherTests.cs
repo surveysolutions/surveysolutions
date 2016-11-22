@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
+            interview.ApplyEvents(changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
+            interview.ApplyEvents(changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesRemoved>(listOfPublishedEvents[0]);
@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
+            interview.ApplyEvents(changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesAdded>(listOfPublishedEvents[0]);
@@ -170,7 +170,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
+            interview.ApplyEvents(changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesAdded>(listOfPublishedEvents[0]);
@@ -226,7 +226,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
+            interview.ApplyEvents(changedTree, responsibleId);
             //assert
             Assert.AreEqual(2, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<AnswersRemoved>(listOfPublishedEvents[1]);
@@ -283,7 +283,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var listOfPublishedEvents = new List<IEvent>();
             var interview = InterviewTreeEventPublisher((evnt) => { listOfPublishedEvents.Add(evnt); });
             //act
-            interview.ApplyEvents(sourceTree, changedTree, responsibleId);
+            interview.ApplyEvents(changedTree, responsibleId);
             //assert
             Assert.AreEqual(1, listOfPublishedEvents.Count);
             Assert.IsAssignableFrom<RosterInstancesTitleChanged>(listOfPublishedEvents[0]);
