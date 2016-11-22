@@ -28,11 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 }),
                 Create.Question(questionId: futureQuestionId, questionType: QuestionType.Text, variable: "q2"));
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(futureCondition) ==
-                   new[] { "q2" });
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
+            verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));

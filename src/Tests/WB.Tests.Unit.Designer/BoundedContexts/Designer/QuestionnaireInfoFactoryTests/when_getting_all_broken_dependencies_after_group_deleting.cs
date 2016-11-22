@@ -40,17 +40,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(questionnaireView);
 
-            expressionProcessorMock
-                .Setup(x => x.GetIdentifiersUsedInExpression("q2 == \"bbbb\""))
-                .Returns(new List<string> { "q2" });
-
-            expressionProcessorMock
-                .Setup(x => x.GetIdentifiersUsedInExpression("q1 > 10"))
-                .Returns(new List<string> { "q1" });
-
             factory = CreateQuestionnaireInfoFactory(
                 questionDetailsReaderMock.Object,
-                expressionProcessor: expressionProcessorMock.Object);
+                expressionProcessor: Create.RoslynExpressionProcessor());
         };
 
         Because of = () =>
@@ -68,6 +60,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         private static Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid groupId = g2Id;
-        private static Mock<IExpressionProcessor> expressionProcessorMock = new Mock<IExpressionProcessor>();
     }
 }
