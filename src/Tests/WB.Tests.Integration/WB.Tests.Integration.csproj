@@ -318,7 +318,7 @@
     <Compile Include="InterviewTests\BackwardCompatibility\when_loading_generated_assembly_for_empty_questionnaire_using_minimal_engine_version.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer_and_it_is_enabled.cs" />
+    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_numeric_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
