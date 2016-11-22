@@ -17,18 +17,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.Tree;
+            this.CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, answers, this.Tree);
 
-            CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, answers, sourceInterviewTree);
-
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
 
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(answers));
 
             changedInterviewTree.ActualizeTree();
 
-            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities);
         }
     }
 }

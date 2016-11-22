@@ -16,14 +16,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.Tree;
-            this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, sourceInterviewTree);
+            this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.Tree);
             
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(answer));
 
-            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities);
         }
     }
 }

@@ -17,8 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.Tree;
-            var treeInvariants = new InterviewTreeInvariants(sourceInterviewTree);
+            var treeInvariants = new InterviewTreeInvariants(this.Tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
@@ -26,11 +25,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
 
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
             var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsQRBarcode.SetAnswer(QRBarcodeAnswer.FromString(answer));
 
-            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities);
             
         }
     }
