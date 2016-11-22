@@ -166,7 +166,7 @@ ko.bindingHandlers.maskFormatter = {
         $(element).mask(value);
     }
 };
-ko.bindingHandlers.typeahead = {
+ko.bindingHandlers.simpletypeahead = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         var $element = $(element);
         var allBindings = allBindingsAccessor();
@@ -195,7 +195,7 @@ ko.bindingHandlers.typeahead = {
         $element
             .attr('autocomplete', 'off')
             .attr("value", allBindings.value()) // for IE, i love you!
-            .typeahead({
+            .simpletypeahead({
                 hint: true,
                 highlight: true,
                 minLength: 1

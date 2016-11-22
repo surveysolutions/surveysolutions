@@ -141,7 +141,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 PublicKey = interview.InterviewId,
                 Status = interview.Status,
                 ReceivedByInterviewer = interview.ReceivedByInterviewer,
-                CurrentTranslation = interview.CurrentLanguage
+                CurrentTranslation = interview.CurrentLanguage,
+                IsAssignedToInterviewer = interview.IsAssignedToInterviewer
             };
         }
 
