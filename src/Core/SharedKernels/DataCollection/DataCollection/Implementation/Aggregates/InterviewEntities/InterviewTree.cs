@@ -256,12 +256,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 }
             }
 
-            return new InterviewTreeQuestion(questionIdentity, questionType: questionType,
-                title: title, variableName: variableName, answer: null, linkedOptions: null,
-                cascadingParentQuestionId: cascadingParentQuestionId, isYesNo: isYesNoQuestion,
-                isDecimal: isDecimalQuestion, linkedSourceId: sourceForLinkedQuestion,
+            return new InterviewTreeQuestion(questionIdentity, 
+                questionType: questionType,
+                title: title, 
+                variableName: variableName, 
+                answer: null, 
+                linkedOptions: null,
+                cascadingParentQuestionId: cascadingParentQuestionId, 
+                isYesNo: isYesNoQuestion,
+                isDecimal: isDecimalQuestion, 
+                linkedSourceId: sourceForLinkedQuestion,
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
-                validationMessages: validationMessages, isLinkedToListQuestion: isLinkedToListQuestion);
+                validationMessages: validationMessages, 
+                isLinkedToListQuestion: isLinkedToListQuestion);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)

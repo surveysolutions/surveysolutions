@@ -434,6 +434,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
             => this.Tree.FindRosters()
                 .Where(roster => roster.Identity.Id == rosterId && roster.Parent.Identity.Equals(parentIdentity))
+                .OrderBy(roster => roster.SortIndex)
                 .Select(roster => roster.Identity)
                 .ToList();
 
