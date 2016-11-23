@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public abstract class MultiOptionLinkedQuestionBaseViewModel : MvxNotifyPropertyChanged,
         IMultiOptionQuestionViewModelToggleable,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        ILiteEventHandler<AnswersRemoved>,
         IInterviewEntityViewModel,
         ICompositeQuestionWithChildren,
         IDisposable
@@ -176,6 +177,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
             {
                 this.PutOrderOnOptions(@event);
+            }
+        }
+
+        public void Handle(AnswersRemoved @event)
+        {
+            if (@event.Questions.Any(x => x.Id == this.questionIdentity.Id && x.RosterVector.Identical(this.questionIdentity.RosterVector)))
+            {
+                foreach (var option in this.Options)
+                {
+                    option.Checked = false;
+                    option.CheckedOrder = null;
+                }
             }
         }
 

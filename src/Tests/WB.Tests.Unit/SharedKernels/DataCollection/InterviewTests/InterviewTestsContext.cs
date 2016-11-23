@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -17,8 +18,17 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     [Subject(typeof(Interview))]
+    [TestOf(typeof(Interview))]
     internal class InterviewTestsContext
     {
+        protected static Interview CreateInterview(QuestionnaireDocument questionnaire)
+        {
+            var questionnaireId = Guid.NewGuid();
+
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, Create.Entity.PlainQuestionnaire(questionnaire));
+            return CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+        }
+        
         protected static Interview CreateInterview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
             Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
