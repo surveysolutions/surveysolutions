@@ -8,20 +8,21 @@ namespace WB.UI.Designer.Migrations.PlainStore
     [Migration(12)]
     public class M012_MigrateSharedPersonsToListStorage : Migration
     {
-        private const string SharedPersonsTableName = "sharedpersons";
+        private const string sharedPersonsTableName = "sharedpersons";
+        private const string archivePrefix = "zz_archived_";
 
         public override void Up()
         {
             List<string> questionnaireIds = new List<string>();
 
-            Rename.Table(SharedPersonsTableName).To("zz_archive_" + SharedPersonsTableName);
-            Create.Table(SharedPersonsTableName)
+            Rename.Table(sharedPersonsTableName).To(archivePrefix + sharedPersonsTableName);
+            Create.Table(sharedPersonsTableName)
                 .WithColumn("questionnaireid").AsString().NotNullable()
                 .WithColumn("userid").AsGuid().NotNullable()
                 .WithColumn("email").AsString().NotNullable()
                 .WithColumn("isowner").AsBoolean().NotNullable()
                 .WithColumn("sharetype").AsInt16().NotNullable();
-            Create.Index("questionnairelistviewitem_sharedpersons").OnTable(SharedPersonsTableName)
+            Create.Index("questionnairelistviewitem_sharedpersons").OnTable(sharedPersonsTableName)
                 .OnColumn("questionnaireid").Ascending();
 
             Execute.WithConnection((con, trans) =>
@@ -72,7 +73,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
                     {
                         var insertCommand = con.CreateCommand();
                         insertCommand.CommandText =
-                            $"INSERT INTO plainstore.\"{SharedPersonsTableName}\" (questionnaireid, userid, email, isowner, sharetype) VALUES (:questionnaireid, :userid, :email, :isowner, :sharetype)";
+                            $"INSERT INTO plainstore.\"{sharedPersonsTableName}\" (questionnaireid, userid, email, isowner, sharetype) VALUES (:questionnaireid, :userid, :email, :isowner, :sharetype)";
 
                         var questionnaireIdParam = insertCommand.CreateParameter();
                         questionnaireIdParam.ParameterName = "questionnaireid";
@@ -105,14 +106,14 @@ namespace WB.UI.Designer.Migrations.PlainStore
                 }
             });
 
-            Rename.Table("questionnairesharedpersons").To("zz_archived_questionnairesharedpersons");
+            Rename.Table("questionnairesharedpersons").To($"{archivePrefix}questionnairesharedpersons");
         }
 
         public override void Down()
         {
-            Rename.Table("zz_archived_questionnairesharedpersons").To("questionnairesharedpersons");
-            Delete.Table(SharedPersonsTableName);
-            Rename.Table("zz_archived_" + SharedPersonsTableName).To(SharedPersonsTableName);
+            Rename.Table($"{archivePrefix}questionnairesharedpersons").To("questionnairesharedpersons");
+            Delete.Table(sharedPersonsTableName);
+            Rename.Table(archivePrefix + sharedPersonsTableName).To(sharedPersonsTableName);
         }
     }
 }
