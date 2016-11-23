@@ -798,5 +798,47 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             parentGroup.UpdateSortIndexesForRosters(rosterIdentity.GroupId, rosterManager);
             addedRoster.ActualizeChildren(skipRosters: true);
         }
+
+        private void UpdateTitlesAndTexts()
+        {
+            var questionnaire = this.GetQuestionnaireOrThrow();
+
+            foreach (var question in this.Tree.FindQuestions())
+            {
+                SubstitionText title = this.substitionTextFactory.CreateText(question.Identity,
+                    questionnaire.GetQuestionTitle(question.Identity.Id), questionnaire);
+
+                SubstitionText[] validationMessages = questionnaire.GetValidationMessages(question.Identity.Id)
+                    .Select(x => this.substitionTextFactory.CreateText(question.Identity, x, questionnaire))
+                    .ToArray();
+
+                question.SetTitle(title);
+                question.SetValidationMessages(validationMessages);
+                question.ReplaceSubstitutions();
+            }
+
+            foreach (var staticText in this.Tree.FindStaticTexts())
+            {
+                SubstitionText title = this.substitionTextFactory.CreateText(staticText.Identity,
+                    questionnaire.GetStaticText(staticText.Identity.Id), questionnaire);
+
+                SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticText.Identity.Id)
+                    .Select(x => this.substitionTextFactory.CreateText(staticText.Identity, x, questionnaire))
+                    .ToArray();
+
+                staticText.SetTitle(title);
+                staticText.SetValidationMessages(validationMessages);
+                staticText.ReplaceSubstitutions();
+            }
+
+            foreach (var groupOrRoster in this.Tree.FindGroupsAndRosters())
+            {
+                SubstitionText title = this.substitionTextFactory.CreateText(groupOrRoster.Identity,
+                    questionnaire.GetGroupTitle(groupOrRoster.Identity.Id), questionnaire);
+
+                groupOrRoster.SetTitle(title);
+                groupOrRoster.ReplaceSubstitutions();
+            }
+        }
     }
 }

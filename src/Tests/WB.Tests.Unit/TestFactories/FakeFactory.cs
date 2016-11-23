@@ -54,6 +54,21 @@ namespace WB.Tests.Unit.TestFactories
             return repository.Object;
         }
 
+        public IQuestionnaireStorage QuestionnaireRepository(KeyValuePair<string, QuestionnaireDocument>[] questionnairesWithTranslations)
+        {
+            var questionnairesStorage = new Mock<IQuestionnaireStorage>();
+
+            foreach (var questionnaire in questionnairesWithTranslations)
+            {
+                IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire.Value);
+
+                questionnairesStorage.Setup(repository =>
+                    repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key)).Returns(plainQuestionnaire);
+            }
+            
+            return questionnairesStorage.Object;
+        }
+
         public ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)
             => Mock.Of<ISnapshotStore>(_
                 => _.GetSnapshot(aggregateRootId, It.IsAny<int>()) == snapshot);

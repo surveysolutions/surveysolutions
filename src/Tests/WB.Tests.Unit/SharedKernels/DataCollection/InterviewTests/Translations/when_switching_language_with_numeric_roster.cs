@@ -26,7 +26,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             options.Add(Create.Entity.Answer(1.ToString(), 1));
             options.Add(Create.Entity.Answer(2.ToString(), 2));
 
-            var nonTranslatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(
+            var chapterId = Guid.Parse("33333333333333333333333333333333");
+
+            var nonTranslatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                chapterId,
                 Create.Entity.NumericQuestion(questionId: rosterSizeQuestion, isInteger: true),
                 Create.Entity.Roster(
                     rosterId: rosterId,
@@ -49,7 +52,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             optionsTranslated.Add(Create.Entity.Answer(11.ToString(), 1));
             optionsTranslated.Add(Create.Entity.Answer(22.ToString(), 2));
 
-            var translatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(
+            var translatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                chapterId,  
                 Create.Entity.NumericQuestion(questionId: rosterSizeQuestion, isInteger: true),
                 Create.Entity.Roster(
                     rosterId: rosterId,

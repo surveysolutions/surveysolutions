@@ -19,14 +19,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
         {
             rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestion = Guid.Parse("11111111111111111111111111111111");
+            var chapterId = Guid.Parse("22222222222222222222222222222222");
 
-            var nonTranslatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(
+            var nonTranslatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                chapterId,
                 Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion, options: new List<Answer> { Create.Entity.Answer("title1", 1) }),
                 Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion));
 
             nonTranslatedQuestionnaire.Translations.Add(Create.Entity.Translation(translationId, targetLanguage));
 
-            var translatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(
+            var translatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                chapterId,
                 Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion, options: new List<Answer> { Create.Entity.Answer("тайтл1", 1) }),
                 Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSizeQuestion));
 

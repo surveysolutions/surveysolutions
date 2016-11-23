@@ -1653,6 +1653,7 @@
       <SubType>Designer</SubType>
     </None>
     <Compile Include="TestFactories\ControllerFactory.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.Translations.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

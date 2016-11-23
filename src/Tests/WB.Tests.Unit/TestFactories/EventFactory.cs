@@ -206,12 +206,22 @@ namespace WB.Tests.Unit.TestFactories
             => new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTexts)
-            => new StaticTextsDeclaredInvalid(
+            => this.StaticTextsDeclaredInvalid(new[] {0}, staticTexts);
+
+        public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(int[] failedConditionIndexes,
+            params Identity[] staticTexts)
+        {
+            var failedValidationConditions = failedConditionIndexes.Select(
+                x => Create.Entity.FailedValidationCondition(failedConditionIndex: x))
+                .ToReadOnlyCollection();
+               
+            return new StaticTextsDeclaredInvalid(
                 staticTexts
                     .Select(identity => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
                         identity,
-                        Create.Entity.FailedValidationCondition(failedConditionIndex: 0).ToEnumerable().ToReadOnlyCollection()))
+                        failedValidationConditions))
                     .ToList());
+        }
 
         public StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTexts)
             => new StaticTextsDeclaredValid(staticTexts);
