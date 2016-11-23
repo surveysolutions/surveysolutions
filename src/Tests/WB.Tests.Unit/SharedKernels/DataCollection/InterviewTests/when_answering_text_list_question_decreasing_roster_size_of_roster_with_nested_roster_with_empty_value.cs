@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
 
         It should_raise_TextListQuestionAnswered_event = () =>
-            eventContext.ShouldContainEvent<TextListQuestionAnswered>();
+            eventContext.ShouldContainEvent<AnswersRemoved>();
 
         It should_raise_RosterInstancesRemoved_event_with_4_instances = () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count().ShouldEqual(4);

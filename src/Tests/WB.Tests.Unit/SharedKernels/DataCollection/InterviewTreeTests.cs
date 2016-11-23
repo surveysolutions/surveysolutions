@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Entities.SubEntities;
@@ -8,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
@@ -628,7 +630,44 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             }
         }
 
+        [Test]
+        public void When_SetAnswer_yes_no_question_with_empty_value_Then_it_should_be_treated_as_not_answered()
+        {
+            //arrange
+            var question = Create.Entity.InterviewTreeQuestion(
+                questionIdentity: Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111")),
+                isDisabled: true,
+                title: "title",
+                variableName: "variable",
+                questionType: QuestionType.MultyOption,
+                answer: new AnsweredYesNoOption[] { new AnsweredYesNoOption(1, true), new AnsweredYesNoOption(4, false) },
+                isYesNo: true);
 
+            //act
+            question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(new List<CheckedYesNoAnswerOption>()));
+
+            //assert
+            Assert.That(question.IsAnswered, Is.False);
+        }
+
+        [Test]
+        public void When_SetAnswer_text_list_question_with_empty_value_Then_it_should_be_treated_as_not_answered()
+        {
+            //arrange
+            var question = Create.Entity.InterviewTreeQuestion(
+                questionIdentity: Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111")),
+                isDisabled: true,
+                title: "title",
+                variableName: "variable",
+                questionType: QuestionType.TextList,
+                answer: new[] { new Tuple<decimal, string>(1, "1") });
+
+            //act
+            question.SetAnswer(TextListAnswer.FromTupleArray(new Tuple<decimal, string>[] {}));
+
+            //assert
+            Assert.That(question.IsAnswered, Is.False);
+        }
 
         private static InterviewTree CreateSimpleTree(Guid interviewId, Identity sectionIdentity, Identity questionIdentity)
             => CreateSimpleTree(interviewId, sectionIdentity, Create.Entity.InterviewTreeQuestion(questionIdentity));
