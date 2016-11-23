@@ -197,6 +197,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoWarning("WB0230");
 
         [Test]
+        public void two_single_option_non_cascading_questions_KP_8184()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.SingleOptionQuestion(),
+                    Create.SingleOptionQuestion(),
+                })
+                .ExpectNoWarning("WB0230");
+
+        [Test]
         public void cascading_questions_with_same_cascade_parent()
             => Create.QuestionnaireDocumentWithOneChapter(new []
                 {
