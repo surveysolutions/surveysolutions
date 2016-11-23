@@ -643,7 +643,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = YesNoAnswer.FromAnsweredYesNoOptions(answer as AnsweredYesNoOption[]);
         }
 
-        public bool IsAnswered => this.answer != null;
+        public bool IsAnswered => this.answer != null && this.answer.CheckedOptions.Count > 0;
         public YesNoAnswer GetAnswer() => this.answer;
         public void SetAnswer(YesNoAnswer answer) => this.answer = answer;
 
@@ -677,7 +677,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = TextListAnswer.FromTupleArray(answer as Tuple<decimal, string>[]);
         }
 
-        public virtual bool IsAnswered => this.answer != null;
+        public virtual bool IsAnswered => this.answer != null && this.answer.Rows.Count > 0;
         public virtual TextListAnswer GetAnswer() => this.answer;
         public void SetAnswer(TextListAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
