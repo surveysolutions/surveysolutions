@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestionWithChildren,
         IInterviewEntityViewModel,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
+        ILiteEventHandler<AnswersRemoved>,
         IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -192,6 +193,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 changedModel.Checked = !changedModel.Checked;
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        public void Handle(AnswersRemoved @event)
+        {
+            if (@event.Questions.Any(x => x.Id == this.questionIdentity.Id && x.RosterVector.Identical(this.questionIdentity.RosterVector)))
+            {
+                foreach (var option in this.Options)
+                {
+                    option.Checked = false;
+                    option.CheckedOrder = null;
+                }
             }
         }
 
