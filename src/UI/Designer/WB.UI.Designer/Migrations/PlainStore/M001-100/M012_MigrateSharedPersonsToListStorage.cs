@@ -8,19 +8,20 @@ namespace WB.UI.Designer.Migrations.PlainStore
     [Migration(12)]
     public class M012_MigrateSharedPersonsToListStorage : Migration
     {
-        string sharedPersonsTableName = "sharedpersons";
+        private const string SharedPersonsTableName = "sharedpersons";
+
         public override void Up()
         {
             List<string> questionnaireIds = new List<string>();
 
-            Rename.Table(this.sharedPersonsTableName).To("zz_archive_" + this.sharedPersonsTableName);
-            Create.Table(this.sharedPersonsTableName)
+            Rename.Table(SharedPersonsTableName).To("zz_archive_" + SharedPersonsTableName);
+            Create.Table(SharedPersonsTableName)
                 .WithColumn("questionnaireid").AsString().NotNullable()
                 .WithColumn("userid").AsGuid().NotNullable()
                 .WithColumn("email").AsString().NotNullable()
                 .WithColumn("isowner").AsBoolean().NotNullable()
                 .WithColumn("sharetype").AsInt16().NotNullable();
-            Create.Index("questionnairelistviewitem_sharedpersons").OnTable(this.sharedPersonsTableName)
+            Create.Index("questionnairelistviewitem_sharedpersons").OnTable(SharedPersonsTableName)
                 .OnColumn("questionnaireid").Ascending();
 
             Execute.WithConnection((con, trans) =>
@@ -71,7 +72,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
                     {
                         var insertCommand = con.CreateCommand();
                         insertCommand.CommandText =
-                            $"INSERT INTO plainstore.\"{this.sharedPersonsTableName}\" (questionnaireid, userid, email, isowner, sharetype) VALUES (:questionnaireid, :userid, :email, :isowner, :sharetype)";
+                            $"INSERT INTO plainstore.\"{SharedPersonsTableName}\" (questionnaireid, userid, email, isowner, sharetype) VALUES (:questionnaireid, :userid, :email, :isowner, :sharetype)";
 
                         var questionnaireIdParam = insertCommand.CreateParameter();
                         questionnaireIdParam.ParameterName = "questionnaireid";
@@ -110,8 +111,8 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Down()
         {
             Rename.Table("zz_archived_questionnairesharedpersons").To("questionnairesharedpersons");
-            Delete.Table(this.sharedPersonsTableName);
-            Rename.Table("zz_archived_" + this.sharedPersonsTableName).To(this.sharedPersonsTableName);
+            Delete.Table(SharedPersonsTableName);
+            Rename.Table("zz_archived_" + SharedPersonsTableName).To(SharedPersonsTableName);
         }
     }
 }
