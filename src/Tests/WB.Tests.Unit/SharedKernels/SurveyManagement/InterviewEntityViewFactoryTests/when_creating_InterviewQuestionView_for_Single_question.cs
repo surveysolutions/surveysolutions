@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -9,11 +10,14 @@ using WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTests;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewEntityViewFactoryTests
 {
-    internal class when_creating_InterviewQuestionView_for_not_answered_TextList_question : InterviewEntityViewFactoryTestsContext
+    internal class when_creating_InterviewQuestionView_for_Single_question : InterviewEntityViewFactoryTestsContext
     {
         Establish context = () =>
         {
-            textListQuestionTemplate = new TextListQuestion("text list");
+            textListQuestionTemplate = new SingleQuestion() {
+                Answers = new List<Answer>() {
+                    new Answer() {AnswerValue = "1", AnswerText = "1"},
+                    new Answer() {AnswerValue = "2", AnswerText = "2"} } };
             textListQuestionData = new InterviewQuestion(textListQuestionId)
             {
                 Answer = null
@@ -28,11 +32,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewEntityViewFactor
             textListQuestionView.Answer.ShouldBeNull();
 
         It should_have_options_not_null = () =>
-            textListQuestionView.Options.ShouldNotBeNull();
+            textListQuestionView.Options.Count.ShouldEqual(2);
         
         private static IInterviewEntityViewFactory interviewEntityViewFactory;
         private static InterviewQuestionView textListQuestionView;
-        private static TextListQuestion textListQuestionTemplate;
+        private static SingleQuestion textListQuestionTemplate;
         private static InterviewQuestion textListQuestionData;
         private static Guid textListQuestionId = Guid.Parse("44444444444444444444444444444444");
     }
