@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Where(x => !string.IsNullOrWhiteSpace(x.validation.Expression))
                 .Where(x => x.validation.Expression.Length >= 100)
                 .GroupBy(x => x.validation.Expression)
-                .Where(grouping => grouping.Select(x => x.question).Distinct().Count() >= 3)
+                .Where(grouping => grouping.Select(x => x.question).Distinct().Count() >= 2)
                 .Select(grouping => grouping.Select(x => CreateReference(x.question)).ToArray());
 
         private static IEnumerable<QuestionnaireNodeReference[]> FewQuestionsWithSameLongEnablement(MultiLanguageQuestionnaireDocument questionnaire)
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Where(question => !string.IsNullOrWhiteSpace(question.ConditionExpression))
                 .Where(question => question.ConditionExpression.Length >= 100)
                 .GroupBy(question => question.ConditionExpression)
-                .Where(grouping => grouping.Count() >= 3)
+                .Where(grouping => grouping.Count() >= 2)
                 .Select(grouping => grouping.Select(question => CreateReference(question)).ToArray());
 
         private static bool RosterInRosterWithSameSourceQuestion(IGroup group)
