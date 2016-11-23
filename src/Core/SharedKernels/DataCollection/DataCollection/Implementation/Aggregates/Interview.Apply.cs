@@ -11,10 +11,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        private InterviewTree treeImpl;
-        protected InterviewTree Tree
-            => this.treeImpl ?? (this.treeImpl = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
-
         public virtual void Apply(InterviewReceivedByInterviewer @event)
         {
             this.properties.IsReceivedByInterviewer = true;
