@@ -15,10 +15,13 @@ namespace WB.UI.Designer.Migrations.PlainStore
 
             Rename.Table(this.sharedPersonsTableName).To("zz_archive_" + this.sharedPersonsTableName);
             Create.Table(this.sharedPersonsTableName)
+                .WithColumn("questionnaireid").AsString().NotNullable()
                 .WithColumn("userid").AsGuid().NotNullable()
                 .WithColumn("email").AsString().NotNullable()
                 .WithColumn("isowner").AsBoolean().NotNullable()
                 .WithColumn("sharetype").AsInt16().NotNullable();
+            Create.Index("questionnairelistviewitem_sharedpersons").OnTable(this.sharedPersonsTableName)
+                .OnColumn("questionnaireid").Ascending();
 
             Execute.WithConnection((con, trans) =>
             {
