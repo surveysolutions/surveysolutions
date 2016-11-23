@@ -114,12 +114,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool MoreThan20Options(ICategoricalQuestion question) => question.Answers?.Count > 20;
 
         private static bool NonconsecutiveCascadings(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => question.GetPrevious() != GetCascadeFromQuestion(question, questionnaire);
-
-        private static IQuestion GetCascadeFromQuestion(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-            => question.CascadeFromQuestionId != null
-                ? questionnaire.Questionnaire.Questionnaire.Find<IQuestion>(question.CascadeFromQuestionId.Value)
-                : null;
+            => question.CascadeFromQuestionId.HasValue
+            && question.CascadeFromQuestionId.Value != question.GetPrevious()?.PublicKey;
 
         private EntityVerificationResult<IQuestionnaireEntity> SupervisorQuestionInValidation(IValidatable validatable, MultiLanguageQuestionnaireDocument questionnaire)
         {
