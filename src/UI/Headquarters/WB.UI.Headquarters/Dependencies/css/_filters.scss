@@ -1,16 +1,9 @@
 .filters{
-	@include transition(left, 0.3s); 
-	top: 70px;
-	left: 0;
-	bottom: 0;
-	overflow: auto;
-	position: fixed;
+	@extend %aside;
 	width: 360px;
 	border-right: 3px solid $gray-super-light;
-	padding: 50px 15px 0;
+	padding: 50px 15px 0 33px;
 	margin-left: 12px;
-	background-color: #fff;
-	z-index: 1;
 }
 .foldback-button{
 	@include square(50px);
@@ -36,37 +29,38 @@ input.checkbox-filter{
   	& ~ label{
   		position: relative;
   		padding-left: 35px;
+  		cursor: pointer;
   	}
   	& ~ label .tick {
 	    @extend %tick;
 	    @include absolute(0, null, null, 0);
 	    height: 25px;
 	    background: transparent url("../img/chekboxes.png") no-repeat;
-	    background-size: 66px 198px;
-	    background-position: 0px 2px;
+	    background-size: 68px 350px;
+	    background-position: 0 0;
 	    margin-right: 10px;
-		@include image-2x("../img/chekboxes2k.png", 66px, 198px);
+		@include image-2x("../img/chekboxes2k.png", 68px, 350px);
   	}
   	& ~ label:hover .tick,
   	& ~ label:focus .tick{
-    	background-position: 0px -34px;
+    	background-position: 0px -36px;
   	}
   	&:checked ~ label .tick {
-    	background-position: 0px -70px;
+    	background-position: 0px -72px;
   	}
   	&:checked ~ label:hover .tick,
   	&:checked ~ label:focus .tick {
-    	background-position: 0px -106px;
+    	background-position: 0px -108px;
   	}
   	&:disabled ~ label .tick,
   	&:checked:disabled ~ label .tick {
-    	background-position: 0px -142px;
+    	background-position: 0px -144px;
   	}
   	&:disabled ~ label:hover .tick,
   	&:checked:disabled ~ label:hover .tick,
   	&:disabled ~ label:focus .tick,
   	&:checked:disabled ~ label:focus .tick {
-    	background-position: 0px -178px;
+    	background-position: 0px -180px;
   	}
 }
 .filters-container {
@@ -150,7 +144,7 @@ input.checkbox-filter{
    		}
    		span:first-child {
 		   left: 10px;
-		   overflow: hidden;
+		   @include text-overflow();
 		   position: absolute;
 		   right: 30px;
 		}
@@ -161,7 +155,7 @@ input.checkbox-filter{
 		    top: 35%;
 		    @include size(0, 0); 
 		    display: block;
-		    border-top: 12px solid $gray-text;
+		    border-top: 12px solid $gray-light;
 		    border-right: 7px solid transparent;
 		    border-left: 7px solid transparent;
 		}
@@ -177,15 +171,22 @@ input.checkbox-filter{
    			}
   		}
    }
-   &.open > .dropdown-menu {
-	    display: block;
-	    width: 295px;
-	    padding: 5px;
-   		border: 1px solid $gray_form;
-   		overflow: auto;
-    	max-height: 300px;
-    	border-radius: 4px;
-	} 
+   	&.open {
+   		.caret-large{
+   			border-top: none;
+   			border-bottom: 12px solid $gray-light;
+   		}
+	   	&> .dropdown-menu {
+		    display: block;
+		    width: 295px;
+		    padding: 5px;
+	   		border: 1px solid $gray_form;
+	   		overflow: auto;
+	    	max-height: 300px;
+	    	border-radius: 4px;
+		} 
+   }
+   
 }
 .filters.hidden-filters{
 	left: -400px;
@@ -238,7 +239,7 @@ input.checkbox-filter{
 	   	.filters-container, .preset-filters-container{
 	   		display: none;
 	   		border-color: transparent;
-	   		opacity: 0;
+	   		@include opacity(0);
 	   		visibility: hidden;
 	   		@include transition(opacity);
 
@@ -279,8 +280,8 @@ input.checkbox-filter{
 		   		width: 300px;
 		   		margin: 0 auto;
 		   		border-color: $gray_form;
-		   		opacity: 1;
-		    visibility: visible;
+		   		@include opacity(1);
+		    	visibility: visible;
 		    }
 	    }
 	}

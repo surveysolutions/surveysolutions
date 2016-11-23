@@ -5,6 +5,7 @@
 @include fontface(TrebuchetMSBold);
 @include fontface(ufonts_com_lucidaconsole);
 @include fontface(TrebuchetMS);
+@include fontface(RobotoMedium);
 a{
 	color: $blue;
 	&:hover, &:focus{
@@ -297,7 +298,7 @@ h5{
     letter-spacing: 0.5px;
     display: inline-block;
 }
-.btn-success, .btn-primary{
+.btn-success, .btn-primary, .btn-danger{
     font: 12px/14px "TrebuchetMSBold";
     outline: none;
     text-transform: uppercase;
@@ -317,6 +318,24 @@ h5{
 			border-color: $gray_info;
 		}
 	}
+}
+.breadcrumb{
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+  	& > li + li:before{
+  		display: none;
+  	}
+  	& > li:after{
+  		content: "/ ";
+	    padding: 0 5px;
+	    color: #ccc;
+	    line-height: 75%;
+	    font-size: 75%;
+  	}
+    li a{
+        @extend %gray-uppercase;
+    } 
 }
 @media (max-width: $screen-xs-min){
 	.breadcrumb li a, .breadcrumb > li + li:before{
