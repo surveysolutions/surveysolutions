@@ -13,12 +13,12 @@ namespace WB.UI.Designer.Migrations.PlainStore
         {
             List<string> questionnaireIds = new List<string>();
 
-            Delete.FromTable(sharedPersonsTableName).AllRows();
-            Rename.Column("sharedpersonid").OnTable(sharedPersonsTableName).To("userid");
-
-            Alter.Table(sharedPersonsTableName).AddColumn("email").AsString().NotNullable();
-            Alter.Table(sharedPersonsTableName).AddColumn("isowner").AsBoolean().NotNullable();
-            Alter.Table(sharedPersonsTableName).AddColumn("sharetype").AsInt16().NotNullable();
+            Rename.Table(this.sharedPersonsTableName).To("zz_archive_" + this.sharedPersonsTableName);
+            Create.Table(this.sharedPersonsTableName)
+                .WithColumn("userid").AsGuid().NotNullable()
+                .WithColumn("email").AsString().NotNullable()
+                .WithColumn("isowner").AsBoolean().NotNullable()
+                .WithColumn("sharetype").AsInt16().NotNullable();
 
             Execute.WithConnection((con, trans) =>
             {
@@ -107,12 +107,8 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Down()
         {
             Rename.Table("zz_archived_questionnairesharedpersons").To("questionnairesharedpersons");
-
-            Rename.Column("userid").OnTable(this.sharedPersonsTableName).To("sharedpersonid");
-
-            Delete.Column("email").FromTable(this.sharedPersonsTableName);
-            Delete.Column("isowner").FromTable(this.sharedPersonsTableName);
-            Delete.Column("sharetype").FromTable(this.sharedPersonsTableName);
+            Delete.Table(this.sharedPersonsTableName);
+            Rename.Table("zz_archived_" + this.sharedPersonsTableName).To(this.sharedPersonsTableName);
         }
     }
 }
