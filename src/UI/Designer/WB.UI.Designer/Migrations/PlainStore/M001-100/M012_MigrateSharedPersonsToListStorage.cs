@@ -101,13 +101,12 @@ namespace WB.UI.Designer.Migrations.PlainStore
                 }
             });
 
-            Delete.Table("questionnairesharedpersons");
+            Rename.Table("questionnairesharedpersons").To("zz_archived_questionnairesharedpersons");
         }
 
         public override void Down()
         {
-            Create.Table("questionnairesharedpersons").WithColumn("id").AsString().PrimaryKey()
-                .WithColumn("value").AsCustom("json").NotNullable();
+            Rename.Table("zz_archived_questionnairesharedpersons").To("questionnairesharedpersons");
 
             Rename.Column("userid").OnTable(this.sharedPersonsTableName).To("sharedpersonid");
 

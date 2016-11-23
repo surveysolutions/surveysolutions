@@ -14,16 +14,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
     internal class QuestionnaireRepository : IPlainAggregateRootRepository<Questionnaire>
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> sharedPersonsStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListItems;
         private readonly IServiceLocator serviceLocator;
 
         public QuestionnaireRepository(IServiceLocator serviceLocator,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireListViewItem> sharedPersonsStorage)
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListItems)
         {
             this.serviceLocator = serviceLocator;
             this.questionnaireStorage = questionnaireStorage;
-            this.sharedPersonsStorage = sharedPersonsStorage;
+            this.questionnaireListItems = questionnaireListItems;
         }
 
         public Questionnaire Get(Guid aggregateId)
@@ -33,8 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             if (questionnaireDocument == null)
                 return null;
 
-            var sharedPersons = this.sharedPersonsStorage.GetById(aggregateId.FormatGuid());
-            var personsCollection = sharedPersons?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
+            var questionnaireListItem = this.questionnaireListItems.GetById(aggregateId.FormatGuid());
+            var personsCollection = questionnaireListItem?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
             var questionnaire = this.serviceLocator.GetInstance<Questionnaire>();
             questionnaire.Initialize(aggregateId, questionnaireDocument, personsCollection);
             return questionnaire;
