@@ -102,16 +102,11 @@
         messageTemplateId,
         continueMessageTemplateId,
         onSuccessCommandExecuting,
-        onCancelConfirmation,
-        modelUpdaterFunc)
+        onCancelConfirmation)
     {
             var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
-            var model = { items: filteredItems }
-            if (!_.isUndefined(modelUpdaterFunc)) {
-                modelUpdaterFunc(model);
-            }
 
-            var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
+            var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
             if (filteredItems.length === 0) {
                 bootbox.alert(messageHtml);
