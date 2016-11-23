@@ -478,7 +478,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
                 if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
 
-                return question.FailedValidations.Select(failedValidation =>
+                return staticText.FailedValidations.Select(failedValidation =>
                     $"{staticTextValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} " +
                     $"[{failedValidation.FailedConditionIndex + 1}]");
             }

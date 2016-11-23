@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -274,6 +275,27 @@ namespace WB.Tests.Unit
                     handler.Invoke(evnt);
                 }
             }
+        }
+
+        internal static StatefulInterview StatefulInterviewWithMultilanguageQuestionnaires(params KeyValuePair<string, IComposite[]>[] questionnaires)
+        {
+            var chapterId = Guid.Parse("33333333333333333333333333333333");
+
+            var questionnaireDocuments = new List<KeyValuePair<string, QuestionnaireDocument>>();
+            foreach (var questionnaire in questionnaires)
+            {
+                var questionnaireDocumentWithOneChapterAndLanguages = Create.Entity.QuestionnaireDocumentWithOneChapterAndLanguages(
+                        chapterId,
+                        questionnaires.Select(x => x.Key).Where(x => x != null).ToArray(),
+                        questionnaire.Value);
+
+                questionnaireDocuments.Add(new KeyValuePair<string, QuestionnaireDocument>(questionnaire.Key,
+                    questionnaireDocumentWithOneChapterAndLanguages));
+            }
+
+            var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
+
+            return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
         }
     }
 }

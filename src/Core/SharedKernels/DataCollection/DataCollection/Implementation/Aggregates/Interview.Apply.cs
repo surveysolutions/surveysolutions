@@ -273,6 +273,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(TranslationSwitched @event)
         {
             this.Language = @event.Language;
+
+            this.UpdateTitlesAndTexts();
         }
 
         public virtual void Apply(FlagRemovedFromAnswer @event) { }

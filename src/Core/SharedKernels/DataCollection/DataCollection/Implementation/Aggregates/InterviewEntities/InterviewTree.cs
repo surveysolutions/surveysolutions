@@ -73,6 +73,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IEnumerable<InterviewTreeRoster> FindRosters()
             => this.nodesCache.Values.OfType<InterviewTreeRoster>();
 
+        public IEnumerable<InterviewTreeGroup> FindGroupsAndRosters()
+            => this.nodesCache.Values.OfType<InterviewTreeGroup>();
+
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
             => this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value);
 
