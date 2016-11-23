@@ -61,6 +61,45 @@
     background-size: $width $height;
     }
 }
+@mixin accordion($initial-padding){
+    $padding : 30px;
+    $cummulativePadding: $initial-padding;
+    @include paccordion($cummulativePadding);
+        $cummulativePadding: $cummulativePadding + $padding;
+    & .panel-default{
+        @include paccordion($cummulativePadding);
+        $cummulativePadding: $cummulativePadding + $padding;
+        & .panel-default{
+            @include paccordion($cummulativePadding);
+            $cummulativePadding: $cummulativePadding + $padding;
+            & .panel-default{
+                @include paccordion($cummulativePadding);
+                $cummulativePadding: $cummulativePadding + $padding;
+                & .panel-default{
+                    @include paccordion($cummulativePadding);
+                    $cummulativePadding: $cummulativePadding + $padding;
+                    & .panel-default{
+                        @include paccordion($cummulativePadding);
+                        $cummulativePadding: $cummulativePadding + $padding;
+                        & .panel-default{
+                            @include paccordion($cummulativePadding);
+                            $cummulativePadding: $cummulativePadding + $padding;
+                            & .panel-default{
+                                @include paccordion($cummulativePadding);
+                                $cummulativePadding: $cummulativePadding + $padding;
+                            } 
+                        } 
+                    } 
+                } 
+            } 
+        } 
+    }
+}
+@mixin paccordion($cummulativePadding){
+  & > .panel-heading h3 a{
+        margin-left: $cummulativePadding;
+  }
+}
 %instructions{
     font: 26px/28px "RobotoLight";
     color: $gray_text;
@@ -97,4 +136,14 @@
     border: none;
     background-color: transparent;
   }
+}
+%aside{
+  top: 70px;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+  position: fixed;
+  background-color: #fff;
+  z-index: 1;
+  @include transition(left, 0.3s);
 }
