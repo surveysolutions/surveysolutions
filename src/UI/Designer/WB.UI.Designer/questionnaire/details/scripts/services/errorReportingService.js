@@ -10,6 +10,9 @@
                         } else {
                             notificationService.notice(rejection.data.Message);
                         }
+                    }
+                    else if (rejection.status === 404) {
+                        notificationService.notice('Entry was not found in questionnaire, please select another.');
                     } else {
                         notificationService.error('Request failed unexpectedly.');
                     }
