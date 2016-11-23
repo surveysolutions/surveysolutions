@@ -381,7 +381,8 @@ namespace WB.Tests.Integration
             string variable = null,
             string enablementCondition = null, 
             string validationExpression = null,
-            IEnumerable<ValidationCondition> validationConditions = null)
+            IEnumerable<ValidationCondition> validationConditions = null,
+            string title = null)
         {
             return new NumericQuestion
             {
@@ -389,6 +390,7 @@ namespace WB.Tests.Integration
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 IsInteger = true,
+                QuestionText = title,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationConditions = validationConditions?.ToList(),
@@ -573,11 +575,12 @@ namespace WB.Tests.Integration
 
         public static ISubstitionTextFactory SubstitionTextFactory()
         {
-            var factoryMock = new Mock<ISubstitionTextFactory>
-            {
-                DefaultValue = DefaultValue.Mock
-            };
-            return factoryMock.Object;
+            return new SubstitionTextFactory(Create.SubstitutionService(), Create.VariableToUIStringService());
+        }
+
+        private static IVariableToUIStringService VariableToUIStringService()
+        {
+            return new VariableToUIStringService();
         }
 
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
