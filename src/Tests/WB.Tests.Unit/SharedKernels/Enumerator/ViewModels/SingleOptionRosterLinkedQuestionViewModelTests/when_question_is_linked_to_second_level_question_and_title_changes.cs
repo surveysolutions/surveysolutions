@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             viewModel.Handle(Create.Event.RosterInstancesTitleChanged(parentRosterId, Create.Entity.RosterVector(1, 2)));
 
         It should_refresh_roster_titles_in_options = () => 
-            viewModel.Options.Select(x => x.Title).ShouldContainOnly("Level2");
+            viewModel.Options.Select(x => x.Title).ShouldContainOnly("Level1: Level2");
 
         static SingleOptionRosterLinkedQuestionViewModel viewModel;
         static Guid parentRosterId;
