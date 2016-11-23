@@ -26,6 +26,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
         }
 
+        public virtual void Apply(InterviewOnClientCreated @event)
+        {
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
+        }
+
         public virtual void Apply(InterviewFromPreloadedDataCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
