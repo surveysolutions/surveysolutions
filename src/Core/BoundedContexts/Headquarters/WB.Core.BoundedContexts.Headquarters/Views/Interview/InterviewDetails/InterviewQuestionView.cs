@@ -9,6 +9,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewQuestionView : InterviewEntityView
     {
+
+        public InterviewQuestionView()
+        {
+            this.Options = new List<QuestionOptionView>();
+            this.FailedValidationMessages = new List<ValidationCondition>();
+            this.Comments = new List<InterviewQuestionCommentView>();
+        }
+
         public List<ValidationCondition> FailedValidationMessages { get; set; }
 
         public string AnswerString { get; set; }
