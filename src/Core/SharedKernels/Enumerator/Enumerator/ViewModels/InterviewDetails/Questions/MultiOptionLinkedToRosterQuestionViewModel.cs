@@ -18,7 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionLinkedToRosterQuestionViewModel : MultiOptionLinkedQuestionBaseViewModel,
         ILiteEventHandler<LinkedOptionsChanged>,
-        ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private Guid linkedToRosterId;
@@ -84,20 +83,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (optionListShouldBeUpdated)
             {
                 this.RefreshOptionsFromModel();
-            }
-        }
-
-        public void Handle(AnswersRemoved @event)
-        {
-            foreach (var question in @event.Questions)
-            {
-                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
-                {
-                    foreach (var option in this.Options.Where(option => option.Checked))
-                    {
-                        option.Checked = false;
-                    }
-                }
             }
         }
 
