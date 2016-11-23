@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class MultiOptionLinkedToRosterQuestionQuestionViewModel : MultiOptionLinkedQuestionViewModel,
+    public class MultiOptionLinkedToRosterQuestionQuestionViewModel : MultiOptionLinkedQuestionBaseViewModel,
         ILiteEventHandler<LinkedOptionsChanged>,
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
