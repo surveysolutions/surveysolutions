@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewEntityViewFactor
             textListQuestionTemplate = new TextListQuestion("text list");
             textListQuestionData = new InterviewQuestion(textListQuestionId)
             {
-                Answer = new InterviewTextListAnswers(new List<Tuple<decimal, string>>())
+                Answer = null
             };
             interviewEntityViewFactory = CreateInterviewEntityViewFactory();
         };
