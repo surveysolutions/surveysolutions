@@ -145,6 +145,21 @@ namespace WB.Tests.Unit.TestFactories
                     interviewRepository: interviewRepository));
         }
 
+        public VariableViewModel VariableViewModel(
+            ILiteEventRegistry eventRegistry = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IQuestionnaire questionnaire = null,
+            Identity entityIdentity = null)
+        {
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
+                x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+
+            return new VariableViewModel(
+                questionnaireRepository,
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                eventRegistry ?? Create.Service.LiteEventRegistry());
+        }
+
         public QuestionInstructionViewModel QuestionInstructionViewModel()
         {
             return Mock.Of<QuestionInstructionViewModel>();
