@@ -24,6 +24,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public Interview() { }
 
+        private InterviewTree tree;
+        protected InterviewTree Tree => this.tree ?? (this.tree = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
+
         protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
         public Guid? SupervisorId { get; private set; }
         public Guid? InterviewerId { get; private set; }
