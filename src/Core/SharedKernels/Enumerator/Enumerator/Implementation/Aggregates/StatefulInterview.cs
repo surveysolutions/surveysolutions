@@ -120,9 +120,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             foreach (var linkedQuestion in @event.InterviewData.LinkedQuestionOptions)
                 this.Tree.GetQuestion(Identity.Create(linkedQuestion.Key.Id, linkedQuestion.Key.InterviewItemRosterVector)).AsLinked.SetOptions(linkedQuestion.Value);
 
-            base.ReplaceSubstitutions(this.Tree, this.GetQuestionnaireOrThrow(),
-                @event.InterviewData.Answers.Select(questionWithAnswer =>
-                    Identity.Create(questionWithAnswer.Id, questionWithAnswer.QuestionRosterVector)).ToList());
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            List<Identity> changedQuestionIdentities = @event.InterviewData.Answers.Select(questionWithAnswer =>
+                Identity.Create(questionWithAnswer.Id, questionWithAnswer.QuestionRosterVector)).ToList();
+            this.Tree.ReplaceSubstitutions();
 
             CalculateLinkedToListOptionsOnTree(this.Tree, false);
 
