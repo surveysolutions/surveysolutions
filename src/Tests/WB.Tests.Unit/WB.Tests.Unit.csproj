@@ -539,7 +539,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_parent_group_disabled.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_synchronizing_interview_with_fixed_rosters_and_translations.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\EnablementViewModelTests\EnablementViewModelTestsContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\EnablementViewModelTests\when_being_disposed_of_question_enablement_model_updates_it_state_and_question_was_removed_from_interview.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnablementViewModelTests\when_question_enablement_model_updates_it_state_and_question_was_removed_from_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\FilteredOptionsViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_answering_any_question_for_options_with_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_initializing_options_with_filter.cs" />
