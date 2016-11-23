@@ -49,6 +49,7 @@ using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
@@ -1063,6 +1064,15 @@ namespace WB.Tests.Unit.Designer
         {
             return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
                 attachmentMetaStorage: attachmentMetaStorage);
+        }
+
+        public static QuestionnireHistotyVersionsService QuestionnireHistotyVersionsService(
+            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage = null,
+            IEntitySerializer<QuestionnaireDocument> entitySerializer = null)
+        {
+            return new QuestionnireHistotyVersionsService(
+                questionnaireChangeItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
+                entitySerializer ?? new EntitySerializer<QuestionnaireDocument>());
         }
 
         public static ITopologicalSorter<T> TopologicalSorter<T>()
