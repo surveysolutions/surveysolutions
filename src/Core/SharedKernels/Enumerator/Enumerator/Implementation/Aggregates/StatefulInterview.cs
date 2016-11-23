@@ -226,21 +226,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IInterviewTreeNode sourceNode = this.Tree.GetNodeByIdentity(sourceIdentity);
 
             string optionTitle = string.Empty;
-            List<IInterviewTreeNode> parents = new List<IInterviewTreeNode>(sourceNode.Parents);
+            var skipBreadcrumsThreshold = 1;
             if (sourceNode is InterviewTreeRoster)
             {
                 var sourceRoster = sourceNode as InterviewTreeRoster;
                 optionTitle = sourceRoster.RosterTitle;
-                parents.Add(sourceRoster);
+                skipBreadcrumsThreshold = 0;
             }
             if (sourceNode is InterviewTreeQuestion)
             {
                 var sourceQuestion = sourceNode as InterviewTreeQuestion;
                 optionTitle = sourceQuestion.GetAnswerAsString();
             }
-
             
-            var sourceBreadcrumbsOfRosterTitles = parents.OfType<InterviewTreeRoster>().ToArray();
+            var sourceBreadcrumbsOfRosterTitles = sourceNode.Parents.OfType<InterviewTreeRoster>().ToArray();
             var linkedBreadcrumbsOfRosterTitles = linkedQuestion.Parents.OfType<InterviewTreeRoster>().ToArray();
             
             var common = sourceBreadcrumbsOfRosterTitles.Zip(linkedBreadcrumbsOfRosterTitles, (x, y) => x.RosterSizeId.Equals(y.RosterSizeId) ? x : null).TakeWhile(x => x != null).Count();
@@ -249,7 +248,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var breadcrumbs = string.Join(": ", breadcrumbsOfRosterTitles);
 
-            return breadcrumbsOfRosterTitles.Length > 1
+            return breadcrumbsOfRosterTitles.Length > skipBreadcrumsThreshold
                 ?  $"{breadcrumbs}: {optionTitle}"
                 : optionTitle;
         }
