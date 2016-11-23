@@ -22,6 +22,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool IsValid => !this.FailedValidations?.Any() ?? true;
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
+
+        public void SetTitle(SubstitionText title) => this.Title = title;
+        public void SetValidationMessages(SubstitionText[] validationMessages) => this.ValidationMessages = validationMessages;
+
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
         {
             if (failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));

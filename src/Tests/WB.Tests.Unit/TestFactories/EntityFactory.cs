@@ -726,6 +726,21 @@ namespace WB.Tests.Unit.TestFactories
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
             => this.QuestionnaireDocumentWithOneChapter(null, null, children);
 
+        public QuestionnaireDocument QuestionnaireDocumentWithOneChapterAndLanguages(Guid chapterId, string[] languages, params IComposite[] children)
+            => new QuestionnaireDocument
+            {
+                PublicKey = Guid.NewGuid(),
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter")
+                    {
+                        PublicKey = chapterId,
+                        Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+                    }
+                }.ToReadOnlyCollection(),
+                Translations = new List<Translation>(languages.Select(x=>Create.Entity.Translation(Guid.NewGuid(), x)))
+            };
+
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
             {
