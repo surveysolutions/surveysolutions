@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public abstract class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
+    public abstract class MultiOptionLinkedQuestionBaseViewModel : MvxNotifyPropertyChanged,
         IMultiOptionQuestionViewModelToggleable,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IInterviewEntityViewModel,
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; protected set; }
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
-        protected MultiOptionLinkedQuestionViewModel(
+        protected MultiOptionLinkedQuestionBaseViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
