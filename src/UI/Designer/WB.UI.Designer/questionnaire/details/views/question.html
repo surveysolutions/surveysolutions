@@ -1,4 +1,4 @@
-﻿<form role="form" id="question-editor" name="questionForm" unsaved-warning-form>
+﻿<form role="form" id="question-editor" name="questionForm" unsaved-warning-form ng-show="activeQuestion">
     <div id="show-reload-details-promt" class="ng-cloak" ng-show="activeQuestion.shouldUserSeeReloadDetailsPromt">
         <div class="inner">Click <a ng-click="loadQuestion();" href="javascript:void(0);">reload</a> to update options</div>
     </div>
