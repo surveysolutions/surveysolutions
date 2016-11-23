@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         #region Apply
 
-        public void Apply(InterviewOnClientCreated @event)
+        public override void Apply(InterviewOnClientCreated @event)
         {
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId,
                 @event.QuestionnaireVersion);
