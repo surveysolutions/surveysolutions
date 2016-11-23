@@ -310,26 +310,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiFixedOption)
             {
                 var answerAsRosterVector = answer as RosterVector;
-                if (answerAsRosterVector != null)
-                    this.AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answerAsRosterVector));
-                else if (answer is decimal[])
-                    this.AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]));
+                this.AsMultiFixedOption.SetAnswer(answerAsRosterVector != null
+                    ? CategoricalFixedMultiOptionAnswer.FromDecimalArray(answerAsRosterVector)
+                    : CategoricalFixedMultiOptionAnswer.FromDecimalArray((decimal[]) answer));
                 return;
             }
             if (this.IsSingleLinkedOption)
             {
-                var answerAsRosterVector = answer as RosterVector ?? new RosterVector(answer as decimal[]);
-                var categoricalLinkedSingleOptionAnswer = CategoricalLinkedSingleOptionAnswer.FromRosterVector(answerAsRosterVector);
-                this.AsSingleLinkedOption.SetAnswer(categoricalLinkedSingleOptionAnswer);
+                var answerAsRosterVector = answer as RosterVector;
+                this.AsSingleLinkedOption.SetAnswer(answerAsRosterVector != null 
+                    ? CategoricalLinkedSingleOptionAnswer.FromRosterVector(answerAsRosterVector)
+                    : CategoricalLinkedSingleOptionAnswer.FromRosterVector(new RosterVector((decimal[])answer)));
                 return;
             }
             if (this.IsMultiLinkedOption)
             {
                 var answerAsRosterVector = answer as RosterVector[];
-                if (answerAsRosterVector != null)
-                    this.AsMultiLinkedOption.SetAnswer(CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answerAsRosterVector));
-                else if (answer is decimal[][])
-                    this.AsMultiLinkedOption.SetAnswer(CategoricalLinkedMultiOptionAnswer.FromDecimalArrayArray((decimal[][])answer));
+                this.AsMultiLinkedOption.SetAnswer(answerAsRosterVector != null
+                    ? CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answerAsRosterVector)
+                    : CategoricalLinkedMultiOptionAnswer.FromDecimalArrayArray((decimal[][]) answer));
                 return;
             }
             if (this.IsYesNo) { this.AsYesNo.SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions((AnsweredYesNoOption[])answer)); return; }
