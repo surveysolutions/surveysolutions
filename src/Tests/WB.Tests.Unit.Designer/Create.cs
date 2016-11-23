@@ -617,7 +617,7 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
             => QuestionnaireDocumentWithOneChapter(null, null, null, null, null, children);
 
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid chapterId, params IComposite[] children)
         {
             return QuestionnaireDocumentWithOneChapter(null, chapterId, null, null, null, children);
         }
