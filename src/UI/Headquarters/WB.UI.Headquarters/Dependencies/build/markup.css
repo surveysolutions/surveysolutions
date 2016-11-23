@@ -5749,7 +5749,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.chec
   text-transform: uppercase;
   letter-spacing: 0.5px; }
 
-.breadcrumb li a, .action-block .float-box .btn.cancel-uploading, .export-types .data .table-data-header {
+.action-block .float-box .btn.cancel-uploading, .export-types .data .table-data-header {
   color: #a6a8a9;
   font: 11px/13px "TrebuchetMSBold";
   letter-spacing: 1px;
@@ -6129,8 +6129,7 @@ input.wb-checkbox {
     border-left: 2px solid #dbdfe2; }
   .two-columns-form .log-in .form-error {
     margin-bottom: 20px;
-    margin-bottom: 35px;
-    display: none; }
+    margin-bottom: 35px; }
     .two-columns-form .log-in .form-error p {
       line-height: 21px;
       color: #e74924; }
@@ -6171,11 +6170,6 @@ input.wb-checkbox {
   .centered-box-table .centered-box-table-cell {
     display: table-cell;
     vertical-align: middle; }
-
-.breadcrumb {
-  background-color: transparent;
-  margin: 0;
-  padding: 0; }
 
 @media (max-width: 880px) {
   html body main .flex-row, html body main .two-columns-form {
@@ -6353,8 +6347,7 @@ input.wb-checkbox {
     border-left: 2px solid #dbdfe2; }
   .two-columns-form .log-in .form-error {
     margin-bottom: 20px;
-    margin-bottom: 35px;
-    display: none; }
+    margin-bottom: 35px; }
     .two-columns-form .log-in .form-error p {
       line-height: 21px;
       color: #e74924; }
@@ -6395,11 +6388,6 @@ input.wb-checkbox {
   .centered-box-table .centered-box-table-cell {
     display: table-cell;
     vertical-align: middle; }
-
-.breadcrumb {
-  background-color: transparent;
-  margin: 0;
-  padding: 0; }
 
 @media (max-width: 880px) {
   html body main .flex-row, html body main .two-columns-form {

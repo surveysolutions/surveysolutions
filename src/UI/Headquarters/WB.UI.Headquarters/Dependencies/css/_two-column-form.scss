@@ -43,7 +43,6 @@ input.wb-checkbox{
         .form-error{
             margin-bottom: 20px;
             margin-bottom: 35px;
-            display: none;
             p{
                 line-height: 21px;
                 color: $red_error; 
@@ -88,15 +87,6 @@ input.wb-checkbox{
         display: table-cell;
         vertical-align: middle;
     }
-}
-.breadcrumb{
-    background-color: transparent;
-    margin: 0;
-    padding: 0;
-  
-    li a{
-        @extend %gray-uppercase;
-    } 
 }
 @media (max-width: $screen-sm-min){
     html body main {
