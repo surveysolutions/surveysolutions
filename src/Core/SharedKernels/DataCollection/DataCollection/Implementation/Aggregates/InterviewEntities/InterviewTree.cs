@@ -403,6 +403,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return null;
         }
+
+        public void ReplaceSubstitutions()
+        {
+            foreach (var interviewTreeNode in this.nodesCache.Values)
+            {
+                interviewTreeNode.ReplaceSubstitutions();
+            }
+        }
     }
 
     public interface IInterviewTreeNode

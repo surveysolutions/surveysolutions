@@ -795,18 +795,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
-        public IReadOnlyCollection<Guid> GetEntitiesDependentOnServiceVariables()
-        {
-            var questionsDependentOnServiceVariables = new List<Guid>();
-            var rosterTitle = "rostertitle"; //this.substitutionService.RosterTitleSubstitutionReference-;
-            if (this.SubstitutionReferencedQuestionsCache.ContainsKey(rosterTitle))
-                questionsDependentOnServiceVariables.AddRange(this.SubstitutionReferencedQuestionsCache[rosterTitle]);
-            if (this.SubstitutionReferencedStaticTextsCache.ContainsKey(rosterTitle))
-                questionsDependentOnServiceVariables.AddRange(this.SubstitutionReferencedStaticTextsCache[rosterTitle]);
-            if (this.SubstitutionReferencedGroupsCache.ContainsKey(rosterTitle))
-                questionsDependentOnServiceVariables.AddRange(this.SubstitutionReferencedGroupsCache[rosterTitle]);
-            return questionsDependentOnServiceVariables.ToReadOnlyCollection();
-        }
 
         private bool IsQuestionChildOfGroup(Guid questionId, Guid groupId)
         {
