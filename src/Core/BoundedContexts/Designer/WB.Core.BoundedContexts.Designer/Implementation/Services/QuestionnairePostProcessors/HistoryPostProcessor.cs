@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, questionnaire.CreatedBy,
                 QuestionnaireActionType.Delete, QuestionnaireItemType.Questionnaire, command.QuestionnaireId,
-                questionnaire.GroupsState[command.QuestionnaireId], aggregate.QuestionnaireDocument);
+                questionnaire.GroupsState[command.QuestionnaireId], null);
         }
 
         public void Process(Questionnaire aggregate, CloneQuestionnaire command)
@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, creatorId, QuestionnaireActionType.Clone,
                 QuestionnaireItemType.Questionnaire,
-                command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument, linkToQuestionnaire);
+                command.QuestionnaireId, command.Title, null, linkToQuestionnaire);
         }
 
         public void Process(Questionnaire aggregate, ImportQuestionnaire command)
