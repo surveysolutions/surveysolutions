@@ -226,10 +226,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IInterviewTreeNode sourceNode = this.Tree.GetNodeByIdentity(sourceIdentity);
 
             string optionTitle = string.Empty;
+            List<IInterviewTreeNode> parents = new List<IInterviewTreeNode>(sourceNode.Parents);
             if (sourceNode is InterviewTreeRoster)
             {
                 var sourceRoster = sourceNode as InterviewTreeRoster;
                 optionTitle = sourceRoster.RosterTitle;
+                parents.Add(sourceRoster);
             }
             if (sourceNode is InterviewTreeQuestion)
             {
@@ -237,7 +239,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 optionTitle = sourceQuestion.GetAnswerAsString();
             }
 
-            var sourceBreadcrumbsOfRosterTitles = sourceNode.Parents.OfType<InterviewTreeRoster>().ToArray();
+            
+            var sourceBreadcrumbsOfRosterTitles = parents.OfType<InterviewTreeRoster>().ToArray();
             var linkedBreadcrumbsOfRosterTitles = linkedQuestion.Parents.OfType<InterviewTreeRoster>().ToArray();
             
             var common = sourceBreadcrumbsOfRosterTitles.Zip(linkedBreadcrumbsOfRosterTitles, (x, y) => x.RosterSizeId.Equals(y.RosterSizeId) ? x : null).TakeWhile(x => x != null).Count();
