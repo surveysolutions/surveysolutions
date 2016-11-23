@@ -1,4 +1,5 @@
 ﻿using System;
+using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
@@ -81,7 +82,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         public void When_questionnaire_has_question_linked_to_question_should_return_version_18()
         {
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                                         Create.Question(questionId: questionId, questionType: QuestionType.TextList), 
                                         Create.MultyOptionsQuestion(linkedToQuestionId: questionId));
 
@@ -91,6 +92,43 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
 
             Assert.That(contentVersion, Is.EqualTo(18));
+        }
+
+        [Test]
+        public void When_questionnaire_contains_question_linked_to_question_in_roster_Should_return_version_10()
+        {
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                                        Create.FixedRoster(children: new IComposite[]
+                                        {
+                                            Create.TextQuestion(questionId: questionId)
+                                        }),
+                                        Create.MultyOptionsQuestion(linkedToQuestionId: questionId));
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(10));
+        }
+
+        [Test]
+        public void When_questionnaire_contains_question_linked_to_roster_Should_return_version_12()
+        {
+            var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                                        Create.FixedRoster(rosterId: rosterId, children: new IComposite[]
+                                        {
+                                        }),
+                                        Create.MultyOptionsQuestion(linkedToRosterId: rosterId));
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(12));
         }
     }
 }
