@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         [Test]
         public void should_read_roster_instances_ordered_like_options_in_multi_option_question_if_trigger_is_not_ordered()
         {
+            // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
             {
                 Create.Entity.MultipleOptionsQuestion(questionId: question1Id, areAnswersOrdered: false, textAnswers: new []
@@ -67,11 +68,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var navigationState = Create.Other.NavigationState(interviewRepository);
             navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
 
+            // act
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
 
             var rosterModel = viewModel.RosterInstances.Cast<GroupViewModel>().ToList();
             List<decimal> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
 
+            // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
             Assert.AreEqual(new decimal[] {1, 2, 3, 4}, rosterIds);
         }
@@ -79,6 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         [Test]
         public void should_read_roster_instances_ordered_like_options_in_yes_no_question_if_trigger_is_not_ordered()
         {
+            // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
             {
                 Create.Entity.MultipleOptionsQuestion(questionId: question1Id, isYesNo: true, areAnswersOrdered: false, textAnswers: new []
@@ -114,11 +118,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var navigationState = Create.Other.NavigationState(interviewRepository);
             navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
 
+            // act
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
 
             var rosterModel = viewModel.RosterInstances.Cast<GroupViewModel>().ToList();
             List<decimal> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
 
+            // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
             Assert.AreEqual(new decimal[] { 1, 2, 3, 4 }, rosterIds);
         }
@@ -126,6 +132,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         [Test]
         public void should_read_roster_instances_with_the_same_order_as_user_checked_them_if_multi_size_question_is_ordered()
         {
+            // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
             {
                 Create.Entity.MultipleOptionsQuestion(questionId: question1Id, areAnswersOrdered: true, textAnswers: new []
@@ -151,11 +158,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var navigationState = Create.Other.NavigationState(interviewRepository);
             navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
 
+            // act
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
 
             var rosterModel = viewModel.RosterInstances.Cast<GroupViewModel>().ToList();
             List<decimal> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
 
+            // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
             Assert.AreEqual(new decimal[] { 3, 1, 4, 2 }, rosterIds);
         }
@@ -163,6 +172,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         [Test]
         public void should_read_roster_instances_with_the_same_order_as_user_checked_them_if_yes_no_size_question_is_ordered()
         {
+            // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
             {
                 Create.Entity.MultipleOptionsQuestion(questionId: question1Id, isYesNo: true, areAnswersOrdered: true, textAnswers: new []
@@ -192,17 +202,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             }, DateTime.Now));
 
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
-
+            
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
 
             var navigationState = Create.Other.NavigationState(interviewRepository);
             navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
 
+            // act
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
 
             var rosterModel = viewModel.RosterInstances.Cast<GroupViewModel>().ToList();
             List<decimal> rosterIds = rosterModel.Select(x => x.Identity.RosterVector.Last()).ToList();
 
+            // assert
             Assert.That(rosterModel.Count, Is.EqualTo(4));
             Assert.AreEqual(new decimal[] { 3, 1, 4, 2 }, rosterIds);
         }
