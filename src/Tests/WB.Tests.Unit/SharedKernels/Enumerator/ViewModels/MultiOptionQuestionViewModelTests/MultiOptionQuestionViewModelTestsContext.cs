@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
     [Subject(typeof(MultiOptionQuestionViewModel))]
+    [TestOf(typeof(MultiOptionQuestionViewModel))]
     internal class MultiOptionQuestionViewModelTestsContext
     {
         protected static MultiOptionQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
