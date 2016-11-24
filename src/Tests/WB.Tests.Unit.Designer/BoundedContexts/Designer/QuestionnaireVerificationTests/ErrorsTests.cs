@@ -7,11 +7,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     [TestFixture]
     internal class ErrorsTests
     {
-        private readonly Guid q1Id = Guid.Parse("11111111111111111111111111111111");
-        private readonly Guid q2Id = Guid.Parse("22222222222222222222222222222222");
-        private readonly Guid q3Id = Guid.Parse("33333333333333333333333333333333");
-        private readonly Guid q4Id = Guid.Parse("44444444444444444444444444444444");
-        private readonly Guid r1Id = Guid.Parse("99999999999999999999999999999999");
+        private static readonly Guid Id1 = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
 
         [Test]
         public void circular_reference_in_enablings()
@@ -39,50 +36,55 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [Test]
         public void linked_question_reference_on_TextList_question_from_wrong_scope()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
-            {
-                Create.Roster(r1Id, children: new IComposite[]
                 {
-                    Create.TextListQuestion(q1Id),
-                }),
-                Create.SingleQuestion(q2Id, linkedToQuestionId: q1Id)
-            }).ExpectError("WB0116");
+                    Create.Roster(children: new IComposite[]
+                    {
+                        Create.TextListQuestion(Id1),
+                    }),
+                    Create.SingleQuestion(linkedToQuestionId: Id1)
+                })
+                .ExpectError("WB0116");
 
 
         [Test]
         public void linked_question_reference_on_TextList_question_from_current_and_child_scope()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
-            {
-                Create.TextListQuestion(q1Id),
-                Create.Roster(r1Id, children: new IComposite[]
                 {
-                    Create.TextListQuestion(q2Id),
-                    Create.SingleQuestion(q3Id, linkedToQuestionId: q1Id),
-                    Create.SingleQuestion(q4Id, linkedToQuestionId: q2Id)
-                }),
-            }).ExpectNoError("WB0116");
+                    Create.TextListQuestion(Id1),
+                    Create.Roster(children: new IComposite[]
+                    {
+                        Create.TextListQuestion(Id2),
+                        Create.SingleQuestion(linkedToQuestionId: Id1),
+                        Create.SingleQuestion(linkedToQuestionId: Id2)
+                    }),
+                })
+                .ExpectNoError("WB0116");
 
         [Test]
         public void linked_question_reference_on_TextList_question()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
-            {
-                Create.TextListQuestion(q1Id),
-                Create.SingleQuestion(q2Id, linkedToQuestionId: q1Id)
-            }).ExpectNoError("WB0012");
+                {
+                    Create.TextListQuestion(Id1),
+                    Create.SingleQuestion(linkedToQuestionId: Id1)
+                })
+                .ExpectNoError("WB0012");
 
         [Test]
         public void linked_to_TextList_question_has_options_filter()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
-            {
-                Create.TextListQuestion(q1Id),
-                Create.SingleQuestion(q2Id, linkedToQuestionId: q1Id, optionsFilter: "something")
-            }).ExpectCritical("WB0117");
+                {
+                    Create.TextListQuestion(Id1),
+                    Create.SingleQuestion(linkedToQuestionId: Id1, optionsFilter: "something")
+                })
+                .ExpectCritical("WB0117");
 
         [Test]
         public void linked_to_TextList_question_has_linked_filter()
             => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
-            {
-                Create.TextListQuestion(q1Id),
-                Create.SingleQuestion(q2Id, linkedToQuestionId: q1Id, linkedFilter: "something")
-            }).ExpectCritical("WB0117");
+                {
+                    Create.TextListQuestion(Id1),
+                    Create.SingleQuestion(linkedToQuestionId: Id1, linkedFilter: "something")
+                })
+                .ExpectCritical("WB0117");
     }
 }
