@@ -294,7 +294,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
 
-            if (this.InterviewerId.HasValue)
+            if (this.properties.InterviewerId.HasValue)
             {
                 this.ApplyEvent(new InterviewerAssigned(userId, null, null));
             }
