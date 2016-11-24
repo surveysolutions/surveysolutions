@@ -365,9 +365,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleLinkedOption)
             {
                 var interviewTreeSingleLinkedToRosterQuestion = this.AsSingleLinkedOption;
-                var linkedQuestion = new Identity(interviewTreeSingleLinkedToRosterQuestion.LinkedSourceId, interviewTreeSingleLinkedToRosterQuestion.GetAnswer()?.SelectedValue);
+                var linkedToEntityId = new Identity(interviewTreeSingleLinkedToRosterQuestion.LinkedSourceId, interviewTreeSingleLinkedToRosterQuestion.GetAnswer()?.SelectedValue);
                 
-                return this.Tree.GetQuestion(linkedQuestion).GetAnswerAsString(getCategoricalAnswerOptionText);
+                return this.Tree.GetQuestion(linkedToEntityId)?.GetAnswerAsString(getCategoricalAnswerOptionText) ?? 
+                       this.Tree.GetRoster(linkedToEntityId).RosterTitle;
             }
             if (this.IsMultiLinkedOption)
             {
