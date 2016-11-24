@@ -192,7 +192,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public string SupervisorRejectComment { get; private set; }
 
         public string GetAnswerAsString(Identity questionIdentity)
-            => this.Tree.GetQuestion(questionIdentity).GetAnswerAsString();
+        {
+            var questionnaire = this.GetQuestionnaireOrThrow();
+            var question = this.Tree.GetQuestion(questionIdentity);
+
+            return !question.IsAnswered()
+                ? string.Empty
+                : question.GetAnswerAsString(answerOptionValue =>
+                    questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerOptionValue).Title);
+        }
 
         public bool HasErrors { get; private set; }
 
