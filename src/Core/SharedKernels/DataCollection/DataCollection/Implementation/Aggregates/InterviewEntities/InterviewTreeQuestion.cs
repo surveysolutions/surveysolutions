@@ -352,7 +352,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null)
         {
-            if (!this.IsAnswered()) return null;
+            if (!this.IsAnswered()) return String.Empty;
             if (this.IsText) return this.AsText.GetAnswer()?.Value;
             if (this.IsMultimedia) return this.AsMultimedia.GetAnswer()?.FileName;
             if (this.IsQRBarcode) return this.AsQRBarcode.GetAnswer()?.DecodedText;

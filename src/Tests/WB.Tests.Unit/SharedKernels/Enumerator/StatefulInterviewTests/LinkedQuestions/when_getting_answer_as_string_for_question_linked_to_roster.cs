@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         public void Should_return_null_as_answer_to_single_option_question()
         {
             var answerAsString = this.interview.GetAnswerAsString(Create.Entity.Identity(this.linkedQuestionid));
-            Assert.That(answerAsString, Is.Null);
+            Assert.That(answerAsString, Is.Empty);
         }
 
         [Test]
