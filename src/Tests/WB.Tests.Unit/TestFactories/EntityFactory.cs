@@ -837,7 +837,8 @@ namespace WB.Tests.Unit.TestFactories
             Guid? linkedToRosterId = null,
             bool? isFilteredCombobox = null,
             string optionsFilterExpression = null,
-            List<Answer> answers = null)
+            List<Answer> answers = null,
+            bool isPrefilled = false)
         {
             answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -849,6 +850,7 @@ namespace WB.Tests.Unit.TestFactories
             }
             return new SingleQuestion
             {
+                Featured = isPrefilled,
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable ?? "single_option_question",
                 QuestionText = title ?? "SO Question",
