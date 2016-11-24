@@ -103,9 +103,6 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         int CountInvalidEntitiesInInterview();
         
-        Guid? SupervisorId { get;  }
-        Guid? InterviewerId { get; }
-
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();

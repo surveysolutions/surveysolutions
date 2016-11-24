@@ -39,9 +39,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public IEnumerable<EntityWithCommentsViewModel> GetEntitiesWithComments(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            Identity[] invalidEntities = interview.GetCommentedBySupervisorQuestionsInInterview().Take(this.maxNumberOfEntities).ToArray();
+            Identity[] commentedBySupervisorEntities = interview.GetCommentedBySupervisorQuestionsInInterview().Take(this.maxNumberOfEntities).ToArray();
 
-            return this.EntityWithErrorsViewModels<EntityWithCommentsViewModel>(interviewId, navigationState, invalidEntities, interview);
+            return this.EntityWithErrorsViewModels<EntityWithCommentsViewModel>(interviewId, navigationState, commentedBySupervisorEntities, interview);
         }
 
         private IEnumerable<T> EntityWithErrorsViewModels<T>(string interviewId, NavigationState navigationState,

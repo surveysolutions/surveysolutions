@@ -424,13 +424,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private bool IsEnabledWithSupervisorComments(InterviewTreeQuestion question, IQuestionnaire questionnaire)
             => !question.IsDisabled() &&
                questionnaire.IsInterviewierQuestion(question.Identity.Id) &&
-               question.AnswerComments.Any(y => y.UserId != this.InterviewerId);
+               question.AnswerComments.Any(y => y.UserId != this.properties.InterviewerId);
 
         public string GetLastSupervisorComment() => this.SupervisorRejectComment;
 
         private bool HasSupervisorCommentInterviewerReply(InterviewTreeQuestion question)
         {
-            var indexOfLastNotInterviewerComment = question.AnswerComments.FindLastIndex(0, x => x.UserId != this.InterviewerId);
+            var indexOfLastNotInterviewerComment = question.AnswerComments.FindLastIndex(0, x => x.UserId != this.properties.InterviewerId);
             return question.AnswerComments.Skip(indexOfLastNotInterviewerComment + 1).Any();
         }
 

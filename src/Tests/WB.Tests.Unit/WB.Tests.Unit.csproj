@@ -516,6 +516,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level1.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_answering_on_nested_roster_question_which_is_linked_to_question_and_sorce_in_different_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_answering_on_nested_roster_question_which_is_linked_to_question_from_roster.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_interviewer_leaves_a_comment.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_options_for_linked_to_list_question_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_roster_trigger_is_multioption_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_fixed_roster_has_substitution.cs" />

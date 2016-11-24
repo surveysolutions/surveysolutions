@@ -75,8 +75,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private CommentViewModel ToViewModel(AnswerComment comment)
         {
-            var isCurrentUserComment = this.principal.CurrentUserIdentity.UserId == comment.UserId;
-            var isSupervisorComment = this.interview.SupervisorId == comment.UserId;
+            var userId = this.principal.CurrentUserIdentity.UserId;
+            var isCurrentUserComment = userId == comment.UserId;
+            var isSupervisorComment = comment.UserId != userId; // TODO: This is bad and won't work after reassign, but previous code was no better so anyway.
 
             return new CommentViewModel
             {
