@@ -196,9 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var questionnaire = this.GetQuestionnaireOrThrow();
             var question = this.Tree.GetQuestion(questionIdentity);
 
-            return !question.IsAnswered()
-                ? string.Empty
-                : question.GetAnswerAsString(answerOptionValue =>
+            return question.GetAnswerAsString(answerOptionValue =>
                     questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerOptionValue).Title);
         }
 
