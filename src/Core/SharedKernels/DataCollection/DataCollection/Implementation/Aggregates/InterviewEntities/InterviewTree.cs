@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -37,7 +38,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string InterviewId { get; }
         public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
-        
+        public IEnumerable<IInterviewTreeNode> AllNodes => this.nodesCache.Values;
+
         public InterviewTreeQuestion GetQuestion(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeQuestion;
 
@@ -72,9 +74,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IEnumerable<InterviewTreeRoster> FindRosters()
             => this.nodesCache.Values.OfType<InterviewTreeRoster>();
-
-        public IEnumerable<InterviewTreeGroup> FindGroupsAndRosters()
-            => this.nodesCache.Values.OfType<InterviewTreeGroup>();
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
             => this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value);
