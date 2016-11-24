@@ -28,8 +28,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected InterviewTree Tree => this.tree ?? (this.tree = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
 
         protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
-        public Guid? SupervisorId { get; private set; }
-        public Guid? InterviewerId { get; private set; }
 
         public override Guid EventSourceId
         {
