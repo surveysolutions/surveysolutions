@@ -264,14 +264,25 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                var interviewerName = this.GetResponsibleIdName(@event.Payload.InterviewerId);
+                if (@event.Payload.InterviewerId.HasValue)
+                {
+                    var interviewerName = this.GetResponsibleIdName(@event.Payload.InterviewerId.Value);
 
-                interview.ResponsibleId = @event.Payload.InterviewerId;
-                interview.ResponsibleName = interviewerName;
-                interview.ResponsibleRole = UserRoles.Operator;
-                interview.IsAssignedToInterviewer = true;
+                    interview.ResponsibleId = @event.Payload.InterviewerId.Value;
+                    interview.ResponsibleName = interviewerName;
+                    interview.ResponsibleRole = UserRoles.Operator;
+                    interview.IsAssignedToInterviewer = true;
 
-                interview.ReceivedByInterviewer = false;
+                    interview.ReceivedByInterviewer = false;
+                }
+                else
+                {
+                    interview.ResponsibleId = interview.TeamLeadId;
+                    interview.ResponsibleName = interview.TeamLeadName;
+                    interview.ResponsibleRole = UserRoles.Supervisor;
+                    interview.IsAssignedToInterviewer = false;
+                    interview.ReceivedByInterviewer = false;
+                }
             });
         }
 
