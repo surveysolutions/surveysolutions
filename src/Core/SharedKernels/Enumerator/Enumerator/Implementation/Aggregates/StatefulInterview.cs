@@ -262,14 +262,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
+            changedInterviewTree.ActualizeTree();
+
+            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, new List<Identity>());
+
             //apply events
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            changedInterviewTree.ActualizeTree();
-
-            this.ApplyTreeDiffChanges(userId: userId, questionnaire: questionnaire, changedInterviewTree: changedInterviewTree,
-                changedQuestionIdentities: new List<Identity>());
+            this.ApplyEvents(changedInterviewTree, userId);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));

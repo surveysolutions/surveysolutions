@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -26,7 +27,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.ApplyTreeDiffChanges(command.UserId, changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+
+            this.ApplyEvents(changedInterviewTree, command.UserId);
         }
     }
 }

@@ -135,12 +135,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
+            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+
             //apply events
             this.ApplyEvent(new InterviewFromPreloadedDataCreated(command.UserId,
                 this.QuestionnaireIdentity.QuestionnaireId, this.QuestionnaireIdentity.Version));
 
-            this.ApplyTreeDiffChanges(userId: command.UserId, questionnaire: questionnaire, changedInterviewTree: changedInterviewTree,
-                changedQuestionIdentities: changedQuestionIdentities);
+            this.ApplyEvents(changedInterviewTree, command.UserId);
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -169,14 +170,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
             }
 
+            changedInterviewTree.ActualizeTree();
+
+            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, prefilledQuestionsWithAnswers.Keys.ToList());
+
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            changedInterviewTree.ActualizeTree();
-            
-            this.ApplyTreeDiffChanges(userId: userId, questionnaire: questionnaire, changedInterviewTree: changedInterviewTree,
-                changedQuestionIdentities: prefilledQuestionsWithAnswers.Keys.ToList());
+            this.ApplyEvents(changedInterviewTree, userId);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -577,11 +579,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected bool HasInvalidStaticTexts
             => this.Tree.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
 
-        protected void ApplyTreeDiffChanges(Guid userId, InterviewTree changedInterviewTree, IQuestionnaire questionnaire,
+        protected void CalculateTreeDiffChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire,
             List<Identity> changedQuestionIdentities)
         {
             var expressionProcessorState = this.GetClonedExpressionState();
-            
+
             this.UpdateExpressionState(changedInterviewTree, expressionProcessorState);
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
@@ -606,8 +608,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
             this.ReplaceSubstitutions(changedInterviewTree, questionnaire, changedQuestionIdentities);
-
-            this.ApplyEvents(changedInterviewTree, userId);
         }
 
         protected void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
