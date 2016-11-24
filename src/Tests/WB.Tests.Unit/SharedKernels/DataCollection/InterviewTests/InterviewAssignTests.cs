@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             // assert
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
-            eventContext.AssertThatDoesNotContainEvent<InterviewerAssigned>();
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>(e => e.InterviewerId == null);
             eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>();
         }
 
@@ -138,7 +138,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             // assert
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
-            eventContext.AssertThatDoesNotContainEvent<InterviewerAssigned>();
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>(e => e.InterviewerId == null);
             eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>();
         }
 
@@ -158,7 +158,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             // assert
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
             eventContext.AssertThatContainsEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.SupervisorAssigned);
-            eventContext.AssertThatDoesNotContainEvent<InterviewerAssigned>();
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>(e => e.InterviewerId == null);
         }
 
 
