@@ -107,16 +107,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     : fullStatusHistory;
 
             var orderedInterviewStatuses = statusHistoryStartingWithLastComplete
-                .Where(status =>
-                    status.Status == InterviewStatus.RejectedBySupervisor ||
-                    status.Status == InterviewStatus.InterviewerAssigned)
+                .Where(status => status.Status == InterviewStatus.RejectedBySupervisor)
                 .ToList();
 
             var lastRejectedBySupervisorStatus =
                 orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
 
+            var interviewStatus = lastRejectedBySupervisorStatus?.Status ?? lastInterviewStatus.Status;
+
             return this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId,
-                lastInterviewStatus.Status, lastRejectedBySupervisorStatus?.Comment,
+                interviewStatus,
+                lastRejectedBySupervisorStatus?.Comment,
                 lastRejectedBySupervisorStatus?.Date,
                 lastInterviewerAssignedStatus?.Date);
         }
