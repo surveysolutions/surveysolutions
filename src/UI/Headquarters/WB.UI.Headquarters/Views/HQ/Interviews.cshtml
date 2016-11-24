@@ -163,8 +163,8 @@
             <div class="row">
                 @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
                     "<span class='text-normal' data-bind='text: eligibleSelectedItems.length'></span>",
-                    InterviewStatus.ApprovedByHeadquarters.ToLocalizeString(), 
-                    InterviewStatus.SupervisorAssigned.ToLocalizeString()))
+                    InterviewStatus.ApprovedBySupervisor.ToLocalizeString(), 
+                    InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
             </div>
         </div>
     </script>
