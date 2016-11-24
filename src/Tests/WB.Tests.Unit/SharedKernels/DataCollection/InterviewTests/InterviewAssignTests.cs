@@ -142,6 +142,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>();
         }
 
+        [Test]
+        public void Interview_in_status_InterviewerAssigned_And_interview_being_moved_to_other_team_As_result_supervisor_should_be_changed_and_interviewer_set_to_null_and_status_set_to_SupervisorAssigned()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+            SetupEventContext();
+
+            // act
+            interview.AssignSupervisor(headquarterId, supervisorId2);
+
+            // assert
+            eventContext.AssertThatContainsEvent<SupervisorAssigned>();
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.SupervisorAssigned);
+            eventContext.AssertThatDoesNotContainEvent<InterviewerAssigned>();
+        }
+
 
         readonly Guid interviewerId   = Guid.Parse("99999999999999999999999999999999");
         readonly Guid interviewerId2  = Guid.Parse("22222222222222222222222222222222");
