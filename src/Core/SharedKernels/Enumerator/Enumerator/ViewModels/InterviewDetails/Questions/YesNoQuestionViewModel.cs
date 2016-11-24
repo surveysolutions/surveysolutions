@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -26,7 +25,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IInterviewEntityViewModel,
         IDisposable,
         ICompositeQuestionWithChildren,
-        ILiteEventHandler<YesNoQuestionAnswered>
+        ILiteEventHandler<YesNoQuestionAnswered>,
+        ILiteEventHandler<AnswersRemoved>
     {
         private readonly Guid userId;
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -227,6 +227,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+        }
+
+        public void Handle(AnswersRemoved @event)
+        {
+            if (this.areAnswersOrdered && @event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector)))
+            {
+                foreach (var option in this.Options.ToList())
+                {
+                    option.Selected = null;
+                    option.AnswerCheckedOrder = null;
+                }
+            }
         }
 
         public void Handle(YesNoQuestionAnswered @event)
