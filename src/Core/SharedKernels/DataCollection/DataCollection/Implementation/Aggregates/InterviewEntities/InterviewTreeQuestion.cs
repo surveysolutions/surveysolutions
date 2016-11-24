@@ -364,8 +364,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (this.IsSingleLinkedOption)
             {
-                var linkedQuestion = new Identity(this.AsSingleLinkedOption.LinkedSourceId, this.AsSingleLinkedOption.GetAnswer()?.SelectedValue);
-                return this.Tree.GetRoster(linkedQuestion).RosterTitle;
+                var interviewTreeSingleLinkedToRosterQuestion = this.AsSingleLinkedOption;
+                var linkedQuestion = new Identity(interviewTreeSingleLinkedToRosterQuestion.LinkedSourceId, interviewTreeSingleLinkedToRosterQuestion.GetAnswer()?.SelectedValue);
+                
+                return this.Tree.GetQuestion(linkedQuestion).GetAnswerAsString(getCategoricalAnswerOptionText);
             }
             if (this.IsMultiLinkedOption)
             {
@@ -743,7 +745,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
         }
 
-        public bool IsAnswered => this.answer != null;
+        public bool IsAnswered => this.answer != null && this.answer.CheckedValues.Count > 0;
         public CategoricalFixedMultiOptionAnswer GetAnswer() => this.answer;
         public void SetAnswer(CategoricalFixedMultiOptionAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
@@ -777,7 +779,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = CategoricalLinkedSingleOptionAnswer.FromRosterVector(answer as RosterVector);
         }
 
-        public virtual bool IsAnswered => this.answer != null;
+        public virtual bool IsAnswered => this.answer != null && this.answer.SelectedValue.Length > 0;
         public virtual CategoricalLinkedSingleOptionAnswer GetAnswer() => this.answer;
         public void SetAnswer(CategoricalLinkedSingleOptionAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
@@ -808,7 +810,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = CategoricalLinkedMultiOptionAnswer.FromRosterVectors(answer as RosterVector[]);
         }
 
-        public bool IsAnswered => this.answer != null;
+        public bool IsAnswered => this.answer != null && this.answer.CheckedValues.Count > 0;
         public CategoricalLinkedMultiOptionAnswer GetAnswer() => this.answer;
         public void SetAnswer(CategoricalLinkedMultiOptionAnswer answer) => this.answer = answer;
 
@@ -888,7 +890,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         private CategoricalFixedMultiOptionAnswer answer;
-        public bool IsAnswered => this.answer != null;
+        public bool IsAnswered => this.answer != null && this.answer.CheckedValues.Count > 0;
         public CategoricalFixedMultiOptionAnswer GetAnswer() => this.answer;
         public void SetAnswer(CategoricalFixedMultiOptionAnswer answer) => this.answer = answer;
 
