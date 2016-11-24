@@ -101,7 +101,7 @@ namespace WB.UI.Headquarters.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that were not received by interviewers and are in status &lt;i&gt;{1}&lt;/i&gt; could be reassigned..
+        ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt; could be reassigned..
         /// </summary>
         public static string AssignToOtherTeamConfirmMessage {
             get {
