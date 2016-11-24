@@ -8,9 +8,11 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using System;
+using Main.Core.Documents;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using NSubstitute;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -211,5 +213,18 @@ namespace WB.Tests.Unit.TestFactories
         private EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry, IQuestionnaireStorage questionnaireRepository)
             => new EnablementViewModel(interviewRepository, eventRegistry, questionnaireRepository);
+
+        public FilteredOptionsViewModel FilteredOptionsViewModel(
+            Identity questionId,
+            QuestionnaireDocument questionnaire, 
+            IStatefulInterview statefulInterview)
+        {
+            var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
+
+            var result = new FilteredOptionsViewModel(questionnaireRepository, interviewRepository, new AnswerNotifier(Create.Service.LiteEventRegistry()));
+            result.Init(statefulInterview.Id.FormatGuid(), questionId, 30);
+            return result;
+        }
     }
 }

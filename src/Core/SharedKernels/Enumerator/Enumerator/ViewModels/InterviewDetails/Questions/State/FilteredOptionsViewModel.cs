@@ -80,7 +80,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return Options;
         }
 
-
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
             var newOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, null, Filter, Count)
