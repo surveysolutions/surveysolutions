@@ -352,6 +352,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null)
         {
+            if (!this.IsAnswered()) return null;
             if (this.IsText) return this.AsText.GetAnswer()?.Value;
             if (this.IsMultimedia) return this.AsMultimedia.GetAnswer()?.FileName;
             if (this.IsQRBarcode) return this.AsQRBarcode.GetAnswer()?.DecodedText;
@@ -364,7 +365,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleLinkedOption)
             {
                 var linkedQuestion = new Identity(this.AsSingleLinkedOption.LinkedSourceId, this.AsSingleLinkedOption.GetAnswer()?.SelectedValue);
-                return this.Tree.GetQuestion(linkedQuestion).GetAnswerAsString(getCategoricalAnswerOptionText);
+                return this.Tree.GetRoster(linkedQuestion).RosterTitle;
             }
             if (this.IsMultiLinkedOption)
             {
