@@ -803,41 +803,47 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var questionnaire = this.GetQuestionnaireOrThrow();
 
-            foreach (var question in this.Tree.FindQuestions())
+            foreach (var node in this.Tree.AllNodes)
             {
-                SubstitionText title = this.substitionTextFactory.CreateText(question.Identity,
-                    questionnaire.GetQuestionTitle(question.Identity.Id), questionnaire);
+                var question = node as InterviewTreeQuestion;
+                if (question != null)
+                {
+                    SubstitionText title = this.substitionTextFactory.CreateText(question.Identity,
+                        questionnaire.GetQuestionTitle(question.Identity.Id), questionnaire);
 
-                SubstitionText[] validationMessages = questionnaire.GetValidationMessages(question.Identity.Id)
-                    .Select(x => this.substitionTextFactory.CreateText(question.Identity, x, questionnaire))
-                    .ToArray();
+                    SubstitionText[] validationMessages = questionnaire.GetValidationMessages(question.Identity.Id)
+                        .Select(x => this.substitionTextFactory.CreateText(question.Identity, x, questionnaire))
+                        .ToArray();
 
-                question.SetTitle(title);
-                question.SetValidationMessages(validationMessages);
-                question.ReplaceSubstitutions();
-            }
+                    question.SetTitle(title);
+                    question.SetValidationMessages(validationMessages);
+                    question.ReplaceSubstitutions();
+                }
 
-            foreach (var staticText in this.Tree.FindStaticTexts())
-            {
-                SubstitionText title = this.substitionTextFactory.CreateText(staticText.Identity,
-                    questionnaire.GetStaticText(staticText.Identity.Id), questionnaire);
+                var groupOrRoster = node as InterviewTreeGroup;
+                if (groupOrRoster != null)
+                {
+                    SubstitionText title = this.substitionTextFactory.CreateText(groupOrRoster.Identity,
+                        questionnaire.GetGroupTitle(groupOrRoster.Identity.Id), questionnaire);
 
-                SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticText.Identity.Id)
-                    .Select(x => this.substitionTextFactory.CreateText(staticText.Identity, x, questionnaire))
-                    .ToArray();
+                    groupOrRoster.SetTitle(title);
+                    groupOrRoster.ReplaceSubstitutions();
+                }
 
-                staticText.SetTitle(title);
-                staticText.SetValidationMessages(validationMessages);
-                staticText.ReplaceSubstitutions();
-            }
+                var staticText = node as InterviewTreeStaticText;
+                if (staticText != null)
+                {
+                    SubstitionText title = this.substitionTextFactory.CreateText(staticText.Identity,
+                       questionnaire.GetStaticText(staticText.Identity.Id), questionnaire);
 
-            foreach (var groupOrRoster in this.Tree.FindGroupsAndRosters())
-            {
-                SubstitionText title = this.substitionTextFactory.CreateText(groupOrRoster.Identity,
-                    questionnaire.GetGroupTitle(groupOrRoster.Identity.Id), questionnaire);
+                    SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticText.Identity.Id)
+                        .Select(x => this.substitionTextFactory.CreateText(staticText.Identity, x, questionnaire))
+                        .ToArray();
 
-                groupOrRoster.SetTitle(title);
-                groupOrRoster.ReplaceSubstitutions();
+                    staticText.SetTitle(title);
+                    staticText.SetValidationMessages(validationMessages);
+                    staticText.ReplaceSubstitutions();
+                }
             }
         }
     }

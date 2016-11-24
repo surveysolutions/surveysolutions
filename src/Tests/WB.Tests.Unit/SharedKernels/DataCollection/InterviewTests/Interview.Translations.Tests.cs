@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     [TestOf(typeof(Interview))]
     public partial class InterviewTests
     {
-		[Test]
+        [Test]
 	    public void When_switch_translation_with_group_Then_title_should_be_translated()
 	    {
 	        //arrange
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 	        //act
 			interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
 	        //assert
-	        interview.GetTitleText(groupIdentity).ShouldEqual(ruTitle);
+	        Assert.That(interview.GetTitleText(groupIdentity), Is.EqualTo(ruTitle));
 	    }
 
         [Test]
@@ -60,9 +60,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //act
             interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
             //assert
-            interview.GetTitleText(staticTextIdentity).ShouldEqual(ruText);
-            interview.GetFailedValidationMessages(staticTextIdentity)
-                .ShouldContainOnly($"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]");
+            Assert.That(interview.GetTitleText(staticTextIdentity), Is.EqualTo(ruText));
+            Assert.That(interview.GetFailedValidationMessages(staticTextIdentity),
+                Is.EquivalentTo(new[] {$"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]"}));
         }
 
         [Test]
@@ -102,9 +102,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //act
             interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
             //assert
-            interview.GetTitleText(questionIdentity).ShouldEqual(ruText);
-            interview.GetFailedValidationMessages(questionIdentity)
-                .ShouldContainOnly($"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]");
+            Assert.That(interview.GetTitleText(questionIdentity), Is.EqualTo(ruText));
+            Assert.That(interview.GetFailedValidationMessages(questionIdentity),
+                Is.EquivalentTo(new[] {$"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]"}));
         }
     }
 }
