@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var userId = this.principal.CurrentUserIdentity.UserId;
             var isCurrentUserComment = userId == comment.UserId;
-            var isSupervisorComment = comment.UserId != userId; // TODO: This is bad and won't work after reassign, but previous code was no better so anyway.
+            var isSupervisorComment = comment.UserId != userId; // TODO: KP-8225 This is bad and won't work after reassign, but previous code was no better so anyway.
 
             return new CommentViewModel
             {
