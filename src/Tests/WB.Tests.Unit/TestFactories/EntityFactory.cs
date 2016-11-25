@@ -42,6 +42,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -1259,5 +1260,8 @@ namespace WB.Tests.Unit.TestFactories
         {
             return new PreloadedLevelDto(rosterVector, answeres.ToDictionary(answer => answer.Id, answer => answer.Answer));
         }
+
+        public NavigationIdentity NavigationIdentity(Identity navigateTo)
+            => new NavigationIdentity() {TargetScreen = ScreenType.Group, TargetGroup = navigateTo};
     }
 }
