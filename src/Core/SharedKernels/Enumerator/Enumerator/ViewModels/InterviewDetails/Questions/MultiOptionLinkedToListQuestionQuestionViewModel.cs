@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.questionState.Dispose();
-
+            this.eventRegistry.Unsubscribe(this);
         }
 
         public IObservableCollection<ICompositeEntity> Children
