@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -33,6 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private IStatefulInterview interview;
         private readonly ICommandService commandService;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private readonly IPrincipal principal;
 
         protected CommentsViewModel() { }
@@ -40,13 +42,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public CommentsViewModel(
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
-            ICommandService commandService)
+            ICommandService commandService,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
-
             this.interviewRepository = interviewRepository;
             this.principal = principal;
             this.commandService = commandService;
+            this.mainThreadDispatcher = mainThreadDispatcher;
         }
 
         private string interviewId;
@@ -54,8 +56,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.interviewId = interviewId;
             this.questionIdentity = entityIdentity;
@@ -70,7 +72,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var comments = interview.GetQuestionComments(this.questionIdentity) ?? new List<AnswerComment>();
 
-            comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.Comments.Clear();
+                comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
+            });
         }
 
         private CommentViewModel ToViewModel(AnswerComment comment)
@@ -136,7 +142,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     questionId: this.questionIdentity.Id,
                     rosterVector: this.questionIdentity.RosterVector,
                     commentTime: DateTime.UtcNow,
-                    comment: this.InterviewerComment));
+                    comment: this.InterviewerComment)).ConfigureAwait(false);
 
             this.UpdateCommentsFromInterview();
 
