@@ -755,6 +755,9 @@ namespace WB.Tests.Unit.TestFactories
                 }.ToReadOnlyCollection()
             };
 
+        public QuestionnaireDocument QuestionnaireDocumentWithOneQuestion(Guid? questionId = null, Guid? questionnaireId = null)
+           => this.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId));
+
         public QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
             => new QuestionnaireExportStructure
             {

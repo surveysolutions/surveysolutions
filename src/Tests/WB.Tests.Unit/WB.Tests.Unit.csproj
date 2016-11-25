@@ -1660,6 +1660,7 @@
     </None>
     <Compile Include="TestFactories\ControllerFactory.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.Translations.Tests.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterview.Synchronization.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

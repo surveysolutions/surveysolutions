@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     [TestOf(typeof(StatefulInterview))]
-    public class StatefullInterviewTests
+    internal partial class StatefullInterviewTests
     {
         [Test]
         public void When_GetAnswerAsString_for_prefilled_single_fixed_question_Then_should_be_returned_answered_option_text()
