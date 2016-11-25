@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             
         };
 
-        Because of = () => interview.Apply(Create.Event.TextListQuestionAnswered(linkSourceId, RosterVector.Empty, new[] { new Tuple<decimal, string>(1, "one"), }));
+        Because of = () => interview.AnswerTextListQuestion(Guid.NewGuid(), linkSourceId, RosterVector.Empty, DateTime.UtcNow, new[] { new Tuple<decimal, string>(1, "one"), });
 
         It should_calculate_state_of_options_for_linked_question = () =>
         {
