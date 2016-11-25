@@ -25,8 +25,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IMultiOptionQuestionViewModelToggleable,
         IInterviewEntityViewModel,
         ILiteEventHandler<TextListQuestionAnswered>,
-        ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         ILiteEventHandler<AnswersRemoved>,
+        ILiteEventHandler<LinkedToListOptionsChanged>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
@@ -135,22 +135,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 linkedOption => this.CreateOptionViewModel(linkedOption, answeredOptions)).ToList();
                 
         }
-        
-        public void Handle(TextListQuestionAnswered @event)
-        {
-            if (@event.QuestionId == this.linkedToQuestionId)
-            {
-                //check scope and than update
-
-                var newOptions = this.CreateOptions();
-
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value == t.Value && s.Title == t.Title);
-                    this.RaisePropertyChanged(() => HasOptions);
-                });
-            }
-        }
 
         private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue, decimal[] answeredOptions)
         {
@@ -167,11 +151,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             option.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?)null;
 
             return option;
-        }
-
-
-        public void Handle(MultipleOptionsQuestionAnswered @event)
-        {
         }
 
         public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
@@ -249,6 +228,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                 }
             }
+        }
+
+        public void Handle(TextListQuestionAnswered @event)
+        {
+            if (@event.QuestionId == this.linkedToQuestionId)
+            {
+                //check scope and than update
+
+                var newOptions = this.CreateOptions();
+
+                this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                {
+                    this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Title == t.Title);
+                    this.RaisePropertyChanged(() => HasOptions);
+                });
+            }
+        }
+
+        public void Handle(LinkedToListOptionsChanged @event)
+        {
+            if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
+
+            var newOptions = this.CreateOptions();
+
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value == t.Value);
+                this.RaisePropertyChanged(() => HasOptions);
+            });
+
         }
     }
 }

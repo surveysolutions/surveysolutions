@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
             var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.AreLinkedOptionsChanged).ToArray();
+            var questionsWithChangedLinkedToListOptionsSet = diffByQuestions.Where(x => x.AreLinkedToListOptionsChanged).ToArray();
             var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
             var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
@@ -32,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyValidityEvents(diff);
             this.ApplyVariableEvents(changedVariables);
             this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet);
+            this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
             this.ApplySubstitutionEvents(diff);
         }
 
@@ -80,6 +82,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (changedLinkedOptions.Any())
             {
                 this.ApplyEvent(new LinkedOptionsChanged(changedLinkedOptions));
+            }
+        }
+
+        private void ApplyLinkedToListOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
+        {
+            var changedLinkedOptions = questionsWithChangedOptionsSet
+                .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options.ToArray()))
+                .ToArray();
+
+            if (changedLinkedOptions.Any())
+            {
+                this.ApplyEvent(new LinkedToListOptionsChanged(changedLinkedOptions));
             }
         }
 
