@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            interview.Apply(Create.Event.TextListQuestionAnswered(questionId, RosterVector.Empty, new[] { new Tuple<decimal, string>(1, "one"), }));
+            interview.AnswerTextListQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] { new Tuple<decimal, string>(1, "one"), });
             eventContext = new EventContext();
         };
 
