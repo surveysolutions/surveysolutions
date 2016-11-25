@@ -77,7 +77,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 {
                     var question = this.Tree.GetQuestion(Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
 
-                    question.SetObjectAnswer(answerDto.Answer);
+                    if (answerDto.Answer != null)
+                    {
+                        question.SetObjectAnswer(answerDto.Answer);
+                    }
 
                     if (answerDto.AllComments != null)
                         question.AnswerComments = answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)).ToList();
