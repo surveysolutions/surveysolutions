@@ -304,5 +304,12 @@ namespace WB.Tests.Unit.TestFactories
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 settings ?? Mock.Of<IEnumeratorSettings>());
         }
+
+        public AllInterviewsFactory AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null,
+            IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions = null)
+        {
+            return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
+                featuredQuestions ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionAnswer>>());
+        }
     }
 }
