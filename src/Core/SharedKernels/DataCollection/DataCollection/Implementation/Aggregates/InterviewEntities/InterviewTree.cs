@@ -125,7 +125,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsStaticTextValid(diff as InterviewTreeStaticTextDiff) ||
                     IsStaticTextInalid(diff as InterviewTreeStaticTextDiff) ||
                     IsVariableChanged(diff as InterviewTreeVariableDiff) ||
-                    IsOptionsSetChanged(diff as InterviewTreeQuestionDiff))
+                    IsOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
+                    IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff))
                 .ToReadOnlyCollection();
         }
 
@@ -155,11 +156,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return false;
         }
 
-        private bool IsOptionsSetChanged(InterviewTreeQuestionDiff diffByQuestion)
+        private static bool IsOptionsSetChanged(InterviewTreeQuestionDiff diffByQuestion)
         {
             if (diffByQuestion == null || diffByQuestion.IsNodeRemoved) return false;
 
             return diffByQuestion.AreLinkedOptionsChanged;
+        }
+
+        private static bool IsLinkedToListOptionsSetChanged(InterviewTreeQuestionDiff diffByQuestion)
+        {
+            if (diffByQuestion == null || diffByQuestion.IsNodeRemoved) return false;
+
+            return diffByQuestion.AreLinkedToListOptionsChanged;
         }
 
         private static bool IsVariableChanged(InterviewTreeVariableDiff diffByVariable)
