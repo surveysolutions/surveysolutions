@@ -236,7 +236,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 foreach (var option in this.Options.ToList())
                 {
                     option.Selected = null;
-                    option.AnswerCheckedOrder = null;
+                    option.YesAnswerCheckedOrder = null;
                 }
             }
         }
