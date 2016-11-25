@@ -71,7 +71,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             for (int i = 0; i <= maxDepth; i++)
             {
                 var answersByScope = @event.InterviewData.Answers
-                    .Where(questionWithAnswer => questionWithAnswer.Answer != null)
                     .Where(x => x.QuestionRosterVector.Length == i);
 
                 foreach (var answerDto in answersByScope)
