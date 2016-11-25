@@ -496,8 +496,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
-            propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId, createdOnClient);
-            
             var isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
 
             if (isInterviewNeedToBeCreated)
@@ -506,6 +504,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
+                propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId);
+
                 if (this.properties.Status == InterviewStatus.Deleted)
                     this.Restore(userId);
                 else
