@@ -374,7 +374,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 var formattedAnswers = this.AsMultiLinkedOption.GetAnswer()?.CheckedValues
                     .Select(x => new Identity(this.AsMultiLinkedOption.LinkedSourceId, x))
-                    .Select(x => this.Tree.GetQuestion(x).GetAnswerAsString(getCategoricalAnswerOptionText));
+                    .Select(x => this.Tree.GetQuestion(x)?.GetAnswerAsString(getCategoricalAnswerOptionText) ?? this.Tree.GetRoster(x).RosterTitle);
                 return string.Join(", ", formattedAnswers);
             }
 
