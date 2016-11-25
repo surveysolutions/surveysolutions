@@ -80,6 +80,22 @@ namespace WB.Tests.Unit.TestFactories
             return new ErrorMessagesViewModel(dynamicTextViewModelFactory);
         }
 
+        public MultiOptionLinkedToListQuestionQuestionViewModel MultiOptionLinkedToListQuestionQuestionViewModel(
+            IQuestionnaire questionnaire = null,
+            IStatefulInterview interview = null,
+            ILiteEventRegistry eventRegistry = null,
+            QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState = null,
+            AnsweringViewModel answering = null)
+            => new MultiOptionLinkedToListQuestionQuestionViewModel(
+                questionState ?? Stub<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>.WithNotEmptyValues,
+                answering ?? Mock.Of<AnsweringViewModel>(),
+                Mock.Of<QuestionInstructionViewModel>(),
+                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
+                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
+                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                Stub.MvxMainThreadDispatcher());
+
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
             IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
