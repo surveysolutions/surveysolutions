@@ -193,7 +193,8 @@ namespace WB.Tests.Unit.TestFactories
 
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
                                     commandService: Stub<ICommandService>.WithNotEmptyValues,
-                                    principal: Stub<IPrincipal>.WithNotEmptyValues);
+                                    principal: Stub<IPrincipal>.WithNotEmptyValues,
+                                    mainThreadDispatcher: Stub.MvxMainThreadDispatcher());
 
             var answersRemovedNotifier = new AnswersRemovedNotifier(liteEventRegistry);
 
