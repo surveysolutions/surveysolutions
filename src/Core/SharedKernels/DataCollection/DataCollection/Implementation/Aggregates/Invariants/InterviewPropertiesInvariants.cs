@@ -22,10 +22,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             this.ThrowIfInterviewReceivedByInterviewer();
         }
 
-        public void ThrowIfOtherInterviewerIsResponsible(Guid userId)
+        public void ThrowIfOtherInterviewerIsResponsible(Guid userId, bool createdOnClient)
         {
-            if (this.InterviewProperties.InterviewerId.HasValue &&
-                userId != this.InterviewProperties.InterviewerId.Value)
+            if (!createdOnClient && userId != this.InterviewProperties.InterviewerId)
                 throw new InterviewException(
                     $"Interviewer with id {userId.FormatGuid()} is not responsible for the interview anymore, interviewer with id {this.InterviewProperties.InterviewerId} is.",
                     InterviewDomainExceptionType.OtherUserIsResponsible);

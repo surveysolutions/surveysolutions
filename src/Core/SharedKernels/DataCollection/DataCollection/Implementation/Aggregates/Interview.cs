@@ -496,7 +496,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
-            propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId);
+            propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId, createdOnClient);
             
             var isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
 
