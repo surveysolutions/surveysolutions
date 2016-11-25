@@ -146,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value == t.Value);
+                    this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value == t.Value && s.Title == t.Title);
                     this.RaisePropertyChanged(() => HasOptions);
                 });
             }
