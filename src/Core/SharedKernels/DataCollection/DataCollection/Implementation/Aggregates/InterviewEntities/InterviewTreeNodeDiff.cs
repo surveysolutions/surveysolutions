@@ -176,6 +176,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return !sourceOptions.SequenceEqual(ChangedNode.AsLinked.Options);
             }
         }
+
+        public bool AreLinkedToListOptionsChanged
+        {
+            get
+            {
+                if (ChangedNode == null) return false;
+                if (!ChangedNode.IsLinkedToListQuestion) return false;
+
+                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? new List<decimal>();
+
+                if (sourceOptions.Count != ChangedNode.AsLinkedToList.Options.Count)
+                    return true;
+
+                return !sourceOptions.SequenceEqual(ChangedNode.AsLinkedToList.Options);
+            }
+        }
     }
 
     public class InterviewTreeStaticTextDiff : InterviewTreeNodeDiff

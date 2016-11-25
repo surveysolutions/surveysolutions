@@ -116,9 +116,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.Tree.GetQuestion(Identity.Create(@event.QuestionId, @event.RosterVector)).AsTextList.SetAnswer(TextListAnswer.FromTupleArray(@event.Answers));
             this.ExpressionProcessorStatePrototype.UpdateTextListAnswer(@event.QuestionId, @event.RosterVector, @event.Answers);
-
-            //calculate referenced linked questions
-            CalculateLinkedToListOptionsOnTree(this.Tree, false);
         }
 
         public virtual void Apply(SingleOptionLinkedQuestionAnswered @event)
@@ -185,6 +182,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var linkedQuestion in @event.ChangedLinkedQuestions)
                 this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinked.SetOptions(linkedQuestion.Options);
+        }
+
+        public void Apply(LinkedToListOptionsChanged @event)
+        {
+            foreach (var linkedQuestion in @event.ChangedLinkedQuestions)
+                this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinkedToList.SetOptions(linkedQuestion.Options);
         }
 
         public virtual void Apply(GroupsDisabled @event)

@@ -90,6 +90,8 @@
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\StaticTextsPassiveEvent.cs" />
+    <Compile Include="Events\Interview\Dtos\ChangedLinkedToListOptions.cs" />
+    <Compile Include="Events\Interview\LinkedToListOptionsChanged.cs" />
     <Compile Include="Events\Interview\TranslationSwitched.cs" />
     <Compile Include="Events\Interview\VariablesDisabled.cs" />
     <Compile Include="Events\Interview\VariablesEnabled.cs" />

@@ -9,7 +9,6 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -25,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<TextListQuestionAnswered>,
+        ILiteEventHandler<LinkedToListOptionsChanged>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
@@ -216,6 +216,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 //check scope before update
                 RefreshOptionsFromModel();
             }
+        }
+
+        public void Handle(LinkedToListOptionsChanged @event)
+        {
+            if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
+
+            this.RefreshOptionsFromModel();
         }
 
         public IObservableCollection<ICompositeEntity> Children
