@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -67,10 +68,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var listViewItem = this.listItemStorage.GetById(questionnaireId);
+            var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
 
             var sharedPersons = listViewItem.SharedPersons;
-            if (sharedPersons.Any(x => x.UserId == userId))
+            if (sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit))
                 return true;
 
             return false;
