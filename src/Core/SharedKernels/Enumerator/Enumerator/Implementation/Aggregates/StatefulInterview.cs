@@ -354,10 +354,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return null;
         }
 
-        public InterviewTreeTextListQuestion FindTextListQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
-        {
-            return (this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion)?.AsTextList;
-        }
+        public InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
+            => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity)
             => this.Tree.GetQuestion(questionIdentity).Parents

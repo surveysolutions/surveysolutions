@@ -25,6 +25,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<TextListQuestionAnswered>,
         ILiteEventHandler<LinkedToListOptionsChanged>,
+        ILiteEventHandler<QuestionsEnabled>,
+        ILiteEventHandler<QuestionsDisabled>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
@@ -132,11 +134,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private List<SingleOptionQuestionOptionViewModel> CreateOptions()
         {
             var linkedQuestionAnswer = interview.GetSingleOptionLinkedToListQuestion(this.Identity).GetAnswer()?.SelectedValue;
-            
-            var listQuestion = interview.FindTextListQuestionInQuestionBranch(this.linkedToQuestionId, this.Identity);
-            var listQuestionAnsweredOptions = listQuestion.GetAnswer()?.Rows ?? new List<TextListAnswerRow>();
 
-            return listQuestionAnsweredOptions.Select(linkedOption => this.CreateOptionViewModel(linkedOption, linkedQuestionAnswer)).ToList();
+            var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.Identity);
+
+            if ((listQuestion?.IsDisabled() ?? true) || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+                return new List<SingleOptionQuestionOptionViewModel>();
+
+            return listQuestion.AsTextList.GetAnswer().Rows.Select(linkedOption => this.CreateOptionViewModel(linkedOption, linkedQuestionAnswer)).ToList();
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs) => await this.OptionSelectedAsync(sender);
@@ -193,6 +197,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.QuestionState.Validity.ProcessException(ex);
             }
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
+
+            this.RefreshOptionsFromModel();
+        }
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
+
+            this.RefreshOptionsFromModel();
         }
 
         public void Handle(AnswersRemoved @event)

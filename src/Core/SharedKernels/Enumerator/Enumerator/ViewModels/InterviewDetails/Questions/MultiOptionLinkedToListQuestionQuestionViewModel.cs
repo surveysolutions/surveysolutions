@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<LinkedToListOptionsChanged>,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
+        ILiteEventHandler<QuestionsEnabled>,
+        ILiteEventHandler<QuestionsDisabled>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
@@ -128,13 +130,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var linkedToListQuestion = interview.GetMultiOptionLinkedToListQuestion(this.questionIdentity);
             var answeredOptions = linkedToListQuestion.GetAnswer()?.ToDecimals()?.ToArray();
+            
+            var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.questionIdentity);
 
-            var listQuestion = interview.FindTextListQuestionInQuestionBranch(this.linkedToQuestionId, this.questionIdentity);
-            var listQuestionAnsweredOptions = listQuestion?.GetAnswer()?.Rows ?? new List<TextListAnswerRow>(); ;
+            if ((listQuestion?.IsDisabled() ?? true) || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+                return new List<MultiOptionQuestionOptionViewModel>();
 
-            return listQuestionAnsweredOptions.Select(
+            return listQuestion.AsTextList.GetAnswer().Rows.Select(
                 linkedOption => this.CreateOptionViewModel(linkedOption, answeredOptions)).ToList();
-                
         }
 
         private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue, decimal[] answeredOptions)
@@ -214,6 +217,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 result.Add(this.optionsBottomBorderViewModel);
                 return result;
             }
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
+
+            var newOptions = this.CreateOptions();
+
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s == t);
+                this.RaisePropertyChanged(() => HasOptions);
+            });
+        }
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
+
+            var newOptions = this.CreateOptions();
+
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s == t);
+                this.RaisePropertyChanged(() => HasOptions);
+            });
         }
 
         public void Handle(AnswersRemoved @event)
