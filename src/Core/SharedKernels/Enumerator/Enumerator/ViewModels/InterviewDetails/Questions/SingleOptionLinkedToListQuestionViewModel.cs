@@ -197,16 +197,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswersRemoved @event)
         {
-            foreach (var question in @event.Questions)
-            {
-                if (this.Identity.Equals(question.Id, question.RosterVector))
-                {
-                    foreach (var option in this.Options.Where(option => option.Selected))
-                    {
-                        option.Selected = false;
-                    }
-                }
-            }
+            if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector == this.Identity.RosterVector))
+                return;
+
+            this.RefreshOptionsFromModel();
         }
 
         public void Handle(TextListQuestionAnswered @event)
@@ -250,7 +244,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.mainThreadDispatcher.RequestMainThreadAction(() =>
             {
                 var newOptions = this.CreateOptions();
-                var removedItems = this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s == t);
+                var removedItems = this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value == t.Value && s.Title == t.Title && s.Selected == t.Selected);
                 removedItems.ForEach(option =>
                 {
                     option.BeforeSelected -= this.OptionSelected;
