@@ -125,6 +125,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 @event.InterviewData.Answers.Select(questionWithAnswer =>
                     Identity.Create(questionWithAnswer.Id, questionWithAnswer.QuestionRosterVector)).ToList());
 
+            CalculateLinkedToListOptionsOnTree(this.Tree, false);
+
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
