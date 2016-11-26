@@ -9,7 +9,7 @@
   <LinearLayout style="@style/Interview_Question_Answer"
                 local:MvxBind="
                   Hidden HasOptions;
-                  BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+                  BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, And(QuestionState.IsAnswered, HasOptions)));">
         
     <TextView style="@style/Interview_Question_EmptyOptions"
               local:MvxBind="Hidden HasOptions; Text Localization('Interview_LinkedQuestion_Empty');"/>
