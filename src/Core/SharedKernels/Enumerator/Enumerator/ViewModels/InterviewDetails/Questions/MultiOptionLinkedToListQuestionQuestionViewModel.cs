@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<TextListQuestionAnswered>,
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<LinkedToListOptionsChanged>,
+        ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         ICompositeQuestionWithChildren,
         IDisposable
     {
@@ -227,6 +228,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         option.CheckedOrder = null;
                     }
                 }
+            }
+        }
+
+        public void Handle(MultipleOptionsQuestionAnswered @event)
+        {
+            if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
+            {
+                var newOptions = this.CreateOptions();
+
+                this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                {
+                    this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value == t.Value && s.CheckedOrder == t.CheckedOrder);
+                });
             }
         }
 
