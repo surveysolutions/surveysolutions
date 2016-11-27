@@ -78,7 +78,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         {
                             this.children.OfType<InterviewTreeRoster>()
                                 .Where(x => x.Identity.Equals(expectedRoster))
-                                .ForEach(roster => roster.ActualizeChildren());
+                                .ForEach(roster =>
+                                {
+                                    roster.ActualizeChildren();
+                                    roster.ReplaceSubstitutions();
+                                });
                         }
                         break;
                     case QuestionnaireReferenceType.SubSection:
@@ -91,17 +95,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                             subSection = Tree.CreateSubSection(subSectionIdentity);
                             this.AddChild(subSection);
                         }
-
+                        
                         subSection.ActualizeChildren();
+                        subSection.ReplaceSubstitutions();
                         break;
                     case QuestionnaireReferenceType.StaticText:
                     case QuestionnaireReferenceType.Variable:
                     case QuestionnaireReferenceType.Question:
                         var entityIdentity = new Identity(childEntityId, this.RosterVector);
-                        if (!HasChild(entityIdentity))
+                        var entity = this.Children.FirstOrDefault(x => x.Identity.Equals(entityIdentity));
+
+                        if (entity == null)
                         {
-                            this.AddChild(Tree.CreateNode(childEntityReference.Type, entityIdentity));
+                            entity = this.Tree.CreateNode(childEntityReference.Type, entityIdentity);
+                            this.AddChild(entity);
                         }
+                        entity.ReplaceSubstitutions();
                         break;
                 }
             }
@@ -166,11 +175,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             return null;
-        }
-
-        public bool HasChild(Identity identity)
-        {
-            return this.Children.Any(x => x.Identity.Equals(identity));
         }
 
         public virtual IInterviewTreeNode Clone()
