@@ -20,10 +20,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.Tree);
             
             var changedInterviewTree = this.Tree.Clone();
-            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsDateTime.SetAnswer(DateTimeAnswer.FromDateTime(answer));
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
 
             this.ApplyEvents(changedInterviewTree, userId);
         }
