@@ -20,5 +20,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         {
             this.HeaderItems = new Dictionary<Guid, ExportedHeaderItem>();
         }
+
+        public bool ContainsQuestion(Guid questionId)
+        {
+           return this.HeaderItems.ContainsKey(questionId);
+        }
     }
 }

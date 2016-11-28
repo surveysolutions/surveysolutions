@@ -340,7 +340,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                 var idValue = levelData.Content[y][idCoulmnIndexFile];
                 
                 decimal[] ids = preloadedDataService.GetAvailableIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector,
-                    this.CreateParentIdsVector(levelData.Content[y], parentIdColumnIndexes));
+                    this.CreateParentIdsVector(levelData.Content[y], parentIdColumnIndexes), allLevels);
 
                 if (ids == null)
                     continue;
