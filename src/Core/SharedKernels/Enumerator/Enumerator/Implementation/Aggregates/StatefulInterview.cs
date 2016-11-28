@@ -40,8 +40,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.properties.InterviewerId = @event.UserId;
 
             this.sourceInterview = this.Tree.Clone();
-
-            this.Tree.ActualizeTree();
         }
 
         public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)

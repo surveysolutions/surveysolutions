@@ -269,7 +269,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var userRole = @event.UserId == this.properties.InterviewerId
                 ? UserRoles.Operator
-                : @event.UserId == this.properties.SupervisorId ? UserRoles.Supervisor : (UserRoles?)null;
+                : @event.UserId == this.properties.SupervisorId ? UserRoles.Supervisor : UserRoles.Headquarter;
 
             this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(new AnswerComment(@event.UserId, userRole, @event.CommentTime, @event.Comment,
                 commentByQuestion));
