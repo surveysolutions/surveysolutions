@@ -24,9 +24,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp);
             changedInterviewTree.GetQuestion(answeredQuestion).AsGps.SetAnswer(GpsAnswer.FromGeoPosition(answer));
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
 
-            this.ApplyEvents(changedInterviewTree, userId);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference, userId);
         }
     }
 }
