@@ -529,6 +529,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
             => new AnswerComment(
                 userId: commentDto.UserId,
+                userRole: commentDto.UserRole,
                 commentTime: commentDto.Date,
                 comment: commentDto.Text,
                 questionIdentity: Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));

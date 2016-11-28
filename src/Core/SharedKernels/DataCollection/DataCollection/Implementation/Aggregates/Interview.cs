@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private static AnswerComment ToAnswerComment(CommentSynchronizationDto answerComment,
             AnsweredQuestionSynchronizationDto answerDto)
-            => new AnswerComment(answerComment.UserId, answerComment.Date, answerComment.Text,
+            => new AnswerComment(answerComment.UserId, answerComment.UserRole, answerComment.Date, answerComment.Text,
                 Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
 
         private static string JoinDecimalsWithComma(IEnumerable<decimal> values) => string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
