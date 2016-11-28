@@ -31,8 +31,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changedInterviewTree.GetQuestion(answeredQuestion).AsMultimedia.SetAnswer(MultimediaAnswer.FromString(pictureFileName));
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(changedInterviewTree, userId);
+            this.ApplyEvents(treeDifference, userId);
         }
     }
 }

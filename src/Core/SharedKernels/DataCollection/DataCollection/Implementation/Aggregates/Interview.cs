@@ -134,12 +134,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, answeredQuestions, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
             this.ApplyEvent(new InterviewFromPreloadedDataCreated(command.UserId,
                 this.QuestionnaireIdentity.QuestionnaireId, this.QuestionnaireIdentity.Version));
 
-            this.ApplyEvents(changedInterviewTree, command.UserId);
+            this.ApplyEvents(treeDifference, command.UserId);
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -173,12 +174,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changedInterviewTree.ActualizeTree();
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, answeredQuestions, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            this.ApplyEvents(changedInterviewTree, userId);
+            this.ApplyEvents(treeDifference, userId);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -203,7 +205,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
-            this.ApplyEvents(changedInterviewTree);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference);
 
             if (!this.HasInvalidAnswers())
             {
@@ -242,7 +246,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.UpdateRosterTitles(changedInterviewTree, targetQuestionnaire);
 
-            this.ApplyEvents(changedInterviewTree, command.UserId);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference, command.UserId);
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
@@ -583,6 +589,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected bool HasInvalidStaticTexts
             => this.Tree.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
+
+        protected static IReadOnlyCollection<InterviewTreeNodeDiff> FindDifferenceBetweenTrees(InterviewTree sourceInterview, InterviewTree changedInterview)
+            => sourceInterview.Compare(changedInterview);
 
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IEnumerable<Identity> changedQuestions, IQuestionnaire questionnaire)
         {

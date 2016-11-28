@@ -275,12 +275,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             changedInterviewTree.ActualizeTree();
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, Enumerable.Empty<Identity>(), questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            this.ApplyEvents(changedInterviewTree, userId);
+            this.ApplyEvents(treeDifference, userId);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -297,7 +298,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
-            this.ApplyEvents(this.sourceInterview, this.Tree, userId);
+            var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
+
+            this.ApplyEvents(treeDifference, userId);
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
