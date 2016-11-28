@@ -200,6 +200,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.filterText; }
             set
             {
+                if (this.filterText == value)
+                    return;
+
                 this.filterText = value;
 
                 this.UpdateAutoCompleteList();
