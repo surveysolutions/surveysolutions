@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
                 .WithColumn("email").AsString().NotNullable()
                 .WithColumn("isowner").AsBoolean().NotNullable()
                 .WithColumn("sharetype").AsInt16().NotNullable();
-            Create.Index("questionnairelistviewitem_sharedpersons").OnTable(sharedPersonsTableName)
+            Create.Index("questionnairelistviewitem_sharedpersons_1").OnTable(sharedPersonsTableName)
                 .OnColumn("questionnaireid").Ascending();
 
             Execute.WithConnection((con, trans) =>
