@@ -27,8 +27,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changedInterviewTree.ActualizeTree();
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(changedInterviewTree, command.UserId);
+            this.ApplyEvents(treeDifference, command.UserId);
         }
     }
 }

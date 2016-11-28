@@ -437,4 +437,10 @@
   <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;пусто&gt;</value>
   </data>
+  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+    <value>Комментарий хедквотера</value>
+  </data>
+  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+    <value>Комментарий интервьювера</value>
+  </data>
 </root>

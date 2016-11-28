@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
@@ -81,20 +82,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private CommentViewModel ToViewModel(AnswerComment comment)
         {
-            var userId = this.principal.CurrentUserIdentity.UserId;
-            var isCurrentUserComment = userId == comment.UserId;
-            var isSupervisorComment = comment.UserId != userId; // TODO: KP-8225 This is bad and won't work after reassign, but previous code was no better so anyway.
+            var isCurrentUserComment = comment.UserId == this.principal.CurrentUserIdentity.UserId;
+            var commentCaption = GetCommentCaption(comment);
 
             return new CommentViewModel
             {
                 Comment = comment.Comment,
                 IsCurrentUserComment = isCurrentUserComment,
-                CommentCaption = isCurrentUserComment 
-                ? UIResources.Interview_Comment_Interviewer_Caption
-                : (isSupervisorComment
-                    ? UIResources.Interview_Supervisor_Comment_Caption
-                    : UIResources.Interview_Other_Comment_Caption)
+                CommentCaption = commentCaption
             };
+        }
+
+        private string GetCommentCaption(AnswerComment comment)
+        {
+            var isCurrentUserComment = comment.UserId == this.principal.CurrentUserIdentity.UserId;
+
+            if (isCurrentUserComment)
+            {
+                return UIResources.Interview_Comment_Interviewer_Caption;
+            }
+            else
+            {
+                switch (comment.UserRole)
+                {
+                    case UserRoles.Headquarter:
+                        return UIResources.Interview_Headquarters_Comment_Caption;
+                    case UserRoles.Supervisor:
+                        return UIResources.Interview_Supervisor_Comment_Caption;
+                    case UserRoles.Operator:
+                        return UIResources.Interview_Interviewer_Comment_Caption;
+                    default:
+                        return UIResources.Interview_Other_Comment_Caption;
+                }
+            }
         }
 
         private bool hasComments;
