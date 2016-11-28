@@ -21,10 +21,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsSingleLinkedOption.SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(selectedRosterVector));
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
 
             this.ApplyEvents(changedInterviewTree, userId);
         }

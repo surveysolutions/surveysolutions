@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = this.Tree.Clone();
 
             var orderedData = command.PreloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
-            var changedQuestionIdentities = orderedData.SelectMany(x => x.Answers.Select(y => new Identity(y.Key, x.RosterVector))).ToList();
+            var answeredQuestions = orderedData.SelectMany(x => x.Answers.Select(y => new Identity(y.Key, x.RosterVector))).ToList();
 
             for (int index = 0; index < orderedData.Length; index++)
             {
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, answeredQuestions, questionnaire);
 
             //apply events
             this.ApplyEvent(new InterviewFromPreloadedDataCreated(command.UserId,
@@ -168,9 +168,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
             }
 
+            var answeredQuestions = prefilledQuestionsWithAnswers.Keys.ToList();
+
             changedInterviewTree.ActualizeTree();
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, prefilledQuestionsWithAnswers.Keys.ToList());
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, answeredQuestions, questionnaire);
 
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
@@ -582,8 +584,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected bool HasInvalidStaticTexts
             => this.Tree.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
 
-        protected void CalculateTreeDiffChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire,
-            List<Identity> changedQuestionIdentities)
+        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IEnumerable<Identity> changedQuestions, IQuestionnaire questionnaire)
         {
             var expressionProcessorState = this.GetClonedExpressionState();
 
@@ -596,9 +597,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var structuralChanges = expressionProcessorState.GetStructuralChanges();
             this.UpdateTreeWithStructuralChanges(changedInterviewTree, structuralChanges);
 
-            changedQuestionIdentities.AddRange(structuralChanges.ChangedMultiQuestions.Keys);
-            changedQuestionIdentities.AddRange(structuralChanges.ChangedSingleQuestions.Keys);
-            changedQuestionIdentities.AddRange(structuralChanges.ChangedYesNoQuestions.Keys);
+            var allChangedQuestions = changedQuestions.Concat(
+                structuralChanges.ChangedMultiQuestions.Keys).Concat(
+                structuralChanges.ChangedSingleQuestions.Keys).Concat(
+                structuralChanges.ChangedYesNoQuestions.Keys).ToList();
 
             this.UpdateRosterTitles(changedInterviewTree, questionnaire);
 
@@ -610,7 +612,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
-            this.ReplaceSubstitutions(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.ReplaceSubstitutions(changedInterviewTree, questionnaire, allChangedQuestions);
         }
 
         protected void ReplaceSubstitutions(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
