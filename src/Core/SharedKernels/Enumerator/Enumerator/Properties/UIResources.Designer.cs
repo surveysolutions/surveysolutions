@@ -514,6 +514,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Headquarters comment.
+        /// </summary>
+        public static string Interview_Headquarters_Comment_Caption {
+            get {
+                return ResourceManager.GetString("Interview_Headquarters_Comment_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show instruction.
         /// </summary>
         public static string Interview_Instruction_ShowInstruction {
@@ -528,6 +537,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Instruction_Title {
             get {
                 return ResourceManager.GetString("Interview_Instruction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer comment.
+        /// </summary>
+        public static string Interview_Interviewer_Comment_Caption {
+            get {
+                return ResourceManager.GetString("Interview_Interviewer_Comment_Caption", resourceCulture);
             }
         }
         
