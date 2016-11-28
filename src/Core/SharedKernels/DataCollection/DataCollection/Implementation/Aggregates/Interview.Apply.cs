@@ -267,7 +267,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var commentByQuestion = Identity.Create(@event.QuestionId, @event.RosterVector);
 
-            this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(new AnswerComment(@event.UserId, @event.CommentTime, @event.Comment,
+            var userRole = @event.UserId == this.properties.InterviewerId
+                ? UserRoles.Operator
+                : @event.UserId == this.properties.SupervisorId ? UserRoles.Supervisor : (UserRoles?)null;
+
+            this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(new AnswerComment(@event.UserId, userRole, @event.CommentTime, @event.Comment,
                 commentByQuestion));
         }
 
