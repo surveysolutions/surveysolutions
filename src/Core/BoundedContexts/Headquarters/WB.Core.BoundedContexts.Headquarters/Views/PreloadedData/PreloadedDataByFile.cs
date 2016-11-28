@@ -1,4 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+﻿using Main.Core.Entities.SubEntities;
+
+namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
 {
     public class PreloadedDataByFile
     {
