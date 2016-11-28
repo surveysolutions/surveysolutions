@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion, this.Tree, isLinkedToList);
 
             var changedInterviewTree = this.Tree.Clone();
-            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
 
             if (isLinkedToList)
             {
@@ -33,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
 
             this.ApplyEvents(changedInterviewTree, userId);
         }

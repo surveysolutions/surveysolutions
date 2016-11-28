@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
+            var givenAndRemovedAnswers = new List<Identity> { answeredQuestion };
             var singleQuestion = changedInterviewTree.GetQuestion(answeredQuestion);
             
             if (isLinkedToList)
@@ -38,11 +38,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 if (questionWasAnsweredAndAnswerChanged)
                 {
-                    RemoveAnswersForDependendCascadingQuestions(answeredQuestion, changedInterviewTree, questionnaire, changedQuestionIdentities);
+                    RemoveAnswersForDependendCascadingQuestions(answeredQuestion, changedInterviewTree, questionnaire, givenAndRemovedAnswers);
                 }
             }
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, givenAndRemovedAnswers, questionnaire);
 
             this.ApplyEvents(changedInterviewTree, userId);
         }
