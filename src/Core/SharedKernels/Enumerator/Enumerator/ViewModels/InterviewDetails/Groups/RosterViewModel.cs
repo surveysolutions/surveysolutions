@@ -80,8 +80,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             foreach (var removedRosterInstance in removedRosterInstances)
             {
-                if (this.isDisposed) return;
-
                 var rosterInstanceViewModel = this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(removedRosterInstance));
                 rosterInstanceViewModel.DisposeIfDisposable();
                 this.RosterInstances.Remove(rosterInstanceViewModel);
@@ -89,8 +87,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             foreach (var addedRosterInstance in addedRosterInstances)
             {
-                if (this.isDisposed) return;
-
                 this.RosterInstances.Insert(interviewRosterInstances.IndexOf(addedRosterInstance),
                     this.GetGroupViewModel(addedRosterInstance));
             }
@@ -108,17 +104,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             groupViewModel.Init(this.interviewId, identity, this.navigationState);
             return groupViewModel;
         }
-
-        private bool isDisposed;
+        
         public void Dispose()
         {
-            this.isDisposed = true;
+            this.eventRegistry.Unsubscribe(this);
+
             foreach (var rosterInstance in this.RosterInstances)
             {
                 rosterInstance.DisposeIfDisposable();
             }
-
-            this.eventRegistry.Unsubscribe(this);
         }
     }
 }
