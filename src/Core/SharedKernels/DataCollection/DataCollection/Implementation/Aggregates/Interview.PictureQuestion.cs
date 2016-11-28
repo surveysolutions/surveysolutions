@@ -28,10 +28,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
             changedInterviewTree.GetQuestion(answeredQuestion).AsMultimedia.SetAnswer(MultimediaAnswer.FromString(pictureFileName));
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, new [] { answeredQuestion }, questionnaire);
 
             this.ApplyEvents(changedInterviewTree, userId);
         }
