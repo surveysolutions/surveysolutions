@@ -490,6 +490,8 @@
     <Compile Include="SharedKernels\DataCollection\IdentityTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering__NO__to_YesNo_roster_size_question_with_max_answers_set_to__1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.CategoricalMulti.Tests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.CategoricalSingle.Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\InterviewAssignTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multi_linked_to_List_question_and_answer_is_specified.cs" />
