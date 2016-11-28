@@ -132,7 +132,7 @@ namespace WB.Tests.Unit.TestFactories
             {
                 Text = text,
                 UserId = userId ?? Guid.NewGuid(),
-                UserRole = userRole
+                UserRole = userRole ?? UserRoles.Operator
             };
         }
 
