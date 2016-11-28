@@ -298,7 +298,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
 
-            this.ApplyEvents(treeDifference, userId);
+            this.ApplyPassiveEvents(treeDifference);
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
