@@ -215,7 +215,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswersRemoved @event)
         {
-            if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector == this.Identity.RosterVector))
+            if (!@event.Questions.Contains(this.Identity))
                 return;
 
             this.RefreshOptionsFromModel();

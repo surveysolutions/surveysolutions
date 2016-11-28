@@ -97,17 +97,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GetDataFileByLevelName(allLevels, parentLevel.LevelName);
         }
 
-        public decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues)
+        public decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels)
         {
             if (parentIdValues == null || parentIdValues.Length == 0)
                 return null;
 
             var idIndexInParentDataFile = this.GetIdColumnIndex(parentDataFile);
             var parentIdColumnIndexesOfParentDataFile = this.GetParentIdColumnIndexes(parentDataFile)?? new int[0];
-            var row =
-                parentDataFile.Content.FirstOrDefault(
-                    record =>
-                        record[idIndexInParentDataFile] == parentIdValues.First() &&
+            var row = parentDataFile.Content.FirstOrDefault(record =>
+                            record[idIndexInParentDataFile] == parentIdValues.First() &&
                             parentIdColumnIndexesOfParentDataFile.Select(x => record[x]).SequenceEqual(parentIdValues.Skip(1)));
             if (row == null)
                 return null;
@@ -115,8 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (!this.rosterScopes.ContainsKey(levelScopeVector))
                 return null;
 
-            var rosterScopeDescription = this.rosterScopes[levelScopeVector];
-
+            RosterScopeDescription rosterScopeDescription = this.rosterScopes[levelScopeVector];
             if (rosterScopeDescription.Type == RosterScopeType.Fixed)
             {
                 return this.GroupsCache.ContainsKey(levelScopeVector.Last()) 
@@ -124,33 +121,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     : null;
             }
 
-            var rosterSizeQuestion = this.questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelScopeVector.Last());
-
-            var levelExportStructure = this.FindLevelInPreloadedData(parentDataFile.FileName);
+            HeaderStructureForLevel levelExportStructure = this.FindLevelInPreloadedData(parentDataFile.FileName);
             if (levelExportStructure == null)
                 return null;
 
-            var answerObject = this.BuildAnswerByVariableName(levelExportStructure, rosterSizeQuestion.StataExportCaption,
+            var rosterSizeQuestion = this.questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelScopeVector.Last());
+            while (!levelExportStructure.ContainsQuestion(rosterSizeQuestion.PublicKey))
+            {
+                parentDataFile = this.GetParentDataFile(parentDataFile.FileName, allLevels);
+                levelExportStructure = this.FindLevelInPreloadedData(parentDataFile.FileName);
+
+                row = parentDataFile.Content.FirstOrDefault(record => record[idIndexInParentDataFile] == parentIdValues.First()) ??
+                      parentDataFile.Content.FirstOrDefault(record => record[idIndexInParentDataFile] == parentIdValues.Last());
+            }
+
+            var rosterSizeAnswer = this.BuildAnswerByVariableName(levelExportStructure, rosterSizeQuestion.StataExportCaption,
                 parentDataFile.Header, row);
 
-            if (answerObject == null)
+            if (rosterSizeAnswer == null)
                 return new decimal[0];
 
             if (rosterScopeDescription.Type == RosterScopeType.Numeric)
             {
-                return Enumerable.Range(0, ((NumericIntegerAnswer) answerObject).Value)
+                return Enumerable.Range(0, ((NumericIntegerAnswer) rosterSizeAnswer).Value)
                     .Select(i => (decimal) i).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
-                return ((CategoricalFixedMultiOptionAnswer) answerObject).CheckedValues
+                return ((CategoricalFixedMultiOptionAnswer) rosterSizeAnswer).CheckedValues
                     .Select(v => (decimal) v).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.TextList)
             {
-                return ((TextListAnswer) answerObject).Rows
+                return ((TextListAnswer) rosterSizeAnswer).Rows
                     .Select(a => a.Value).ToArray();
             }
             return null;
