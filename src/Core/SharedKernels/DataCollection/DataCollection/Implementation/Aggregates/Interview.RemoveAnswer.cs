@@ -24,19 +24,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            var changedQuestionIdentities = new List<Identity> { questionIdentity };
+            var givenAndRemovedAnswers = new List<Identity> { questionIdentity };
             changedInterviewTree.GetQuestion(questionIdentity).RemoveAnswer();
 
-            RemoveAnswersForDependendCascadingQuestions(questionIdentity, changedInterviewTree, questionnaire, changedQuestionIdentities);
+            RemoveAnswersForDependendCascadingQuestions(questionIdentity, changedInterviewTree, questionnaire, givenAndRemovedAnswers);
 
             changedInterviewTree.ActualizeTree();
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, changedQuestionIdentities);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, givenAndRemovedAnswers, questionnaire);
 
             this.ApplyEvents(changedInterviewTree, userId);
         }
 
-        private static void RemoveAnswersForDependendCascadingQuestions(Identity questionIdentity, InterviewTree changedInterviewTree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        private static void RemoveAnswersForDependendCascadingQuestions(Identity questionIdentity, InterviewTree changedInterviewTree, IQuestionnaire questionnaire, List<Identity> givenAndRemovedAnswers)
         {
             IEnumerable<Guid> dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionIdentity.Id);
             foreach (var dependentQuestionId in dependentQuestionIds)
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var cascadingQuestion in cascadingAnsweredQuestionsToRemoveAnswer)
                 {
                     cascadingQuestion.RemoveAnswer();
-                    changedQuestionIdentities.Add(cascadingQuestion.Identity);
+                    givenAndRemovedAnswers.Add(cascadingQuestion.Identity);
                 }
             }
         }

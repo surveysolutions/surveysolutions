@@ -274,7 +274,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.CalculateTreeDiffChanges(changedInterviewTree, questionnaire, new List<Identity>());
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, Enumerable.Empty<Identity>(), questionnaire);
 
             //apply events
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
