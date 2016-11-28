@@ -1,18 +1,21 @@
 ﻿using System;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public struct AnswerComment
     {
         public Guid UserId { get; private set; }
+        public UserRoles? UserRole { get; private set; }
         public DateTime CommentTime { get; private set; }
         public string Comment { get; private set; }
         public Identity QuestionIdentity { get; private set; }
 
-        public AnswerComment(Guid userId, DateTime commentTime, string comment, Identity questionIdentity)
+        public AnswerComment(Guid userId, UserRoles? userRole, DateTime commentTime, string comment, Identity questionIdentity)
             : this()
         {
             UserId = userId;
+            UserRole = userRole;
             CommentTime = commentTime;
             Comment = comment;
             this.QuestionIdentity = questionIdentity;
