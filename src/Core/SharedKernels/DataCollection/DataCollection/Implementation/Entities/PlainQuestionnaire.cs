@@ -449,6 +449,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var question = this.GetQuestion(questionId);
 
+            return IsInterviewierQuestion(question);
+        }
+
+        private bool IsInterviewierQuestion(IQuestion question)
+        {
             return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         }
 
@@ -673,7 +678,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!this.cacheOfUnderlyingInterviewerQuestions.ContainsKey(groupId))
                 this.cacheOfUnderlyingInterviewerQuestions[groupId] = this
                     .GetGroupOrThrow(groupId)
-                    .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Interviewer && !question.Featured)
+                    .Find<IQuestion>(IsInterviewierQuestion)
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection();
 
@@ -822,7 +827,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
                     .GetGroupOrThrow(groupId)
                     .Children.OfType<IQuestion>()
-                    .Where(question => !question.Featured && question.QuestionScope == QuestionScope.Interviewer)
+                    .Where(IsInterviewierQuestion)
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection());
 
