@@ -387,10 +387,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
         {
-            for (int i = questionIdentity.RosterVector.Length; i >= 0; i--)
+            for (int shorterRosterVectorLength = questionIdentity.RosterVector.Length; shorterRosterVectorLength >= 0; shorterRosterVectorLength--)
             {
-                var entityIdentity = new Identity(entityId, questionIdentity.RosterVector.Take(i).ToArray());
-                var entity = this.GetNodeByIdentity(entityIdentity);
+                var shorterRosterVector = questionIdentity.RosterVector.Shrink(shorterRosterVectorLength);
+
+                var entity = this.GetNodeByIdentity(new Identity(entityId, shorterRosterVector));
                 if (entity != null)
                     return entity;
             }
