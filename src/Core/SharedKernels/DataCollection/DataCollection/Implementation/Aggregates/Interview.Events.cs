@@ -10,13 +10,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
+        protected void ApplyPassiveEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
+            var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
+            var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.AreLinkedOptionsChanged).ToArray();
+            var questionsWithChangedLinkedToListOptionsSet = diffByQuestions.Where(x => x.AreLinkedToListOptionsChanged).ToArray();
+            var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
+
+            this.ApplyEnablementEvents(diff);
+            this.ApplyValidityEvents(diff);
+            this.ApplyVariableEvents(changedVariables);
+            this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet);
+            this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
+            this.ApplySubstitutionEvents(diff);
+        }
+
         protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
         {
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
-            var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.AreLinkedOptionsChanged).ToArray();
-            var questionsWithChangedLinkedToListOptionsSet = diffByQuestions.Where(x => x.AreLinkedToListOptionsChanged).ToArray();
-            var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
             var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
@@ -24,12 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.NewApply(questionsWithChangedAnswer, changedRosters, responsibleId.Value);
 
             this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
-            this.ApplyEnablementEvents(diff);
-            this.ApplyValidityEvents(diff);
-            this.ApplyVariableEvents(changedVariables);
-            this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet);
-            this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
-            this.ApplySubstitutionEvents(diff);
+            this.ApplyPassiveEvents(diff);
         }
 
         private void NewApply(InterviewTreeQuestionDiff[] questionsWithChangedAnswer, InterviewTreeRosterDiff[] changedRosters, Guid responsibleId)
