@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 
         It should_return_failed_validation_index = () => statefulInterview.GetFailedValidationMessages(staticTextIdentity).ShouldNotBeEmpty();
 
-        It should_count_it_in_total_invalid_entities = () => statefulInterview.CountInvalidEntitiesInInterview().ShouldEqual(1);
+        It should_count_it_in_total_invalid_entities = () => statefulInterview.CountVisibleInvalidEntitiesInInterview().ShouldEqual(1);
 
         static StatefulInterview statefulInterview;
         static Identity staticTextIdentity;
