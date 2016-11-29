@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.questionIdentity);
 
-            if ((listQuestion?.IsDisabled() ?? true) || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
                 return new List<MultiOptionQuestionOptionViewModel>();
 
             return listQuestion.AsTextList.GetAnswer().Rows.Select(
