@@ -29,10 +29,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {           
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
 
-            this.QuestionsCount = interview.CountActiveQuestionsInInterview();
+            this.QuestionsCount = interview.CountVisibleActiveQuestionsInInterview();
             this.SubgroupsCount = 0;
-            this.AnsweredQuestionsCount = interview.CountAnsweredQuestionsInInterview();
-            this.InvalidAnswersCount = interview.CountInvalidEntitiesInInterview();
+            this.AnsweredQuestionsCount = interview.CountVisibleActiveAnsweredQuestionsInInterview();
+            this.InvalidAnswersCount = interview.CountVisibleInvalidEntitiesInInterview();
 
             this.SimpleStatus = this.CalculateInterviewSimpleStatus();
             this.Status = this.CalculateDetailedStatus();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -45,13 +44,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         {
             var result = this.BuildFrom(interview, interview.ResponsibleId, interview.Status, comments, rejectedDateTime, interviewerAssignedDateTime);
             return result;
-        }
-
-        private static string GetLastComment(InterviewQuestion question)
-        {
-            if (question.Comments == null || !question.Comments.Any())
-                return null;
-            return question.Comments.Last().Text;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview,
@@ -98,7 +90,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     if (interviewQuestion.Value.IsInvalid())
                     {
                         invalidQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
-                        failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector), interviewQuestion.Value.FailedValidationConditions.ToList());
+                        failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector), 
+                            interviewQuestion.Value.FailedValidationConditions.ToList());
                     }
                     if (!interviewQuestion.Value.IsInvalid())
                     {

@@ -1207,7 +1207,7 @@ namespace WB.Tests.Unit.TestFactories
         {
             var titleWithSubstitutions = Create.Entity.SubstitionText(questionIdentity, title);
             var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
-                cascadingParentQuestionId, isYesNo,  isDecimal, false, linkedSourceId);
+                cascadingParentQuestionId, isYesNo,  isDecimal, false, QuestionScope.Interviewer, false, linkedSourceId);
 
             if (isDisabled) question.Disable();
             return question;
