@@ -431,6 +431,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them_with_expression_state_by_questionnaire_version.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_text_question_that_is_source_for_linked_question_and_in_numeric_roster.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_option_that_question_is_linked_to_in_condition_is_removed.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
