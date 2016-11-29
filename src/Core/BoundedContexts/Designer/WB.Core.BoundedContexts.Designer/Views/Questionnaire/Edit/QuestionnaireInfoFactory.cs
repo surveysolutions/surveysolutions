@@ -545,7 +545,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     if (rosterScope.Length == 0)
                         continue;
 
-                    if (targetRosterScope.IsSameOrChildScopeFor(rosterScope))
+                    if (targetRosterScope.IsSameOrParentScopeFor(rosterScope))
                     {
                         result.Add(this.CreateQuestionDropdownView(document, question));
                     }
