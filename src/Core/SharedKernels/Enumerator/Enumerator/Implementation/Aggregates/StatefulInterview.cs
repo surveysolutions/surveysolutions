@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -370,41 +371,55 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
-        public int CountAnsweredQuestionsInInterview()
-            => this.Tree.FindQuestions().Count(question => !question.IsDisabled() && question.IsAnswered());
+        public int CountVisibleActiveAnsweredQuestionsInInterview()
+            => this.Tree.FindQuestions().Count(question => !question.IsDisabled() 
+                    && question.IsAnswered() 
+                    && !question.IsFeatured 
+                    && question.QuestionScope == QuestionScope.Interviewer);
 
-        public int CountActiveQuestionsInInterview()
-            => this.Tree.FindQuestions().Count(question => !question.IsDisabled());
+        public int CountVisibleActiveQuestionsInInterview()
+            => this.Tree.FindQuestions().Count(question => !question.IsDisabled()
+                    && !question.IsFeatured
+                    && question.QuestionScope == QuestionScope.Interviewer);
 
-        public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
+        public int CountVisibleInvalidEntitiesInInterview() => this.GetVisibleInvalidEntitiesInInterview().Count();
 
-        public IEnumerable<Identity> GetInvalidEntitiesInInterview()
-            => this.GetEnabledInvalidStaticTexts().Concat(this.GetEnabledInvalidQuestions());
+        public IEnumerable<Identity> GetVisibleInvalidEntitiesInInterview()
+            => this.GetEnabledInvalidStaticTexts().Concat(this.GetVisibleEnabledInvalidQuestions());
 
         private IEnumerable<Identity> GetEnabledInvalidStaticTexts()
             => this.Tree.FindStaticTexts()
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
                 .Select(staticText => staticText.Identity);
 
-        private IEnumerable<Identity> GetEnabledInvalidQuestions()
+        private IEnumerable<Identity> GetVisibleEnabledInvalidQuestions()
             => this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled() && !question.IsValid)
+                .Where(question => !question.IsDisabled() && !question.IsValid 
+                    && !question.IsFeatured
+                    && question.QuestionScope == QuestionScope.Interviewer)
                 .Select(question => question.Identity);
 
-        public int CountEnabledQuestions(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled());
+        public int CountVisibleEnabledQuestions(Identity group)
+            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled()
+                    && !question.IsFeatured
+                    && question.QuestionScope == QuestionScope.Interviewer);
 
-        public int CountEnabledAnsweredQuestions(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled() && question.IsAnswered());
+        public int CountVisibleEnabledAnsweredQuestions(Identity group)
+            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled() && question.IsAnswered() 
+                    && !question.IsFeatured
+                    && question.QuestionScope == QuestionScope.Interviewer);
 
-        public int CountEnabledInvalidQuestionsAndStaticTexts(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled() && !question.IsValid) +
+        public int CountVisibleEnabledInvalidQuestionsAndStaticTexts(Identity group)
+            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled() 
+                    && !question.IsValid 
+                    && !question.IsFeatured
+                    && question.QuestionScope == QuestionScope.Interviewer) +
                this.Tree.FindStaticTexts(group).Count(staticText => !staticText.IsDisabled() && !staticText.IsValid);
 
-        public bool HasEnabledInvalidQuestionsAndStaticTexts(Identity group)
-            => this.CountEnabledInvalidQuestionsAndStaticTexts(group) > 0;
+        public bool HasVisibleEnabledInvalidQuestionsAndStaticTexts(Identity group)
+            => this.CountVisibleEnabledInvalidQuestionsAndStaticTexts(group) > 0;
 
-        public bool HasUnansweredQuestions(Identity group) 
+        public bool HasVisibleUnansweredQuestions(Identity group) 
             => this.Tree.FindQuestions(group).Any(question => !question.IsDisabled() && !question.IsAnswered());
 
         public IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview()
