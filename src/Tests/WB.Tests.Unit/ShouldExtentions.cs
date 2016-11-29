@@ -64,18 +64,18 @@ namespace WB.Tests.Unit
         public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
             where TEvent : IEvent
         {
-            if (condition == null)
+            eventContext
+                .Events
+                .Select(@event => @event.Payload.GetType())
+                .ShouldContain(typeof(TEvent));
+
+            if (condition != null)
             {
                 eventContext
                     .Events
-                    .Select(@event => @event.Payload.GetType().Name)
-                    .ShouldContain(typeof(TEvent).Name);
-            }
-            else
-            {
-                eventContext.Events.ShouldContain(@event
-                    => @event.Payload is TEvent
-                        && condition.Invoke((TEvent)@event.Payload));
+                    .Where(@event => @event.Payload is TEvent)
+                    .Select(@event => (TEvent) @event.Payload)
+                    .ShouldContain(payload => condition.Invoke(payload));
             }
         }
 
