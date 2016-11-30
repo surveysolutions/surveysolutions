@@ -167,11 +167,8 @@ ko.bindingHandlers.maskFormatter = {
     }
 };
 ko.bindingHandlers.simpletypeahead = {
-    init: function (element, valueAccessor, allBindingsAccessor) {
-        var $element = $(element);
-        var allBindings = allBindingsAccessor();
+    init: function (element, valueAccessor, selectedValueAccessor) {
         var source = ko.toJS(ko.utils.unwrapObservable(valueAccessor()));
-
         var states = new Bloodhound({
             datumTokenizer: function (item) {
                 var tokens = Bloodhound.tokenizers.whitespace(item.label);
@@ -191,24 +188,28 @@ ko.bindingHandlers.simpletypeahead = {
 
         states.initialize();
         
-
+        var $element = $(element);
+        var selectedValue = selectedValueAccessor();
         $element
             .attr('autocomplete', 'off')
-            .attr("value", allBindings.value()) // for IE, i love you!
+            .attr("value", selectedValue.value()) // for IE, i love you!
             .typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 1
-            },
-            {
-                name: 'states',
-                displayKey: 'label',
-                source: states.ttAdapter()
-            }).on('typeahead:selected', function(obj, datum) {
-                allBindings.id(datum.value);
-                $element.change();
-            })
-            .val(allBindings.value());
+                    items: 10,
+                    hint: true,
+                    highlight: true,
+                    source: states.ttAdapter(),
+                    displayText: function(item) {
+                        return item.label;
+                    },
+                    showLoadMore: false,
+                    autoselect: false,
+                    updater: function (item) {
+                        selectedValue.id(item.value);
+                        $element.change();
+                        return item;
+                    }
+                }
+            ).val(selectedValue.value());
     }
 };
 (function () {
