@@ -329,15 +329,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText)
+        public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(new QuestionnaireIdentity(this.QuestionnaireId, Version),
-                    questionId, optionText, this.translation);
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(
+                    new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                    questionId,
+                    optionText, 
+                    parentQuestionValue,
+                    this.translation);
             }
 
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
@@ -413,12 +417,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText)
+        public CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
+            return question.Answers.SingleOrDefault(x => x.AnswerText == optionText && x.ParentCode == parentQuestionValue).ToCategoricalOption();
         }
 
         public int? GetMaxSelectedAnswerOptions(Guid questionId)

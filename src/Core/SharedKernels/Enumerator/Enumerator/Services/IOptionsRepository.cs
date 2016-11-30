@@ -13,8 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, 
             Guid questionId, int? parentValue, string filter, Guid? translationId);
 
-        CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, 
-            string optionText, Guid? translationId);
+        CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionText, int? parentQuestionValue, Guid? translationId);
 
         CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, 
             decimal optionValue, Guid? translationId);

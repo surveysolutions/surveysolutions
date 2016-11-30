@@ -142,26 +142,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (existingOptions.Length == 0)
                 return false;
 
-            var minOption = existingOptions.Aggregate(Math.Min);
-            var maxOption = existingOptions.Aggregate(Math.Max);
 
-            int[] expectedOptions = Enumerable.Range(minOption, count: maxOption - minOption).ToArray();
+            List<int> diffsByPrevNextOptionValues = new List<int>();
 
-            int[] missingOptions = expectedOptions.Except(existingOptions).OrderBy(x => x).ToArray();
+            existingOptions.Aggregate((prev, next) =>
+             {
+                 diffsByPrevNextOptionValues.Add(next - prev);
+                 return next;
+             });
 
-            int firstIndex = 0;
-            int lastIndex = missingOptions.Length - 1;
-            for (int optionIndex = firstIndex; optionIndex <= lastIndex; optionIndex++)
-            {
-                var isStandaloneFromPrevious = optionIndex == firstIndex || missingOptions[optionIndex] - 1 != missingOptions[optionIndex - 1];
-                var isStandaloneFromNext = optionIndex == lastIndex || missingOptions[optionIndex] + 1 != missingOptions[optionIndex + 1];
-                bool isStandaloneMissingOption = isStandaloneFromPrevious && isStandaloneFromNext;
-
-                if (isStandaloneMissingOption)
-                    return true;
-            }
-
-            return false;
+            return diffsByPrevNextOptionValues.Contains(2);
         }
 
         private static bool NotShared(MultiLanguageQuestionnaireDocument questionnaire)

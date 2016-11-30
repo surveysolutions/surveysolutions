@@ -1,7 +1,9 @@
 using System;
+using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
@@ -24,7 +26,8 @@ namespace WB.Tests.Unit.TestFactories
             IQuestionnaireStorage questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             QuestionnaireIdentity questionnaireId = null,
-            ISubstitionTextFactory textFactory = null)
+            ISubstitionTextFactory textFactory = null,
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
             var textFactoryMock = new Mock<ISubstitionTextFactory> {DefaultValue = DefaultValue.Mock};
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
@@ -32,6 +35,11 @@ namespace WB.Tests.Unit.TestFactories
                 textFactory ?? textFactoryMock.Object);
 
             interview.SetId(interviewId ?? Guid.NewGuid());
+
+            if (questionOptionsRepository != null)
+            {
+                Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
+            }
 
             interview.Apply(Create.Event.InterviewCreated(
                 questionnaireId: questionnaireId?.QuestionnaireId ?? Guid.NewGuid(),

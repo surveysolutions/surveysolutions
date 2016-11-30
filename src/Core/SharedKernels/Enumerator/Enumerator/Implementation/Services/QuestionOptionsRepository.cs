@@ -26,10 +26,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.optionsRepository.GetFilteredQuestionOptions(qestionnaireIdentity, questionId, parentQuestionValue, filter, translation?.Id);
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity,
-             Guid questionId, string optionText, Translation translation)
+        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)
         {
-            return this.optionsRepository.GetQuestionOption(qestionnaireIdentity, questionId, optionText, translation?.Id);
+            return this.optionsRepository.GetQuestionOption(qestionnaireIdentity, questionId, optionText, parentQuestionValue, translation?.Id);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
