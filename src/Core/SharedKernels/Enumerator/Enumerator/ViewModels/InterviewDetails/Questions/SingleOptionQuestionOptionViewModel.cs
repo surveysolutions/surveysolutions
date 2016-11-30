@@ -14,7 +14,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public EnablementViewModel Enablement { get; set; }
 
         public decimal Value { get; set; }
-        public string Title { get; set; }
+
+        private string title;
+        public string Title
+        {
+            get { return this.title; }
+            set { this.RaiseAndSetIfChanged(ref this.title, value); }
+        }
 
         private bool selected;
 
