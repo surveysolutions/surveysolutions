@@ -28,12 +28,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
 
             var viewModel = Create.ViewModel.MultiOptionLinkedToListQuestionQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
             viewModel.Init(null, Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
+
+            var answers = new[] {new Tuple<decimal, string>(1, expectedTitle)};
+
+            interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, answers);
             //act
-            interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new []
-            {
-                new Tuple<decimal, string>(1, expectedTitle)
-            });
-            viewModel.Handle(Create.Event.TextListQuestionAnswered(textListQuestionId));
+            viewModel.Handle(Create.Event.TextListQuestionAnswered(textListQuestionId, Create.Entity.RosterVector(), answers: answers));
             //assert
             Assert.That(viewModel.Options[0].Title, Is.EqualTo(expectedTitle));
         }
