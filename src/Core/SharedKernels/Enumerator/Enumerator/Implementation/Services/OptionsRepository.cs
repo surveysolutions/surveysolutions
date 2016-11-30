@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionTitle, Guid? translationId)
+        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionTitle, int? parentQuestionValue, Guid? translationId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
@@ -125,6 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
                             x.Title == optionTitle &&
+                            x.ParentValue == parentQuestionValue &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
                 .OrderBy(x => x.TranslationId == null)
                 .FirstOrDefault();

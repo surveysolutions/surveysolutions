@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            var filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText);
+            var filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText, parentQuestionValue);
 
             if (filteredOption == null)
                 return null;
