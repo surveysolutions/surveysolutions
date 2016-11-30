@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     [RoutePrefix("api/v1/interviews")]
-    [ApiBasicAuth(new [] {UserRoles.ApiUser}, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(new [] {UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
     public class InterviewsController : BaseApiServiceController
     {
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
