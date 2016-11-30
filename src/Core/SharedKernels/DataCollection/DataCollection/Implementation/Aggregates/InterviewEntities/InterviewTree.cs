@@ -281,9 +281,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 linkedSourceId: sourceForLinkedQuestion,
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
                 validationMessages: validationMessages, 
-                isLinkedToListQuestion: isLinkedToListQuestion,
-                questionScope: questionScope,
-                isFeatured: isPrefield);
+                isLinkedToListQuestion: isLinkedToListQuestion);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
