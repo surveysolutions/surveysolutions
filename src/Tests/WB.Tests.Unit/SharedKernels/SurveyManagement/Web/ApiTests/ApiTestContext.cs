@@ -60,7 +60,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             return new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                allInterviewsViewFactory ?? Mock.Of<IAllInterviewsFactory>());
+                allInterviewsViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
+                serializer: Mock.Of<ISerializer>(),
+                questionnaireStorage: Mock.Of<IQuestionnaireStorage>());
         }
 
         protected static InterviewsController CreateInterviewsController(
