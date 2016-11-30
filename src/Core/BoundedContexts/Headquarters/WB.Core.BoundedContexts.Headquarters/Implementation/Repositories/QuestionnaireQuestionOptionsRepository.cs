@@ -24,12 +24,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity,
-             Guid questionId, string optionText, Translation translation)
+        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)
         {
             var questionnaire = questionnaireRepository.GetQuestionnaire(qestionnaireIdentity, translation?.Name);
 
-            return questionnaire.GetOptionForQuestionByOptionTextFromStructure(questionId, optionText);
+            return questionnaire.GetOptionForQuestionByOptionTextFromStructure(questionId, optionText, parentQuestionValue);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
