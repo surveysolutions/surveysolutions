@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public string Title
         {
             get { return this.title; }
-            set { this.title = value; this.RaisePropertyChanged(); }
+            set { this.RaiseAndSetIfChanged(ref this.title, value); }
         }
 
         public bool Checked
