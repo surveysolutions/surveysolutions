@@ -151,7 +151,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
             options.Add(Create.Entity.Answer(1.ToString(), 1));
             options.Add(Create.Entity.Answer(2.ToString(), 2));
 
-
             SingleQuestion question = Create.Entity.SingleQuestion(
                 id: questionId,
                 variable: "cat",
@@ -176,7 +175,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
 
             var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
             storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, translations);
-            var filteredQuestionOption = storage.GetQuestionOption(questionnaireIdentity, questionId, 1.ToString(), translationId);
+            var filteredQuestionOption = storage.GetQuestionOption(questionnaireIdentity, questionId, 1.ToString(), null, translationId);
 
             Assert.That(filteredQuestionOption, Is.Not.Null);
             Assert.That(filteredQuestionOption.Value, Is.EqualTo(1));
@@ -222,6 +221,34 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OptionsRepositoryTests
 
             Assert.That(filteredQuestionOption, Is.Not.Null);
             Assert.That(filteredQuestionOption.Value, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void should_return_correct_option_when_contains_duplidate_titles()
+        {
+            var options = new List<Answer>();
+            options.Add(Create.Entity.Answer("one", 1, 1));
+            options.Add(Create.Entity.Answer("two", 2, 1));
+            options.Add(Create.Entity.Answer("one", 3, 2));
+            options.Add(Create.Entity.Answer("two", 4, 2));
+
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            SingleQuestion question = Create.Entity.SingleQuestion(
+                id: questionId,
+                variable: "cat",
+                options: options,
+                isFilteredCombobox: true);
+
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+            var storage = new OptionsRepository(new SqliteInmemoryStorage<OptionView>());
+            storage.StoreOptionsForQuestion(questionnaireIdentity, questionId, question.Answers, new List<TranslationDto>());
+
+            // act
+            var cascadingOption = storage.GetQuestionOption(questionnaireIdentity, questionId, "two", 2, null);
+
+            // assert
+            Assert.That(cascadingOption, Is.Not.Null);
+            Assert.That(cascadingOption.Value, Is.EqualTo(4));
         }
     }
 }

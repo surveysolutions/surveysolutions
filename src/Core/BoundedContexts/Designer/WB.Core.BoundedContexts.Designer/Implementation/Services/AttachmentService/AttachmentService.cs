@@ -146,6 +146,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         public void CloneMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId)
         {
             var storedAttachmentMeta = this.attachmentMetaStorage.GetById(sourceAttachmentId);
+            if (storedAttachmentMeta == null)
+            {
+                throw new ArgumentException($"Missing attachment with id {sourceAttachmentId}", nameof(sourceAttachmentId));
+            }
+
             var clonedAttachmentMeta = new AttachmentMeta
             {
                 AttachmentId = newAttachmentId,

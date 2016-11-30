@@ -62,13 +62,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter);
 
-        CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText);
+        CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue);
 
         CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue);
 
         IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter);
 
-        CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText);
+        CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue);
 
         CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue);
 
