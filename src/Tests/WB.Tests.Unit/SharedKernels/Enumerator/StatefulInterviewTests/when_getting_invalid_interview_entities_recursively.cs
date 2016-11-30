@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         };
 
         Because of = () =>
-            invalidEntitiesInInterview = interview.GetVisibleInvalidEntitiesInInterview();
+            invalidEntitiesInInterview = interview.GetInvalidEntitiesInInterview();
 
         It shouldreturn_3_entities_with_error = () =>
           invalidEntitiesInInterview.Count().ShouldEqual(3);

@@ -79,17 +79,17 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Identity rosterIdentity);
 
-        int CountVisibleEnabledQuestions(Identity group);
+        int CountEnabledQuestions(Identity group);
 
         int GetGroupsInGroupCount(Identity group);
 
-        int CountVisibleEnabledAnsweredQuestions(Identity group);
+        int CountEnabledAnsweredQuestions(Identity group);
 
-        int CountVisibleEnabledInvalidQuestionsAndStaticTexts(Identity group);
+        int CountEnabledInvalidQuestionsAndStaticTexts(Identity group);
 
-        bool HasVisibleEnabledInvalidQuestionsAndStaticTexts(Identity group);
+        bool HasEnabledInvalidQuestionsAndStaticTexts(Identity group);
 
-        bool HasVisibleUnansweredQuestions(Identity group);
+        bool HasUnansweredQuestions(Identity group);
 
         Identity GetParentGroup(Identity groupOrQuestion);
 
@@ -97,15 +97,15 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
 
-        int CountVisibleActiveAnsweredQuestionsInInterview();
+        int CountActiveAnsweredQuestionsInInterview();
 
-        int CountVisibleActiveQuestionsInInterview();
+        int CountActiveQuestionsInInterview();
 
-        int CountVisibleInvalidEntitiesInInterview();
+        int CountInvalidEntitiesInInterview();
         
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
 
-        IEnumerable<Identity> GetVisibleInvalidEntitiesInInterview();
+        IEnumerable<Identity> GetInvalidEntitiesInInterview();
 
         List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize);
 
