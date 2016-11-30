@@ -100,10 +100,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InitFromModel(this.questionnaireStorage.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language));
 
             this.instructionViewModel.Init(interviewId, entityIdentity);
-            var childViewModels = this.CreateOptions();
-
-            this.Options.Clear();
-            this.Options.CollectionChanged += (sender, args) =>
+            
+            this.options.CollectionChanged += (sender, args) =>
             {
                 if (this.optionsTopBorderViewModel != null)
                 {
@@ -114,8 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
                 }
             };
-
-            childViewModels.ForEach(x => this.Options.Add(x));
+            this.RefreshOptionsFromModel();
         }
 
 
@@ -124,37 +121,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(questionIdentity.Id);
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
-        }
-
-        protected List<MultiOptionQuestionOptionViewModel> CreateOptions()
-        {
-            var linkedToListQuestion = interview.GetMultiOptionLinkedToListQuestion(this.questionIdentity);
-            var answeredOptions = linkedToListQuestion.GetAnswer()?.ToDecimals()?.ToArray();
-            
-            var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.questionIdentity);
-
-            if ((listQuestion?.IsDisabled() ?? true) || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
-                return new List<MultiOptionQuestionOptionViewModel>();
-
-            return listQuestion.AsTextList.GetAnswer().Rows.Select(
-                linkedOption => this.CreateOptionViewModel(linkedOption, answeredOptions)).ToList();
-        }
-
-        private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue, decimal[] answeredOptions)
-        {
-         var option =  new MultiOptionQuestionOptionViewModel(this)
-            {
-                Title = optionValue.Text,
-                Value = Convert.ToInt32(optionValue.Value),
-                Checked = answeredOptions?.Contains(optionValue.Value) ?? false,
-                QuestionState = this.questionState
-                
-            };
-
-            var indexOfAnswer = Array.IndexOf(answeredOptions ?? new decimal[] { }, optionValue.Value);
-            option.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?)null;
-
-            return option;
         }
 
         public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
@@ -223,69 +189,61 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            var newOptions = this.CreateOptions();
-
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s == t);
-                this.RaisePropertyChanged(() => HasOptions);
-            });
+            this.RefreshOptionsFromModel();
         }
 
         public void Handle(QuestionsDisabled @event)
         {
-            if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
+            if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
+                return;
 
-            var newOptions = this.CreateOptions();
-
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s == t);
-                this.RaisePropertyChanged(() => HasOptions);
-            });
+            this.ClearOptions();
         }
 
         public void Handle(AnswersRemoved @event)
         {
-            foreach (var question in @event.Questions)
+            if (@event.Questions.Contains(this.Identity))
             {
-                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
-                {
-                    foreach (var option in this.Options.Where(option => option.Checked))
-                    {
-                        option.Checked = false;
-                        option.CheckedOrder = null;
-                    }
-                }
+                foreach (var option in this.options)
+                    this.UpdateOptionSelection(option, new List<decimal>());
             }
+
+            if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
+                this.ClearOptions();
         }
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
         {
-            if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
-            {
-                var newOptions = this.CreateOptions();
+            if (!this.areAnswersOrdered) return;
 
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value == t.Value && s.CheckedOrder == t.CheckedOrder);
-                });
-            }
+            if (@event.QuestionId != this.questionIdentity.Id || !@event.RosterVector.Identical(this.questionIdentity.RosterVector))
+                return;
+
+            foreach (var option in this.options)
+                this.UpdateOptionSelection(option, @event.SelectedValues.ToList());
+        }
+
+        private void UpdateOptionSelection(MultiOptionQuestionOptionViewModel option, List<decimal> selectedOptionValues)
+        {
+            option.Checked = selectedOptionValues.Contains(option.Value);
+
+            if (!this.areAnswersOrdered) return;
+
+            var orderNo = selectedOptionValues.IndexOf(option.Value);
+
+            option.CheckedOrder = orderNo == -1 ? (int?) null : orderNo + 1;
         }
 
         public void Handle(TextListQuestionAnswered @event)
         {
-            if (@event.QuestionId == this.linkedToQuestionId)
+            if (@event.QuestionId != this.linkedToQuestionId)
+                return;
+
+            foreach (var answer in @event.Answers)
             {
-                //check scope and than update
+                var option = this.options.FirstOrDefault(o => o.Value == answer.Item1);
 
-                var newOptions = this.CreateOptions();
-
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Title == t.Title);
-                    this.RaisePropertyChanged(() => HasOptions);
-                });
+                if (option != null) option.Title = answer.Item2;
             }
         }
 
@@ -293,14 +251,75 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            var newOptions = this.CreateOptions();
-
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value == t.Value);
-                this.RaisePropertyChanged(() => HasOptions);
-            });
-
+            this.RefreshOptionsFromModel();
         }
+
+        private void RefreshOptionsFromModel()
+        {
+            var textListAnswerRows = this.GetTextListAnswerRows();
+
+            this.RemoveOptions(textListAnswerRows);
+            this.InsertOrUpdateOptions(textListAnswerRows);
+
+            this.RaisePropertyChanged(() => this.HasOptions);
+        }
+
+        private void InsertOrUpdateOptions(List<TextListAnswerRow> textListAnswerRows)
+        {
+            var linkedQuestionAnswer = interview.GetMultiOptionLinkedToListQuestion(this.Identity).GetAnswer()?.CheckedValues?
+                .Select(optionValue => (decimal) optionValue)?
+                .ToList() ?? new List<decimal>();
+
+            foreach (var textListAnswerRow in textListAnswerRows)
+            {
+                var viewModelOption = this.options.FirstOrDefault(o => o.Value == textListAnswerRow.Value);
+                if (viewModelOption == null)
+                {
+                    viewModelOption = this.CreateOptionViewModel(textListAnswerRow);
+
+                    this.mainThreadDispatcher.RequestMainThreadAction(
+                        () => this.options.Insert(textListAnswerRows.IndexOf(textListAnswerRow), viewModelOption));
+                }
+
+                this.UpdateOptionSelection(viewModelOption, linkedQuestionAnswer);
+            }
+        }
+
+        private void RemoveOptions(List<TextListAnswerRow> textListAnswerRows)
+        {
+            var removedOptionValues =
+                this.options.Select(option => option.Value).Except(textListAnswerRows.Select(row => (int)row.Value));
+
+            foreach (var removedOptionValue in removedOptionValues)
+            {
+                var removedOption = this.options.First(option => option.Value == removedOptionValue);
+
+                this.mainThreadDispatcher.RequestMainThreadAction(() => this.options.Remove(removedOption));
+            }
+        }
+
+        private List<TextListAnswerRow> GetTextListAnswerRows()
+        {
+            var listQuestion = interview.FindQuestionInQuestionBranch(this.linkedToQuestionId, this.Identity);
+
+            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.AsTextList?.GetAnswer()?.Rows == null)
+                return new List<TextListAnswerRow>();
+
+            return new List<TextListAnswerRow>(listQuestion.AsTextList.GetAnswer().Rows);
+        }
+
+        private void ClearOptions()
+        {
+            this.options.Clear();
+            this.RaisePropertyChanged(() => this.HasOptions);
+        }
+
+        private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
+            => new MultiOptionQuestionOptionViewModel(this)
+            {
+                Title = optionValue.Text,
+                Value = Convert.ToInt32(optionValue.Value),
+                QuestionState = this.questionState
+            };
     }
 }
