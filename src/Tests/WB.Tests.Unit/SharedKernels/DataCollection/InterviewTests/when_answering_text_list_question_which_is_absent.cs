@@ -46,8 +46,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_throw_exception_with_message_containting__question__ = () =>
             exception.Message.ToLower().ShouldContain("question");
 
-        It should_throw_exception_with_message_containting__is_not_found__ = () =>
-            exception.Message.ToLower().ShouldContain("is not found");
+        It should_throw_exception_with_message_containting__is_missing__ = () =>
+            exception.Message.ToLower().ShouldContain("is missing");
 
         private static Exception exception;
         private static Interview interview;
