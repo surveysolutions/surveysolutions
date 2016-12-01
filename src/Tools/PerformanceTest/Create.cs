@@ -74,6 +74,21 @@ namespace PerformanceTest
             return group;
         }
 
+        public static Group MultiRoster(Guid? rosterId, string variable, Guid? sizeQuestionId, string enablementCondition = null, params IComposite[] children)
+        {
+            Group group = Create.Group(
+                id: rosterId,
+                title: "Roster X",
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = sizeQuestionId;
+            return group;
+        }
+
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
             Guid? linkedToRosterId = null)
@@ -120,11 +135,12 @@ namespace PerformanceTest
             };
         }
 
-        public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
+        public static MultyOptionsQuestion MultiQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null,
             Guid? linkedToRosterId = null,
             bool yesNo = false,
-            string optionsFilter = null)
+            string optionsFilter = null,
+            int maxAllowedAnswers = 60)
         {
             var multyOptionsQuestion = new MultyOptionsQuestion
             {
@@ -135,7 +151,8 @@ namespace PerformanceTest
                 StataExportCaption = variable,
                 LinkedToRosterId = linkedToRosterId,
                 YesNoView = yesNo,
-                Properties = { OptionsFilterExpression = optionsFilter }
+                Properties = { OptionsFilterExpression = optionsFilter },
+                MaxAllowedAnswers = maxAllowedAnswers
             };
             return multyOptionsQuestion;
         }
@@ -218,6 +235,15 @@ namespace PerformanceTest
                 }
             };
             return singleQuestion;
+        }
+
+        public static Answer Option(int value, string text = null)
+        {
+            return new Answer
+            {
+                AnswerText = text ?? ("Option " + value),
+                AnswerCode = value,
+            };
         }
 
         public static Answer Option(string value = null, Guid? id = null, string text = null, string parentValue = null)

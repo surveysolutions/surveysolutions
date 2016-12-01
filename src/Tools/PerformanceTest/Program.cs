@@ -30,7 +30,7 @@ namespace PerformanceTest
             var rosterChildQuestions = Enumerable.Range(1, 30).Select(x => Create.TextQuestion(variable: $"text{x}")).ToArray();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
-                    Create.MultyQuestion(q1Id, variable: "q1", options: multioptions, maxAllowedAnswers: Constants.MaxLongRosterRowCount),
+                    Create.MultiQuestion(q1Id, variable: "q1", options: multioptions, maxAllowedAnswers: Constants.MaxLongRosterRowCount),
                     Create.MultiRoster(rosterId, variable:"r1", enablementCondition:"single==1", sizeQuestionId: q1Id, children: rosterChildQuestions),
                     Create.SingleQuestion(q2Id, variable: "single", options: new List<Answer>
                     {
