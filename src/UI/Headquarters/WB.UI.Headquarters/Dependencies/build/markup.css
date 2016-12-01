@@ -5749,7 +5749,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.chec
   text-transform: uppercase;
   letter-spacing: 0.5px; }
 
-.action-block .float-box .btn.cancel-uploading, .export-types .data .table-data-header {
+.breadcrumb li a, .action-block .float-box .btn.cancel-uploading, .export-types .data .table-data-header {
   color: #a6a8a9;
   font: 11px/13px "TrebuchetMSBold";
   letter-spacing: 1px;
@@ -5767,6 +5767,16 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.chec
   .action-block .float-box .btn.cancel-uploading:hover, .action-block .float-box .btn.cancel-uploading:focus {
     border: none;
     background-color: transparent; }
+
+.filters {
+  top: 70px;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+  position: fixed;
+  background-color: #fff;
+  z-index: 1;
+  transition: left 0.3s linear 0s; }
 
 @font-face {
   font-family: "RobotoRegular";
@@ -5802,6 +5812,11 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.chec
   font-family: "TrebuchetMS";
   src: url("../fonts/TrebuchetMS.eot");
   src: url("../fonts/TrebuchetMS.eot") format("embedded-opentype"), url("../fonts/TrebuchetMS.woff2") format("woff2"), url("../fonts/TrebuchetMS.woff") format("woff"), url("../fonts/TrebuchetMS.ttf") format("truetype"), url("../fonts/TrebuchetMS.svg#TrebuchetMS") format("svg"); }
+
+@font-face {
+  font-family: "RobotoMedium";
+  src: url("../fonts/RobotoMedium.eot");
+  src: url("../fonts/RobotoMedium.eot") format("embedded-opentype"), url("../fonts/RobotoMedium.woff2") format("woff2"), url("../fonts/RobotoMedium.woff") format("woff"), url("../fonts/RobotoMedium.ttf") format("truetype"), url("../fonts/RobotoMedium.svg#RobotoMedium") format("svg"); }
 
 a {
   color: #2a81cb; }
@@ -6061,7 +6076,7 @@ h5, .preset-filters-container a {
   letter-spacing: 0.5px;
   display: inline-block; }
 
-.btn-success, .btn-primary {
+.btn-success, .btn-primary, .btn-danger {
   font: 12px/14px "TrebuchetMSBold";
   outline: none;
   text-transform: uppercase;
@@ -6078,6 +6093,19 @@ h5, .preset-filters-container a {
   border-color: transparent; }
   .btn:disabled:hover, .btn:disabled:focus {
     border-color: #3c4143; }
+
+.breadcrumb {
+  background-color: transparent;
+  margin: 0;
+  padding: 0; }
+  .breadcrumb > li + li:before {
+    display: none; }
+  .breadcrumb > li:after {
+    content: "/ ";
+    padding: 0 5px;
+    color: #ccc;
+    line-height: 75%;
+    font-size: 75%; }
 
 @media (max-width: 481px) {
   .breadcrumb li a, .breadcrumb > li + li:before {
@@ -6431,17 +6459,19 @@ img#placeholder {
   line-height: 0;
   position: relative;
   display: block; }
-  img#placeholder:after {
-    content: " ";
-    display: block;
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff url("../img/HQ-login-3_05.png") no-repeat;
-    background-size: 365px 329px; }
+
+.default-logo {
+  display: none; }
+
+.no-logo .default-logo {
+  width: 365px;
+  height: 329px;
+  display: block;
+  background: #fff url("../img/HQ-login-3_05.png") no-repeat;
+  background-size: 365px 329px; }
+
+.no-logo #placeholder {
+  display: none; }
 
 .navbar .retina-world-bank {
   width: 270px;
@@ -6594,18 +6624,10 @@ main .flex-row {
     margin-right: 5px; } }
 
 .filters {
-  transition: left 0.3s linear 0s;
-  top: 70px;
-  left: 0;
-  bottom: 0;
-  overflow: auto;
-  position: fixed;
   width: 360px;
   border-right: 3px solid #efefef;
-  padding: 50px 15px 0;
-  margin-left: 12px;
-  background-color: #fff;
-  z-index: 1; }
+  padding: 50px 15px 0 33px;
+  margin-left: 12px; }
 
 .foldback-button {
   width: 50px;
@@ -6632,37 +6654,38 @@ input.checkbox-filter {
   display: none; }
   input.checkbox-filter ~ label {
     position: relative;
-    padding-left: 35px; }
+    padding-left: 35px;
+    cursor: pointer; }
   input.checkbox-filter ~ label .tick {
     position: absolute;
     top: 0;
     left: 0;
     height: 25px;
     background: transparent url("../img/chekboxes.png") no-repeat;
-    background-size: 66px 198px;
-    background-position: 0px 2px;
+    background-size: 68px 350px;
+    background-position: 0 0;
     margin-right: 10px; }
     @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
       input.checkbox-filter ~ label .tick {
         /* on retina, use image that's scaled by 2 */
         background-image: url("../img/chekboxes2k.png");
-        background-size: 66px 198px; } }
+        background-size: 68px 350px; } }
   input.checkbox-filter ~ label:hover .tick,
   input.checkbox-filter ~ label:focus .tick {
-    background-position: 0px -34px; }
+    background-position: 0px -36px; }
   input.checkbox-filter:checked ~ label .tick {
-    background-position: 0px -70px; }
+    background-position: 0px -72px; }
   input.checkbox-filter:checked ~ label:hover .tick,
   input.checkbox-filter:checked ~ label:focus .tick {
-    background-position: 0px -106px; }
+    background-position: 0px -108px; }
   input.checkbox-filter:disabled ~ label .tick,
   input.checkbox-filter:checked:disabled ~ label .tick {
-    background-position: 0px -142px; }
+    background-position: 0px -144px; }
   input.checkbox-filter:disabled ~ label:hover .tick,
   input.checkbox-filter:checked:disabled ~ label:hover .tick,
   input.checkbox-filter:disabled ~ label:focus .tick,
   input.checkbox-filter:checked:disabled ~ label:focus .tick {
-    background-position: 0px -178px; }
+    background-position: 0px -180px; }
 
 .filters-container {
   color: #3f3f3f;
@@ -6734,6 +6757,8 @@ input.checkbox-filter {
     .btn-input .dropdown-toggle span:first-child {
       left: 10px;
       overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       position: absolute;
       right: 30px; }
     .btn-input .dropdown-toggle .caret-large {
@@ -6744,7 +6769,7 @@ input.checkbox-filter {
       width: 0;
       height: 0;
       display: block;
-      border-top: 12px solid #3f3f3f;
+      border-top: 12px solid #a6a8a9;
       border-right: 7px solid transparent;
       border-left: 7px solid transparent; }
   .btn-input .dropdown-menu > li > a {
@@ -6753,6 +6778,9 @@ input.checkbox-filter {
     color: #3f3f3f; }
     .btn-input .dropdown-menu > li > a:hover, .btn-input .dropdown-menu > li > a:focus {
       background-color: #efefef; }
+  .btn-input.open .caret-large {
+    border-top: none;
+    border-bottom: 12px solid #a6a8a9; }
   .btn-input.open > .dropdown-menu {
     display: block;
     width: 295px;
@@ -6807,6 +6835,7 @@ input.checkbox-filter {
       display: none;
       border-color: transparent;
       opacity: 0;
+      filter: alpha(opacity=0);
       visibility: hidden;
       transition: opacity 0.5s linear 0s; }
     .filters .dropdown-toggle, .filters .input-group-addon {
@@ -6839,6 +6868,7 @@ input.checkbox-filter {
         margin: 0 auto;
         border-color: #dbdfe2;
         opacity: 1;
+        filter: alpha(opacity=100);
         visibility: visible; } }
 
 @media (max-width: 481px) {

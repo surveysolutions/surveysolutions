@@ -23,8 +23,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             bool isYesNo, 
             bool isDecimal,
             bool isLinkedToListQuestion,
-            QuestionScope questionScope,
-            bool isFeatured,
             Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null,
             SubstitionText[] validationMessages = null)
@@ -33,8 +31,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.ValidationMessages = validationMessages ?? new SubstitionText[0];
             this.Title = title;
             this.VariableName = variableName;
-            this.QuestionScope = questionScope;
-            this.IsFeatured = isFeatured;
 
             if (questionType == QuestionType.SingleOption)
             {
@@ -142,10 +138,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if(failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
             this.FailedValidations = failedValidations.ToReadOnlyCollection();
         }
-
-        public QuestionScope QuestionScope { get; private set; }
-
-        public bool IsFeatured { get; private set; }
 
         [Obsolete("Since v6.0")]
         private bool isValidWithoutFailedValidations = true;

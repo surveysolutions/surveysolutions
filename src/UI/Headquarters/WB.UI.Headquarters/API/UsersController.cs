@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    [ApiBasicAuth(new[] { UserRoles.ApiUser }, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator  }, TreatPasswordAsPlain = true)]
     public class UsersController : BaseApiServiceController
     {
         private readonly IInterviewersViewFactory interviewersFactory;

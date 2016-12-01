@@ -38,7 +38,7 @@
             <div class="input-group">
                 <input id="@Html.InterviewItemIdWithPostfix(Model.Id, Model.RosterVector, "")" class="form-control" type="text" value="@Model.Answer"/>
                 <span class="input-group-btn">
-                    <button class="btn btn-success filtered-combobox-button" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@Model.Id', '@Html.Stringify(Model.RosterVector)')">@Pages.EditQuestion_Save</button>
+                    <button class="btn btn-success" type="button" data-bind="click: saveFilteredComboboxAnswer.bind($data, '@Model.Id', '@Html.Stringify(Model.RosterVector)')">@Pages.EditQuestion_Save</button>
                 </span>
             </div>
         }
