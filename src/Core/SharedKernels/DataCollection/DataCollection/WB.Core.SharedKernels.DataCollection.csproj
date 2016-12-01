@@ -152,6 +152,7 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticText.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariable.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitutionVariables.cs" />
+    <Compile Include="Implementation\Aggregates\Invariants\InterviewQuestionnaireInvariants.cs" />
     <Compile Include="Services\ISubstitionTextFactory.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\RosterManager.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitionText.cs" />

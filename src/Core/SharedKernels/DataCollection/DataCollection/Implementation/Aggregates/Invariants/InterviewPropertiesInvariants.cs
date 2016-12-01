@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             this.InterviewProperties = interviewProperties;
         }
 
-        public InterviewEntities.InterviewProperties InterviewProperties { get; }
+        private InterviewEntities.InterviewProperties InterviewProperties { get; }
 
         public void RequireAnswerCanBeChanged()
         {
