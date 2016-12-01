@@ -1,4 +1,5 @@
 ﻿using Android.Graphics;
+using Android.Support.V4.Content;
 using Android.Widget;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -16,7 +17,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (textView.CurrentTextColor != textColor)
             {
-                textView.SetTextColor(textView.Resources.GetColor(textColor));
+                var color = new Color(ContextCompat.GetColor(Target.Context, textColor));
+                textView.SetTextColor(color);
             }
         }
     }
