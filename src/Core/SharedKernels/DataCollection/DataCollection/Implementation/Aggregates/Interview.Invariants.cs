@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.MultyOption);
 
             if (applyStrongChecks)
             {
@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.SingleOption);
 
             if (applyStrongChecks)
             {
@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Numeric);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
 
             if (applyStrongChecks)
@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.DateTime);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.DateTime);
 
             if (applyStrongChecks)
             {
@@ -167,7 +167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.SingleOption);
 
             if (isLinkedToList)
             {
@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.MultyOption);
 
             if (isLinkedToList)
             {
@@ -238,7 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(question.Id);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(question.Id, questionnaire, QuestionType.MultyOption);
+            questionnaireInvariants.RequireQuestionType(question.Id, QuestionType.MultyOption);
             this.ThrowIfSomeValuesAreNotFromAvailableOptions(question.Id, selectedValues, questionnaire);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(question.Id))
@@ -266,7 +266,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Text);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.Text);
 
             if (applyStrongChecks)
             {
@@ -282,7 +282,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.AutoPropagate, QuestionType.Numeric);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.Numeric);
             this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
@@ -307,7 +307,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.TextList);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.TextList);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
@@ -335,7 +335,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.GpsCoordinates);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.GpsCoordinates);
 
             if (applyStrongChecks)
             {
@@ -351,7 +351,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.QRBarcode);
 
             if (applyStrongChecks)
             {
@@ -389,20 +389,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Decimal values should be unique for question {0}. InterviewId: {1}",
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
             }
-        }
-
-        private void ThrowIfQuestionTypeIsNotOneOfExpected(Guid questionId, IQuestionnaire questionnaire,
-            params QuestionType[] expectedQuestionTypes)
-        {
-            QuestionType questionType = questionnaire.GetQuestionType(questionId);
-
-            bool typeIsNotExpected = !expectedQuestionTypes.Contains(questionType);
-            if (typeIsNotExpected)
-                throw new AnswerNotAcceptedException(string.Format(
-                    "Question {0} has type {1}. But one of the following types was expected: {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire), questionType,
-                    string.Join(", ", expectedQuestionTypes.Select(type => type.ToString())),
-                    EventSourceId));
         }
 
         private void ThrowIfNumericQuestionIsNotReal(Guid questionId, IQuestionnaire questionnaire)
