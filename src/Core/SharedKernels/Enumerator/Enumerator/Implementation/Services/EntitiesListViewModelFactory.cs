@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public IEnumerable<EntityWithErrorsViewModel> GetEntitiesWithErrors(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            Identity[] invalidEntities = interview.GetVisibleInvalidEntitiesInInterview().Take(this.maxNumberOfEntities).ToArray();
+            Identity[] invalidEntities = interview.GetInvalidEntitiesInInterview().Take(this.maxNumberOfEntities).ToArray();
            
             return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
         }

@@ -306,9 +306,11 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
                 filteredCombobox.selectedValue().id(selectedOptionId);
                 filteredCombobox.selectedValue().value(_.find(filteredCombobox.options, function (option) { return parseFloat(option.value) == selectedOptionId; }).label);
             }
-            ko.bindingHandlers.simpletypeahead.init(filteredComboboxElement, function () {
-                return filteredCombobox.options;
-            }, filteredCombobox.selectedValue);
+
+            ko.bindingHandlers.simpletypeahead.init(filteredComboboxElement,
+                    function () { return filteredCombobox.options; },
+                    filteredCombobox.selectedValue);
+
         });
         updateCommentDates();
         setInterval(updateCommentDates, 60000);

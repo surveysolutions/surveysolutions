@@ -92,7 +92,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.spin.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/details").Include(
-                "~/Scripts/typeahead.js",
+                "~/Scripts/bloodhound.js",
                 "~/Scripts/bootstrap3-typeahead.js", 
                 "~/Scripts/components/typeahead-extended.js", 
                 "~/Scripts/knockout/ko.typeahead.js",

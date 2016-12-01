@@ -69,24 +69,18 @@
                                             @Pages.LogOn_UnsuccessfulLogin
                                             @foreach (var error in modelState.Keys.SelectMany(key => modelState[key].Errors))
                                             {
-                                            <span>@error.ErrorMessage</span>
+                                                <span>@error.ErrorMessage</span>
                                             }
                                         </p>
                                     </div>
                                 }
 
                                 <div class="form-group">
-                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autocomplete = "off", placeholder = Pages.Login})
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autocomplete = "off", placeholder = Pages.Login })
                                 </div>
                                 <div class="form-group">
                                     @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "off", placeholder = Pages.Password })
                                 </div>
-                                @*<div class="form-group">
-                                    <input class="wb-checkbox" id="stay-logged-in" type="checkbox" />
-                                    <label for="stay-logged-in">
-                                        <span class="tick"></span>Stay logged in
-                                    </label>
-                                </div>*@
                                 <div class="form-actions">
                                     <button class="btn btn-success btn-lg" type="submit">@Pages.LogOn_LogIn</button>
                                 </div>
@@ -98,41 +92,48 @@
                     <div class="centered-box-table">
                         <div class="centered-box-table-cell">
                             <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" id="placeholder" alt="survey management"></img>
+                            <div class="default-logo"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="text-left">
-            &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
-        </div>
-        <div class="text-left">
-            @(ServiceLocator.Current.GetInstance<IProductVersion>())
-            @if (AppSettings.IsDebugBuilded)
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="text-left">
+                &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
+            </div>
+            <div class="text-left">
+                @(ServiceLocator.Current.GetInstance<IProductVersion>())
+                @if (AppSettings.IsDebugBuilded)
             {
-                <span id="build-config">[.NET Debug]</span>
-            }
+                    <span id="build-config">[.NET Debug]</span>
+                }
 
-            @if (HttpContext.Current.IsDebuggingEnabled)
+                @if (HttpContext.Current.IsDebuggingEnabled)
             {
-                <span id="compile-config" style="color: red">Web Debug</span>
-            }
-            <span>|</span>
-            <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
+                    <span id="compile-config" style="color: red">Web Debug</span>
+                }
+                <span>|</span>
+                <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
 
-@Html.Partial("Clickjacking")
+    @Html.Partial("Clickjacking")
     <!-- jsLibs:js -->
     <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
     <!-- endinject -->
 
     <!-- jsApp:js -->
     <!-- endinject -->
+
+    <script type="text/javascript">
+    $("<img/>")
+        .on('error', function () { $("img#placeholder").parent().addClass("no-logo"); })
+        .attr("src", $("img#placeholder").attr("src"))
+    </script>
 </body>
 </html>
