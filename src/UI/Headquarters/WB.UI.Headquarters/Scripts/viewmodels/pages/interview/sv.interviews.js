@@ -101,7 +101,7 @@
             }
         }
 
-        var messageHtml = $(messageTemplateId).html(); 
+        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
 
         if (filteredItems.length === 0) {
             bootbox.alert(messageHtml);
