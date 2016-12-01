@@ -295,11 +295,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void ClearOptions()
-        {
-            this.options.Clear();
-            this.RaisePropertyChanged(() => this.HasOptions);
-        }
+        private void ClearOptions() =>
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.options.Clear();
+                this.RaisePropertyChanged(() => this.HasOptions);
+            });
 
         private List<TextListAnswerRow> GetTextListAnswerRows()
         {

@@ -308,11 +308,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return new List<TextListAnswerRow>(listQuestion.AsTextList.GetAnswer().Rows);
         }
 
-        private void ClearOptions()
-        {
-            this.options.Clear();
-            this.RaisePropertyChanged(() => this.HasOptions);
-        }
+        private void ClearOptions() =>
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.options.Clear();
+                this.RaisePropertyChanged(() => this.HasOptions);
+            });
 
         private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
             => new MultiOptionQuestionOptionViewModel(this)
