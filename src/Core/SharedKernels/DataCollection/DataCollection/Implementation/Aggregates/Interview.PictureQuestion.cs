@@ -22,10 +22,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
             questionnaireInvariants.RequireQuestionExists(questionId);
+            questionnaireInvariants.RequireQuestionType(questionId, QuestionType.Multimedia);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
-
-            this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
 
             var changedInterviewTree = this.Tree.Clone();
 
