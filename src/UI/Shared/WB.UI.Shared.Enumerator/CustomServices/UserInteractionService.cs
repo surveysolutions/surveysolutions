@@ -8,6 +8,7 @@ using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
@@ -15,7 +16,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private static readonly HashSet<Guid> userInteractions = new HashSet<Guid>();
         private static readonly object UserInteractionsLock = new object();
-        private static TaskCompletionSource<object> userInteractionsAwaiter = null;
+        private static TaskCompletionSource<object> userInteractionsAwaiter;
 
         private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
 
@@ -109,8 +110,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         }
 
                         new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(isHtml ? Html.FromHtml(message) : new SpannedString(message))
-                            .SetTitle(isHtml ? Html.FromHtml(title) : new SpannedString(title))
+                            .SetMessage(isHtml ? message.ToAndroidSpanned(): new SpannedString(message))
+                            .SetTitle(isHtml ? title.ToAndroidSpanned() : new SpannedString(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(true)); })
                             .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(false)); })
                             .SetCancelable(false)
@@ -149,12 +150,15 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         }
                         new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(Html.FromHtml(message))
-                            .SetTitle(Html.FromHtml(title)).SetView(inflatedView)
+                            .SetMessage(message.ToAndroidSpanned())
+                            .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
                             .SetPositiveButton(okButton,
                                 delegate
                                 {
-                                    HandleDialogClose(userInteractionId, () => { if (okCallback != null) okCallback(editText.Text); });
+                                    HandleDialogClose(userInteractionId, () =>
+                                    {
+                                        okCallback?.Invoke(editText.Text);
+                                    });
 
                                     this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
                                 })
@@ -162,7 +166,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                                 delegate
                                 {
                                     HandleDialogClose(userInteractionId,
-                                        () => { if (cancelCallBack != null) cancelCallBack(); });
+                                        () =>
+                                        {
+                                            cancelCallBack?.Invoke();
+                                        });
                                     this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
                                 })
                             .SetCancelable(false)
@@ -195,9 +202,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         }
 
                         new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(Html.FromHtml(message))
-                            .SetTitle(Html.FromHtml(title))
-                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(); }); })
+                            .SetMessage(message.ToAndroidSpanned())
+                            .SetTitle(title.ToAndroidSpanned())
+                            .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () =>
+                            {
+                                callback?.Invoke();
+                            }); })
                             .SetCancelable(false)
                             .Show();
                     },

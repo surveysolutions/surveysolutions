@@ -1,4 +1,5 @@
 ﻿using Android.Graphics;
+using Android.Support.V4.Content;
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
@@ -99,7 +100,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private Color GetColorFromResources(int resourceId)
         {
-            return this.CurrentTopActivity.Activity.Resources.GetColor(resourceId);
+            var color = new Color(ContextCompat.GetColor(Target.Context, resourceId));
+            return color;
         }
 
         private static string GetInformationByQuestionsAndAnswers(GroupStateViewModel value)

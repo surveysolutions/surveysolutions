@@ -1,4 +1,6 @@
-﻿using Android.Views;
+﻿using Android.Graphics;
+using Android.Support.V4.Content;
+using Android.Views;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -33,7 +35,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private static void SetBackgroundColor(ViewGroup target, int colorResourceId)
         {
-            target.SetBackgroundColor(target.Resources.GetColor(colorResourceId));
+            var color = new Color(ContextCompat.GetColor(target.Context, colorResourceId));
+            target.SetBackgroundColor(color);
         }
     }
 }

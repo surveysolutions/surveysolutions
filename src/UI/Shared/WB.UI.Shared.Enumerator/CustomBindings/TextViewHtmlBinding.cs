@@ -1,7 +1,6 @@
-﻿using System;
-using Android.Text;
-using Android.Widget;
+﻿using Android.Widget;
 using MvvmCross.Binding;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -13,10 +12,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(TextView control, string value)
         {
-            control.SetText(Html.FromHtml(value ?? String.Empty), TextView.BufferType.Spannable);
-            //don't use
-            //control.TextFormatted = Html.FromHtml(value ?? String.Empty);
-            //height is wrong calculated
+            control.SetText(value.ToAndroidSpanned(), TextView.BufferType.Spannable);
         }
     }
 }
