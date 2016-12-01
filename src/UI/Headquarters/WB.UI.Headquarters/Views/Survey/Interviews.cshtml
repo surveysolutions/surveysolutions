@@ -157,7 +157,7 @@
 </script>
     <script type="text/html" id="confirm-approve-template">
         @Html.Raw(string.Format(Interviews.ApproveConfirmMessage,
-            "<span class='text-normal' data-bind='text: items.length'></span>",
+            "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
