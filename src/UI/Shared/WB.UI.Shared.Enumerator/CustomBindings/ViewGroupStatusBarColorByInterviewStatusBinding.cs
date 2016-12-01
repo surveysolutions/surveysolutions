@@ -1,5 +1,7 @@
 ﻿using Android.App;
+using Android.Graphics;
 using Android.OS;
+using Android.Support.V4.Content;
 using Android.Views;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -38,7 +40,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private static void SetBackgroundColor(ViewGroup target, int colorResourceId)
         {
-            var color = target.Resources.GetColor(colorResourceId);
+            var color = new Color(ContextCompat.GetColor(target.Context, colorResourceId));
 
             var activity = (Activity)target.Context;
             Window window = activity.Window;
