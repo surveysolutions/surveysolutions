@@ -258,8 +258,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
-            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            questionnaireInvariants.RequireQuestionExists(questionId);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
@@ -272,8 +273,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
-            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            questionnaireInvariants.RequireQuestionExists(questionId);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
@@ -286,8 +288,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             
             var treeInvariants = new InterviewTreeInvariants(this.Tree);
+            var questionnaireInvariants = new InterviewQuestionnaireInvariants(this.properties.Id, questionnaire);
 
-            this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            questionnaireInvariants.RequireQuestionExists(questionId);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
