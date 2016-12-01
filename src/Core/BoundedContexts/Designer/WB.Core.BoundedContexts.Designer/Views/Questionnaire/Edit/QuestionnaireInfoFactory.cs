@@ -678,7 +678,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     IsSectionPlaceHolder = false,
                     Breadcrumbs = brief.Key,
                     Type = question.Type,
-                    VarName = question.VarName
+                    VarName = question.VarName,
+                    QuestionType = question.QuestionType
                 }));
             }
             return result;
