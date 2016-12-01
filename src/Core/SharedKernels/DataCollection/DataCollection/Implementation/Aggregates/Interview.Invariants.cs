@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             questionnaireInvariants.RequireQuestionExists(questionId);
             questionnaireInvariants.RequireQuestionType(questionId, QuestionType.Numeric);
-            this.ThrowIfNumericQuestionIsNotReal(questionId, questionnaire);
+            questionnaireInvariants.RequireNumericRealQuestion(questionId);
 
             if (applyStrongChecks)
             {
@@ -283,7 +283,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             questionnaireInvariants.RequireQuestionExists(questionId);
             questionnaireInvariants.RequireQuestionType(questionId, QuestionType.Numeric);
-            this.ThrowIfNumericQuestionIsNotInteger(questionId, questionnaire);
+            questionnaireInvariants.RequireNumericIntegerQuestion(questionId);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
@@ -389,24 +389,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Decimal values should be unique for question {0}. InterviewId: {1}",
                     FormatQuestionForException(questionId, questionnaire), EventSourceId));
             }
-        }
-
-        private void ThrowIfNumericQuestionIsNotReal(Guid questionId, IQuestionnaire questionnaire)
-        {
-            var isNotSupportReal = questionnaire.IsQuestionInteger(questionId);
-            if (isNotSupportReal)
-                throw new AnswerNotAcceptedException(string.Format(
-                    "Question {0} doesn't support answer of type real. InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
-        }
-
-        private void ThrowIfNumericQuestionIsNotInteger(Guid questionId, IQuestionnaire questionnaire)
-        {
-            var isNotSupportInteger = !questionnaire.IsQuestionInteger(questionId);
-            if (isNotSupportInteger)
-                throw new AnswerNotAcceptedException(string.Format(
-                    "Question {0} doesn't support answer of type integer. InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
         }
 
         private void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
