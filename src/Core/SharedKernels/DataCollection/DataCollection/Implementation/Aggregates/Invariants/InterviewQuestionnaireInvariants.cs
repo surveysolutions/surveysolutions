@@ -38,5 +38,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Question ID: {questionId.FormatGuid()}. " +
                     $"Interview ID: {this.InterviewId}.");
         }
+
+        public void RequireNumericRealQuestion(Guid questionId)
+        {
+            if (this.Questionnaire.IsQuestionInteger(questionId))
+                throw new AnswerNotAcceptedException(
+                    $"Question doesn't support answer of type real. " +
+                    $"Question ID: {questionId.FormatGuid()}. " +
+                    $"Interview ID: {this.InterviewId}.");
+        }
+
+        public void RequireNumericIntegerQuestion(Guid questionId)
+        {
+            if (!this.Questionnaire.IsQuestionInteger(questionId))
+                throw new AnswerNotAcceptedException(
+                    $"Question doesn't support answer of type integer. " +
+                    $"Question ID: {questionId.FormatGuid()}. " +
+                    $"Interview ID: {this.InterviewId}.");
+        }
     }
 }
