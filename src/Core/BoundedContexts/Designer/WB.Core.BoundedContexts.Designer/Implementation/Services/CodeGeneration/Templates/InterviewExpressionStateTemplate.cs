@@ -140,73 +140,73 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
                     "\n\r\n\t\tpublic void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, d" +
                     "ecimal rosterInstanceId, string rosterTitle)\r\n        {\r\n        }\r\n\r\n        pu" +
                     "blic override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, deci" +
-                    "mal rosterInstanceId)\r\n        {\r\n            if (!HasParentScropeRosterId(roste" +
-                    "rId))\r\n            {\r\n                return;\r\n            }\r\n\r\n            deci" +
-                    "mal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);\r" +
-                    "\n            var rosterIdentityKey = Util.GetRosterKey(GetParentRosterScopeIds(r" +
-                    "osterId), rosterVector);\r\n            var rosterStringKey = Util.GetRosterString" +
-                    "Key(rosterIdentityKey);\r\n\r\n            var dependentRosters = this.InterviewScop" +
-                    "es.Keys.Where(x => x.StartsWith(rosterStringKey)).ToArray();\r\n\r\n            fore" +
-                    "ach (var rosterKey in dependentRosters)\r\n            {\r\n                this.Int" +
-                    "erviewScopes.Remove(rosterKey);\r\n                foreach (var siblings in this.S" +
-                    "iblingRosters.Values)\r\n                {\r\n                    siblings.Remove(ro" +
-                    "sterKey);\r\n                }\r\n            }\r\n        }\r\n\r\n        public overrid" +
-                    "e void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long?" +
-                    " answer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector(q" +
-                    "uestionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n     " +
-                    "       targetLevel.UpdateNumericIntegerAnswer(questionId, answer);\r\n        }\r\n\r" +
-                    "\n        public override void UpdateNumericRealAnswer(Guid questionId, decimal[]" +
-                    " rosterVector, double? answer)\r\n        {\r\n            var targetLevel = this.Ge" +
-                    "tRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == " +
-                    "null) return;\r\n\r\n            targetLevel.UpdateNumericRealAnswer(questionId, ans" +
-                    "wer);\r\n        }\r\n\r\n        public override void UpdateDateAnswer(Guid questionI" +
-                    "d, decimal[] rosterVector, DateTime? answer)\r\n        {\r\n            var targetL" +
-                    "evel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (t" +
-                    "argetLevel == null) return;\r\n\r\n            targetLevel.UpdateDateTimeAnswer(ques" +
-                    "tionId, answer);\r\n        }\r\n\r\n        public override void UpdateMediaAnswer(Gu" +
-                    "id questionId, decimal[] rosterVector, string answer)\r\n        {\r\n            va" +
-                    "r targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n        " +
-                    "    if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateMediaAnswe" +
-                    "r(questionId, answer);\r\n        }\r\n\r\n        public override void UpdateTextAnsw" +
-                    "er(Guid questionId, decimal[] rosterVector, string answer)\r\n        {\r\n         " +
-                    "   var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n   " +
-                    "         if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateTextA" +
-                    "nswer(questionId, answer);\r\n        }\r\n        \r\n        public override void Up" +
-                    "dateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)\r\n   " +
-                    "     {\r\n            var targetLevel = this.GetRosterByIdAndVector(questionId, ro" +
-                    "sterVector);\r\n            if (targetLevel == null) return;\r\n\r\n            target" +
-                    "Level.UpdateQrBarcodeAnswer(questionId, answer);\r\n        }\r\n\r\n        public ov" +
-                    "erride void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, de" +
-                    "cimal? answer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVe" +
-                    "ctor(questionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r" +
-                    "\n            targetLevel.UpdateSingleOptionAnswer(questionId, answer);\r\n        " +
-                    "}\r\n\r\n        public override void UpdateMultiOptionAnswer(Guid questionId, decim" +
-                    "al[] rosterVector, decimal[] answer)\r\n        {\r\n            var targetLevel = t" +
-                    "his.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLev" +
-                    "el == null) return;\r\n\r\n            targetLevel.UpdateMultiOptionAnswer(questionI" +
-                    "d, answer);\r\n        }\r\n\r\n        public override void UpdateGeoLocationAnswer(G" +
-                    "uid questionId, decimal[] rosterVector, double latitude, double longitude, doubl" +
-                    "e accuracy, double altitude)\r\n        {\r\n            var targetLevel = this.GetR" +
-                    "osterByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel == nu" +
-                    "ll) return;\r\n\r\n            targetLevel.UpdateGeoLocationAnswer(questionId, latit" +
-                    "ude,  longitude,  accuracy, altitude);\r\n        }\r\n\r\n        public override voi" +
-                    "d UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, s" +
-                    "tring>[] answers)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAn" +
-                    "dVector(questionId, rosterVector);\r\n            if (targetLevel == null) return;" +
-                    "\r\n\r\n            targetLevel.UpdateTextListAnswer(questionId, answers);\r\n        " +
-                    "}\r\n\r\n        public override void UpdateLinkedSingleOptionAnswer(Guid questionId" +
-                    ", decimal[] rosterVector, decimal[] selectedPropagationVector)\r\n        {\r\n     " +
+                    "mal rosterInstanceId)\r\n        {\r\n            if (!IdOf.parentScopeMap.ContainsK" +
+                    "ey(rosterId))\r\n            {\r\n                return;\r\n            }\r\n\r\n        " +
+                    "    decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInsta" +
+                    "nceId);\r\n            var rosterIdentityKey = Util.GetRosterKey(IdOf.parentScopeM" +
+                    "ap[rosterId], rosterVector);\r\n            var rosterStringKey = Util.GetRosterSt" +
+                    "ringKey(rosterIdentityKey);\r\n\r\n            var dependentRosters = this.Interview" +
+                    "Scopes.Keys.Where(x => x.StartsWith(rosterStringKey)).ToArray();\r\n\r\n            " +
+                    "foreach (var rosterKey in dependentRosters)\r\n            {\r\n                this" +
+                    ".InterviewScopes.Remove(rosterKey);\r\n                foreach (var siblings in th" +
+                    "is.SiblingRosters.Values)\r\n                {\r\n                    siblings.Remov" +
+                    "e(rosterKey);\r\n                }\r\n            }\r\n        }\r\n\r\n        public ove" +
+                    "rride void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, l" +
+                    "ong? answer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdAndVect" +
+                    "or(questionId, rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n " +
+                    "           targetLevel.UpdateNumericIntegerAnswer(questionId, answer);\r\n        " +
+                    "}\r\n\r\n        public override void UpdateNumericRealAnswer(Guid questionId, decim" +
+                    "al[] rosterVector, double? answer)\r\n        {\r\n            var targetLevel = thi" +
+                    "s.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel" +
+                    " == null) return;\r\n\r\n            targetLevel.UpdateNumericRealAnswer(questionId," +
+                    " answer);\r\n        }\r\n\r\n        public override void UpdateDateAnswer(Guid quest" +
+                    "ionId, decimal[] rosterVector, DateTime? answer)\r\n        {\r\n            var tar" +
+                    "getLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            i" +
+                    "f (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateDateTimeAnswer(" +
+                    "questionId, answer);\r\n        }\r\n\r\n        public override void UpdateMediaAnswe" +
+                    "r(Guid questionId, decimal[] rosterVector, string answer)\r\n        {\r\n          " +
+                    "  var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n    " +
+                    "        if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateMediaA" +
+                    "nswer(questionId, answer);\r\n        }\r\n\r\n        public override void UpdateText" +
+                    "Answer(Guid questionId, decimal[] rosterVector, string answer)\r\n        {\r\n     " +
                     "       var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r" +
-                    "\n            if (targetLevel == null) return;\r\n            \r\n            targetL" +
-                    "evel.UpdateLinkedSingleOptionAnswer(questionId, selectedPropagationVector);\r\n   " +
-                    "     }\r\n\r\n        public override void UpdateLinkedMultiOptionAnswer(Guid questi" +
-                    "onId, decimal[] rosterVector, decimal[][] answer)\r\n        {\r\n            var ta" +
-                    "rgetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            " +
-                    "if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateLinkedMultiOpt" +
-                    "ionAnswer(questionId, answer);\r\n        }\r\n        \r\n        public override Dic" +
-                    "tionary<Guid, Guid[]> GetParentsMap()\r\n        {\r\n            return IdOf.parent" +
-                    "ScopeMap;\r\n        }\r\n\r\n\t\tpublic override IInterviewExpressionState Clone ()\r\n  " +
-                    "      {\r\n            return new ");
+                    "\n            if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateT" +
+                    "extAnswer(questionId, answer);\r\n        }\r\n        \r\n        public override voi" +
+                    "d UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)\r" +
+                    "\n        {\r\n            var targetLevel = this.GetRosterByIdAndVector(questionId" +
+                    ", rosterVector);\r\n            if (targetLevel == null) return;\r\n\r\n            ta" +
+                    "rgetLevel.UpdateQrBarcodeAnswer(questionId, answer);\r\n        }\r\n\r\n        publi" +
+                    "c override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector" +
+                    ", decimal? answer)\r\n        {\r\n            var targetLevel = this.GetRosterByIdA" +
+                    "ndVector(questionId, rosterVector);\r\n            if (targetLevel == null) return" +
+                    ";\r\n\r\n            targetLevel.UpdateSingleOptionAnswer(questionId, answer);\r\n    " +
+                    "    }\r\n\r\n        public override void UpdateMultiOptionAnswer(Guid questionId, d" +
+                    "ecimal[] rosterVector, decimal[] answer)\r\n        {\r\n            var targetLevel" +
+                    " = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targe" +
+                    "tLevel == null) return;\r\n\r\n            targetLevel.UpdateMultiOptionAnswer(quest" +
+                    "ionId, answer);\r\n        }\r\n\r\n        public override void UpdateGeoLocationAnsw" +
+                    "er(Guid questionId, decimal[] rosterVector, double latitude, double longitude, d" +
+                    "ouble accuracy, double altitude)\r\n        {\r\n            var targetLevel = this." +
+                    "GetRosterByIdAndVector(questionId, rosterVector);\r\n            if (targetLevel =" +
+                    "= null) return;\r\n\r\n            targetLevel.UpdateGeoLocationAnswer(questionId, l" +
+                    "atitude,  longitude,  accuracy, altitude);\r\n        }\r\n\r\n        public override" +
+                    " void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decima" +
+                    "l, string>[] answers)\r\n        {\r\n            var targetLevel = this.GetRosterBy" +
+                    "IdAndVector(questionId, rosterVector);\r\n            if (targetLevel == null) ret" +
+                    "urn;\r\n\r\n            targetLevel.UpdateTextListAnswer(questionId, answers);\r\n    " +
+                    "    }\r\n\r\n        public override void UpdateLinkedSingleOptionAnswer(Guid questi" +
+                    "onId, decimal[] rosterVector, decimal[] selectedPropagationVector)\r\n        {\r\n " +
+                    "           var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVecto" +
+                    "r);\r\n            if (targetLevel == null) return;\r\n            \r\n            tar" +
+                    "getLevel.UpdateLinkedSingleOptionAnswer(questionId, selectedPropagationVector);\r" +
+                    "\n        }\r\n\r\n        public override void UpdateLinkedMultiOptionAnswer(Guid qu" +
+                    "estionId, decimal[] rosterVector, decimal[][] answer)\r\n        {\r\n            va" +
+                    "r targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);\r\n        " +
+                    "    if (targetLevel == null) return;\r\n\r\n            targetLevel.UpdateLinkedMult" +
+                    "iOptionAnswer(questionId, answer);\r\n        }\r\n        \r\n        public override" +
+                    " Dictionary<Guid, Guid[]> GetParentsMap()\r\n        {\r\n            return IdOf.pa" +
+                    "rentScopeMap;\r\n        }\r\n\r\n\t\tpublic override IInterviewExpressionState Clone ()" +
+                    "\r\n        {\r\n            return new ");
             
             #line 213 "C:\work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(QuestionnaireStructure.ClassName));
