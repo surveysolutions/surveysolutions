@@ -19,7 +19,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public bool IsReadOnly => true;
 
+        public void CopyTo(Array array, int index)
+        {
+            foreach (var coll in this.collections)
+                foreach (var item in coll)
+                    array.SetValue(item, index++);
+        }
+
         public int Count { get ; private set; }
+        public bool IsSynchronized => false;
+        public object SyncRoot => (object)null;
 
         public void Clear()
         {
@@ -66,6 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             this.collections.Add(collection);
             collection.CollectionChanged += this.HandleChildCollectionChanged;
             var offset = this.Count;
+
             var addedCollectionCount = collection.Count();
             this.Count += addedCollectionCount;
 
@@ -75,6 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
+
             if (newCount != this.Count)
             {
                 this.Count = newCount;
