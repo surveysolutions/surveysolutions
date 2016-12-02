@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -82,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Select(questionId => new CoverPrefilledQuestion
                 {
                     Question = this.CreateQuestionTitle(interviewId, new Identity(questionId, RosterVector.Empty)),
-                    Answer = interview.GetAnswerAsString(Identity.Create(questionId, RosterVector.Empty))
+                    Answer = interview.GetAnswerAsString(Identity.Create(questionId, RosterVector.Empty), CultureInfo.CurrentCulture)
                 })
                 .ToList();
            

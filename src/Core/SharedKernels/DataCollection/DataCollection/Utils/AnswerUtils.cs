@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class AnswerUtils
     {
-        public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null)
+        public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null, CultureInfo cultureInfo = null, bool isTimestamp = false)
         {
             if (answer == null)
                 return string.Empty;
@@ -25,7 +25,12 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 return ((int) answer).ToString(CultureInfo.InvariantCulture);
 
             if (answer is DateTime)
-                return ((DateTime)answer).ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture);
+            {
+                var dateTime = (DateTime) answer;
+                if (isTimestamp)
+                    return dateTime.ToString(cultureInfo ?? CultureInfo.InvariantCulture); 
+                return dateTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture);
+            }
 
             if (answer is decimal)
             {
