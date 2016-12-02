@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -19,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         string InterviewerCompleteComment { get; }
         string SupervisorRejectComment { get; }
         
-        string GetAnswerAsString(Identity questionIdentity);
+        string GetAnswerAsString(Identity questionIdentity, CultureInfo cultureInfo = null);
 
         string Language { get; }
 
