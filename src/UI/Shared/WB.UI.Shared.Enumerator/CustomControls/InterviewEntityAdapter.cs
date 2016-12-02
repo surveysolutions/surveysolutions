@@ -71,5 +71,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
 
         }
+
     }
 }

@@ -245,7 +245,6 @@
     <Compile Include="ViewModels\NavigationIdentity.cs" />
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
-    <Compile Include="ViewModels\ObservableRangeCollection.cs" />
     <Compile Include="ViewModels\BasePrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
     <Compile Include="Views\AttachmentContent.cs" />
