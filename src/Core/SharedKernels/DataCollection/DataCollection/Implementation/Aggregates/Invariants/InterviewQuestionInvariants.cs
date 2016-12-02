@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
                 throw new InterviewException(
-                    $"Answer exceeds MaxAnswerCount limit {maxAnswersCountLimit.Value} for question {this.FormatQuestionForException()}. {this.InfoForException}");
+                    $"Answers exceed MaxAnswerCount limit {maxAnswersCountLimit.Value} for question {this.FormatQuestionForException()}. {this.InfoForException}");
         }
 
         public void RequireNotEmptyTexts(Tuple<decimal, string>[] answers)
