@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionIdentity, selectedRosterVector);
             }
 
-            this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, linkedQuestionSelectedOptions.Length, questionnaire);
+            questionInvariants.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(linkedQuestionSelectedOptions.Length);
         }
 
         private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
-                this.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(questionnaire, questionId, answer);
+                questionInvariants.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(answer);
             }
         }
 
@@ -175,7 +175,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 treeInvariants.RequireLinkedToListOptionIsAvailable(linkedQuestionIdentity, selectedValue);
             }
             else
-                this.ThrowIfValueIsNotOneOfAvailableOptions(questionId, selectedValue, questionnaire);
+            {
+                questionInvariants.ThrowIfValueIsNotOneOfAvailableOptions(selectedValue);
+            }
 
             if (applyStrongChecks)
             {
@@ -205,7 +207,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
             else
-                this.ThrowIfSomeValuesAreNotFromAvailableOptions(questionId, selectedValues, questionnaire);
+            {
+                questionInvariants.ThrowIfSomeValuesAreNotFromAvailableOptions(selectedValues);
+            }
 
             if (questionnaire.IsQuestionYesNo(questionId))
             {
@@ -214,17 +218,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, selectedValues.Count, questionnaire);
+                questionInvariants.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(selectedValues.Count);
                 var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
-                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, selectedValues.Count,
-                    questionnaire,
-                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
+                questionInvariants.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(selectedValues.Count, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
             {
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-                this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedValues.Count, questionnaire);
+                questionInvariants.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(selectedValues.Count);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
@@ -239,18 +241,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             questionInvariants.RequireQuestionExists();
             questionInvariants.RequireQuestionType(QuestionType.MultyOption);
-            this.ThrowIfSomeValuesAreNotFromAvailableOptions(question.Id, selectedValues, questionnaire);
+            questionInvariants.ThrowIfSomeValuesAreNotFromAvailableOptions(selectedValues);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(question.Id))
             {
-                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(question.Id, yesAnswersCount, questionnaire);
+                questionInvariants.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(yesAnswersCount);
                 var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(question.Id);
-                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(question.Id, yesAnswersCount,
-                    questionnaire,
-                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
+                questionInvariants.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(yesAnswersCount, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
-            this.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(question.Id, yesAnswersCount, questionnaire);
+            questionInvariants.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(yesAnswersCount);
 
             if (applyStrongChecks)
             {
@@ -287,11 +287,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answer, questionnaire);
-                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, answer, questionnaire,
-                    questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
-                        ? questionnaire.GetMaxLongRosterRowCount()
-                        : questionnaire.GetMaxRosterRowCount());
+                questionInvariants.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(answer);
+                questionInvariants.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(answer, questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
+                    ? questionnaire.GetMaxLongRosterRowCount()
+                    : questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
@@ -311,21 +310,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                this.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(questionId, answers.Length, questionnaire);
+                questionInvariants.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(answers.Length);
                 var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
-                this.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(questionId, answers.Length,
-                    questionnaire,
-                    maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
+                questionInvariants.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(answers.Length, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
             {
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
-                this.ThrowIfDecimalValuesAreNotUnique(answers, questionId, questionnaire);
-                this.ThrowIfStringValueAreEmptyOrWhitespaces(answers, questionId, questionnaire);
+                questionInvariants.ThrowIfDecimalValuesAreNotUnique(answers);
+                questionInvariants.ThrowIfStringValueAreEmptyOrWhitespaces(answers);
                 var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
-                this.ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit, questionId, questionnaire);
+                questionInvariants.ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit);
             }
         }
 
@@ -345,7 +342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void CheckQRBarcodeInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
-         Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
+            Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
         {
             var treeInvariants = new InterviewTreeInvariants(tree);
             var questionInvariants = new InterviewQuestionInvariants(this.properties.Id, questionId, questionnaire);
@@ -359,108 +356,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
-
-        #region ThrowIfs
-
-        private void ThrowIfAnswersExceedsMaxAnswerCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit,
-            Guid questionId, IQuestionnaire questionnaire)
-        {
-            if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
-            {
-                throw new InterviewException(string.Format("Answers exceeds MaxAnswerCount limit for question {0}. InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
-            }
-        }
-
-        private void ThrowIfStringValueAreEmptyOrWhitespaces(Tuple<decimal, string>[] answers, Guid questionId, IQuestionnaire questionnaire)
-        {
-            if (answers.Any(x => string.IsNullOrWhiteSpace(x.Item2)))
-            {
-                throw new InterviewException(string.Format("String values should be not empty or whitespaces for question {0}. InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
-            }
-        }
-
-        private void ThrowIfDecimalValuesAreNotUnique(Tuple<decimal, string>[] answers, Guid questionId, IQuestionnaire questionnaire)
-        {
-            var decimals = answers.Select(x => x.Item1).Distinct().ToArray();
-            if (answers.Length > decimals.Length)
-            {
-                throw new InterviewException(string.Format("Decimal values should be unique for question {0}. InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
-            }
-        }
-
-        private void ThrowIfValueIsNotOneOfAvailableOptions(Guid questionId, decimal value, IQuestionnaire questionnaire)
-        {
-            var availableValues = questionnaire.GetOptionForQuestionByOptionValue(questionId, value);
-
-            if (availableValues == null)
-                throw new AnswerNotAcceptedException(string.Format(
-                    "For question {0} was provided selected value {1} as answer. InterviewId: {2}",
-                    FormatQuestionForException(questionId, questionnaire), value, EventSourceId));
-        }
-
-        private void ThrowIfSomeValuesAreNotFromAvailableOptions(Guid questionId, IReadOnlyCollection<int> values, IQuestionnaire questionnaire)
-        {
-            IEnumerable<decimal> availableValues = questionnaire.GetMultiSelectAnswerOptionsAsValues(questionId);
-
-            bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
-            if (someValueIsNotOneOfAvailable)
-                throw new AnswerNotAcceptedException(string.Format(
-                    "For question {0} were provided selected values {1} as answer. But only following values are allowed: {2}. InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire), JoinIntsWithComma(values),
-                    JoinDecimalsWithComma(availableValues),
-                    EventSourceId));
-        }
-
-        private void ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(Guid questionId, int answersCount, IQuestionnaire questionnaire)
-        {
-            int? maxSelectedOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
-
-            if (maxSelectedOptions.HasValue && maxSelectedOptions > 0 && answersCount > maxSelectedOptions)
-                throw new AnswerNotAcceptedException(string.Format(
-                    "For question {0} number of answers is greater than the maximum number of selected answers. InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), EventSourceId));
-        }
-
-        private void ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(IQuestionnaire questionnaire, Guid questionId, double answer)
-        {
-            int? countOfDecimalPlacesAllowed = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(questionId);
-            if (!countOfDecimalPlacesAllowed.HasValue)
-                return;
-
-            var roundedAnswer = Math.Round(answer, countOfDecimalPlacesAllowed.Value);
-            if (roundedAnswer != answer)
-                throw new AnswerNotAcceptedException(
-                    string.Format(
-                        "Answer '{0}' for question {1}  is incorrect because has more decimal places than allowed by questionnaire. Allowed amount of decimal places is {2}. InterviewId: {3}",
-                        answer,
-                        FormatQuestionForException(questionId, questionnaire),
-                        countOfDecimalPlacesAllowed.Value,
-                        EventSourceId));
-        }
-
-        private void ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(Guid questionId, int answer,
-            IQuestionnaire questionnaire)
-        {
-            if (answer < 0)
-                throw new AnswerNotAcceptedException(
-                    $"Answer '{answer}' for question {FormatQuestionForException(questionId, questionnaire)} is incorrect because question is used as size of roster and specified answer is negative. InterviewId: {this.EventSourceId}");
-        }
-
-        private void ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(Guid questionId, int answer,
-           IQuestionnaire questionnaire, int maxRosterRowCount)
-        {
-            if (answer > maxRosterRowCount)
-            {
-                var message = string.Format(
-                    "Answer '{0}' for question {1} is incorrect because question is used as size of roster and specified answer is greater than {3}. InterviewId: {2}",
-                    answer, FormatQuestionForException(questionId, questionnaire), this.EventSourceId, maxRosterRowCount);
-                throw new AnswerNotAcceptedException(message);
-            }
-        }
-
-        #endregion
     }
 }
