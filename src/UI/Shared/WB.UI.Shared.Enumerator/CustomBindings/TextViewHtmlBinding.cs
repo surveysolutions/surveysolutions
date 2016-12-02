@@ -12,7 +12,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(TextView control, string value)
         {
-            control.SetText(value.ToAndroidSpanned(), TextView.BufferType.Spannable);
+            control?.SetText(value?.ToAndroidSpanned(), TextView.BufferType.Spannable);
         }
     }
 }
