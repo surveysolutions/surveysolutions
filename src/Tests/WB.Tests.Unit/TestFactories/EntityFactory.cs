@@ -145,8 +145,8 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 "some questionnaire");
 
-        public InterviewTreeDateTimeQuestion InterviewTreeDateTimeQuestion(DateTime answer)
-            => new InterviewTreeDateTimeQuestion(answer);
+        public InterviewTreeDateTimeQuestion InterviewTreeDateTimeQuestion(DateTime answer, bool isTimestampQuestion = false)
+            => new InterviewTreeDateTimeQuestion(answer, isTimestampQuestion);
 
         public DateTimeQuestion DateTimeQuestion(
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -1207,7 +1207,7 @@ namespace WB.Tests.Unit.TestFactories
         {
             var titleWithSubstitutions = Create.Entity.SubstitionText(questionIdentity, title);
             var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
-                cascadingParentQuestionId, isYesNo,  isDecimal, false, linkedSourceId);
+                cascadingParentQuestionId, isYesNo,  isDecimal, false, false, linkedSourceId);
 
             if (isDisabled) question.Disable();
             return question;

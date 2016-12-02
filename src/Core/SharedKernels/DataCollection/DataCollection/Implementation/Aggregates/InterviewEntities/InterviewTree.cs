@@ -246,6 +246,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionIdentity.Id);
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
             var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionIdentity.Id);
+            var isTimestampQuestion = questionnaire.IsTimestampQuestion(questionIdentity.Id);
 
             if (isLinkedToQuestion)
                 sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
@@ -267,19 +268,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 }
             }
 
-            return new InterviewTreeQuestion(questionIdentity, 
-                questionType: questionType,
+            return new InterviewTreeQuestion(questionIdentity,
                 title: title, 
                 variableName: variableName, 
-                answer: null, 
-                linkedOptions: null,
-                cascadingParentQuestionId: cascadingParentQuestionId, 
-                isYesNo: isYesNoQuestion,
+                questionType: questionType, 
+                answer: null,
+                linkedOptions: null, 
+                cascadingParentQuestionId: cascadingParentQuestionId,
+                isYesNo: isYesNoQuestion, 
                 isDecimal: isDecimalQuestion, 
-                linkedSourceId: sourceForLinkedQuestion,
-                commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion,
-                validationMessages: validationMessages, 
-                isLinkedToListQuestion: isLinkedToListQuestion);
+                isLinkedToListQuestion: isLinkedToListQuestion, 
+                isTimestampQuestion: isTimestampQuestion, 
+                linkedSourceId: sourceForLinkedQuestion, 
+                commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion, 
+                validationMessages: validationMessages);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
