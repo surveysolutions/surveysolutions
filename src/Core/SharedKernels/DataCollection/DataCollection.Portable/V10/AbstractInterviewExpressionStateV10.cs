@@ -129,8 +129,10 @@ namespace WB.Core.SharedKernels.DataCollection.V10
 
         public virtual void RemoveRoster(Identity[] rosterIdentityKey)
         {
+            var rosterStringKey = Util.GetRosterStringKey((rosterIdentityKey));
+
             var dependentRosters = this.InterviewScopes.Keys
-                .Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey))))
+                .Where(x => x.StartsWith(rosterStringKey))
                 .ToArray();
 
             foreach (var rosterKey in dependentRosters)
