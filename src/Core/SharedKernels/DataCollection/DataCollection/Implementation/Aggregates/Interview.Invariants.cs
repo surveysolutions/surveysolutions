@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 treeInvariants.RequireLinkedOptionIsAvailable(linkedQuestionIdentity, selectedRosterVector);
             }
 
-            questionInvariants.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(linkedQuestionSelectedOptions.Length);
+            questionInvariants.RequireMaxAnswersCountLimit(linkedQuestionSelectedOptions.Length);
         }
 
         private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire, Identity answeredQuestion, InterviewTree tree, bool applyStrongChecks = true)
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
-                questionInvariants.ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(answer);
+                questionInvariants.RequireAllowedDecimalPlaces(answer);
             }
         }
 
@@ -176,7 +176,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
-                questionInvariants.ThrowIfValueIsNotOneOfAvailableOptions(selectedValue);
+                questionInvariants.RequireOptionExists(selectedValue);
             }
 
             if (applyStrongChecks)
@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
-                questionInvariants.ThrowIfSomeValuesAreNotFromAvailableOptions(selectedValues);
+                questionInvariants.RequireOptionsExist(selectedValues);
             }
 
             if (questionnaire.IsQuestionYesNo(questionId))
@@ -218,15 +218,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                questionInvariants.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(selectedValues.Count);
+                questionInvariants.RequireRosterSizeAnswerNotNegative(selectedValues.Count);
                 var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
-                questionInvariants.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(selectedValues.Count, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
+                questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
             {
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
-                questionInvariants.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(selectedValues.Count);
+                questionInvariants.RequireMaxAnswersCountLimit(selectedValues.Count);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
         }
@@ -241,16 +241,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             questionInvariants.RequireQuestionExists();
             questionInvariants.RequireQuestionType(QuestionType.MultyOption);
-            questionInvariants.ThrowIfSomeValuesAreNotFromAvailableOptions(selectedValues);
+            questionInvariants.RequireOptionsExist(selectedValues);
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(question.Id))
             {
-                questionInvariants.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(yesAnswersCount);
+                questionInvariants.RequireRosterSizeAnswerNotNegative(yesAnswersCount);
                 var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(question.Id);
-                questionInvariants.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(yesAnswersCount, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
+                questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
-            questionInvariants.ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(yesAnswersCount);
+            questionInvariants.RequireMaxAnswersCountLimit(yesAnswersCount);
 
             if (applyStrongChecks)
             {
@@ -287,8 +287,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                questionInvariants.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(answer);
-                questionInvariants.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(answer, questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
+                questionInvariants.RequireRosterSizeAnswerNotNegative(answer);
+                questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer, questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId)
                     ? questionnaire.GetMaxLongRosterRowCount()
                     : questionnaire.GetMaxRosterRowCount());
             }
@@ -310,19 +310,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.ShouldQuestionSpecifyRosterSize(questionId))
             {
-                questionInvariants.ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(answers.Length);
+                questionInvariants.RequireRosterSizeAnswerNotNegative(answers.Length);
                 var maxSelectedAnswerOptions = questionnaire.GetMaxSelectedAnswerOptions(questionId);
-                questionInvariants.ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(answers.Length, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
+                questionInvariants.RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length, maxSelectedAnswerOptions ?? questionnaire.GetMaxRosterRowCount());
             }
 
             if (applyStrongChecks)
             {
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
-                questionInvariants.ThrowIfDecimalValuesAreNotUnique(answers);
-                questionInvariants.ThrowIfStringValueAreEmptyOrWhitespaces(answers);
+                questionInvariants.RequireUniqueValues(answers);
+                questionInvariants.RequireNotEmptyTexts(answers);
                 var maxAnswersCountLimit = questionnaire.GetListSizeForListQuestion(questionId);
-                questionInvariants.ThrowIfAnswersExceedsMaxAnswerCountLimit(answers, maxAnswersCountLimit);
+                questionInvariants.RequireMaxAnswersCountLimit(answers, maxAnswersCountLimit);
             }
         }
 

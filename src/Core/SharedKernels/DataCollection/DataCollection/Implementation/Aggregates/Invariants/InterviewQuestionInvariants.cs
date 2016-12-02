@@ -56,21 +56,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Question {this.FormatQuestionForException()} doesn't support answer of type integer. {this.InfoForException}");
         }
 
-        public void ThrowIfAnswersExceedsMaxAnswerCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit)
+        public void RequireMaxAnswersCountLimit(Tuple<decimal, string>[] answers, int? maxAnswersCountLimit)
         {
             if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
                 throw new InterviewException(
-                    $"Answers exceeds MaxAnswerCount limit for question {this.FormatQuestionForException()}. {this.InfoForException}");
+                    $"Answer exceeds MaxAnswerCount limit {maxAnswersCountLimit.Value} for question {this.FormatQuestionForException()}. {this.InfoForException}");
         }
 
-        public void ThrowIfStringValueAreEmptyOrWhitespaces(Tuple<decimal, string>[] answers)
+        public void RequireNotEmptyTexts(Tuple<decimal, string>[] answers)
         {
             if (answers.Any(x => string.IsNullOrWhiteSpace(x.Item2)))
                 throw new InterviewException(
                     $"String values should be not empty or whitespaces for question {this.FormatQuestionForException()}. {this.InfoForException}");
         }
 
-        public void ThrowIfDecimalValuesAreNotUnique(Tuple<decimal, string>[] answers)
+        public void RequireUniqueValues(Tuple<decimal, string>[] answers)
         {
             var decimals = answers.Select(x => x.Item1).Distinct().ToArray();
 
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Decimal values should be unique for question {this.FormatQuestionForException()}. {this.InfoForException}");
         }
 
-        public void ThrowIfValueIsNotOneOfAvailableOptions(decimal value)
+        public void RequireOptionExists(decimal value)
         {
             var availableValues = this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, value);
 
@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"For question {this.FormatQuestionForException()} was provided selected value {value} as answer. {this.InfoForException}");
         }
 
-        public void ThrowIfSomeValuesAreNotFromAvailableOptions(IReadOnlyCollection<int> values)
+        public void RequireOptionsExist(IReadOnlyCollection<int> values)
         {
             IEnumerable<decimal> availableValues = this.Questionnaire.GetMultiSelectAnswerOptionsAsValues(this.QuestionId);
 
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"For question {this.FormatQuestionForException()} were provided selected values {JoinUsingCommas(values)} as answer. But only following values are allowed: {JoinUsingCommas(availableValues)}. {this.InfoForException}");
         }
 
-        public void ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(int answersCount)
+        public void RequireMaxAnswersCountLimit(int answersCount)
         {
             int? maxSelectedOptions = this.Questionnaire.GetMaxSelectedAnswerOptions(this.QuestionId);
 
@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"For question {this.FormatQuestionForException()} number of answers is greater than the maximum number of selected answers. {this.InfoForException}");
         }
 
-        public void ThrowIfAnswerHasMoreDecimalPlacesThenAccepted(double answer)
+        public void RequireAllowedDecimalPlaces(double answer)
         {
             int? countOfDecimalPlacesAllowed = this.Questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(this.QuestionId);
             if (!countOfDecimalPlacesAllowed.HasValue)
@@ -119,14 +119,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Answer '{answer}' for question {this.FormatQuestionForException()}  is incorrect because has more decimal places than allowed by questionnaire. Allowed amount of decimal places is {countOfDecimalPlacesAllowed.Value}. {this.InfoForException}");
         }
 
-        public void ThrowIfRosterSizeAnswerIsNegativeOrGreaterThenMaxRosterRowCount(int answer)
+        public void RequireRosterSizeAnswerNotNegative(int answer)
         {
             if (answer < 0)
                 throw new AnswerNotAcceptedException(
                     $"Answer '{answer}' for question {this.FormatQuestionForException()} is incorrect because question is used as size of roster and specified answer is negative. {this.InfoForException}");
         }
 
-        public void ThrowIfRosterSizeAnswerIsGreaterThenMaxRosterRowCount(int answer, int maxRosterRowCount)
+        public void RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer, int maxRosterRowCount)
         {
             if (answer > maxRosterRowCount)
                 throw new AnswerNotAcceptedException(
