@@ -1,14 +1,13 @@
 using Flurl.Http;
-using Geolocator.Plugin;
-using Geolocator.Plugin.Abstractions;
 using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using NinjectAdapter;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;

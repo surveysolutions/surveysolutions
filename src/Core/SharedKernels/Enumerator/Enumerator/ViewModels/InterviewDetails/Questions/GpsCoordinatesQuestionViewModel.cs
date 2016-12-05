@@ -38,7 +38,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
-            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(async () => await this.SaveAnswerAsync(), () => !this.Answering.InProgress)); }
+            get
+            {
+                return this.saveAnswerCommand ??
+                       (this.saveAnswerCommand =
+                           new MvxAsyncCommand(async () => await this.SaveAnswerAsync().ConfigureAwait(false),
+                               () => !this.Answering.InProgress));
+            }
         }
 
         private IMvxCommand answerRemoveCommand;
@@ -150,12 +156,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userInterfaceStateService.NotifyRefreshStarted();
             try
             {
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-                cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
-                var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token, this.settings.GpsDesiredAccuracy);
+                var mvxGeoLocation = 
+                    await this.locationService.GetLocation(this.settings.GpsReceiveTimeoutSec, this.settings.GpsDesiredAccuracy)
+                                              .ConfigureAwait(false);
 
                 this.userInterfaceStateService.NotifyRefreshFinished();
-                await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
+                await this.SetGeoLocationAnswerAsync(mvxGeoLocation).ConfigureAwait(false);
+            }
+            catch (NoGpsPermissionException)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
             }
             catch (OperationCanceledException)
             {

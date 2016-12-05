@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             SqliteSettings settings)
         {
             var entityName = typeof(TEntity).Name;
-            Debug.WriteLine($">>> init for {entityName}");
 
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
 

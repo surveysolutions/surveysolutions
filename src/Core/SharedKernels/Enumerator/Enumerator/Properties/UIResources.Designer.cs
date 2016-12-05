@@ -244,6 +244,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use location of current device in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings to allow application to use device location..
+        /// </summary>
+        public static string GpsQuestion_MissingPermissions {
+            get {
+                return ResourceManager.GetString("GpsQuestion_MissingPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to GPS was unable to determine your location. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting..
         /// </summary>
         public static string GpsQuestion_Timeout {
