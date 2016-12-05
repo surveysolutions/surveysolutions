@@ -39,31 +39,33 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             var interviewsRepository = new Mock<IStatefulInterviewRepository>();
             interviewsRepository.SetReturnsDefault(interview);
 
+            var serviceLocatorMock = new Mock<IServiceLocator>();
+
+            var sideBarSectionViewModelsFactory = new SideBarSectionViewModelFactory(serviceLocatorMock.Object);
+
             Func<SideBarSectionViewModel> sideBarSectionViewModel = () =>
             {
-                var barSectionViewModel = new SideBarSectionViewModel(interviewsRepository.Object,
-                    Stub.SideBarSectionViewModelsFactory(),
+                var barSectionViewModel = new SideBarSectionViewModel(
+                    interviewsRepository.Object,
+                    sideBarSectionViewModelsFactory,
                     Mock.Of<IMvxMessenger>(),
                     Create.ViewModel.DynamicTextViewModel(
                         interviewRepository: interviewsRepository.Object));
-                barSectionViewModel.NavigationState = Create.Other.NavigationState(); 
+                barSectionViewModel.NavigationState = Create.Other.NavigationState();
                 return barSectionViewModel;
             };
-
-            var serviceLocatorMock = new Mock<IServiceLocator>();
+            
             serviceLocatorMock.Setup(x => x.GetInstance<SideBarSectionViewModel>())
                 .Returns(sideBarSectionViewModel);
 
             serviceLocatorMock.Setup(x => x.GetInstance<GroupStateViewModel>())
                 .Returns(Mock.Of<GroupStateViewModel>());
-
+            
             serviceLocatorMock.Setup(x => x.GetInstance<InterviewStateViewModel>())
                 .Returns(Mock.Of<InterviewStateViewModel>());
 
             serviceLocatorMock.Setup(x => x.GetInstance<CoverStateViewModel>())
                .Returns(Mock.Of<CoverStateViewModel>());
-
-            var sideBarSectionViewModelsFactory =  new SideBarSectionViewModelFactory(serviceLocatorMock.Object);
            
             return CreateSectionsViewModel(questionnaireRepository: questionnaireRepository.Object,
                 interviewRepository: interviewsRepository.Object,
