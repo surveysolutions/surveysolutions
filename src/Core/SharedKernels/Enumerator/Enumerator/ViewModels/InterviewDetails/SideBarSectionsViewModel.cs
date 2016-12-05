@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private QuestionnaireIdentity questionnaireIdentity;
         private string interviewId;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
         protected SideBarSectionsViewModel()
         {
@@ -44,12 +45,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
             ILiteEventRegistry eventRegistry,
-            ISideBarSectionViewModelsFactory modelsFactory)
+            ISideBarSectionViewModelsFactory modelsFactory,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRegistry = eventRegistry;
             this.modelsFactory = modelsFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.mainThreadDispatcher = mainThreadDispatcher;
         }
 
         public void Init(string interviewId,
@@ -284,9 +287,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             get
             {
                 return new MvxAsyncCommand(async () => await Task.Run(() =>
+                {
+                    mainThreadDispatcher.RequestMainThreadAction(() =>
                     {
                         this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromGroupModel());
-                    }));
+                    });
+                }));
             }
         }
 
