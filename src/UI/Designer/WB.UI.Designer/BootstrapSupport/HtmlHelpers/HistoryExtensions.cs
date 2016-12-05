@@ -57,6 +57,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return MvcHtmlString.Create(replaceRecord);
             }
 
+            if (record.ActionType == QuestionnaireActionType.Revert)
+            {
+                var revertRecord = GetFormattedHistoricalRecordForRevertQuestionnire(record);
+                if (!string.IsNullOrWhiteSpace(revertRecord))
+                    return MvcHtmlString.Create(revertRecord);
+            }
+
             var localizedNameOfItemBeingInAction = GetStringRepresentation(record.TargetType);
 
             var questionnaireItemLinkWithTitle = BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
@@ -83,6 +90,15 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         {
             return string.Format(QuestionnaireHistoryResources.TextsReplaced, record.TargetTitle, record.TargetNewTitle,
                 record.AffectedEntries);
+        }
+
+        private static string GetFormattedHistoricalRecordForRevertQuestionnire(QuestionnaireChangeHistoricalRecord record)
+        {
+            var questionnireTitle = record.TargetTitle;
+            var questionnireDateTime = record.TargetDateTime;
+            return questionnireDateTime.HasValue
+                ? string.Format(QuestionnaireHistoryResources.reverted_to, questionnireTitle, questionnireDateTime.Value.ToString())
+                : string.Format(QuestionnaireHistoryResources.reverted, questionnireTitle);
         }
 
         private static string GetFormattedHistoricalRecordForVariable(QuestionnaireChangeHistoricalRecord record)
@@ -221,8 +237,6 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return QuestionnaireHistoryResources.imported;
                 case QuestionnaireActionType.Replace:
                     return QuestionnaireHistoryResources.replaced;
-                case QuestionnaireActionType.Revert:
-                    return QuestionnaireHistoryResources.reverted;
             }
             return QuestionnaireHistoryResources.unknown;
         }

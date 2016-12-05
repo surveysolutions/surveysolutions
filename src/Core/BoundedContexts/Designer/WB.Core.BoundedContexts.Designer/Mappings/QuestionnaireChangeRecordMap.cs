@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.TargetItemNewTitle);
             Property(x => x.AffectedEntriesCount);
             Property(x => x.TargetItemType);
+            Property(x => x.TargetItemDateTime);
 
             Set(x => x.References, set =>
             {

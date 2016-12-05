@@ -163,7 +163,7 @@
     <value>replaced</value>
   </data>
   <data name="reverted" xml:space="preserve">
-    <value>reverted</value>
+    <value>Questionnaire "{0}" reverted</value>
   </data>
   <data name="unknown" xml:space="preserve">
     <value>unknown</value>
@@ -278,5 +278,8 @@
   </data>
   <data name="ResetQuestionnaireToThis" xml:space="preserve">
     <value>Reset questionnaire to version at {0}?</value>
+  </data>
+  <data name="reverted_to" xml:space="preserve">
+    <value>Questionnaire "{0}" reverted to version from {1}</value>
   </data>
 </root>

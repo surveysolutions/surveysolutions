@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeRecord.TargetItemNewTitle,
                 questionnaireChangeRecord.AffectedEntriesCount,
                 recordWithRevertAvaialbe.Contains(questionnaireChangeRecord.QuestionnaireChangeRecordId),
+                questionnaireChangeRecord.TargetItemDateTime,
                 references);
         }
 
