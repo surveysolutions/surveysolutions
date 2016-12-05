@@ -544,7 +544,7 @@
     <value>Roster size multi-select question should have limit</value>
   </data>
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>Questionnaire contains rosters that cumulative size is not allowed.</value>
+    <value>Questionnaire contains rosters with total number of elements exceeding the system limits.</value>
   </data>
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Roster has reached size limit. Reduce roster size or decrease nesting.</value>
