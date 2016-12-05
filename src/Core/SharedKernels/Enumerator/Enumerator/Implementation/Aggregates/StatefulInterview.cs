@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.EventBus;
@@ -192,13 +193,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public string InterviewerCompleteComment { get; private set; }
         public string SupervisorRejectComment { get; private set; }
 
-        public string GetAnswerAsString(Identity questionIdentity)
+        public string GetAnswerAsString(Identity questionIdentity, CultureInfo cultureInfo = null)
         {
             var questionnaire = this.GetQuestionnaireOrThrow();
             var question = this.Tree.GetQuestion(questionIdentity);
 
             return question.GetAnswerAsString(answerOptionValue =>
-                    questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerOptionValue).Title);
+                    questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerOptionValue).Title,
+                    cultureInfo ?? CultureInfo.InvariantCulture);
         }
 
         public bool HasErrors { get; private set; }

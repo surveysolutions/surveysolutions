@@ -97,5 +97,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             Assert.That(collectionChangedArgs.NewItems, Is.EquivalentTo(new[] { "three" }));
             Assert.That(collectionChangedArgs.NewStartingIndex, Is.EqualTo(3));
         }
+
+        [Test]
+        public void when_clearing_child_collection_should_update_count_of_parent()
+        {
+            var items = Create.Entity.CompositeCollection<string>();
+
+            var options = new CovariantObservableCollection<string> { "item" };
+            items.AddCollection(options);
+
+            var options1 = new CovariantObservableCollection<string> {"item1"};
+            items.AddCollection(options1);
+
+            // act
+            options.Clear();
+
+            // assert
+            Assert.That(items.Count, Is.EqualTo(1));
+            
+        }
     }
 }

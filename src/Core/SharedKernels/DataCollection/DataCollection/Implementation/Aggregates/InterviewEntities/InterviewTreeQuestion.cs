@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,18 +14,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeQuestion : InterviewTreeLeafNode
     {
-        public InterviewTreeQuestion(Identity identity,
+        public InterviewTreeQuestion(Identity identity, 
             SubstitionText title, 
             string variableName,
             QuestionType questionType, 
-            object answer,
+            object answer, 
             IEnumerable<RosterVector> linkedOptions, 
             Guid? cascadingParentQuestionId, 
-            bool isYesNo, 
-            bool isDecimal,
+            bool isYesNo,
+            bool isDecimal, 
             bool isLinkedToListQuestion,
+            bool isTimestampQuestion = false, 
             Guid? linkedSourceId = null, 
-            Identity commonParentRosterIdForLinkedQuestion = null,
+            Identity commonParentRosterIdForLinkedQuestion = null, 
             SubstitionText[] validationMessages = null)
             : base(identity)
         {
@@ -66,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             if (questionType == QuestionType.DateTime)
-                this.AsDateTime = new InterviewTreeDateTimeQuestion(answer);
+                this.AsDateTime = new InterviewTreeDateTimeQuestion(answer, isTimestampQuestion);
 
             if (questionType == QuestionType.GpsCoordinates)
                 this.AsGps = new InterviewTreeGpsQuestion(answer);
@@ -350,7 +352,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiLinkedToList) { this.AsMultiLinkedToList.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[])); return; }
         }
 
-        public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null)
+        public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null, CultureInfo cultureInfo = null)
         {
             if (!this.IsAnswered()) return String.Empty;
             if (this.IsText) return this.AsText.GetAnswer()?.Value;
@@ -358,7 +360,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsQRBarcode) return this.AsQRBarcode.GetAnswer()?.DecodedText;
             if (this.IsInteger) return AnswerUtils.AnswerToString(this.AsInteger.GetAnswer()?.Value);
             if (this.IsDouble) return AnswerUtils.AnswerToString(this.AsDouble.GetAnswer()?.Value);
-            if (this.IsDateTime) return AnswerUtils.AnswerToString(this.AsDateTime.GetAnswer()?.Value);
+            if (this.IsDateTime)
+                return AnswerUtils.AnswerToString(this.AsDateTime.GetAnswer()?.Value, cultureInfo: cultureInfo, isTimestamp: this.AsDateTime.IsTimestamp);
             if (this.IsGps) return AnswerUtils.AnswerToString(this.AsGps.GetAnswer()?.Value);
             if (this.IsTextList) return AnswerUtils.AnswerToString(this.AsTextList.GetAnswer()?.ToTupleArray());
 
@@ -488,12 +491,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeDateTimeQuestion
     {
         private DateTimeAnswer answer;
-        public InterviewTreeDateTimeQuestion(object answer)
+        public InterviewTreeDateTimeQuestion(object answer, bool isTimestamp)
         {
+            this.IsTimestamp = isTimestamp;
             this.answer = answer == null ? null : DateTimeAnswer.FromDateTime(Convert.ToDateTime(answer));
         }
 
         public bool IsAnswered => this.answer != null;
+
+        public bool IsTimestamp { get; private set; }
         public DateTimeAnswer GetAnswer() => this.answer;
         public void SetAnswer(DateTimeAnswer answer) => this.answer = answer;
         public void RemoveAnswer() => this.answer = null;
