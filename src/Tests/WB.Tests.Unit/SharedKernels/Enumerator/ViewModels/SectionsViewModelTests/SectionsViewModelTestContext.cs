@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             return new SideBarSectionsViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 Create.Service.LiteEventRegistry(),
-                sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory());
+                sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory(),
+                mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher());
         }
 
 
