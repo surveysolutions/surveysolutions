@@ -1567,7 +1567,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains rosters that cumulative size is not allowed..
+        ///   Looks up a localized string similar to Questionnaire contains rosters with total number of elements exceeding the system limits..
         /// </summary>
         internal static string WB0261_RosterStructureTooExplosive {
             get {
