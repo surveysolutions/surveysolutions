@@ -299,6 +299,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M007_UpdateQuestionnairechangereferencesTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M006_AddTablesNeededForStoreQuestionnaireInPlainStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M005_AddNhibernateKeyIfMissing.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M013_AddTargetItemDateTimeToHistory.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M008_AddFindReplaceToHistory.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M009_Users.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M011_AddColumnResultingQuestionnaireDocument.cs" />
