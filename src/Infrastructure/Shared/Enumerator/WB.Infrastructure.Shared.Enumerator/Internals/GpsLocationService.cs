@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Geolocator.Plugin.Abstractions;
+﻿using System.Threading.Tasks;
+using Plugin.Geolocator.Abstractions;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
@@ -16,11 +16,18 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
             this.Geolocator = geolocator;
         }
 
-        public async Task<GpsLocation> GetLocation(CancellationToken cancellationToken, double desiredAccuracy)
+        public async Task<GpsLocation> GetLocation(int timeoutSec, double desiredAccuracy)
         {
             this.Geolocator.DesiredAccuracy = desiredAccuracy;
-            var position = await this.Geolocator.GetPositionAsync(token: cancellationToken)
-                                                .ConfigureAwait(false);
+            Position position = await this.Geolocator.GetPositionAsync(timeoutMilliseconds: timeoutSec*1000)
+                                                     .ConfigureAwait(false);
+            var gpsPermissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location)
+                                                                    .ConfigureAwait(false);
+            if (gpsPermissionStatus != PermissionStatus.Granted && position == null)
+            {
+                throw new NoGpsPermissionException();
+            }
+
             return new GpsLocation(position.Accuracy, position.Altitude, position.Latitude, position.Longitude, position.Timestamp);
         }
     }
