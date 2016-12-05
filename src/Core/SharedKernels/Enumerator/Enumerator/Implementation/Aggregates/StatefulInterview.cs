@@ -474,7 +474,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(groupOrRoster => groupOrRoster.Identity);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
-            => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
+            => this.Tree.GetGroup(group)?.OrderedChildren?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
 
         public bool IsValid(Identity identity)
             => (this.Tree.GetQuestion(identity)?.IsValid ?? false) ||
