@@ -397,24 +397,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(question => question.Identity);
 
         public int CountEnabledQuestions(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled()
+            => this.Tree.FindImmediateChildQuestions(group).Count(question => !question.IsDisabled()
                     && IsQuestionToInterviewer(question.Identity.Id));
 
         public int CountEnabledAnsweredQuestions(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled() && question.IsAnswered() 
+            => this.Tree.FindImmediateChildQuestions(group).Count(question => !question.IsDisabled() && question.IsAnswered() 
                     && IsQuestionToInterviewer(question.Identity.Id));
 
         public int CountEnabledInvalidQuestionsAndStaticTexts(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled() 
+            => this.Tree.FindImmediateChildQuestions(group).Count(question => !question.IsDisabled() 
                     && !question.IsValid 
                     && IsQuestionToInterviewer(question.Identity.Id)) +
-               this.Tree.FindStaticTexts(group).Count(staticText => !staticText.IsDisabled() && !staticText.IsValid);
+               this.Tree.FindImmediateChildStaticTexts(group).Count(staticText => !staticText.IsDisabled() && !staticText.IsValid);
 
         public bool HasEnabledInvalidQuestionsAndStaticTexts(Identity group)
             => this.CountEnabledInvalidQuestionsAndStaticTexts(group) > 0;
 
         public bool HasUnansweredQuestions(Identity group) 
-            => this.Tree.FindQuestions(group).Any(question => !question.IsDisabled() && !question.IsAnswered());
+            => this.Tree.FindImmediateChildQuestions(group).Any(question => !question.IsDisabled() && !question.IsAnswered());
 
         private bool IsQuestionToInterviewer(Guid questionId)
         {
