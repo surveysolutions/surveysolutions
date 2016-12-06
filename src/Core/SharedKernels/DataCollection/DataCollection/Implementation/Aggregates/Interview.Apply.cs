@@ -281,7 +281,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             this.Language = @event.Language;
 
-            this.UpdateTitlesAndTexts();
+            var questionnaire = this.GetQuestionnaireOrThrow();
+
+            this.UpdateTitlesAndTexts(questionnaire);
+            this.Tree.SwitchQuestionnaire(questionnaire);
         }
 
         public virtual void Apply(FlagRemovedFromAnswer @event) { }
