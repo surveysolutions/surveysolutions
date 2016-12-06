@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTree
     {
-        private readonly IQuestionnaire questionnaire;
+        private IQuestionnaire questionnaire;
         private readonly ISubstitionTextFactory textFactory;
 
         private Dictionary<Identity, IInterviewTreeNode> nodesCache = new Dictionary<Identity, IInterviewTreeNode>();
@@ -35,6 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             WarmUpCache();
         }
+
+        public void SwitchQuestionnaire(IQuestionnaire questionnaire) => this.questionnaire = questionnaire;
 
         public string InterviewId { get; }
         public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
