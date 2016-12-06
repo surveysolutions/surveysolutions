@@ -2605,13 +2605,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (substitutionReferences.Length == 0)
                 return;
 
-            List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope;
+            List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope, rostersIllegalPropagationScope;
             
             this.ValidateSubstitutionReferences(entityId, variableName, parentGroup, substitutionReferences,
                 out unknownReferences,
                 out questionsIncorrectTypeOfReferenced,
                 out questionsIllegalPropagationScope,
-                out variablesIllegalPropagationScope);
+                out variablesIllegalPropagationScope,
+                out rostersIllegalPropagationScope);
 
             if (unknownReferences.Count > 0)
                 throw new QuestionnaireException(
@@ -2635,6 +2636,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.TextContainsInvalidSubstitutionReference,
                     "Text contains illegal substitution references to variables: " +
                     String.Join(", ", variablesIllegalPropagationScope.ToArray()));
+
+            if (rostersIllegalPropagationScope.Count > 0)
+                throw new QuestionnaireException(
+                    DomainExceptionType.TextContainsInvalidSubstitutionReference,
+                    "Text contains illegal substitution references to rosters: " +
+                    String.Join(", ", rostersIllegalPropagationScope.ToArray()));
         }
 
         private void ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid questionId)
@@ -3019,12 +3026,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             out List<string> unknownReferences, 
             out List<string> questionsIncorrectTypeOfReferenced,
             out List<string> questionsIllegalPropagationScope,
-            out List<string> variablesIllegalPropagationScope)
+            out List<string> variablesIllegalPropagationScope,
+            out List<string> rostersIllegalPropagationScope)
         {
             unknownReferences = new List<string>();
             questionsIncorrectTypeOfReferenced = new List<string>();
             questionsIllegalPropagationScope = new List<string>();
             variablesIllegalPropagationScope = new List<string>();
+            rostersIllegalPropagationScope = new List<string>();
 
             var questions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
                 .Where(q => q.PublicKey != entityId)
@@ -3035,6 +3044,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var variables = this.innerDocument.GetEntitiesByType<Variable>()
                 .Where(v => v.PublicKey != entityId && !string.IsNullOrEmpty(v.Name))
                 .GroupBy(v => v.Name, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+            var rosters = this.innerDocument.GetEntitiesByType<Group>()
+                .Where(r => r.PublicKey != entityId && !string.IsNullOrEmpty(r.VariableName) && r.IsRoster)
+                .GroupBy(r => r.VariableName, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
 
@@ -3056,9 +3070,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 bool isQuestionReference = questions.ContainsKey(substitutionReference);
                 bool isVariableReference = variables.ContainsKey(substitutionReference);
+                bool isRosterReference = rosters.ContainsKey(substitutionReference);
                 bool isSelfReference = string.Compare(substitutionReference, variableName, StringComparison.OrdinalIgnoreCase) == 0;
 
-                if (!isQuestionReference && !isVariableReference && !isSelfReference)
+                if (!isQuestionReference && !isVariableReference && !isRosterReference && !isSelfReference)
                 {
                     unknownReferences.Add(substitutionReference);
                 }
@@ -3084,6 +3099,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                     if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentVariable.PublicKey), rosterVectorOfEntity))
                         variablesIllegalPropagationScope.Add(substitutionReference);
+                }
+                else if (isRosterReference)
+                {
+                    var referencedRoster = rosters[substitutionReference];
+
+                    var rosterRosterVector = this.GetQuestionnaireItemDepthAsVector(referencedRoster.PublicKey);
+                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(rosterRosterVector, rosterVectorOfEntity))
+                        rostersIllegalPropagationScope.Add(substitutionReference);
                 }
             }
         }
