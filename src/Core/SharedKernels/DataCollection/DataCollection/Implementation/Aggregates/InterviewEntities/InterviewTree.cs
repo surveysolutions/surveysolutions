@@ -63,16 +63,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IEnumerable<InterviewTreeStaticText> FindStaticTexts()
             => this.nodesCache.Values.OfType<InterviewTreeStaticText>();
 
-        public IEnumerable<InterviewTreeStaticText> FindImmediateChildStaticTexts(Identity parentGroup)
-            => this.nodesCache.Values.OfType<InterviewTreeStaticText>()
-                .Where(staticText => staticText.Parent.Identity.Equals(parentGroup));
-
         public IEnumerable<InterviewTreeQuestion> FindQuestions()
             => this.nodesCache.Values.OfType<InterviewTreeQuestion>();
-
-        public IEnumerable<InterviewTreeQuestion> FindImmediateChildQuestions(Identity parentGroup)
-            => this.nodesCache.Values.OfType<InterviewTreeQuestion>()
-                .Where(question => question.Parent.Identity.Equals(parentGroup));
 
         public IEnumerable<InterviewTreeRoster> FindRosters()
             => this.nodesCache.Values.OfType<InterviewTreeRoster>();
