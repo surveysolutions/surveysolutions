@@ -301,27 +301,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.Tree.GetQuestion(question).ReplaceSubstitutions();
         }
 
-        public virtual void Apply(GroupPropagated @event)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            Guid? parentGroupId = questionnaire.GetParentGroup(@event.GroupId);
-            if (!parentGroupId.HasValue) return;
-
-            var parentGroupIdentity = Identity.Create(parentGroupId.Value, @event.OuterScopeRosterVector);
-
-            for (int i = 0; i < @event.Count; i++)
-            {
-                var rosterIdentity = new RosterIdentity(@event.GroupId, @event.OuterScopeRosterVector, i).ToIdentity();
-
-                var addedRoster = this.Tree.GetRosterManager(@event.GroupId)
-                        .CreateRoster(parentGroupIdentity, rosterIdentity, i);
-
-                this.Tree.GetGroup(parentGroupIdentity).AddChild(addedRoster);
-            }
-
-            //expressionProcessorStatePrototype could also be changed but it's an old code.
-        }
-
         public virtual void Apply(RosterInstancesTitleChanged @event)
         {
             foreach (var changedRosterTitle in @event.ChangedInstances)

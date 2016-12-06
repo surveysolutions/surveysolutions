@@ -33,40 +33,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyCollection<IInterviewTreeNode> Children => this.children;
 
-        public IEnumerable<IInterviewTreeNode> OrderedChildren
-        {
-            get
-            {
-                foreach (var childEntityReference in this.childEntitiesReferences)
-                {
-                    var childEntityId = childEntityReference.Id;
-                    switch (childEntityReference.Type)
-                    {
-                        case QuestionnaireReferenceType.Roster:
-                            var rosters = this.children
-                                .Where(x => x.Identity.Id == childEntityId)
-                                .OfType<InterviewTreeRoster>()
-                                .OrderBy(x => x.SortIndex);
-                            foreach (var roster in rosters)
-                            {
-                                yield return roster;
-                            }
-                            break;
-                        case QuestionnaireReferenceType.SubSection:
-                        case QuestionnaireReferenceType.StaticText:
-                        case QuestionnaireReferenceType.Variable:
-                        case QuestionnaireReferenceType.Question:
-                            var group = this.children.FirstOrDefault(x => x.Identity.Id == childEntityId);
-                            if (group != null)
-                            {
-                                yield return group;
-                            }
-                            break;
-                    }
-                }
-            }
-        }
-
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree)
         {
             this.Tree = tree;
@@ -179,9 +145,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             internalTreeNode.SetTree(this.Tree);
             internalTreeNode.SetParent(this);
+
             this.children.Add(child);
 
-            Tree?.ProcessAddedNode(child);
+            Tree?.ProcessAddedNode(child); 
+        }
+
+        public void AddRosterAndFixOrder(InterviewTreeRoster childRoster)
+        {
+            this.AddChild(childRoster);
+            this.UpdateSortIndexesForRosters(this.Tree.GetRosterManager(childRoster.Identity.Id));
+            this.SortChildrenNodes();
         }
 
         public void AddChildren(IEnumerable<IInterviewTreeNode> nodes)
@@ -232,7 +206,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Title.ReplaceSubstitutions();
         }
 
-        public void UpdateSortIndexesForRosters(Guid rosterId, RosterManager rosterManager)
+        private void UpdateSortIndexesForRosters(RosterManager rosterManager)
         {
             if (rosterManager is MultiRosterManager)
             {
@@ -242,9 +216,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     var roster = this.Tree.GetRoster(orderedIdentities[i]);
                     if (roster != null) roster.SortIndex = i;
                 }
-                return;
             }
-            if (rosterManager is YesNoRosterManager)
+            else if (rosterManager is YesNoRosterManager)
             {
                 var orderedIdentities = (rosterManager as YesNoRosterManager).GetOrderedExpectedRostersIdentities(this.Identity);
                 for (int i = 0; i < orderedIdentities.Count; i++)
@@ -252,7 +225,44 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     var roster = this.Tree.GetRoster(orderedIdentities[i]);
                     if (roster != null) roster.SortIndex = i;
                 }
-                return;
+            }
+        }
+
+        private void SortChildrenNodes()
+        {
+            var orderedChildren = this.OrderChildrenAsInQuestionnaire().ToList();
+            this.children.Clear();
+            this.children.AddRange(orderedChildren);
+        }
+
+        public IEnumerable<IInterviewTreeNode> OrderChildrenAsInQuestionnaire()
+        {
+            foreach (var childEntityReference in this.childEntitiesReferences)
+            {
+                var childEntityId = childEntityReference.Id;
+                switch (childEntityReference.Type)
+                {
+                    case QuestionnaireReferenceType.Roster:
+                        var rosters = this.children
+                            .Where(x => x.Identity.Id == childEntityId)
+                            .OfType<InterviewTreeRoster>()
+                            .OrderBy(x => x.SortIndex);
+                        foreach (var roster in rosters)
+                        {
+                            yield return roster;
+                        }
+                        break;
+                    case QuestionnaireReferenceType.SubSection:
+                    case QuestionnaireReferenceType.StaticText:
+                    case QuestionnaireReferenceType.Variable:
+                    case QuestionnaireReferenceType.Question:
+                        var group = this.children.FirstOrDefault(x => x.Identity.Id == childEntityId);
+                        if (group != null)
+                        {
+                            yield return group;
+                        }
+                        break;
+                }
             }
         }
 
