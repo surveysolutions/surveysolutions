@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
             statefulInterview.Apply(Create.Event.StaticTextsDeclaredValid(staticTextIdentity));
         };
 
-        Because of = () => isValid = statefulInterview.IsValid(staticTextIdentity);
+        Because of = () => isValid = statefulInterview.IsEntityValid(staticTextIdentity);
 
         It should_remember_validity_status = () => isValid.ShouldBeTrue();
 

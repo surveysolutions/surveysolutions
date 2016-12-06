@@ -42,24 +42,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Identity entityIdentity;
 
-        private bool isForStaticText = false;
-
-        public void InitForQuestion(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity)
         {
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-
-            this.Init(interviewId, entityIdentity);
-        }
-
-        public void InitForStaticText(string interviewId, Identity entityIdentity)
-        {
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-            isForStaticText = true;
-            this.Init(interviewId, entityIdentity);
-        }
-
-        private void Init(string interviewId, Identity entityIdentity)
-        {
             this.interviewId = interviewId;
             this.entityIdentity = entityIdentity;
 
@@ -84,15 +69,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            bool isInvalidAnswer = this.isForStaticText
-                ? !interview.IsValid(this.entityIdentity)
-                : !interview.IsValid(this.entityIdentity) && interview.WasAnswered(this.entityIdentity);
+            bool isInvalidEntity = !interview.IsEntityValid(this.entityIdentity);
 
             bool wasError = this.exceptionErrorMessageFromViewModel != null;
 
             mainThreadDispatcher.RequestMainThreadAction(() =>
             {
-                if (isInvalidAnswer && !wasError)
+                if (isInvalidEntity && !wasError)
                 {
                     var validationMessages = interview.GetFailedValidationMessages(this.entityIdentity);
 
@@ -105,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Error.ChangeValidationErrors(this.exceptionErrorMessageFromViewModel.ToEnumerable());
                 }
 
-                this.IsInvalid = isInvalidAnswer || wasError;
+                this.IsInvalid = isInvalidEntity || wasError;
             });
         }
 
