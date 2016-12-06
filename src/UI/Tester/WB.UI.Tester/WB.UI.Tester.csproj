@@ -402,6 +402,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\loginLogo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\loginLogo.png" />
     <AndroidResource Include="Resources\drawable\loginLogo.png" />
+    <AndroidResource Include="Resources\xml\file_paths.xml" />
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">

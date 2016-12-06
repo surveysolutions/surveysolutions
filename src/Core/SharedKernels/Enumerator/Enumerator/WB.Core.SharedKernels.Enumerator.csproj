@@ -139,6 +139,7 @@
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\IOptionsRepository.cs" />
     <Compile Include="Services\IAsyncRunner.cs" />
+    <Compile Include="Services\IPictureChooser.cs" />
     <Compile Include="Utils\CompositeCollection.cs" />
     <Compile Include="Utils\CovariantObservableCollection.cs" />
     <Compile Include="Utils\IObservableCollection.cs" />

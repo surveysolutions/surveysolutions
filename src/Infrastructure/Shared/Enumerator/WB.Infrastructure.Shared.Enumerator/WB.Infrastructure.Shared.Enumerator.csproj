@@ -204,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidPathUtils.cs" />
+    <Compile Include="Internals\PictureChooser.cs" />
     <Compile Include="Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Internals\FileSystem\AndroidDirectoryInfo.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileInfo.cs" />
