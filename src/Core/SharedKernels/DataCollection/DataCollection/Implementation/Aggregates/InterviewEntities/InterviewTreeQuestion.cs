@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeQuestion : InterviewTreeLeafNode
+    public class InterviewTreeQuestion : InterviewTreeLeafNode, ISubstitutable
     {
         public InterviewTreeQuestion(Identity identity, 
             SubstitionText title, 
@@ -472,7 +472,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clonedQuestion;
         }
 
-        public override void ReplaceSubstitutions()
+        public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
             foreach (var messagesWithSubstition in this.ValidationMessages)
