@@ -77,6 +77,32 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         [Test]
+        public void When_FindImmediateChildQuestions_and_child_chaild_group_has_children_Than_should_return_first_level_children()
+        {
+            //arrange
+            var interviewId = Guid.Parse("11111111111111111111111111111111");
+            var sectionIdentity = Create.Entity.Identity(Guid.Parse("22222222222222222222222222222222"));
+            var addedQuestionIdentity = Create.Entity.Identity(Guid.Parse("33333333333333333333333333333333"));
+            var addedRosterIdentity = Create.Entity.Identity(Guid.Parse("44444444444444444444444444444444"));
+            var addedNestedQuestionIdentity = Create.Entity.Identity(Guid.Parse("43333333333333333333333333333333"));
+
+            var roster = Create.Entity.InterviewTreeRoster(addedRosterIdentity);
+            roster.AddChild(Create.Entity.InterviewTreeQuestion(addedNestedQuestionIdentity));
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(sectionIdentity);
+
+            sourceTreeMainSection.AddChild(Create.Entity.InterviewTreeQuestion(addedQuestionIdentity));
+            sourceTreeMainSection.AddChild(Create.Entity.InterviewTreeRoster(addedRosterIdentity));
+
+            var sourceTree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
+
+            //act
+            var childrenQuestions = sourceTree.FindImmediateChildQuestions(sectionIdentity);
+            //assert
+            Assert.That(childrenQuestions.Count, Is.EqualTo(1));
+            
+        }
+
+        [Test]
         public void When_Compare_on_same_trees_Then_should_return_no_diffs()
         {
             //arrange
