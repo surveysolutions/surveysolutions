@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -373,12 +374,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public int CountActiveAnsweredQuestionsInInterview()
             => this.Tree.FindQuestions().Count(question => !question.IsDisabled() 
-                    && question.IsAnswered() 
-                    && IsQuestionToInterviewer(question.Identity.Id));
+                    && question.IsAnswered()
+                    && !question.IsPrefilled && question.IsInterviewer);
 
         public int CountActiveQuestionsInInterview()
-            => this.Tree.FindQuestions().Count(question => !question.IsDisabled()
-                    && IsQuestionToInterviewer(question.Identity.Id));
+            => this.Tree.FindQuestions().Count(question => !question.IsDisabled() && !question.IsPrefilled && question.IsInterviewer);
 
         public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
 
@@ -392,38 +392,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private IEnumerable<Identity> GetEnabledInvalidQuestions()
             => this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled() && !question.IsValid 
-                    && IsQuestionToInterviewer(question.Identity.Id))
+                .Where(question => !question.IsDisabled() && !question.IsValid
+                    && !question.IsPrefilled && question.IsInterviewer)
                 .Select(question => question.Identity);
 
         public int CountEnabledQuestions(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled()
-                    && IsQuestionToInterviewer(question.Identity.Id));
+            => this.Tree.GetGroup(group)?.CountEnabledQuestions() ?? 0;
 
         public int CountEnabledAnsweredQuestions(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled() && question.IsAnswered() 
-                    && IsQuestionToInterviewer(question.Identity.Id));
+            => this.Tree.GetGroup(group)?.CountEnabledAnsweredQuestions() ?? 0;
 
         public int CountEnabledInvalidQuestionsAndStaticTexts(Identity group)
-            => this.Tree.FindQuestions(group).Count(question => !question.IsDisabled() 
-                    && !question.IsValid 
-                    && IsQuestionToInterviewer(question.Identity.Id)) +
-               this.Tree.FindStaticTexts(group).Count(staticText => !staticText.IsDisabled() && !staticText.IsValid);
+            => this.Tree.GetGroup(group)?.CountEnabledInvalidQuestionsAndStaticTexts() ?? 0;
 
         public bool HasEnabledInvalidQuestionsAndStaticTexts(Identity group)
             => this.CountEnabledInvalidQuestionsAndStaticTexts(group) > 0;
 
         public bool HasUnansweredQuestions(Identity group) 
-            => this.Tree.FindQuestions(group).Any(question => !question.IsDisabled() && !question.IsAnswered());
-
-        private bool IsQuestionToInterviewer(Guid questionId)
-        {
-            var questionnaire = this.GetQuestionnaireOrThrow();
-            var questionScope = questionnaire.GetQuestionScope(questionId);
-            var isPrefield = questionnaire.IsPrefilled(questionId);
-
-            return !isPrefield && questionScope == QuestionScope.Interviewer;
-        }
+            => this.Tree.GetGroup(group)?.HasUnansweredQuestions() ?? false;
 
         public IEnumerable<Identity> GetCommentedBySupervisorQuestionsInInterview()
         {
