@@ -25,19 +25,19 @@ namespace WB.UI.Interviewer.Activities
         {
         }
 
-        protected override async void TriggerFirstNavigate()
+        protected override void TriggerFirstNavigate()
         {
-            await this.BackwardCompatibilityAsync().ConfigureAwait(false);
+            this.BackwardCompatibility();
             Mvx.Resolve<IViewModelNavigationService>().NavigateToLogin();
         }
 
-        private async Task BackwardCompatibilityAsync()
+        private void BackwardCompatibility()
         {
-            await this.MoveCategoricalOptionsToPlainStorageIfNeeded();
+            this.MoveCategoricalOptionsToPlainStorageIfNeeded();
         }
 
         [Obsolete("Released on the 1st of June. Version 5.9")]
-        private async Task MoveCategoricalOptionsToPlainStorageIfNeeded()
+        private void MoveCategoricalOptionsToPlainStorageIfNeeded()
         {
             var optionsRepository = Mvx.Resolve<IOptionsRepository>();
 
