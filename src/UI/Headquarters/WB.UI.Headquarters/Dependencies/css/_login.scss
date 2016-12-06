@@ -1,7 +1,7 @@
 @import "two-column-form";
 
-.left-column {
-    #log-in {
+.left-column{
+    #log-in{
         text-align: left;
     }
 }
@@ -30,23 +30,21 @@ img#placeholder {
         display: none;
     }
 }
-
-.navbar {
-    .retina-world-bank {
+ 
+.navbar{
+    .retina-world-bank{
         @include size(270px, 53px);
         font-size: 0;
-        background: url("../img/wb-logo.png") no-repeat;
+        background: url("../img/wb-logo.png") no-repeat; 
         background-size: 100%;
         margin-top: 20px;
         @include image-2x("../img/WBG_Horizontal-Grayscale-high.png", 100%, 100%);
     }
-
-    .flex-row {
+    .flex-row{
         margin: 0 0 0 5px;
         background-color: white;
     }
-
-    .help {
+    .help{
         margin-top: 20px;
         float: right;
         padding: 5px 15px;
@@ -56,37 +54,31 @@ img#placeholder {
         font-size: 12px;
         line-height: 14px;
         @include transition;
-
-        &:hover, &:focus {
+        &:hover, &:focus{
             background-color: $gray-light;
         }
     }
 }
-
-.retina.headquarter {
+.retina.headquarter{
     @include size(269px, 96px);
     background: url("../img/headquarter_logo.png") no-repeat -9px 0;
     background-size: 269px 96px;
     margin-bottom: 25px;
     @include image-2x("../img/headquarter_logo-retina.png", 269px, 96px);
 }
-
-@media (max-width: $screen-sm-min) {
-    .left-column {
-        #log-in {
+@media (max-width: $screen-sm-min){
+    .left-column{
+        #log-in{
             text-align: center;
         }
     }
-
-    img#placeholder {
+    img#placeholder, .no-logo .default-logo{
         display: none;
     }
-
-    .retina.headquarter {
+    .retina.headquarter{
         display: inline-block;
     }
-
-    .navbar .retina-world-bank {
+    .navbar .retina-world-bank{
         @include size(135px, 26.5px);
     }
 }

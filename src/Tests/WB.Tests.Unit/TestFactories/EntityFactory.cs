@@ -624,6 +624,18 @@ namespace WB.Tests.Unit.TestFactories
                 ParentValue = parentValue
             };
 
+        public Answer Option(int value, string text = null)
+            => new Answer
+            {
+                AnswerText = text ?? $"Option {value}",
+                AnswerCode = value,
+            };
+
+        public IEnumerable<Answer> Options(params int[] values)
+        {
+            return values.Select(value => Create.Entity.Option(value));
+        }
+
         public ParaDataExportProcessDetails ParaDataExportProcess()
             => new ParaDataExportProcessDetails(DataExportFormat.Tabular);
 
@@ -780,6 +792,50 @@ namespace WB.Tests.Unit.TestFactories
 
         public InterviewTreeDoubleQuestion InterviewTreeDoubleQuestion(double answer = 42.42)
             => new InterviewTreeDoubleQuestion(answer);
+
+        public Group MultiRoster(
+            Guid? rosterId = null,
+            string title = "Multi roster",
+            string variable = "_multi_roster_var",
+            Guid? rosterSizeQuestionId = null,
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group group = Create.Entity.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+
+            return group;
+        }
+
+        public Group ListRoster(
+            Guid? rosterId = null,
+            string title = "List roster",
+            string variable = "_list_roster_var",
+            Guid? rosterSizeQuestionId = null,
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group group = Create.Entity.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+
+            return group;
+        }
 
         public Group Roster(
             Guid? rosterId = null,

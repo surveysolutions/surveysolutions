@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Init(string interviewId, Identity entityIdentity)
         {
             this.Enablement.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity);
+            this.Validity.InitForStaticText(interviewId, entityIdentity);
         }
 
         public void Dispose()

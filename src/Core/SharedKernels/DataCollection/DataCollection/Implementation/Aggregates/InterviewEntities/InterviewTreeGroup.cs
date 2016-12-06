@@ -33,13 +33,47 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyCollection<IInterviewTreeNode> Children => this.children;
 
+        public IEnumerable<IInterviewTreeNode> OrderedChildren
+        {
+            get
+            {
+                foreach (var childEntityReference in this.childEntitiesReferences)
+                {
+                    var childEntityId = childEntityReference.Id;
+                    switch (childEntityReference.Type)
+                    {
+                        case QuestionnaireReferenceType.Roster:
+                            var rosters = this.children
+                                .Where(x => x.Identity.Id == childEntityId)
+                                .OfType<InterviewTreeRoster>()
+                                .OrderBy(x => x.SortIndex);
+                            foreach (var roster in rosters)
+                            {
+                                yield return roster;
+                            }
+                            break;
+                        case QuestionnaireReferenceType.SubSection:
+                        case QuestionnaireReferenceType.StaticText:
+                        case QuestionnaireReferenceType.Variable:
+                        case QuestionnaireReferenceType.Question:
+                            var group = this.children.FirstOrDefault(x => x.Identity.Id == childEntityId);
+                            if (group != null)
+                            {
+                                yield return group;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
         void IInternalInterviewTreeNode.SetTree(InterviewTree tree)
         {
             this.Tree = tree;
             this.Title.SetTree(tree);
             foreach (var child in this.Children)
             {
-                ((IInternalInterviewTreeNode)child).SetTree(tree);
+                ((IInternalInterviewTreeNode) child).SetTree(tree);
             }
         }
 
@@ -47,57 +81,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ActualizeChildren(bool skipRosters = false)
         {
-            foreach (var childEntityReference in childEntitiesReferences)
+            foreach (var childEntityReference in this.childEntitiesReferences)
             {
                 var childEntityId = childEntityReference.Id;
                 switch (childEntityReference.Type)
                 {
                     case QuestionnaireReferenceType.Roster:
                         if (skipRosters) continue;
-                        var rosterId = childEntityId;
-                        var rosterManager = Tree.GetRosterManager(rosterId);
-
-                        var expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
-                        var actualRosterIdentities = this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
-
-                        var rostersToRemove = actualRosterIdentities.Except(expectedRosterIdentities);
-                        var rostersToAdd = expectedRosterIdentities.Except(actualRosterIdentities);
-
-                        foreach (var rosterToRemove in rostersToRemove)
-                            this.RemoveChild(rosterToRemove);
-
-                        foreach (var rosterToAdd in rostersToAdd)
-                        {
-                            var expectedRoster = rosterManager.CreateRoster(this.Identity, rosterToAdd,
-                                expectedRosterIdentities.IndexOf(rosterToAdd));
-
-                            this.AddChild(expectedRoster);
-                        }
-
-                        foreach (var expectedRoster in expectedRosterIdentities)
-                        {
-                            this.children.OfType<InterviewTreeRoster>()
-                                .Where(x => x.Identity.Equals(expectedRoster))
-                                .ForEach(roster =>
-                                {
-                                    roster.ActualizeChildren();
-                                    roster.ReplaceSubstitutions();
-                                });
-                        }
+                        this.ActualizeRoster(childEntityId);
                         break;
                     case QuestionnaireReferenceType.SubSection:
-                        var subSectionIdentity = new Identity(childEntityId, this.RosterVector);
-                        var subSection = this.children.OfType<InterviewTreeGroup>()
-                            .FirstOrDefault(x => x.Identity.Equals(subSectionIdentity));
-
-                        if (subSection == null)
-                        {
-                            subSection = Tree.CreateSubSection(subSectionIdentity);
-                            this.AddChild(subSection);
-                        }
-                        
-                        subSection.ActualizeChildren();
-                        subSection.ReplaceSubstitutions();
+                        this.ActualizeGroup(childEntityId);
                         break;
                     case QuestionnaireReferenceType.StaticText:
                     case QuestionnaireReferenceType.Variable:
@@ -113,6 +107,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         entity.ReplaceSubstitutions();
                         break;
                 }
+            }
+        }
+
+        private void ActualizeGroup(Guid groupId)
+        {
+            var subSectionIdentity = new Identity(groupId, this.RosterVector);
+            var subSection = this.children.OfType<InterviewTreeGroup>().FirstOrDefault(x => x.Identity.Equals(subSectionIdentity));
+
+            if (subSection == null)
+            {
+                subSection = this.Tree.CreateSubSection(subSectionIdentity);
+                this.AddChild(subSection);
+            }
+
+            subSection.ActualizeChildren();
+            subSection.ReplaceSubstitutions();
+        }
+
+        private void ActualizeRoster(Guid rosterId)
+        {
+            var rosterManager = this.Tree.GetRosterManager(rosterId);
+
+            var expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
+            var actualRosterIdentities = this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
+
+            var rostersToRemove = actualRosterIdentities.Except(expectedRosterIdentities);
+            var rostersToAdd = expectedRosterIdentities.Except(actualRosterIdentities);
+
+            foreach (var rosterToRemove in rostersToRemove)
+                this.RemoveChild(rosterToRemove);
+
+            foreach (var rosterToAdd in rostersToAdd)
+            {
+                var expectedRoster = rosterManager.CreateRoster(this.Identity, rosterToAdd, expectedRosterIdentities.IndexOf(rosterToAdd));
+
+                this.AddChild(expectedRoster);
+            }
+
+            foreach (var expectedRoster in expectedRosterIdentities)
+            {
+                this.children.OfType<InterviewTreeRoster>().Where(x => x.Identity.Equals(expectedRoster)).ForEach(roster =>
+                {
+                    roster.ActualizeChildren();
+                    roster.ReplaceSubstitutions();
+                });
             }
         }
 
@@ -152,7 +191,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void RemoveChild(Identity identity)
         {
-            var nodeToRemove = this.children.Find(child=>child.Identity == identity);
+            var nodeToRemove = this.children.Find(child => child.Identity == identity);
             if (nodeToRemove != null) this.children.Remove(nodeToRemove);
 
             Tree?.ProcessRemovedNodeByIdentity(identity);
@@ -201,7 +240,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 for (int i = 0; i < orderedIdentities.Count; i++)
                 {
                     var roster = this.Tree.GetRoster(orderedIdentities[i]);
-                    if (roster!=null) roster.SortIndex = i;
+                    if (roster != null) roster.SortIndex = i;
                 }
                 return;
             }
@@ -221,8 +260,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeSubSection : InterviewTreeGroup
     {
-        public InterviewTreeSubSection(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) 
-            : base(identity, title, childrenReferences)
+        public InterviewTreeSubSection(Identity identity, SubstitionText title, IEnumerable<QuestionnaireItemReference> childrenReferences) : base(identity, title, childrenReferences)
         {
         }
 
