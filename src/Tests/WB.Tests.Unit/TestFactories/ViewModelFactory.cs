@@ -172,7 +172,6 @@ namespace WB.Tests.Unit.TestFactories
             return new ValidityViewModel(
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                questionnaireRepository,
                 Stub.MvxMainThreadDispatcher(),
                 Create.ViewModel.ErrorMessagesViewModel(
                     questionnaireRepository: questionnaireRepository,
@@ -218,8 +217,7 @@ namespace WB.Tests.Unit.TestFactories
 
             var validityViewModel = new ValidityViewModel(
                 liteEventRegistry: liteEventRegistry,
-                interviewRepository: interviewRepository, 
-                questionnaireRepository: questionnaireRepository,
+                interviewRepository: interviewRepository,
                 mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
                 errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
 
