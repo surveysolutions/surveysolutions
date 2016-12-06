@@ -557,6 +557,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_changed_answer_for_filtered_question_with_filter_on_options.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_long_roster_size_numeric_question_with_201_and_question_was_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_expanding_section_has_4_roster_instances_created_in_random_order.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_sections_model_has_disabled_items.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedToListQuestionViewModelTests\when_text_list_disabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedToListQuestionViewModelTests\when_text_list_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToListQuestionQuestionViewModelTests\when_text_list_enabled.cs" />
@@ -856,7 +857,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_variable_value_changed_and_current_culture_is_russian.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_variable_value_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_sections_model_has_disabled_items.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_handling_groupEnabledEvent_and_roster_is_not_present.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_section_get_disable_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_initializing_sections_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_roster_instances_added.cs" />
