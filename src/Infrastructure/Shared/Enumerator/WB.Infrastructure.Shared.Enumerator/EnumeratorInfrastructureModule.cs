@@ -6,6 +6,8 @@ using Ninject.Modules;
 using NinjectAdapter;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -36,8 +38,10 @@ namespace WB.Infrastructure.Shared.Enumerator
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
             this.Bind<IQRBarcodeScanService>().To<QRBarcodeScanService>();
+            this.Bind<IPictureChooser>().To<PictureChooser>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IGeolocator>().ToMethod(context => CrossGeolocator.Current);
+            this.Bind<IMedia>().ToMethod(context => CrossMedia.Current);
 
             FlurlHttp.Configure(c => {
                 c.HttpClientFactory = new ModernHttpClientFactory();

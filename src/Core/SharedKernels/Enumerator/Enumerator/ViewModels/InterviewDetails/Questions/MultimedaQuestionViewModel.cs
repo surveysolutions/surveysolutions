@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -26,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IPictureChooser pictureChooser;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly ILiteEventRegistry eventRegistry;
         private Guid interviewId;
@@ -39,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPlainInterviewFileStorage plainInterviewFileStorage,
             ILiteEventRegistry eventRegistry,
             IQuestionnaireStorage questionnaireStorage,
+            IPictureChooser pictureChooser,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
@@ -48,6 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.eventRegistry = eventRegistry;
             this.questionnaireStorage = questionnaireStorage;
+            this.pictureChooser = pictureChooser;
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
@@ -98,8 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var pictureFileName = this.GetPictureFileName();
 
-            var pictureChooserTask = Mvx.Resolve<IMvxPictureChooserTask>();
-            using (Stream pictureStream = await pictureChooserTask.TakePictureAsync(400, 95))
+            using (Stream pictureStream = await this.pictureChooser.TakePicture())
             {
                 if (pictureStream != null)
                 {
