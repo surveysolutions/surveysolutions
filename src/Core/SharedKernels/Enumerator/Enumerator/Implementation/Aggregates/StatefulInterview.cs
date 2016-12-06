@@ -462,9 +462,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
             => this.Tree.GetGroup(group)?.OrderedChildren?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
 
-        public bool IsValid(Identity identity)
-            => (this.Tree.GetQuestion(identity)?.IsValid ?? false) ||
-               (this.Tree.GetStaticText(identity)?.IsValid ?? false);
+        public bool IsEntityValid(Identity identity)
+        {
+            var question = this.Tree.GetQuestion(identity);
+            if (question != null)
+            {
+                return !question.IsAnswered() || question.IsValid;
+            }
+            var staticText = this.Tree.GetStaticText(identity);
+            return staticText?.IsValid ?? false;
+        }
 
         public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId)
         {

@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         bool HasGroup(Identity group);
 
-        bool IsValid(Identity identity);
+        bool IsEntityValid(Identity identity);
 
         IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId);
 
