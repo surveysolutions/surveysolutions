@@ -1862,9 +1862,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var isVariable = entityToSubstitute is IVariable;
             var isQuestion = entityToSubstitute is IQuestion;
-            var isNotVariableNorQuestions = !(isVariable || isQuestion);
+            var isRoster = (entityToSubstitute as IGroup)?.IsRoster ?? false;
+            var isNotVariableOrQuestionOrRoster = !(isVariable || isQuestion || isRoster);
             var isQuestionOfNotSupportedType = isQuestion && !QuestionTypesValidToBeSubstitutionReferences.Contains(((IQuestion)entityToSubstitute).QuestionType);
-            if (isNotVariableNorQuestions || isQuestionOfNotSupportedType)
+            if (isNotVariableOrQuestionOrRoster || isQuestionOfNotSupportedType)
             {
                 return QuestionnaireVerificationMessage.Error("WB0018",
                     VerificationMessages.WB0018_SubstitutionReferencesUnsupportedEntity,
