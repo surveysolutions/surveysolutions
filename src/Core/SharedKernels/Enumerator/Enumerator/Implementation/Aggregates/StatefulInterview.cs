@@ -448,9 +448,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(question => question.Identity);
 
         public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
-            => this.Tree.FindRosters()
-                .Where(roster => roster.Identity.Id == rosterId && roster.Parent.Identity.Equals(parentIdentity))
-                .OrderBy(roster => roster.SortIndex)
+            => this.Tree.GetGroup(parentIdentity)
+                .Children
+                .Where(roster => roster.Identity.Id == rosterId)
                 .Select(roster => roster.Identity)
                 .ToList();
 
@@ -460,7 +460,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 .Select(groupOrRoster => groupOrRoster.Identity);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
-            => this.Tree.GetGroup(group)?.OrderedChildren?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
+            => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
 
         public bool IsEntityValid(Identity identity)
         {
