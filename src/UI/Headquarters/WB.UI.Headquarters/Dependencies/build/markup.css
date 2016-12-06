@@ -6518,7 +6518,7 @@ img#placeholder {
 @media (max-width: 880px) {
   .left-column #log-in {
     text-align: center; }
-  img#placeholder {
+  img#placeholder, .no-logo .default-logo {
     display: none; }
   .retina.headquarter {
     display: inline-block; }

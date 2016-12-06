@@ -556,6 +556,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_initializing_options_without_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_changed_answer_for_filtered_question_with_filter_on_options.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_long_roster_size_numeric_question_with_201_and_question_was_answered.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_expanding_section_has_4_roster_instances_created_in_random_order.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedToListQuestionViewModelTests\when_text_list_disabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedToListQuestionViewModelTests\when_text_list_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToListQuestionQuestionViewModelTests\when_text_list_enabled.cs" />
@@ -569,6 +570,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\RosterViewModelTests\when_initializing.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\RosterViewModelTests\when_roster_instances_added.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\RosterViewModelTests\when_roster_instances_removed.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_initializing_and_static_text_is_invalid.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_init_view_model_with_199_items_and_this_questions_is_roster_size_with_maxAnswerCount_200.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\TextQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\when_answering_and_answer_is_whitespace.cs" />
