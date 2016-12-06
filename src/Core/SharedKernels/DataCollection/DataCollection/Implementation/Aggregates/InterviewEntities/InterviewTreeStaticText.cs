@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeStaticText : InterviewTreeLeafNode
+    public class InterviewTreeStaticText : InterviewTreeLeafNode, ISubstitutable
     {
         public SubstitionText Title { get; private set; }
 
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return clone;
         }
 
-        public override void ReplaceSubstitutions()
+        public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
             foreach (var messagesWithSubstition in this.ValidationMessages)
