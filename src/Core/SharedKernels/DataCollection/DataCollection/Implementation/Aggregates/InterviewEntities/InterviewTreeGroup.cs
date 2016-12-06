@@ -228,6 +228,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
+        private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
+            => this.Children.TreeToEnumerable(x => x.Children).OfType<InterviewTreeQuestion>()
+                .Where(x => !x.IsPrefilled && x.IsInterviewer && !x.IsDisabled());
+
+        private IEnumerable<InterviewTreeStaticText> GetEnabledStaticTexts()
+            => this.Children.TreeToEnumerable(x => x.Children).OfType<InterviewTreeStaticText>()
+                .Where(x => !x.IsDisabled());
+
+        public int CountEnabledQuestions() => this.GetEnabledInterviewerQuestions().Count();
+        public int CountEnabledAnsweredQuestions() => this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
+
+        public int CountEnabledInvalidQuestionsAndStaticTexts()
+            => this.GetEnabledInterviewerQuestions().Count(question => !question.IsValid) +
+               this.GetEnabledStaticTexts().Count(staticText => !staticText.IsValid);
+
+        public bool HasUnansweredQuestions()
+            => this.GetEnabledInterviewerQuestions().Any(question => !question.IsAnswered());
+
         private void SortChildrenNodes()
         {
             var orderedChildren = this.OrderChildrenAsInQuestionnaire().ToList();
