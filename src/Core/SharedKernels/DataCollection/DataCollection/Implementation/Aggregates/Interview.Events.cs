@@ -33,35 +33,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
             var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
 
-            this.NewApply(questionsWithChangedAnswer, changedRosters, responsibleId.Value);
-
-            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
-            this.ApplyPassiveEvents(diff);
-        }
-
-        private void NewApply(InterviewTreeQuestionDiff[] questionsWithChangedAnswer, InterviewTreeRosterDiff[] changedRosters, Guid responsibleId)
-        {
             var questionsRosterLevels = questionsWithChangedAnswer.Select(x => x.Identity.RosterVector).ToHashSet();
             var rosterLevels = changedRosters.Select(x => x.Identity.RosterVector).ToHashSet();
             var intersection = questionsRosterLevels.Intersect(rosterLevels).ToList();
 
-            if (intersection.Count == 0)
+            var aggregatedEventsShouldBeFired = intersection.Count == 0;
+            if (aggregatedEventsShouldBeFired)
             {
-                // this is for tests only
-                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
+                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
                 this.ApplyRosterEvents(changedRosters);
             }
             else
             {
                 var maxDepth = Math.Max(questionsRosterLevels.Max(x => x.Length), rosterLevels.Select(x => x.Length).Max());
+                // events fired by levels (from the questionnaire level down to nested rosters)
                 for (int i = 0; i <= maxDepth; i++)
                 {
-                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId);
+                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId.Value);
                     this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
                 }
             }
+            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
+            this.ApplyPassiveEvents(diff);
         }
-
 
         private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
         {
