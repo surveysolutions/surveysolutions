@@ -168,7 +168,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.AddSection(sectionIdToAdd, questionnaire, interview);
             }
-
             
             var groupsToRefresh = @event.Groups.Where(x => !allSections.Contains(x.Id) && interview.HasGroup(x)).Select(x => interview.GetParentGroup(x)).Distinct();
             foreach (Identity parentGroupToRefresh in groupsToRefresh)
