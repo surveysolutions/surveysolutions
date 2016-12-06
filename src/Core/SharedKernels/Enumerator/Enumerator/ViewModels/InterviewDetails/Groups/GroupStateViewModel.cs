@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public int SubgroupsCount { get; protected set; }
         public int QuestionsCount { get; protected set; }
         public int InvalidAnswersCount { get; protected set; }
+        public int ImmediateInvalidAnswersCount { get; protected set; }
 
         private GroupStatus status;
         public GroupStatus Status
@@ -55,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.QuestionsCount = interview.CountEnabledQuestions(this.group);
             this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
             this.AnsweredQuestionsCount = interview.CountEnabledAnsweredQuestions(this.group);
+            this.InvalidAnswersCount = interview.CountEnabledInvalidQuestionsAndStaticTexts(this.group);
             this.InvalidAnswersCount = interview.CountEnabledInvalidQuestionsAndStaticTexts(this.group);
             this.SimpleStatus = CalculateSimpleStatus(this.group, interview);
             this.Status = this.CalculateDetailedStatus();
