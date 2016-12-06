@@ -777,10 +777,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             addedRoster.ActualizeChildren(skipRosters: true);
         }
 
-        private void UpdateTitlesAndTexts()
+        private void UpdateTitlesAndTexts(IQuestionnaire questionnaire)
         {
-            var questionnaire = this.GetQuestionnaireOrThrow();
-
             foreach (var node in this.Tree.AllNodes)
             {
                 var question = node as InterviewTreeQuestion;
