@@ -241,6 +241,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
             var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionIdentity.Id);
             var isTimestampQuestion = questionnaire.IsTimestampQuestion(questionIdentity.Id);
+            var isInterviewerQuestion = questionnaire.GetQuestionScope(questionIdentity.Id) == QuestionScope.Interviewer;
+            var isPrefilled = questionnaire.IsPrefilled(questionIdentity.Id);
 
             if (isLinkedToQuestion)
                 sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
@@ -275,7 +277,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 isTimestampQuestion: isTimestampQuestion, 
                 linkedSourceId: sourceForLinkedQuestion, 
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion, 
-                validationMessages: validationMessages);
+                validationMessages: validationMessages,
+                isInterviewerQuestion : isInterviewerQuestion,
+                isPrefilled : isPrefilled);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
