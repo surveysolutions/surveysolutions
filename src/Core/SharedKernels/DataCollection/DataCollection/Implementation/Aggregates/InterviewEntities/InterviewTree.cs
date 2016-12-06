@@ -63,16 +63,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public IEnumerable<InterviewTreeStaticText> FindStaticTexts()
             => this.nodesCache.Values.OfType<InterviewTreeStaticText>();
 
-        public IEnumerable<InterviewTreeStaticText> FindStaticTexts(Identity parentGroup)
-            => this.nodesCache.Values.OfType<InterviewTreeStaticText>()
-                .Where(staticText => staticText.Parents.Any(parent => parent.Identity.Equals(parentGroup)));
-
         public IEnumerable<InterviewTreeQuestion> FindQuestions()
             => this.nodesCache.Values.OfType<InterviewTreeQuestion>();
-
-        public IEnumerable<InterviewTreeQuestion> FindQuestions(Identity parentGroup)
-            => this.nodesCache.Values.OfType<InterviewTreeQuestion>()
-                .Where(question => question.Parents.Any(parent => parent.Identity.Equals(parentGroup)));
 
         public IEnumerable<InterviewTreeRoster> FindRosters()
             => this.nodesCache.Values.OfType<InterviewTreeRoster>();
@@ -249,6 +241,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionIdentity.Id);
             var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionIdentity.Id);
             var isTimestampQuestion = questionnaire.IsTimestampQuestion(questionIdentity.Id);
+            var isInterviewerQuestion = questionnaire.GetQuestionScope(questionIdentity.Id) == QuestionScope.Interviewer;
+            var isPrefilled = questionnaire.IsPrefilled(questionIdentity.Id);
 
             if (isLinkedToQuestion)
                 sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
@@ -283,7 +277,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 isTimestampQuestion: isTimestampQuestion, 
                 linkedSourceId: sourceForLinkedQuestion, 
                 commonParentRosterIdForLinkedQuestion: commonParentRosterForLinkedQuestion, 
-                validationMessages: validationMessages);
+                validationMessages: validationMessages,
+                isInterviewerQuestion : isInterviewerQuestion,
+                isPrefilled : isPrefilled);
         }
 
         public static InterviewTreeVariable CreateVariable(Identity variableIdentity)
