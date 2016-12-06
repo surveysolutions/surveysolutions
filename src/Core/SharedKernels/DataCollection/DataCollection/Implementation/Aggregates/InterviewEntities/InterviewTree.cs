@@ -404,7 +404,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             foreach (var interviewTreeNode in this.nodesCache.Values)
             {
-                interviewTreeNode.ReplaceSubstitutions();
+                (interviewTreeNode as ISubstitutable)?.ReplaceSubstitutions();
             }
         }
     }
@@ -422,7 +422,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void Enable();
 
         IInterviewTreeNode Clone();
+    }
 
+    public interface ISubstitutable
+    {
         void ReplaceSubstitutions();
     }
 
@@ -479,8 +482,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Enable() => this.isDisabled = false;
 
         public abstract IInterviewTreeNode Clone();
-
-        public abstract void ReplaceSubstitutions();
     }
 
     public enum QuestionnaireReferenceType

@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
-    public abstract class InterviewTreeGroup : IInterviewTreeNode, IInternalInterviewTreeNode
+    public abstract class InterviewTreeGroup : IInterviewTreeNode, IInternalInterviewTreeNode, ISubstitutable
     {
         private bool isDisabled;
         private List<IInterviewTreeNode> children = new List<IInterviewTreeNode>();
@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                             entity = this.Tree.CreateNode(childEntityReference.Type, entityIdentity);
                             this.AddChild(entity);
                         }
-                        entity.ReplaceSubstitutions();
+                        (entity as ISubstitutable)?.ReplaceSubstitutions();
                         break;
                 }
             }
