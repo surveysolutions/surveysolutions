@@ -27,12 +27,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             bool isTimestampQuestion = false, 
             Guid? linkedSourceId = null, 
             Identity commonParentRosterIdForLinkedQuestion = null, 
-            SubstitionText[] validationMessages = null)
+            SubstitionText[] validationMessages = null,
+            bool isInterviewerQuestion = true,
+            bool isPrefilled = false)
             : base(identity)
         {
             this.ValidationMessages = validationMessages ?? new SubstitionText[0];
             this.Title = title;
             this.VariableName = variableName;
+            this.IsInterviewer = isInterviewerQuestion;
+            this.IsPrefilled = isPrefilled;
 
             if (questionType == QuestionType.SingleOption)
             {
@@ -126,6 +130,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public SubstitionText[] ValidationMessages { get; private set; }
         
         public string VariableName { get; }
+        public bool IsInterviewer { get; private set; }
+        public bool IsPrefilled { get; private set; }
 
         public bool IsValid => !this.FailedValidations?.Any() ?? this.isValidWithoutFailedValidations;
 
