@@ -46,6 +46,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid GetVariableIdByVariableName(string variableName);
 
+        Guid GetGroupIdByVariableName(string variableName);
+
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
@@ -231,6 +233,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool ShouldUseFormatting(Guid questionId);
         bool HasVariable(string variableName);
         bool HasQuestion(string variableName);
+        bool HasRoster(string rosterName);
         bool IsTimestampQuestion(Guid questionId);
         bool IsSupportFilteringForOptions(Guid questionId);
         bool IsFixedRoster(Guid id);
