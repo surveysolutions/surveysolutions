@@ -292,7 +292,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var removedOptionValue in removedOptionValues)
             {
-                var removedOption = this.options.FirstOrDefault(option => option.Value == removedOptionValue);
+                var removedOption = this.options.SingleOrDefault(option => option.Value == removedOptionValue);
                 if (removedOption == null) continue;
 
                 this.mainThreadDispatcher.RequestMainThreadAction(() => this.options.Remove(removedOption));
