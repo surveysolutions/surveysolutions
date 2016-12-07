@@ -39,14 +39,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var viewModel = this.ViewModel;
                 viewModel.Sections.UpdateStatuses.Execute(null); // for some reason custom binding on drawerlayout is not working. 
             };
-
-            CrossCurrentActivity.Current.Activity = this;
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-            CrossCurrentActivity.Current.Activity = this;
         }
 
         protected override void OnStart()
@@ -68,12 +60,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 this.ViewModel.NavigateBack();
                 this.Finish();
             });
-        }
-
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)

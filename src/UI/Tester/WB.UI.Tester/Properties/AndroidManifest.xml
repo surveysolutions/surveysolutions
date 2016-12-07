@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.Vtester" android:versionCode="101" android:versionName="1.0.1">
-  <application android:label="Tester" android:icon="@drawable/icon" android:largeHeap="true" android:theme="@style/AppTheme"></application>
+  <application android:label="Tester" android:icon="@drawable/icon" android:largeHeap="true" android:theme="@style/AppTheme">
+    <provider android:name="android.support.v4.content.FileProvider"
+          android:authorities="org.worldbank.solutions.Vtester.fileprovider"
+          android:exported="false"
+          android:grantUriPermissions="true">
+      <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths"></meta-data>
+    </provider>
+  </application>
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,11 +26,4 @@
   <uses-feature android:name="android.hardware.location.gps" android:required="false" />
   <uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
   <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="24" />
-  <provider android:name="android.support.v4.content.FileProvider"
-            android:authorities="org.worldbank.solutions.Vtester.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-    <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
-      android:resource="@xml/file_paths"></meta-data>
-  </provider>
 </manifest>

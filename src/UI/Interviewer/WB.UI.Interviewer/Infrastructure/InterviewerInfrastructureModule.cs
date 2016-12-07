@@ -5,6 +5,7 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using NLog;
+using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -60,7 +61,28 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
 
-            LogManager.Configuration.Variables["interviewerPublicDir"] = new SimpleLayout(AndroidPathUtils.GetPathToExternalInterviewerDirectory());
+            var pathToLocalDirectory = AndroidPathUtils.GetPathToLocalDirectory();
+
+            var fileName = Path.Combine(pathToLocalDirectory, "Logs", "${shortdate}.log");
+            var fileTarget = new FileTarget("logFile")
+            {
+                FileName = fileName,
+                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=tostring}|${stacktrace}}]"
+            };
+
+            var config = new LoggingConfiguration();
+            config.AddTarget("logFile", fileTarget);
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, fileTarget));
+            LogManager.Configuration = config;
+
+            var logEventInfo = new LogEventInfo { TimeStamp = DateTime.Now };
+            string logFileName = fileTarget.FileName.Render(logEventInfo);
+         
+            this.Bind<IBackupRestoreService>()
+                .To<BackupRestoreService>()
+                .WithConstructorArgument("privateStorage", pathToLocalDirectory)
+                .WithConstructorArgument("logDirectoryPath", Path.GetDirectoryName(logFileName));
+
             this.Bind<ILoggerProvider>().To<NLogLoggerProvider>();
             this.Bind<ILogger>().ToMethod(context =>
             {
@@ -69,14 +91,6 @@ namespace WB.UI.Interviewer.Infrastructure
 
                 return new NLogLogger("UNKNOWN");
             });
-
-            var fileTarget = LogManager.Configuration.FindTargetByName<FileTarget>("logfile");
-            var logEventInfo = new LogEventInfo { TimeStamp = DateTime.Now };
-            string logFileName = fileTarget.FileName.Render(logEventInfo);
-            this.Bind<IBackupRestoreService>()
-                .To<BackupRestoreService>()
-                .WithConstructorArgument("privateStorage", AndroidPathUtils.GetPathToLocalDirectory())
-                .WithConstructorArgument("logDirectoryPath", Path.GetDirectoryName(logFileName));
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
                 kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(), 
