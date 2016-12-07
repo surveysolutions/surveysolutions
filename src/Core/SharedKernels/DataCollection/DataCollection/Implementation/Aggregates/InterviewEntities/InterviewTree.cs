@@ -402,6 +402,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 interviewTreeNode.ReplaceSubstitutions();
             }
         }
+
+        public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue)
+        {
+            return questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
+        }
     }
 
     public interface IInterviewTreeNode

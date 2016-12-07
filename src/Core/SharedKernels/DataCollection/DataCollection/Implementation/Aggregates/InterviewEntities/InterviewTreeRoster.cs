@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 var titleQuestion = this.Tree.GetQuestion(this.AsNumeric.RosterTitleQuestionIdentity);
                 if (titleQuestion == null) return;
                 var rosterTitle = titleQuestion.IsAnswered()
-                    ? titleQuestion.GetAnswerAsString((answerOptionValue) => getCategoricalAnswerOptionText?.Invoke(titleQuestion.Identity.Id, answerOptionValue))
+                    ? titleQuestion.GetAnswerAsString()
                     : null;
                 this.SetRosterTitle(rosterTitle);
             }
