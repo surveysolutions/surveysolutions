@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -13,6 +15,29 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     [TestOf(typeof(Interview))]
     public partial class InterviewTests
     {
+        [Test]
+        public void When_add_roster_after_switch_translation_Then_title_should_be_translated()
+        {
+            //arrange
+            var ruTranslationName = "ru";
+            var ruTitle = "русский заголовок";
+
+            var rosterIdentity = Create.Entity.Identity("11111111111111111111111111111111", Create.Entity.RosterVector(0));
+
+            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
+            {
+                new KeyValuePair<string, IComposite[]>(null, new [] { Create.Entity.Roster(rosterIdentity.Id, "invariant title")}),
+                new KeyValuePair<string, IComposite[]>(ruTranslationName, new [] { Create.Entity.Roster(rosterIdentity.Id, ruTitle) })
+            });
+
+            //act
+            interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
+            interview.Apply(Create.Event.RosterInstancesAdded(rosterIdentity.Id, rosterIdentity.RosterVector));
+
+            //assert
+            Assert.That(interview.GetTitleText(rosterIdentity), Is.EqualTo(ruTitle));
+        }
+
         [Test]
 	    public void When_switch_translation_with_group_Then_title_should_be_translated()
 	    {
