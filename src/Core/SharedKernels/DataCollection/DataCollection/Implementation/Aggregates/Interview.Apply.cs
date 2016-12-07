@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -330,7 +331,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(RosterInstancesAdded @event)
         {
-            foreach (var instance in @event.Instances)
+            foreach (var instance in @event.Instances.OrderBy(x => x.OuterRosterVector.Length))
             {
                 var rosterIdentity = new RosterIdentity(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
                 this.AddRosterToTree(rosterIdentity);
