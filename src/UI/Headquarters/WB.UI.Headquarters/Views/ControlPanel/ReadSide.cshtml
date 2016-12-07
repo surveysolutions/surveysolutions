@@ -289,7 +289,8 @@
             color: red;
         }
     </style>
-    @Scripts.Render("~/Scripts/components/moment-duration-format.js", "~/Scripts/components/bindings.js", "~/Scripts/viewmodels/pages/controlpanel/readside.js")
+    @Scripts.Render("~/Scripts/components/moment-duration-format.js", "~/Scripts/components/bindings.js", 
+                    "~/Scripts/viewmodels/pages/controlpanel/readside.js")
     <script type="text/javascript">
         var updateRebuildStatusApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetReadSideStatus" })';
         var eventHandlersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetAllAvailableHandlers" })';
