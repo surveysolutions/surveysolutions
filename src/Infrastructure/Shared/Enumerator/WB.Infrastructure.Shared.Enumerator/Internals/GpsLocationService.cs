@@ -21,7 +21,8 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
             this.Geolocator.DesiredAccuracy = desiredAccuracy;
             Position position = await this.Geolocator.GetPositionAsync(timeoutMilliseconds: timeoutSec*1000)
                                                      .ConfigureAwait(false);
-            var gpsPermissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location)
+            IPermissions permissions = CrossPermissions.Current;
+            var gpsPermissionStatus = await permissions.CheckPermissionStatusAsync(Permission.Location)
                                                                     .ConfigureAwait(false);
             if (gpsPermissionStatus != PermissionStatus.Granted && position == null)
             {
