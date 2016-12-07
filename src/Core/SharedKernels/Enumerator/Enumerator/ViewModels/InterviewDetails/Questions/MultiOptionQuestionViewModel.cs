@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
         private bool areAnswersOrdered;
+        private IMvxMainThreadDispatcher mainThreadDispatcher;
 
         public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -58,7 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IUserInteractionService userInteraction,
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel, 
-            QuestionInstructionViewModel instructionViewModel)
+            QuestionInstructionViewModel instructionViewModel,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
             this.questionState = questionStateViewModel;
@@ -70,6 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.instructionViewModel = instructionViewModel;
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
+            this.mainThreadDispatcher = mainThreadDispatcher;
         }
 
         public Identity Identity => this.questionIdentity;
@@ -102,21 +105,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateQuestionOptions()
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
-            var answerOnMultiOptionQuestion = interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer()?.ToDecimals()?.ToArray();
-            var optionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion))
-                .ToList();
 
-            this.Options.ForEach(x => x.DisposeIfDisposable());
-            this.Options.Clear();
+            
+                    var answerOnMultiOptionQuestion =
+                        interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer()?.ToDecimals()?.ToArray();
+                    var optionViewModels = this.filteredOptionsViewModel.GetOptions()
+                        .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion))
+                        .ToList();
 
-            optionViewModels.ForEach(x => this.Options.Add(x));
+                    this.Options.ForEach(x => x.DisposeIfDisposable());
+                    this.Options.Clear();
+
+                    optionViewModels.ForEach(x => this.Options.Add(x));
+                
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
-            this.UpdateQuestionOptions();
-            this.RaisePropertyChanged(() => Options);
+            this.mainThreadDispatcher.RequestMainThreadAction(
+                () =>
+                {
+                    this.UpdateQuestionOptions();
+                    this.RaisePropertyChanged(() => Options);
+                });
         }
 
         public void Dispose()
