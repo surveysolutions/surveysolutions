@@ -16,20 +16,17 @@ namespace WB.UI.Interviewer.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
         private readonly string privateStorage;
-        private readonly string logDirectoryPath;
 
         public BackupRestoreService(
             IArchiveUtils archiver,
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
-            string privateStorage,
-            string logDirectoryPath)
+            string privateStorage)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.privateStorage = privateStorage;
-            this.logDirectoryPath = logDirectoryPath;
         }
 
         public async Task<string> BackupAsync()
@@ -44,10 +41,6 @@ namespace WB.UI.Interviewer.Services
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
             this.BackupSqliteDbs();
-
-            var isLogFolderExists = this.fileSystemAccessor.IsDirectoryExists(this.logDirectoryPath);
-            if (isLogFolderExists)
-                this.fileSystemAccessor.CopyFileOrDirectory(this.logDirectoryPath, this.privateStorage, true);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
