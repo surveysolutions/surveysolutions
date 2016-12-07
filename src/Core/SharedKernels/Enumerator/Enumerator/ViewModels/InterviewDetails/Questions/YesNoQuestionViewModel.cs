@@ -118,17 +118,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                this.Options.Clear();
-                newOptions.ForEach(x => this.Options.Add(x));
-            });
+            
+            this.Options.Clear();
+            newOptions.ForEach(x => this.Options.Add(x));
+            
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
-            this.UpdateQuestionOptions();
-            this.RaisePropertyChanged(() => Options);
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.UpdateQuestionOptions();
+                this.RaisePropertyChanged(() => Options);
+            });
         }
 
         private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, AnsweredYesNoOption[] checkedYesNoAnswerOptions)
