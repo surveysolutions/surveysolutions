@@ -288,6 +288,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.VariablesCache.Values.Single(x => x.Name == variableName).PublicKey;
         }
+        public Guid GetGroupIdByVariableName(string variableName)
+        {
+            return this.GroupCache.Values.Single(x => x.VariableName == variableName).PublicKey;
+        }
 
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
 
@@ -942,6 +946,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasQuestion(string variableName)
         {
             return this.QuestionCache.Values.Any(x => x.StataExportCaption == variableName);
+        }
+
+        public bool HasRoster(string rosterName)
+        {
+            return this.GroupCache.Values.Any(x => x.IsRoster && x.VariableName == rosterName);
         }
 
         public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
