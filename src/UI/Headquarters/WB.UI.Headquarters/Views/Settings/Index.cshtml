@@ -8,8 +8,7 @@
 @section scripts
 {
 
-    @Scripts.Render("~/Scripts/pages/export-settings.js")
-
+    @Scripts.Render("~/js/export-settings")
 
     <script type="text/javascript">
         var $dataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ExportSettingsApi", action = "ExportSettings" })';
