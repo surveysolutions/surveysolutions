@@ -352,9 +352,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiLinkedToList) { this.AsMultiLinkedToList.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[])); return; }
         }
 
-        public string GetAnswerAsString(Func<decimal, string> getCategoricalAnswerOptionText = null, CultureInfo cultureInfo = null)
+        public string GetAnswerAsString(CultureInfo cultureInfo = null)
         {
             if (!this.IsAnswered()) return String.Empty;
+
+            Func<decimal, string> getCategoricalAnswerOptionText = answerOptionValue
+                => Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
+
             if (this.IsText) return this.AsText.GetAnswer()?.Value;
             if (this.IsMultimedia) return this.AsMultimedia.GetAnswer()?.FileName;
             if (this.IsQRBarcode) return this.AsQRBarcode.GetAnswer()?.DecodedText;
@@ -370,14 +374,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 var interviewTreeSingleLinkedToRosterQuestion = this.AsSingleLinkedOption;
                 var linkedToEntityId = new Identity(interviewTreeSingleLinkedToRosterQuestion.LinkedSourceId, interviewTreeSingleLinkedToRosterQuestion.GetAnswer()?.SelectedValue);
                 
-                return this.Tree.GetQuestion(linkedToEntityId)?.GetAnswerAsString(getCategoricalAnswerOptionText) ?? 
+                return this.Tree.GetQuestion(linkedToEntityId)?.GetAnswerAsString() ?? 
                        this.Tree.GetRoster(linkedToEntityId).RosterTitle;
             }
             if (this.IsMultiLinkedOption)
             {
                 var formattedAnswers = this.AsMultiLinkedOption.GetAnswer()?.CheckedValues
                     .Select(x => new Identity(this.AsMultiLinkedOption.LinkedSourceId, x))
-                    .Select(x => this.Tree.GetQuestion(x)?.GetAnswerAsString(getCategoricalAnswerOptionText) ?? this.Tree.GetRoster(x).RosterTitle);
+                    .Select(x => this.Tree.GetQuestion(x)?.GetAnswerAsString() ?? this.Tree.GetRoster(x).RosterTitle);
                 return string.Join(", ", formattedAnswers);
             }
 
