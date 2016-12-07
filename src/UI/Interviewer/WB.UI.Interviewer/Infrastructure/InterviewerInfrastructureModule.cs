@@ -75,13 +75,9 @@ namespace WB.UI.Interviewer.Infrastructure
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, fileTarget));
             LogManager.Configuration = config;
 
-            var logEventInfo = new LogEventInfo { TimeStamp = DateTime.Now };
-            string logFileName = fileTarget.FileName.Render(logEventInfo);
-         
             this.Bind<IBackupRestoreService>()
                 .To<BackupRestoreService>()
-                .WithConstructorArgument("privateStorage", pathToLocalDirectory)
-                .WithConstructorArgument("logDirectoryPath", Path.GetDirectoryName(logFileName));
+                .WithConstructorArgument("privateStorage", pathToLocalDirectory);
 
             this.Bind<ILoggerProvider>().To<NLogLoggerProvider>();
             this.Bind<ILogger>().ToMethod(context =>

@@ -27,6 +27,9 @@ namespace WB.UI.Interviewer.Activities
 
         protected override void TriggerFirstNavigate()
         {
+            var logger = Mvx.Resolve<ILoggerProvider>().GetFor<SplashActivity>();
+            logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
+
             this.BackwardCompatibility();
             Mvx.Resolve<IViewModelNavigationService>().NavigateToLogin();
         }
