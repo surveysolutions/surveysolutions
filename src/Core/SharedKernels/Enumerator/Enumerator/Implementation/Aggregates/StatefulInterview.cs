@@ -195,12 +195,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public string GetAnswerAsString(Identity questionIdentity, CultureInfo cultureInfo = null)
         {
-            var questionnaire = this.GetQuestionnaireOrThrow();
             var question = this.Tree.GetQuestion(questionIdentity);
 
-            return question.GetAnswerAsString(answerOptionValue =>
-                    questionnaire.GetOptionForQuestionByOptionValue(question.Identity.Id, answerOptionValue).Title,
-                    cultureInfo ?? CultureInfo.InvariantCulture);
+            return question.GetAnswerAsString(cultureInfo ?? CultureInfo.InvariantCulture);
         }
 
         public bool HasErrors { get; private set; }
