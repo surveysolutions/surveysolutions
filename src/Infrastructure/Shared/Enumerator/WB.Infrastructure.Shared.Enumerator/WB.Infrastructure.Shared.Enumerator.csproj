@@ -221,6 +221,7 @@
     <Compile Include="Ninject\ModuleExtensions.cs" />
     <Compile Include="Ninject\KernelExtensions.cs" />
     <Compile Include="Ninject\NinjectModuleAdapter.cs" />
+    <Compile Include="PermissionsExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
   </ItemGroup>

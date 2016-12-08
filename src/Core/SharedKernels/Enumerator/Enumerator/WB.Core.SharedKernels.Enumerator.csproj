@@ -82,7 +82,6 @@
     <Compile Include="Implementation\Services\InMemoryPlainStorage.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\OptionsRepository.cs" />
-    <Compile Include="Implementation\Services\NoGpsPermissionException.cs" />
     <Compile Include="Implementation\Services\QuestionOptionsRepository.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
@@ -143,6 +142,7 @@
     <Compile Include="Utils\CompositeCollection.cs" />
     <Compile Include="Utils\CovariantObservableCollection.cs" />
     <Compile Include="Utils\IObservableCollection.cs" />
+    <Compile Include="Utils\MissingPermissionsException.cs" />
     <Compile Include="Utils\NumericTextFormatter.cs" />
     <Compile Include="Utils\NumericTextFormatterSettings.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />

@@ -446,4 +446,7 @@
   <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
     <value>Приложению необходимо разрешение на использование текущего положения устройства для ответа на данный вопрос</value>
   </data>
+  <data name="MissingPermission" xml:space="preserve">
+    <value>У приложения нет необходимых разрешений для выполнения действия</value>
+  </data>
 </root>
