@@ -20,16 +20,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
 
         public async Task<Stream> TakePicture()
         {
-            var cameraPermissions = await this.permissions.CheckPermissionStatusAsync(Permission.Camera).ConfigureAwait(false);
-            if (cameraPermissions != PermissionStatus.Granted)
-            {
-                var requestStatus = await this.permissions.RequestPermissionsAsync(Permission.Camera);
-                if (requestStatus[Permission.Camera] != PermissionStatus.Granted)
-                {
-                    return null;
-                }
-            }
-
+            await this.permissions.AssureHasPermission(Permission.Camera);
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions
             {

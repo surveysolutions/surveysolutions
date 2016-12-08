@@ -847,6 +847,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application has not enough permissions to execute requested action.
+        /// </summary>
+        public static string MissingPermission {
+            get {
+                return ResourceManager.GetString("MissingPermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
