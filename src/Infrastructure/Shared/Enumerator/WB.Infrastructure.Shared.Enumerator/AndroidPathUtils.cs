@@ -6,9 +6,9 @@ namespace WB.Infrastructure.Shared.Enumerator
     public class AndroidPathUtils
     {
         public static string GetPathToSubfolderInLocalDirectory(string subFolderName)
-            => GetPathToSubfolderInDirectory(GetPathToLocalDirectory(), subFolderName);
+            => GetPathToSubfolderInDirectory(GetPathToInternalDirectory(), subFolderName);
 
-        public static string GetPathToLocalDirectory()
+        public static string GetPathToInternalDirectory()
             => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         public static string GetPathToExternalDirectory()

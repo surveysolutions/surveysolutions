@@ -61,7 +61,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
 
-            var pathToLocalDirectory = AndroidPathUtils.GetPathToLocalDirectory();
+            var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
 
             var fileName = Path.Combine(pathToLocalDirectory, "Logs", "${shortdate}.log");
             var fileTarget = new FileTarget("logFile")
