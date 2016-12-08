@@ -47,6 +47,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         internal InterviewTreeGroup GetGroup(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeGroup;
+
+        internal bool HasRoster(Identity identity) => this.GetRoster(identity) != null;
     
         internal InterviewTreeRoster GetRoster(Identity identity)
             => this.GetNodeByIdentity(identity) as InterviewTreeRoster;
