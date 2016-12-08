@@ -212,7 +212,12 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/chart").Include(
-                "~/Scripts/jqplot-area",
+                "~/Scripts/query-string.js", 
+                "~/Scripts/jqPlot/jquery.jqplot.js", 
+                "~/Scripts/jqPlot/plugins/jqplot.dateAxisRenderer.js", 
+                "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js", 
+                "~/Scripts/jqPlot/plugins/jqplot.cursor.js", 
+                "~/Scripts/jqPlot/plugins/jqplot.enhancedLegendRenderer.js",
                 "~/Scripts/bootstrap-datepicker.js",
                 "~/Scripts/ko.datepicker.js",
                 "~/Scripts/viewmodels/pages/interviews.base.js",
@@ -232,15 +237,7 @@ namespace WB.UI.Headquarters
             bundles.Add(new ScriptBundle("~/js/export-settings").Include(
                 "~/Scripts/pages/export-settings.js"
                 ));
-
-            bundles.Add(new ScriptBundle("~/Scripts/jqplot-area").Include(
-                "~/Scripts/query-string.js", 
-                "~/Scripts/jqPlot/jquery.jqplot.js", 
-                "~/Scripts/jqPlot/plugins/jqplot.dateAxisRenderer.js", 
-                "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js", 
-                "~/Scripts/jqPlot/plugins/jqplot.cursor.js", 
-                "~/Scripts/jqPlot/plugins/jqplot.enhancedLegendRenderer.js"
-                ));
+            
         }
     }
 }
