@@ -2,11 +2,13 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Shared.Enumerator;
 
 namespace WB.UI.Interviewer.Services
 {
@@ -15,27 +17,33 @@ namespace WB.UI.Interviewer.Services
         private readonly IArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
+        private readonly IPermissions permissions;
         private readonly string privateStorage;
 
         public BackupRestoreService(
             IArchiveUtils archiver,
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
-            string privateStorage)
+            string privateStorage, 
+            IPermissions permissions)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.privateStorage = privateStorage;
+            this.permissions = permissions;
         }
 
         public async Task<string> BackupAsync()
         {
+            await this.permissions.AssureHasPermission(Permission.Storage);
             return await this.BackupAsync(this.privateStorage).ConfigureAwait(false);
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
+            await this.permissions.AssureHasPermission(Permission.Storage);
+
             var isBackupFolderExists = this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath);
             if (!isBackupFolderExists)
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
@@ -149,6 +157,8 @@ namespace WB.UI.Interviewer.Services
 
         public async Task RestoreAsync(string backupFilePath)
         {
+            await this.permissions.AssureHasPermission(Permission.Storage);
+
             if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {
                 if (this.fileSystemAccessor.IsDirectoryExists(this.privateStorage))
