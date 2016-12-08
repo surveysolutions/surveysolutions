@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -8,6 +9,7 @@ namespace Ncqrs.Eventing
     /// <summary>
     /// Represents an event which has been persisted.
     /// </summary>
+    [DebuggerDisplay("CommittedEvent {Payload.GetType().Name}")]
     public class CommittedEvent : IPublishableEvent
     {
         public long GlobalSequence { get; private set; }
@@ -22,50 +24,26 @@ namespace Ncqrs.Eventing
         /// <summary>
         /// If of a commit in which this event was stored (usually corresponds to a command id which caused this event).
         /// </summary>
-        public Guid CommitId
-        {
-            get { return _commitId; }
-        }
+        public Guid CommitId => this._commitId;
 
-        public string Origin
-        {
-            get { return _origin; }
-        }
+        public string Origin => this._origin;
 
-        /// <summary>
-        /// Gets the payload of the event.
-        /// </summary>
-        public WB.Core.Infrastructure.EventBus.IEvent Payload
-        {
-            get { return _payload; }
-        }
+        public WB.Core.Infrastructure.EventBus.IEvent Payload => this._payload;
 
-        /// <summary>
-        /// Gets the unique identifier for this event.
-        /// </summary>
-        public Guid EventIdentifier
-        {
-            get { return _eventIdentifier; }
-        }
+        public Guid EventIdentifier => this._eventIdentifier;
 
         /// <summary>
         /// Gets the time stamp for this event.
         /// </summary>
         /// <value>a <see cref="DateTime"/> UTC value that represents the point
         /// in time where this event occurred.</value>
-        public DateTime EventTimeStamp
-        {
-            get { return _eventTimeStamp; }
-        }
+        public DateTime EventTimeStamp => this._eventTimeStamp;
 
         /// <summary>
         /// Gets the id of the event source that caused the event.
         /// </summary>
         /// <value>The id of the event source that caused the event.</value>
-        public Guid EventSourceId
-        {
-            get { return _eventSourceId; }
-        }
+        public Guid EventSourceId => this._eventSourceId;
 
         /// <summary>
         /// Gets the event sequence number.
@@ -74,10 +52,7 @@ namespace Ncqrs.Eventing
         /// An sequence of events always starts with <c>1</c>. So the first event in a sequence has the <see cref="EventSequence"/> value of <c>1</c>.
         /// </remarks>
         /// <value>A number that represents the order of where this events occurred in the sequence.</value>
-        public int EventSequence
-        {
-            get { return _eventSequence; }
-        }
+        public int EventSequence => this._eventSequence;
 
         public CommittedEvent(Guid commitId, 
             string origin, 
@@ -98,9 +73,6 @@ namespace Ncqrs.Eventing
             _eventTimeStamp = eventTimeStamp;
         }
 
-        public override string ToString()
-        {
-            return string.Format("{0}[{1}]", Payload.GetType().FullName, EventIdentifier.ToString("D"));
-        }
+        public override string ToString() => $"{this.Payload.GetType().FullName}[{this.EventIdentifier:D}]";
     }
 }
