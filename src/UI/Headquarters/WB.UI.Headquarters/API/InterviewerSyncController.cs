@@ -120,11 +120,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             if (fileSystemAccessor.IsFileExists(pathToFile))
             {
+                var fileContents = this.fileSystemAccessor.ReadAllBytes(pathToFile);
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new ByteArrayContent(fileSystemAccessor.ReadAllBytes(pathToFile))
+                    Content = new ByteArrayContent(fileContents)
                 };
 
+                response.Content.Headers.ContentLength = fileContents.Length;
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
                 response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
