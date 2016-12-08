@@ -334,6 +334,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var instance in @event.Instances.OrderBy(x => x.OuterRosterVector.Length))
             {
                 var rosterIdentity = new RosterIdentity(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
+
+                // this skip is made for backward compatibility with interviewer version 5.14 and lower
+                if (this.Tree.HasRoster(rosterIdentity.ToIdentity())) continue;
+
                 this.AddRosterToTree(rosterIdentity);
                 this.ExpressionProcessorStatePrototype.AddRoster(instance.GroupId, instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex);
             }
