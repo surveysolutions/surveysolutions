@@ -8,13 +8,7 @@
 
 @section scripts
 {
-    @Scripts.Render(
-        "~/Scripts/jqplot-area",
-        "~/Scripts/bootstrap-datepicker.js",
-        "~/Scripts/ko.datepicker.js",
-        "~/Scripts/viewmodels/pages/interviews.base.js",
-        "~/Scripts/pages/chart.js",
-        "~/Scripts/dateRangePicker/daterangepicker.js")
+    @Scripts.Render("~/js/chart")
 
     <script type="text/javascript">
     var interviewChartUrl = '@Html.Raw(@Url.Action("InterviewsChart", "HQ", new { }, Request.Url.Scheme))';;

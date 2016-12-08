@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection
                     {
                         builder.Append("-");
 
-                        builder.Append(coordinate);
+                        builder.Append(Convert.ToInt32(coordinate));
                     }
                 }
 
