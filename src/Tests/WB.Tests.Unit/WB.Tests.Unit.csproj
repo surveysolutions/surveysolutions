@@ -505,6 +505,8 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events_for_interviews_created_before_version_5_15.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_child_interviewer_entities.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTreeTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\SubstitionTextTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\SubstitionTextFactoryTests.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_ordered_roster_size_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\InterviewViewModelFactoryTests\InterviewViewModelFactoryTest.cs" />

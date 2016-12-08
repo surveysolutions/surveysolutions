@@ -1,0 +1,66 @@
+﻿using System;
+using System.Linq;
+using Main.Core.Entities.Composite;
+using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
+
+namespace WB.Tests.Unit.SharedKernels.DataCollection
+{
+    [TestOf(typeof(SubstitionText))]
+    [TestFixture]
+    public class SubstitionTextTests
+    {
+        [Test]
+        public void When_Compare_and_changed_tree_has_2_nodes_which_dont_have_source_tree_Then_should_return_2_diff_nodes()
+        {
+            //arrange
+            var questionnireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var interviewId    = Guid.Parse("11111111111111111111111111111111");
+            var rosterId1 = Guid.Parse("22222222222222222222222222222222");
+            var rosterId2 = Guid.Parse("33333333333333333333333333333333");
+            var questionId = Guid.Parse("44444444444444444444444444444444");
+            var sectionIdentity = Create.Entity.Identity(Guid.Parse("55555555555555555555555555555555"));
+
+            var questionnireDocument = Create.Entity.QuestionnaireDocument(questionnireId, new IComposite[]
+            {
+                Create.Entity.Roster(rosterId1, variable: "r1", fixedRosterTitles: new FixedRosterTitle[]
+                {
+                    new FixedRosterTitle(1, "title 1"), 
+                    new FixedRosterTitle(2, "title 2"), 
+                }, 
+                children: new IComposite[]
+                    {
+                        Create.Entity.Roster(rosterId2, variable: "r2", fixedRosterTitles: new FixedRosterTitle[]
+                        {
+                            new FixedRosterTitle(1, "title 1.1"),
+                            new FixedRosterTitle(2, "title 2.1"),
+                        },
+                        children: new IComposite[]
+                            {
+                                Create.Entity.NumericQuestion(questionId, variableName: "n1", title: "title %r1% %r2%")
+                            })
+                    })
+            });
+            var questionnire = Create.Entity.PlainQuestionnaire(questionnireDocument);
+
+            var tree = Create.Entity.InterviewTree(interviewId, 
+                Create.Entity.InterviewTreeSection(sectionIdentity, 
+                    Create.Entity.InterviewTreeRoster()) )
+
+            var substitionTextFactory = Create.Service.SubstitionTextFactory();
+            var questionIdentity = Create.Entity.Identity(questionId, new RosterVector(new decimal[] {1, 1}));
+            var substitionText = substitionTextFactory.CreateText(questionIdentity, "title %r1% %r2%", questionnire);
+            substitionText.SetTree();
+
+            //act
+            substitionText.ReplaceSubstitutions();
+
+            //assert
+            Assert.That(substitionText.HasSubstitutions, Is.True);
+            Assert.That(substitionText.Text, Is.EqualTo(null));
+        }
+    }
+}
