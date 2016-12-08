@@ -34,6 +34,8 @@
       android:id="@+id/interviewCurrentStepFrame"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
+      android:descendantFocusability="beforeDescendants"
+      android:focusableInTouchMode="true"
       local:MvxBind="CurrentScreen CurrentStage;"
       />
     
