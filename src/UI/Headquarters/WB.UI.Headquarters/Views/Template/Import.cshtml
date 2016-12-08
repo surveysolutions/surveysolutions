@@ -5,7 +5,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/js/questionnaires")
+    @Scripts.Render("~/Scripts/viewmodels/pages/designerquestionnaires.js")
     <script type="text/javascript">
         $(function () {
             var model = new Supervisor.VM.DesignerQuestionnaires('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesList" })',
