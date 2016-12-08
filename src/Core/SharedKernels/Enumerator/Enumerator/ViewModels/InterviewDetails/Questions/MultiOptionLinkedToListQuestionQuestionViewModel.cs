@@ -257,11 +257,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void RefreshOptionsFromModel()
         {
             var textListAnswerRows = this.GetTextListAnswerRows();
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.RemoveOptions(textListAnswerRows);
+                this.InsertOrUpdateOptions(textListAnswerRows);
 
-            this.RemoveOptions(textListAnswerRows);
-            this.InsertOrUpdateOptions(textListAnswerRows);
-
-            this.RaisePropertyChanged(() => this.HasOptions);
+                this.RaisePropertyChanged(() => this.HasOptions);
+            });
         }
 
         private void InsertOrUpdateOptions(List<TextListAnswerRow> textListAnswerRows)
@@ -276,9 +278,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (viewModelOption == null)
                 {
                     viewModelOption = this.CreateOptionViewModel(textListAnswerRow);
-
-                    this.mainThreadDispatcher.RequestMainThreadAction(
-                        () => this.options.Insert(textListAnswerRows.IndexOf(textListAnswerRow), viewModelOption));
+                    this.options.Insert(textListAnswerRows.IndexOf(textListAnswerRow), viewModelOption);
                 }
 
                 this.UpdateOptionSelection(viewModelOption, linkedQuestionAnswer);
@@ -292,10 +292,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var removedOptionValue in removedOptionValues)
             {
-                var removedOption = this.options.SingleOrDefault(option => option.Value == removedOptionValue);
-                if (removedOption == null) continue;
+                                var removedOption =
+                                    this.options.SingleOrDefault(option => option.Value == removedOptionValue);
+                                if (removedOption == null) continue;
 
-                this.mainThreadDispatcher.RequestMainThreadAction(() => this.options.Remove(removedOption));
+                                this.options.Remove(removedOption);
             }
         }
 
