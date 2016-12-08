@@ -36,7 +36,7 @@ namespace WB.UI.Interviewer.Implementations.Services
         public async Task UpdateTheApp(string url)
         {
             var applicationFileName = "interviewer.apk";
-            var pathToExternalDirectory = AndroidPathUtils.GetPathToExternalDirectory();
+            var pathToExternalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
             var downloadFolder = this.fileSystemAccessor.CombinePath(pathToExternalDirectory, "download");
             string pathTofile = this.fileSystemAccessor.CombinePath(downloadFolder, applicationFileName);
 
