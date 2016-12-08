@@ -24,10 +24,13 @@
     </LinearLayout>
 
   </LinearLayout>
-  <LinearLayout style="@style/Diagnostics_SubSection"  local:MvxBind="Visible IsStringNotEmpty(CheckNewVersion.CheckNewVersionResult)" >
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible IsStringNotEmpty(CheckNewVersion.CheckNewVersionResult)" >
     <TextView
      style="@style/Diagnostics_Subsection_Title"
      local:MvxBind="Text CheckNewVersion.CheckNewVersionResult" />
+    <Button
+         style="@style/Diagnostic_Transparent_Button"
+         local:MvxBind="Text Localization('Cancel'); Click CheckNewVersion.CancelUpgrade; Visible CheckNewVersion.IsVersionCheckInProgress" />
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
                android:indeterminateOnly="true"
