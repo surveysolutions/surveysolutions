@@ -8,7 +8,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
+    @Scripts.Render("~/js/users")
     <script type="text/javascript">
         var $interviewersUrl = '@Url.Action("Index", "Interviewers", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';

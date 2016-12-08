@@ -718,7 +718,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (!IsAnswered)
                 return string.Empty;
-            return this.answer.Rows.Single(row => row.Value == code).Text;
+            return this.answer.Rows.FirstOrDefault(row => row.Value == code)?.Text ?? String.Empty;
         }
 
         public InterviewTreeTextListQuestion Clone() => (InterviewTreeTextListQuestion) this.MemberwiseClone();

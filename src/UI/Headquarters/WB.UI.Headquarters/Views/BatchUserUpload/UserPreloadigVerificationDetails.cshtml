@@ -77,7 +77,8 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/components/bindings.js", "~/Scripts/pages/userpreloading.js")
+    @Scripts.Render("~/js/preloading")
+    @Scripts.Render()
     <script type="text/javascript">
         var updateVerificationStatusApiUrl = '@(Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UserPreloading", action = "UserPreloadingDetails"})+"/"+Model)';
 

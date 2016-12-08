@@ -10,7 +10,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/sv.interviews.js")
+    @Scripts.Render("~/js/interviews-sv")
 
     <script type="text/javascript">
     var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
