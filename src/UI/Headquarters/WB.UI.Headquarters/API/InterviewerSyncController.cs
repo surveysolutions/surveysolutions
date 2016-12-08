@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new StreamContent(fileSystemAccessor.ReadFile(pathToFile))
+                    Content = new ByteArrayContent(fileSystemAccessor.ReadAllBytes(pathToFile))
                 };
 
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
