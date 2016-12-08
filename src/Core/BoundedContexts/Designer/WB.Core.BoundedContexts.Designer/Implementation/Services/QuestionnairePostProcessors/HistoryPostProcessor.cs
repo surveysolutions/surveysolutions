@@ -807,6 +807,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
         {
+            questionnaireStateTackerStorage.Remove(command.QuestionnaireId.FormatGuid());
+            var creatorId = aggregate.QuestionnaireDocument.CreatedBy ?? Guid.Empty;
+            UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
+
             var itemToRevert = this.questionnaireChangeItemStorage.GetById(command.HistoryReferanceId.FormatGuid());
 
             AddQuestionnaireChangeItem(command.QuestionnaireId,
