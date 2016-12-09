@@ -182,7 +182,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Apply(LinkedOptionsChanged @event)
         {
             foreach (var linkedQuestion in @event.ChangedLinkedQuestions)
-                this.Tree.GetQuestion(linkedQuestion.QuestionId).AsLinked.SetOptions(linkedQuestion.Options);
+                this.Tree.GetQuestion(linkedQuestion.QuestionId)?.AsLinked.SetOptions(linkedQuestion.Options);
         }
 
         public void Apply(LinkedToListOptionsChanged @event)

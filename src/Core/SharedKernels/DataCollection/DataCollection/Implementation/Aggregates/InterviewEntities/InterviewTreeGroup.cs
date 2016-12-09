@@ -267,11 +267,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
-            => this.Children.TreeToEnumerable(x => x.Children).OfType<InterviewTreeQuestion>()
+            => this.Children.OfType<InterviewTreeQuestion>()
                 .Where(x => !x.IsPrefilled && x.IsInterviewer && !x.IsDisabled());
 
         private IEnumerable<InterviewTreeStaticText> GetEnabledStaticTexts()
-            => this.Children.TreeToEnumerable(x => x.Children).OfType<InterviewTreeStaticText>()
+            => this.Children.OfType<InterviewTreeStaticText>()
                 .Where(x => !x.IsDisabled());
 
         public int CountEnabledQuestions() => this.GetEnabledInterviewerQuestions().Count();
