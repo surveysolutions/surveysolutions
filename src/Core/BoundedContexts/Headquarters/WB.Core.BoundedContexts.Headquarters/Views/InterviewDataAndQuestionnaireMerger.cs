@@ -39,7 +39,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
             public QuestionnaireDocument Questionnaire { get; }
             public Dictionary<string, Guid> VariableToQuestionId { get; }
             public Dictionary<string, Guid> VariableToVariableId { get; }
-            public Dictionary<string, Guid> VariableToRosterId { get; }
             public Dictionary<string, AttachmentInfoView> Attachments { get; }
 
             public InterviewInfoInternal(
@@ -47,14 +46,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 QuestionnaireDocument questionnaire,
                 Dictionary<string, Guid> variableToQuestionId,
                 Dictionary<string, Guid> variableToVariableId,
-                Dictionary<string, Guid> variableToRosterId,
                 Dictionary<string, AttachmentInfoView> attachments)
             {
                 this.Interview = interview;
                 this.Questionnaire = questionnaire;
                 this.VariableToQuestionId = variableToQuestionId;
                 this.VariableToVariableId = variableToVariableId;
-                this.VariableToRosterId = variableToRosterId;
                 this.Attachments = attachments;
             }
         }
@@ -81,8 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 interview: interview,
                 questionnaire: questionnaire,
                 variableToQuestionId: questionnaire.GetAllQuestions().ToDictionary(x => x.StataExportCaption, x => x.PublicKey),
-                variableToVariableId: questionnaire.Find<IVariable>().ToDictionary(x => x.Name, x => x.PublicKey),
-                variableToRosterId:   questionnaire.Find<IGroup>(g => g.IsRoster).ToDictionary(x => x.VariableName, x => x.PublicKey),
+                variableToVariableId:questionnaire.Find<IVariable>().ToDictionary(x => x.Name, x => x.PublicKey),
                 attachments: attachmentInfos);
 
             var interviewGroups = new List<InterviewGroupView>();
@@ -396,9 +392,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 return rosterTitle;
             }
 
-            if (interviewInfo.VariableToRosterId.ContainsKey(variableName))
-                return this.SubstituteRosterTitle(variableName, currentInterviewLevel, upperInterviewLevels, interviewInfo);
-
             if (!interviewInfo.VariableToQuestionId.ContainsKey(variableName))
                 return this.SubstituteVariableValue(variableName, currentInterviewLevel, upperInterviewLevels, interviewInfo);
 
@@ -413,37 +406,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
                 return null;
 
             return this.GetFormattedAnswerForTitleSubstitution(interviewQuestion, interviewInfo, interviewLinkedQuestionOptions);
-        }
-
-        private string SubstituteRosterTitle(string variableName, InterviewLevel currentInterviewLevel, List<InterviewLevel> upperInterviewLevels, InterviewInfoInternal interviewInfo)
-        {
-            if (!interviewInfo.VariableToRosterId.ContainsKey(variableName))
-                return null;
-
-            var rosterId = interviewInfo.VariableToRosterId[variableName];
-            var questionRosterVector = currentInterviewLevel.RosterVector;
-            var allInterviewLevelsToLookForTheVariable = upperInterviewLevels.Union(new[] {currentInterviewLevel}).ToArray();
-
-            var rosterLevelDepth = currentInterviewLevel.RosterVector.Length;
-
-            do
-            {
-                var variableRosterVector = questionRosterVector.Take(rosterLevelDepth).ToArray();
-                var levelToLookForTheVariable =
-                    allInterviewLevelsToLookForTheVariable.FirstOrDefault(
-                        x => x.RosterVector.Length == rosterLevelDepth && x.RosterVector.SequenceEqual(variableRosterVector));
-
-                if (levelToLookForTheVariable != null && levelToLookForTheVariable.RosterRowTitles.ContainsKey(rosterId))
-                {
-                    var rosterTitle = levelToLookForTheVariable.RosterRowTitles[rosterId];
-                    return rosterTitle;
-                }
-
-                rosterLevelDepth--;
-
-            } while (rosterLevelDepth > 0);
-
-            return null;
         }
 
         private string SubstituteVariableValue(string variableName, InterviewLevel currentInterviewLevel, List<InterviewLevel> upperInterviewLevels, InterviewInfoInternal interviewInfo)
