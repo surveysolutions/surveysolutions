@@ -143,25 +143,7 @@ main.export{
 	}
 }
 .export-types .data .table-data .btn.cancel{
-	outline: none;
-	background-color: transparent;
-	@include square(25px);
-	@include absolute(null, -45px, -6px, null);
-	padding: 0;
-	margin: 0;
-	&:before, &:after{
-		display: block;
-		content: "";
-		@include size(100%, 2px);
-		background-color: $gray_light;
-		@include rotate(45deg);
-		position: relative;
-	}
-	&:after{
-		@include rotate(-45deg);
-		left: -1px;
-    	top: -2px;
-	}
+	@include cancel(20px, null, -45px, -14px, null);
 }
 .progress-information.queued{
 	&>span{
@@ -207,6 +189,9 @@ main.export{
 		  	.not-generated{
 		  		padding: 0 10px;
 		  	}
+			.progress-information{
+				width: 80%;
+			}
 	  	}
 	  	.data p{
 	  		margin-bottom: 15px;
@@ -240,6 +225,7 @@ main.export{
 		  	.not-generated{
 		  		padding: 0 10px;
 		  	}
+		  	
 	  	}
 	  	.data p{
 	  		margin-bottom: 15px;
