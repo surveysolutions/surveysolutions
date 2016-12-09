@@ -115,9 +115,12 @@
                 var interviewer = model.Users.AssignTo();
                 $.each(filteredItems, function (index, interview) {
                     if (interview.IsNeedInterviewerAssign()) {
-                        self.sendCommand(rejectToInterviewerCommandName,
-                            function (interview) { return { InterviewId: interview.InterviewId, InterviewerId: interviewer.UserId } },
-                            [ interview ]);
+                        if (interviewer != undefined)
+                        {
+                            self.sendCommand(rejectToInterviewerCommandName,
+                                function (interview) { return { InterviewId: interview.InterviewId, InterviewerId: interviewer.UserId } },
+                                [interview]);
+                        }
                     } else {
                         self.sendCommand(rejectCommandName,
                             function (interview) { return { InterviewId: interview.InterviewId } },
