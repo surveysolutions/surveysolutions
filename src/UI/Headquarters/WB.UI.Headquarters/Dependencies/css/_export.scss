@@ -7,7 +7,7 @@ main.export{
 .export-types{
 	padding: 40px 30px;
 	position: relative;
-	margin-left: 335px;
+	margin-left: $export-types-margin;
 	max-width: 900px;
 	@include transition(margin, 0.3s);
 	background-color: #fff;
@@ -166,7 +166,7 @@ main.export{
 		padding-left: 4%;
 	}
   	.export-types{
-  		margin-left: 265px;
+  		margin-left: $small-export-types-margin;
   		.size, .last-generated{
   			display: none;
   		}

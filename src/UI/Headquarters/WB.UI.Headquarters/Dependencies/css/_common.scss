@@ -68,6 +68,27 @@ html {
 		padding: 0 45px;
 	}
 	.navbar-brand{
+		height: 50px;
+		div{
+			float: left;
+		}
+		.brand-name{
+			@extend %font-header;
+			padding: 9px 0 0 28px;
+			&:hover, &:focus{
+				font-family: "RobotoBold";
+			}
+			&::after {
+				   display:block;
+				    font-family: "RobotoBold";
+				    content:attr(title);
+				    height:1px;
+				    color:transparent;
+				    overflow:hidden;
+				    visibility:hidden;
+				    margin-bottom:-1px;
+				}
+		}
 		.retina.logo{
 			@include size(15px, 41px);
 			background: url(../img/logo.png) no-repeat;
@@ -77,27 +98,39 @@ html {
 	}
 	.navbar-collapse{
 		li{
-			&.active a{
+			position: relative;
+			
+			&.active>a{
 				@include transition;
 				font-family: "RobotoBold";
 				span{
 					font-family: "RobotoLight";
 				}
+				& > .caret{
+					border-top-color: $white;
+				}
 			}
 			&>a{
-				color: $white;
-				font-family: "RobotoLight";
-				font-size: 18px;
-				line-height: 20px;
-				padding: 24px 25px 25px 13px;
+				@extend %font-header;
+				padding: 24px 12px 25px;
 				text-align: center;
-				@include transition;
+				@include transition();
 				
 				&:hover, &:focus{
 					font-family: "RobotoBold";
 					span{
 						font-family: "RobotoLight";
 					}
+					& > .caret{
+						border-top-color: $white;
+					}
+				}
+				.caret{
+					@include absolute(31px, 0);
+					margin-left: 11px;
+					border-top: 8px solid rgba(255, 255, 255, 0.7);
+					border-right: 5px solid transparent;
+					border-left: 5px solid transparent;
 				}
 				&::after {
 				    display:block;
@@ -108,6 +141,7 @@ html {
 				    overflow:hidden;
 				    visibility:hidden;
 				    margin-bottom:-1px;
+				    padding: 0 5px;
 				}
 			}
 			.dropdown-menu li a{
@@ -115,21 +149,7 @@ html {
 				padding: 10px;
 				text-align: left;
 				color: $gray_text;
-			}
-		}
-		.navbar-right{
-			li{
-				position: relative;
-				.caret{
-					@include absolute($top: 28px, $right: 0);
-					margin-left: 11px;
-					border-top: 12px solid;
-					border-right: 7px solid transparent;
-					border-left: 7px solid transparent;
-				}
-				&.dropdown a{
-					position: relative;
-				}
+				@include transition();
 			}
 		}
 	}
@@ -146,7 +166,7 @@ html {
 	background-color: #2a81cb;
 	border-radius: 100%;
 	padding: 9px;
-	@include absolute($top: 18px, $left: -35px);
+	@include absolute($top: 18px, $left: -30px);
 	font-size: 18px;
 	line-height: 20px;
 }
@@ -183,9 +203,12 @@ html {
 	}	
 	.navbar-brand{
 		transform: rotate(270deg);
+		.brand-name{
+			display: none;
+		}
 	}
 	.navbar-toggle{
-		z-index: 5;
+		z-index: 25;
 	}
 	.navbar-header{
 		margin: 5px 0;
@@ -225,7 +248,7 @@ html {
 			position: relative;
 			margin-right: 10px;
 		}
-		.navbar-right li .caret{
+		li .caret{
 			top: 0;
 			left: 0;
 			position: relative;
@@ -332,10 +355,10 @@ h5{
 }
 .btn{
 	&:disabled{
-		background: $gray_info repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
+		background: $gray-super-light repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
 		border-color: transparent;	
 		&:hover, &:focus{
-			border-color: $gray_info;
+			border-color: $gray-super-light;
 		}
 	}
 }
