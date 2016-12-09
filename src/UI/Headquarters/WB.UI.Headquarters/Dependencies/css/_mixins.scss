@@ -132,6 +132,40 @@
         top: -2px;
     }
 }
+@mixin question_title_colors($default, $with_error, $filled){
+    .unit-title{
+        background-color: lighten($blue, $default);
+    }
+    &.contains-error>.unit-title,
+    .contains-error>.unit-title{
+        background-color: lighten($red_error, $with_error) ;
+    }
+    &.filled>.unit-title,
+    .filled>.unit-title{
+        background-color: lighten($green, $filled);
+    }
+}
+@mixin keyframes($animationName)
+{
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+%font-header{
+    color: $white;
+    font-family: "RobotoLight";
+    font-size: 18px;
+    line-height: 20px;
+}
 %default-logo-size{
     @include size(365px, 329px);
     background-size: 365px 329px !important;
