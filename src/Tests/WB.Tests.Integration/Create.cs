@@ -269,7 +269,14 @@ namespace WB.Tests.Integration
             {
                 return new RosterInstancesRemoved(rosterInstances);
             }
+
+            public static LinkedOptionsChanged LinkedOptionsChanged(ChangedLinkedOptions[] changedLinkedOptions)
+            {
+                return new LinkedOptionsChanged(changedLinkedOptions);
+            }
         }
+
+        public static RosterVector RosterVector(params int[] vectors) => new RosterVector(vectors.Select(x => (decimal) x));
 
         public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
         {
@@ -583,6 +590,23 @@ namespace WB.Tests.Integration
             return new VariableToUIStringService();
         }
 
+        public static QuestionnaireIdentity QuestionnaireIdentity(Guid? questionnaireId = null, long? questionnaireVersion = null)
+            => new QuestionnaireIdentity(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 7);
+
+        public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity();
+
+            var questionnaireRepository = QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
+
+            return StatefulInterview(
+                questionnaireIdentity: questionnaireIdentity,
+                questionnaireRepository: questionnaireRepository);
+        }
+        
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire)
+            => Stub<IQuestionnaireStorage>.Returning(questionnaire);
+
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
@@ -590,7 +614,8 @@ namespace WB.Tests.Integration
         {
             var interview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                expressionProcessorStatePrototypeProvider ??
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.SubstitionTextFactory());
 
             interview.CreateInterview(
