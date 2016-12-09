@@ -96,6 +96,7 @@ html body .details-interview{
 	width: 570px;
 	padding-bottom: 40px;
 	@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
+	z-index: 3;
 	.questionnaire-content{
 		padding: 25px 0 5px 30px;
 		border-bottom: 3px solid $gray-super-light;
@@ -220,6 +221,12 @@ html body .details-interview{
 		}
 	}
 }
+.unit-section{
+	position: relative;
+	&:last-of-type{
+		margin-bottom: 50px;
+	}
+}
 .questionnaire{
 	margin-left: 855px;
 	.unit-title{
@@ -240,17 +247,17 @@ html body .details-interview{
 			font: 16px/18px "RobotoMedium";
 		}
 	}
-	.contains-error .unit-title{
+	.contains-error>.unit-title{
 		background-color: $red_error;
 	}
-	.filled .unit-title{
+	.filled>.unit-title{
 		background-color: $green;
 	}
 }
 .question{
 	position: relative;
 	padding: 18px 20px 15px 70px;
-	border-bottom: 1px solid $gray-form;
+	border-bottom: 2px solid $gray-form;
 	&.with-flag{
 		display: block;
 		@include gradient($gray-super-light, $gray-super-light, null, null);
@@ -260,7 +267,7 @@ html body .details-interview{
 		}
 	}
 	.dropdown{
-		@include absolute(10px, 10px, null, null);
+		@include absolute(4px, 10px, null, null);
 		@include size(25px, 45px);
 		button{
 			@extend %clean-btn;
@@ -342,28 +349,33 @@ html body .details-interview{
 				margin-bottom: 10px;
 			}
 		}
-		&.comment {
-			display: none;
-			&.active{
-				display: block;
+		&.comments-block{
+			p{
+				color: $gray_text;
 			}
-			.form-inline{
-				.form-control{
-					@extend %form;
-					height: 40px;
-					width: 365px;
-					z-index: 0;
-					color: $gray_light;
+			.comment {
+				display: none;
+				&.active{
+					display: block;
 				}
-				button{
-					color: $white;
-					padding: 12px;
-					background-color: darken($gray_form, 10%);
-					border: none;
-					&:hover, &:focus{
-						outline: none;
+				.form-inline{
+					.form-control{
+						@extend %form;
+						height: 40px;
+						width: 365px;
+						z-index: 0;
+						color: $gray_light;
+					}
+					button{
+						color: $white;
+						padding: 12px;
+						background-color: darken($gray_form, 10%);
 						border: none;
-						background-color: darken($gray_form, 20%);
+						&:hover, &:focus{
+							outline: none;
+							border: none;
+							background-color: darken($gray_form, 20%);
+						}
 					}
 				}
 			}
@@ -379,20 +391,61 @@ html body .details-interview{
 		}
 	}
 }
-.question.disabled{
-	background: repeating-linear-gradient(-45deg, $gray-form, $gray-form 2px, white 2px, white 6px);
+.question.hidden-question{
+	background: repeating-linear-gradient(-45deg, $gray-form, $gray-form 2px, transparent 2px, transparent 6px);
 	h5{
+		margin: 0;
 		color: $gray_light;
 		.button-flag{
 			z-index: 0;
 		}
 	}
-	.question-unit, .instructions, .enumerators-comment{
+	.question-unit, .information-block{
 		display: none;
 	}
 }
+.question.hidden-by-filter {
+	background: $white;
+	padding: 2px;
+	/* @include transition(padding, 0.2s); */
+	& > .question-editor, 
+	& > h5, 
+	& > .dropdown{
+		display: none;
+	}	
+}
+.unit-section.hidden-by-filter {	
+	.unit-title .breadcrumb, .unit-title h3{
+		display: none;
+	} 
+	.question{
+		padding: 2px 0; 
+		background: transparent;
+		& *{
+			display: none;
+		}
+	}
+	.unit-title{
+		padding: 2px 0;
+		box-shadow: none;
+		border-bottom: 2px solid $gray-form;
+		z-index: 1;
+	}
+	@include question_title_colors(40%, 40%, 50%);
+}
+.questionnaire .open-hidden-by-filter{
+	&:before{
+		content: "";
+		display: block;
+		width: 100%;
+		height: 100%;
+		@include absolute(0, 0, 0, 0);
+		background-color: rgba(0, 0, 0, 0.1);
+	}
+	@include question_title_colors(20%, 20%, 20%);
+}
 .question-editor{
-	max-width: 445px;
+	max-width: $width-question-editor;
 	h5{
 		padding-left: 10px;
 		margin: 0 0 10px;
@@ -451,6 +504,7 @@ html body .details-interview{
 			}
 			.form-group{
 				label {
+					cursor: pointer;
 					.tick{
 						position: relative;
 					}
@@ -527,6 +581,27 @@ html body .details-interview{
 		}
 	}  
 }
+.static-text{
+	h5{
+		margin: 0;
+		.static-text-image{
+			padding: 30px;
+			display: block;
+			@include size($width-question-editor, auto);
+			img{
+				@include img-responsive();
+			}
+		}
+	}
+	&.invalid{
+		h5{
+			color: $red_error;
+		}
+	}
+}
+.variable{
+	@extend .static-text;
+}
 .question-editor .question-unit .options-group .field 
 .gray-text{
 	color: $gray_light;
@@ -551,7 +626,6 @@ html body .details-interview{
 		}
 	}
 }
-
 .index-number{
 	display: none;
 	@include absolute(0, null, null, -40px);
@@ -643,3 +717,72 @@ html body .details-interview{
 	}
 }
 
+.zoomImg {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.zoomImg:hover {
+
+	transform:scale(1.4);
+}
+
+
+.modal {
+	position: fixed; 
+    z-index: 50; 
+    padding-top: 50px; 
+    left: 0;
+    top: 70px;
+    bottom: 0;
+    right: 0;
+    width: 100%; 
+    background-color: rgba(0,0,0,0.9); 
+    text-align: center;
+    display: none; 
+    .modal-content {
+		@include center-block();
+	    width: 75% !important;
+	    max-width: 80% !important;
+	}
+	.caption {
+	    width: 75%;
+	    text-align: center;
+	    color: $gray-super-light;
+	    padding: 15px 0;
+		@include center-block();
+		&:first-letter{
+			text-transform: capitalize;
+		}
+	}
+	.close-zoomming-img {
+		@include absolute(40px, 40px);
+	    color: $gray-super-light;
+	    font-size: 40px;
+	    @include transition(all, 0.2s);
+	    &:hover,
+		&:focus {
+		    color: $gray_light;
+		    cursor: pointer;
+		}
+	}
+}
+
+.modal-content, .caption {    
+    @include animation-name(zoom);
+    @include animation-duration(0.5s);
+}
+
+@include keyframes(zoom) {
+    0% {
+    	@include scale(0);
+    } 
+    100% {
+    	@include scale(1);
+    }
+} 
+@media only screen and (max-width: 700px){
+    .modal-content {
+        width: 100%;
+    }
+}
