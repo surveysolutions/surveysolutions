@@ -3,107 +3,58 @@
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
+
 <ul class="nav navbar-nav" role="menu">
+    <li><a class="navbar-brand" href="@Url.Action("Index", "Headquarters", new {area = ""})">@Users.Admin</a></li>
     <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="glyphicon glyphicon-th"></i> @MainMenu.Reports <b class="caret"></b>
+            @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            <li class="@(page == MenuItem.Surveys ? "active" : "")">
-                <a href="@Url.Action("SurveysAndStatuses", "HQ", new { area = "" })">@MainMenu.SurveysAndStatuses</a>
-            </li>
-            <li class="@(page == MenuItem.Summary ? "active" : "")">
-                <a href="@Url.Action("SupervisorsAndStatuses", "HQ", new { area = "" })">@MainMenu.TeamsAndStatuses</a>
-            </li>
-            <li class="@(page == MenuItem.MapReport ? "active" : "")">
-                <a href="@Url.Action("MapReport", "HQ", new { area = "" })">@MainMenu.MapReport</a>
-            </li>
-            <li class="@(page == MenuItem.InterviewsChart ? "active" : "")">
-                <a href="@Url.Action("InterviewsChart", "HQ", new {area = ""})">@MainMenu.CumulativeChart</a>
-            </li>
-            <li class="@(page == MenuItem.NumberOfCompletedInterviews ? "active" : "")">
-                <a href="@Url.Action("QuantityBySupervisors", "PeriodicStatusReport", new {area = ""})">@MainMenu.Quantity</a>
-            </li>
-            <li class="@(page == MenuItem.SpeedOfCompletingInterviews ? "active" : "")">
-                <a href="@Url.Action("SpeedBySupervisors", "PeriodicStatusReport", new { area = "" })">@MainMenu.Speed</a>
-            </li>
+            @Html.MainMenuItem("SurveysAndStatuses", "HQ", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
+            @Html.MainMenuItem("SupervisorsAndStatuses", "HQ", @MainMenu.TeamsAndStatuses, MenuItem.Summary)
+            @Html.MainMenuItem("MapReport", "HQ", @MainMenu.MapReport, MenuItem.MapReport)
+            @Html.MainMenuItem("InterviewsChart", "HQ", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)
+            @Html.MainMenuItem("QuantityBySupervisors", "PeriodicStatusReport", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
+            @Html.MainMenuItem("SpeedBySupervisors", "PeriodicStatusReport", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
         </ul>
     </li>
-    <li class="@(page == MenuItem.Docs ? "active" : "")">
-        <a href="@Url.Action("Interviews", "HQ", new {area = ""})">
-            <i class="glyphicon glyphicon-list-alt"></i>
-            @MainMenu.Interviews
-        </a>
-    </li>
+    @Html.MainMenuItem("Interviews", "HQ", @MainMenu.Interviews, MenuItem.Docs)
 
     <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters || page == MenuItem.Interviewers ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="glyphicon glyphicon-user"></i> @MainMenu.TeamsAndRoles <b class="caret"></b>
+            @MainMenu.TeamsAndRoles <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            <li class="@(page == MenuItem.Teams ? "active" : "")">
-                <a href="@Url.Action("Index", "Supervisor", new {area = string.Empty})">
-                     @MainMenu.Supervisors
-                </a>
-            </li>
-            <li class="@(page == MenuItem.Headquarters ? "active" : "")">
-                <a href="@Url.Action("Index", "Headquarters", new {area = string.Empty})">
-                    @MainMenu.Headquarters
-                </a>
-            </li>
-            <li class="@(page == MenuItem.Interviewers ? "active" : "")">
-                <a href="@Url.Action("Index", "Interviewers", new {area = string.Empty})">
-                    @MainMenu.Interviewers
-                </a>
-            </li>
-            <li class="@(page == MenuItem.Observers ? "active" : "")">
-                <a href="@Url.Action("Index", "Observer", new {area = string.Empty})">
-                    @MainMenu.Observers
-                </a>
-            </li>
-            <li class="@(page == MenuItem.ApiUsers ? "active" : "")">
-                <a href="@Url.Action("Index", "ApiUser", new {area = string.Empty})">
-                    @MainMenu.ApiUsers
-                </a>
-            </li>
-            <li class="@(page == MenuItem.UserBatchUpload ? "active" : "")">
-                <a href="@Url.Action("UserBatchUploads", "BatchUserUpload", new { area = string.Empty })">
-                    @MainMenu.UserBatchUpload
-                </a>
-            </li>
+            @Html.MainMenuItem("Index", "Supervisor", @MainMenu.Supervisors, MenuItem.Teams)
+            @Html.MainMenuItem("Index", "Headquarters", @MainMenu.Headquarters, MenuItem.Headquarters)
+            @Html.MainMenuItem("Index", "Interviewers", @MainMenu.Interviewers, MenuItem.Interviewers)
+            @Html.MainMenuItem("Index", "Observer", @MainMenu.Observers, MenuItem.Observers)
+            @Html.MainMenuItem("Index", "ApiUser", @MainMenu.ApiUsers, MenuItem.ApiUsers)
+            @Html.MainMenuItem("UserBatchUploads", "BatchUserUpload", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
+        </ul>
+    </li>
+    @Html.MainMenuItem("Index", "HQ", @MainMenu.Questionnaires, MenuItem.Questionnaires)
+    @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
+</ul>
+<ul class="nav navbar-nav navbar-right" role="menu">
+    <li class="active glow-animate" style="display: none" id="IncomingPackagesQueueIndicator">
+        <a href="javascript:void(0);" title="@MainMenu.QueueSizeTitle">
+            <i class="glyphicon glyphicon-cloud-upload"></i>
+            <span class="sync-queue-size">-</span>
+        </a>
+    </li>
+    <li><a href="http://docs.mysurvey.solutions/headquarters.pdf" target="_blank" title="Help">@MainMenu.Help</a></li>
+    <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+            @User.Identity.Name <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
+            @Html.MainMenuItem("Manage", "Account", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
+            <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
         </ul>
     </li>
 
-    <li class="@(page == MenuItem.Questionnaires ? "active" : "")">
-        <a href="@Url.Action("Index", "HQ", new {area = ""})"><i class="glyphicon glyphicon-list-alt">
-        </i> @MainMenu.Questionnaires</a>
-    </li>
-    <li class="@(page == MenuItem.DataExport ? "active" : "")">
-        <a href="@Url.Action("Index", "DataExport", new {area = ""})">
-            <i class="glyphicon glyphicon-download">
-            </i> @MainMenu.DataExport
-        </a>
-    </li>
+    @Html.Partial("LimitsIndicator")
 </ul>
-        <ul class="nav navbar-nav navbar-right" role="menu">
-            <li class="active glow-animate" style="display: none" id="IncomingPackagesQueueIndicator">
-                <a href="javascript:void(0);" title="@MainMenu.QueueSizeTitle">
-                    <i class="glyphicon glyphicon-cloud-upload"></i>
-                    <span class="sync-queue-size">-</span>
-                </a>
-            </li>
-            <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
-                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><strong>@User.Identity.Name</strong> <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li>@Html.ActionLink(Common.Settings, "Index", "Settings", new { area = string.Empty }, null)</li>
-                    <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new {area = string.Empty}, null)</li>
-                    <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
-                </ul>
-            </li>
-            <li>
-                <a href="http://docs.mysurvey.solutions/headquarters.pdf" target="_blank">
-                    <i class="glyphicon glyphicon-question-sign"></i>
-                </a>
-            </li>
-            @Html.Partial("LimitsIndicator")
-        </ul>
