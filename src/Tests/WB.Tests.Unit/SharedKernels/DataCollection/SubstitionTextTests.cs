@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -26,41 +29,40 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             var questionnireDocument = Create.Entity.QuestionnaireDocument(questionnireId, new IComposite[]
             {
-                Create.Entity.Roster(rosterId1, variable: "r1", fixedRosterTitles: new FixedRosterTitle[]
-                {
-                    new FixedRosterTitle(1, "title 1"), 
-                    new FixedRosterTitle(2, "title 2"), 
-                }, 
-                children: new IComposite[]
+                Create.Entity.Roster(rosterId1, variable: "r1", children: new IComposite[]
                     {
-                        Create.Entity.Roster(rosterId2, variable: "r2", fixedRosterTitles: new FixedRosterTitle[]
-                        {
-                            new FixedRosterTitle(1, "title 1.1"),
-                            new FixedRosterTitle(2, "title 2.1"),
-                        },
-                        children: new IComposite[]
+                        Create.Entity.Roster(rosterId2, variable: "r2", children: new IComposite[]
                             {
-                                Create.Entity.NumericQuestion(questionId, variableName: "n1", title: "title %r1% %r2%")
+                                Create.Entity.NumericQuestion(questionId, variableName: "n1")
                             })
                     })
             });
             var questionnire = Create.Entity.PlainQuestionnaire(questionnireDocument);
 
-            var tree = Create.Entity.InterviewTree(interviewId, 
-                Create.Entity.InterviewTreeSection(sectionIdentity, 
-                    Create.Entity.InterviewTreeRoster()) )
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(sectionIdentity, children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(rosterId1, new decimal[] { 2 }), rosterTitle: "title 2", children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeRoster(Create.Entity.Identity(rosterId2, new decimal[] { 2, 1}), rosterTitle: "title 2.1", children: new IInterviewTreeNode[]
+                    {
+                        Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId), questionType: QuestionType.Numeric, answer: 5),
+                    }),
+                }),
+            });
+            var tree = Create.Entity.InterviewTree(interviewId, sourceTreeMainSection);
+
 
             var substitionTextFactory = Create.Service.SubstitionTextFactory();
-            var questionIdentity = Create.Entity.Identity(questionId, new RosterVector(new decimal[] {1, 1}));
-            var substitionText = substitionTextFactory.CreateText(questionIdentity, "title %r1% %r2%", questionnire);
-            substitionText.SetTree();
+            var questionIdentity = Create.Entity.Identity(questionId, new RosterVector(new decimal[] {2, 1}));
+            var substitionText = substitionTextFactory.CreateText(questionIdentity, "title: %r1% %r2%", questionnire);
+            substitionText.SetTree(tree);
 
             //act
             substitionText.ReplaceSubstitutions();
 
             //assert
             Assert.That(substitionText.HasSubstitutions, Is.True);
-            Assert.That(substitionText.Text, Is.EqualTo(null));
+            Assert.That(substitionText.Text, Is.EqualTo("title: title 2 title 2.1"));
         }
     }
 }
