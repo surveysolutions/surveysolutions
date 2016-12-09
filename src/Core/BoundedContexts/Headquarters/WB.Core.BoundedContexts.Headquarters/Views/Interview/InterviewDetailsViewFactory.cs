@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -105,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .ToList();
             var questionViews = interviewEntityViews.OfType<InterviewQuestionView>().ToList();
 
-            this.FilterCategoricalQuestionOptions(interviewId, questionViews);
+            this.FilterCategoricalQuestionOptions(interviewId, questionnaire, questionViews);
 
             var detailsStatisticView = new DetailsStatisticView
             {
@@ -166,9 +168,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             };
         }
 
-        private void FilterCategoricalQuestionOptions(Guid interviewId, List<InterviewQuestionView> questionViews)
+        private void FilterCategoricalQuestionOptions(Guid interviewId, QuestionnaireDocument questionnaire, List<InterviewQuestionView> questionViews)
         {
             var interviewAggregate = (Interview) this.eventSourcedRepository.GetLatest(typeof(Interview), interviewId);
+
+            var linkedQuestions = questionViews.Where(x => x.LinkedToQuestionId.HasValue || x.LinkedToRosterId.HasValue).ToList();
+            this.UpdateOptionsForLinkedQuestions(interviewAggregate, questionnaire, linkedQuestions);
 
             foreach (var categoricalQuestion in questionViews.Where(x => x.IsFilteredCategorical))
             {
@@ -184,6 +189,51 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     .ToList();
             }
         }
+
+        private void UpdateOptionsForLinkedQuestions(Interview interview, QuestionnaireDocument questionnaire, List<InterviewQuestionView> questionViews)
+        {
+            this.UpdateOptionsForLinkedMultiQuestions(interview, questionnaire, questionViews.Where(x=>x.QuestionType == QuestionType.MultyOption).ToList());
+            this.UpdateOptionsForLinkedSingleQuestions(interview, questionnaire, questionViews.Where(x => x.QuestionType == QuestionType.SingleOption).ToList());
+        }
+
+        private void UpdateOptionsForLinkedSingleQuestions(Interview interview, QuestionnaireDocument questionnaire, List<InterviewQuestionView> singleOptionQuestions)
+        {
+            foreach (var singleOptionQuestionView in singleOptionQuestions)
+            {
+                if(questionnaire.Find<IQuestion>(singleOptionQuestionView.Id).QuestionType == QuestionType.TextList) continue;
+                
+                var linkedQuestionIdentity = Identity.Create(singleOptionQuestionView.Id, singleOptionQuestionView.RosterVector);
+                
+                var singleLinkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(linkedQuestionIdentity);
+
+                singleOptionQuestionView.Options =
+                    singleLinkedToRosterQuestion?.Options?.Select(x => new QuestionOptionView
+                        {
+                            Value = x.Coordinates.ToArray(),
+                            Label = interview.GetLinkedOptionTitle(linkedQuestionIdentity, x)
+                        })?.ToList() ?? Enumerable.Empty<QuestionOptionView>().ToList();
+            }
+        }
+
+        private void UpdateOptionsForLinkedMultiQuestions(Interview interview, QuestionnaireDocument questionnaire, List<InterviewQuestionView> multiOptionsQuestions)
+        {
+            foreach (var multiOptionQuestionView in multiOptionsQuestions)
+            {
+                if (questionnaire.Find<IQuestion>(multiOptionQuestionView.Id).QuestionType == QuestionType.TextList) continue;
+
+                var linkedQuestionIdentity = Identity.Create(multiOptionQuestionView.Id, multiOptionQuestionView.RosterVector);
+
+                var multiLinkedToRosterQuestion = interview.GetLinkedMultiOptionQuestion(linkedQuestionIdentity);
+
+                multiOptionQuestionView.Options =
+                    multiLinkedToRosterQuestion?.Options?.Select(x => new QuestionOptionView
+                    {
+                        Value = x.Coordinates.ToArray(),
+                        Label = interview.GetLinkedOptionTitle(linkedQuestionIdentity, x)
+                    })?.ToList() ?? Enumerable.Empty<QuestionOptionView>().ToList();
+            }
+        }
+
 
         public Guid? GetFirstChapterId(Guid interviewId)
         {
