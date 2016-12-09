@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     public class SubstitionTextTests
     {
         [Test]
-        public void When_Compare_and_changed_tree_has_2_nodes_which_dont_have_source_tree_Then_should_return_2_diff_nodes()
+        public void When_ReplaceSubstitutions_for_element_with_referancec_on_parent_rosters_Then_should_return_text_with_roster_titles()
         {
             //arrange
             var questionnireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
