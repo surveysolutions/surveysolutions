@@ -856,6 +856,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use camera in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings to allow application to use camera..
+        /// </summary>
+        public static string MissingPermissions_Camera {
+            get {
+                return ResourceManager.GetString("MissingPermissions_Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
