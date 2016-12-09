@@ -103,6 +103,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             questionView.IsEnabled = (question.QuestionScope == QuestionScope.Supervisor) || (answeredQuestion == null) && !isParentGroupDisabled;
             questionView.IsReadOnly = !(question.QuestionScope == QuestionScope.Supervisor && interviewStatus < InterviewStatus.ApprovedByHeadquarters);
             questionView.Scope = question.QuestionScope;
+            questionView.LinkedToQuestionId = question.LinkedToQuestionId;
+            questionView.LinkedToRosterId = question.LinkedToRosterId;
 
             var categoricalTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
             questionView.IsFilteredCategorical =

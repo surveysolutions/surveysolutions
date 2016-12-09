@@ -587,6 +587,46 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return linkedQuestion.RosterVector.Shrink(targetRosterLevel);
         }
 
+        public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedOption;
+        public InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedOption;
+
+        public string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option)
+        {
+            var linkedQuestion = this.Tree.GetQuestion(linkedQuestionIdentity);
+            if (!linkedQuestion.IsLinked) return string.Empty;
+
+            Identity sourceIdentity = Identity.Create(linkedQuestion.AsLinked.LinkedSourceId, option);
+
+            IInterviewTreeNode sourceNode = this.Tree.GetNodeByIdentity(sourceIdentity);
+
+            string optionTitle = string.Empty;
+            var skipBreadcrumsThreshold = 1;
+            if (sourceNode is InterviewTreeRoster)
+            {
+                var sourceRoster = sourceNode as InterviewTreeRoster;
+                optionTitle = sourceRoster.RosterTitle;
+                skipBreadcrumsThreshold = 0;
+            }
+            if (sourceNode is InterviewTreeQuestion)
+            {
+                var sourceQuestion = sourceNode as InterviewTreeQuestion;
+                optionTitle = sourceQuestion.GetAnswerAsString();
+            }
+
+            var sourceBreadcrumbsOfRosterTitles = sourceNode.Parents.OfType<InterviewTreeRoster>().ToArray();
+            var linkedBreadcrumbsOfRosterTitles = linkedQuestion.Parents.OfType<InterviewTreeRoster>().ToArray();
+
+            var common = sourceBreadcrumbsOfRosterTitles.Zip(linkedBreadcrumbsOfRosterTitles, (x, y) => x.RosterSizeId.Equals(y.RosterSizeId) ? x : null).TakeWhile(x => x != null).Count();
+
+            string[] breadcrumbsOfRosterTitles = sourceBreadcrumbsOfRosterTitles.Skip(common).Select(x => x.RosterTitle).ToArray();
+
+            var breadcrumbs = string.Join(": ", breadcrumbsOfRosterTitles);
+
+            return breadcrumbsOfRosterTitles.Length > skipBreadcrumsThreshold
+                ? $"{breadcrumbs}: {optionTitle}"
+                : optionTitle;
+        }
+
         protected bool HasInvalidAnswers()
             => this.Tree.FindQuestions().Any(question => !question.IsValid && !question.IsDisabled());
 
@@ -608,11 +648,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var structuralChanges = expressionProcessorState.GetStructuralChanges();
             this.UpdateTreeWithStructuralChanges(changedInterviewTree, structuralChanges);
-
-            var allChangedQuestions = changedQuestions.Concat(
-                structuralChanges.ChangedMultiQuestions.Keys).Concat(
-                structuralChanges.ChangedSingleQuestions.Keys).Concat(
-                structuralChanges.ChangedYesNoQuestions.Keys).ToList();
 
             this.UpdateRosterTitles(changedInterviewTree, questionnaire);
 
@@ -679,7 +714,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState)
+        protected void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState, bool removeAnswersIfOptionsSetChanged = true)
         {
             var expressionStateSupportLinkedOptionsCalculation = interviewExpressionState.AreLinkedQuestionsSupported();
             if (expressionStateSupportLinkedOptionsCalculation)
@@ -689,7 +724,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
                 {
                     var linkedQuestion = tree.GetQuestion(linkedQuestionWithOptions.Key);
-                    linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value);
+                    linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value, removeAnswersIfOptionsSetChanged);
                 }
 
                 // backward compatibility with old assemblies
