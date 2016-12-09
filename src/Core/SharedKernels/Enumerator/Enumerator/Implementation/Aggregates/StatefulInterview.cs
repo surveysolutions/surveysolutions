@@ -334,7 +334,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public int CountActiveAnsweredQuestionsInInterview()
             => this.Tree.FindQuestions().Count(question => !question.IsDisabled() 
                     && question.IsAnswered()
-                    && !question.IsPrefilled && question.IsInterviewer);
+                    && (!question.IsPrefilled || (question.IsPrefilled && CreatedOnClient))
+                    && question.IsInterviewer);
 
         public int CountActiveQuestionsInInterview()
             => this.Tree.FindQuestions().Count(question => !question.IsDisabled() && !question.IsPrefilled && question.IsInterviewer);
@@ -351,8 +352,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private IEnumerable<Identity> GetEnabledInvalidQuestions()
             => this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled() && !question.IsValid
-                    && !question.IsPrefilled && question.IsInterviewer)
+                .Where(question => !question.IsDisabled() 
+                                && !question.IsValid
+                                && (!question.IsPrefilled || (question.IsPrefilled && CreatedOnClient))
+                                && question.IsInterviewer)
                 .Select(question => question.Identity);
 
         public int CountEnabledQuestions(Identity group)
