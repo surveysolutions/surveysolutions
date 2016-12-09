@@ -34,7 +34,7 @@ input.checkbox-filter{
   	& ~ label .tick {
 	    @extend %tick;
 	    @include absolute(0, null, null, 0);
-	    height: 25px;
+	    height: 20px;
 	    background: transparent url("../img/chekboxes.png") no-repeat;
 	    background-size: 68px 350px;
 	    background-position: 0 0;
@@ -78,13 +78,16 @@ input.checkbox-filter{
 			}
 		}
 		.form-group{
-			margin-bottom: 5px;
+			margin-bottom: 10px;
 			label{
 				font-size: 14px;
 			    line-height: 20px;
 			    font-family: inherit;
 			    font-weight: normal;
 			    margin: 0;
+			}
+			&:last-of-type{
+				margin-bottom: 0;
 			}
 		}
 		.form-date{

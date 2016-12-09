@@ -8,19 +8,30 @@ $grid-gutter-width:         30px;
 $container-tablet:             (768px + $grid-gutter-width);
 $container-desktop:            (960px + $grid-gutter-width);
 $container-large-desktop:      (960px + $grid-gutter-width);
+
 $blue: #2a81cb;
+$light-blue: #5fd3c6;
+$blue-super-light: #eff4f8;
+
 $gray_form: #dbdfe2;
 $gray_text: #3f3f3f;
 $gray_light: #a6a8a9;
 $gray_info: #3c4143;
-$gray-super-light: #efefef;
+$gray-super-light: #ececec;
 $gray-highlighting: #f3f3f3;
+$gray-highlight-font: #6b6b6b;
+
 $white: #fff;
+
 $green_btn: #2fc507;
 $green: #3ca21a;
+$green-light: #22c015;
+$green-progress: #cbe1cc;
+
 $red_error: #e74924;
 $red: #ed2c39;
-$green-progress: #cbe1cc;
+$red-super-light: #f6d6d0;
+
 $pink: #ed45aa;
-$light-blue: #5fd3c6;
+
 $icon-font-path: '../vendor/bootstrap-sass/assets/fonts/bootstrap/';

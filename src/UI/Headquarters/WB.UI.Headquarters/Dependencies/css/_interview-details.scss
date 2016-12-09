@@ -1,0 +1,645 @@
+.filters-container {
+	.separate-filters-group{
+		@include gradient($gray_form, $gray_form, null, null);
+		background-size: 65px 1px;
+		background-position: 0 100%; 
+		padding: 15px 0;
+		margin-bottom: 0;
+	}
+	.flagged-questions{
+		padding-top: 0;
+		font-size: 14px;
+		line-height: 24px;
+	}
+	.reset-filters{
+		@extend .flagged-questions;
+		margin: 15px 5px;
+		a{
+  			color: $gray_text;
+		}
+	}
+}
+.flag{
+  	color: $gray_form;
+  	display: block;
+  	padding-left: 35px;
+  	position: relative;
+  	&:before{
+  		@extend %flag;
+  	}
+	&.flagged{
+		color: $gray-text;
+		&:before{
+            background-position: 1px 0;
+        }
+	}
+	&:hover, &:focus{
+		color: $gray_light;
+		text-decoration: none;
+		&:before{
+			background-position: -56px 0;
+		}
+	}
+	&.flagged:hover, &.flagged:focus{
+		color: $gray-text;
+		text-decoration: none;
+		&:before{
+			background-position: -18px 0;
+		}
+	}	
+}
+.btn-input .dropdown-menu > li > a.flagged{
+	padding-left: 35px;
+	&:before{
+		top: 5px;
+		left: 7px;
+	}
+}
+.quotes{
+	color: $gray_text;
+}
+.pink-text{
+	color: $pink;
+}
+.light-blue-text{
+	color: $light-blue;
+}
+label.inactive{
+	color: $gray_light;
+}
+.preset-filters-container {
+	.block-filter{
+		margin-bottom: 20px;
+		.form-group label{
+		font-size: 14px;
+		line-height: 20px;
+		font-weight: normal;
+		margin: 0;
+		}
+		.dropdown-menu li a{
+			margin: 0;
+		}
+	}	
+}
+html body .details-interview{
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-right: 0;
+	article{
+		margin-left: 285px;
+	}
+}
+.content{
+	@extend %aside;
+	border-right: 3px solid $gray-super-light;
+	left: 372px;
+	width: 570px;
+	padding-bottom: 40px;
+	@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
+	.questionnaire-content{
+		padding: 25px 0 5px 30px;
+		border-bottom: 3px solid $gray-super-light;
+		.breadcrumb{
+			margin-bottom: 5px;
+		}
+		div{
+			overflow: hidden;
+			h2{
+				margin: 0 20px 10px 0;
+				line-height: 36px;
+				float: left;
+			}
+			button{
+				float: right;
+				padding-bottom: 10px;
+				padding-top: 10px;
+				margin-right: 10px;
+				&.btn.approve{
+					@include button-variant(#fff, $green, $green);
+				}
+				&.btn-danger{
+					border-width: 3px;
+					border-color: $red;
+					background-color: transparent;
+					color: $red;
+					padding-top: 9px;
+					padding-bottom: 9px;
+					&:focus,
+					&.focus,
+					&:hover {
+					    color: darken($red, 10%);
+					    border-color: darken($red, 10%);
+					}
+				}
+			}
+		}
+	}
+	.panel-group{
+		margin: 0;
+		.panel + .panel{
+			margin-top: -1px;
+		}
+	}
+	.panel-default{
+		background-color: transparent;
+		margin: 0 0 -1px;
+		border-radius: 0;
+		border-left: none;
+		border-right: none;
+		box-shadow: none;
+		padding: 0;
+		@include accordion(30px);
+		&:first-of-type{
+			border-top: none;
+		}
+		& > .panel-heading{
+			background-color: transparent;
+			border: none;
+			padding: 0;
+			h3{
+				@include transition(all, 0.3s);
+				&.group a{
+					padding-left: 0;
+					&:before, &:after{
+						display: none;
+					}
+				}
+				a{
+					display: block;
+					font-size: 16px/18px "RobotoMedium";
+					font-weight: normal;
+					color: $blue;
+					padding: 15px 40px 15px 30px;
+					position: relative;
+
+					&:hover, &:focus{
+						text-decoration: none;
+					}
+					&:before, &:after{
+						@include absolute(23px, null, null, 0);
+						content: "";
+						width: 12px;
+						height: 2px;
+						display: block;
+						background-color: $blue;
+					}
+					&:after{
+						@include rotate(0);
+						@include transition(all, 0.3s);
+					}
+					&.collapsed:after{
+						@include rotate(270deg);
+						@include transition(all, 0.3s);
+					}
+				}
+				&.contains-error a{
+					color: $red;
+					&:before, &:after{
+						background-color: $red;
+					}
+				}
+				&.complete a{
+					color: $green;
+					&:before, &:after{
+						background-color: $green;
+					}
+				}
+			} 
+			.active, &:hover, &:focus{ 
+				background-color: darken($gray-highlighting, 5%);
+			}			
+		} 
+		.in{
+			background-color: $gray-highlighting;
+		}
+	}
+	.panel-body{
+		padding: 0;
+		.panel-group{
+			margin-bottom: -1px;
+		}
+	}
+}
+.questionnaire{
+	margin-left: 855px;
+	.unit-title{
+		position: relative;
+		z-index: 2;
+		background-color: $blue;
+		padding: 15px 20px 10px 80px;
+		color: $white;
+		@include box-shadow(0 3px 5px 0px rgba(0, 0, 0, 0.3));
+		.breadcrumb {
+			margin-bottom: 10px;
+			li a{
+					color: rgba(255, 255, 255, 0.5);
+					font: 10px/12px "TrebuchetMS";
+			}
+		}
+		h3{
+			font: 16px/18px "RobotoMedium";
+		}
+	}
+	.contains-error .unit-title{
+		background-color: $red_error;
+	}
+	.filled .unit-title{
+		background-color: $green;
+	}
+}
+.question{
+	position: relative;
+	padding: 18px 20px 15px 70px;
+	border-bottom: 1px solid $gray-form;
+	&.with-flag{
+		display: block;
+		@include gradient($gray-super-light, $gray-super-light, null, null);
+		background-size: 12px 100%;
+		.question-editor h5 .button-flag{
+			@extend .flagged;
+		}
+	}
+	.dropdown{
+		@include absolute(10px, 10px, null, null);
+		@include size(25px, 45px);
+		button{
+			@extend %clean-btn;
+			display: block;
+			position: relative;
+			@include square(100%);
+			span{
+				@include absolute(20px, 10px, null, null);
+				display: block;
+				@include square(5px);
+				border-radius: 100%;
+				background-color: $gray-form;
+				@include transition(all, 0.3s);
+				&:first-of-type{
+					top: 13px;
+				}
+				&:last-of-type{
+					top: 27px;
+				}
+			}
+			&:hover, &:focus, &:active{
+				outline: none;
+				span{
+					background-color: $gray_light;
+				}
+			}
+		}
+		&.open button{
+			span{
+				display: none;
+				right: 10px;
+				top: 20px;
+				border-radius: 0;
+				@include size(20px, 2px);
+				&:first-of-type{
+					display: block;
+					@include rotate(45deg);
+				}
+				&:last-of-type{
+					display: block;
+					@include rotate(-45deg);
+				}
+			}
+		}
+		.dropdown-menu{
+			left: auto;
+			right: 35px;
+			top: 10px;
+			@include opacity(0);
+			@include transform-origin(top);
+			@include animation-fill-mode(forwards);
+			@include scale(1, 0);
+			@include transition(all, 0.2s, linear);
+			display: block;
+		}
+		&.open > .dropdown-menu {
+		  	@include scale(1, 1);
+		  	@include opacity(1);
+		}
+	}
+	.information-block{
+		padding: 0 10px;
+		
+		color: $gray_light;
+		h6{
+			margin-top: 20px;
+			font: 10px/12px "TrebuchetMSBold";
+			letter-spacing: 0.5px;
+	    	text-transform: uppercase;
+	    	display: block;
+		}
+		p{
+			width: 90%;
+			font-size: 12px;
+			line-height: 14px;
+			font-weight: bold;
+			font-style: italic;
+			p:last-of-type{
+				margin-bottom: 10px;
+			}
+		}
+		&.comment {
+			display: none;
+			&.active{
+				display: block;
+			}
+			.form-inline{
+				.form-control{
+					@extend %form;
+					height: 40px;
+					width: 365px;
+					z-index: 0;
+					color: $gray_light;
+				}
+				button{
+					color: $white;
+					padding: 12px;
+					background-color: darken($gray_form, 10%);
+					border: none;
+					&:hover, &:focus{
+						outline: none;
+						border: none;
+						background-color: darken($gray_form, 20%);
+					}
+				}
+			}
+		}
+		&.enumerators{
+			color: $pink;
+		}
+		&.instruction{
+			color: $blue;
+		}
+		&.errors{
+			color: $red_error;
+		}
+	}
+}
+.question.disabled{
+	background: repeating-linear-gradient(-45deg, $gray-form, $gray-form 2px, white 2px, white 6px);
+	h5{
+		color: $gray_light;
+		.button-flag{
+			z-index: 0;
+		}
+	}
+	.question-unit, .instructions, .enumerators-comment{
+		display: none;
+	}
+}
+.question-editor{
+	max-width: 445px;
+	h5{
+		padding-left: 10px;
+		margin: 0 0 10px;
+
+		position: relative;
+		.button-flag{
+			@extend %clean-btn;
+			@extend %flag;
+			left: -30px;
+			&:hover, &:focus{
+					background-position: -56px 0;
+					outline: none;
+			}
+			&.flagged, &:active{
+            	background-position: 1px 0;
+            	outline: none;
+            	&:hover, &:focus{
+            		background-position: -18px 0;
+            	}
+			}
+		}
+		&:before{left: -25px;}
+	}
+	&.answered .question-unit{
+		.options-group{
+			background-color: transparent;
+		}
+	}
+	&.contains-error .question-unit .options-group{
+		background-color: $red-super-light;
+		.form-group{
+			border-color: $red-super-light;
+		}
+	}
+	.question-unit{
+		.options-group{
+			padding: 10px;
+			border-radius: 7px;
+			margin-bottom: 0px;
+			background-color: #eeeff0;
+			.radio, .form-group, .form-input{
+				padding: 0;
+				margin: 0 0 5px;
+				max-width: 425px;
+				@extend %form;
+				&:last-of-type{
+					margin-bottom: 0;
+				}
+				label{
+					display: block;
+					font-size: 14px;
+					line-height: 18px;
+					padding: 11px 15px;
+					margin: 0;
+				}
+			}
+			.form-group{
+				label {
+					.tick{
+						position: relative;
+					}
+				}
+			}
+			.field{
+				position: relative;
+				.field-to-fill{
+					width: 100%;
+					padding: 11px 15px;
+					border: none;
+					font-size: 14px;
+					line-height: 18px;
+					font-weight: bold;
+					padding-right: 30px;
+					border-radius: 5px;
+				}
+				.btn.cancel{
+					@include cancel(10px, -2px, -5px);
+					@include transition(all, 0.2s);
+					@extend %visibility-hidden;
+				}	
+				.dropdown-toggle {
+					@extend .field-to-fill;
+					padding: 11px 15px;
+					span{
+						position: static;
+					}
+					&:hover, &:focus, &:active {
+						z-index: 0;
+					}
+				}
+				.dropdown-menu{
+					z-index: 1;
+					max-width: 425px;
+					width: 420px;
+					padding:  5px 10px;
+					li{
+						border-bottom: 1px solid $gray_form;
+						&:last-child{
+							border: none;
+						}
+					}
+				}
+			}
+			.action-btn-holder{
+				.action-btn{
+					padding: 12px 15px;
+					font-size: 14px;
+					line-height: 16px;
+					background-color: $white;
+					border-color: transparent;
+					color: $gray_light;
+					font-style: italic;
+					border-radius: 5px;
+					outline: none;
+					&:hover, &:focus, &:active{
+						background-color: $gray-super-light;
+						border-color: darken($gray_light, 10%);
+						color: darken($gray_light, 20%);
+					}
+				}
+			}
+		}
+	}
+	.question-unit .options-group .field{
+		&.answered, &.contains-error{
+		 .btn.cancel{
+				@extend %visibility-visible;
+			}
+		}
+		input:checked ~ .btn.cancel{
+			@extend %visibility-visible;
+		}
+	}  
+}
+.question-editor .question-unit .options-group .field 
+.gray-text{
+	color: $gray_light;
+	font-weight: normal;
+	font-style: italic;
+}
+.ordered-question{
+	.form-group{
+		position: relative;
+		input.wb-checkbox:checked ~ label .index-number{
+			display: block;
+		}
+	}
+}
+.yes-no-question.ordered{
+	.radio{
+		position: relative;
+		input.wb-radio:first-of-type{
+			&:checked ~ .index-number{
+				display: block;
+			}
+		}
+	}
+}
+
+.index-number{
+	display: none;
+	@include absolute(0, null, null, -40px);
+	line-height: 42px;
+	text-align: right;
+	width: 25px;
+	color: $blue !important;
+}
+.yes-no-question .question-unit {
+	.yes-no-mark{
+		color: $blue;
+		margin: 15px 0 0 17px;
+		span{
+			color: $gray_light;
+			font-size: 18px;
+			line-height: 20px;
+			padding: 0 5px;
+		}
+	}
+	.options-group .radio{
+		label{
+			padding-left: 0;
+			padding-right: 5px;
+			display: inline-block;
+			&:first-of-type{
+				padding-left: 15px;
+			}
+		}
+		span{
+			color: $gray_light;
+			font-weight: normal;
+			padding: 11px 0;
+			font-size: 14px;
+			line-height: 18px;
+			margin: 0;
+			&:first-of-type{
+				font-size: 18px;
+				line-height: 20px;
+				padding: 10px 0;
+			}
+		}
+		input.wb-radio:checked ~ span{
+		    color:  $gray_text;
+		    font-weight: bold;
+		    &:first-of-type{
+				color: $gray_light;
+			    font-weight: normal;
+		    }
+		}
+	}
+}
+@include placeholder {
+    font-weight: normal !important;
+    font-style: italic;
+}
+.gps-question{
+	&.answered, &.contains-error{
+		@extend %action-btn;
+		#map {
+	        height: 200px;
+	        width: 385px;
+	        margin-bottom: 10px;
+	    }
+	}
+}
+.multimedia-question{
+	&.answered, &.contains-error{
+		@extend %action-btn;
+		.custom-photo-wrapper{
+			margin-bottom: 10px;
+		}	
+	}
+	.custom-photo-wrapper{
+		@include size(385px, 200px);
+		overflow: hidden;
+		img{
+			@include img-responsive();
+		}
+	}
+}
+.qr-question, .current-time-question{
+		&.answered, &.contains-error{
+		@extend %action-btn;
+		.block-with-data{
+			font-size: 12px;
+			line-height: 14px;
+			margin-bottom: 10px;
+		}
+	}
+}
+

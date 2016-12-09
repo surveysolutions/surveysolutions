@@ -1,32 +1,5 @@
 @import "two-column-form";
 @import "add-interviews";
-.radio{
-    input.wb-radio{
-        display: none;
-        & ~ label .tick {
-            @extend %tick;
-            background-position: -215px 0;
-        } 
-        &:checked ~ label{
-            color:  $gray_text;
-            font-weight: bold;
-            .tick {
-                background-position: -245px 0;
-            }
-        } 
-        &:disabled ~ label .tick {
-            background-position: -215px 0;
-        } 
-        &:checked:disabled ~ label .tick {
-            background-position: -215px 0;
-        } 
-    }
-    label{
-        padding: 0;
-        color: $gray_light;
-        font-weight: normal;
-    }
-}
 
 main{
     .page-header{
@@ -109,3 +82,383 @@ main{
 .radio{
     margin: 0;
 }
+.import-wrapper{
+    padding-right: 35px;
+    padding-left: 68px;
+}
+.table-title{
+    float: left;
+    margin-left: 15px;
+    width: 60%;
+    h2{
+        margin-bottom: 30px;
+        font-size: 28px;
+        line-height: 30px;
+    }
+    .breadcrumb{
+        margin-bottom: 5px;
+    }
+}
+.signed-name{
+    width: 35%;
+    font-size: 13px;
+    line-height: 15px;
+    margin: 30px 15px 0 0; 
+    float: right;
+    text-align: right;
+    span{
+        @extend %uppercase-font;
+        color: $blue;
+    }
+    a{
+        color: $gray_light;
+        text-decoration: underline;
+        &:hover, &:focus{
+            text-decoration: none;
+        }
+    }
+}
+.import-interview{
+    tr{
+        @include transition(all, 0.1s);
+        height: 35px;
+        td, th{
+            width: 10%;  
+        }
+        .size{
+            width: 6%;
+        }
+    }
+    thead{
+        @extend %uppercase-font;
+        color: $gray_light;
+        tr th{
+            padding-right: 0;
+            font-weight: normal;
+            position: relative;
+            cursor: pointer;
+            &:after{
+                display: inline-block;
+                content: "";
+                position: relative;
+                right: -8px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid $gray_form;
+                border-right: 6px solid transparent;
+                border-left: 6px solid transparent;
+            }
+            &.sorting_asc{
+                color: $blue;
+                &:after{
+                    border-top-color: $blue;
+                }
+            }
+            &.sorting_desc{
+                color: $blue;
+                &:after{
+                    border-top: none;
+                    border-bottom: 10px solid $blue;
+                }
+            }
+        }
+        th:first-child{
+            width: 44%;
+            padding-left: 50px;
+            @include transition(all, 0.2s);
+        }
+    }
+    tbody{
+        font: 13px/15px Georgia, Times, "Times New Roman", serif;
+        font-style: italic;
+        border-bottom: 2px solid #ddd;
+        tr{
+            border-bottom: 1px solid #ddd;
+            &:hover, &:focus{
+                background-color: $blue-super-light;
+                td {
+                    &:first-child a{
+                        color: #000;
+                    }
+                    &.shared-with{
+                        color: $gray_text;
+                    }
+                    span{
+                        color: $gray_text;
+                    }
+                }
+                .parameters span{
+                    color: $gray_light;
+                }
+            }
+            td{
+                border: none;
+                height: 35px;
+                &.shared-with{
+                    color: $gray_form;
+                    &>span{
+                        color: $gray_text;
+                        span{
+                            color: $gray_light;
+                        }
+                    }
+                }
+                span{
+                    color: $gray_light;
+                }
+                &:first-child{
+                    width: 44%; 
+                    padding-left: 20px;
+                    font: 18px/20px "RobotoRegular";
+                    font-style: normal;
+                    
+                    a{
+                        text-overflow: ellipsis;
+                        color: $gray_text;
+                        &:hover, &:focus{
+                            color: $blue;
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+        }
+        .current-user,  .changed-recently{
+            color: $green-light;
+        }
+        .parameters{
+            font-style: normal;
+            font-family: "TrebuchetMSBold";
+            color: $gray-highlight-font;
+            span{
+                @extend %gray-uppercase;
+                text-transform: none; 
+            }
+        }  
+    }
+}
+#DataTables_Table_0_wrapper{
+    position: relative;
+    #DataTables_Table_0_filter{
+        @include absolute(0, null, null, 5px);
+        z-index: 2;
+        label{
+            font-size: 0;
+            color: transparent;
+            margin-bottom: 0;
+            min-width: 20px;
+            min-height: 20px;
+            &:after{
+                @include absolute(5px, null, null, 15px);
+                display: block;
+                content: "";
+                @include square(20px);
+                background: url('../img/search.png') no-repeat;
+                background-position: 0 0;
+                background-size: 80px 20px;
+                @include image-2x("../img/search2k.png", 80px, 20px);
+                cursor: pointer;
+            }
+            &:hover{
+                &:after{
+                    background-position: -20px 0;
+                }
+            }
+            &.active{
+                &:after{background-position: -40px 0;}
+                &:hover{
+                    &:after{
+                       background-position: -60px 0; 
+                    } 
+                }
+                input{
+                    border: 1px solid $gray_form;
+                    @extend %visibility-visible;
+                    width: 300px;
+                    background-color: #f7fbff;
+                }
+            }
+            input{
+                @include transition(all, 0.2s);
+                @extend %visibility-hidden;
+                width: 0;
+                margin-left: 45px;
+                font-size: 13px;
+                line-height: 15px;
+                color: $gray_text;
+                padding: 5px 10px;
+                border-radius: 5px;
+                outline: none;
+            }
+        }
+    }
+}
+.dataTables_wrapper {
+    .dataTables_info{
+        clear: both;
+        float: right;
+        padding-top: 0.755em;
+        font-size: 13px;
+        line-height: 15px;
+        padding-left: 20px;
+        text-align: right;
+    }
+    .dataTables_paginate{
+        float: left;
+        position: relative;
+        padding: 40px 0 0 10px;
+        overflow: hidden;
+        @extend %uppercase-font;
+        font-size: 14px;
+        line-height: 16px;
+        &>span{
+            display: block;
+            @include absolute(10px, null, null, 8px);
+        }
+        .paginate_button{
+            padding: 6px 12px;
+            cursor: pointer;
+            &:hover{
+            }
+            &.disabled, &.disabled:hover, &.disabled:active{
+                color: $gray_light;
+                text-decoration: none;
+                cursor: not-allowed;
+            }
+            &.current, &.current:hover{
+                color: $gray_light !important;
+            }
+        }
+        &>.paginate_button{
+            float: left;
+            color: $green;
+            padding: 5px 12px;
+        }
+    }
+}
+.table thead th.padding-left-lide:first-child{
+    padding-left: 365px;
+}
+@media (max-width: 1450px){
+    .import-interview{
+        thead{
+            font-size: 10px;
+            line-height: 12px;
+            tr th{
+                &:after{
+                    right: -4px;
+                    border-top: 8px solid $gray_form;
+                }
+                &.sorting_desc:after{
+                    border-bottom: 8px solid $blue;
+                } 
+            }
+        }
+    }
+}
+@media (max-width: $screen-md-min){
+    html body main.import-wrapper{
+        padding: 0 2% 0 4%;
+    }
+    .parameters{
+        display: none;
+    }
+    .table{
+        tr{
+            @include transition(all, 0.1s);
+            height: 35px;
+            td, th{
+                width: 13%;  
+            }
+        }
+    }
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input{
+        width: 250px;
+    }
+    .table thead th.padding-left-lide:first-child{
+        padding-left: 315px;
+    }
+    .dataTables_paginate{
+        margin-bottom: 30px;
+    }
+}
+@media (max-width: $screen-sm-min){
+    .shared-with{
+        display: none;
+    }
+    .table-title, .signed-name{
+        width: 100%;
+        float: none;
+        margin: 0;
+        padding: 0 3%;
+    }
+    .signed-name{
+        margin-bottom: 20px;
+    }
+}
+@media (max-width: $screen-sm-min){
+    .modified-by, .created-by{
+        display: none;
+    }
+    .import-interview tbody tr td:first-child{
+        font-size: 12px;
+        line-height: 14px;
+        width: 70%;
+    }
+    .table{
+
+        tr{
+            td, th{
+                width: 30%;  
+                font-size: 10px;
+                line-height: 12px;
+            }
+        }
+    }
+}
+@media (max-width: $screen-xs-min){
+    .signed-name{
+        margin: 10px 0;
+    }
+    .table-title h2{
+        margin-bottom: 10px;
+    }
+    .dataTables_wrapper {
+        .dataTables_info{
+            float: none;
+            margin-bottom: 15px;
+        }
+        .dataTables_paginate{
+            float: none;
+        }
+    }
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+        left: 0;
+        label.active input{
+            width: 150px;
+            margin-left: 40px;
+        }
+    }
+    .import-interview{
+        thead{
+            tr th{
+                &:first-child, &.padding-left-lide:first-child{
+                    padding-left: 45px;
+                }
+                font-size: 8px;
+                line-height: 10px;
+                &:after{
+                    border-width: 4px;
+                    border-top: 6px solid $gray_form;
+                }
+                &.sorting_desc:after{
+                    border-bottom: 6px solid $blue;
+                } 
+            }
+        }
+        tbody tr td:first-child{
+            padding-left: 10px;
+        }
+    }
+}
+
