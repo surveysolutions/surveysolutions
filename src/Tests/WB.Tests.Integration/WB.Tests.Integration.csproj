@@ -426,6 +426,7 @@
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_enables_linked_to_roster_question_with_options_filter .cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_on_roster_title_question.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_without_options.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_applying_linked_options_changed_event.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_with_option_not_from_the_list.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_two_fixed_rosters_and_question_linked_on_second.cs" />
     <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them_with_expression_state_by_questionnaire_version.cs" />
