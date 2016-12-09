@@ -6,6 +6,19 @@
 @include fontface(ufonts_com_lucidaconsole);
 @include fontface(TrebuchetMS);
 @include fontface(RobotoMedium);
+input[type=number] { 
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0; 
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+}
+input::-ms-clear {
+    display: none;
+}
 a{
 	color: $blue;
 	&:hover, &:focus{
@@ -181,7 +194,7 @@ html {
 		max-height: 100%;
 		top: 0;
 		left: 0;
-		z-index: 2;
+		z-index: 5;
 		display: none;
 		position: fixed;
 		@include size(100%, 100%);
@@ -252,6 +265,22 @@ html {
 		margin: 6px 15px 6px 0;
 	}
 }
+@media (max-width: $screen-sm){
+	html body .container{
+		width: auto;
+		padding-left: 15px;
+		padding-right: 15px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+@media (max-width: $screen-xs-min){
+	.breadcrumb li a, .breadcrumb > li + li:before{
+			padding: 0 2px;
+			font-size: 8px;
+			line-height: 10px;
+	}	
+}
 h2{
 	font: 26px/28px "RobotoLight";
 	font-weight: normal;
@@ -261,15 +290,6 @@ h2{
 h3{
 	@include font(19px, 21px, "RobotoBold");
 	margin-top: 0;
-}
-@media (max-width: $screen-sm){
-	html body .container{
-		width: auto;
-		padding-left: 15px;
-		padding-right: 15px;
-		margin-left: auto;
-		margin-right: auto;
-	}
 }
 h4{
 	font: 22px/24px "RobotoLight";
@@ -298,7 +318,7 @@ h5{
     letter-spacing: 0.5px;
     display: inline-block;
 }
-.btn-success, .btn-primary, .btn-danger{
+.btn-success, .btn-primary, .btn-danger, .btn-default{
     font: 12px/14px "TrebuchetMSBold";
     outline: none;
     text-transform: uppercase;
@@ -337,13 +357,7 @@ h5{
         @extend %gray-uppercase;
     } 
 }
-@media (max-width: $screen-xs-min){
-	.breadcrumb li a, .breadcrumb > li + li:before{
-			padding: 0 2px;
-			font-size: 8px;
-			line-height: 10px;
-	}	
-}
+
 .error-text{
 	color: $red_error;
 }
@@ -352,4 +366,79 @@ h5{
 }
 .default-text{
 	color: $gray_form;
+}
+.radio{
+	label{
+	    color: $gray_light;
+	    font-weight: normal;
+	    padding: 7px 0;
+	}
+    input.wb-radio{
+        display: none;
+	    @extend %questionnaire-sprite;
+	    &:checked + label{
+            color:  $gray_text;
+            font-weight: bold;
+        }
+       	& + label .tick {background-position: -324px 0px;}
+
+	    & + label:hover .tick,
+	  	& + label:focus .tick{
+	    	background-position: -365px 0px;
+	  	}
+	  	&:checked + label .tick {
+	    	background-position: -406px 0px;
+	  	}
+	  	&:checked + label:hover .tick,
+	  	&:checked + label:focus .tick {
+	    	background-position: -447px 0px;
+	  	}
+	  	&:disabled + label .tick {
+	    	background-position: -570px 0px;
+	  	}
+	  	&:disabled + label:hover .tick,
+	  	&:disabled + label:focus .tick{
+	    	background-position: -611px 0px;
+	  	}
+	  	&:checked:disabled + label .tick{
+	    	background-position: -488px 0px;
+	  	}
+	  	&:checked:disabled + label:hover .tick,
+	  	&:checked:disabled + label:focus .tick{
+	    	background-position: -529px 0px;
+	  	}
+    }
+}
+input.wb-checkbox{
+    display: none;
+    @extend %questionnaire-sprite;
+    & ~ label:hover .tick,
+  	& ~ label:focus .tick{
+    	background-position: -37px 0px;
+  	}
+  	&:checked ~ label .tick {
+    	background-position: -78px 0px;
+  	}
+  	&:checked ~ label:hover .tick,
+  	&:checked ~ label:focus .tick {
+    	background-position: -119px 0px;
+  	}
+  	&:disabled ~ label .tick {
+    	background-position: -160px 0px;
+  	}
+  	&:disabled ~ label:hover .tick,
+  	&:disabled ~ label:focus .tick{
+    	background-position: -201px 0px;
+  	}
+  	&:checked:disabled ~ label .tick{
+    	background-position: -242px 0px;
+  	}
+  	&:checked:disabled ~ label:hover .tick,
+  	&:checked:disabled ~ label:focus .tick{
+    	background-position: -283px 0px;
+  	}
+}
+@include placeholder {
+    font-weight: normal !important;
+    font-style: italic;
 }
