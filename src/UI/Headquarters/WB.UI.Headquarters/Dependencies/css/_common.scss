@@ -126,7 +126,7 @@ html {
 					}
 				}
 				.caret{
-					@include absolute(31px, 0);
+					@include absolute(31px, 7px);
 					margin-left: 11px;
 					border-top: 8px solid rgba(255, 255, 255, 0.7);
 					border-right: 5px solid transparent;
@@ -143,6 +143,9 @@ html {
 				    margin-bottom:-1px;
 				    padding: 0 5px;
 				}
+			}
+			&.dropdown > a{
+				padding-right: 20px;
 			}
 			.dropdown-menu li a{
 				border-radius: 5px;
