@@ -49,6 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public object Answer { get; set; }
 
         public dynamic Settings { get; set; }
+        public Guid? LinkedToQuestionId { get; set; }
+        public Guid? LinkedToRosterId { get; set; }
     }
 
     public class TextQuestionSettings

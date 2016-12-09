@@ -119,14 +119,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             foreach (var disabledVariable in @event.InterviewData.DisabledVariables)
                 this.Tree.GetVariable(Identity.Create(disabledVariable.Id, disabledVariable.InterviewItemRosterVector)).Disable();
 
-            foreach (var linkedQuestion in @event.InterviewData.LinkedQuestionOptions)
-                this.Tree.GetQuestion(Identity.Create(linkedQuestion.Key.Id, linkedQuestion.Key.InterviewItemRosterVector)).AsLinked.SetOptions(linkedQuestion.Value);
-
             this.Tree.ReplaceSubstitutions();
 
             CalculateLinkedToListOptionsOnTree(this.Tree, false);
 
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
+
+            this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
+
+
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
             this.properties.SupervisorId = @event.InterviewData.SupervisorId;
@@ -211,9 +212,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultimedia;
         public InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsQRBarcode;
         public InterviewTreeTextListQuestion GetTextListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsTextList;
-        public InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedOption;
         public InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiFixedOption;
-        public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedOption;
         public InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsInteger;
         public InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsDouble;
         public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsText;
@@ -222,43 +221,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedToList;
         public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedToList;
-
-        public string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option)
-        {
-            var linkedQuestion = this.Tree.GetQuestion(linkedQuestionIdentity);
-            if (!linkedQuestion.IsLinked) return string.Empty;
-
-            Identity sourceIdentity = Identity.Create(linkedQuestion.AsLinked.LinkedSourceId, option);
-
-            IInterviewTreeNode sourceNode = this.Tree.GetNodeByIdentity(sourceIdentity);
-
-            string optionTitle = string.Empty;
-            var skipBreadcrumsThreshold = 1;
-            if (sourceNode is InterviewTreeRoster)
-            {
-                var sourceRoster = sourceNode as InterviewTreeRoster;
-                optionTitle = sourceRoster.RosterTitle;
-                skipBreadcrumsThreshold = 0;
-            }
-            if (sourceNode is InterviewTreeQuestion)
-            {
-                var sourceQuestion = sourceNode as InterviewTreeQuestion;
-                optionTitle = sourceQuestion.GetAnswerAsString();
-            }
-            
-            var sourceBreadcrumbsOfRosterTitles = sourceNode.Parents.OfType<InterviewTreeRoster>().ToArray();
-            var linkedBreadcrumbsOfRosterTitles = linkedQuestion.Parents.OfType<InterviewTreeRoster>().ToArray();
-            
-            var common = sourceBreadcrumbsOfRosterTitles.Zip(linkedBreadcrumbsOfRosterTitles, (x, y) => x.RosterSizeId.Equals(y.RosterSizeId) ? x : null).TakeWhile(x => x != null).Count();
-
-            string[] breadcrumbsOfRosterTitles = sourceBreadcrumbsOfRosterTitles.Skip(common).Select(x => x.RosterTitle).ToArray();
-
-            var breadcrumbs = string.Join(": ", breadcrumbsOfRosterTitles);
-
-            return breadcrumbsOfRosterTitles.Length > skipBreadcrumsThreshold
-                ?  $"{breadcrumbs}: {optionTitle}"
-                : optionTitle;
-        }
 
         #region Command handlers
 
