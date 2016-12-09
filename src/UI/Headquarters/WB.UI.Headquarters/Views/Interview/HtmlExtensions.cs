@@ -5,7 +5,7 @@ using System.Web.Mvc;
 
 namespace ASP
 {
-    public static class HtmlExtensions 
+    public static partial class HtmlExtensions 
     {
         public static string InterviewItemIdWithPostfix(this HtmlHelper htmlHelper, Guid questionId, decimal[] rosterVector, string postfix = "")
         {
