@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     public class SubstitionTextFactoryTests
     {
         [Test]
-        public void When_Compare_and_changed_tree_has_2_nodes_which_dont_have_source_tree_Then_should_return_2_diff_nodes()
+        public void When_CreateText_with_referance_one_parent_rosteres_Then_should_return_substition_text_with_substitions()
         {
             //arrange
             var questionnireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -50,7 +50,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             //act
             var substitionText = substitionTextFactory.CreateText(questionIdentity, "title %r1% %r2%", questionnire);
-            substitionText.ReplaceSubstitutions();
 
             //assert
             Assert.That(substitionText.HasSubstitutions, Is.True);
