@@ -449,4 +449,7 @@
   <data name="MissingPermission" xml:space="preserve">
     <value>У приложения нет необходимых разрешений для выполнения действия</value>
   </data>
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>Приложению необходимо разрешение на использование камеры для ответа на данный вопрос</value>
+  </data>
 </root>
