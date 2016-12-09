@@ -31,46 +31,6 @@ var config = {
     jsLibsInject: 'jsLibs'
 };
 
-
-gulp.task('inject-css', ['styles', 'bowerCss'], function () {
-    if (config.production) {
-        var cssApp = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
-        var cssLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
-
-        var tasks = config.filesToInject.map(function (fileToInject) {
-            var target = gulp.src(fileToInject.folder + fileToInject.file);
-
-            return target
-                .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }))
-                .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }))
-                .pipe(gulp.dest(fileToInject.folder));
-        });
-
-        return tasks;
-    }
-
-    return util.noop();
-});
-
-gulp.task('inject-js', ['inject-css', 'bowerJs'], function () {
-    if (config.production) {
-        var jsApp = gulp.src(config.buildDir + '/app-*.min.js', { read: false });
-        var jsLibs = gulp.src(config.buildDir + '/libs-*.min.js', { read: false });
-
-        var tasks = config.filesToInject.map(function (fileToInject) {
-            var target = gulp.src(fileToInject.folder + fileToInject.file);
-
-            return target
-                .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }))
-                .pipe(plugins.inject(jsApp, { relative: true, name: config.jsAppInject }))
-                .pipe(gulp.dest(fileToInject.folder));
-        });
-        return tasks;
-    }
-
-    return util.noop();
-});
-
 gulp.task('styles', function () {
     return gulp.src(config.cssSource)
         .pipe(sass())
@@ -108,10 +68,34 @@ gulp.task('bowerCss', function () {
     	.pipe(gulp.dest(config.buildDir));
 });
 
+gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], function () {
+    if (config.production) {
+        var cssApp = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
+        var cssLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
+        var jsApp = gulp.src(config.buildDir + '/app-*.min.js', { read: false });
+        var jsLibs = gulp.src(config.buildDir + '/libs-*.min.js', { read: false });
+
+        var tasks = config.filesToInject.map(function (fileToInject) {
+            var target = gulp.src(fileToInject.folder + fileToInject.file);
+
+            return target
+                .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }))
+                .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }))
+                .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }))
+                .pipe(plugins.inject(jsApp, { relative: true, name: config.jsAppInject }))
+                .pipe(gulp.dest(fileToInject.folder));
+        });
+
+        return tasks;
+    }
+
+    return util.noop();
+});
+
 gulp.task('clean', function () {
     return gulp.src(config.buildDir + '/*').pipe(plugins.clean());
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start(/*'watch-styles', */'styles', 'bowerCss', 'bowerJs', 'inject-css', 'inject-js');
+    gulp.start(/*'watch-styles', */'styles', 'bowerCss', 'bowerJs', 'inject');
 });
