@@ -6008,7 +6008,7 @@ html {
       .navbar .navbar-collapse li > a .caret {
         position: absolute;
         top: 31px;
-        right: 0;
+        right: 7px;
         margin-left: 11px;
         border-top: 8px solid rgba(255, 255, 255, 0.7);
         border-right: 5px solid transparent;
@@ -6023,6 +6023,8 @@ html {
         visibility: hidden;
         margin-bottom: -1px;
         padding: 0 5px; }
+    .navbar .navbar-collapse li.dropdown > a {
+      padding-right: 20px; }
     .navbar .navbar-collapse li .dropdown-menu li a {
       border-radius: 5px;
       padding: 10px;
