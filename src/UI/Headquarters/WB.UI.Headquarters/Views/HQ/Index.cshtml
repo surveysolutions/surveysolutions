@@ -1,45 +1,42 @@
-﻿@using System.Web.Optimization
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+@using WB.UI.Headquarters.Resources
 
 @{
-    Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Dashboard.Questionnaires;
 }
 
 @section scripts
 {
+    @Scripts.Render("~/js/list")
     @Scripts.Render("~/js/questionnaires")
     <script type="text/javascript">
-    var $getExportedDataUrl = '@Url.Action("GetExportedData", "ImportExport")';
-    var $getExportedApprovedDataUrl = '@Url.Action("GetExportedApprovedData", "ImportExport")';
-    var $getExportedFilesUrl = '@Url.Action("GetExportedFiles", "ImportExport")';
-    var $getExportedHistoryUrl = '@Url.Action("GetExportedHistoy", "ImportExport")';
-    var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
-    var $batchUploadUrl = '@Url.Action("BatchUpload", "HQ")';
-    var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
-    var $importTemplateUrl = '@Url.Action("Import", "Template")';
-    $(function () {
-        var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "AllQuestionnaires"})';
-        var deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
+        var $getExportedDataUrl = '@Url.Action("GetExportedData", "ImportExport")';
+        var $getExportedApprovedDataUrl = '@Url.Action("GetExportedApprovedData", "ImportExport")';
+        var $getExportedFilesUrl = '@Url.Action("GetExportedFiles", "ImportExport")';
+        var $getExportedHistoryUrl = '@Url.Action("GetExportedHistoy", "ImportExport")';
+        var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
+        var $batchUploadUrl = '@Url.Action("BatchUpload", "HQ")';
+        var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
+        var $importTemplateUrl = '@Url.Action("Import", "Template")';
+        $(function () {
+            var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "AllQuestionnaires"})';
+            var deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
 
-        var model = new Supervisor.VM.Questionnaires(questionnairesUrl, deleteQuestionnaireUrl);
+            var model = new Supervisor.VM.Questionnaires(questionnairesUrl, deleteQuestionnaireUrl);
 
-        ko.applyBindings(model);
-        model.load();
-    });
+            ko.applyBindings(model);
+            model.load();
+        });
     </script>
 }
 
-@section header
-{
-    <h3 class="sinle-line-header">@Dashboard.Questionnaires</h3>
-}
+<h3 class="sinle-line-header">@Dashboard.Questionnaires</h3>
 
-@section gridnavigation
-{
+<div class="well well-sm">
     <div class="btn-group">
         @if (!(User.Identity.IsObserver()))
-        {
+            {
             <div class="form-inline">
                 <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
                     <i class="glyphicon glyphicon-import">
@@ -48,24 +45,31 @@
             </div>
         }
     </div>
-}
 
-@section grid
-{
+</div>
+
+<div id="list">
+    <!-- ko if:IsPageLoaded()  -->
+    <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
+    <p class="text-center">
+        @Pages.NoResults
+    </p>
+    <!-- /ko -->
+    <!-- ko if:Pager().TotalItemCount() > 0 -->
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
-        <tr>
-            <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
-            <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
-            <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
-            <th data-bind='sortby : "ImportDate"'>@Dashboard.ImportDate</th>
-            <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
-            <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
-            <th>@Dashboard.Actions</th>
-        </tr>
+            <tr>
+                <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
+                <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
+                <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
+                <th data-bind='sortby : "ImportDate"'>@Dashboard.ImportDate</th>
+                <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
+                <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
+                <th>@Dashboard.Actions</th>
+            </tr>
         </thead>
         <tbody>
-        <!-- ko foreach:Items -->
+            <!-- ko foreach:Items -->
             <tr data-bind="css: {'text-muted':Disabled }">
                 <td style="vertical-align: middle">
                     <!-- ko if:AllowCensusMode -->
@@ -117,9 +121,18 @@
                             </a>
                         </div>
                     }
-                    </td>
+                </td>
             </tr>
-        <!-- /ko -->
+            <!-- /ko -->
         </tbody>
     </table>
-}
+
+    <!-- ko if:Pager().LastPage() > 1 -->
+    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
+    <!-- /ko -->
+    <!-- /ko -->
+    <!-- /ko -->
+</div>
+
+@Html.Partial("_ListViewPagingScript")
+

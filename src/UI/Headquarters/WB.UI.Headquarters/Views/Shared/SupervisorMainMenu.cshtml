@@ -3,6 +3,7 @@
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
 <ul class="nav navbar-nav" role="menu">
+    <a class="navbar-brand" href="@Url.Action("Index", "Survey", new {area = ""})">@Users.Supervisor</a>
     <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
             <i class="glyphicon glyphicon-th"></i> @MainMenu.Reports <b class="caret"></b>
@@ -18,7 +19,7 @@
                 <a href="@Url.Action("QuantityByInterviewers", "PeriodicStatusReport", new {area = ""})">@MainMenu.Quantity</a>
             </li>
             <li class="@(page == MenuItem.SpeedOfCompletingInterviews ? "active" : "")">
-                <a href="@Url.Action("SpeedByInterviewers", "PeriodicStatusReport", new { area = "" })">@MainMenu.Speed</a>
+                <a href="@Url.Action("SpeedByInterviewers", "PeriodicStatusReport", new {area = ""})">@MainMenu.Speed</a>
             </li>
         </ul>
     </li>
