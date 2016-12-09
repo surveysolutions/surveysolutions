@@ -12,6 +12,8 @@
 
 var config = {
     production: !!util.env.production,
+    bootstrapFontFiles: './vendor/bootstrap-sass/assets/fonts/bootstrap/*.*',
+    fontsDir: './fonts',
     buildDir: './build',
     filesToInject: [
         {
@@ -31,7 +33,11 @@ var config = {
     jsLibsInject: 'jsLibs'
 };
 
-gulp.task('styles', function () {
+gulp.task('move-bootstrap-fonts', function () {
+    return gulp.src(config.bootstrapFontFiles).pipe(gulp.dest(config.fontsDir));
+});
+
+gulp.task('styles', ['move-bootstrap-fonts'], function () {
     return gulp.src(config.cssSource)
         .pipe(sass())
         .pipe(autoprefixer('last 2 version'))
@@ -97,5 +103,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start(/*'watch-styles', */'styles', 'bowerCss', 'bowerJs', 'inject');
+    gulp.start(/*'watch-styles', */'move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject');
 });
