@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using MvvmCross.Platform.Droid.Platform;
 using MWBarcodeScanner;
+using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals
@@ -8,13 +9,18 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
     internal class QRBarcodeScanService : IQRBarcodeScanService
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
-        public QRBarcodeScanService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity)
+        private readonly IPermissions permissions;
+
+        public QRBarcodeScanService(IMvxAndroidCurrentTopActivity androidCurrentTopActivity, IPermissions permissions)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
+            this.permissions = permissions;
         }
 
         public async Task<QRBarcodeScanResult> ScanAsync()
         {
+            await this.permissions.AssureHasPermission(Permission.Camera);
+
             var scanner = new Scanner(this.androidCurrentTopActivity.Activity);
             scanner.setInterfaceOrientation(
                 this.androidCurrentTopActivity.Activity.RequestedOrientation.ToString());
@@ -22,7 +28,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
             this.CustomizeScanner();
             var result = await scanner.Scan();
 
-            return result != null ? new QRBarcodeScanResult() {Code = result.code, RawBytes = result.bytes} : null;
+            return result != null ? new QRBarcodeScanResult() { Code = result.code, RawBytes = result.bytes } : null;
         }
 
         private void CustomizeScanner()
