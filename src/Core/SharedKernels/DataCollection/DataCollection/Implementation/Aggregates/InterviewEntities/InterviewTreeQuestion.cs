@@ -401,11 +401,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return string.Empty;
         }
 
-        public void UpdateLinkedOptionsAndResetAnswerIfNeeded(RosterVector[] options)
+        public void UpdateLinkedOptionsAndResetAnswerIfNeeded(RosterVector[] options, bool removeAnswer = true)
         {
             if (!this.IsLinked) return;
             var previousOptions = this.AsLinked.Options;
             this.AsLinked.SetOptions(options);
+
+            if (!removeAnswer) return;
 
             var optionsAreIdentical = previousOptions.SequenceEqual(options);
             if (optionsAreIdentical) return;
