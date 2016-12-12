@@ -20,11 +20,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void When_ReplaceSubstitutions_for_element_with_referancec_on_parent_rosters_Then_should_return_text_with_roster_titles()
         {
             //arrange
-            var questionnireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var interviewId    = Guid.Parse("11111111111111111111111111111111");
-            var rosterId1 = Guid.Parse("22222222222222222222222222222222");
-            var rosterId2 = Guid.Parse("33333333333333333333333333333333");
-            var questionId = Guid.Parse("44444444444444444444444444444444");
+            var questionnireId  = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var interviewId     = Guid.Parse("11111111111111111111111111111111");
+            var rosterId1       = Guid.Parse("22222222222222222222222222222222");
+            var rosterId2       = Guid.Parse("33333333333333333333333333333333");
+            var questionId      = Guid.Parse("44444444444444444444444444444444");
             var sectionIdentity = Create.Entity.Identity(Guid.Parse("55555555555555555555555555555555"));
 
             var questionnireDocument = Create.Entity.QuestionnaireDocument(questionnireId, new IComposite[]

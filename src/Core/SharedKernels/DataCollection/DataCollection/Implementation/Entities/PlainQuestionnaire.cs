@@ -948,9 +948,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionCache.Values.Any(x => x.StataExportCaption == variableName);
         }
 
-        public bool HasRoster(string rosterName)
+        public bool HasRoster(string variableName)
         {
-            return this.GroupCache.Values.Any(x => x.IsRoster && x.VariableName == rosterName);
+            return this.GroupCache.Values.Any(x => x.IsRoster && x.VariableName == variableName);
         }
 
         public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
