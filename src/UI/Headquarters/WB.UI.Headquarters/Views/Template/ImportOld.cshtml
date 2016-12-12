@@ -1,0 +1,83 @@
+﻿@using System.Web.Optimization
+@{
+    Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/designerquestionnaires")
+    <script type="text/javascript">
+        $(function () {
+            var model = new Supervisor.VM.DesignerQuestionnaires('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesList" })',
+                '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "GetQuestionnaire" })');
+
+            model.onQuestionnaireImported = function () {
+                window.location.href = '@Url.Action("Index", "HQ")';
+            };
+
+            ko.applyBindings(model);
+            model.load();
+        });
+    </script>
+}
+
+@section output{
+    <h5 data-bind="text: ImportFailMessage" class="importError"></h5>
+    <div class="verificatonErrors" data-bind="visible: VerificationErrors().length > 0">
+        <ul data-bind="foreach: VerificationErrors" class="list-group">
+            <li class="list-group-item">
+                <p class="list-group-item-heading"><b class="error-code" data-bind="text: code"></b>&nbsp;<span data-bind="html: message"></span></p>
+                <p class="list-group-item-text">
+                    <ul class="error-reference-items" data-bind="foreach: references">
+                        <li><span data-bind="text: title"></span></li>
+                    </ul>
+                </p>
+            </li>
+        </ul>
+    </div>
+}
+
+@section header
+{
+    <h3 class="sinle-line-header">@QuestionnaireImport.DesignerQuestionnaires</h3>
+}
+
+@section gridnavigation
+{
+    <div class="menubar">
+        <form data-bind="submit: filter" class="form-inline">
+            <div class="form-group">
+                <input class="form-control" type="text" data-bind="value: Query, valueUpdate: 'afterkeydown'" />
+            </div>
+            <button class="btn btn-default" type="button" data-bind="click: filter">@Common.Search</button>
+        </form>
+    
+    </div>
+}
+
+@section grid
+{
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th data-bind='sortby: "Title"'>@Common.Title</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach:Items -->
+            <tr>
+                <td data-bind="text: Title"></td>
+                <td>
+                    <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaire">
+                        <i class="glyphicon glyphicon-info-sign"></i> @QuestionnaireImport.Import
+                    </a>
+                    <a class="btn btn-primary" data-bind="click: $parent.getQuestionnaireCensus">
+                        <i class="glyphicon glyphicon-info-sign"></i> @QuestionnaireImport.ImportInCensus
+                    </a>
+                </td>
+            </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
+}
