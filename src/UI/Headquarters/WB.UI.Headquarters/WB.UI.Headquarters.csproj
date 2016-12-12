@@ -550,6 +550,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.pt.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.pt.resx" />
+    <EmbeddedResource Include="Resources\LoginToDesigner.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginToDesigner.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.pt.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx" />
     <EmbeddedResource Include="Resources\Strings.pt.resx" />
@@ -1521,6 +1525,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\LoginToDesigner.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoginToDesigner.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Pages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1939,7 +1948,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50491</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
