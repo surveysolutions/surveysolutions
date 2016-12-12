@@ -117,6 +117,7 @@ main{
     }
 }
 .import-interview{
+    width: 100% !important;
     tr{
         @include transition(all, 0.1s);
         height: 35px;
@@ -465,3 +466,11 @@ main{
     }
 }
 
+.dataTables_processing{
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    background: rgba(0,0,0,0.1);
+}
