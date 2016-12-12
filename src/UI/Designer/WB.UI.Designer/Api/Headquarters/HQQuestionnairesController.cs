@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
@@ -70,7 +69,9 @@ namespace WB.UI.Designer.Api.Headquarters
                 Items = questionnaireListView.Items.Select(questionnaireListItem => new QuestionnaireListItem
                 {
                     Id = questionnaireListItem.PublicId,
-                    Title = questionnaireListItem.Title
+                    Title = questionnaireListItem.Title,
+                    LastModifiedDate = questionnaireListItem.LastEntryDate,
+                    OwnerName = questionnaireListItem.CreatorName
                 }).ToList()
             };
 
