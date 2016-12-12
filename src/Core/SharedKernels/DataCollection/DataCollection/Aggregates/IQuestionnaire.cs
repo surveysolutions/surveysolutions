@@ -233,7 +233,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool ShouldUseFormatting(Guid questionId);
         bool HasVariable(string variableName);
         bool HasQuestion(string variableName);
-        bool HasRoster(string rosterName);
+        bool HasRoster(string variableName);
         bool IsTimestampQuestion(Guid questionId);
         bool IsSupportFilteringForOptions(Guid questionId);
         bool IsFixedRoster(Guid id);
