@@ -201,7 +201,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void Disable() => this.isDisabled = true;
         public void Enable() => this.isDisabled = false;
 
-        public void SetTitle(SubstitionText title) => this.Title = title;
+        public void SetTitle(SubstitionText title)
+        {
+            this.Title = title;
+            this.Title.SetTree(this.Tree);
+        }
 
         public InterviewTreeQuestion GetQuestionFromThisOrUpperLevel(Guid questionId)
         {

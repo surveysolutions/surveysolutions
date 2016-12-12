@@ -137,9 +137,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
 
-        public void SetTitle(SubstitionText title) => this.Title = title;
+        public void SetTitle(SubstitionText title) 
+        {
+            this.Title = title;
+            this.Title.SetTree(this.Tree);
+        }
 
-        public void SetValidationMessages(SubstitionText[] validationMessages) => this.ValidationMessages = validationMessages;
+        public void SetValidationMessages(SubstitionText[] validationMessages)
+        {
+            this.ValidationMessages = validationMessages;
+            foreach (var validationMessage in validationMessages)
+            {
+                validationMessage.SetTree(this.Tree);
+            }
+        }
 
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
         {
