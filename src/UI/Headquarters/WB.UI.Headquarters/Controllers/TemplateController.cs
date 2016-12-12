@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return
-                this.View();
+                this.View("ImportOld");
         }
 
         public ActionResult LoginToDesigner()
