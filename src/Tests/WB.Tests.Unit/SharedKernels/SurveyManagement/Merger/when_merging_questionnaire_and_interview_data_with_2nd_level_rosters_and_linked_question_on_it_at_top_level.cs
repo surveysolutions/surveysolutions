@@ -38,10 +38,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 {
                     PublicKey = firstLevelRosterId,
                     IsRoster = true,
+                    VariableName = "r1",
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>()
                     {
                         Create.Entity.FixedRoster(rosterId: secondLevelRosterId,
+                            variable:"r2",
                             obsoleteFixedTitles: new[] {"t1", "t2"},
                             children: new IComposite[]
                             {
