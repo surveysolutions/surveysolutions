@@ -319,6 +319,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
             => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
+        public InterviewTreeQuestion GetInterviewTreeQuestion(Identity entityIdentity)
+        {
+            return this.Tree.GetQuestion(entityIdentity);
+        }
+
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity)
             => this.Tree.GetQuestion(questionIdentity).Parents
                 .OfType<InterviewTreeRoster>()
