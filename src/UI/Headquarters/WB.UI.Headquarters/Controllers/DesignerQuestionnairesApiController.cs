@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Common.Logging.Configuration;
+using Humanizer;
 using Main.Core.Documents;
 using NHibernate.Properties;
 using NHibernate.Util;
@@ -27,6 +31,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
+using NameValueCollection = System.Collections.Specialized.NameValueCollection;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -86,32 +91,84 @@ namespace WB.UI.Headquarters.Controllers
             HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = designerUserCredentials;
         }
 
+        public class TableInfo
+        {
+            public class SortOrder
+            {
+               public int Column { get; set; }
+               public OrderDirection Dir { get; set; }
+            }
+
+            public class SearchInfo
+            {
+                public string Value { get; set; }
+                public bool Regex { get; set; }
+            }
+
+            public class ColumnInfo
+            {
+                public int Title { get; set; }
+                public string Data { get; set; }
+                public bool Searchable { get; set; }
+                public bool Orderable { get; set; }
+                public SearchInfo Search { get; set; }
+            }
+            public int Draw { get; set; }
+            public int Start { get; set; }
+            public int Length { get; set; }
+            public List<SortOrder> Order { get; set; }
+            public List<ColumnInfo> Columns { get; set; }
+            public SearchInfo Search { get; set; }
+            public int PageIndex => 1 + this.Start/this.Length;
+            public int PageSize => this.Length;
+        }
+
         [HttpPost]
         [CamelCase]
-        public async Task<object> QuestionnairesListNew()
+        public async Task<object> QuestionnairesListNew([FromBody] TableInfo info)
         {
+            var sortOrder = String.Join(",", info.Order?.Select(o => info.Columns[o.Column].Title + (o.Dir == OrderDirection.Asc ? String.Empty : " Desc")));
             var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
                 url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires",
                 credentials: this.designerUserCredentials,
                 queryString: new
                 {
+                    Filter = info.Search.Value,
+                    PageIndex = info.PageIndex,
+                    PageSize = info.PageSize,
+                    //SortOrder = null
                 });
 
             return new 
             {
-                Draw = 1,
+                Draw = info.Draw + 1,
                 RecordsTotal = list.TotalCount,
                 RecordsFiltered = list.TotalCount,
                 Data = list.Items.Select(x => new {
-                    Id = x.Id,
+                    DT_RowId = x.Id,
                     Title = x.Title,
                     LastModified = new {
-                        Display = x.LastModifiedDate?.ToLocalTime().ToString() ?? "",
+                        Display = HumanizeLastUpdateDate(x.LastModifiedDate),
                         Timestamp= x.LastModifiedDate?.Ticks ?? 0
                     },
                     CreatedBy = x.OwnerName ?? ""
                 }),
             };
+        }
+
+        private string HumanizeLastUpdateDate(DateTime? date)
+        {
+            if (!date.HasValue) return string.Empty;
+
+            var localDate = date.Value.ToLocalTime();
+
+            var twoDaysAgoAtNoon = DateTime.Now.ToLocalTime().AddDays(-1).AtNoon();
+
+            if (localDate < twoDaysAgoAtNoon)
+                // from Designer
+                return localDate.ToString("d MMM yyyy, HH:mm");
+            
+            return localDate.Humanize();
         }
 
         public async Task<DesignerQuestionnairesView> QuestionnairesList(DesignerQuestionnairesListViewModel data)
