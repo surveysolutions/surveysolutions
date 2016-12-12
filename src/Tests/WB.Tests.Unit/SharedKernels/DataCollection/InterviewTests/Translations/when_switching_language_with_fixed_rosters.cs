@@ -16,19 +16,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
         Establish context = () =>
         {
             rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            QuestionnaireIdentity questionnaireIdentity = 
-                Create.Entity.QuestionnaireIdentity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), 1);
 
-            var nonTranslatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(
+            var chapterId = Guid.Parse("11111111111111111111111111111111");
+
+            var nonTranslatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.Entity.FixedRoster(
                 rosterId: rosterId,
-                fixedTitles: new List<string> {"title1", "title2"}
+                obsoleteFixedTitles: new List<string> {"title1", "title2"}
                 ));
             nonTranslatedQuestionnaire.Translations.Add(
                     Create.Entity.Translation(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), targetLanguage));
 
-            var translatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(
+            var translatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.Entity.FixedRoster(
                 rosterId: rosterId,
-                fixedTitles: new List<string> { "тайтл1", "тайтл2" }
+                obsoleteFixedTitles: new List<string> { "тайтл1", "тайтл2" }
                 ));
 
             IQuestionnaire nonTranslatedPlainQuestionnaire = Create.Entity.PlainQuestionnaire(nonTranslatedQuestionnaire);

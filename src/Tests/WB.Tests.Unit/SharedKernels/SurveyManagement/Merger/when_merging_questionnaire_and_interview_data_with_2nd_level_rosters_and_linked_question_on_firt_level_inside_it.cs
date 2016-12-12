@@ -12,6 +12,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -47,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>()
                     {
-                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId, fixedTitles: new [] {"t1", "t2"},
+                        Create.Entity.FixedRoster(rosterId: secondLevelRosterId, obsoleteFixedTitles: new [] {"t1", "t2"},
                             children: new IComposite[]
                             {
                                 new SingleQuestion()
@@ -63,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                             QuestionType = QuestionType.Numeric,
                             StataExportCaption = "sourceForLinkedQuestionId"
                         }
-                    }
+                    }.ToReadOnlyCollection()
                 });
 
             interview = CreateInterviewData(interviewId);

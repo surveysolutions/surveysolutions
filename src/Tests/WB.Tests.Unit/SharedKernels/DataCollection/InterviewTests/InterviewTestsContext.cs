@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -14,22 +18,33 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     [Subject(typeof(Interview))]
+    [TestOf(typeof(Interview))]
     internal class InterviewTestsContext
     {
+        protected static Interview CreateInterview(QuestionnaireDocument questionnaire)
+        {
+            var questionnaireId = Guid.NewGuid();
+
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, Create.Entity.PlainQuestionnaire(questionnaire));
+            return CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+        }
+        
         protected static Interview CreateInterview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
-            Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
+            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
+            var textFactory = Create.Service.SubstitionTextFactory();
             var interview = Create.AggregateRoot.Interview(
                 questionnaireRepository: questionnaireRepository,
-                expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider);
+                expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider,
+                textFactory: textFactory);
 
             interview.CreateInterview(
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 1,
                 supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"),
-                answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
+                answersToFeaturedQuestions ?? new Dictionary<Guid, AbstractAnswer>(),
                 answersTime ?? new DateTime(2012, 12, 20),
                 userId ?? new Guid("F000F000F000F000F000F000F000F000"));
 
@@ -61,15 +76,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            var result = new QuestionnaireDocument();
-            var chapter = new Group("Chapter");
-            result.Children.Add(chapter);
-
-            foreach (var child in children)
+            var result = new QuestionnaireDocument()
             {
-                chapter.Children.Add(child);
-            }
-
+                Children = new IComposite[]
+                {
+                    new Group("Chapter")
+                    {
+                        Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+                    }
+                }.ToReadOnlyCollection()
+            };
+            
             return result;
         }
     }

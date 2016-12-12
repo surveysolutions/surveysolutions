@@ -3,8 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -19,16 +21,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
     {
         Establish context = () =>
         {
-            var textListAnswer = Mock.Of<TextListAnswer>(_ => _.Answers == savedAnswers && _.IsAnswered == true);
+            var answersAsTuple = new Tuple<decimal, string>[199];
+            for (int i = 1; i <= 199; i++)
+            {
+                answersAsTuple[i - 1] = new Tuple<decimal, string>(i, $"Answer {i}");
+            }
+            savedAnswers = TextListAnswer.FromTupleArray(answersAsTuple);
+            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer() == savedAnswers && _.IsAnswered == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
-                   && _.GetTextListAnswer(questionIdentity) == textListAnswer);
-
-            for (int i = 1; i <= 199; i++)
-            {
-                savedAnswers[i - 1] = new Tuple<decimal, string>(i, $"Answer {i}");
-            }
+                   && _.GetTextListQuestion(questionIdentity) == textListAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
@@ -66,6 +69,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         private static readonly string questionnaireId = "Questionnaire Id";
         private static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
 
-        private static readonly Tuple<decimal, string>[] savedAnswers = new Tuple<decimal, string>[199];
+        private static TextListAnswer savedAnswers;
     }
 }

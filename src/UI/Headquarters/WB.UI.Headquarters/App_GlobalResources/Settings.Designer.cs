@@ -97,6 +97,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company logo.
+        /// </summary>
+        internal static string Logo {
+            get {
+                return ResourceManager.GetString("Logo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company logo was not updated. Please provide a valid image.
+        /// </summary>
+        internal static string LogoNotUpdated {
+            get {
+                return ResourceManager.GetString("LogoNotUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company logo updated.
+        /// </summary>
+        internal static string LogoUpdated {
+            get {
+                return ResourceManager.GetString("LogoUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         internal static string Password {

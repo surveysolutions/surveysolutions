@@ -13,8 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     internal class SurveyManagementInterviewCommandValidator : ICommandValidator<Interview, SynchronizeInterviewEventsCommand>,
         ICommandValidator<Interview, CreateInterviewWithPreloadedData>,
-        ICommandValidator<Interview, CreateInterviewCommand>,
-        ICommandValidator<Interview, CreateInterviewOnClientCommand>
+        ICommandValidator<Interview, CreateInterviewCommand>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings;
@@ -93,11 +92,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         }
 
         public void Validate(Interview aggregate, CreateInterviewCommand command)
-        {
-            this.ThrowIfInterviewCountLimitReached();
-        }
-
-        public void Validate(Interview aggregate, CreateInterviewOnClientCommand command)
         {
             this.ThrowIfInterviewCountLimitReached();
         }

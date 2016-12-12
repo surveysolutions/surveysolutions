@@ -121,10 +121,6 @@
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretiens seront approuvés.&lt;/h3&gt;
 &lt;b&gt;Attention!&lt;/b&gt; Vous pouvez approuver des entrevues avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt; et &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
-  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entrevue sera approuvé.&lt;/h3&gt;
-&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec l’état suivant uniquement : &lt;i&gt;{1}&lt;/i&gt;.</value>
-  </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; entretients à réaffecter.&lt;/h3&gt;
 &lt;b&gt;Attention!&lt;/b&gt; Vous pouvez affecter des entrevues qu'avec les statuts suivants seulement : &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (seulement à un autre enquêteur de la même équipe)&lt;/i&gt; et &lt;i&gt;{3}&lt;/i&gt;.</value>

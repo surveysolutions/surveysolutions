@@ -90,6 +90,15 @@
         };
     };
 
+    commands[config.commands.rejectInterviewToInterviewerCommand] = function (args) {
+        return {
+            interviewId: interviewId,
+            interviewerId: args.interviewerId,
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
+
     commands[config.commands.hQApproveInterviewCommand] = function(args) {
         return {
             interviewId: interviewId,

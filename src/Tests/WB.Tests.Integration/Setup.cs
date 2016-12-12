@@ -2,13 +2,11 @@
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
-using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -40,12 +38,6 @@ namespace WB.Tests.Integration
                 .Setup(locator => locator.GetInstance<IFileSystemAccessor>())
                 .Returns(fileSystemIoAccessor);
 
-            var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
-
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
-                .Returns(questionOptionsRepository);
-
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
 
@@ -71,9 +63,6 @@ namespace WB.Tests.Integration
             Func<SideBarSectionViewModel> sideBarSectionViewModel = ()
                 => new SideBarSectionViewModel(
                     interviewsRepository,
-                    questionnaireRepository,
-                    new SubstitutionService(),
-                    new LiteEventRegistry(),
                     sideBarSectionViewModelsFactory,
                     Mock.Of<IMvxMessenger>(),
                     Create.DynamicTextViewModel(
@@ -82,6 +71,11 @@ namespace WB.Tests.Integration
                 {
                     NavigationState = navigationState,
                 };
+           
+            var dispatcherMock = new Mock<IMvxMainThreadDispatcher>();
+            dispatcherMock
+                .Setup(_ => _.RequestMainThreadAction(It.IsAny<Action>()))
+                .Callback<Action>(action => action.Invoke());
 
             Setup.InstanceToMockedServiceLocator<GroupStateViewModel>(Mock.Of<GroupStateViewModel>());
             Mock.Get(ServiceLocator.Current)
@@ -93,7 +87,8 @@ namespace WB.Tests.Integration
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 eventRegistry: new LiteEventRegistry(),
-                modelsFactory: sideBarSectionViewModelsFactory);
+                modelsFactory: sideBarSectionViewModelsFactory,
+                mainThreadDispatcher: dispatcherMock.Object);
 
             sidebarViewModel.Init("", new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), navigationState);
 

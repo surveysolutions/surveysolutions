@@ -18,17 +18,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
 
                 Create.Entity.FixedRoster(rosterId: Guid.Parse("11111111111111111111111111111111"),
-                    title: "top level fixed group", fixedTitles: new[] {"1", "2"}, children: new[]
+                    title: "top level fixed group", obsoleteFixedTitles: new[] {"1", "2"}, children: new[]
                     {
                         Create.Entity.FixedRoster(rosterId: Guid.Parse("21111111111111111111111111111111"),
-                            title: "nested fixed group", fixedTitles: new[] {"a", "b"}, children: new[]
+                            title: "nested fixed group", obsoleteFixedTitles: new[] {"a", "b"}, children: new[]
                             {
                                 Create.Entity.FixedRoster(rosterId: Guid.Parse("31111111111111111111111111111111"),
-                                    title: "nested fixed subgroup", fixedTitles: new[] {"x", "y"})
+                                    title: "nested fixed subgroup", obsoleteFixedTitles: new[] {"x", "y"})
                             })
                     }),
                 Create.Entity.FixedRoster(rosterId: Guid.Parse("22222222222222222222222222222222"),
-                    title: "separate fixed group", fixedTitles: new[] {"I", "II"}));
+                    title: "separate fixed group", obsoleteFixedTitles: new[] {"I", "II"}));
 
             questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));

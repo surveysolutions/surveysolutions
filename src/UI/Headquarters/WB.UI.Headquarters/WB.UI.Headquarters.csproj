@@ -452,6 +452,34 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
+    <Content Include="Dependencies\build\*.js" />
+    <Content Include="Dependencies\build\*.css" />
+    <Content Include="Dependencies\fonts\RobotoBold.svg" />
+    <Content Include="Dependencies\fonts\RobotoItalic.svg" />
+    <Content Include="Dependencies\fonts\RobotoLight.svg" />
+    <Content Include="Dependencies\fonts\RobotoRegular.svg" />
+    <Content Include="Dependencies\fonts\TrebuchetMS.svg" />
+    <Content Include="Dependencies\fonts\TrebuchetMSBold.svg" />
+    <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.svg" />
+    <Content Include="Dependencies\gulpfile.js" />
+    <Content Include="Dependencies\img\designer-logo.png" />
+    <Content Include="Dependencies\img\headquarter_logo-retina.png" />
+    <Content Include="Dependencies\img\headquarter_logo.png" />
+    <Content Include="Dependencies\img\HQ-login-3_05.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq-114x114.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq-120x120.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq-144x144.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq-152x152.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq-180x180.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq-192x192.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq-72x72.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq-76x76.png" />
+    <Content Include="Dependencies\img\identity\favicon-hq.png" />
+    <Content Include="Dependencies\img\logo-retina.png" />
+    <Content Include="Dependencies\img\logo.png" />
+    <Content Include="Dependencies\img\pretty-checkable-sprites.png" />
+    <Content Include="Dependencies\img\wb-logo.png" />
+    <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
@@ -470,6 +498,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
@@ -506,6 +535,11 @@
     <EmbeddedResource Include="Resources\EnumNames.pt.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.pt.resx" />
+    <EmbeddedResource Include="Resources\Details.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Details.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.pt.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.pt.resx" />
     <EmbeddedResource Include="Resources\Pages.pt.resx" />
@@ -515,6 +549,52 @@
     <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Dependencies\css\markup.scss" />
+    <Content Include="Dependencies\.bowerrc" />
+    <Content Include="Dependencies\bower.json" />
+    <Content Include="Dependencies\package.json" />
+    <Content Include="Dependencies\css\_add-interviews.scss" />
+    <Content Include="Dependencies\css\_batch-upload.scss" />
+    <Content Include="Dependencies\css\_common.scss" />
+    <Content Include="Dependencies\css\_export.scss" />
+    <Content Include="Dependencies\css\_import-questionnaires.scss" />
+    <Content Include="Dependencies\css\_login.scss" />
+    <Content Include="Dependencies\css\_mixins.scss" />
+    <Content Include="Dependencies\css\_two-column-form.scss" />
+    <Content Include="Dependencies\css\_variables.scss" />
+    <Content Include="Dependencies\fonts\RobotoBold.eot" />
+    <Content Include="Dependencies\fonts\RobotoBold.ttf" />
+    <Content Include="Dependencies\fonts\RobotoBold.woff" />
+    <Content Include="Dependencies\fonts\RobotoBold.woff2" />
+    <Content Include="Dependencies\fonts\RobotoItalic.eot" />
+    <Content Include="Dependencies\fonts\RobotoItalic.ttf" />
+    <Content Include="Dependencies\fonts\RobotoItalic.woff" />
+    <Content Include="Dependencies\fonts\RobotoItalic.woff2" />
+    <Content Include="Dependencies\fonts\RobotoLight.eot" />
+    <Content Include="Dependencies\fonts\RobotoLight.ttf" />
+    <Content Include="Dependencies\fonts\RobotoLight.woff" />
+    <Content Include="Dependencies\fonts\RobotoLight.woff2" />
+    <Content Include="Dependencies\fonts\RobotoRegular.eot" />
+    <Content Include="Dependencies\fonts\RobotoRegular.ttf" />
+    <Content Include="Dependencies\fonts\RobotoRegular.woff" />
+    <Content Include="Dependencies\fonts\RobotoRegular.woff2" />
+    <Content Include="Dependencies\fonts\TrebuchetMS.eot" />
+    <Content Include="Dependencies\fonts\TrebuchetMS.ttf" />
+    <Content Include="Dependencies\fonts\TrebuchetMS.woff" />
+    <Content Include="Dependencies\fonts\TrebuchetMS.woff2" />
+    <Content Include="Dependencies\fonts\TrebuchetMSBold.eot" />
+    <Content Include="Dependencies\fonts\TrebuchetMSBold.ttf" />
+    <Content Include="Dependencies\fonts\TrebuchetMSBold.woff" />
+    <Content Include="Dependencies\fonts\TrebuchetMSBold.woff2" />
+    <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.eot" />
+    <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.ttf" />
+    <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.woff" />
+    <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.woff2" />
+    <Content Include="Scripts\bloodhound.min.js" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -571,7 +651,6 @@
     <Content Include="Scripts\spin.js" />
     <Content Include="Scripts\spin.min.js" />
     <Content Include="Scripts\supervisor.framework.js" />
-    <Content Include="Scripts\typeahead.js" />
     <Content Include="Scripts\viewmodels\listview.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\brokeninterviewpackages.js" />
@@ -743,7 +822,7 @@
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\ControlPanel\RestoreAllDeletedQuestionnaireProjections.cshtml" />
     <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
-    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
@@ -812,6 +891,7 @@
     <Content Include="Scripts\spin.min.js.map" />
     <Content Include="Views\Interview\CommentTemplatePartialView.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
+    <Content Include="Views\Account\LogOn.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -860,6 +940,7 @@
     <Compile Include="API\ProgressiveDownloadResult.cs" />
     <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
+    <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
@@ -1278,6 +1359,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M005_QuestionnaireRosterStructures.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M004_QuestionnaireImportDate.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslations.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M006_AddMinInterviewerVersion.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M005_AddTeamLeatIdIndex.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddUsersIndex.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M001_InitDb.cs" />
@@ -1285,6 +1367,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M003_RemoveFeedTables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M004_RemoveOldSyncTables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M006_AddSortOrderToFeaturedQuestions.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
@@ -1307,6 +1390,7 @@
     <Compile Include="Models\ChangeStateHistoryViewModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CloneQuestionnaireModel.cs" />
+    <Compile Include="Models\CompanyLogo\CompanyLogo.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\CypherSettingsModel.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />
@@ -1406,6 +1490,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Details.Designer.cs">
+      <DependentUpon>Details.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\Interviews.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1491,8 +1580,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\Attributes\" />
-    <Folder Include="API\Resources\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Dependencies\js\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>

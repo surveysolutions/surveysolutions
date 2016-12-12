@@ -24,6 +24,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind(typeof(IPlainKeyValueStorage<>))
                 .To(typeof(PostgresPlainKeyValueStorage<>))
                 .InSingletonScope();
+
+            this.Kernel.Bind(typeof(IEntitySerializer<>))
+                .To(typeof(EntitySerializer<>))
+                .InSingletonScope();
         }
     }
 }

@@ -3,7 +3,6 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Api.Headquarters;
 using WB.UI.Shared.Web.Membership;
@@ -15,7 +14,6 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
     {
         protected static HQQuestionnairesController CreateQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory = null,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory = null,
             IMembershipUserService membershipUserService = null,
             IDesignerEngineVersionService engineVersionService = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
@@ -28,7 +26,6 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 userHelper: membershipUserService ?? Mock.Of<IMembershipUserService>(),
                 questionnaireViewFactory: questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
                 viewFactory: Mock.Of<IQuestionnaireListViewFactory>(),
-                sharedPersonsViewFactory: sharedPersonsViewFactory ?? Mock.Of<IQuestionnaireSharedPersonsFactory>(),
                 questionnaireVerifier: questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 expressionProcessorGenerator: expressionProcessorGenerator??Mock.Of<IExpressionProcessorGenerator>(),
                 engineVersionService: engineVersionService ?? Mock.Of<IDesignerEngineVersionService>(),

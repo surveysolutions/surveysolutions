@@ -7,6 +7,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
@@ -17,7 +19,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             appDomainContext = AppDomainContext.Create();
         };
 
-        private Because of = () =>
+        Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -34,9 +36,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 using (var eventContext = new EventContext())
                 {
                     var interview = SetupStatefullInterview(questionnaireDocument, 
-                        answersOnPrefilledQuestions: new Dictionary<Guid, object>
+                        answersOnPrefilledQuestions: new Dictionary<Guid, AbstractAnswer>
                         {
-                            { numericQuestionId, 3 }
+                            { numericQuestionId, NumericIntegerAnswer.FromInt(3) }
                         });
 
                     result.AnyNumericRosterWasCreated = eventContext.AnyEvent<RosterInstancesAdded>(x => x.Instances.Any(r => r.GroupId == roster1Id));

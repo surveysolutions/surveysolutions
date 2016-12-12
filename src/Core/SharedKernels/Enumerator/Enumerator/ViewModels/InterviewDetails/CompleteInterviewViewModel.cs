@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CompleteInterviewViewModel : MvxViewModel
+    public class CompleteInterviewViewModel : MvxViewModel, IDisposable
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
@@ -112,6 +112,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.viewModelNavigationService.NavigateToDashboard();
 
             this.messenger.Publish(new InterviewCompletedMessage(this));
+        }
+
+        public void Dispose()
+        {
+            this.Name.Dispose();
         }
     }
 }

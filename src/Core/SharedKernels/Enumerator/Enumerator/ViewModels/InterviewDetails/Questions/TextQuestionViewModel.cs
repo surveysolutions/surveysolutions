@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -192,9 +191,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateSelfFromModel()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-
-            var answerModel = interview.GetTextAnswer(this.questionIdentity);
-            this.Answer = answerModel.Answer;
+            
+            this.Answer = interview.GetTextQuestion(this.questionIdentity).GetAnswer()?.Value;
         }
 
         public void Handle(TextQuestionAnswered @event)

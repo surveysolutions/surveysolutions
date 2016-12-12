@@ -5,9 +5,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
     public class SharedPerson
     {
-        public Guid Id { get; set; }
-        public string Email { get; set; }
-        public ShareType ShareType { set; get; }
-        public bool IsOwner { get; set; }
+        public virtual Guid UserId { get; set; }
+        public virtual string Email { get; set; }
+        public virtual ShareType ShareType { set; get; }
+        public virtual bool IsOwner { get; set; }
     }
 }

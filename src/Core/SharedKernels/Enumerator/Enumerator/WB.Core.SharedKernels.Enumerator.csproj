@@ -66,22 +66,6 @@
   <ItemGroup>
     <Compile Include="Aggregates\IStatefulInterview.cs" />
     <Compile Include="DataTransferObjects\InterviewSnapshotDto.cs" />
-    <Compile Include="Entities\Interview\BaseInterviewAnswer.cs" />
-    <Compile Include="Entities\Interview\DateTimeAnswer.cs" />
-    <Compile Include="Entities\Interview\GpsCoordinatesAnswer.cs" />
-    <Compile Include="Entities\Interview\IntegerNumericAnswer.cs" />
-    <Compile Include="Entities\Interview\InterviewComment.cs" />
-    <Compile Include="Entities\Interview\InterviewEnablementState.cs" />
-    <Compile Include="Entities\Interview\InterviewRoster.cs" />
-    <Compile Include="Entities\Interview\LinkedMultiOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\LinkedSingleOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\MultimediaAnswer.cs" />
-    <Compile Include="Entities\Interview\MultiOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\RealNumericAnswer.cs" />
-    <Compile Include="Entities\Interview\SingleOptionAnswer.cs" />
-    <Compile Include="Entities\Interview\TextAnswer.cs" />
-    <Compile Include="Entities\Interview\TextListAnswer.cs" />
-    <Compile Include="Entities\Interview\YesNoAnswer.cs" />
     <Compile Include="Events\InterviewAnswersFromSyncPackageRestored.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
@@ -90,7 +74,6 @@
     <Compile Include="Implementation\Repositories\TranslationsStorage.cs" />
     <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
-    <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Services\AsyncRunner.cs" />
     <Compile Include="Implementation\Services\BaseViewModelNavigationService.cs" />
     <Compile Include="Implementation\Services\EntitiesListViewModelFactory.cs" />
@@ -154,8 +137,6 @@
     <Compile Include="Services\Infrastructure\Storage\IPlainStorage.cs" />
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\IOptionsRepository.cs" />
-    <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
-    <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
     <Compile Include="Services\IAsyncRunner.cs" />
     <Compile Include="Utils\CompositeCollection.cs" />
     <Compile Include="Utils\CovariantObservableCollection.cs" />
@@ -175,7 +156,11 @@
     <Compile Include="ViewModels\InterviewDetails\OptionTopBorderViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestion.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\ICompositeQuestionWithChildren.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\IMultiOptionQuestionViewModelToggleable.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\IQuestionStateViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToListQuestionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionOptionViewModelBase.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionLinkedToListQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\ErrorMessagesViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\FilteredOptionsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\QuestionInstructionsViewModel.cs" />
@@ -190,7 +175,6 @@
       <DependentUpon>UIResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
-    <Compile Include="Services\IAnswerToStringService.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="Services\IUserInteractionService.cs" />
     <Compile Include="Services\IUserInterfaceStateService.cs" />
@@ -204,11 +188,12 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\GpsLocation.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionRosterLinkedQuestionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\State\SubstitutionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SingleInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextStateViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\VariableViewModel.cs" />
+    <Compile Include="ViewModels\NavigationGroupType.cs" />
     <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\EnumerationStageViewModel.cs" />
@@ -234,7 +219,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\IntegerQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultimedaQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionOptionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToQuestionQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\QRBarcodeQuestionViewModel.cs" />
@@ -260,7 +245,6 @@
     <Compile Include="ViewModels\NavigationIdentity.cs" />
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
-    <Compile Include="ViewModels\ObservableRangeCollection.cs" />
     <Compile Include="ViewModels\BasePrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
     <Compile Include="Views\AttachmentContent.cs" />
@@ -323,11 +307,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.0.1\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.0\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.0\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.core.1.0.1\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\SQLitePCLRaw.core.1.1.0\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

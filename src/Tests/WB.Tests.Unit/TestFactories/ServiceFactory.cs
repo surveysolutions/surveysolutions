@@ -27,6 +27,7 @@ using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -49,6 +50,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.WriteSide;
@@ -56,6 +58,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -66,8 +69,20 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class ServiceFactory
     {
-        public IAnswerToStringService AnswerToStringService()
-            => new AnswerToStringService();
+        public static CommandService CommandService(
+            IEventSourcedAggregateRootRepository repository = null,
+            IPlainAggregateRootRepository plainRepository = null,
+            IEventBus eventBus = null, 
+            IAggregateSnapshotter snapshooter = null,
+            IServiceLocator serviceLocator = null)
+        {
+            return new CommandService(
+                repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                eventBus ?? Mock.Of<IEventBus>(),
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
+                serviceLocator ?? Mock.Of<IServiceLocator>(),
+                plainRepository ?? Mock.Of<IPlainAggregateRootRepository>());
+        }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
 
@@ -274,6 +289,27 @@ namespace WB.Tests.Unit.TestFactories
                 paraDataAccessor: paraDataAccessor ?? Substitute.For<IParaDataAccessor>(),
                 fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Substitute.For<IQuestionnaireExportStructureStorage>());
+        }
+
+        public ISubstitionTextFactory SubstitionTextFactory()
+        {
+            return new SubstitionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
+        }
+
+        public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository,
+            IEnumeratorSettings settings)
+        {
+            return new InterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                settings ?? Mock.Of<IEnumeratorSettings>());
+        }
+
+        public AllInterviewsFactory AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null,
+            IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions = null)
+        {
+            return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
+                featuredQuestions ?? Mock.Of<IQueryableReadSideRepositoryReader<QuestionAnswer>>());
         }
     }
 }

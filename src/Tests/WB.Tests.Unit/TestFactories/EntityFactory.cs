@@ -5,7 +5,10 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using Moq;
+using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
@@ -19,6 +22,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -28,14 +32,17 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -125,7 +132,7 @@ namespace WB.Tests.Unit.TestFactories
             {
                 Text = text,
                 UserId = userId ?? Guid.NewGuid(),
-                UserRole = userRole
+                UserRole = userRole ?? UserRoles.Operator
             };
         }
 
@@ -138,13 +145,8 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 "some questionnaire");
 
-        public DateTimeAnswer DateTimeAnswer(Identity answerIdentity, DateTime answer)
-        {
-            var model = new DateTimeAnswer(answerIdentity.Id, answerIdentity.RosterVector);
-
-            model.SetAnswer(answer);
-            return model;
-        }
+        public InterviewTreeDateTimeQuestion InterviewTreeDateTimeQuestion(DateTime answer, bool isTimestampQuestion = false)
+            => new InterviewTreeDateTimeQuestion(answer, isTimestampQuestion);
 
         public DateTimeQuestion DateTimeQuestion(
             Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -202,17 +204,17 @@ namespace WB.Tests.Unit.TestFactories
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
             => new FailedValidationCondition(failedConditionIndex ?? 1117);
 
-        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null)
+        public Group FixedRoster(Guid? rosterId = null, IEnumerable<string> obsoleteFixedTitles = null, IEnumerable<IComposite> children = null, string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedTitles = null)
             => Create.Entity.Roster(
                 rosterId: rosterId,
                 children: children,
                 title: title,
                 variable: variable,
-                fixedRosterTitles: fixedRosterTitles,
-                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+                fixedRosterTitles: fixedTitles,
+                fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
-        public FixedRosterTitle FixedRosterTitle(decimal value, string title)
-            => new FixedRosterTitle(value, title);
+        public FixedRosterTitle FixedTitle(decimal value, string title = null)
+            => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
 
         public GeoPosition GeoPosition()
             => new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984, 4, 18)));
@@ -245,7 +247,7 @@ namespace WB.Tests.Unit.TestFactories
                 VariableName = variable,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
-                Children = children?.ToList() ?? new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
             };
 
         public HeaderStructureForLevel HeaderStructureForLevel()
@@ -259,15 +261,8 @@ namespace WB.Tests.Unit.TestFactories
                 id ?? Guid.NewGuid(),
                 rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty);
 
-        public IntegerNumericAnswer IntegerNumericAnswer(Identity answerIdentity = null, int answer = 42)
-        {
-            answerIdentity = answerIdentity ?? Create.Entity.Identity();
-
-            var model = new IntegerNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);
-
-            model.SetAnswer(answer);
-            return model;
-        }
+        public InterviewTreeIntegerQuestion InterviewTreeIntegerQuestion(int answer = 42)
+            => new InterviewTreeIntegerQuestion(answer);
 
         public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()
             => new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", () => new byte[0]);
@@ -376,15 +371,6 @@ namespace WB.Tests.Unit.TestFactories
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 301);
 
-        public InterviewRoster InterviewRoster(Guid? rosterId = null, decimal[] rosterVector = null, string rosterTitle = "titile")
-            => new InterviewRoster
-            {
-                Id = rosterId ?? Guid.NewGuid(),
-                IsDisabled = false,
-                RosterVector = rosterVector ?? new decimal[0],
-                Title = rosterTitle
-            };
-
         public InterviewStatuses InterviewStatuses(Guid? interviewid = null, Guid? questionnaireId = null, 
             long? questionnaireVersion = null, params InterviewCommentedStatus[] statuses)
             => new InterviewStatuses
@@ -464,11 +450,11 @@ namespace WB.Tests.Unit.TestFactories
                 answers ?? new AnsweredQuestionSynchronizationDto[0],
                 disabledGroups ?? new HashSet<InterviewItemId>(),
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
-                disabledStaticTexts,
+                disabledStaticTexts ?? new List<Identity>(),
                 validQuestions ?? new HashSet<InterviewItemId>(),
                 invalidQuestions ?? new HashSet<InterviewItemId>(),
-                validStaticTexts,
-                invalidStaticTexts,
+                validStaticTexts ?? new List<Identity>(),
+                invalidStaticTexts ?? new List<KeyValuePair<Identity, List<FailedValidationCondition>>>(),
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                 failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
                 new Dictionary<InterviewItemId, RosterVector[]>(),
@@ -526,13 +512,13 @@ namespace WB.Tests.Unit.TestFactories
                 QuestionText = text
             };
 
-        public MultiOptionAnswer MultiOptionAnswer(Guid questionId, decimal[] rosterVector)
-            => new MultiOptionAnswer(questionId, rosterVector);
+        public InterviewTreeMultiOptionQuestion InterviewTreeMultiOptionQuestion(decimal[] answer)
+            => new InterviewTreeMultiOptionQuestion(answer);
 
         public MultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null,
             string validationExpression = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null,
             bool isYesNo = false, bool hideIfDisabled = false, string optionsFilterExpression = null, Answer[] textAnswers = null,
-            params decimal[] answers)
+            params int[] answers)
             => new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -577,9 +563,11 @@ namespace WB.Tests.Unit.TestFactories
             bool isPrefilled = false,
             bool hideIfDisabled = false,
             bool useFormatting = false,
+            string questionText = null,
             IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
             => new NumericQuestion
             {
+                QuestionText = questionText ?? "text",
                 QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
@@ -635,6 +623,18 @@ namespace WB.Tests.Unit.TestFactories
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue
             };
+
+        public Answer Option(int value, string text = null)
+            => new Answer
+            {
+                AnswerText = text ?? $"Option {value}",
+                AnswerCode = value,
+            };
+
+        public IEnumerable<Answer> Options(params int[] values)
+        {
+            return values.Select(value => Create.Entity.Option(value));
+        }
 
         public ParaDataExportProcessDetails ParaDataExportProcess()
             => new ParaDataExportProcessDetails(DataExportFormat.Tabular);
@@ -703,15 +703,14 @@ namespace WB.Tests.Unit.TestFactories
             => new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
             };
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
             => new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
-                UsesCSharp = usesCSharp,
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithAttachments(Guid? chapterId = null, params Attachment[] attachments)
@@ -720,7 +719,7 @@ namespace WB.Tests.Unit.TestFactories
                 Children = new List<IComposite>
                 {
                     new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
-                },
+                }.ToReadOnlyCollection(),
                 Attachments = attachments.ToList()
             };
 
@@ -730,12 +729,30 @@ namespace WB.Tests.Unit.TestFactories
                 Children = new List<IComposite>
                 {
                     new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() }
-                },
+                }.ToReadOnlyCollection(),
                 Translations = translations.ToList()
             };
 
+        public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+            => this.QuestionnaireDocumentWithOneChapter(chapterId, null, children);
+
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
             => this.QuestionnaireDocumentWithOneChapter(null, null, children);
+
+        public QuestionnaireDocument QuestionnaireDocumentWithOneChapterAndLanguages(Guid chapterId, string[] languages, params IComposite[] children)
+            => new QuestionnaireDocument
+            {
+                PublicKey = Guid.NewGuid(),
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter")
+                    {
+                        PublicKey = chapterId,
+                        Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+                    }
+                }.ToReadOnlyCollection(),
+                Translations = new List<Translation>(languages.Select(x=>Create.Entity.Translation(Guid.NewGuid(), x)))
+            };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
@@ -746,10 +763,13 @@ namespace WB.Tests.Unit.TestFactories
                     new Group("Chapter")
                     {
                         PublicKey = chapterId.GetValueOrDefault(),
-                        Children = children.ToList()
+                        Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
                     }
-                }
+                }.ToReadOnlyCollection()
             };
+
+        public QuestionnaireDocument QuestionnaireDocumentWithOneQuestion(Guid? questionId = null, Guid? questionnaireId = null)
+           => this.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId));
 
         public QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
             => new QuestionnaireExportStructure
@@ -770,13 +790,51 @@ namespace WB.Tests.Unit.TestFactories
         public ReadSideSettings ReadSideSettings()
             => new ReadSideSettings(readSideVersion: 0);
 
-        public RealNumericAnswer RealNumericAnswer(Identity answerIdentity = null, decimal answer = 42.42m)
-        {
-            answerIdentity = answerIdentity ?? Create.Entity.Identity(Guid.NewGuid(), Core.SharedKernels.DataCollection.RosterVector.Empty);
-            var model = new RealNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);
+        public InterviewTreeDoubleQuestion InterviewTreeDoubleQuestion(double answer = 42.42)
+            => new InterviewTreeDoubleQuestion(answer);
 
-            model.SetAnswer(answer);
-            return model;
+        public Group MultiRoster(
+            Guid? rosterId = null,
+            string title = "Multi roster",
+            string variable = "_multi_roster_var",
+            Guid? rosterSizeQuestionId = null,
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group group = Create.Entity.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+
+            return group;
+        }
+
+        public Group ListRoster(
+            Guid? rosterId = null,
+            string title = "List roster",
+            string variable = "_list_roster_var",
+            Guid? rosterSizeQuestionId = null,
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group group = Create.Entity.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+
+            return group;
         }
 
         public Group Roster(
@@ -807,7 +865,7 @@ namespace WB.Tests.Unit.TestFactories
                 {
                     group.FixedRosterTitles =
                         (fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" }).Select(
-                            (x, i) => Create.Entity.FixedRosterTitle(i, x)).ToArray();
+                            (x, i) => Create.Entity.FixedTitle(i, x)).ToArray();
                 }
                 else
                 {
@@ -839,7 +897,8 @@ namespace WB.Tests.Unit.TestFactories
             Guid? linkedToRosterId = null,
             bool? isFilteredCombobox = null,
             string optionsFilterExpression = null,
-            List<Answer> answers = null)
+            List<Answer> answers = null,
+            bool isPrefilled = false)
         {
             answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -851,6 +910,7 @@ namespace WB.Tests.Unit.TestFactories
             }
             return new SingleQuestion
             {
+                Featured = isPrefilled,
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable ?? "single_option_question",
                 QuestionText = title ?? "SO Question",
@@ -902,20 +962,8 @@ namespace WB.Tests.Unit.TestFactories
                 validationConditions ?? new List<ValidationCondition>(),
                 attachmentName);
 
-        public TextAnswer TextAnswer(string answer)
-            => Create.Entity.TextAnswer(answer, null, null);
-
-        public TextAnswer TextAnswer(string answer, Guid? questionId, decimal[] rosterVector)
-        {
-            var textAnswer = new TextAnswer(questionId ?? Guid.NewGuid(), rosterVector ?? Empty.RosterVector);
-
-            if (answer != null)
-            {
-                textAnswer.SetAnswer(answer);
-            }
-
-            return textAnswer;
-        }
+        public InterviewTreeTextQuestion InterviewTreeTextQuestion(string answer)
+            => new InterviewTreeTextQuestion(answer);
 
         public TextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             int? maxAnswerCount = null, string variable = null, bool hideIfDisabled = false)
@@ -1046,23 +1094,23 @@ namespace WB.Tests.Unit.TestFactories
         public Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
             => new Variable(
                 id ?? Guid.NewGuid(),
-                new VariableData(type, variableName, expression));
+                new VariableData(type, variableName, expression, null));
 
         public VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
             => new VariableValueLabel(value, label);
 
-        public YesNoAnswer YesNoAnswer(Guid questionId, decimal[] rosterVector)
-            => new YesNoAnswer(questionId, rosterVector);
-
         public YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
             => new YesNoAnswers(allOptionCodes, yesNoAnswersOnly);
+        public InterviewTreeYesNoQuestion InterviewTreeYesNoQuestion(AnsweredYesNoOption[] answer)
+            => new InterviewTreeYesNoQuestion(answer);
 
-        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null, bool ordered = false)
+        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, int[] answers = null, bool ordered = false, int? maxAnswersCount = null)
             => Create.Entity.MultipleOptionsQuestion(
                 isYesNo: true,
                 questionId: questionId,
-                answers: answers ?? new decimal[] { },
-                areAnswersOrdered: ordered);
+                answers: answers ?? new int[] { },
+                areAnswersOrdered: ordered,
+                maxAllowedAnswers: maxAnswersCount);
 
         public TranslationInstance TranslationInstance(string value = null,
             Guid? translationId = null, 
@@ -1117,10 +1165,12 @@ namespace WB.Tests.Unit.TestFactories
             };
         }
 
-        public RosterSynchronizationDto RosterSynchronizationDto(Guid rosterId)
-        {
-            return new RosterSynchronizationDto(rosterId, new decimal[] {}, 0, 0, "roster title");
-        }
+        public RosterSynchronizationDto RosterSynchronizationDto(Guid rosterId,
+            RosterVector outerScopeRosterVector = null, decimal? rosterInstanceId = null, int? sortIndex = null,
+            string rosterTitle = null)
+            => new RosterSynchronizationDto(rosterId,
+                    outerScopeRosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    rosterInstanceId ?? 0, sortIndex ?? 0, rosterTitle ?? "roster title");
 
         public MapReportPoint MapReportPoint(string id, double latitude, double longitude)
         {
@@ -1155,43 +1205,119 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewTreeRoster InterviewTreeRoster(Identity rosterIdentity, bool isDisabled = false, string rosterTitle = null,
             RosterType rosterType = RosterType.Fixed, Guid? rosterSizeQuestion = null,
             params IInterviewTreeNode[] children)
-            => new InterviewTreeRoster(rosterIdentity, children, rosterType: rosterType, rosterSizeQuestion: rosterSizeQuestion, childrenReferences : Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
+        {
+            var titleWithSubstitutions = Create.Entity.SubstitionText(rosterIdentity, "Title");
+            return new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, children, rosterType: rosterType,
+                rosterSizeQuestion: rosterSizeQuestion,
+                childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
+        }
 
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 
             params IInterviewTreeNode[] children)
         {
-            var subSection = new InterviewTreeSubSection(groupIdentity, Enumerable.Empty<QuestionnaireItemReference>());
-            subSection.AddChild(children);
+            var titleWithSubstitutions = Create.Entity.SubstitionText(groupIdentity, "Title");
+            var subSection = new InterviewTreeSubSection(groupIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
+            subSection.AddChildren(children);
             if (isDisabled) subSection.Disable();
             return subSection;
         }
 
         public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
         {
-            var section = new InterviewTreeSection(sectionIdentity, Enumerable.Empty<QuestionnaireItemReference>());
-            section.AddChild(children);
+            var titleWithSubstitutions = Create.Entity.SubstitionText(sectionIdentity, "Title");
+            var section = new InterviewTreeSection(sectionIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
+            section.AddChildren(children);
             if (isDisabled)
                 section.Disable();
             return section;
         }
 
-        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
-            string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
-            Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null)
-            => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, questionType, answer,
-                linkedOptions, cascadingParentQuestionId, isYesNo, isDecimal, linkedSourceId);
 
         public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
-            => new InterviewTreeStaticText(staticTextIdentity, isDisabled);
+        {
+            var titleWithSubstitutions = Create.Entity.SubstitionText(staticTextIdentity, "Title");
+            var staticText = new InterviewTreeStaticText(staticTextIdentity, titleWithSubstitutions);
+            if (isDisabled) staticText.Disable();
+            return staticText;
+        }
 
         public InterviewTreeVariable InterviewTreeVariable(Identity variableIdentity, bool isDisabled = false, object value = null)
-            => new InterviewTreeVariable(variableIdentity, isDisabled, value);
+        {
+            var variable = new InterviewTreeVariable(variableIdentity);
+            if (isDisabled) variable.Disable();
+            variable.SetValue(value);
+            return variable;
+        }
 
         public InterviewTreeQuestion InterviewTreeQuestion_SingleOption(Identity questionIdentity,
             bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
-            => new InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null, false, false);
+        {
+            var question = InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null, false, false);
+            if (isDisabled) question.Disable();
+            return question;
+        }
 
-        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections) 
-            => new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), sections);
+        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
+            string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
+            Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
+        {
+            var titleWithSubstitutions = Create.Entity.SubstitionText(questionIdentity, title);
+            var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
+                cascadingParentQuestionId, isYesNo,  isDecimal, false, false, linkedSourceId);
+
+            if (isDisabled) question.Disable();
+            return question;
+        }
+
+        private SubstitionText SubstitionText(Identity identity, string title)
+        {
+            return new SubstitionText(identity, title, new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+        }
+
+
+        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections)
+        {
+            var tree = new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
+            tree.SetSections(sections);
+            return tree;
+        }
+
+        public CategoricalFixedSingleOptionAnswer SingleOptionAnswer(int answer)
+        {
+            return CategoricalFixedSingleOptionAnswer.FromInt(answer);
+        }
+
+        public CategoricalFixedMultiOptionAnswer MultiOptionAnswer(params int[] selectedOptions)
+        {
+            return CategoricalFixedMultiOptionAnswer.FromInts(selectedOptions);
+        }
+
+        
+        public TextListAnswer ListAnswer(params int[] answers)
+        {
+            return TextListAnswer.FromTextListAnswerRows(answers.Select(x => new TextListAnswerRow(x, $"answer #{x}")));
+        }
+
+        public TextAnswer TextQuestionAnswer(string answer)
+        {
+            return TextAnswer.FromString(answer);
+        }
+
+        public CategoricalLinkedSingleOptionAnswer LinkedSingleOptionAnswer(RosterVector selectedValue)
+        {
+            return CategoricalLinkedSingleOptionAnswer.FromRosterVector(selectedValue);
+        }
+
+        public NumericIntegerAnswer NumericIntegerAnswer(int i)
+            => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
+                    .NumericIntegerAnswer.FromInt(i);
+
+        public PreloadedLevelDto PreloadedLevelDto(RosterVector rosterVector, params PreloadedAnswer[] answeres)
+        {
+            return new PreloadedLevelDto(rosterVector, answeres.ToDictionary(answer => answer.Id, answer => answer.Answer));
+        }
+
+        public NavigationIdentity NavigationIdentity(Identity navigateTo)
+            => new NavigationIdentity() {TargetScreen = ScreenType.Group, TargetGroup = navigateTo};
     }
 }

@@ -197,7 +197,7 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage UpdateTranslation(TranslationModel model)
         {
             var commandType = typeof(AddOrUpdateTranslation).Name;
-            AddOrUpdateTranslation command;
+            AddOrUpdateTranslation command; 
             try
             {
                 command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);

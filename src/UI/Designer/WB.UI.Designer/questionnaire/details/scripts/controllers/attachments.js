@@ -150,12 +150,15 @@
                         attachment.meta.fileName = file.name;
                         attachment.meta.lastUpdated = moment();
 
-                        var maxAttachmentNameLength = 32;
-                        var attachmentFileNameLength = attachment.meta.fileName.length;
+                        if (attachment.meta.fileName) {
+                            var maxAttachmentNameLength = 32;
+                            var attachmentFileNameLength = attachment.meta.fileName.length;
 
-                        attachment.name = attachment.meta.fileName.replace(/\.[^/.]+$/, "")
-                            .substring(0, attachmentFileNameLength < maxAttachmentNameLength ? attachmentFileNameLength : maxAttachmentNameLength);
-
+                            attachment.name = attachment.meta.fileName.replace(/\.[^/.]+$/, "")
+                                .substring(0, attachmentFileNameLength < maxAttachmentNameLength
+                                              ? attachmentFileNameLength
+                                              : maxAttachmentNameLength);
+                        }
                         if (!_.isUndefined(attachment.form)) {
                             attachment.form.$setDirty();
                         }
@@ -170,6 +173,10 @@
             }
 
             $scope.saveAttachment = function (attachment) {
+
+                attachment.oldAttachmentId = attachment.attachmentId;
+                attachment.attachmentId = utilityService.guid();
+
                 commandService.updateAttachment($state.params.questionnaireId, attachment).success(function () {
                     attachment.initialAttachment = angular.copy(attachment);
                     attachment.form.$setPristine();

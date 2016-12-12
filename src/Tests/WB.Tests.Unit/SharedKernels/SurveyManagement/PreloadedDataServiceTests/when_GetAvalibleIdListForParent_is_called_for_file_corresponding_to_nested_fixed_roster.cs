@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -20,11 +21,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 CreateQuestionnaireDocumentWithOneChapter(
 
                     Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "rosterGroup",  variable: "rosterGroup",
-                        fixedTitles: new[] {"1", "2"},
+                        obsoleteFixedTitles: new[] {"1", "2"},
                         children: new IComposite[]
                         {
                             Create.Entity.FixedRoster(rosterId: nestedRosterId, variable: "nestedRoster",
-                                fixedTitles: new[] {"a"}, title: "nestedRoster")
+                                obsoleteFixedTitles: new[] {"a"}, title: "nestedRoster")
                         }));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 result =
                     preloadedDataService.GetAvailableIdListForParent(
                         CreatePreloadedDataByFile(new string[] { "Id", "ParentId1",  }, new string[][] { new string[] { "1", "1"} },
-                            "rosterGroup"), new ValueVector<Guid> { rosterGroupId, nestedRosterId }, new[] { "1", "1" });
+                            "rosterGroup"), new ValueVector<Guid> { rosterGroupId, nestedRosterId }, new[] { "1", "1" }, new PreloadedDataByFile[0]);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

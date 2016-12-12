@@ -16,16 +16,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             notUnderPropagatedGroupLinkingQuestionId = Guid.Parse("12222222222222222222222222222222");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new NumericQuestion
+            questionnaire = CreateQuestionnaireDocument(
+                new NumericQuestion
             {
                 PublicKey = notUnderPropagatedGroupLinkingQuestionId,
                 StataExportCaption = "var1",
                 QuestionType = QuestionType.Numeric
-            });
-
-            questionnaire.Children.Add(new SingleQuestion()
+            },
+                new SingleQuestion()
             {
                 PublicKey = linkedQuestionId,
                 LinkedToQuestionId = notUnderPropagatedGroupLinkingQuestionId,
@@ -36,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

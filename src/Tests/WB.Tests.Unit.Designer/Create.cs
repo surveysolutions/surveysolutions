@@ -1,6 +1,7 @@
 ﻿extern alias designer;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -48,6 +49,7 @@ using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
@@ -69,7 +71,7 @@ namespace WB.Tests.Unit.Designer
                 UserName = userName,
             };
 
-        public static Answer Answer(string answer, decimal? value = null, string stringValue = null, decimal? parentValue = null)
+        public static Answer Answer(string answer = "answer option", decimal? value = null, string stringValue = null, decimal? parentValue = null)
         {
             return new Answer()
             {
@@ -154,6 +156,12 @@ namespace WB.Tests.Unit.Designer
                 groupId: sectionId,
                 children: children);
 
+        public static Group Subsection(string title = "Subsection X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
+            => Create.Group(
+                title: title,
+                groupId: sectionId,
+                children: children);
+
         public static CodeGenerationSettings CodeGenerationSettings()
         {
             return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV5" },
@@ -184,71 +192,6 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ICompilerSettings>());
         }
 
-        private static QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId,
-            string questionnaireTitle,
-            string chapter1Id,
-            string chapter1Title,
-            string chapter2Id,
-            string chapter2Title,
-            string chapter1GroupId,
-            string chapter1GroupTitle,
-            string chapter2QuestionId,
-            string chapter2QuestionTitle,
-            string chapter2QuestionVariable,
-            string chapter2QuestionConditionExpression,
-            string chapter1StaticTextId,
-            string chapter1StaticText,
-            bool isPublic)
-        {
-            return new QuestionnaireDocument()
-            {
-                PublicKey = Guid.Parse(questionnaireId),
-                Title = questionnaireTitle,
-                IsPublic = isPublic,
-                Children = new List<IComposite>()
-                {
-                    new Group()
-                    {
-                        PublicKey = Guid.Parse(chapter1Id),
-                        Title = chapter1Title,
-                        Children = new List<IComposite>()
-                        {
-                            Create.StaticText(staticTextId: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
-                            new Group()
-                            {
-                                PublicKey = GetQuestionnaireItemId(chapter1GroupId),
-                                Title = chapter1GroupTitle,
-                                Children = new List<IComposite>()
-                                {
-                                    new Group()
-                                    {
-                                        IsRoster = true
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    new Group()
-                    {
-                        PublicKey = Guid.Parse(chapter2Id),
-                        Title = chapter2Title,
-                        Children = new List<IComposite>()
-                        {
-                            new TextQuestion()
-                            {
-                                PublicKey = GetQuestionnaireItemId(chapter2QuestionId),
-                                QuestionText = chapter2QuestionTitle,
-                                StataExportCaption = chapter2QuestionVariable,
-                                QuestionType = QuestionType.Text,
-                                ConditionExpression = chapter2QuestionConditionExpression
-                            }
-                        }
-                    }
-                }
-            };
-        }
-
-
         public static QuestionProperties QuestionProperties()
         {
             return new QuestionProperties(false, false);
@@ -256,7 +199,7 @@ namespace WB.Tests.Unit.Designer
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer,
-            bool preFilled = false, bool hideIfDisabled = false)
+            bool preFilled = false, bool hideIfDisabled = false, bool isCurrentTime = false)
         {
             return new DateTimeQuestion("Question DT")
             {
@@ -269,7 +212,8 @@ namespace WB.Tests.Unit.Designer
                 QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
-                Featured = preFilled
+                Featured = preFilled,
+                IsTimestamp = isCurrentTime,
             };
         }
 
@@ -354,7 +298,7 @@ namespace WB.Tests.Unit.Designer
                 VariableName = variable,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
-                Children = children != null ? children.ToList() : new List<IComposite>(),
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 RosterSizeQuestionId = rosterSizeQuestionId,
             };
         }
@@ -415,7 +359,7 @@ namespace WB.Tests.Unit.Designer
 
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
+            string variable = null, string validationMessage = null, string title = null, QuestionScope scope = QuestionScope.Interviewer
             , bool hideIfDisabled = false)
         {
             return new MultimediaQuestion("Question T")
@@ -428,7 +372,7 @@ namespace WB.Tests.Unit.Designer
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                QuestionText = text
+                QuestionText = title
             };
         }
 
@@ -513,6 +457,17 @@ namespace WB.Tests.Unit.Designer
         }
 
 
+        public static Answer Option(int code, string text = null, string parentValue = null, Guid? id = null)
+        {
+            return new Answer
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                AnswerText = text ?? "text",
+                ParentValue = parentValue,
+                AnswerCode = code
+            };
+        }
+
         public static Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
         {
             return new Answer
@@ -550,10 +505,12 @@ namespace WB.Tests.Unit.Designer
             string validationExpression = null,
             string validationMessage = null,
             QuestionType questionType = QuestionType.Text,
-            IList<ValidationCondition> validationConditions = null,
+            IEnumerable<ValidationCondition> validationConditions = null,
             string variableLabel =null,
             string title= "Question X test",
             string instructions = null,
+            bool isPrefilled = false,
+            QuestionScope scope = QuestionScope.Interviewer,
             params Answer[] answers)
         {
             return new TextQuestion(title)
@@ -567,11 +524,13 @@ namespace WB.Tests.Unit.Designer
                 VariableLabel = variableLabel,
                 Instructions = instructions,
                 Answers = answers.ToList(),
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
+                Featured = isPrefilled,
+                QuestionScope = scope,
             };
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnireHistotyVersionsService histotyVersionsService = null)
         {
             return new Questionnaire(
                 Mock.Of<ILogger>(),
@@ -581,7 +540,8 @@ namespace WB.Tests.Unit.Designer
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>());
+                Mock.Of<ITranslationsService>(),
+                histotyVersionsService ?? Mock.Of<IQuestionnireHistotyVersionsService>());
         }
 
 
@@ -595,7 +555,8 @@ namespace WB.Tests.Unit.Designer
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>());
+                Mock.Of<ITranslationsService>(),
+                Mock.Of<IQuestionnireHistotyVersionsService>());
             questionnaire.Initialize(Guid.NewGuid(), document, new List<SharedPerson> {Create.SharedPerson(responsible)});
             return questionnaire;
         }
@@ -629,72 +590,71 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireDocument QuestionnaireDocumentWithSharedPersons(Guid? id = null, Guid? createdBy = null, List<Guid> sharedPersons = null)
-        {
-            return new QuestionnaireDocument
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                CreatedBy = createdBy,
-            };
-        }
-
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X");
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
         {
             return new Variable(publicKey: id ?? Guid.NewGuid(),
-                variableData: new VariableData(type: type, name: variableName, expression: expression));
+                variableData: new VariableData(type: type, name: variableName, expression: expression, label: null));
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
-            Guid? id = null, bool usesCSharp = false, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
+            Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
         {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children?.ToList() ?? new List<IComposite>(),
-                UsesCSharp = usesCSharp,
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
                 CreatedBy = userId ?? Guid.NewGuid()
             };
         }
 
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
-        {
-            return QuestionnaireDocumentWithOneChapter(null, null, null, null, children);
-        }
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(IEnumerable<Macro> macros = null, IEnumerable<IComposite> children = null)
+            => QuestionnaireDocumentWithOneChapter(null, null, null, null, macros?.ToArray(), children?.ToArray() ?? new IComposite[] {});
 
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
+            => QuestionnaireDocumentWithOneChapter(null, null, null, null, null, children);
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid chapterId, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, chapterId, null, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, chapterId, null, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Attachment[] attachments = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, null, attachments, null, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, attachments, null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Translation[] translations = null, params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, null, null, translations, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, null, translations, null, children);
         }
         
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? questionnaireId = null, Guid? chapterId = null, Attachment[] attachments = null, 
-            Translation[] translations = null, params IComposite[] children)
+            Translation[] translations = null, IEnumerable<Macro> macros = null, params IComposite[] children)
         {
-            var result = new QuestionnaireDocument { PublicKey = questionnaireId ?? Guid.NewGuid() };
-            var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
-
-            result.Children.Add(chapter);
-
-            foreach (var child in children)
+            var result = new QuestionnaireDocument
             {
-                chapter.Children.Add(child);
-            }
+                PublicKey = questionnaireId ?? Guid.NewGuid(),
+                Children = new IComposite[]
+                {
+                    new Group("Chapter")
+                    {
+                        PublicKey = chapterId.GetValueOrDefault(),
+                        Children = children.ToReadOnlyCollection()
+                    }
+                }.ToReadOnlyCollection()
+            };
 
             result.Attachments.AddRange(attachments ?? new Attachment[0]);
             result.Translations.AddRange(translations ?? new Translation[0]);
+
+            foreach (var macro in macros ?? Enumerable.Empty<Macro>())
+            {
+                result.Macros[Guid.NewGuid()] = macro;
+            }
 
             return result;
         }
@@ -710,11 +670,6 @@ namespace WB.Tests.Unit.Designer
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
-        public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId = null)
-        {
-            return new QuestionnaireSharedPersons(questionnaireId ?? Guid.NewGuid());
-        }
-
         public static QuestionnaireStateTracker QuestionnaireStateTacker()
         {
             return new QuestionnaireStateTracker();
@@ -723,8 +678,8 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireView QuestionnaireView(Guid? createdBy)
             => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid() });
 
-        public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument)
-            => new QuestionnaireView(questionnaireDocument);
+        public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument = null, IEnumerable<SharedPerson> sharedPersons = null)
+            => new QuestionnaireView(questionnaireDocument ?? Create.QuestionnaireDocument(), sharedPersons ?? Enumerable.Empty<SharedPerson>());
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
@@ -745,7 +700,7 @@ namespace WB.Tests.Unit.Designer
             string enablementCondition = null,
             string[] fixedTitles = null,
             IEnumerable<IComposite> children = null,
-            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+            RosterSizeSourceType rosterType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null)
@@ -758,9 +713,9 @@ namespace WB.Tests.Unit.Designer
                 children: children);
 
             group.IsRoster = true;
-            group.RosterSizeSource = rosterSizeSourceType;
+            group.RosterSizeSource = rosterType;
 
-            if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
+            if (rosterType == RosterSizeSourceType.FixedTitles)
             {
                 if (fixedRosterTitles == null)
                 {
@@ -783,7 +738,7 @@ namespace WB.Tests.Unit.Designer
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
-            Guid? linkedToRosterId = null, List<Answer> answers = null)
+            Guid? linkedToRosterId = null, List<Answer> answers = null, bool isPrefilled = false, bool isComboBox = false)
         {
             return new SingleQuestion
             {
@@ -798,7 +753,9 @@ namespace WB.Tests.Unit.Designer
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 Answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
-                LinkedFilterExpression = linkedFilterExpression
+                LinkedFilterExpression = linkedFilterExpression,
+                Featured = isPrefilled,
+                IsFilteredCombobox = isComboBox,
             };
         }
 
@@ -967,9 +924,10 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
             }
 
-            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
+            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, 
+                string lookupTableName = "table", Guid? oldLookupTableId = null)
             {
-                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file");
+                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file", oldLookupTableId);
             }
 
             internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
@@ -983,9 +941,10 @@ namespace WB.Tests.Unit.Designer
                 return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
             }
             
-            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)
+            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, 
+                Guid responsibleId, string attachmentName, Guid? oldAttachmentId = null)
             {
-                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId);
+                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId, oldAttachmentId);
             }
 
             public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
@@ -1004,12 +963,13 @@ namespace WB.Tests.Unit.Designer
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, Guid? userId = null)
             {
-                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression));
+                return new UpdateVariable(questionnaireId, userId ?? Guid.NewGuid(), entityId, new VariableData(type, name, expression, null));
             }
 
-            public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, Guid responsibleId)
+            public static AddOrUpdateTranslation AddOrUpdateTranslation(Guid questionnaireId, Guid translationId, string name, 
+                Guid responsibleId, Guid? oldTranslationId = null)
             {
-                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name);
+                return new AddOrUpdateTranslation(questionnaireId, responsibleId, translationId, name, oldTranslationId);
             }
 
             public static DeleteTranslation DeleteTranslation(Guid questionnaireId, Guid translationId, Guid responsibleId)
@@ -1075,7 +1035,21 @@ namespace WB.Tests.Unit.Designer
 
             public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, int? index =null)
             {
-                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression), responsibleId, parentId, index);
+                return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, null), responsibleId, parentId, index);
+            }
+
+            public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", bool isPublic = false, bool isResponsibleAdmin = false)
+            {
+                return new UpdateQuestionnaire(questionnaireId, title, isPublic, responsibleId, isResponsibleAdmin);
+            }
+            public static DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId)
+            {
+                return new DeleteQuestionnaire(questionnaireId, responsibleId);
+            }
+
+            public static RevertVersionQuestionnaire RevertVersionQuestionnaire(Guid questionnaireId, Guid historyReferanceId, Guid responsibleId)
+            {
+                return new RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             }
         }
 
@@ -1092,6 +1066,15 @@ namespace WB.Tests.Unit.Designer
                 attachmentMetaStorage: attachmentMetaStorage);
         }
 
+        public static QuestionnireHistotyVersionsService QuestionnireHistotyVersionsService(
+            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage = null,
+            IEntitySerializer<QuestionnaireDocument> entitySerializer = null)
+        {
+            return new QuestionnireHistotyVersionsService(
+                questionnaireChangeItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
+                entitySerializer ?? new EntitySerializer<QuestionnaireDocument>());
+        }
+
         public static ITopologicalSorter<T> TopologicalSorter<T>()
         {
             return new TopologicalSorter<T>();
@@ -1101,7 +1084,7 @@ namespace WB.Tests.Unit.Designer
         {
             return new SharedPerson
             {
-                Id = id ?? Guid.NewGuid(),
+                UserId = id ?? Guid.NewGuid(),
                 IsOwner = isOwner,
                 Email = email ?? "user@e.mail",
                 ShareType = shareType
@@ -1177,6 +1160,49 @@ namespace WB.Tests.Unit.Designer
         public static CustomWebApiAuthorizeFilter CustomWebApiAuthorizeFilter()
         {
             return new CustomWebApiAuthorizeFilter();
+        }
+
+        public static QuestionnaireVerifier QuestionnaireVerifier(
+            IExpressionProcessor expressionProcessor = null,
+            ISubstitutionService substitutionService = null,
+            IKeywordsProvider keywordsProvider = null,
+            IExpressionProcessorGenerator expressionProcessorGenerator = null,
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            ILookupTableService lookupTableService = null,
+            IAttachmentService attachmentService = null,
+            ITopologicalSorter<string> topologicalSorter = null,
+            IQuestionnaireTranslator questionnaireTranslator = null)
+        {
+            var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
+            fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
+
+            var questionnireExpressionProcessorGeneratorMock = new Mock<IExpressionProcessorGenerator>();
+            string generationResult;
+            questionnireExpressionProcessorGeneratorMock.Setup(
+                _ => _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<int>(), out generationResult))
+                .Returns(new GenerationResult() { Success = true, Diagnostics = new List<GenerationDiagnostic>() });
+
+            var substitutionServiceInstance = new SubstitutionService();
+
+            var lookupTableServiceMock = new Mock<ILookupTableService>(MockBehavior.Default)
+            {
+                DefaultValue = DefaultValue.Mock
+            };
+
+            var attachmentServiceMock = Stub<IAttachmentService>.WithNotEmptyValues;
+
+            return new QuestionnaireVerifier(expressionProcessor ?? Create.RoslynExpressionProcessor(),
+                fileSystemAccessorMock.Object,
+                substitutionService ?? substitutionServiceInstance,
+                keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
+                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
+                new DesignerEngineVersionService(),
+                macrosSubstitutionService ?? Create.MacrosSubstitutionService(),
+                lookupTableService ?? lookupTableServiceMock.Object,
+                attachmentService ?? attachmentServiceMock,
+                topologicalSorter ?? Create.TopologicalSorter<string>(),
+                Mock.Of<ITranslationsService>(),
+                questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>());
         }
     }
 }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -14,18 +14,25 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid variableId = Guid.Parse("00000000000000000000000000000001");
             RosterVector rosterVector = Create.Entity.RosterVector(1m, 0m);
-
-            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId, 1), Create.Entity.QuestionnaireDocument(id: questionnaireId));
-
-            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-
             variableIdentity = new Identity(variableId, rosterVector);
-            synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId,
-                variables: new Dictionary<InterviewItemId, object>() {{ Create.Entity.InterviewItemId(variableIdentity.Id, variableIdentity.RosterVector), "test"}},
-                disabledVariables:new HashSet<InterviewItemId>() {Create.Entity.InterviewItemId(Guid.NewGuid(), RosterVector.Empty) });
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+            {
+                Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(1)}, children: new[]
+                {
+                    Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(0)}, children: new[]
+                    {
+                        Create.Entity.Variable(variableIdentity.Id, VariableType.String)
+                    })
+                })
+            });
+
+            interview = Setup.StatefulInterview(questionnaire);
+
+            synchronizationDto = Create.Entity.InterviewSynchronizationDto(
+                variables: new Dictionary<InterviewItemId, object>() {{ Create.Entity.InterviewItemId(variableIdentity.Id, variableIdentity.RosterVector), "test"}});
         };
 
         Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);

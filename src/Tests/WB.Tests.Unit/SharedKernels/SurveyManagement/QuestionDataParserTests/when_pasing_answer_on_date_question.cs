@@ -28,14 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 
         Because of = () =>
         {
-            parsingResult1 = questionDataParser.TryParse("2016-01-14", questionVarName, dateQuestion, out parcedValue1);
-            parsingResult2 = questionDataParser.TryParse("06/26/15 12:01 AM", questionVarName, dateQuestion, out parcedValue2);
-            parsingResult3 = questionDataParser.TryParse("06/26/15", questionVarName, dateQuestion, out parcedValue3);
-            parsingResult4 = questionDataParser.TryParse("2016-02-02T17:04:41", questionVarName, dateQuestion, out parcedValue4);
-            parsingResult5 = questionDataParser.TryParse("2016-02-02", questionVarName, dateQuestion, out parcedValue5);
+            parsingResult1 = questionDataParser.TryParse("2016-01-14", questionVarName, dateQuestion, out parcedValue1, out parsedSingleColumnAnswer);
+            parsingResult2 = questionDataParser.TryParse("06/26/15 12:01 AM", questionVarName, dateQuestion, out parcedValue2, out parsedSingleColumnAnswer);
+            parsingResult3 = questionDataParser.TryParse("06/26/15", questionVarName, dateQuestion, out parcedValue3, out parsedSingleColumnAnswer);
+            parsingResult4 = questionDataParser.TryParse("2016-02-02T17:04:41", questionVarName, dateQuestion, out parcedValue4, out parsedSingleColumnAnswer);
+            parsingResult5 = questionDataParser.TryParse("2016-02-02", questionVarName, dateQuestion, out parcedValue5, out parsedSingleColumnAnswer);
 
-            parsingResult6 = questionDataParser.TryParse("06/26/15 12:01 AM", questionVarName, currentTimeQuestion, out parcedValue6);
-            parsingResult7 = questionDataParser.TryParse("2016-02-02T17:04:41", questionVarName, currentTimeQuestion, out parcedValue7);
+            parsingResult6 = questionDataParser.TryParse("06/26/15 12:01 AM", questionVarName, currentTimeQuestion, out parcedValue6, out parsedSingleColumnAnswer);
+            parsingResult7 = questionDataParser.TryParse("2016-02-02T17:04:41", questionVarName, currentTimeQuestion, out parcedValue7, out parsedSingleColumnAnswer);
         };
 
         It should_result1_be_parsed_successfully = () =>

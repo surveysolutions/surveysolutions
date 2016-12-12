@@ -30,10 +30,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.AddSharedPerson(personId, email, shareType, responsibleId);
 
             // assert
-            var person = questionnaire.SharedPersons.Single(p => p.Id == personId);
+            var person = questionnaire.SharedPersons.Single(p => p.UserId == personId);
 
             Assert.IsNotNull(person);
-            Assert.That(person.Id, Is.EqualTo(personId));
+            Assert.That(person.UserId, Is.EqualTo(personId));
             Assert.That(person.Email, Is.EqualTo(email));
             Assert.That(person.ShareType, Is.EqualTo(shareType));
         }
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.RemoveSharedPerson(personId, string.Empty, responsibleId);
 
             // assert
-            var isExistsPerson = questionnaire.SharedPersons.Any(p => p.Id == personId);
+            var isExistsPerson = questionnaire.SharedPersons.Any(p => p.UserId == personId);
             Assert.IsFalse(isExistsPerson);
         }
 

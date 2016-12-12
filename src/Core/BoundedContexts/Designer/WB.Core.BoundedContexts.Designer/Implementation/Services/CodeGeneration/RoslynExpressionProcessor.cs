@@ -12,94 +12,76 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class RoslynExpressionProcessor : IExpressionProcessor
     {
-        public IEnumerable<string> GetIdentifiersUsedInExpression(string expression)
+        public IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression)
         {
-            string code = string.Format("class a {{ bool b() {{ return ({0}); }} }} ", expression);
+            string code = WrapToClass(expression);
 
             var tree = SyntaxFactory.ParseSyntaxTree(code);
-                
-                
-            return 
-                tree.GetRoot().ChildNodesAndTokens().TreeToEnumerable(_ => _.ChildNodesAndTokens())
+
+            return tree
+                .GetRoot()
+                .ChildNodesAndTokens()
+                .TreeToEnumerable(_ => _.ChildNodesAndTokens())
                 .Where(IsIdentifierToken)
                 .Except(IsFunction)
                 .Except(IsConstructorCall)
                 .Except(IsLambdaParameter)
-                //.Except(identifierToken => IsPropertyOrMethod(identifierToken) && !IsPropertyOfLambdaParameter(identifierToken))
                 .Select(token => token.ToString())
                 .Except(string.IsNullOrEmpty)
-                .Distinct();
+                .Distinct()
+                .ToReadOnlyCollection();
         }
+
+        public bool ContainsBitwiseAnd(string expression)
+        {
+            string code = WrapToClass(expression);
+
+            var tree = SyntaxFactory.ParseSyntaxTree(code);
+
+            return
+                tree
+                .GetRoot()
+                .ChildNodesAndTokens()
+                .TreeToEnumerable(_ => _.ChildNodesAndTokens())
+                .Any(IsBitwiseAndExpression);
+        }
+
+        public bool ContainsBitwiseOr(string expression)
+        {
+            string code = WrapToClass(expression);
+
+            var tree = SyntaxFactory.ParseSyntaxTree(code);
+
+            return
+                tree
+                .GetRoot()
+                .ChildNodesAndTokens()
+                .TreeToEnumerable(_ => _.ChildNodesAndTokens())
+                .Any(IsBitwiseOrExpression);
+        }
+
+        private static string WrapToClass(string expression) => $"class a {{ bool b() {{ return ({expression}); }} }} ";
+
+        private static bool IsBitwiseAndExpression(SyntaxNodeOrToken nodeOrToken)
+            => nodeOrToken.Kind() == SyntaxKind.BitwiseAndExpression;
+
+        private static bool IsBitwiseOrExpression(SyntaxNodeOrToken nodeOrToken)
+            => nodeOrToken.Kind() == SyntaxKind.BitwiseOrExpression;
 
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)
-        {
-            return nodeOrToken.IsToken
-                && nodeOrToken.Kind() == SyntaxKind.IdentifierToken
-                && nodeOrToken.Parent.Kind() == SyntaxKind.IdentifierName;
-        }
+            => nodeOrToken.IsToken
+            && nodeOrToken.Kind() == SyntaxKind.IdentifierToken
+            && nodeOrToken.Parent.Kind() == SyntaxKind.IdentifierName;
 
         private static bool IsFunction(SyntaxNodeOrToken identifierToken)
-        {
-            var t = identifierToken.Parent.Parent is InvocationExpressionSyntax;
-            return t;
-        }
+            => identifierToken.Parent.Parent is InvocationExpressionSyntax;
 
         private static bool IsConstructorCall(SyntaxNodeOrToken identifierToken)
-        {
-            return identifierToken.Parent.Parent is ObjectCreationExpressionSyntax;
-        }
-
-        private static bool IsPropertyOrMethod(SyntaxNodeOrToken identifierToken)
-        {
-            return IsPartOfMemberAccessChain(identifierToken)
-                && !IsFirstMemberInMemberAccessChain(identifierToken);
-        }
-
-        private static bool IsPropertyOfLambdaParameter(SyntaxNodeOrToken identifierToken)
-        {
-            return IsPartOfMemberAccessChain(identifierToken)
-                && IsSecondMemberInMemberAccessChain(identifierToken)
-                && DoesMemberAccessChainStartWithLambdaParameter(identifierToken.Parent.Parent);
-        }
-
-        private static bool IsFirstMemberInMemberAccessChain(SyntaxNodeOrToken identifierToken)
-        {
-            return identifierToken == GetFirstMemberAsIdentifierTokenFromMemberAccessChain(identifierToken.Parent.Parent);
-        }
-
-        private static bool IsSecondMemberInMemberAccessChain(SyntaxNodeOrToken identifierToken)
-        {
-            return identifierToken.Parent.Parent.ChildNodesAndTokens().Skip(2).First() == identifierToken.Parent;
-        }
-
-        private static bool DoesMemberAccessChainStartWithLambdaParameter(SyntaxNode memberAccessChainNode)
-        {
-            var firstMemberAsIdentifierToken = GetFirstMemberAsIdentifierTokenFromMemberAccessChain(memberAccessChainNode);
-
-            return firstMemberAsIdentifierToken != null && IsLambdaParameter(firstMemberAsIdentifierToken);
-        }
-
-        private static SyntaxNodeOrToken GetFirstMemberAsIdentifierTokenFromMemberAccessChain(SyntaxNode memberAccessChainNode)
-        {
-            ChildSyntaxList childrenOfFirstMemberInChain = memberAccessChainNode.ChildNodesAndTokens().First().ChildNodesAndTokens();
-
-            if (childrenOfFirstMemberInChain.Count != 1)
-                return null;
-
-            SyntaxNodeOrToken potentialIdentifierToken = childrenOfFirstMemberInChain.Single();
-
-            return IsIdentifierToken(potentialIdentifierToken) ? potentialIdentifierToken : null;
-        }
-
-        private static bool IsPartOfMemberAccessChain(SyntaxNodeOrToken identifierToken)
-        {
-            return identifierToken.Parent.Parent is MemberAccessExpressionSyntax;
-        }
+            => identifierToken.Parent.Parent is ObjectCreationExpressionSyntax;
 
         private static bool IsLambdaParameter(SyntaxNodeOrToken identifierToken)
-        {
-            return IsSimpleLambdaParameter(identifierToken) || IsParenthesizedLambdaParameter(identifierToken);
-        }
+            => IsSimpleLambdaParameter(identifierToken)
+            || IsParenthesizedLambdaParameter(identifierToken);
 
         private static bool IsSimpleLambdaParameter(SyntaxNodeOrToken identifierToken)
         {
@@ -135,18 +117,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static TAncestor FindAncestor<TAncestor>(SyntaxNodeOrToken nodeOrToken)
             where TAncestor : SyntaxNode
-        {
-            SyntaxNode ancestor = nodeOrToken.Parent;
-
-            while (ancestor != null)
-            {
-                if (ancestor is TAncestor)
-                    return (TAncestor) ancestor;
-
-                ancestor = ancestor.Parent;
-            }
-
-            return null;
-        }
+            => (TAncestor) nodeOrToken.Parent.UnwrapReferences(ancestor => ancestor.Parent).FirstOrDefault(ancestor => ancestor is TAncestor);
     }
 }

@@ -6,12 +6,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public interface IInterviewEntityViewFactory
     {
-        InterviewQuestionView BuildInterviewLinkedQuestionView(IQuestion question, 
+        InterviewQuestionView BuildInterviewLinkedToRosterQuestionView(IQuestion question, 
             InterviewQuestion answeredQuestion,
             Dictionary<string, string> answersForTitleSubstitution,
             Dictionary<decimal[], string> availableOptions, 
             bool isParentGroupDisabled, 
             decimal[] rosterVector, 
+            InterviewStatus interviewStatus);
+
+        InterviewQuestionView BuildInterviewLinkedToListQuestionView(IQuestion question,
+            InterviewQuestion answeredQuestion,
+            Dictionary<string, string> answersForTitleSubstitution,
+            object answerToListQuestion,
+            bool isParentGroupDisabled,
+            decimal[] rosterVector,
             InterviewStatus interviewStatus);
 
         InterviewQuestionView BuildInterviewQuestionView(IQuestion question, 

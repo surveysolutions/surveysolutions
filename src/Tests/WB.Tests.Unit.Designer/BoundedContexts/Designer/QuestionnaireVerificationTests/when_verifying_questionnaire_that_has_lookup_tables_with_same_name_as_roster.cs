@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionnaire = Create.QuestionnaireDocument(Guid.NewGuid(), 
                 Create.TextQuestion(questionId: questionId, variable: "variable"),
-                Create.Roster(variable: "var", rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles));
+                Create.Roster(variable: "var", rosterId: rosterId, rosterType: RosterSizeSourceType.FixedTitles));
             questionnaire.LookupTables.Add(table1Id, Create.LookupTable("var"));
 
             lookupTableServiceMock
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_WB0026_error = () =>
            verificationMessages.ShouldContainCritical("WB0026");

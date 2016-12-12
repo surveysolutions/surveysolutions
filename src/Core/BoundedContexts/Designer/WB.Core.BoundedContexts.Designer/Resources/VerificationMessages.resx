@@ -288,7 +288,7 @@
   <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
     <value>Contains more than 5000 options.</value>
   </data>
-  <data name="WB0076_CategoricalOneAnswerOptionsCountMoreThan200" xml:space="preserve">
+  <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
     <value>Contains more than 200 options.</value>
   </data>
   <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
@@ -462,8 +462,8 @@
   <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
     <value>Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
   </data>
-  <data name="WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions" xml:space="preserve">
-    <value>Most numeric questions can have validation conditions. Add validation conditions to improve data quality.</value>
+  <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>More than 50% of questions contain no validation conditions. Add validation conditions to improve data quality.</value>
   </data>
   <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Linked question filter expression has length more than 10,000 characters.</value>
@@ -544,12 +544,99 @@
     <value>Roster size multi-select question should have limit</value>
   </data>
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>Questionnaire contains rosters that cumulative size is not allowed.</value>
+    <value>Questionnaire contains rosters with total number of elements exceeding the system limits.</value>
   </data>
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Roster has reached size limit. Reduce roster size or decrease nesting.</value>
   </data>
   <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
     <value>First section can not have enabling condition.</value>
+  </data>
+  <data name="WB0264_GpsQuestion" xml:space="preserve">
+    <value>You have a GPS question. Tablets must support geolocation to be used with this questionnaire.</value>
+  </data>
+  <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+    <value>More than 30% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead.</value>
+  </data>
+  <data name="WB0266_SameTitle" xml:space="preserve">
+    <value>Duplicate questions. (Questions have the same title.)</value>
+  </data>
+  <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+    <value>You have a barcode question. Tablets must support autofocus to be used with this questionnaire.</value>
+  </data>
+  <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+    <value>No prefilled (identifying) questions are defined. Define at least one prefilled question.</value>
+  </data>
+  <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+    <value>Variable label is too long (more than 120 chars) and will be truncated in SPSS file export.</value>
+  </data>
+  <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+    <value>Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section.</value>
+  </data>
+  <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+    <value>Multiple consecutive unconditional single choice options with 2 options. Consider one multiple choice question.</value>
+  </data>
+  <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+    <value>Using @rowindex with a multi-choice roster may be unstable. Consider using @rowcode instead.</value>
+  </data>
+  <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+    <value>No current time question was found. Consider recording the date of interview in your questionnaire.</value>
+  </data>
+  <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+    <value>Single-choice question is marked as prefilled. Consider using a text question.</value>
+  </data>
+  <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+    <value>Section contains less than five questions. Consider joining with other sections.</value>
+  </data>
+  <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+    <value>Too many sub-sections at one level. Consider hierarchical layout.</value>
+  </data>
+  <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+    <value>Drop-down menu (combo box) contains less than 10 elements. Consider switching to a standard single choice representation.</value>
+  </data>
+  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+    <value>Linked question references a list question from wrong level.</value>
+  </data>
+  <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+    <value>Cascading combo box questions have the same parent question.</value>
+  </data>
+  <data name="WB0227_NotShared" xml:space="preserve">
+    <value>Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback.</value>
+  </data>
+  <data name="WB0228_OmittedOptions" xml:space="preserve">
+    <value>Categorical question has nonconsecutive option codes. Check for omitted options.</value>
+  </data>
+  <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+    <value>Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond.</value>
+  </data>
+  <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+    <value>Nonconsecutive cascade questions. Consider laying the cascading questions one after another.</value>
+  </data>
+  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+    <value>Linked to list question doen't support options filter</value>
+  </data>
+  <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+    <value>Multichoice question contains too many (&gt;20) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible.</value>
+  </data>
+  <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+    <value>Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency.</value>
+  </data>
+  <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+    <value>Nested roster with three or more degrees of nesting. Try avoiding such complex structures that might lead to problems in data collection.</value>
+  </data>
+  <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+    <value>Subordinate levels in a nested roster are based on the same parent question. Try revising, such rosters might lead to problems in data collection.</value>
+  </data>
+  <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+    <value>The same long enablement condition is used in several questions. You might want to create a Boolean variable to simplify the code management.</value>
+  </data>
+  <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+    <value>The same long validation condition is used in several questions. You might want to create a Boolean variable to simplify the code management.</value>
+  </data>
+  <data name="WB0237_BitwiseAnd" xml:space="preserve">
+    <value>&amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;.</value>
+  </data>
+  <data name="WB0238_BitwiseOr" xml:space="preserve">
+    <value>| is used in expression. Make sure you understand the difference between | and || operators. In most cases, use ||.</value>
   </data>
 </root>

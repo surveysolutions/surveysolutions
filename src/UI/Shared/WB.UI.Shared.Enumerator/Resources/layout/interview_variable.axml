@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Interview_QuestionWithDivider"
+    local:MvxBind="HideKeyboardOnClick .">
+
+  <TextView
+    style="@style/Interview_Question_Title"
+    local:MvxBind="Html Text;" />
+
+  <TextView
+    style="@style/Interview_Variable_Description"
+    local:MvxBind="Html Label; Visible HasLabel" />
+
+  <View style="@style/Interview_Entity_Divider" />
+</LinearLayout>

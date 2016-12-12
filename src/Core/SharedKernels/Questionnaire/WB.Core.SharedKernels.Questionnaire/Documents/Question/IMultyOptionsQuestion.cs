@@ -1,6 +1,8 @@
+using WB.Core.SharedKernels.Questionnaire.Documents;
+
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public interface IMultyOptionsQuestion : IQuestion
+    public interface IMultyOptionsQuestion : IQuestion, ICategoricalQuestion
     {
         bool AreAnswersOrdered { get; set; }
 

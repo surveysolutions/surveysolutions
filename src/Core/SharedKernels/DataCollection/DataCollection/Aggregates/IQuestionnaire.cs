@@ -18,10 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Guid QuestionnaireId { get; }
 
         string Title { get; }
-
-        Guid? ResponsibleId { get; }
-
-        void InitializeQuestionnaireDocument();
+        
+        Translation Translation { get; }
 
         [Obsolete("This method is for import service only and should be removed at all.")]
         IQuestion GetQuestionByStataCaption(string stataCaption);
@@ -37,6 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         AnswerType GetAnswerType(Guid questionId);
 
         bool IsQuestionLinked(Guid questionId);
+
+        bool IsLinkedToListQuestion(Guid questionId);
 
         Guid[] GetQuestionsLinkedToRoster();
 
@@ -62,9 +62,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter);
 
-        CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText);
+        CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue);
 
         CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue);
+
+        IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter);
+
+        CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue);
+
+        CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue);
 
         string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue);
 
@@ -174,8 +180,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllChildCascadingQuestions();
 
-        bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue);
-
         IEnumerable<Guid> GetAllSections();
 
         /// <summary>
@@ -215,6 +219,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
         string GetValidationMessage(Guid questionId, int conditionIndex);
+        string[] GetValidationMessages(Guid entityId);
 
         bool HasMoreThanOneValidationRule(Guid questionId);
         string GetQuestionInstruction(Guid questionId);
@@ -239,5 +244,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<QuestionnaireItemReference> GetChidrenReferences(Guid groupId);
         Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid questionId);
+        string GetVariableLabel(Guid variableId);
+        string GetVariableName(Guid variableId);
+        bool HasVariable(Guid entityId);
+        bool HasStaticText(Guid entityId);
     }
 }

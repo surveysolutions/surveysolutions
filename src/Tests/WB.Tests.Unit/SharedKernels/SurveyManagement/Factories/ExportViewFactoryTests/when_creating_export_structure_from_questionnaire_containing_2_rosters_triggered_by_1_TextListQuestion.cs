@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     Children = new List<IComposite>
                     {
                         new NumericQuestion() { PublicKey = questionInsideRoster1Id, QuestionType = QuestionType.Numeric }
-                    }
+                    }.ToReadOnlyCollection()
                 },
                 new Group("roster group 2")
                 {
@@ -46,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     Children = new List<IComposite>
                     {
                         new NumericQuestion() { PublicKey = questionInsideRoster2Id, QuestionType = QuestionType.Numeric }
-                    }
+                    }.ToReadOnlyCollection()
                 });
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();

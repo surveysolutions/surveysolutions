@@ -32,19 +32,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     RosterSizeSource = RosterSizeSourceType.Question,
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     RosterTitleQuestionId = rosterTitleQuestionId
-                }
-                );
-            questionnaire.Children.Add(new TextQuestion("question 1")
-            {
-                StataExportCaption = "var2",
-                PublicKey = rosterTitleQuestionId
-            });
+                },
+                new TextQuestion("question 1")
+                {
+                    StataExportCaption = "var2",
+                    PublicKey = rosterTitleQuestionId
+                });
             
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

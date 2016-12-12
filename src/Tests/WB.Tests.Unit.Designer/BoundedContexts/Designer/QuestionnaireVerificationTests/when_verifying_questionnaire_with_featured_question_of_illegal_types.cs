@@ -15,9 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             featuredQuestionWithSubstitutionsId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new SingleQuestion()
+            questionnaire = CreateQuestionnaireDocument(new SingleQuestion()
             {
                 PublicKey = featuredQuestionWithSubstitutionsId,
                 StataExportCaption = "var",
@@ -30,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

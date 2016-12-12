@@ -102,8 +102,10 @@
         messageTemplateId,
         continueMessageTemplateId,
         onSuccessCommandExecuting,
-        onCancelConfirmation) {
+        onCancelConfirmation)
+    {
             var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
+
             var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
             if (filteredItems.length === 0) {

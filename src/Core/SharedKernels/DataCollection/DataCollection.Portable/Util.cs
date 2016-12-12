@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -23,7 +24,23 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static string GetRosterStringKey(Identity[] scopeIds)
         {
-            return String.Join("$", scopeIds.Select(ConversionHelper.ConvertIdentityToString).ToArray());
+                StringBuilder builder = new StringBuilder();
+
+                foreach (var scopeId in scopeIds)
+                {
+                    builder.Append("$");
+
+                    builder.Append(scopeId.Id);
+
+                    foreach (var coordinate in scopeId.RosterVector.Coordinates)
+                    {
+                        builder.Append("-");
+
+                        builder.Append(Convert.ToInt32(coordinate));
+                    }
+                }
+
+                return builder.ToString();
         }
 
         public static Identity[] GetRosterKey(Guid[] rosterScopeIds, decimal[] rosterVector)

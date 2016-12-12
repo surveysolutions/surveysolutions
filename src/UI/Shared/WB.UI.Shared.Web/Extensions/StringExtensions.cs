@@ -15,11 +15,13 @@ namespace WB.UI.Shared.Web.Extensions
                     (current, c) => current.Replace(c, 'x'));
         }
 
-        public static int ToIntOrDefault(this string value, int @default)
+        public static int ToIntOrDefault(this string value, int @default) => value.ToIntOrNull() ?? @default;
+
+        public static int? ToIntOrNull(this string value)
         {
             int result;
 
-            return int.TryParse(value, out result) ? result : @default;
+            return int.TryParse(value, out result) ? result : null as int?;
         }
 
         public static bool IsDecimal(this string value)

@@ -36,10 +36,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
                 Create.Entity.Roster(rosterId: rosterGroupId, rosterSizeQuestionId: questionWhichIncreasesRosterSizeId, children: new IComposite[]
                 {
-                    Create.Entity.FixedRoster(rosterId: fixedRosterGroupId, fixedRosterTitles: new []
+                    Create.Entity.FixedRoster(rosterId: fixedRosterGroupId, fixedTitles: new []
                     {
-                        Create.Entity.FixedRosterTitle(0, title1),
-                        Create.Entity.FixedRosterTitle(1, title2),
+                        Create.Entity.FixedTitle(0, title1),
+                        Create.Entity.FixedTitle(1, title2),
                     }),
                 }),
             }));

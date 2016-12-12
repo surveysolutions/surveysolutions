@@ -24,7 +24,6 @@ namespace WB.UI.Designer.Api.Headquarters
     {
         private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
-        private readonly IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
@@ -34,7 +33,6 @@ namespace WB.UI.Designer.Api.Headquarters
 
         public HQQuestionnairesController(IMembershipUserService userHelper,
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireListViewFactory viewFactory, 
@@ -44,7 +42,6 @@ namespace WB.UI.Designer.Api.Headquarters
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
@@ -88,7 +85,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public QuestionnaireCommunicationPackage Get(Guid id, int clientQuestionnaireContentVersion)
+        public QuestionnaireCommunicationPackage Get(Guid id, int clientQuestionnaireContentVersion, [FromUri]int? minSupportedQuestionnaireVersion = null)
         {
             var questionnaireView = this.GetQuestionnaireViewOrThrow(id);
 
@@ -96,7 +93,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
             var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
-            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, questionnaireContentVersion);
+            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, Math.Max(questionnaireContentVersion, minSupportedQuestionnaireVersion.GetValueOrDefault()));
 
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
@@ -131,7 +128,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 });
             }
 
-            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView.Source).ToArray();
+            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView).ToArray();
 
             if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {
@@ -155,9 +152,9 @@ namespace WB.UI.Designer.Api.Headquarters
 
             if (!this.ValidateAccessPermissions(questionnaireView))
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
-                    ReasonPhrase = ErrorMessages.User_Not_authorized
+                    ReasonPhrase = ErrorMessages.NoAccessToQuestionnaire
                 });
             }
             return questionnaireView;
@@ -206,10 +203,7 @@ namespace WB.UI.Designer.Api.Headquarters
             if (questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
                 return true;
 
-            QuestionnaireSharedPersons questionnaireSharedPersons =
-                this.sharedPersonsViewFactory.Load(new QuestionnaireSharedPersonsInputModel() { QuestionnaireId = questionnaireView.PublicKey });
-
-            return (questionnaireSharedPersons != null) && questionnaireSharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.UserId == this.userHelper.WebUser.UserId);
         }
     }
 }

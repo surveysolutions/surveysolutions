@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
                 {
                     Create.SingleQuestion(q1Id, variable: "q1", options: options),
-                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []{ Create.FixedRosterTitle(1, "Hello")}, children: new IComposite[]
+                    Create.Roster(rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedTitles: new []{ Create.FixedTitle(1, "Hello")}, children: new IComposite[]
                     {
                         Create.MultyOptionsQuestion(q2Id, variable: "q2", options: options, optionsFilter: "@optioncode < (int)q1"),
                         Create.SingleQuestion(q3Id, variable: "q3", options: options, enablementCondition: "q2.Contains(2)"),
@@ -49,9 +49,9 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
                 interview.AnswerSingleOptionQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, 12);
-                interview.AnswerMultipleOptionsQuestion(userId, q2Id, Create.RosterVector(1), DateTime.Now, new[] { 1m, 2m, 3m });
+                interview.AnswerMultipleOptionsQuestion(userId, q2Id, Create.RosterVector(1), DateTime.Now, new[] { 1, 2, 3 });
                 interview.AnswerSingleOptionQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 2);
-                interview.AnswerMultipleOptionsQuestion(userId, q4Id, Create.RosterVector(1), DateTime.Now, new[] { 12m });
+                interview.AnswerMultipleOptionsQuestion(userId, q4Id, Create.RosterVector(1), DateTime.Now, new[] { 12 });
                 interview.AnswerSingleOptionQuestion(userId, q5Id, Create.RosterVector(1), DateTime.Now, 3);
 
                 var result = new InvokeResults();
@@ -62,8 +62,8 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                     result.QuestionsQ5Disabled = eventContext.AnyEvent<QuestionsDisabled>(x => x.Questions.Any(q => q.Id == q5Id));
 
-                    result.QuestionqQ4HasEmptyAnswer = eventContext.GetEvents<MultipleOptionsQuestionAnswered>().Count(x => x.QuestionId == q4Id && x.SelectedValues.Length == 0) == 1;
-                    result.QuestionqQ2HasEmptyAnswer = eventContext.AnyEvent<MultipleOptionsQuestionAnswered>(x => x.QuestionId == q2Id && x.SelectedValues.Length == 0);
+                    result.QuestionqQ4HasEmptyAnswer = eventContext.GetSingleEvent<AnswersRemoved>().Questions.Any(x => x.Id == q4Id);
+                    result.QuestionqQ2HasEmptyAnswer = eventContext.GetSingleEvent<AnswersRemoved>().Questions.Any(x => x.Id == q2Id);
                 }
 
                 return result;

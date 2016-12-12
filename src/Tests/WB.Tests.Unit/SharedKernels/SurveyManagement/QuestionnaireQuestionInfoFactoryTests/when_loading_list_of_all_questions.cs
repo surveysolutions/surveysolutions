@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
                     CreateQuestion(QuestionType.MultyOption, questionId: multiQuestionId),
                     CreateQuestion(QuestionType.GpsCoordinates, questionId: geoQuestionId),
                     CreateQuestion(QuestionType.DateTime, questionId: dateQuestionId)
-                }
+                }.ToReadOnlyCollection()
             };
 
             factory = CreateQuestionnaireQuestionInfoFactory(questionnaire);

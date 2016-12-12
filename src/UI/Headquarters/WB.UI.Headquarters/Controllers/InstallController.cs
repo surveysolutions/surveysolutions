@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,16 +18,19 @@ namespace WB.UI.Headquarters.Controllers
     public class InstallController : BaseController
     {
         private readonly IPasswordHasher passwordHasher;
+        private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly IFormsAuthentication authentication;
 
         public InstallController(ICommandService commandService,
                                  IGlobalInfoProvider globalInfo,
                                  ILogger logger,
                                  IPasswordHasher passwordHasher,
+                                 ISupportedVersionProvider supportedVersionProvider,
                                  IFormsAuthentication authentication)
             : base(commandService, globalInfo, logger)
         {
             this.passwordHasher = passwordHasher;
+            this.supportedVersionProvider = supportedVersionProvider;
             this.authentication = authentication;
         }
 
@@ -52,6 +56,8 @@ namespace WB.UI.Headquarters.Controllers
                                             phoneNumber:model.PhoneNumber));
 
                 this.authentication.SignIn(model.UserName, true);
+
+                this.supportedVersionProvider.RememberMinSupportedVersion();
 
                 return this.RedirectToAction("Index", "Headquarters");
             }

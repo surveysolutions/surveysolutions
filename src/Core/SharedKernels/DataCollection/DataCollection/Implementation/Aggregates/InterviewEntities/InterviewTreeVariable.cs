@@ -1,22 +1,17 @@
 using System;
+using System.Diagnostics;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
+    [DebuggerDisplay("Variable {Identity}. Value = {Value}")]
     public class InterviewTreeVariable : InterviewTreeLeafNode
     {
         public object Value { get; private set; }
         public bool HasValue => this.Value != null;
 
-        public InterviewTreeVariable(Identity identity) : this(identity, false, null)
+        public InterviewTreeVariable(Identity identity) : base(identity)
         {
         }
-
-        public InterviewTreeVariable(Identity identity, bool isDisabled, object value)
-            : base(identity, isDisabled)
-        {
-            this.SetValue(value);
-        }
-
 
         public override string ToString() => $"Variable ({this.Identity})";
 
@@ -24,6 +19,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override IInterviewTreeNode Clone()
         {
             return (IInterviewTreeNode)this.MemberwiseClone();
+        }
+
+        public override void ReplaceSubstitutions()
+        {
         }
     }
 }

@@ -45,7 +45,5 @@ public class AssemblyContext : IAssemblyContext
 
         Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
         Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
-
-        Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository());
     }
 }

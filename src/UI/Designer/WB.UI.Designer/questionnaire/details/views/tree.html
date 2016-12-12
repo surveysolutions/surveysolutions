@@ -12,7 +12,7 @@
 
         <div ng-switch-when="default" class="chapter-name">
             <a id="group-{{currentChapter.itemId}}" class="chapter-title-text" ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
-                <span>{{currentChapter.title}}</span>
+                <span ng-bind-html="currentChapter.title | escape"></span>
             </a>
             <ul class="controls-right">
                 <li>
@@ -23,7 +23,6 @@
     </div>
     <perfect-scrollbar class="scroller">
         <div class="question-list" ui-tree="groupsTree" data-empty-placeholder-enabled="false">
-
             <div ui-tree-nodes ng-model="items">
                 <div ng-repeat="item in items | filter:searchItem as results"
                      ui-tree-node>

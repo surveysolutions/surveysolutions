@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -18,14 +19,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             rosterTitleQuestionId = Guid.Parse("11333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new NumericQuestion("question 1")
+            questionnaire = CreateQuestionnaireDocument(new IComposite[] {
+            new NumericQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
                 StataExportCaption = "var1",
                 IsInteger = true
-            });
-            questionnaire.Children.Add(new Group()
+            },
+            new Group()
             {
                 PublicKey = Guid.NewGuid(),
                 Children = new List<IComposite>()
@@ -35,9 +36,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         StataExportCaption = "var2",
                         PublicKey = rosterTitleQuestionId
                     }
-                }
-            });
-            questionnaire.Children.Add(new Group()
+                }.ToReadOnlyCollection()
+            },
+            new Group()
             {
                 PublicKey = rosterGroupId,
                 IsRoster = true,
@@ -45,12 +46,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 RosterSizeSource = RosterSizeSourceType.Question,
                 RosterSizeQuestionId = rosterSizeQuestionId,
                 RosterTitleQuestionId = rosterTitleQuestionId
-            });
+            }});
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.substitutionService = substitutionService;
         }
 
-        public InterviewQuestionView BuildInterviewLinkedQuestionView(IQuestion question, 
+        public InterviewQuestionView BuildInterviewLinkedToRosterQuestionView(IQuestion question, 
             InterviewQuestion answeredQuestion,
             Dictionary<string, string> answersForTitleSubstitution,
             Dictionary<decimal[], string> availableOptions, 
@@ -36,6 +36,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             questionView.Options = availableOptions
                 .Select(a => new QuestionOptionView { Value = a.Key, Label = a.Value })
                 .ToList();
+
+            if (answeredQuestion != null)
+                questionView.Answer = answeredQuestion.Answer;
+
+            return questionView;
+        }
+
+        public InterviewQuestionView BuildInterviewLinkedToListQuestionView(IQuestion question,
+            InterviewQuestion answeredQuestion,
+            Dictionary<string, string> answersForTitleSubstitution,
+            object answerToListQuestion,
+            bool isParentGroupDisabled,
+            decimal[] rosterVector,
+            InterviewStatus interviewStatus)
+        {
+            var questionView = new InterviewQuestionView();
+
+            var typedAnswer = answerToListQuestion as InterviewTextListAnswers;
+            if (typedAnswer != null)
+            {
+                questionView.Options = typedAnswer.Answers.Select(a => new QuestionOptionView
+                {
+                    Value = a.Value,
+                    Label = a.Answer
+                }).ToList();
+            }
+
+            this.FillInterviewQuestionView(questionView, question, answeredQuestion, answersForTitleSubstitution,
+                isParentGroupDisabled, rosterVector, interviewStatus, true);
 
             if (answeredQuestion != null)
                 questionView.Answer = answeredQuestion.Answer;
@@ -61,7 +90,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Dictionary<string, string> answersForTitleSubstitution, 
             bool isParentGroupDisabled, 
             decimal[] rosterVector,
-            InterviewStatus interviewStatus)
+            InterviewStatus interviewStatus, 
+            bool treatAsLinkedToList = false)
         {
             questionView.Id = question.PublicKey;
             questionView.RosterVector = rosterVector;
@@ -73,13 +103,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             questionView.IsEnabled = (question.QuestionScope == QuestionScope.Supervisor) || (answeredQuestion == null) && !isParentGroupDisabled;
             questionView.IsReadOnly = !(question.QuestionScope == QuestionScope.Supervisor && interviewStatus < InterviewStatus.ApprovedByHeadquarters);
             questionView.Scope = question.QuestionScope;
+            questionView.LinkedToQuestionId = question.LinkedToQuestionId;
+            questionView.LinkedToRosterId = question.LinkedToRosterId;
 
             var categoricalTypes = new[] { QuestionType.SingleOption, QuestionType.MultyOption };
             questionView.IsFilteredCategorical =
                 categoricalTypes.Contains(questionView.QuestionType) &&
                 !string.IsNullOrEmpty(question.Properties.OptionsFilterExpression);
 
-            if (question.Answers != null)
+            bool answersShouldUpdateOptions = question.Answers != null && question.Answers.Count > 0;
+
+            if (answersShouldUpdateOptions)
             {
                 questionView.Options = question.Answers.Select(a => new QuestionOptionView
                 {
@@ -107,9 +141,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     YesNoQuestion = categoricalMultiQuestion.YesNoView,
                     AreAnswersOrdered = categoricalMultiQuestion.AreAnswersOrdered,
                     MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers,
-                    IsLinked =
-                        (categoricalMultiQuestion.LinkedToQuestionId.HasValue ||
-                         categoricalMultiQuestion.LinkedToRosterId.HasValue)
+                    IsLinkedToRoster = (categoricalMultiQuestion.LinkedToRosterId.HasValue ||
+                         (categoricalMultiQuestion.LinkedToQuestionId.HasValue && !treatAsLinkedToList)),
+                    IsLinkedToListQuestion = treatAsLinkedToList
                 };
             }
 
@@ -120,9 +154,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox ?? false,
                     IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue,
-                    IsLinked =
-                        (categoricalSingleQuestion.LinkedToQuestionId.HasValue ||
-                         categoricalSingleQuestion.LinkedToRosterId.HasValue)
+                    IsLinkedToRoster = (categoricalSingleQuestion.LinkedToRosterId.HasValue || 
+                        (categoricalSingleQuestion.LinkedToQuestionId.HasValue && !treatAsLinkedToList)),
+                    IsLinkedToListQuestion = treatAsLinkedToList
                 };
             }
 
@@ -234,7 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             switch (questionView.QuestionType)
             {
                 case QuestionType.SingleOption:
-                    if (questionView.Settings != null && (questionView.Settings as SingleQuestionSettings).IsLinked)
+                    if (questionView.Settings != null && (questionView.Settings as SingleQuestionSettings).IsLinkedToRoster)
                     {
                         return AnswerUtils.AnswerToString(answer);
                     }
@@ -244,7 +278,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     }
 
                 case QuestionType.MultyOption:
-                    if ((questionView.Settings as MultiQuestionSettings).IsLinked)
+                    if ((questionView.Settings as MultiQuestionSettings).IsLinkedToRoster)
                     {
                         return AnswerUtils.AnswerToString(answer);
                     }

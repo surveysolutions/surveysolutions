@@ -53,9 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         public void ImportFromDesigner(ImportFromDesigner command)
         {
             QuestionnaireDocument questionnaireDocument = CastToQuestionnaireDocumentOrThrow(command.Source);
-
-            questionnaireDocument.ConnectChildrenWithParent();
-
+            
             if (string.IsNullOrWhiteSpace(command.SupportingAssembly))
                 throw new QuestionnaireException(
                     $"Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {this.Id}");

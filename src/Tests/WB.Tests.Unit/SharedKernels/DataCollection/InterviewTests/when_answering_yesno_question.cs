@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.NumericIntegerQuestion(numericId),
                 Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: numericId, children: new[]
                 {
-                    Create.Entity.YesNoQuestion(questionId: questionId, answers: new[] { 11m, 222m, 3333m, })
+                    Create.Entity.YesNoQuestion(questionId: questionId, answers: new[] { 11, 222, 3333, })
                 }),
             });
 

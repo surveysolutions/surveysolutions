@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         public VariableView()
         {
             this.Breadcrumbs = new Breadcrumb[] {};
-            this.VariableData = new VariableData(VariableType.Boolean, null, null);
+            this.VariableData = new VariableData(VariableType.Boolean, null, null, null);
         }
 
         public Guid Id { get; set; }

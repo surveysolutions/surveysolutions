@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
@@ -14,19 +18,25 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     [RoutePrefix("api/v1/questionnaires")]
-    [ApiBasicAuth(new[] { UserRoles.ApiUser }, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
+        private readonly ISerializer serializer;
+        protected readonly IQuestionnaireStorage questionnaireStorage;
 
         public QuestionnairesController(ILogger logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IAllInterviewsFactory allInterviewsViewFactory)
+            IAllInterviewsFactory allInterviewsViewFactory, 
+            ISerializer serializer,
+            IQuestionnaireStorage questionnaireStorage)
             :base(logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
+            this.serializer = serializer;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         [HttpGet]
@@ -66,6 +76,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public IEnumerable<string> QuestionnairesStatuses()
         {
             return Enum.GetNames(typeof(InterviewStatus));
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/{version:long}/document")]
+        public HttpResponseMessage QuestionnaireDocument(Guid id, long version)
+        {
+            var questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
+
+            if (questionnaireDocumentVersioned == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            var questionnaireDocumentVersionedSrialized =  this.serializer.Serialize(questionnaireDocumentVersioned);
+            var response = this.Request.CreateResponse(questionnaireDocumentVersionedSrialized);
+            return response;
         }
 
         [HttpGet]

@@ -5,9 +5,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class AnswerNumericRealQuestionCommand : AnswerQuestionCommand
     {
-        public decimal Answer { get; private set; }
+        public double Answer { get; private set; }
 
-        public AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal answer)
+        public AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double answer)
             : base(interviewId, userId, questionId, rosterVector, answerTime)
         {
             this.Answer = answer;

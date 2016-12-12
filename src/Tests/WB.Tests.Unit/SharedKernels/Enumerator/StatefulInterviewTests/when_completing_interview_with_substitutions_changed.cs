@@ -13,25 +13,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
+            Guid substitutionId = Guid.Parse("77777777777777777777777777777777");
+            Guid userId = Guid.Parse("88888888888888888888888888888888");
+            string substitutionVar = "subst";
+
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[] {
-                Create.Entity.TextQuestion(questionId: questionId),
-                Create.Entity.StaticText(publicKey: staticTextId),
-                Create.Entity.Group(groupId: groupId),
+                Create.Entity.TextQuestion(questionId: questionId, text: $"substitution is %{substitutionVar}%"),
+                Create.Entity.StaticText(publicKey: staticTextId, text: $"substitution is %{substitutionVar}%"),
+                Create.Entity.Group(groupId: groupId, title: $"substitution is %{substitutionVar}%"),
+                Create.Entity.TextQuestion(questionId: substitutionId, variable: substitutionVar),
             });
 
             interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
 
-            interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
-
-            interview.Apply(Create.Event.SubstitutionTitlesChanged(
-                questions: new[] { Create.Entity.Identity(questionId, RosterVector.Empty)},
-                staticTexts: new[] { Create.Entity.Identity(staticTextId, RosterVector.Empty)},
-                groups: new[] {Create.Entity.Identity(groupId, RosterVector.Empty)})
-            );
-
-            interview.Apply(Create.Event.SubstitutionTitlesChanged(
-                questions: new[] { Create.Entity.Identity(questionId, RosterVector.Empty)},
-                staticTexts: new[] {Create.Entity.Identity(staticTextId, RosterVector.Empty)}));
+            interview.AnswerTextQuestion(userId, substitutionId, RosterVector.Empty, DateTime.UtcNow, "substitution text");
 
             eventContext = Create.Other.EventContext();
         };

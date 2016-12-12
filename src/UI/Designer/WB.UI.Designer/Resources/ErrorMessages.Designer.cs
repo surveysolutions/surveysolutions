@@ -97,6 +97,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User has not permissions to access requested questionnaire.
+        /// </summary>
+        internal static string NoAccessToQuestionnaire {
+            get {
+                return ResourceManager.GetString("NoAccessToQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to import questionnaire. Your questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports only up to version {2}..
         /// </summary>
         internal static string NotSupportedQuestionnaireVersion {

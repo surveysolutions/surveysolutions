@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 Create.Chapter(children: new IComposite[]
                 {
                     Create.TextListQuestion(Id.g1, variable: "list"),
-                    Create.Roster(rosterId: Id.gA, variable: "list_roster", rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: Id.g1, enablementCondition: "roster condition", children: new IComposite[]
+                    Create.Roster(rosterId: Id.gA, variable: "list_roster", rosterType: RosterSizeSourceType.Question, rosterSizeQuestionId: Id.g1, enablementCondition: "roster condition", children: new IComposite[]
                     {
                     })
                 })

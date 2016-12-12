@@ -11,14 +11,18 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments
             Guid attachmentId,
             Guid responsibleId,
             string attachmentName,
-            string attachmentContentId)
+            string attachmentContentId,
+            Guid? oldAttachmentId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
         {
             this.AttachmentId = attachmentId;
             this.AttachmentName = attachmentName;
             this.AttachmentContentId = attachmentContentId;
+            this.OldAttachmentId = oldAttachmentId;
         }
 
+
+        public Guid? OldAttachmentId { get; set; }
         public Guid AttachmentId { get; private set; }
         public string AttachmentContentId { get; set; }
         public string AttachmentName { get; private set; }

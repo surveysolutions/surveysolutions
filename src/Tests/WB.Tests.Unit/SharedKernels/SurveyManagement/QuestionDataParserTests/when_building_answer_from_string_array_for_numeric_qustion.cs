@@ -2,12 +2,13 @@
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_building_answer_from_string_array_for_numeric_qustion : QuestionDataParserTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             answer = "1";
             questionDataParser = CreateQuestionDataParser();
@@ -20,12 +21,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             };
         };
 
-        private Because of =
+        Because of =
             () =>
                 result =
                     questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName, answer) }, question);
 
-        private It should_result_be_equal_to_1 = () =>
-            result.ShouldEqual(1);
+        It should_result_be_equal_to_1 = () =>
+            (result as NumericIntegerAnswer)?.Value.ShouldEqual(1);
     }
 }

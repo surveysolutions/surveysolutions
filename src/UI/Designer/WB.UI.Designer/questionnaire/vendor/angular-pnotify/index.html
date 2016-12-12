@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<head>
+
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="node_modules/pnotify/dist/pnotify.css">
+	<link rel="stylesheet" href="node_modules/pnotify/dist/pnotify.buttons.css">
+
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="node_modules/angular/angular.js"></script>
+	<script src="node_modules/pnotify/dist/pnotify.js"></script>
+	<script src="node_modules/pnotify/dist/pnotify.confirm.js"></script>
+	<script src="node_modules/pnotify/dist/pnotify.buttons.js"></script>
+	<script src="src/angular-pnotify.js"></script>
+
+</head>
+
+<body ng-app="pnotify-demo">
+
+	<div ng-controller="MyCtrl">
+
+		<div class="container-fluid">
+
+			<div class="page-header">
+				<h1>angular-pnotify demo</h1>
+			</div>
+
+			<p>View source for more details.</p>
+			<hr>
+
+			<p><button ng-click="success()" class="btn btn-success">Success</button></p>
+			<p><pre>notificationService.success('Successing text')</pre></p>
+			<hr>
+
+			<p><button ng-click="info()" class="btn btn-info">Info</button></p>
+			<p><pre>notificationService.info('Infomative text')</pre></p>
+			<hr>
+
+			<p><button ng-click="notice()" class="btn btn-warning">Notice</button></p>
+			<p><pre>notificationService.notice('Notice text')</pre></p>
+			<hr>
+
+			<p><button ng-click="error()" class="btn btn-danger">Error</button></p>
+			<p><pre>notificationService.error('Error text')</pre></p>
+			<hr>
+
+			<p>Use the generic PNotify object.</p>
+			<p><button ng-click="generic()" class="btn btn-primary">Generic PNotify</button></p>
+			<p>
+				<pre>
+notificationService.notify({
+	title: 'The notice title.',
+	title_escape: false,
+	text: 'The notice text.',
+	text_escape: false,
+	styling: "bootstrap3",
+	type: "notice",
+	icon: true
+});
+				</pre>
+			</p>
+			<hr>
+
+			<p><button ng-click="confirmDialog()" class="btn btn-primary">Confirm dialog</button></p>
+			<p>
+				<pre>
+notificationService.notify({
+	title: 'Confirmation Needed',
+	text: 'Are you sure?',
+	hide: false,
+	confirm: {
+		confirm: true
+	},
+	buttons: {
+		closer: false,
+		sticker: false
+	},
+	history: {
+		history: false
+	}
+}).get().on('pnotify.confirm', function() {
+	alert('Ok, cool.');
+}).on('pnotify.cancel', function() {
+	alert('Oh ok. Chicken, I see.');
+});
+				</pre>
+			</p>
+			<hr>
+
+			<p><button ng-click="overrideDefaults()" class="btn btn-primary">Override defaults</button></p>
+			<p>
+				<pre>
+notificationService.notifyWithDefaults({
+	text: 'Keeps defaults but override delay',
+	delay: 1000,
+});
+				</pre>
+			</p>
+			<hr>
+
+			<p><button ng-click="stackTopLeft()" class="btn btn-primary">Stack top left</button></p>
+			<p>
+				In config:
+				<pre>
+// Configure a stack named 'top_left' that append a call 'stack-topleft'
+notificationServiceProvider.setStack('top_left', 'stack-topleft', {
+	dir1: 'down',
+	dir2: 'right',
+	push: 'top'
+});
+				</pre>
+				In controller:
+				<pre>
+notificationService.info('Hello World : Top left', 'top_left');
+				</pre>
+			</p>
+			<hr>
+
+			<p><button ng-click="stackBottomRight()" class="btn btn-primary">Stack bottom right</button></p>
+			<p>
+				In config:
+				<pre>
+// Configure a stack named 'bottom_right' that append a call 'stack-bottomright'
+notificationServiceProvider.setStack('bottom_right', 'stack-bottomright', {
+	dir1: 'up',
+	dir2: 'left',
+	firstpos1: 25,
+	firstpos2: 25
+});
+				</pre>
+				In controller:
+				<pre>
+notificationService.info('Hello World : Bottom right', 'bottom_right');
+				</pre>
+			</p>
+            <hr>
+
+            <p><button ng-click="removeNotifications()" class="btn btn-primary">Remove all notifications</button></p>
+            <p>
+                In controller:
+				<pre>
+notificationService.removeNotifications();
+				</pre>
+            </p>
+
+		</div>
+
+	</div>
+
+	<script>
+
+		angular.module('pnotify-demo', ['jlareau.pnotify'])
+
+			.config(['notificationServiceProvider', function(notificationServiceProvider) {
+
+				notificationServiceProvider
+
+					.setDefaults({
+                        styling: 'bootstrap3',
+						delay: 4000,
+						buttons: {
+							closer: false,
+							closer_hover: false,
+							sticker: false,
+							sticker_hover: false
+						},
+						type: 'error'
+					})
+
+					// Configure a stack named 'bottom_right' that append a call 'stack-bottomright'
+					.setStack('bottom_right', 'stack-bottomright', {
+						dir1: 'up',
+						dir2: 'left',
+						firstpos1: 25,
+						firstpos2: 25
+					})
+
+					// Configure a stack named 'top_left' that append a call 'stack-topleft'
+					.setStack('top_left', 'stack-topleft', {
+						dir1: 'down',
+						dir2: 'right',
+						push: 'top'
+					})
+
+				;
+
+			}])
+
+			.controller('MyCtrl', ['$scope','notificationService', function ($scope, notificationService) {
+
+				$scope.success = function() {
+					notificationService.success('Successing text');
+				};
+
+				$scope.info = function() {
+					notificationService.info('Info text');
+				};
+
+				$scope.notice = function() {
+					notificationService.notice('Notice text');
+				};
+
+				$scope.error = function() {
+					notificationService.error('Error text');
+				};
+
+				$scope.generic = function() {
+
+					// This is a sample using the generic PNotify object
+					notificationService.notify({
+						title: 'The notice title.',
+						title_escape: false,
+						text: 'The notice text.',
+						text_escape: false,
+						styling: 'bootstrap3',
+						type: 'notice',
+						icon: true
+					});
+
+				};
+
+				$scope.confirmDialog = function() {
+
+					notificationService.notify(
+						{
+							title: 'Confirmation Needed',
+							text: 'Are you sure?',
+							hide: false,
+							confirm: {
+							confirm: true
+						},
+						buttons: {
+							closer: false,
+							sticker: false
+						},
+						history: {
+							history: false
+						}
+					}).get().on('pnotify.confirm', function() {
+						alert('Ok, cool.');
+					}).on('pnotify.cancel', function() {
+						alert('Oh ok. Chicken, I see.');
+					});
+
+				};
+
+				$scope.overrideDefaults = function() {
+					notificationService.notifyWithDefaults({
+						text: 'Keeps defaults but override delay',
+						delay: 1000
+					});
+				};
+
+				$scope.stackTopLeft = function(){
+					notificationService.info('Hello World : Top left', 'top_left');
+				};
+
+				$scope.stackBottomRight = function(){
+					notificationService.info('Hello World : Bottom right', 'bottom_right');
+				};
+
+                $scope.removeNotifications = function(){
+                    notificationService.removeNotifications();
+                }
+
+			}]);
+
+		</script>
+
+	</body>
+
+</html>

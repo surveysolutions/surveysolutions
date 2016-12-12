@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.Composite;
@@ -11,24 +12,45 @@ namespace Main.Core.Documents
 {
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
-        public QuestionnaireDocument()
+        //is used for deserrialization
+        public QuestionnaireDocument(List<IComposite> children = null)
         {
             this.CreationDate = DateTime.Now;
             this.LastEntryDate = DateTime.Now;
             this.PublicKey = Guid.NewGuid();
             this.Id = this.PublicKey.FormatGuid();
-            this.Children = new List<IComposite>();
             this.ConditionExpression = string.Empty;
             this.IsPublic = false;
             this.Macros = new Dictionary<Guid, Macro>();
             this.LookupTables = new Dictionary<Guid, LookupTable>();
             this.Attachments = new List<Attachment>();
             this.Translations = new List<Translation>();
-        }
 
+            if(children == null)
+                this.children = new List<IComposite>();
+            else
+            {
+                this.children = children;
+                ConnectChildrenWithParentIfNeeded();
+            }
+        }
+        
         public string Id { get; set; }
 
-        public List<IComposite> Children { get; set; }
+        private List<IComposite> children;
+
+        public ReadOnlyCollection<IComposite> Children
+        {
+            get
+            {
+                return new ReadOnlyCollection<IComposite>(this.children);
+            }
+            set
+            {
+                children = new List<IComposite>(value);
+                ConnectChildrenWithParentIfNeeded();
+            } 
+        }
 
         public Dictionary<Guid, Macro> Macros { get; set; }
 
@@ -56,9 +78,9 @@ namespace Main.Core.Documents
 
         public bool IsPublic { get; set; }
 
-        public bool UsesCSharp { get; set; }
-
         private IComposite parent;
+
+        private bool childrenWereConnected = false;
 
         public IComposite GetParent()
         {
@@ -68,6 +90,7 @@ namespace Main.Core.Documents
         public void SetParent(IComposite parent)
         {
             this.parent = parent;
+            this.childrenWereConnected = false;
         }
 
         public Guid PublicKey { get; set; }
@@ -84,52 +107,60 @@ namespace Main.Core.Documents
 
         public RosterSizeSourceType RosterSizeSource => RosterSizeSourceType.Question;
 
-        public string[] RosterFixedTitles {
-            set {}
-        }
+        public string[] RosterFixedTitles { set {} }
 
         public FixedRosterTitle[] FixedRosterTitles => new FixedRosterTitle[0];
 
         public Guid? RosterTitleQuestionId => null;
+        public void ReplaceChildEntityById(Guid id, IComposite newEntity)
+        {
+            int indexOfEntity = this.children.FindIndex(child => child.PublicKey == id);
+            this.children[indexOfEntity] = newEntity;
+            newEntity.SetParent(this);
+        }
 
         public long LastEventSequence { get; set; }
 
-        public void Insert(int index, IComposite c, Guid? parent)
+        public void Insert(int index, IComposite c, Guid? parentId)
         {
-            if (!parent.HasValue || this.PublicKey == parent)
+            if (!parentId.HasValue || this.PublicKey == parentId)
             {
+                this.children.Insert(index, c);
                 c.SetParent(this);
-                this.Children.Insert(index, c);
+                c.ConnectChildrenWithParent();
                 return;
             }
 
-            var group = this.Find<Group>(parent.Value);
-            if (@group != null)
-            {
-                @group.Children.Insert(index, c);
-            }
+            var group = this.Find<Group>(parentId.Value);
+
+            @group?.Insert(index, c, parentId);
         }
 
-        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
+        public void RemoveChild(Guid childId)
         {
-            if (!parent.HasValue || this.PublicKey == parent)
+            IComposite child = this.children.Find(c => c.PublicKey == childId);
+            this.children.Remove(child);
+        }
+
+        public void Add(IComposite c, Guid? parentKey)
+        {
+            if (!parentKey.HasValue || this.PublicKey == parentKey)
             {
                 ////add to the root
+                this.children.Add(c);
                 c.SetParent(this);
-                this.Children.Add(c);
-                return;
             }
-
-            var group = this.Find<Group>(parent.Value);
-            if (@group != null)
+            else
             {
-                c.SetParent(@group);
-                @group.Children.Add(c);
-                return;
+                var group = this.Find<Group>(parentKey.Value);
+                if (@group != null)
+                {
+                    @group.Insert(Int32.MaxValue, c, parentKey);
+                    c.SetParent(@group);
+                }
             }
-
-            //// leave legacy for awhile
-            throw new CompositeException();
+            
+            c.ConnectChildrenWithParent();
         }
 
         public void UpdateQuestion(Guid questionId, Action<IQuestion> update)
@@ -161,7 +192,7 @@ namespace Main.Core.Documents
 
         public IEnumerable<T> Find<T>() where T : class
             => this
-                .Children
+                .children
                 .TreeToEnumerable(composite => composite.Children)
                 .Where(child => child is T)
                 .Cast<T>();
@@ -179,39 +210,7 @@ namespace Main.Core.Documents
             Guid oldEntityId = oldEntity.PublicKey;
 
             var entityParent = this.GetParentById(oldEntityId);
-            if (entityParent != null)
-            {
-                int indexOfEntity = entityParent.Children.FindIndex(child => IsEntityWithSpecifiedId(child, oldEntityId));
-                entityParent.Children[indexOfEntity] = newEntity;
-            }
-        }
-
-        public void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey)
-        {
-            // we could delete group from the root of Questionnaire
-            if (parentPublicKey == null || parentPublicKey == Guid.Empty || this.PublicKey == parentPublicKey)
-            {
-                this.Children.RemoveAll(i => i.PublicKey == itemKey);
-            }
-            else
-            {
-                IGroup parent = this.Find<IGroup>(g => g.PublicKey == parentPublicKey).FirstOrDefault();
-                if (parent != null)
-                {
-                    parent.Children.RemoveAll(i => i.PublicKey == itemKey);
-                }
-            }
-        }
-
-        public void RemoveGroup(Guid groupId)
-        {
-            IComposite groupParent = this.GetParentOfGroup(groupId);
-
-            if (groupParent != null)
-            {
-                var group = groupParent.Children.First(child => IsGroupWithSpecifiedId(child, groupId)) as IGroup;
-                RemoveChildGroupBySpecifiedId(groupParent, groupId);
-            }
+            entityParent?.ReplaceChildEntityById(oldEntityId, newEntity);
         }
 
         public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled)
@@ -236,44 +235,14 @@ namespace Main.Core.Documents
 
         public void RemoveEntity(Guid entityId)
         {
+            if (children.Any(child => child.PublicKey == entityId))
+                this.RemoveChild(entityId);
+
             IComposite entityParent = this.GetParentById(entityId);
 
-            if (entityParent != null)
-            {
-                RemoveChildEntityBySpecifiedId(entityParent, entityId);
-            }
+            entityParent?.RemoveChild(entityId);
         }
-
-        private static void RemoveChildGroupBySpecifiedId(IComposite container, Guid groupId)
-        {
-            RemoveFirstChild(container, child => IsGroupWithSpecifiedId(child, groupId));
-        }
-
-        private static void RemoveChildEntityBySpecifiedId(IComposite container, Guid entityId)
-        {
-            RemoveFirstChild(container, child => IsEntityWithSpecifiedId(child, entityId));
-        }
-
-        private static void RemoveFirstChild(IComposite container, Predicate<IComposite> condition)
-        {
-            IComposite child = container.Children.Find(condition);
-
-            if (child != null)
-            {
-                container.Children.Remove(child);
-            }
-        }
-
-        private IComposite GetParentOfGroup(Guid groupId)
-        {
-            if (ContainsChildGroupWithSpecifiedId(this, groupId))
-                return this;
-
-            return this
-                .Find<IGroup>(group => ContainsChildGroupWithSpecifiedId(group, groupId))
-                .SingleOrDefault();
-        }
-
+        
         private IComposite GetParentOfItem(IComposite item)
         {
             if (ContainsChildItem(this, item))
@@ -375,11 +344,6 @@ namespace Main.Core.Documents
             }
         }
 
-        private static bool ContainsChildGroupWithSpecifiedId(IComposite container, Guid groupId)
-        {
-            return container.Children.Any(child => IsGroupWithSpecifiedId(child, groupId));
-        }
-
         private static bool ContainsEntityWithSpecifiedId(IComposite container, Guid entityId)
         {
             return container.Children.Any(child => IsEntityWithSpecifiedId(child, entityId));
@@ -389,29 +353,33 @@ namespace Main.Core.Documents
         {
             return container.Children.Any(child => child == item);
         }
-
-        private static bool IsGroupWithSpecifiedId(IComposite child, Guid groupId)
-        {
-            return child is IGroup && ((IGroup)child).PublicKey == groupId;
-        }
-
+        
         private static bool IsEntityWithSpecifiedId(IComposite entity, Guid entityId)
         {
             return entity.PublicKey == entityId;
         }
 
+        private void ConnectChildrenWithParentIfNeeded()
+        {
+            if (childrenWereConnected)
+                return;
+            ConnectChildrenWithParent();
+        }
+
         public void ConnectChildrenWithParent()
         {
-            foreach (var item in this.Children)
+            foreach (var item in this.children)
             {
                 item.SetParent(this);
                 item.ConnectChildrenWithParent();
             }
+
+            this.childrenWereConnected = true;
         }
 
         public void ParseCategoricalQuestionOptions()
         {
-            var questions = this.Children.TreeToEnumerable(x => x.Children).OfType<IQuestion>();
+            var questions = this.children.TreeToEnumerable(x => x.Children).OfType<IQuestion>();
             foreach (var question in questions)
             {
                 bool isCategorical = question.QuestionType == QuestionType.SingleOption || question.QuestionType == QuestionType.MultyOption;
@@ -449,23 +417,8 @@ namespace Main.Core.Documents
             if (targetContainer == null)
                 return;
 
-            sourceContainer.Children.Remove(item);
-
-            if (targetIndex < 0)
-            {
-                //item.SetParent(targetContainer);
-                targetContainer.Children.Insert(0, item);
-            }
-            else if (targetIndex >= targetContainer.Children.Count)
-            {
-                //item.SetParent(targetContainer);
-                targetContainer.Children.Add(item);
-            }
-            else
-            {
-                targetContainer.Children.Insert(targetIndex, item);
-            }
-            item.SetParent(targetContainer);
+            sourceContainer.RemoveChild(itemId);
+            targetContainer.Insert(targetIndex, item, targetGroupId);
         }
 
         private IComposite GetItemOrLogWarning(Guid itemId)
@@ -503,11 +456,14 @@ namespace Main.Core.Documents
 
             doc.SetParent(null);
 
-            doc.Children = new List<IComposite>();
-            foreach (var composite in this.Children)
+            var newChildren = new List<IComposite>();
+            foreach (var composite in this.children)
             {
-                doc.Children.Add(composite.Clone());
+                newChildren.Add(composite.Clone());
             }
+
+            doc.Children = newChildren.ToReadOnlyCollection();
+
             doc.Macros = new Dictionary<Guid, Macro>();
             this.Macros.ForEach(x => doc.Macros.Add(x.Key, x.Value.Clone()));
 
@@ -563,7 +519,6 @@ namespace Main.Core.Documents
             }
         }
 
-
         public void RemoveHeadPropertiesFromRosters(Guid questionId)
         {
             var scopeGroups = this.Find<IGroup>(group => group.RosterTitleQuestionId == questionId);  
@@ -574,23 +529,6 @@ namespace Main.Core.Documents
                         if (@group != null)
                             @group.RosterTitleQuestionId = null;
                     }
-        }
-
-
-        public void MarkGroupsAsRosterAndSetRosterSizeQuestion(List<Guid> triggeredGroupIds, Guid rosterSizeQuestionId)
-        {
-            foreach (var triggeredGroupId in triggeredGroupIds)
-            {
-                var triggeredGroup = this.Find<IGroup>(group => group.PublicKey == triggeredGroupId).FirstOrDefault() as Group;
-
-                if (triggeredGroup == null)
-                {
-                    continue;
-                }
-
-                triggeredGroup.IsRoster = true;
-                triggeredGroup.RosterSizeQuestionId = rosterSizeQuestionId;
-            }
         }
     }
 }

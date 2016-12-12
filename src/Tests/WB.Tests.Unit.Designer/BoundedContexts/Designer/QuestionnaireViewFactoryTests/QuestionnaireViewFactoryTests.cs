@@ -21,16 +21,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireViewFacto
             Guid questionnaireId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
             var questionnaireDocument = Create.QuestionnaireDocument();
-            var persons = Create.QuestionnaireSharedPersons(questionnaireId);
             var listItem = Create.QuestionnaireListViewItem(isPublic: true);
 
             var questionnaireStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(q =>
                 q.GetById(questionnaireId.FormatGuid()) == questionnaireDocument);
-            var sharedPersonsStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireSharedPersons>>(p =>
-                p.GetById(questionnaireId.FormatGuid()) == persons);
+
             var listItemStorage = Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(i =>
                 i.GetById(questionnaireId.FormatGuid()) == listItem);
-            var factory = new QuestionnaireViewFactory(questionnaireStorage, sharedPersonsStorage, listItemStorage);
+            var factory = new QuestionnaireViewFactory(questionnaireStorage, listItemStorage);
 
             var result = factory.HasUserAccessToQuestionnaire(questionnaireId, userId);
 

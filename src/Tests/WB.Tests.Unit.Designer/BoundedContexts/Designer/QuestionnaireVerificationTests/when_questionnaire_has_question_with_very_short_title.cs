@@ -22,15 +22,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => errors = verifier.Verify(questionnaire);
+        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_return_WB0255_warning = () => errors.ShouldContainWarning("WB0255", "Question is too short. This might be an incomplete question.");
 
         It should_return_error_with_references_on_text_question = () =>
-          errors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+          errors.First(warning => warning.Code == "WB0255").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_error_with_references_on_text_question_id = () =>
-          errors.First().References.First().Id.ShouldEqual(textQuestionId);
+          errors.First(warning => warning.Code == "WB0255").References.First().Id.ShouldEqual(textQuestionId);
 
         It should_not_return_warning_for_prefilled_question = () => errors.GetWarnings("WB0255").Count().ShouldEqual(1);
 

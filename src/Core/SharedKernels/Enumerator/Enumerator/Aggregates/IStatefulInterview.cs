@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 
 namespace WB.Core.SharedKernels.Enumerator.Aggregates
 {
@@ -17,8 +19,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         Guid Id { get; }
         string InterviewerCompleteComment { get; }
         string SupervisorRejectComment { get; }
-
-        IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }
+        
+        string GetAnswerAsString(Identity questionIdentity, CultureInfo cultureInfo = null);
 
         string Language { get; }
 
@@ -26,108 +28,87 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         bool IsCompleted { get; }
         bool CreatedOnClient { get; }
 
-        InterviewRoster GetRoster(Identity identity);
+        InterviewTreeRoster GetRoster(Identity identity);
 
-        GpsCoordinatesAnswer GetGpsCoordinatesAnswer(Identity identity);
+        InterviewTreeGpsQuestion GetGpsQuestion(Identity identity);
 
-        DateTimeAnswer GetDateTimeAnswer(Identity identity);
+        InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity);
 
-        MultimediaAnswer GetMultimediaAnswer(Identity identity);
+        InterviewTreeMultimediaQuestion GetMultimediaQuestion(Identity identity);
 
-        TextAnswer GetQRBarcodeAnswer(Identity identity);
+        InterviewTreeQRBarcodeQuestion GetQRBarcodeQuestion(Identity identity);
 
-        TextListAnswer GetTextListAnswer(Identity identity);
+        InterviewTreeTextListQuestion GetTextListQuestion(Identity identity);
 
-        LinkedSingleOptionAnswer GetLinkedSingleOptionAnswer(Identity identity);
+        InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity);
 
-        MultiOptionAnswer GetMultiOptionAnswer(Identity identity);
+        InterviewTreeMultiOptionQuestion GetMultiOptionQuestion(Identity identity);
 
-        LinkedMultiOptionAnswer GetLinkedMultiOptionAnswer(Identity identity);
+        InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity);
 
-        IntegerNumericAnswer GetIntegerNumericAnswer(Identity identity);
+        InterviewTreeIntegerQuestion GetIntegerQuestion(Identity identity);
 
-        RealNumericAnswer GetRealNumericAnswer(Identity identity);
+        InterviewTreeDoubleQuestion GetDoubleQuestion(Identity identity);
 
-        TextAnswer GetTextAnswer(Identity identity);
+        InterviewTreeTextQuestion GetTextQuestion(Identity identity);
 
-        SingleOptionAnswer GetSingleOptionAnswer(Identity identity);
+        InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity);
 
-        YesNoAnswer GetYesNoAnswer(Identity identity);
+        InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity);
+
+        InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity);
+
+        InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity);
 
         bool HasGroup(Identity group);
 
         bool IsValid(Identity identity);
 
-        IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId);
+        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId);
 
         bool IsEnabled(Identity entityIdentity);
 
         bool WasAnswered(Identity entityIdentity);
 
-        List<QuestionComment> GetQuestionComments(Identity entityIdentity);
+        IEnumerable<AnswerComment> GetQuestionComments(Identity entityIdentity);
 
         string GetRosterTitle(Identity rosterIdentity);
 
-        /// <summary>
-        /// Gets an answer by roster vector that will be reduced until requested question is found.
-        /// </summary>
-        /// <returns>null if question is not answered yet.</returns>
-        BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, RosterVector targetRosterVector);
+        string GetTitleText(Identity entityIdentity);
 
-        IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion);
+        IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity);
 
-        IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion);
+        IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Identity rosterIdentity);
 
-        InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, RosterVector targetRosterVector);
-
-        IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, RosterVector rosterVector);
-
-        IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Guid rosterId, RosterVector rosterVector);
-
-        int CountInterviewerQuestionsInGroupRecursively(Identity groupIdentity);
-
-        int CountActiveInterviewerQuestionsInGroupOnly(Identity group);
+        int CountEnabledQuestions(Identity group);
 
         int GetGroupsInGroupCount(Identity group);
 
-        int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity);
+        int CountEnabledAnsweredQuestions(Identity group);
 
-        int CountAnsweredInterviewerQuestionsInGroupOnly(Identity group);
+        int CountEnabledInvalidQuestionsAndStaticTexts(Identity group);
 
-        int CountInvalidInterviewerAnswersInGroupRecursively(Identity groupIdentity);
+        bool HasEnabledInvalidQuestionsAndStaticTexts(Identity group);
 
-        int CountInvalidInterviewerEntitiesInGroupOnly(Identity group);
-
-        bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group);
-
-        bool HasUnansweredInterviewerQuestionsInGroupOnly(Identity group);
+        bool HasUnansweredQuestions(Identity group);
 
         Identity GetParentGroup(Identity groupOrQuestion);
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
-
-        IEnumerable<Identity> GetInterviewerEntities(Identity groupIdentity);
-
-        IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, RosterVector parentRosterVector);
-
+        
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
 
-        int CountAnsweredQuestionsInInterview();
+        int CountActiveAnsweredQuestionsInInterview();
 
         int CountActiveQuestionsInInterview();
 
         int CountInvalidEntitiesInInterview();
-
-        bool HasLinkedOptionsChangedEvents { get; }
-
-        [Obsolete("it should be removed when all clients has version 5.7 or higher")]
-        void MigrateLinkedOptionsToFiltered();
-
+        
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();
 
-        IEnumerable<CategoricalOption> GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter);
+        List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize);
 
         CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null);
 
@@ -141,6 +122,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
 
-        int GetRosterSortIndex(Identity entityIdentity);
+        InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
+
+        string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
     }
 }

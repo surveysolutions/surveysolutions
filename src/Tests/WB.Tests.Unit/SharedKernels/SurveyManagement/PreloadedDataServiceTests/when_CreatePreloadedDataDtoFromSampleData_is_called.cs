@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         PublicKey = Guid.NewGuid()
                     },
                     Create.Entity.FixedRoster(rosterId: rosterGroupId,
-                        fixedTitles: new[] {"a"},
+                        obsoleteFixedTitles: new[] {"a"},
                         children: new IComposite[]
                         {
                             new NumericQuestion()

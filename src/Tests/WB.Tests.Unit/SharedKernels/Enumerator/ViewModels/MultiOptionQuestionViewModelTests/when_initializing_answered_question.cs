@@ -37,10 +37,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 Create.Entity.CategoricalQuestionOption(2, "item2"),
             });
 
-            var multiOptionAnswer = Create.Entity.MultiOptionAnswer(questionGuid, Empty.RosterVector);
-            multiOptionAnswer.SetAnswers(new[] {1m});
+            var multiOptionAnswer = Create.Entity.InterviewTreeMultiOptionQuestion(new[] { 1m });
             
-            var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionAnswer(questionId) == multiOptionAnswer);
+            var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionQuestion(questionId) == multiOptionAnswer);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
@@ -66,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             firstOption.Checked.ShouldBeTrue();
             firstOption.Title.ShouldEqual("item1");
             firstOption.CheckedOrder.ShouldEqual(1);
-            firstOption.Value.ShouldEqual(1m);
+            firstOption.Value.ShouldEqual(1);
         };
 
         It should_subscribe_model_in_events_registry = () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));

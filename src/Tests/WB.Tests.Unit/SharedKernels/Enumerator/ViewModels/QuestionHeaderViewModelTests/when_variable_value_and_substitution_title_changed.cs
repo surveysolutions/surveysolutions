@@ -1,18 +1,10 @@
 ﻿using System;
 using Machine.Specifications;
-using Moq;
-using Ncqrs.Eventing;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus.Lite;
+using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
@@ -21,59 +13,36 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
     {
         Establish context = () =>
         {
-            var interviewId = "interviewId";
-            var substitutionTargetQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            staticTextWithSubstitutionIdentity = Identity.Create(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
+            var substitutedVariableIdentity = Identity.Create(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
+
             var substitutedVariable1Name = "var1";
             var substitutedVariable2Name = "var2";
-            var substitutedQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            var substitutedVariableIdentity = new Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
 
-            changedVariables = new[]{new ChangedVariable(new Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty),  555)};
-            changedTitleIds =new []{new Identity(substitutionTargetQuestionId, Empty.RosterVector)};
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(new QuestionnaireIdentity(Guid.NewGuid(), 1),
+                    Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                    {
+                        Create.Entity.StaticText(publicKey: staticTextWithSubstitutionIdentity.Id,
+                            text: $"Your answer on question is %{substitutedVariable1Name}% and variable is %{substitutedVariable2Name}%"),
+                        Create.Entity.NumericIntegerQuestion(variable: substitutedVariable1Name, id: substitutedQuestionId),
+                        Create.Entity.Variable(variableName: substitutedVariable2Name,
+                            id: substitutedVariableIdentity.Id, expression: $"({substitutedVariable1Name}*100)/20")
+                    }));
 
-            answer = new TextAnswer();
-            answer.SetAnswer("new value");
-            var interview = Mock.Of<IStatefulInterview>(x =>
-                x.GetVariableValueByOrDeeperRosterLevel(substitutedVariableIdentity.Id, substitutedVariableIdentity.RosterVector) == changedVariables[0].NewValue &&
-                x.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionId, Empty.RosterVector) == answer);
-
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
-
-            var questionnaireMock = Mock.Of<IQuestionnaire>(_
-            => _.GetQuestionTitle(substitutionTargetQuestionId) == $"Your answer on question is %{substitutedVariable1Name}% and variable is %{substitutedVariable2Name}%"
-            && _.GetQuestionInstruction(substitutionTargetQuestionId) == "Instruction"
-            && _.GetQuestionIdByVariable(substitutedVariable1Name) == substitutedQuestionId
-            && _.HasQuestion(substitutedVariable1Name) == true
-            && _.GetVariableIdByVariableName(substitutedVariable2Name) == substitutedVariableIdentity.Id
-            && _.HasVariable(substitutedVariable2Name) == true
-            );
-
-            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
-            questionnaireRepository.SetReturnsDefault(questionnaireMock);
-           
-            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
-            liteEventBus = Create.Service.LiteEventBus(registry);
-
-            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
-
-            Identity id = new Identity(substitutionTargetQuestionId, Empty.RosterVector);
-            viewModel.Init(interviewId, id);
-
-            fakeInterview = Create.AggregateRoot.Interview();
+            statefullInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
+            statefullInterview.Apply(Create.Event.VariablesChanged(new ChangedVariable(substitutedVariableIdentity, 10)));
         };
 
-        Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
-            Create.Other.CommittedEvent(payload:new VariablesChanged(changedVariables), eventSourceId: fakeInterview.EventSourceId, eventSequence: 1),
-            Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: changedTitleIds), eventSourceId: fakeInterview.EventSourceId, eventSequence: 2)));
+        Because of = () => statefullInterview.AnswerNumericIntegerQuestion(interviewerId, substitutedQuestionId, RosterVector.Empty, DateTime.UtcNow, answerOnIntegerQuestion);
 
-        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual($"Your answer on question is {answer.Answer} and variable is {changedVariables[0].NewValue}");
-
-        static QuestionHeaderViewModel viewModel;
-        static ILiteEventBus liteEventBus;
-        static IEventSourcedAggregateRoot fakeInterview;
-        private static ChangedVariable[] changedVariables;
-        private static Identity[] changedTitleIds;
-        static TextAnswer answer;
+        It should_change_item_title = () => statefullInterview.GetTitleText(staticTextWithSubstitutionIdentity)
+                    .ShouldEqual($"Your answer on question is {answerOnIntegerQuestion} and variable is {(answerOnIntegerQuestion*100)/20}");
+        
+        static StatefulInterview statefullInterview;
+        static int answerOnIntegerQuestion = 2;
+        static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");
+        static Guid substitutedQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        static Identity staticTextWithSubstitutionIdentity;
     }
 }
 

@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         It should_contain_email_of_first_element_in_list_of_shared_persons_equal_to_owner_email = () => view.SharedPersons[0].Email.ShouldEqual(ownerEmail);
 
-        It should_contain_id_of_first_element_in_list_of_shared_persons_equal_to_owner_id = () => view.SharedPersons[0].Id.ShouldEqual(userId);
+        It should_contain_id_of_first_element_in_list_of_shared_persons_equal_to_owner_id = () => view.SharedPersons[0].UserId.ShouldEqual(userId);
 
         It should_contain_isOwner_of_first_element_in_list_of_shared_persons_be_true = () => view.SharedPersons[0].IsOwner.ShouldEqual(true);
 

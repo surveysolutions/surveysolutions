@@ -87,6 +87,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> FailedValidationConditions { get; set; } 
         public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances { get; set; }
+        [Obsolete("Since all intervewers will be version 5.15+")]
         public Dictionary<InterviewItemId, RosterVector[]> LinkedQuestionOptions { get; set; }
         public Dictionary<InterviewItemId, object> Variables { get; set; }
 

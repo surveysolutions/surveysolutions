@@ -1,10 +1,11 @@
 using System;
+using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -24,12 +25,26 @@ namespace WB.Tests.Unit.TestFactories
         public Interview Interview(Guid? interviewId = null,
             IQuestionnaireStorage questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
-            QuestionnaireIdentity questionnaireId = null)
+            QuestionnaireIdentity questionnaireId = null,
+            ISubstitionTextFactory textFactory = null,
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
+            var textFactoryMock = new Mock<ISubstitionTextFactory> {DefaultValue = DefaultValue.Mock};
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
+                expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
+                textFactory ?? textFactoryMock.Object);
 
             interview.SetId(interviewId ?? Guid.NewGuid());
+
+            if (questionOptionsRepository != null)
+            {
+                Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
+            }
+
+            interview.Apply(Create.Event.InterviewCreated(
+                questionnaireId: questionnaireId?.QuestionnaireId ?? Guid.NewGuid(),
+                questionnaireVersion: questionnaireId?.Version ?? 1));
+
             return interview;
         }
 
@@ -51,36 +66,37 @@ namespace WB.Tests.Unit.TestFactories
             long? questionnaireVersion = null,
             Guid? userId = null,
             IQuestionnaireStorage questionnaireRepository = null,
-            IInterviewExpressionStatePrototypeProvider interviewExpressionStatePrototypeProvider = null)
+            IInterviewExpressionStatePrototypeProvider interviewExpressionStatePrototypeProvider = null,
+            bool shouldBeInitialized = true)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
-                Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                interviewExpressionStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
-            {
-                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, questionnaireVersion ?? 1),
-            };
+                interviewExpressionStatePrototypeProvider ??
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                Create.Service.SubstitionTextFactory());
 
-            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
+            if (shouldBeInitialized)
+            {
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid());
+            }
 
             return statefulInterview;
         }
 
-        public StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null, IQuestionnaire questionnaire = null)
+        public StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null, IQuestionnaire questionnaire = null, bool shouldBeInitialized = true)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
 
             var statefulInterview = new StatefulInterview(
-                Mock.Of<ILogger>(),
                 Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire),
-                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                Create.Service.SubstitionTextFactory());
+
+            if (shouldBeInitialized)
             {
-                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
-            };
-
-            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
-
+                statefulInterview.CreateInterviewOnClient(Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), Guid.NewGuid(), DateTime.Now, userId ?? Guid.NewGuid());
+            }
             return statefulInterview;
         }
     }

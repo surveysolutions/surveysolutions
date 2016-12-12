@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
-using Nito.AsyncEx.Synchronous;
+using Moq;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
@@ -21,21 +22,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
 
-            eventData = new[]
-            {
-                new ChangedLinkedOptions(linkedQuestionId, 
-                    new[]
-                    {
-                        Create.Entity.RosterVector(1),
-                        Create.Entity.RosterVector(2)
-                    }),
-            };
-
-            linkedOptionTextInInterview = "answer in init";
+            var answer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_ 
+                => _.IsAnswered == true 
+                && _.GetAnswer() == Create.Entity.LinkedSingleOptionAnswer(Create.Entity.RosterVector(2))
+                && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2), Create.Entity.RosterVector(3)});
 
             IStatefulInterview interview = Substitute.For<IStatefulInterview>();
-            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
-                    .Returns(new List<BaseInterviewAnswer> { Create.Entity.TextAnswer(linkedOptionTextInInterview) });
+            interview.GetLinkedSingleOptionQuestion(linkedQuestionId).Returns(answer);
 
             IQuestionnaire questionnaire = Substitute.For<IQuestionnaire>();
             questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId.Id)
@@ -44,15 +37,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
             viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
-            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
-                  .Returns(new List<BaseInterviewAnswer>
-                  {
-                      Create.Entity.TextAnswer("one"),
-                      Create.Entity.TextAnswer("two")
-                  });
+            var newAnswer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_
+               => _.IsAnswered == false
+               && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2) });
+
+            interview.GetLinkedSingleOptionQuestion(linkedQuestionId).Returns(newAnswer);
         };
 
-        Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));
+        Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(new[]
+        {
+            new ChangedLinkedOptions(linkedQuestionId, new[] { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2) }),
+        }));
 
         It should_replace_answer_title_from_add_provided_by_event_options_to_self = () => viewModel.Options.Count.ShouldEqual(2);
 
@@ -60,7 +55,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         static Identity linkSourceQuestionId;
         static Identity linkedQuestionId;
         static string interviewId;
-        static ChangedLinkedOptions[] eventData;
-        static string linkedOptionTextInInterview;
     }
 }

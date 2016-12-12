@@ -26,29 +26,23 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     Create.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked", linkedFilter:"1==1"),
                     Create.Roster(id: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
-                        fixedRosterTitles: new[] {Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)},
+                        fixedTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)},
                         children: new IComposite[]
                         {
                             Create.Roster(id: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                                 variable: "r2", 
-                                fixedRosterTitles: new[] {Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)})
+                                fixedTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)})
                         }),
                 });
 
-                var result = new InvokeResults();
+                ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument, false);
 
-                using (var eventContext = new EventContext())
+                var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
+
+                return new InvokeResults
                 {
-                    ILatestInterviewExpressionState interviewState = GetInterviewExpressionState(questionnaireDocument, false);
-
-                    var interview = SetupStatefullInterview(questionnaireDocument, precompiledState: interviewState);
-                    
-                    var options = interview.FindReferencedRostersForLinkedQuestion(roster2Id, Create.Identity(linkedToQuestionId, RosterVector.Empty)).ToList();
-
-                    result.OptionsCountForLinkedToRosterQuestion = options.Count();
-                }
-
-                return result;
+                    OptionsCountForLinkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Identity.Create(linkedToQuestionId, RosterVector.Empty)).Options.Count
+                };
             });
 
         It should_return_4_options_for_linked_question = () =>

@@ -192,6 +192,15 @@
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Server Response timeout</value>
   </data>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>Show variables</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>Variables are shown in the interview with value and description</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>Variables are hidden</value>
+  </data>
   <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
     <value>Version: {0}</value>
   </data>

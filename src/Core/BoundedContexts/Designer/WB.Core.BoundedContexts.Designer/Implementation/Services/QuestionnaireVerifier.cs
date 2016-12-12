@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -29,6 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private const int MaxExpressionLength = 10000;
         private const int MaxOptionsCountInCascadingQuestion = 15000;
         private const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
+
+        private const int MaxOptionsCountInCategoricalOptionQuestion = 200;
 
         private const int DefaultVariableLengthLimit = 32;
         private const int DefaultRestrictedVariableLengthLimit = 20;
@@ -49,6 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.DateTime,
             QuestionType.Numeric,
             QuestionType.Text,
+            QuestionType.TextList
         };
 
         private static readonly HashSet<QuestionType> WhiteListOfQuestionTypes = new HashSet<QuestionType>
@@ -85,8 +89,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.QRBarcode
         };
 
+        private static class EntityVerificationResult
+        {
+            public static EntityVerificationResult<IQuestionnaireEntity> NoProblems()
+                => new EntityVerificationResult<IQuestionnaireEntity> { HasErrors = false };
+
+            public static EntityVerificationResult<TReferencedEntity> NoProblems<TReferencedEntity>()
+                where TReferencedEntity : class, IQuestionnaireEntity
+                => new EntityVerificationResult<TReferencedEntity> { HasErrors = false };
+
+            public static EntityVerificationResult<TReferencedEntity> Problems<TReferencedEntity>(IEnumerable<TReferencedEntity> entities)
+                where TReferencedEntity : class, IQuestionnaireEntity
+                => new EntityVerificationResult<TReferencedEntity> { HasErrors = true, ReferencedEntities = entities };
+
+            public static EntityVerificationResult<IQuestionnaireEntity> Problems(IQuestionnaireEntity entity, IEnumerable<IQuestionnaireEntity> entities)
+                => Problems(entity.ToEnumerable().Concat(entities));
+        }
+
         private struct EntityVerificationResult<TReferencedEntity>
-            where TReferencedEntity : class, IComposite
+            where TReferencedEntity : class, IQuestionnaireEntity
         {
             public bool HasErrors { get; set; }
             public IEnumerable<TReferencedEntity> ReferencedEntities { get; set; }
@@ -141,129 +162,129 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
-            Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
+            Error(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
             
-            Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
-            Verifier<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
-            Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
-            Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
-            Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion, "WB0034", VerificationMessages.WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion),
-            Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion, "WB0035", VerificationMessages.WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion),
-            Verifier<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
-            Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
-            Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues, "WB0041", VerificationMessages.WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues),
-            Verifier<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesValuesHaveNonIntegerValues, "WB0115", VerificationMessages.WB0115_FixRosterSupportsOnlyIntegerTitleValues),
-            Verifier<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", string.Format(VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan200Items, Constants.MaxLongRosterRowCount)),
-            Verifier<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
-            Verifier<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
-            Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
-            Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
-            Verifier<IGroup>(this.RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
-            Verifier<IGroup>(this.RosterHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
-            Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
-            TranslationVerifier<IGroup>(GroupTitleIsTooLong, "WB0260", VerificationMessages.WB0260_GroupTitleIsTooLong),
-            Verifier<IGroup>(LongMultiRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
-            Verifier<IGroup>(LongListRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
-            Verifier<IGroup>(LongFixedRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
-            Verifier<IGroup>(LongFixedRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
-            Verifier<IGroup>(LongMultiRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
-            Verifier<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
-            Verifier<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
+            Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
+            Error<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
+            Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
+            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
+            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion, "WB0034", VerificationMessages.WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion),
+            Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion, "WB0035", VerificationMessages.WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion),
+            Error<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
+            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
+            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues, "WB0041", VerificationMessages.WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues),
+            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesValuesHaveNonIntegerValues, "WB0115", VerificationMessages.WB0115_FixRosterSupportsOnlyIntegerTitleValues),
+            Error<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", string.Format(VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan200Items, Constants.MaxLongRosterRowCount)),
+            Error<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
+            Error<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4),
+            Error<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
+            Error<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
+            Error<IGroup>(this.RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
+            Error<IGroup>(this.RosterHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
+            Error<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
+            ErrorForTranslation<IGroup>(GroupTitleIsTooLong, "WB0260", VerificationMessages.WB0260_GroupTitleIsTooLong),
+            Error<IGroup>(LongMultiRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
+            Error<IGroup>(LongListRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
+            Error<IGroup>(LongFixedRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
+            Error<IGroup>(LongFixedRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
+            Error<IGroup>(LongMultiRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
+            Error<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
+            Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
 
-            Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
-            Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
-            Verifier<IMultyOptionsQuestion>(RosterSizeMultiOptionQuestionShouldBeLimited, "WB0082", VerificationMessages.WB0082_RosterSizeMultiOptionQuestionShouldBeLimited),
-            Verifier<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And60(q,document, GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options), "WB0100", VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200),
-            Verifier<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
-            Verifier<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
-            Verifier<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
-            Verifier<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And200, "WB0042", string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200, Constants.MaxLongRosterRowCount)),
-            Verifier<ITextListQuestion>(RosterSizeListQuestionShouldBeLimited, "WB0093", VerificationMessages.WB0093_RosterSizeListOptionQuestionShouldBeLimit),
-            TranslationVerifier<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
-            Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
-            Verifier<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
-            Verifier<IQuestion>(QuestionHasEmptyVariableName, "WB0057", VerificationMessages.WB0057_QuestionHasEmptyVariableName),
-            Verifier<IQuestion>(QuestionHasInvalidVariableName, "WB0077", VerificationMessages.WB0077_QuestionHasInvalidVariableName),
-            Verifier<IQuestion>(this.QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
-            Verifier<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options),
-            Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
-            Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionYesNoQuestionCantBeLinked, "WB0007", VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
-            Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionHasNonIntegerOptionsValues, "WB0008", VerificationMessages.WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues),
-            Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
-            TranslationVerifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
-            Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
-            Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
-            Verifier<IQuestion>(FilteredComboboxContainsMoreThanMaxOptions, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
-            Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan200),
-            Verifier<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
-            Verifier<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
-            Verifier<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
-            Verifier<IQuestion, IComposite>(CascadingComboboxOptionsHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
-            Verifier<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
-            Verifier<SingleQuestion>(this.SingleOptionQuestionHasNonIntegerOptionsValues, "WB0114", VerificationMessages.WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues),
-            Verifier<SingleQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
-            Verifier<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
-            Verifier<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
-            Verifier<SingleQuestion>(CascadingQuestionOptionsWithParentValuesShouldBeUnique, "WB0089", VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
-            Verifier<IQuestion>(LinkedQuestionIsInterviewersOnly, "WB0090", VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
-            Verifier<SingleQuestion>(CascadingQuestionHasEnablementCondition, "WB0091", VerificationMessages.WB0091_CascadingChildQuestionShouldNotContainCondition),
-            Verifier<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
-            Verifier<IComposite>(this.ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
-            Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
-            Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
-            Verifier<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
-            Verifier<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters),
-            Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
-            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
-            TranslationVerifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
-            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
-            TranslationVerifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
-            Verifier<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
-            Verifier<IQuestion>(QuestionWithOptionsFilterCannotBePrefilled, "WB0029", VerificationMessages.WB0029_QuestionWithOptionsFilterCannotBePrefilled),
-            TranslationVerifier<IQuestion>(QuestionTitleIsTooLong, "WB0259", VerificationMessages.WB0259_QuestionTitleIsTooLong),
+            Error<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
+            Error<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsPrefilled, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
+            Error<IMultyOptionsQuestion>(RosterSizeMultiOptionQuestionShouldBeLimited, "WB0082", VerificationMessages.WB0082_RosterSizeMultiOptionQuestionShouldBeLimited),
+            Error<IQuestion>((q, document)=>RosterSizeQuestionMaxValueCouldBeInRange1And60(q,document, GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options), "WB0100", VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200),
+            Error<IQuestion>(PrefilledQuestionCantBeInsideOfRoster, "WB0030", VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
+            Error<ITextListQuestion>(TextListQuestionCannotBePrefilled, "WB0039", VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
+            Error<ITextListQuestion>(TextListQuestionCannotBeFilledBySupervisor, "WB0040", VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
+            Error<ITextListQuestion>(TextListQuestionMaxAnswerNotInRange1And200, "WB0042", string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200, Constants.MaxLongRosterRowCount)),
+            Error<ITextListQuestion>(RosterSizeListQuestionShouldBeLimited, "WB0093", VerificationMessages.WB0093_RosterSizeListOptionQuestionShouldBeLimit),
+            ErrorForTranslation<IQuestion>(QuestionHasOptionsWithEmptyValue, "WB0045", VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
+            Error<IQRBarcodeQuestion>(QRBarcodeQuestionIsSupervisorQuestion, "WB0049", VerificationMessages.WB0049_QRBarcodeQuestionIsSupervisorQuestion),
+            Error<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
+            Error<IQuestion>(QuestionHasEmptyVariableName, "WB0057", VerificationMessages.WB0057_QuestionHasEmptyVariableName),
+            Error<IQuestion>(QuestionHasInvalidVariableName, "WB0077", VerificationMessages.WB0077_QuestionHasInvalidVariableName),
+            Error<IQuestion>(this.QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
+            Error<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options),
+            Error<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
+            Error<IMultyOptionsQuestion>(this.MultiOptionQuestionYesNoQuestionCantBeLinked, "WB0007", VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
+            Error<IMultyOptionsQuestion>(this.MultiOptionQuestionHasNonIntegerOptionsValues, "WB0008", VerificationMessages.WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues),
+            Error<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
+            ErrorForTranslation<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
+            Error<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
+            Error<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
+            Error<IQuestion>(FilteredComboboxContainsMoreThanMaxOptions, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
+            Error<IQuestion>(CategoricalOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOptionsCountMoreThan200),
+            Error<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
+            Error<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
+            Error<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
+            Error<IQuestion, IComposite>(CascadingComboboxOptionsHasNoParentOptions, "WB0084", VerificationMessages.WB0084_CascadingOptionsShouldHaveParent),
+            Error<IQuestion, IComposite>(ParentShouldNotHaveDeeperRosterLevelThanCascadingQuestion, "WB0085", VerificationMessages.WB0085_CascadingQuestionWrongParentLevel),
+            Error<SingleQuestion>(this.SingleOptionQuestionHasNonIntegerOptionsValues, "WB0114", VerificationMessages.WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues),
+            Error<SingleQuestion>(CascadingQuestionReferencesMissingParent, "WB0086", VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
+            Error<SingleQuestion, SingleQuestion>(CascadingHasCircularReference, "WB0087", VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
+            Error<SingleQuestion>(CascadingQuestionHasMoreThanAllowedOptions, "WB0088", VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers),
+            Error<SingleQuestion>(CascadingQuestionOptionsWithParentValuesShouldBeUnique, "WB0089", VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
+            Error<IQuestion>(LinkedQuestionIsInterviewersOnly, "WB0090", VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
+            Error<SingleQuestion>(CascadingQuestionHasEnablementCondition, "WB0091", VerificationMessages.WB0091_CascadingChildQuestionShouldNotContainCondition),
+            Error<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
+            Error<IComposite>(this.ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
+            Error(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
+            Error(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
+            Error<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
+            Error<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters),
+            Error<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
+            Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
+            ErrorForTranslation<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
+            Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
+            ErrorForTranslation<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
+            Error<IQuestion>(OptionFilterExpressionHasLengthMoreThan10000Characters, "WB0028", VerificationMessages.WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters),
+            Error<IQuestion>(QuestionWithOptionsFilterCannotBePrefilled, "WB0029", VerificationMessages.WB0029_QuestionWithOptionsFilterCannotBePrefilled),
+            ErrorForTranslation<IQuestion>(QuestionTitleIsTooLong, "WB0259", VerificationMessages.WB0259_QuestionTitleIsTooLong),
 
-            TranslationVerifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
-            Verifier<IStaticText>(StaticTextRefersAbsentAttachment, "WB0095", VerificationMessages.WB0095_StaticTextRefersAbsentAttachment),
+            ErrorForTranslation<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
+            Error<IStaticText>(StaticTextRefersAbsentAttachment, "WB0095", VerificationMessages.WB0095_StaticTextRefersAbsentAttachment),
 
-            Verifier<IVariable>(VariableHasInvalidName, "WB0112", VerificationMessages.WB0112_VariableHasInvalidName),
-            Verifier<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName, VerificationMessageLevel.Critical),
-            Verifier<IVariable>(VariableHasEmptyExpression, "WB0004", VerificationMessages.WB0004_VariableHasEmptyExpression, VerificationMessageLevel.Critical),
+            Error<IVariable>(VariableHasInvalidName, "WB0112", VerificationMessages.WB0112_VariableHasInvalidName),
+            Critical<IVariable>(VariableHasEmptyVariableName, "WB0113", VerificationMessages.WB0113_VariableHasEmptyVariableName),
+            Critical<IVariable>(VariableHasEmptyExpression, "WB0004", VerificationMessages.WB0004_VariableHasEmptyExpression),
 
-            MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
-            MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
+            ErrorForMacro(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
+            ErrorForMacro(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
 
-            LookupVerifier(LookupTableNameIsKeyword, "WB0052", VerificationMessages.WB0052_LookupNameIsKeyword),
-            LookupVerifier(LookupTableHasInvalidName, "WB0024", VerificationMessages.WB0024_LookupHasInvalidName),
-            LookupVerifier(LookupTableHasEmptyName, "WB0025", VerificationMessages.WB0025_LookupHasEmptyName),
-            LookupVerifier(LookupTableHasEmptyContent, "WB0048", VerificationMessages.WB0048_LookupHasEmptyContent),
-            LookupVerifier(LookupTableHasInvalidHeaders, "WB0031", VerificationMessages.WB0031_LookupTableHasInvalidHeaders),
-            LookupVerifier(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
-            LookupVerifier(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
-            LookupVerifier(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
+            CriticalForLookupTable(LookupTableNameIsKeyword, "WB0052", VerificationMessages.WB0052_LookupNameIsKeyword),
+            CriticalForLookupTable(LookupTableHasInvalidName, "WB0024", VerificationMessages.WB0024_LookupHasInvalidName),
+            CriticalForLookupTable(LookupTableHasEmptyName, "WB0025", VerificationMessages.WB0025_LookupHasEmptyName),
+            CriticalForLookupTable(LookupTableHasEmptyContent, "WB0048", VerificationMessages.WB0048_LookupHasEmptyContent),
+            this.CriticalForLookupTable(LookupTableHasInvalidHeaders, "WB0031", VerificationMessages.WB0031_LookupTableHasInvalidHeaders),
+            this.CriticalForLookupTable(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
+            this.CriticalForLookupTable(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
+            this.CriticalForLookupTable(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
 
-            AttachmentVerifier(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
+            ErrorForAttachment(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
 
-            TranslationVerifier(TranslationNameIsInvalid, "WB0256", VerificationMessages.WB0256_TranslationNameIsInvalid),
-            TranslationVerifier(TranslationHasEmptyContent, "WB0257", VerificationMessages.WB0257_TranslationHasEmptyContent),
-            TranslationVerifier(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHaveDuplicatedNames),
+            ErrorForTranslation(TranslationNameIsInvalid, "WB0256", VerificationMessages.WB0256_TranslationNameIsInvalid),
+            ErrorForTranslation(TranslationHasEmptyContent, "WB0257", VerificationMessages.WB0257_TranslationHasEmptyContent),
+            ErrorForTranslation(TranslationsHasDuplicatedNames, "WB0258", VerificationMessages.WB0258_TranslationsHaveDuplicatedNames),
 
-            Verifier(QuestionnaireHasRostersPropagationsExededLimit, "WB0261", VerificationMessages.WB0261_RosterStructureTooExplosive),
-            Verifier<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
-            Verifier<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
+            Error(QuestionnaireHasRostersPropagationsExededLimit, "WB0261", VerificationMessages.WB0261_RosterStructureTooExplosive),
+            Error<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
+            Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
 
-            VerifyGpsPrefilledQuestions,
+            Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByCircularReferences,
             ErrorsByLinkedQuestions,
             this.ErrorsBySubstitutions,
             ErrorsByMacrosWithDuplicateName,
             ErrorsByAttachmentsWithDuplicateName,
-            ErrorsByLookupTablesWithDuplicateVariableName,
+            Critical_LookupTablesWithDuplicateVariableName_WB0026,
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
         };
 
         private bool RosterHasPropagationExededLimit(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (!IsRosterGroup(roster))
+            if (!IsRoster(roster))
                 return false;
 
             Dictionary<Guid, long> rosterPropagationCounts = new Dictionary<Guid, long>();
@@ -272,8 +293,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             
         }
 
-        public IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireDocument questionnaire)
+        public IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireView questionnaireView)
         {
+            var questionnaire = questionnaireView.Source;
+
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
 
             List<ReadOnlyQuestionnaireDocument> translatedQuestionnaires = new List<ReadOnlyQuestionnaireDocument>();
@@ -284,8 +307,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 translatedQuestionnaires.Add(new ReadOnlyQuestionnaireDocument(translatedQuestionnaireDocument, t.Name));
             });
 
-            var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(readOnlyQuestionnaireDocument,
-                translatedQuestionnaires.ToArray());
+            var multiLanguageQuestionnaireDocument = new MultiLanguageQuestionnaireDocument(
+                readOnlyQuestionnaireDocument,
+                translatedQuestionnaires.ToArray(),
+                questionnaireView.SharedPersons);
 
             var verificationMessagesByQuestionnaire =
                 (from verifier in this.AtomicVerifiers
@@ -304,9 +329,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
         }
 
-        public IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireDocument questionnaire)
+        public IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireView questionnaireView)
         {
-            return this.Verify(questionnaire).Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
+            return this.Verify(questionnaireView).Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(MultiLanguageQuestionnaireDocument questionnaire)
@@ -332,7 +357,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var group = questionnaire.Find<IGroup>(id);
 
-            return IsRosterGroup(group)
+            return IsRoster(group)
                 ? QuestionnaireVerificationReferenceType.Roster
                 : QuestionnaireVerificationReferenceType.Group;
         }
@@ -368,7 +393,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private IEnumerable<QuestionnaireVerificationMessage> VerifyGpsPrefilledQuestions(MultiLanguageQuestionnaireDocument document)
+        private static IEnumerable<QuestionnaireVerificationMessage> Error_ManyGpsPrefilledQuestions_WB0006(MultiLanguageQuestionnaireDocument document)
         {
             var gpsPrefilledQuestions = document.Find<GpsCoordinateQuestion>(q => q.Featured).ToArray();
             if (gpsPrefilledQuestions.Length < 2)
@@ -466,7 +491,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IComposite questionnaireItem = roster.GetParent();
             while (questionnaireItem != null)
             {
-                if (IsGroup(questionnaireItem) && IsRosterGroup((IGroup) questionnaireItem))
+                if (IsRoster(questionnaireItem))
                 {
                     parentCountMultiplier = CalculateRosterInstancesCountAndUpdateCache((IGroup) questionnaireItem, rosterPropagationCounts, questionnaire);
                     break;
@@ -611,10 +636,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static bool CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount(IQuestion question)
+        private static bool CategoricalOptionsCountMoreThanMaxOptionCount(IQuestion question)
         {
-            return !question.CascadeFromQuestionId.HasValue && IsCategoricalSingleAnswerQuestion(question) && !IsFilteredComboboxQuestion(question) &&
-                   question.Answers != null && question.Answers.Count > 200;
+            return ((IsCategoricalSingleAnswerQuestion(question) && !question.CascadeFromQuestionId.HasValue && !IsFilteredComboboxQuestion(question)) || IsCategoricalMultiAnswersQuestion(question))
+                && question.Answers != null && question.Answers.Count > MaxOptionsCountInCategoricalOptionQuestion;
         }
 
         private static bool FilteredComboboxContainsMoreThanMaxOptions(IQuestion question)
@@ -687,13 +712,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster)
         {
-            if (!IsRosterGroup(roster))
+            if (!IsRoster(roster))
                 return false;
 
             return roster.VariableName != null && keywordsProvider.GetAllReservedKeywords().Contains(roster.VariableName.ToLower());
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForMacro(
             Func<Macro, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) => questionnaire
@@ -702,7 +727,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForMacro(entity.Key)));
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> AttachmentVerifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForAttachment(
             Func<Attachment, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) => questionnaire
@@ -711,7 +736,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForTranslation(
             Func<Translation, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) => questionnaire
@@ -720,7 +745,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForTranslation(entity.Id)));
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalForLookupTable(
             Func<Guid, LookupTable, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) => questionnaire
@@ -729,7 +754,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireNodeReference.CreateForLookupTable(entity.Key)));
         }
 
-        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> LookupVerifier(
+        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalForLookupTable(
             Func<LookupTable, LookupTableContent, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) =>
@@ -740,7 +765,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 select QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireNodeReference.CreateForLookupTable(lookupTable.Key));
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error(
             Func<MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire) =>
@@ -749,7 +774,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TArg>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TArg>(
             Func<MultiLanguageQuestionnaireDocument, Tuple<bool, TArg>> hasError, string code, Func<TArg, string> messageBuilder)
         {
             return (questionnaire) =>
@@ -761,21 +786,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(Func<TEntity, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
                 questionnaire
                     .Find<TEntity>(hasError)
-                    .Select(entity => level == VerificationMessageLevel.General 
-                        ? QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity))
-                        : QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier<TEntity>(Func<TEntity, bool> hasError, string code, string message, VerificationMessageLevel level = VerificationMessageLevel.General)
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(Func<TEntity, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(hasError)
+                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForTranslation<TEntity>(Func<TEntity, bool> hasError, string code, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
                     questionnaire
                         .FindWithTranslations<TEntity>(hasError)
                             .Select(translatedEntity =>
@@ -784,32 +816,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                     ? message
                                     : translatedEntity.TranslationName + ": " + message;
                                 var questionnaireVerificationReference = CreateReference(translatedEntity.Entity);
-                                return level == VerificationMessageLevel.General
-                                    ? QuestionnaireVerificationMessage.Error(code, translationMessage, questionnaireVerificationReference)
-                                    : QuestionnaireVerificationMessage.Critical(code, translationMessage, questionnaireVerificationReference);
+                                return QuestionnaireVerificationMessage.Error(code, translationMessage, questionnaireVerificationReference);
                             }
                       );
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return Verifier(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
+            return Error(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
         }
 
-        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier<TEntity, TSubEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForTranslation<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return TranslationVerifier(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
+            return ErrorForTranslation(getSubEnitites, (entity, subEntity, questionnaire) => hasError(subEntity), code, getMessageBySubEntityIndex);
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
                 questionnaire
                     .Find<TEntity>(entity => true)
                     .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
@@ -817,11 +847,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(descriptor => QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index)));
         }
 
-        private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> TranslationVerifier<TEntity, TSubEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForTranslation<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TEntity, TSubEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
                 questionnaire
                     .FindWithTranslations<TEntity>(entity => true)
                     .SelectMany(translatedEntity => getSubEnitites(translatedEntity.Entity).Select((subEntity, index) => new { Entity = translatedEntity, SubEntity = subEntity, Index = index }))
@@ -836,22 +866,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                      );
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(
             Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
-        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TReferencedEntity>(
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TReferencedEntity>(
             Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string code, string message)
             where TEntity : class, IComposite
             where TReferencedEntity : class, IComposite
         {
-            return (questionnaire) =>
+            return questionnaire =>
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
@@ -1020,7 +1050,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool GroupHasNestedRosters(IGroup @group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var findInGroup = questionnaire.FindInGroup<IGroup>(@group.PublicKey);
-            return findInGroup.Any(IsRosterGroup);
+            return findInGroup.Any(IsRoster);
         }
 
         private static bool GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles(IGroup group)
@@ -1051,7 +1081,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (rosterTitleQuestion == null)
                 return true;
 
-            if (!GetAllParentGroupsForQuestion(rosterTitleQuestion, questionnaire).Any(IsRosterGroup))
+            if (!GetAllParentGroupsForQuestion(rosterTitleQuestion, questionnaire).Any(IsRoster))
                 return true;
 
             Guid[] rosterScopeForGroup = GetAllRosterSizeQuestionsAsVector(group, questionnaire);
@@ -1165,7 +1195,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool RosterHasRosterLevelMoreThan4(IGroup roster)
         {
-            if (!IsRosterGroup(roster))
+            if (!IsRoster(roster))
                 return false;
 
             return GetRosterLevel(roster) > 4;
@@ -1176,7 +1206,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             int rosterLevel = 0;
             while (questionnaireItem != null)
             {
-                if (IsGroup(questionnaireItem) && IsRosterGroup((IGroup)questionnaireItem))
+                if (IsRoster(questionnaireItem))
                     rosterLevel++;
 
                 questionnaireItem = questionnaireItem.GetParent();
@@ -1247,7 +1277,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool PrefilledQuestionCantBeInsideOfRoster(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRosterGroup);
+            return IsPreFilledQuestion(question) && GetAllParentGroupsForQuestion(question, questionnaire).Any(IsRoster);
         }
 
         private static bool QuestionWithOptionsFilterCannotBePrefilled(IQuestion question)
@@ -1422,8 +1452,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(expression))
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            IEnumerable<IComposite> incorrectReferencedQuestions = this.expressionProcessor
-                .GetIdentifiersUsedInExpression(macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values))
+            IEnumerable<IComposite> incorrectReferencedQuestions = this
+                .GetIdentifiersUsedInExpression(expression, questionnaire)
                 .Select(identifier => GetEntityByVariable(identifier, questionnaire))
                 .Where(referencedQuestion => referencedQuestion != null)
                 .Where(isReferencedQuestionIncorrect)
@@ -1444,7 +1474,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static EntityVerificationResult<IComposite> RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (!IsRosterGroup(roster))
+            if (!IsRoster(roster))
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             var rosterSizeQuestion = GetRosterSizeQuestionByRosterGroup(roster, questionnaire);
@@ -1496,19 +1526,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             foreach (var question in questionsWithConditions)
             {
                 if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
-                    dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression).ToArray());
+                    dependencies.Add(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.ConditionExpression, questionnaire).ToArray());
             }
 
             foreach (var question in questionsWithOptionsFilter)
             {
                 if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
-                    dependencies.Add(question.StataExportCaption, this.expressionProcessor.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression).ToArray());
+                    dependencies.Add(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression, questionnaire).ToArray());
             }
 
             foreach (var variable in variables)
             {
                 if (variable.Name != null && !dependencies.ContainsKey(variable.Name))
-                    dependencies.Add(variable.Name, this.expressionProcessor.GetIdentifiersUsedInExpression(variable.Expression).ToArray());
+                    dependencies.Add(variable.Name, this.GetIdentifiersUsedInExpression(variable.Expression, questionnaire).ToArray());
             }
 
             var cycles = topologicalSorter.DetectCycles(dependencies);
@@ -1528,11 +1558,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var linkedQuestions = questionnaire.Find<IQuestion>(
-                question => question.LinkedToQuestionId.HasValue);
+            var linkedQuestions = questionnaire.Find<IQuestion>(question => question.LinkedToQuestionId.HasValue);
 
             foreach (var linkedQuestion in linkedQuestions)
             {
+                
                 var sourceQuestion = questionnaire.Find<IQuestion>(linkedQuestion.LinkedToQuestionId.Value);
 
                 if (sourceQuestion == null)
@@ -1548,10 +1578,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     continue;
                 }
 
-                var isSourceQuestionInsideRosterGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsRosterGroup);
-                if (!isSourceQuestionInsideRosterGroup)
+                if (sourceQuestion.QuestionType == QuestionType.TextList)
                 {
-                    yield return LinkedQuestionReferenceQuestionNotUnderRosterGroup(linkedQuestion, sourceQuestion);
+                    if (!string.IsNullOrWhiteSpace(linkedQuestion.LinkedFilterExpression) ||
+                        !string.IsNullOrEmpty(linkedQuestion.Properties.OptionsFilterExpression))
+                    {
+                        yield return LinkedToTextListQuestionDoesNotSupportFilters(linkedQuestion);
+                    }
+
+                    var linkedRosterScope = questionnaire.Questionnaire.GetRosterScope(linkedQuestion.PublicKey);
+                    var sourceRosterScope = questionnaire.Questionnaire.GetRosterScope(sourceQuestion.PublicKey);
+                    if (!sourceRosterScope.IsSameOrParentScopeFor(linkedRosterScope))
+                    {
+                        yield return LinkedQuestionReferenceTextListQuestionFromWrongScope(linkedQuestion, sourceQuestion);
+                    }
+                }
+                else
+                {
+                    var isSourceQuestionInsideRosterGroup = GetAllParentGroupsForQuestion(sourceQuestion, questionnaire).Any(IsRoster);
+                    if (!isSourceQuestionInsideRosterGroup)
+                    {
+                        yield return LinkedQuestionReferenceQuestionNotUnderRosterGroup(linkedQuestion, sourceQuestion);
+                    }
                 }
             }
 
@@ -1608,7 +1656,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 group.Select(e => QuestionnaireNodeReference.CreateForAttachment(e.AttachmentId)).ToArray()));
         }
 
-        private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLookupTablesWithDuplicateVariableName(
+        private static IEnumerable<QuestionnaireVerificationMessage> Critical_LookupTablesWithDuplicateVariableName_WB0026(
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             var rosterVariableNameMappedOnRosters = questionnaire
@@ -1724,7 +1772,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             || entity is IStaticText
             || entity is IGroup;
 
-        private static QuestionnaireNodeReference CreateReference(IComposite entity)
+        private static QuestionnaireNodeReference CreateReference(IQuestionnaireEntity entity)
         {
             return QuestionnaireNodeReference.CreateFrom(entity);
         }
@@ -1744,7 +1792,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
 
-        private static bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool CategoricalMultianswerQuestionIsPrefilled(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question);
         }
@@ -1860,6 +1908,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
 
+        private static QuestionnaireVerificationMessage LinkedQuestionReferenceTextListQuestionFromWrongScope(IQuestion linkedQuestion, IQuestion sourceQuestion)
+            => QuestionnaireVerificationMessage.Error("WB0116",
+                VerificationMessages.WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope,
+                CreateReference(linkedQuestion),
+                CreateReference(sourceQuestion));
+
+        private static QuestionnaireVerificationMessage LinkedToTextListQuestionDoesNotSupportFilters(IQuestion linkedQuestion)
+           => QuestionnaireVerificationMessage.Critical("WB0117",
+               VerificationMessages.WB0117_LinkedToTextListQuestionDoesNotSupportFilters,
+               CreateReference(linkedQuestion));
+
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
             QuestionnaireNodeReference reference;
@@ -1929,10 +1988,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !questionnaire.Find<IQuestion>(_ => true).Any();
         }
 
-        private static bool IsRosterGroup(IGroup group)
-        {
-            return group.IsRoster;
-        }
+        private static bool IsRoster(IQuestionnaireEntity entity) => (entity as IGroup)?.IsRoster ?? false;
 
         private static bool IsGroup(IComposite questionnaireItem)
         {
@@ -1974,7 +2030,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             Guid[] rosterSizeQuestions =
                 GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(nearestGroup, questionnaire)
-                    .Where(IsRosterGroup)
+                    .Where(IsRoster)
                     .Select(g => g.RosterSizeQuestionId ?? g.PublicKey)
                     .ToArray();
 
@@ -2058,6 +2114,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 ((entity is IQuestion) && isLinkedFilterExpressionLengthExeeded((IQuestion)entity)) ||
                 ((entity is IQuestion) && isOptionsFilterExpressionLengthExeeded((IQuestion)entity)) ||
                 ((entity is IVariable) && isVariableExpressionLengthExeeded((IVariable)entity))).Any();
+        }
+
+        private IEnumerable<string> GetIdentifiersUsedInExpression(string expression, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            string expressionWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
+
+            return this.expressionProcessor.GetIdentifiersUsedInExpression(expressionWithInlinedMacros);
         }
     }
 }

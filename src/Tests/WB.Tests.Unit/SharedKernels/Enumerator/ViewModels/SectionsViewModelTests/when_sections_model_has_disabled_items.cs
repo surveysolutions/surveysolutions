@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using It = Machine.Specifications.It;
@@ -17,18 +13,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            var interview = Substitute.For<IStatefulInterview>();
+            var questionnaire = Create.Entity.QuestionnaireDocument(Guid.NewGuid(),
+                Create.Entity.Group(sectionAId),
+                Create.Entity.Group(sectionBId),
+                Create.Entity.Group(sectionCId),
+                Create.Entity.Group(sectionDId, title: "D"));
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
-            interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionAId)).Returns(true);
-            interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionBId)).Returns(false);
-            interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionCId)).Returns(false);
-            interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionDId)).Returns(false);
+            var interview = Setup.StatefulInterview(questionnaire);
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_ 
-                => _.GetAllSections() == listOfSections
-                && _.GetGroupTitle(sectionDId) == "D");
+            interview.Apply(Create.Event.GroupsDisabled(new[]
+            {
+                Identity.Create(sectionBId, RosterVector.Empty),
+                Identity.Create(sectionCId, RosterVector.Empty),
+                Identity.Create(sectionDId, RosterVector.Empty)
+            }));
 
-            viewModel = CreateSectionsViewModel(questionnaire, interview);
+            viewModel = CreateSectionsViewModel(plainQuestionnaire, interview);
             navigationState = Substitute.For<NavigationState>();
             viewModel.Init("", Create.Entity.QuestionnaireIdentity(), navigationState);
 
@@ -36,7 +37,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             viewModel.Handle(Create.Event.GroupsDisabled(sectionCId, Empty.RosterVector));
             viewModel.Handle(Create.Event.GroupsDisabled(sectionDId, Empty.RosterVector));
 
-            interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionDId)).Returns(true);
+            interview.Apply(Create.Event.GroupsEnabled(new[]
+            {
+                Identity.Create(sectionDId, RosterVector.Empty),
+            }));
         };
 
         Because of = () =>
@@ -61,6 +65,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         static readonly Guid sectionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static readonly Guid sectionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static readonly Guid sectionDId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static readonly List<Guid> listOfSections = new List<Guid> { sectionAId, sectionBId, sectionCId, sectionDId };
     }
 }

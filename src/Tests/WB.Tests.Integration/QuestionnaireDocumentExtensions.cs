@@ -12,7 +12,7 @@ namespace WB.Tests.Integration
             {
                 PublicKey = groupId
             };
-            document.Children.Add(@group);
+            document.Add(@group, null);
             return group;
         }
     }

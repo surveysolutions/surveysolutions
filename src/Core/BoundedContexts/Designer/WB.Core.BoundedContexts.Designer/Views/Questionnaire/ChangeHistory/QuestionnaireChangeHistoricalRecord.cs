@@ -6,6 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     public class QuestionnaireChangeHistoricalRecord
     {
         public QuestionnaireChangeHistoricalRecord(
+            string id,
             string userName, 
             DateTime timestamp,
             QuestionnaireActionType actionType,
@@ -15,8 +16,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             QuestionnaireItemType type, 
             string targetNewTitle,
             int? affectedEntries,
+            bool hasRevertTo,
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences)
         {
+            this.Id = id;
             UserName = userName;
             Timestamp = timestamp;
             ActionType = actionType;
@@ -27,7 +30,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             TargetType = type;
             this.TargetNewTitle = targetNewTitle;
             this.AffectedEntries = affectedEntries;
+            this.HasRevertTo = hasRevertTo;
         }
+
+        public string Id { get; private set; }
 
         public string UserName { get; private set; }
         public DateTime Timestamp { get; private set; }
@@ -40,6 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public string TargetNewTitle { get; private set; }
         public int? AffectedEntries { get; private set; }
 
+        public bool HasRevertTo { get; private set; }
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; private set; }
     }
 }

@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
+    [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeRoster : InterviewTreeGroup
     {
         public InterviewTreeRoster(Identity identity,
+            SubstitionText title,
             IEnumerable<IInterviewTreeNode> children,
             string rosterTitle = null,
             int sortIndex = 0,
@@ -15,18 +18,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Guid? rosterSizeQuestion = null,
             Identity rosterTitleQuestionIdentity = null,
             IEnumerable<QuestionnaireItemReference> childrenReferences = null)
-            : base(identity, childrenReferences)
+            : base(identity, title, childrenReferences)
         {
             this.RosterTitle = rosterTitle;
             this.SortIndex = sortIndex;
-            this.AddChild(children);
+            this.AddChildren(children);
             switch (rosterType)
             {
                 case RosterType.Fixed:
                     this.AsFixed = new InterviewTreeFixedRoster();
                     break;
                 case RosterType.Numeric:
-                    this.AsNumeric = new InterviewTreeNumericRoster(rosterSizeQuestion.Value, rosterTitleQuestionIdentity);
+                    this.AsNumeric = new InterviewTreeNumericRoster(rosterSizeQuestion.Value,
+                        rosterTitleQuestionIdentity);
                     break;
                 case RosterType.YesNo:
                     this.AsYesNo = new InterviewTreeYesNoRoster(rosterSizeQuestion.Value);
@@ -55,9 +59,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsMulti => this.AsMulti != null;
         public bool IsFixed => this.AsFixed != null;
 
+        public Guid RosterSizeId
+        {
+            get
+            {
+                if (this.IsNumeric) return AsNumeric.RosterSizeQuestion;
+                if (this.IsMulti) return AsMulti.RosterSizeQuestion;
+                if (this.IsYesNo) return AsYesNo.RosterSizeQuestion;
+                if (this.IsList) return AsList.RosterSizeQuestion;
+
+                return Identity.Id;
+            }
+        }
+
+
+    private string GetTypeAsText()
+        {
+            if (this.IsNumeric) return "Numeric";
+            if (this.IsFixed) return "Fixed";
+            if (this.IsMulti) return "Multi";
+            if (this.IsYesNo) return "YesNo";
+            if (this.IsList) return "List";
+
+            return "no type";
+        }
         public override string ToString()
-            => $"Roster ({this.Identity}) [{this.RosterTitle}]" + Environment.NewLine
-               + string.Join(Environment.NewLine, this.Children.Select(child => StringExtensions.PrefixEachLine(child.ToString(), "  ")));
+           => $"{this.GetTypeAsText()} Roster ({this.Identity}) [{this.RosterTitle}]" + Environment.NewLine
+              + string.Join(Environment.NewLine, this.Children.Select(child => StringExtensions.PrefixEachLine(child.ToString(), "  ")));
+
+        //public override string ToString()
+        //    => $"Roster {this.Identity} '{this.Title} - {this.RosterTitle ?? "[...]"}'. " +
+        //       $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
 
         public void SetRosterTitle(string rosterTitle)
         {
@@ -90,7 +122,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 var titleQuestion = this.Tree.GetQuestion(this.AsNumeric.RosterTitleQuestionIdentity);
                 if (titleQuestion == null) return;
                 var rosterTitle = titleQuestion.IsAnswered()
-                    ? titleQuestion.GetAnswerAsString((answerOptionValue) => getCategoricalAnswerOptionText?.Invoke(titleQuestion.Identity.Id, answerOptionValue))
+                    ? titleQuestion.GetAnswerAsString()
                     : null;
                 this.SetRosterTitle(rosterTitle);
             }

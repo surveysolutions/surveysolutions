@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             {
                 Create.Chapter(children: new IComposite[]
                 {
-                    Create.Roster(rosterId, fixedRosterTitles: titles.ToArray(), rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: childQuestions)
+                    Create.Roster(rosterId, fixedRosterTitles: titles.ToArray(), rosterType: RosterSizeSourceType.FixedTitles, children: childQuestions)
                 })
             });
 
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_not_contain_error_WB0068 = () =>
             verificationMessages.ShouldNotContain("WB0068");

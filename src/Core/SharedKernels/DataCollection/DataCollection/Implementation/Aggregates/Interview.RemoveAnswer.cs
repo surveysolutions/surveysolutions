@@ -15,28 +15,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var questionIdentity = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
-
-            var treeInvariants = new InterviewTreeInvariants(sourceInterviewTree);
+            var treeInvariants = new InterviewTreeInvariants(this.Tree);
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
             treeInvariants.RequireQuestionIsEnabled(questionIdentity);
 
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
 
-            var changedQuestionIdentities = new List<Identity> { questionIdentity };
+            var givenAndRemovedAnswers = new List<Identity> { questionIdentity };
             changedInterviewTree.GetQuestion(questionIdentity).RemoveAnswer();
 
-            RemoveAnswersForDependendCascadingQuestions(questionIdentity, changedInterviewTree, questionnaire, changedQuestionIdentities);
+            RemoveAnswersForDependendCascadingQuestions(questionIdentity, changedInterviewTree, questionnaire, givenAndRemovedAnswers);
 
             changedInterviewTree.ActualizeTree();
 
-            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, givenAndRemovedAnswers, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference, userId);
         }
 
-        private static void RemoveAnswersForDependendCascadingQuestions(Identity questionIdentity, InterviewTree changedInterviewTree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
+        private static void RemoveAnswersForDependendCascadingQuestions(Identity questionIdentity, InterviewTree changedInterviewTree, IQuestionnaire questionnaire, List<Identity> givenAndRemovedAnswers)
         {
             IEnumerable<Guid> dependentQuestionIds = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionIdentity.Id);
             foreach (var dependentQuestionId in dependentQuestionIds)
@@ -48,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var cascadingQuestion in cascadingAnsweredQuestionsToRemoveAnswer)
                 {
                     cascadingQuestion.RemoveAnswer();
-                    changedQuestionIdentities.Add(cascadingQuestion.Identity);
+                    givenAndRemovedAnswers.Add(cascadingQuestion.Identity);
                 }
             }
         }

@@ -4,6 +4,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 
 namespace WB.Core.SharedKernels.Enumerator.DataTransferObjects
 {
+    [Obsolete("Since v6.0")]
     public class InterviewAnswerDto
     {
         public InterviewAnswerDto(Guid id, decimal[] rosterVector, AnswerType answerType, object answer)

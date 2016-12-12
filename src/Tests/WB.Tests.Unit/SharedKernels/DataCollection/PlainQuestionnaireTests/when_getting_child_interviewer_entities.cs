@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
@@ -31,8 +30,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 
         Because of = () => foundQuestions = plainQuestionnaire.GetAllUnderlyingInterviewerEntities(rootChapterId);
 
-        It should_not_return_variables_as_interviewer_entities = () => 
-            foundQuestions.Should().Contain(questionId).And.NotContain(variableId);
+        It should_return_questions_and_variables_as_interviewer_entities = () => 
+            foundQuestions.Should().Contain(questionId).And.Contain(variableId);
 
         static Guid questionId;
         static Guid variableId;

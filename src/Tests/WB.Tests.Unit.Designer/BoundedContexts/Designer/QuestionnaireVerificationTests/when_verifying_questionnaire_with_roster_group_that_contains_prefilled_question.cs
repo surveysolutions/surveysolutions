@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -16,33 +17,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             prefilledQuestionId = Guid.Parse("30000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-
             var rosterSizeQiestionId = Guid.Parse("20000000000000000000000000000000");
 
-            questionnaire.Children.Add(new NumericQuestion()
-            {
-                PublicKey = rosterSizeQiestionId,
-                IsInteger = true,
-                StataExportCaption = "var1"
-            });
-            questionnaire.Children.Add(new Group()
-            {
-                PublicKey = Guid.Parse("10000000000000000000000000000000"),
-                IsRoster = true,
-                VariableName = "a",
-                RosterSizeQuestionId = rosterSizeQiestionId,
-                Children = new List<IComposite>()
+            questionnaire = CreateQuestionnaireDocument(
+                new NumericQuestion()
                 {
-                    new TextQuestion("Title"){ PublicKey = prefilledQuestionId, Featured = true, StataExportCaption = "var2" }
-                }
-            });
+                    PublicKey = rosterSizeQiestionId,
+                    IsInteger = true,
+                    StataExportCaption = "var1"
+                },
+                new Group()
+                {
+                    PublicKey = Guid.Parse("10000000000000000000000000000000"),
+                    IsRoster = true,
+                    VariableName = "a",
+                    RosterSizeQuestionId = rosterSizeQiestionId,
+                    Children = new List<IComposite>()
+                    {
+                        new TextQuestion("Title"){ PublicKey = prefilledQuestionId, Featured = true, StataExportCaption = "var2" }
+                    }.ToReadOnlyCollection()
+                });
 
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

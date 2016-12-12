@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -16,22 +14,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group("Chapter")
-            {
-                Children = new List<IComposite>()
-                {
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                     new NumericQuestion("Question with empty var")
                     {
                         PublicKey = questionWithEmptyVarId
-                    }
-                }
-            });
+                    });
 
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

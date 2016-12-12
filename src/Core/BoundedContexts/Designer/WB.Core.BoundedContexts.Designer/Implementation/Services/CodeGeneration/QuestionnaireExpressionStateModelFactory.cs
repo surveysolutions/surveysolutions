@@ -35,7 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
            QuestionnaireDocument questionnaire,
            CodeGenerationSettings codeGenerationSettings)
         {
-            questionnaire.ConnectChildrenWithParent();
             var expressionState = new QuestionnaireExpressionStateModel
             {
                 AdditionalInterfaces = codeGenerationSettings.AdditionInterfaces,
@@ -733,7 +732,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 Id = question.PublicKey,
                 VariableName = varName,
                 Condition = condition,
-                TypeName = GenerateQuestionTypeName(question),
+                TypeName = GenerateQuestionTypeName(question, questionnaireDoc),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName,
                 ValidationExpressions = validationExpressions,
@@ -952,7 +951,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return $@" && !(new List<decimal?>(){{ {joinedParentOptions} }}.Contains({stataExportCaption}))";
         }
 
-        private static string GenerateQuestionTypeName(IQuestion question)
+        private static string GenerateQuestionTypeName(IQuestion question, QuestionnaireDocument questionnaire)
         {
             switch (question.QuestionType)
             {
@@ -972,14 +971,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     var multiOtion = question as MultyOptionsQuestion;
                     if (multiOtion != null && multiOtion.YesNoView)
                         return typeof(YesNoAnswers).Name;
-                    return (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) ? "decimal[]" : "decimal[][]";
+
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
+                        return "decimal[]";
+
+                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value)!=null)
+                    {
+                        return "decimal[]";
+                    }
+                    return "decimal[][]";
 
                 case QuestionType.DateTime:
                     return "DateTime?";
 
                 case QuestionType.SingleOption:
-                    return (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) ? "decimal?" : "decimal[]";
+                    if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) return "decimal?";
 
+                    if (question.LinkedToQuestionId.HasValue && questionnaire.Find<ITextListQuestion>(question.LinkedToQuestionId.Value) != null)
+                    {
+                        return "decimal?";
+                    }
+
+                    return "decimal[]";
                 case QuestionType.TextList:
                     return "Tuple<decimal, string>[]";
 

@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -53,9 +54,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     new Group("Chapter")
                     {
                         PublicKey = Guid.Parse("FFF000AAA111EE2DD2EE111AAA000FFF"),
-                        Children = chapterChildren.ToList(),
+                        Children = chapterChildren.ToReadOnlyCollection(),
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
     }

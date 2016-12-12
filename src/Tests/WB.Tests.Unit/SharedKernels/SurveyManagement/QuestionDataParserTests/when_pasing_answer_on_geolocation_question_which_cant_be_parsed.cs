@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer,questionVarName+"_aa", question, out parcedValue);
+                    questionDataParser.TryParse(answer,questionVarName+"_aa", question, out parcedValue, out parsedSingleColumnAnswer);
 
         private It should_result_be_null = () =>
             parsingResult.ShouldEqual(ValueParsingResult.AnswerAsGpsWasNotParsed);

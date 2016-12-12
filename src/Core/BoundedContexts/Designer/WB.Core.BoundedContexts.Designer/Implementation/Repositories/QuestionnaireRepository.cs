@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
@@ -15,16 +14,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
     internal class QuestionnaireRepository : IPlainAggregateRootRepository<Questionnaire>
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListItems;
         private readonly IServiceLocator serviceLocator;
 
         public QuestionnaireRepository(IServiceLocator serviceLocator,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage)
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListItems)
         {
             this.serviceLocator = serviceLocator;
             this.questionnaireStorage = questionnaireStorage;
-            this.sharedPersonsStorage = sharedPersonsStorage;
+            this.questionnaireListItems = questionnaireListItems;
         }
 
         public Questionnaire Get(Guid aggregateId)
@@ -34,8 +33,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             if (questionnaireDocument == null)
                 return null;
 
-            var sharedPersons = this.sharedPersonsStorage.GetById(aggregateId.FormatGuid());
-            var personsCollection = sharedPersons?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
+            var questionnaireListItem = this.questionnaireListItems.GetById(aggregateId.FormatGuid());
+            var personsCollection = questionnaireListItem?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
             var questionnaire = this.serviceLocator.GetInstance<Questionnaire>();
             questionnaire.Initialize(aggregateId, questionnaireDocument, personsCollection);
             return questionnaire;

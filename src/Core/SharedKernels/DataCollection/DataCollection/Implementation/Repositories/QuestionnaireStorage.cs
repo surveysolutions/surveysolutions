@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
 using System.Linq;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
@@ -40,12 +41,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 return null;
 
-            Guid? translationId = null;
+            Translation translationId = null;
             if (language != null)
             {
-                translationId = questionnaireDocument.Translations.SingleOrDefault(t => t.Name == language)?.Id;
+                translationId = questionnaireDocument.Translations.SingleOrDefault(t => t.Name == language);
 
-                var translation = translationId != null ? this.translationStorage.Get(identity, translationId.Value) : null;
+                var translation = translationId != null ? this.translationStorage.Get(identity, translationId.Id) : null;
 
                 if (translation == null)
                     throw new ArgumentException($"No translation found for language '{language}' and questionnaire '{identity}'.", nameof(translationId));
@@ -75,7 +76,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!this.questionnaireDocumentsCache.ContainsKey(repositoryId))
             {
                 var questionnaire = this.repository.GetById(repositoryId);
-                questionnaire?.ConnectChildrenWithParent();
                 this.questionnaireDocumentsCache[repositoryId] = questionnaire;
             }
 

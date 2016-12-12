@@ -1,11 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -13,46 +14,55 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            linkedQuestionRosterVector = new decimal[] { };
-            var linkedQuestionRosters = new Guid[] { };
-            linkedQuestionIdentity = Create.Entity.Identity(linkedQuestionId, linkedQuestionRosterVector);
-
-            var referencedQuestionRosters = new[] { referencedRoster1, referencedRoster2 };
-
-            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                => _.HasQuestion(linkedQuestionId) == true
-                && _.GetRosterLevelForQuestion(linkedQuestionId) == linkedQuestionRosters.Length
-                && _.GetRostersFromTopToSpecifiedQuestion(linkedQuestionId) == linkedQuestionRosters
-                && _.GetRosterSizeSourcesForEntity(linkedQuestionId) == linkedQuestionRosters
-                && _.HasQuestion(referencedQuestionId) == true
-                && _.GetRosterLevelForQuestion(referencedQuestionId) == referencedQuestionRosters.Length
-                && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
-                && _.GetRosterSizeSourcesForEntity(referencedQuestionId) == referencedQuestionRosters);
+            IQuestionnaireStorage questionnaireRepository =
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
+                    Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                    {
+                        Create.Entity.FixedRoster(
+                            fixedTitles:
+                                new[]
+                                {
+                                    new FixedRosterTitle(1, "first fixed roster"),
+                                    new FixedRosterTitle(2, "second fixed roster")
+                                },
+                            children: new[]
+                            {
+                                Create.Entity.FixedRoster(
+                                    fixedTitles:
+                                        new[]
+                                        {
+                                            new FixedRosterTitle(1, "first NESTED fixed roster"),
+                                            new FixedRosterTitle(2, "second NESTED fixed roster")
+                                        },
+                                    children: new[]
+                                    {
+                                        Create.Entity.TextQuestion(sourceOfLinkedQuestionId)
+                                    })
+                            }),
+                        Create.Entity.MultyOptionsQuestion(linkedToQuestionIdentity.Id,
+                            linkedToQuestionId: sourceOfLinkedQuestionId)
+                    })));
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-
-            FillInterviewWithInstancesForTwoNestedRostersAndAnswersToTextQuestionInLastRoster(interview,
-                referencedRoster1, 
-                referencedRoster2, 
-                referencedQuestionId,
-                linkedQuestionIdentity);
         };
 
         Because of = () =>
-            result = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(referencedQuestionId, linkedQuestionIdentity);
+        {
+            interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(1, 1), DateTime.UtcNow, "1-1");
+            interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(1, 2), DateTime.UtcNow, "1-2");
+            interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(2, 1), DateTime.UtcNow, "2-1");
+            interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(2, 2), DateTime.UtcNow, "2-2");
+        };
 
-        It should_return_all_answers = () =>
-            result.Cast<TextAnswer>().Select(answer => answer.Answer)
-                .ShouldContainOnly("1-1", "1-2", "2-1", "2-2");
+        It should_return_4_answers_from_2_roster_instances = () => interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity)
+            .Options
+            .Select(x => interview.GetAnswerAsString(Identity.Create(sourceOfLinkedQuestionId, x)))
+            .ShouldContainOnly("1-1", "1-2", "2-1", "2-2");
 
         private static StatefulInterview interview;
-        private static IEnumerable<BaseInterviewAnswer> result;
-        private static Guid referencedQuestionId = Guid.Parse("55555555555555555555555555555555");
-        private static Guid linkedQuestionId = Guid.Parse("11111111111111111111111111111111");
-        private static decimal[] linkedQuestionRosterVector;
-        private static Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static Guid referencedRoster1 = Guid.Parse("00000000000000001111111111111111");
-        private static Guid referencedRoster2 = Guid.Parse("00000000000000002222222222222222");
-        private static Identity linkedQuestionIdentity;
+        private static Guid interviewerId = Guid.Parse("55555555555555555555555555555555");
+        private static Guid questionnaireId = Guid.Parse("44444444444444444444444444444444");
+        private static Identity linkedToQuestionIdentity = Identity.Create(Guid.Parse("33333333333333333333333333333333"), Create.Entity.RosterVector());
+        private static Guid sourceOfLinkedQuestionId = Guid.Parse("22222222222222222222222222222222");
     }
 }

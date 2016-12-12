@@ -27,6 +27,7 @@
 @section scripts
 {
     @Scripts.Render("~/js/interview-general", "~/js/details")
+
     <script type="text/javascript">
         var urlReferrer = null;
         @if (Request.UrlReferrer != null && Request.UrlReferrer.OriginalString.Contains("Interviews"))
@@ -41,6 +42,7 @@
         settings.Interview.InterviewId = '@Model.InterviewDetails.PublicKey';
         settings.Urls.CommandExecution = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
         settings.Urls.Interviews = '@(GlobalInfo.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ", new {area=""}))';
+        settings.Urls.InterviewersToAssign = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Interviewers" })';
 
         var filter = { filteredBy: '@Model.Filter' };
         var filteredComboboxes = [
@@ -49,9 +51,10 @@
         var answeredYesNoQuestionsBySupervisor = [
             @Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", Html.InterviewItemIdWithPostfix(_.Id, _.RosterVector, ""), JsonConvert.SerializeObject(_.Answer)))))];
         var currentTranslation = '@(Model.InterviewDetails.CurrentTranslation ?? "")';
+        var isAssignedToInterviewer = @Model.InterviewDetails.IsAssignedToInterviewer.ToString().ToLower();
 
         $(function () {
-            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes, currentTranslation);
+            window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes, currentTranslation, isAssignedToInterviewer);
             ko.applyBindings(model);
             model.load();
         });
@@ -116,13 +119,25 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.InterviewDetails_ShowGroupsLabel</button></span>
-                @if (((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor)
-                     || (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
+                @{
+                    bool isSupervisorApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
+                    bool isHeadquarteerOrAdminApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+
+                    bool isSupervisorRedjectSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
+                    bool isHeadquarteerOrAdminRedjectSupport = (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+
+                    bool isHeadquarteerOrAdminUnapproveSupport = Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator);
+                }
+                
+                @if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
                 {
                     <button class="btn btn-success " data-bind="click: showApproveModal">@Pages.ApproveRejectPartialView_ApproveAction</button>
+                }
+                @if (isSupervisorRedjectSupport || isHeadquarteerOrAdminRedjectSupport)
+                {
                     <button class="btn btn-danger" data-bind="click: showRejectModal">@Pages.ApproveRejectPartialView_RejectAction</button>
                 }
-                @if (Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
+                @if (isHeadquarteerOrAdminUnapproveSupport)
                 {
                     <button class="btn" data-bind="click: showUnapproveByHeadquarterModal">@Pages.ApproveRejectPartialView_UnapproveAction</button>
                 }
@@ -179,7 +194,7 @@
 
 @Html.Partial("CommentTemplatePartialView")
 @Html.Partial("HistoryOfStatusesPartialView", Model.History)
-@Html.Partial("ApproveRejectPartialView", Model.InterviewDetails.Status)
+@Html.Partial("ApproveRejectPartialView", Model.InterviewDetails)
 
 @helper SetGroupLevelClass(int level)
 {

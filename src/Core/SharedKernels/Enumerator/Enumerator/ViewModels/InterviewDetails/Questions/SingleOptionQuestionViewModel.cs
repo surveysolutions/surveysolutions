@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.instructionViewModel.Init(interviewId, entityIdentity);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, 200);
 
             this.questionIdentity = entityIdentity;
             var interview = this.interviewRepository.Get(interviewId);
@@ -94,11 +94,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateQuestionOptions()
         {
             var interview = this.interviewRepository.Get(interviewId.FormatGuid());
-            var answerModel = interview.GetSingleOptionAnswer(this.questionIdentity);
-            var selectedValue = Monads.Maybe(() => answerModel.Answer);
+            var singleOptionQuestion = interview.GetSingleOptionQuestion(this.questionIdentity);
 
             List<SingleOptionQuestionOptionViewModel> singleOptionQuestionOptionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
+                .Select(model => this.ToViewModel(model, isSelected: singleOptionQuestion.IsAnswered && model.Value == singleOptionQuestion.GetAnswer().SelectedValue))
                 .ToList();
 
             this.Options.ForEach(x => x.DisposeIfDisposable());
