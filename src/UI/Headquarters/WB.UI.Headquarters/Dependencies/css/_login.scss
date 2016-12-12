@@ -95,16 +95,16 @@ img#placeholder {
     .interviewer-app{
         display: block;
     }
-    .left-column{
+/*     .left-column{
         #log-in{
             text-align: left;
-            max-width: 300px;
+            max-width: 350px;
             margin: 0 auto;
         }
-    }
+    } */
     html body {
         main .two-columns-form .log-in .form-group .form-control{
-            width: 95%;
+            width: 100%;
         }
     }    
 }

@@ -126,7 +126,7 @@ html {
 					}
 				}
 				.caret{
-					@include absolute(31px, 7px);
+					@include absolute(31px, 17px);
 					margin-left: 11px;
 					border-top: 8px solid rgba(255, 255, 255, 0.7);
 					border-right: 5px solid transparent;
@@ -145,14 +145,26 @@ html {
 				}
 			}
 			&.dropdown > a{
-				padding-right: 20px;
+				padding-right: 25px;
 			}
-			.dropdown-menu li a{
-				border-radius: 5px;
-				padding: 10px;
-				text-align: left;
-				color: $gray_text;
-				@include transition();
+			.dropdown-menu li{ 
+				&.active {
+					a{
+						color: $white;
+						font-family: "RobotoLight";
+						border-radius: 0;
+						&:hover, &:focus{
+							font-family: "RobotoBold";
+						}
+					}
+				}
+				a{
+					border-radius: 5px;
+					padding: 10px;
+					text-align: left;
+					color: $gray_text;
+					@include transition();
+				}
 			}
 		}
 	}
@@ -230,6 +242,9 @@ html {
 		li {
 			&.active a{
 				color: white;
+				&:hover, &:focus{
+					background-color: rgba(255, 255, 255, 0.4);
+				}
 			}
 			&> a{
 				border-radius: 5px;
@@ -240,8 +255,20 @@ html {
 					color: white;
 				}
 			}
-			.dropdown-menu li a{
-				padding: 15px 10px;
+			.dropdown-menu li {
+				a{
+					padding: 15px 10px;
+				}
+				&.active {
+						a{
+							border-radius: 5px;
+							background-color: rgba(42, 129, 203, 0.5);
+							&:hover, &:focus{
+								font-family: "RobotoBold";
+								background-color: rgba(42, 129, 203, 1);
+							}
+						}
+					}
 			}
 		}
 		
