@@ -5848,7 +5848,7 @@ input.checkbox-filter ~ label .tick {
   background: transparent url("../img/pretty-checkable-sprites.png") no-repeat;
   vertical-align: middle; }
 
-.selection-box .btn, .signed-name span, .import-interview thead, .dataTables_wrapper .dataTables_paginate, .selection-box a, .export-types .data .table-data .not-generated, .progress-information {
+.selection-box .btn, .signed-name span, .import-interview thead, .dataTables_wrapper .dataTables_paginate, .interviewer-app .get-interviewer-app, .selection-box a, .export-types .data .table-data .not-generated, .progress-information {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
   letter-spacing: 0.5px; }
@@ -5879,7 +5879,7 @@ input.checkbox-filter ~ label .tick {
   overflow: auto;
   position: fixed;
   background-color: #fff;
-  z-index: 1;
+  z-index: 4;
   -webkit-transition: left 0.3s linear 0s;
   -moz-transition: left 0.3s linear 0s;
   -ms-transition: left 0.3s linear 0s;
@@ -5944,6 +5944,27 @@ input.checkbox-filter ~ label .tick {
   line-height: 16px;
   font-weight: bold;
   margin-bottom: 20px; }
+
+.filters.hidden-filters .foldback-button, .fullscreen-hidden-content .content .foldback-button {
+  right: -80px;
+  top: 5px;
+  background-color: #dbdfe2;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px; }
+  .filters.hidden-filters .foldback-button span.arrow, .fullscreen-hidden-content .content .foldback-button span.arrow {
+    margin-left: 13px;
+    margin-right: 2px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg); }
+    .filters.hidden-filters .foldback-button span.arrow:first-of-type, .fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
+      -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      -o-transform: rotate(-45deg);
+      transform: rotate(-45deg); }
+  .filters.hidden-filters .foldback-button .glyphicon, .fullscreen-hidden-content .content .foldback-button .glyphicon {
+    display: inline-block; }
 
 @font-face {
   font-family: "RobotoRegular";
@@ -6020,7 +6041,7 @@ html {
     background-size: 12px 100%;
     padding-top: 70px; }
     html body main {
-      padding: 40px 45px 40px 88px; }
+      padding: 25px 45px 40px 88px; }
     html body .footer {
       position: absolute;
       bottom: 0;
@@ -6171,9 +6192,11 @@ html {
 @media (max-width: 1210px) {
   html body main, html body .footer, .navbar .container-fluid {
     padding: 0 2% 0 4%; }
-  html body main {
-    padding-bottom: 45px;
-    padding-top: 35px; }
+  html body {
+    padding-top: 60px; }
+    html body main {
+      padding-bottom: 45px;
+      padding-top: 25px; }
   .active-page {
     display: inline-block; }
   .navbar-nav {
@@ -6190,7 +6213,7 @@ html {
     max-height: 100%;
     top: 0;
     left: 0;
-    z-index: 5;
+    z-index: 10;
     display: none;
     position: fixed;
     width: 100%;
@@ -6427,6 +6450,53 @@ input.wb-checkbox {
   font-weight: normal !important;
   font-style: italic; }
 
+.foldback-button {
+  width: 50px;
+  height: 46px;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 0;
+  border-radius: 4px;
+  z-index: 2;
+  -webkit-transition: all 0.5s linear 0.2s;
+  -moz-transition: all 0.5s linear 0.2s;
+  -ms-transition: all 0.5s linear 0.2s;
+  -o-transition: all 0.5s linear 0.2s;
+  transition: all 0.5s linear 0.2s; }
+  .foldback-button:hover span.arrow, .foldback-button:focus span.arrow {
+    background-color: black; }
+  .foldback-button:hover .glyphicon, .foldback-button:focus .glyphicon {
+    color: black; }
+  .foldback-button span.arrow {
+    display: inline-block;
+    width: 20px;
+    height: 2px;
+    margin: 15px 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    right: 0;
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg); }
+    .foldback-button span.arrow:first-of-type {
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+      transform: rotate(45deg);
+      top: 13px; }
+  .foldback-button .glyphicon {
+    display: none;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 18px;
+    top: 14px;
+    left: 10px; }
+
+#hidden-links {
+  display: none; }
+
 .btn-lg, .btn-group-lg > .btn {
   padding: 12px 15px; }
 
@@ -6628,7 +6698,7 @@ main .two-columns-form .left-column {
 
 .table-title {
   float: left;
-  margin-left: 15px;
+  margin-left: 20px;
   width: 60%; }
   .table-title h2 {
     margin-bottom: 30px;
@@ -6750,7 +6820,7 @@ main .two-columns-form .left-column {
   position: relative; }
   #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
     position: absolute;
-    top: 0;
+    top: 4px;
     left: 5px;
     z-index: 2; }
     #DataTables_Table_0_wrapper #DataTables_Table_0_filter label {
@@ -6851,7 +6921,7 @@ main .two-columns-form .left-column {
 
 @media (max-width: 1210px) {
   html body main.import-wrapper {
-    padding: 0 2% 0 4%; }
+    padding: 25px 2% 0 4%; }
   .parameters {
     display: none; }
   .table tr {
@@ -6891,7 +6961,9 @@ main .two-columns-form .left-column {
   .table tr td, .table tr th {
     width: 30%;
     font-size: 10px;
-    line-height: 12px; } }
+    line-height: 12px; }
+  #import-questionnaire-form .questionnaire-versioning, #import-questionnaire-form .flex-row {
+    margin-bottom: 0; } }
 
 @media (max-width: 481px) {
   .signed-name {
@@ -7113,10 +7185,24 @@ img#placeholder {
       text-decoration: none; }
   .interviewer-app .get-interviewer-app {
     width: 248px;
-    height: 79px;
-    background: url("../img/HQ-login-mobile-get-button-itself.png") no-repeat;
-    background-size: 100%;
-    margin-bottom: 25px; }
+    height: 81px;
+    background: #000 url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
+    background-size: 55px;
+    margin-bottom: 25px;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.9);
+    background-position: 15px 10px;
+    text-decoration: none;
+    padding: 10px 27px 10px 85px;
+    text-align: left;
+    border-radius: 10px; }
+    .interviewer-app .get-interviewer-app span {
+      display: block; }
+      .interviewer-app .get-interviewer-app span.version {
+        text-transform: none;
+        margin-top: 5px;
+        color: rgba(255, 255, 255, 0.5); }
 
 @media (max-width: 880px) {
   img#placeholder, .no-logo .default-logo {
@@ -7128,13 +7214,6 @@ img#placeholder {
     height: 26.5px; }
   .interviewer-app {
     display: block; }
-  /*     .left-column{
-        #log-in{
-            text-align: left;
-            max-width: 350px;
-            margin: 0 auto;
-        }
-    } */
   html body main .two-columns-form .log-in .form-group .form-control {
     width: 100%; } }
 
@@ -7189,7 +7268,7 @@ main .flex-row {
   .action-block .error-block h5, .action-block .error-block .preset-filters-container a, .preset-filters-container .action-block .error-block a {
     margin: 20px 0 5px; }
   .action-block .error-block p {
-    margin: 3px; }
+    margin: 3px 0; }
 
 .processing-interview .progress-bar {
   background-color: #2fc507; }
@@ -7212,24 +7291,26 @@ main .flex-row {
   .processing-interview.active-preloading, .preloading-done.active-preloading, .preloading-done-with-errors.active-preloading {
     display: block; }
 
+@media (max-width: 880px) {
+  .prefilled-data-info {
+    margin-bottom: 0; } }
+
 @media (max-width: 481px) {
-  .action-block {
-    text-align: center; }
-    .action-block .btn-input {
-      display: inline-block; }
-    .action-block .float-box {
-      text-align: center; }
-      .action-block .float-box .progress {
-        width: 100%;
-        float: none; }
-      .action-block .float-box .btn {
-        margin: 15px 5px; }
-        .action-block .float-box .btn.cancel-uploading {
-          float: none; }
-    .action-block .btn-input .dropdown-toggle {
-      width: 250px; }
-    .action-block.preloading-done-with-errors > a {
-      width: 60%; } }
+  .action-block .btn-input {
+    display: inline-block; }
+  .action-block .back-link {
+    margin: 0; }
+  .action-block .float-box .progress {
+    width: 100%;
+    float: none; }
+  .action-block .float-box .btn {
+    margin: 0; }
+    .action-block .float-box .btn.cancel-uploading {
+      float: none; }
+  .action-block .btn-input .dropdown-toggle {
+    width: 250px; }
+  .action-block.preloading-done-with-errors > a {
+    width: 60%; } }
 
 @media (max-width: 400px) {
   .action-block .float-box .btn:last-of-type {
@@ -7240,37 +7321,6 @@ main .flex-row {
   border-right: 3px solid #ececec;
   padding: 50px 15px 0 33px;
   margin-left: 12px; }
-
-.foldback-button {
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px;
-  border-radius: 4px;
-  z-index: 2;
-  -webkit-transition: all 0.5s linear 0.2s;
-  -moz-transition: all 0.5s linear 0.2s;
-  -ms-transition: all 0.5s linear 0.2s;
-  -o-transition: all 0.5s linear 0.2s;
-  transition: all 0.5s linear 0.2s; }
-  .foldback-button span {
-    display: block;
-    width: 25px;
-    height: 2px;
-    margin: 15px 10px;
-    background-color: #3f3f3f;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg); }
-    .foldback-button span:first-of-type {
-      -webkit-transform: rotate(-45deg);
-      -ms-transform: rotate(-45deg);
-      -o-transform: rotate(-45deg);
-      transform: rotate(-45deg); }
 
 input.checkbox-filter {
   display: none; }
@@ -7417,24 +7467,6 @@ input.checkbox-filter {
 .filters.hidden-filters {
   left: -400px;
   overflow: visible; }
-  .filters.hidden-filters .foldback-button {
-    right: -100px;
-    top: 0;
-    background-color: #dbdfe2;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px; }
-    .filters.hidden-filters .foldback-button span {
-      margin-left: 13px;
-      margin-right: 13px;
-      -webkit-transform: rotate(-45deg);
-      -ms-transform: rotate(-45deg);
-      -o-transform: rotate(-45deg);
-      transform: rotate(-45deg); }
-      .filters.hidden-filters .foldback-button span:first-of-type {
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        transform: rotate(45deg); }
 
 @media (max-width: 1210px) {
   .filters {
@@ -7450,7 +7482,7 @@ input.checkbox-filter {
       left: -330px;
       position: absolute; }
       .filters.hidden-filters .foldback-button {
-        right: -90px; } }
+        right: -70px; } }
 
 @media (max-width: 880px) {
   .filters {
@@ -7479,24 +7511,27 @@ input.checkbox-filter {
     .filters .dropdown-toggle, .filters .input-group-addon {
       background-color: #fff !important; }
     .filters .foldback-button {
-      right: -86px;
+      right: -70px;
       background-color: #dbdfe2;
       -webkit-transition: none 0.5s linear 0s;
       -moz-transition: none 0.5s linear 0s;
       -ms-transition: none 0.5s linear 0s;
       -o-transition: none 0.5s linear 0s;
       transition: none 0.5s linear 0s; }
-      .filters .foldback-button span {
-        position: relative;
-        -webkit-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        -o-transform: rotate(-45deg);
-        transform: rotate(-45deg); }
-        .filters .foldback-button span:first-of-type {
-          -webkit-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-          -o-transform: rotate(45deg);
-          transform: rotate(45deg); }
+      .filters .foldback-button span.arrow {
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+        margin-left: 13px;
+        margin-right: 2px; }
+        .filters .foldback-button span.arrow:first-of-type {
+          -webkit-transform: rotate(-45deg);
+          -ms-transform: rotate(-45deg);
+          -o-transform: rotate(-45deg);
+          transform: rotate(-45deg); }
+      .filters .foldback-button .glyphicon {
+        display: inline-block; }
     .filters.hidden-filters {
       left: 0;
       width: 100%;
@@ -7506,10 +7541,11 @@ input.checkbox-filter {
       .filters.hidden-filters .foldback-button {
         left: auto;
         right: 0; }
-        .filters.hidden-filters .foldback-button span {
-          top: -6px; }
-          .filters.hidden-filters .foldback-button span:first-of-type {
-            top: 10px; }
+        .filters.hidden-filters .foldback-button span.arrow {
+          top: 6px;
+          right: 12px; }
+        .filters.hidden-filters .foldback-button .glyphicon {
+          display: none; }
       .filters.hidden-filters .filters-container, .filters.hidden-filters .preset-filters-container {
         display: block;
         width: 300px;
@@ -7525,11 +7561,10 @@ input.checkbox-filter {
 
 main.export {
   padding-left: 45px;
-  padding-top: 10px;
   color: #3f3f3f; }
 
 .export-types {
-  padding: 40px 30px;
+  padding: 30px;
   position: relative;
   margin-left: 335px;
   max-width: 900px;
@@ -7684,7 +7719,7 @@ main.export {
   .progress-information.queued .progress .progress-bar {
     background-color: #a6a8a9; }
 
-.export-types.fulsscreen {
+.fullscreen .export-types {
   margin-left: 0;
   padding-left: 45px; }
 
@@ -7693,6 +7728,7 @@ main.export {
     padding-right: 2%;
     padding-left: 4%; }
   .export-types {
+    padding: 30px 0 30px 25px;
     margin-left: 265px; }
     .export-types .size, .export-types .last-generated {
       display: none; }
@@ -7713,33 +7749,34 @@ main.export {
       width: 80%; }
     .export-types .data p {
       margin-bottom: 15px; }
-  .export-types.fulsscreen {
+  .fullscreen .export-types {
+    padding-top: 40px;
     padding-left: 0;
     width: 100%; }
-    .export-types.fulsscreen .size, .export-types.fulsscreen .last-generated {
+    .fullscreen .export-types .size, .fullscreen .export-types .last-generated {
       display: table-cell; }
-    .export-types.fulsscreen .data .table-data .min-view {
+    .fullscreen .export-types .data .table-data .min-view {
       display: none;
       width: 40%;
       padding: 0 5px; }
-      .export-types.fulsscreen .data .table-data .min-view div {
+      .fullscreen .export-types .data .table-data .min-view div {
         padding: 8px 0; }
-    .export-types.fulsscreen .data .table-data .size, .export-types.fulsscreen .data .table-data .last-generated {
+    .fullscreen .export-types .data .table-data .size, .fullscreen .export-types .data .table-data .last-generated {
       display: table-cell; }
-    .export-types.fulsscreen .data .table-data .format-data {
+    .fullscreen .export-types .data .table-data .format-data {
       width: 34%;
       padding-left: 75px; }
-    .export-types.fulsscreen .data .table-data .last-generated {
+    .fullscreen .export-types .data .table-data .last-generated {
       width: 19%; }
-    .export-types.fulsscreen .data .table-data .not-generated {
+    .fullscreen .export-types .data .table-data .not-generated {
       padding: 0 10px; }
-    .export-types.fulsscreen .data p {
+    .fullscreen .export-types .data p {
       margin-bottom: 15px; } }
 
 @media (max-width: 880px) {
   .export-types {
     margin-left: 0;
-    padding: 50px 5px 20px; }
+    padding: 35px 5px 0; }
     .export-types h2 {
       margin-bottom: 25px;
       font-size: 24px;
@@ -7850,9 +7887,7 @@ label.inactive {
     margin: 0; }
 
 html body .details-interview {
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-right: 0; }
+  padding: 0; }
   html body .details-interview article {
     margin-left: 285px; }
 
@@ -7972,10 +8007,10 @@ html body .details-interview {
             display: none; }
         .content .panel-default > .panel-heading h3 a {
           display: block;
-          font-size: 16px/18px "RobotoMedium";
+          font: 16px/18px "RobotoMedium";
           font-weight: normal;
           color: #2a81cb;
-          padding: 15px 40px 15px 30px;
+          padding: 15px 20px 15px 25px;
           position: relative; }
           .content .panel-default > .panel-heading h3 a:hover, .content .panel-default > .panel-heading h3 a:focus {
             text-decoration: none; }
@@ -8031,6 +8066,7 @@ html body .details-interview {
     margin-bottom: 50px; }
 
 .questionnaire {
+  min-width: 555px;
   margin-left: 855px; }
   .questionnaire .unit-title {
     position: relative;
@@ -8291,7 +8327,8 @@ html body .details-interview {
     .question-editor .question-unit .options-group .radio, .question-editor .question-unit .options-group .form-group, .question-editor .question-unit .options-group .form-input {
       padding: 0;
       margin: 0 0 5px;
-      max-width: 425px; }
+      max-width: 425px;
+      position: relative; }
       .question-editor .question-unit .options-group .radio:last-of-type, .question-editor .question-unit .options-group .form-group:last-of-type, .question-editor .question-unit .options-group .form-input:last-of-type {
         margin-bottom: 0; }
       .question-editor .question-unit .options-group .radio label, .question-editor .question-unit .options-group .form-group label, .question-editor .question-unit .options-group .form-input label {
@@ -8383,14 +8420,9 @@ html body .details-interview {
 .static-text h5, .variable h5, .static-text .preset-filters-container a, .preset-filters-container .static-text a, .variable .preset-filters-container a, .preset-filters-container .variable a {
   margin: 0; }
   .static-text h5 .static-text-image, .variable h5 .static-text-image, .static-text .preset-filters-container a .static-text-image, .preset-filters-container .static-text a .static-text-image, .variable .preset-filters-container a .static-text-image, .preset-filters-container .variable a .static-text-image {
-    padding: 30px;
-    display: block;
+    margin-top: 10px;
     width: 445px;
     height: auto; }
-    .static-text h5 .static-text-image img, .variable h5 .static-text-image img, .static-text .preset-filters-container a .static-text-image img, .preset-filters-container .static-text a .static-text-image img, .variable .preset-filters-container a .static-text-image img, .preset-filters-container .variable a .static-text-image img {
-      display: block;
-      max-width: 100%;
-      height: auto; }
 
 .static-text.invalid h5, .invalid.variable h5, .static-text.invalid .preset-filters-container a, .preset-filters-container .static-text.invalid a, .invalid.variable .preset-filters-container a, .preset-filters-container .invalid.variable a {
   color: #e74924; }
@@ -8471,22 +8503,25 @@ html body .details-interview {
   font-weight: normal !important;
   font-style: italic; }
 
-.gps-question.answered #map, .gps-question.contains-error #map {
+.gps-question.answered .map, .gps-question.contains-error .map {
   height: 200px;
   width: 385px;
   margin-bottom: 10px; }
 
-.multimedia-question.answered .custom-photo-wrapper, .multimedia-question.contains-error .custom-photo-wrapper {
+.image-zoom-box, .image-option {
+  overflow: hidden;
   margin-bottom: 10px; }
-
-.multimedia-question .custom-photo-wrapper {
-  width: 385px;
-  height: 200px;
-  overflow: hidden; }
-  .multimedia-question .custom-photo-wrapper img {
+  .image-zoom-box img, .image-option img {
     display: block;
     max-width: 100%;
     height: auto; }
+
+span.image-zoom-box, span.image-option {
+  display: block; }
+
+.multimedia-question .image-wrapper {
+  width: 385px;
+  height: 200px; }
 
 .qr-question.answered .block-with-data, .qr-question.contains-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.contains-error .block-with-data {
   font-size: 12px;
@@ -8495,10 +8530,17 @@ html body .details-interview {
 
 .zoomImg {
   cursor: pointer;
-  transition: 0.3s; }
+  -webkit-transition: all 0.3s linear 0s;
+  -moz-transition: all 0.3s linear 0s;
+  -ms-transition: all 0.3s linear 0s;
+  -o-transition: all 0.3s linear 0s;
+  transition: all 0.3s linear 0s; }
 
-.zoomImg:hover {
-  transform: scale(1.4); }
+.zoomImg:hover, .zoomImg:focus {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transform: scale(1.1); }
 
 .modal {
   position: fixed;
@@ -8516,8 +8558,8 @@ html body .details-interview {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 75% !important;
-    max-width: 80% !important; }
+    max-width: 70% !important;
+    max-height: 80%; }
   .modal .caption {
     width: 75%;
     text-align: center;
@@ -8597,7 +8639,49 @@ html body .details-interview {
     -o-transform: scale(1);
     transform: scale(1); } }
 
+.img-single-select-question label {
+  overflow: hidden; }
+  .img-single-select-question label span, .img-single-select-question label .image-option {
+    float: left; }
+
+.image-option {
+  margin-left: 10px;
+  max-width: 70%; }
+
+.fullscreen-hidden-filters .questionnaire {
+  margin-left: 495px; }
+  .fullscreen-hidden-filters .questionnaire .unit-title.is_stuck {
+    width: 100% !important; }
+
+.fullscreen-hidden-filters .content {
+  left: 12px; }
+  .fullscreen-hidden-filters .content .questionnaire-content {
+    padding-left: 55px; }
+
+.fullscreen-hidden-content .content {
+  left: -597px;
+  overflow: inherit; }
+
+.fullscreen-hidden-content .filters {
+  box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+  z-index: 3; }
+
+.fullscreen-hidden-content .questionnaire {
+  margin-left: 285px; }
+
+.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
+  top: 60px; }
+
+.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire {
+  margin-left: 0; }
+
 @media only screen and (max-width: 700px) {
   .modal-content {
     width: 100%; } }
+
+@media (max-width: 1210px) {
+  .content {
+    top: 60px; }
+  .unit-title.is_stuck {
+    top: 60px !important; } }
 

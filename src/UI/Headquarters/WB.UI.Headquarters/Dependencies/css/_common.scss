@@ -37,7 +37,7 @@ html {
 		background-size: 12px 100%;
 		padding-top: 70px;
 		main{
-			padding: 40px 45px 40px 88px;
+			padding: 25px 45px 40px 88px;
 		}
 		.footer {
 			position: absolute;
@@ -206,9 +206,12 @@ html {
 	html body main, html body .footer, .navbar .container-fluid{
 		padding: 0 2% 0 4%;
 	}
-	html body main{
-		padding-bottom: 45px;
-		padding-top: 35px;
+	html body {
+		padding-top: 60px;
+		main{
+			padding-bottom: 45px;
+			padding-top: 25px;
+		}
 	}
 	.active-page{
 		display: inline-block;
@@ -232,7 +235,7 @@ html {
 		max-height: 100%;
 		top: 0;
 		left: 0;
-		z-index: 5;
+		z-index: 10;
 		display: none;
 		position: fixed;
 		@include size(100%, 100%);
@@ -494,4 +497,43 @@ input.wb-checkbox{
 @include placeholder {
     font-weight: normal !important;
     font-style: italic;
+}
+.foldback-button{
+	@include size(50px, 46px);
+	cursor: pointer;
+	@include absolute(5px, 0, null, null);
+	border-radius: 4px;
+	z-index: 2;
+	@include transition(all, 0.5s, linear, 0.2s);
+	&:hover, &:focus{
+	    span.arrow{
+	    	background-color: rgba(0, 0, 0, 1);
+	    }
+	    .glyphicon{
+	    	color: rgba(0, 0, 0, 1);
+		}
+	}
+	span.arrow{
+		display: inline-block;
+		@include size(20px, 2px); 
+		margin: 15px 10px;
+		background-color: rgba(0, 0, 0, 0.5);
+		@include absolute(0, 0);
+		@include rotate(-45deg);
+		&:first-of-type{
+			@include rotate(45deg);
+			top: 13px;
+		}
+	}
+	.glyphicon{
+		display: none;
+		color: rgba(0, 0, 0, 0.5);
+		font-size: 18px;
+		top: 14px;
+		left: 10px;
+	}
+}
+
+#hidden-links{
+    display: none;
 }
