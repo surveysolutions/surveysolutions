@@ -610,6 +610,7 @@
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Dependencies\vendor\bootstrap-sass\assets\stylesheets\_bootstrap.scss" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
