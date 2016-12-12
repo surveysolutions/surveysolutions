@@ -841,7 +841,6 @@
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\ControlPanel\RestoreAllDeletedQuestionnaireProjections.cshtml" />
     <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
-    <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\Designer.cshtml" />
@@ -1948,11 +1947,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50491</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/headquarters</IISUrl>
+          <IISUrl>http://localhost/Headquarters</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
