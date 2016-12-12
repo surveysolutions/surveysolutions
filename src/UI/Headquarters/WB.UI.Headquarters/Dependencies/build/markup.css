@@ -5765,7 +5765,7 @@ input.checkbox-filter ~ label .tick {
   background: transparent url("../img/pretty-checkable-sprites.png") no-repeat;
   vertical-align: middle; }
 
-.selection-box .btn, .signed-name span, .import-interview thead, .dataTables_wrapper .dataTables_paginate, .selection-box a, .export-types .data .table-data .not-generated, .progress-information {
+.selection-box .btn, .signed-name span, .import-interview thead, .dataTables_wrapper .dataTables_paginate, .interviewer-app .get-interviewer-app, .selection-box a, .export-types .data .table-data .not-generated, .progress-information {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
   letter-spacing: 0.5px; }
@@ -6974,10 +6974,24 @@ img#placeholder {
       text-decoration: none; }
   .interviewer-app .get-interviewer-app {
     width: 248px;
-    height: 79px;
-    background: url("../img/HQ-login-mobile-get-button-itself.png") no-repeat;
-    background-size: 100%;
-    margin-bottom: 25px; }
+    height: 81px;
+    background: #000 url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
+    background-size: 55px;
+    margin-bottom: 25px;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.9);
+    background-position: 15px 10px;
+    text-decoration: none;
+    padding: 10px 27px 10px 85px;
+    text-align: left;
+    border-radius: 10px; }
+    .interviewer-app .get-interviewer-app span {
+      display: block; }
+      .interviewer-app .get-interviewer-app span.version {
+        text-transform: none;
+        margin-top: 5px;
+        color: rgba(255, 255, 255, 0.5); }
 
 @media (max-width: 880px) {
   img#placeholder, .no-logo .default-logo {
@@ -6989,13 +7003,6 @@ img#placeholder {
     height: 26.5px; }
   .interviewer-app {
     display: block; }
-  /*     .left-column{
-        #log-in{
-            text-align: left;
-            max-width: 350px;
-            margin: 0 auto;
-        }
-    } */
   html body main .two-columns-form .log-in .form-group .form-control {
     width: 100%; } }
 
