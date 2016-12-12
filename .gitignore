@@ -57,7 +57,8 @@ src/Infrastructure/Shared/Enumerator/WB.Infrastructure.Shared.Enumerator/Resourc
 /src/.vs
 
 src/UI/Designer/WB.UI.Designer/App_Data/Temp/EsentCache/*
-src/UI/Headquarters/WB.UI.Headquarters/*Dependencies/node_modules/*
-src/UI/Headquarters/WB.UI.Headquarters/*Dependencies/vendor/*
-src/UI/Headquarters/WB.UI.Headquarters/*Dependencies/build/markup-*.min.css
-src/UI/Headquarters/WB.UI.Headquarters/*Dependencies/build/libs-*.min.js
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/node_modules/*
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/*
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/build/markup-*.min.css
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/build/libs-*.min.js
+src/UI/Headquarters/WB.UI.Headquarters/Dependencies/build/libs-*.min.css
