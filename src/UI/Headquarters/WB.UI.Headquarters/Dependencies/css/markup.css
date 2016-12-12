@@ -6546,10 +6546,8 @@ main .page-header {
   padding-bottom: 0;
   margin: 0;
   border: none; }
-  main .page-header .maintenance-mode {
-    display: none; }
-    main .page-header .maintenance-mode .message-try-again {
-      color: #e74924; }
+  main .page-header .maintenance-mode .message-try-again {
+    color: #e74924; }
 
 main .two-columns-form .left-column {
   text-align: center; }
