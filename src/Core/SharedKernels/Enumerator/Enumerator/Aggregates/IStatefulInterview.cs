@@ -124,6 +124,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
 
+        InterviewTreeQuestion GetInterviewTreeQuestion(Identity entityIdentity);
+
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
     }
 }

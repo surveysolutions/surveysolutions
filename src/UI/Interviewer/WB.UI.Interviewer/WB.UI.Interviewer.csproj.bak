@@ -3,57 +3,67 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F18F9422-2624-44C6-934D-B5F48C9587C1}</ProjectGuid>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2FE00F67-A1BA-4A93-ABF4-DAE0857711C9}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <RootNamespace>WB.UI.Tester</RootNamespace>
-    <AssemblyName>WB.UI.Tester</AssemblyName>
     <OutputType>Library</OutputType>
-    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
-    <AndroidResgenClass>Resource</AndroidResgenClass>
-    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
-    <AndroidApplication>True</AndroidApplication>
-    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.UI.Interviewer</RootNamespace>
+    <AssemblyName>WB.UI.Interviewer</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>true</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
+    <AndroidStoreUncompressedFileExtensions />
+    <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
+    <JavaMaximumHeapSize />
+    <JavaOptions />
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <ConsolePause>false</ConsolePause>
-    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
     <AndroidSupportedAbis>armeabi;armeabi-v7a;x86</AndroidSupportedAbis>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
+    <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Debugger>Xamarin</Debugger>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
-    <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <AotAssemblies>False</AotAssemblies>
     <EnableLLVM>False</EnableLLVM>
     <EnableProguard>False</EnableProguard>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <ConsolePause>false</ConsolePause>
-    <AndroidLinkSkip>System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;</AndroidLinkSkip>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AndroidLinkSkip>System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -68,8 +78,6 @@
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <EnableProguard>False</EnableProguard>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
-    <DefineConstants>
-    </DefineConstants>
     <DebugSymbols>False</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
@@ -81,7 +89,10 @@
       <HintPath>..\..\..\..\packages\Flurl.Http.1.1.1\lib\monoandroid\Flurl.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ionic.Zip, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\libs\android\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -96,6 +107,7 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
+    <Reference Include="Mono.CSharp" />
     <Reference Include="MvvmCross.Binding, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.Binding.4.4.0\lib\MonoAndroid\MvvmCross.Binding.dll</HintPath>
       <Private>True</Private>
@@ -204,8 +216,7 @@
       <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Visibility.4.4.0\lib\MonoAndroid\MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MWBarcodeScanner, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MWBarcodeScanner">
       <HintPath>..\..\..\..\libs\android\MWBarcodeScanner.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -215,9 +226,6 @@
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="NinjectAdapter">
-      <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
     <Reference Include="Nito.AsyncEx, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\MonoAndroid\Nito.AsyncEx.dll</HintPath>
@@ -231,12 +239,32 @@
       <HintPath>..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\MonoAndroid\Nito.AsyncEx.Enlightenment.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NLog.4.3.11\lib\MonoAndroid10\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.CurrentActivity, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Plugin.CurrentActivity.1.0.1\lib\MonoAndroid10\Plugin.CurrentActivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Permissions, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Plugin.Permissions.1.2.1\lib\MonoAndroid10\Plugin.Permissions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Permissions.Abstractions, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Plugin.Permissions.1.2.1\lib\MonoAndroid10\Plugin.Permissions.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\protobuf-net.2.0.0.668\lib\portable-sl4+net40+wp7+windows8\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLite-net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -278,6 +306,7 @@
       <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\monoandroid\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="Xamarin.Android.Support.Animated.Vector.Drawable, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.Animated.Vector.Drawable.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.Animated.Vector.Drawable.dll</HintPath>
@@ -301,6 +330,10 @@
     </Reference>
     <Reference Include="Xamarin.Android.Support.Media.Compat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.Media.Compat.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.Media.Compat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.24.2.1\lib\MonoAndroid70\Xamarin.Android.Support.v4.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.AppCompat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -327,12 +360,22 @@
       <HintPath>..\..\..\..\packages\Xamarin.Insights.1.12.3\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.Mobile">
+      <HintPath>..\..\..\..\libs\android\Xamarin.Mobile.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\DashboardActivity.cs" />
+    <Compile Include="Activities\DiagnosticsActivity.cs" />
+    <Compile Include="Activities\InterviewActivity.cs" />
+    <Compile Include="Activities\FinishInstallationActivity.cs" />
+    <Compile Include="Activities\LoadingActivity.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
-    <Compile Include="Activities\InterviewActivity.cs" />
-    <Compile Include="App.cs" />
+    <Compile Include="Activities\RelinkDeviceActivity.cs" />
+    <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
+    <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
     <Compile Include="Bootstrap\JsonPluginBootstrap.cs" />
@@ -341,107 +384,236 @@
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
-    <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
-    <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
-    <Compile Include="Infrastructure\Internals\Rest\RestServicePointManager.cs" />
-    <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
-    <Compile Include="Infrastructure\Internals\Settings\TesterSettings.cs" />
-    <Compile Include="Infrastructure\Internals\Compression\Compressor.cs" />
-    <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />
-    <Compile Include="Infrastructure\Internals\Log\XamarinInsightsLogger.cs" />
-    <Compile Include="Infrastructure\Internals\Storage\TesterQuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
+    <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
+    <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
+    <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
+    <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
+    <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
+    <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
+    <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
+    <Compile Include="CustomControls\InterviewerDashboardTemplateSelector.cs" />
+    <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
+    <Compile Include="Implementations\Services\StoredEvent.cs" />
+    <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
+    <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
+    <Compile Include="Infrastructure\Logging\NLogLogger.cs" />
+    <Compile Include="Infrastructure\Logging\NLogLoggerProvider.cs" />
+    <Compile Include="Ninject\AndroidModelModule.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Infrastructure\TesterInfrastructureModule.cs" />
-    <Compile Include="Ninject\TesterUIModule.cs" />
-    <Compile Include="Ninject\NinjectIoCAdapterSetup.cs" />
+    <Compile Include="Ninject\InterviewerUIModule.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Services\BackupRestoreService.cs" />
+    <Compile Include="Services\SyncServiceConnection.cs" />
+    <Compile Include="Services\SyncBgService.cs" />
+    <Compile Include="Services\SyncServiceBinder.cs" />
+    <Compile Include="Settings\InterviewerSettings.cs" />
+    <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="Activities\DashboardActivity.cs" />
-    <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\xml\preferences.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\interview.xml" />
-    <AndroidResource Include="Resources\menu\dashboard.xml" />
-    <AndroidResource Include="Resources\menu\login.xml" />
-    <AndroidResource Include="Resources\values\settings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_item.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_bg.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_my_questionnaires_bg.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_public_questionnaires_bg.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
-    <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\styles-dashboard.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\colors.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable\icon.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\loginLogo.png" />
-    <AndroidResource Include="Resources\drawable\loginLogo.png" />
-    <AndroidResource Include="Resources\xml\file_paths.xml" />
-    <LinkDescription Include="linker.xml" />
-    <AndroidEnvironment Include="AndroidEnvironment.txt" />
-    <Content Include="Properties\AndroidManifest.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <Compile Include="ViewModel\InterviewViewModel.cs" />
+    <Compile Include="ViewModel\PrefilledQuestionsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\layout\login.axml" />
-    <AndroidResource Include="Resources\layout\splash.axml" />
-    <AndroidResource Include="Resources\layout\dashboard.axml">
+    <AndroidResource Include="Resources\Layout\ActionBar.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\Login.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\questionnaire_list_item.axml">
+    <AndroidResource Include="Resources\Layout\Diagnostics.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\diagnostics__tabletinformation.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\SyncLogin.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\InterviewActionBar.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\splash.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Values\styles.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_interview_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\relink.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_census_questionnare_item.axml" />
+    <AndroidResource Include="Resources\Layout\synchronization_panel.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_item_prefilled_question.axml" />
+    <AndroidResource Include="Resources\Layout\finish_installation.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\filepicker_createfolder.axml" />
+    <AndroidResource Include="Resources\Layout\filepicker_fragment.axml" />
+    <AndroidResource Include="Resources\Layout\filepicker_listitem.axml" />
+    <AndroidResource Include="Resources\Layout\filepicker_mainactivity.axml" />
+    <AndroidResource Include="Resources\Layout\diagnostics__check_new_version.axml" />
+    <AndroidResource Include="Resources\Layout\diagnostics__backup_restore.axml" />
+    <AndroidResource Include="Resources\Layout\diagnostics__test_bandwidth_to_server.axml" />
+    <AndroidResource Include="Resources\Layout\loading.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
-      <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
-      <Name>WB.Core.BoundedContexts.Tester</Name>
+    <AndroidResource Include="Resources\Layout\ErrorScreen.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidEnvironment Include="AndroidEnvironment.txt" />
+    <Content Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <AndroidResource Include="Resources\Drawable\dashboardquestionnaire.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\SurveyShape.xml" />
+    <AndroidResource Include="Resources\Drawable\SurveyTableHeader.xml" />
+    <AndroidResource Include="Resources\Values\Themes.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\interview.xml" />
+    <AndroidResource Include="Resources\Values\settings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml" />
+    <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
+    <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
+    <AndroidResource Include="Resources\Values\Colors.xml" />
+    <AndroidResource Include="Resources\Values\dimensions.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\login.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\settings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\dashboard.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
+    <AndroidResource Include="Resources\Drawable\icon.png" />
+    <AndroidResource Include="Resources\Drawable\login_logo.png" />
+    <AndroidResource Include="Resources\Drawable\capi_splash.png" />
+    <AndroidResource Include="Resources\Values\dashboard.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\login_logo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
+    <AndroidResource Include="Resources\Drawable\ic_download.png" />
+    <AndroidResource Include="Resources\Drawable\ic_synchronization_fail.png" />
+    <AndroidResource Include="Resources\Drawable\ic_synchronization_success.png" />
+    <AndroidResource Include="Resources\Drawable\ic_upload.png" />
+    <AndroidResource Include="Resources\Values\login.xml" />
+    <AndroidResource Include="Resources\Drawable\textedit_invalid.xml" />
+    <AndroidResource Include="Resources\Drawable\textedit_valid.xml" />
+    <AndroidResource Include="Resources\xml\preferences.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\synchronization_fail_process_indicator.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\synchronization_success_process_indicator.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\synchronization_upload_indicator.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\synchronization_download_indicator.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
+    <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_disabled.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_pressed.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_unpressed.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
+    <AndroidResource Include="Resources\Drawable\dashboard_sync_icon_small.png" />
+    <AndroidResource Include="Resources\Drawable\dashboard_item_layout_border.xml" />
+    <AndroidResource Include="Resources\Values\diagnostics.xml" />
+    <AndroidResource Include="Resources\Values\relink.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\troubleshooting.xml" />
+    <AndroidResource Include="Resources\menu\relink.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\menu\finish.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_item_pressed.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_item_default.xml" />
+    <AndroidResource Include="Resources\Drawable\location_icon.png" />
+    <AndroidResource Include="Resources\Drawable\dashboard_location_default.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\dashboard_location_bg.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_location_pressed.xml" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_location_bg.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_remove_icon_pressed.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\dashboard_remove_icon.xml" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
+    <AndroidResource Include="Resources\menu\filepicker_menu.xml" />
+    <AndroidResource Include="Resources\Values\strings.xml" />
+    <AndroidResource Include="Resources\Drawable\borderless_button.xml" />
+    <AndroidResource Include="Resources\Drawable\filepicker_file.png" />
+    <AndroidResource Include="Resources\Drawable\filepicker_folder.png" />
+    <AndroidResource Include="Resources\Drawable\filepicker_new_folder.png" />
+    <AndroidResource Include="Resources\Drawable\filepicker_previous.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\filepicker_file.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\filepicker_folder.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\filepicker_new_folder.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\filepicker_previous.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_file.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_folder.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_new_folder.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
+    <AndroidResource Include="Resources\menu\diagnostics.xml" />
+    <AndroidResource Include="Resources\Drawable\diagnostics_section_default.xml" />
+    <AndroidResource Include="Resources\xml\file_paths.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
+      <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
+      <Name>WB.Core.BoundedContexts.Interviewer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
-      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Project>{1bb55f28-7905-424d-9aa6-05e4048dfb0c}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
+      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
+      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
@@ -457,7 +629,7 @@
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
-      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\Shared\Enumerator\WB.Infrastructure.Shared.Enumerator\WB.Infrastructure.Shared.Enumerator.csproj">
@@ -465,9 +637,12 @@
       <Name>WB.Infrastructure.Shared.Enumerator</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj">
-      <Project>{5daa7eaf-9a68-4302-ae74-ef0daa0bd169}</Project>
+      <Project>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
