@@ -6,7 +6,7 @@ $(function () {
     var requestHeaders = {};
     requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
 
-    $('table.import-interview')
+    var table = $('table.import-interview')
         .on('init.dt', function () {
             $('#DataTables_Table_0_filter label').on('click', function (e) {
                 if (e.target !== this)
@@ -28,7 +28,7 @@ $(function () {
                 type: "POST",
                 headers: requestHeaders
             },
-            "columns": [
+            columns: [
                 {
                     data: "title"
                 },
@@ -45,7 +45,8 @@ $(function () {
                     "class": "created-by"
                 }
             ],
-            "pagingType": "full_numbers",
-            "lengthChange": false,
+            pagingType: "full_numbers",
+            lengthChange: false,
+            pageLength: 50
         });
 });
