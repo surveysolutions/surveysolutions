@@ -9,7 +9,8 @@
     position: absolute;
     top: 50%;
     left:50%;
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
     @include translate(-50%,-50%);
 /*  margin-top: 115px; */
   
@@ -114,5 +115,12 @@
         top: 0;
         left:0; 
         @include translate(0,0);
+    }
+}
+@media (max-width: $screen-sm-min){
+    .log-in, main .two-columns-form .left-column p{
+        text-align: left;
+        max-width: 350px;
+        margin: 0 auto;
     }
 }
