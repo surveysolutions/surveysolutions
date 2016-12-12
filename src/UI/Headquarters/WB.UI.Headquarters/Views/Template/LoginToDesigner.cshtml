@@ -9,70 +9,71 @@
 @section scripts
 {
 }
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-sm-9 page-header">
-            <ol class="breadcrumb">
-                <li>
-                    @Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ", null, new { @class = "back-link" })
-                </li>
-            </ol>
-            <div class="page-title">
-                @LoginToDesigner.PageHeader
-            </div>
-            @if (TempData[Alerts.ERROR] != null)
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-9 page-header">
+                <ol class="breadcrumb">
+                    <li>
+                        @Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ", null, new { @class = "back-link" })
+                    </li>
+                </ol>
+                <div class="page-title">
+                    @LoginToDesigner.PageHeader
+                </div>
+                @if (TempData[Alerts.ERROR] != null)
             {
-                <div class="maintenance-mode">
-                    @LoginToDesigner.UnableToImportNewQuestionnaire
-                    <div class="message-try-again">
-                        @TempData[Alerts.ERROR]
+                    <div class="maintenance-mode">
+                        @LoginToDesigner.UnableToImportNewQuestionnaire
+                        <div class="message-try-again">
+                            @TempData[Alerts.ERROR]
+                        </div>
+                    </div>
+                }
+                @Html.ActionLink("Back to questionnaires", "Index", "HQ", null, new { @class = "back-link" })
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row two-columns-form">
+            <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
+                <div class="centered-box-table">
+                    <div class="centered-box-table-cell">
+                        <img src="@Url.Content("~/Dependencies/img/designer-logo.png")" alt="Survey Solutions Designer" />
+                        <p>
+                            @LoginToDesigner.DesignerAppDescription
+                            <a href="https://solutions.worldbank.org" target="_blank">solutions.worldbank.org</a>
+                        </p>
                     </div>
                 </div>
-            }
-            @Html.ActionLink("Back to questionnaires", "Index", "HQ", null, new { @class = "back-link" })
-        </div>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="row two-columns-form">
-        <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 col-sm-6 col-xs-12 left-column">
-            <div class="centered-box-table">
-                <div class="centered-box-table-cell">
-                    <img src="@Url.Content("~/Dependencies/img/designer-logo.png")" alt="Survey Solutions Designer" />
-                    <p>
-                        @LoginToDesigner.DesignerAppDescription
-                        <a href="https://solutions.worldbank.org" target="_blank">solutions.worldbank.org</a>
-                    </p>
-                </div>
             </div>
-        </div>
-        <div class="col-lg-4 col-md-5 col-sm-6 col-xs-12 right-column">
-            <div class="centered-box-table">
-                <div class="centered-box-table-cell">
-                    <form action="@Url.Action("LoginToDesigner", "Template")" method="post" id="import-log-in" class="log-in" autocomplete="off">
-                        @Html.AntiForgeryToken()
-                        @if (!ViewData.ModelState.IsValid)
-                        {
-                            <div class="form-error">
-                                <p>
-                                    @LoginToDesigner.InvalidCredentials
-                                </p>
-                                <p>@LoginToDesigner.UserDesignerCredentials</p>
+            <div class="col-lg-4 col-md-5 col-sm-6 col-xs-12 right-column">
+                <div class="centered-box-table">
+                    <div class="centered-box-table-cell">
+                        <form action="@Url.Action("LoginToDesigner", "Template")" method="post" id="import-log-in" class="log-in" autocomplete="off">
+                            @Html.AntiForgeryToken()
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <div class="form-error">
+                                    <p>
+                                        @LoginToDesigner.InvalidCredentials
+                                    </p>
+                                    <p>@LoginToDesigner.UserDesignerCredentials</p>
+                                </div>
+                            }
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Login" })
                             </div>
-                        }
-                        <div class="form-group">
-                            @Html.TextBoxFor(m => m.UserName, new {@class = "form-control", placeholder = "Login"})
-                        </div>
-                        <div class="form-group">
-                            @Html.PasswordFor(m => m.Password, new {@class = "form-control", placeholder = FieldsAndValidations.PasswordFieldName})
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-success btn-lg">@Common.SignIn</button>
-                        </div>
-                    </form>
+                            <div class="form-group">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = FieldsAndValidations.PasswordFieldName })
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success btn-lg">@Common.SignIn</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>

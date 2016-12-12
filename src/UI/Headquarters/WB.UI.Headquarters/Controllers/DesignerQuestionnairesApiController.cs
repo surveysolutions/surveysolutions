@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
+using NHibernate.Properties;
 using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
@@ -23,6 +24,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
@@ -82,6 +84,34 @@ namespace WB.UI.Headquarters.Controllers
         private static void SetDesignerUserCredentials(IGlobalInfoProvider globalInfoProvider, RestCredentials designerUserCredentials)
         {
             HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = designerUserCredentials;
+        }
+
+        [HttpPost]
+        [CamelCase]
+        public async Task<object> QuestionnairesListNew()
+        {
+            var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
+                url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires",
+                credentials: this.designerUserCredentials,
+                queryString: new
+                {
+                });
+
+            return new 
+            {
+                Draw = 1,
+                RecordsTotal = list.TotalCount,
+                RecordsFiltered = list.TotalCount,
+                Data = list.Items.Select(x => new {
+                    Id = x.Id,
+                    Title = x.Title,
+                    LastModified = new {
+                        Display = x.LastModifiedDate?.ToLocalTime().ToString() ?? "",
+                        Timestamp= x.LastModifiedDate?.Ticks ?? 0
+                    },
+                    CreatedBy = x.OwnerName ?? ""
+                }),
+            };
         }
 
         public async Task<DesignerQuestionnairesView> QuestionnairesList(DesignerQuestionnairesListViewModel data)

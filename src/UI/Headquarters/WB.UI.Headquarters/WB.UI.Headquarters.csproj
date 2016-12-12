@@ -503,6 +503,7 @@
     <Content Include="Dependencies\img\search2k.png" />
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
+    <Content Include="Dependencies\js\import-questionnaires-list.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
@@ -814,7 +815,7 @@
     <Content Include="Views\Install\Finish.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
-    <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Views\Template\ImportOld.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Views\HQ\BatchUpload.cshtml" />
@@ -926,6 +927,7 @@
     <Content Include="Scripts\knockout.validation.min.js.map" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
+    <Content Include="Views\Template\Import.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1320,6 +1322,7 @@
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\AppSettings.cs" />
+    <Compile Include="Code\CamelCaseAttribute.cs" />
     <Compile Include="Code\CommandDeserialization\SurveyManagementCommandDeserializer.cs" />
     <Compile Include="Code\CommandTransformation\CommandTransformator.cs" />
     <Compile Include="Code\CommandTransformation\CreateInterviewControllerCommand.cs" />
@@ -1621,7 +1624,6 @@
   <ItemGroup>
     <Folder Include="API\Attributes\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Dependencies\js\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>

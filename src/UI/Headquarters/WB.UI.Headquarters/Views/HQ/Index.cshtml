@@ -31,109 +31,110 @@
         });
     </script>
 }
+<main>
 
-<h3 class="sinle-line-header">@Dashboard.Questionnaires</h3>
+    <h3 class="sinle-line-header">@Dashboard.Questionnaires</h3>
 
-<div class="well well-sm">
-    <div class="btn-group">
-        @if (!(User.Identity.IsObserver()))
+    <div class="well well-sm">
+        <div class="btn-group">
+            @if (!(User.Identity.IsObserver()))
             {
-            <div class="form-inline">
-                <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
-                    <i class="glyphicon glyphicon-import">
-                    </i> @Dashboard.ImportTemplate
-                </a>
-            </div>
-        }
+                <div class="form-inline">
+                    <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
+                        <i class="glyphicon glyphicon-import">
+                        </i> @Dashboard.ImportTemplate
+                    </a>
+                </div>
+            }
+        </div>
+
     </div>
 
-</div>
-
-<div id="list">
-    <!-- ko if:IsPageLoaded()  -->
-    <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
-    <p class="text-center">
-        @Pages.NoResults
-    </p>
-    <!-- /ko -->
-    <!-- ko if:Pager().TotalItemCount() > 0 -->
-    <table class="table table-striped table-bordered table-condensed table-hover">
-        <thead>
-            <tr>
-                <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
-                <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
-                <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
-                <th data-bind='sortby : "ImportDate"'>@Dashboard.ImportDate</th>
-                <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
-                <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
-                <th>@Dashboard.Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- ko foreach:Items -->
-            <tr data-bind="css: {'text-muted':Disabled }">
-                <td style="vertical-align: middle">
-                    <!-- ko if:AllowCensusMode -->
-                    <span class="glyphicon glyphicon-ok pull-right margin-right-5"></span>
-                    <!-- /ko -->
-                </td>
-                <td style="vertical-align: middle" data-bind="text: Title, css: {'text-italic':Disabled }"></td>
-                <td style="vertical-align: middle" data-bind="text: Version"></td>
-                <td style="vertical-align: middle" data-bind="date: ImportDate"></td>
-                <td style="vertical-align: middle" data-bind="date: CreationDate"></td>
-                <td style="vertical-align: middle" data-bind="date: LastEntryDate"></td>
-                <td>
-                    <!-- ko ifnot:Disabled -->
-                    <div class="btn-group">
-                        <a class="btn btn-default" data-bind="attr: { href: $cloneQuestionnaireUrl + '/' + QuestionnaireId() + '?version=' + Version() }" data-toggle="tooltip" title="@Dashboard.CloneQuestionnaire">
-                            <i class="glyphicon glyphicon-duplicate"></i>
-                        </a>
-                    </div>
-                    <!-- ko ifnot:AllowCensusMode -->
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-plus-sign"></i>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li>
-                                <a data-bind="attr: { href: $batchUploadUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                    <i class="glyphicon glyphicon-plus-sign"></i>
-                                    @Dashboard.BatchUpload
-                                </a>
-                            </li>
-                            <li>
-                                <a data-bind="attr: { href: $newInterviewUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
-                                    <i class="glyphicon glyphicon-plus-sign"></i>
-                                    @Dashboard.NewInterview
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /ko -->
-                    <!-- /ko -->
-
-
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
-                                <i class="glyphicon glyphicon-remove"></i>
+    <div id="list">
+        <!-- ko if:IsPageLoaded()  -->
+        <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
+        <p class="text-center">
+            @Pages.NoResults
+        </p>
+        <!-- /ko -->
+        <!-- ko if:Pager().TotalItemCount() > 0 -->
+        <table class="table table-striped table-bordered table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
+                    <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
+                    <th data-bind='sortby : "Version"'>@Dashboard.Version</th>
+                    <th data-bind='sortby : "ImportDate"'>@Dashboard.ImportDate</th>
+                    <th data-bind='sortby : "CreationDate"'>@Dashboard.CreationDate</th>
+                    <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
+                    <th>@Dashboard.Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ko foreach:Items -->
+                <tr data-bind="css: {'text-muted':Disabled }">
+                    <td style="vertical-align: middle">
+                        <!-- ko if:AllowCensusMode -->
+                        <span class="glyphicon glyphicon-ok pull-right margin-right-5"></span>
+                        <!-- /ko -->
+                    </td>
+                    <td style="vertical-align: middle" data-bind="text: Title, css: {'text-italic':Disabled }"></td>
+                    <td style="vertical-align: middle" data-bind="text: Version"></td>
+                    <td style="vertical-align: middle" data-bind="date: ImportDate"></td>
+                    <td style="vertical-align: middle" data-bind="date: CreationDate"></td>
+                    <td style="vertical-align: middle" data-bind="date: LastEntryDate"></td>
+                    <td>
+                        <!-- ko ifnot:Disabled -->
+                        <div class="btn-group">
+                            <a class="btn btn-default" data-bind="attr: { href: $cloneQuestionnaireUrl + '/' + QuestionnaireId() + '?version=' + Version() }" data-toggle="tooltip" title="@Dashboard.CloneQuestionnaire">
+                                <i class="glyphicon glyphicon-duplicate"></i>
                             </a>
                         </div>
-                    }
-                </td>
-            </tr>
-            <!-- /ko -->
-        </tbody>
-    </table>
+                        <!-- ko ifnot:AllowCensusMode -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-plus-sign"></i>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                <li>
+                                    <a data-bind="attr: { href: $batchUploadUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                                        <i class="glyphicon glyphicon-plus-sign"></i>
+                                        @Dashboard.BatchUpload
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-bind="attr: { href: $newInterviewUrl + '/' + QuestionnaireId() + '?version=' + Version() }">
+                                        <i class="glyphicon glyphicon-plus-sign"></i>
+                                        @Dashboard.NewInterview
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /ko -->
+                        <!-- /ko -->
 
-    <!-- ko if:Pager().LastPage() > 1 -->
-    <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
-    <!-- /ko -->
-    <!-- /ko -->
-    <!-- /ko -->
-</div>
 
-@Html.Partial("_ListViewPagingScript")
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </a>
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <!-- /ko -->
+            </tbody>
+        </table>
 
+        <!-- ko if:Pager().LastPage() > 1 -->
+        <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+
+    @Html.Partial("_ListViewPagingScript")
+</main>
