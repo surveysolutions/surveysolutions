@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -51,12 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var entityWithErrorsViewModel = this.interviewViewModelFactory.GetNew<T>();
 
-                var navigationIdentity = NavigationIdentity.CreateForGroup(interview.GetParentGroup(invalidEntity),
-                    invalidEntity);
+                var navigationIdentity = interview.GetInterviewTreeQuestion(invalidEntity)?.IsPrefilled == true 
+                    ? NavigationIdentity.CreateForPrefieldScreen()
+                    : NavigationIdentity.CreateForGroup(interview.GetParentGroup(invalidEntity), invalidEntity);
 
                 var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
 
-                title.Init(interviewId, navigationIdentity.AnchoredElementIdentity);
+                title.Init(interviewId, invalidEntity);
 
                 entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, navigationState);
                 entitiesWithErrors.Add(entityWithErrorsViewModel);

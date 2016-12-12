@@ -78,6 +78,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void NavigateToImpl(NavigationIdentity navigationItem)
         {
+            if (navigationItem.TargetScreen == ScreenType.PrefieldScreen)
+            {
+                viewModelNavigationService.NavigateToPrefilledQuestions(InterviewId);
+                return;
+            }
+
             if (navigationItem.TargetScreen == ScreenType.Group)
             {
                 if (!this.CanNavigateTo(navigationItem)) return;
