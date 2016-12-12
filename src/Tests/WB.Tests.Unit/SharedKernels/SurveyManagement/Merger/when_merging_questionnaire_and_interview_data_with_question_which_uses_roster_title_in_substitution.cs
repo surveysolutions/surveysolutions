@@ -29,8 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                    Create.Entity.FixedRoster(rosterId: independantRosterId,
+                        variable: "r1",
                         obsoleteFixedTitles: new[] { "1", "2", "3" }),
                    Create.Entity.FixedRoster(rosterId: rosterId,
+                        variable: "r2",
                         obsoleteFixedTitles: new[] { "a", "b", "" },
                         children: new IComposite[]
                         { new NumericQuestion()

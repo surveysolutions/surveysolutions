@@ -35,6 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                             {
                                 PublicKey = nestedGroupId,
                                 IsRoster = true,
+                                VariableName = "r1",
                                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                                 Children =
                                     new List<IComposite>()
