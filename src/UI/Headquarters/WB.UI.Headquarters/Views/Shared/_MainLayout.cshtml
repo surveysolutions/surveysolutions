@@ -18,8 +18,9 @@
     <!-- cssApp:css -->
     <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
     <!-- endinject -->
-
-    <script src="~/Dependencies/build/libs.js"></script>
+    <!-- jsLibs:js -->
+    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
+    <!-- endinject -->
     
     <script>
         $(document).ready(function () {
@@ -101,11 +102,10 @@
             </div>
         </div>
     </footer>
-    <!-- jsLibs:js -->
-    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
-    <!-- endinject -->
+
     <!-- jsApp:js -->
     <!-- endinject -->
+
     @Html.Partial("Clickjacking")
     @Html.Partial("GlobalSettings")
 </body>

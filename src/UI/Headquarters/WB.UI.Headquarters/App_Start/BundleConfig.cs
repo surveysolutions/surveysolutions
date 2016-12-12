@@ -58,6 +58,13 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/surveymanagmentheader.js",
                 "~/Scripts/bootbox.min.js"
                 ));
+            bundles.Add(new ScriptBundle("~/js/main-no-libs").Include(
+                "~/Scripts/supervisor.framework.js",
+                "~/Scripts/viewmodels/viewmodelbase.js",
+                "~/Scripts/viewmodels/pagebase.js",
+                "~/Scripts/viewmodels/surveymanagmentheader.js"
+            ));
+
             bundles.Add(new ScriptBundle("~/validate").Include(
                 "~/Scripts/jquery.validate.js",
                 "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js"
