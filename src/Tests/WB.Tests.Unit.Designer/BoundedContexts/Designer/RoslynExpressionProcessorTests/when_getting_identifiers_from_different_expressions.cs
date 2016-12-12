@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProces
             }
         };
 
-        private static Dictionary<string, IEnumerable<string>> results;
+        private static Dictionary<string, IReadOnlyCollection<string>> results;
         private static Dictionary<string, IEnumerable<string>> expectedResults;
         private static RoslynExpressionProcessor analyzer;
     }

@@ -18,6 +18,7 @@ using WB.UI.Shared.Web.Membership;
 namespace WB.UI.Designer.Api
 {
     [Authorize]
+    [QuestionnairePermissions]
     public class QuestionnaireController : ApiController
     {
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
@@ -94,7 +95,8 @@ namespace WB.UI.Designer.Api
                 name = variableView.VariableData.Name,
                 TypeOptions = variableView.TypeOptions,
                 Type = variableView.VariableData.Type,
-                breadcrumbs = variableView.Breadcrumbs
+                breadcrumbs = variableView.Breadcrumbs,
+                label = variableView.VariableData.Label
             });
 
             return result;
@@ -170,8 +172,8 @@ namespace WB.UI.Designer.Api
         [CamelCase]
         public VerificationResult Verify(Guid id)
         {
-            var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireDocument).ToArray();
+            var questionnaireView = this.GetQuestionnaire(id);
+            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireView).ToArray();
             
             var verificationErrors = verificationMessagesAndWarning
                 .Where(x => x.MessageLevel > VerificationMessageLevel.Warning)
@@ -183,8 +185,8 @@ namespace WB.UI.Designer.Api
                 .Take(MaxVerificationErrors - verificationErrors.Length)
                 .ToArray();
 
-            VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
-            VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireDocument);
+            VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireView.Source);
+            VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireView.Source);
 
             return new VerificationResult
             {
@@ -202,7 +204,7 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
-        public List<DropdownQuestionView> GetQuestionsEligibleForNumericRosterTitle(string id, Guid rosterId, Guid rosterSizeQuestionId)
+        public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(string id, Guid rosterId, Guid rosterSizeQuestionId)
         {
             return this.questionnaireInfoFactory.GetQuestionsEligibleForNumericRosterTitle(id, rosterId, rosterSizeQuestionId);
         }

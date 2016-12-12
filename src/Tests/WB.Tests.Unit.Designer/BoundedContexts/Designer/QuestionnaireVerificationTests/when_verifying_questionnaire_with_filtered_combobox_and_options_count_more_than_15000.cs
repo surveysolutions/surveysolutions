@@ -16,10 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             int incrementer = 0;
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group("Group")
-            {
-                Children = new List<IComposite>()
-                {
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                     new SingleQuestion()
                     {
                         PublicKey = filteredComboboxId,
@@ -34,15 +31,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                             AnswerValue = incrementer.ToString(),
                                             AnswerText = (incrementer++).ToString()
                                         }))
-                    }
-                }
-            });
+                    });
 
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () => 
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

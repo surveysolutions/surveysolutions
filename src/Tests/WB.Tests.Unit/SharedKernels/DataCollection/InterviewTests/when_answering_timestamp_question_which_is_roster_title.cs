@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -26,8 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var rosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var questionnaireRoster = Create.Entity.Roster(rosterSizeSourceType: RosterSizeSourceType.Question,
-                rosterTitleQuestionId: timestampQuestionId, rosterSizeQuestionId: rosterSizeQuestionId, rosterId: rosterId);
-            questionnaireRoster.Children.Add(Create.Entity.DateTimeQuestion(questionId: timestampQuestionId, isTimestamp: true));
+                rosterTitleQuestionId: timestampQuestionId, rosterSizeQuestionId: rosterSizeQuestionId, rosterId: rosterId, 
+                children: new []{
+                    Create.Entity.DateTimeQuestion(questionId: timestampQuestionId, isTimestamp: true)}
+            );
 
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
                 Create.Entity.PlainQuestionnaire(CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.ShouldContainEvent<DateTimeQuestionAnswered>();
 
         It should_set_answer_on_timestamp_question_in_specified_format_for_RosterInstancesTitleChanged_event = () =>
-            eventContext.GetEvent<RosterInstancesTitleChanged>().ChangedInstances[0].Title.ShouldEqual(AnswerUtils.AnswerToString(answerOnDateTimeQuestion.ToLocalTime()));
+            eventContext.GetEvent<RosterInstancesTitleChanged>().ChangedInstances[0].Title.ShouldEqual(AnswerUtils.AnswerToString(answerOnDateTimeQuestion, isTimestamp: true));
 
         private static EventContext eventContext;
         private static Interview interview;

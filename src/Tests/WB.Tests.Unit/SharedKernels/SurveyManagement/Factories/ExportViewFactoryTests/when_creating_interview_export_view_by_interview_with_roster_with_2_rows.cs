@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -62,18 +65,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         private static QuestionnaireDocument CreateQuestionnaireDocumentWith1PropagationLevel()
         {
-            var initialDocument = CreateQuestionnaireDocument(new Dictionary<string, Guid>() { { "auto", propagationScopeKey } });
-            var chapter = new Group();
-            initialDocument.Children.Add(chapter);
-            var roasterGroup = new Group() { PublicKey = propagatedGroup, IsRoster = true, RosterSizeQuestionId = propagationScopeKey };
-            chapter.Children.Add(roasterGroup);
-
-            foreach (var question in variableNameAndQuestionId)
-            {
-                roasterGroup.Children.Add(new NumericQuestion() { StataExportCaption = question.Key, PublicKey = question.Value });
-            }
-
-            return initialDocument;
+            return CreateQuestionnaireDocumentWithOneChapter(
+                new NumericQuestion() { StataExportCaption = "auto", PublicKey = propagationScopeKey, QuestionType = QuestionType.Numeric },
+                new Group()
+                {
+                    PublicKey = propagatedGroup, IsRoster = true, RosterSizeQuestionId = propagationScopeKey, 
+                    Children = variableNameAndQuestionId.Select(x => new NumericQuestion() { StataExportCaption = x.Key, PublicKey = x.Value })
+                        .ToList<IComposite>().ToReadOnlyCollection()
+                }
+            );
         }
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()

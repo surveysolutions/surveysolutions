@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -22,8 +20,10 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public abstract class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
+    public abstract class MultiOptionLinkedQuestionBaseViewModel : MvxNotifyPropertyChanged,
+        IMultiOptionQuestionViewModelToggleable,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        ILiteEventHandler<AnswersRemoved>,
         IInterviewEntityViewModel,
         ICompositeQuestionWithChildren,
         IDisposable
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; protected set; }
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
-        protected MultiOptionLinkedQuestionViewModel(
+        protected MultiOptionLinkedQuestionBaseViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasOptions => this.Options.Any();
 
-        public async Task ToggleAnswerAsync(MultiOptionLinkedQuestionOptionViewModel changedModel)
+        public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
         {
             List<MultiOptionLinkedQuestionOptionViewModel> allSelectedOptions =
                 this.areAnswersOrdered ?
@@ -177,6 +177,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
             {
                 this.PutOrderOnOptions(@event);
+            }
+        }
+
+        public void Handle(AnswersRemoved @event)
+        {
+            if (@event.Questions.Any(x => x.Id == this.questionIdentity.Id && x.RosterVector.Identical(this.questionIdentity.RosterVector)))
+            {
+                foreach (var option in this.Options)
+                {
+                    option.Checked = false;
+                    option.CheckedOrder = null;
+                }
             }
         }
 

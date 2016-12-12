@@ -2,42 +2,29 @@
     Supervisor.VM.SVInterviews.superclass.constructor.apply(this, arguments);
     var self = this;
 
-    self.IsAssignToLoading = ko.observable(false);
-    self.UsersToAssignUrl = usersToAssignUrl;
-    self.Users = function (query, sync, pageSize) {
-        self.IsAssignToLoading(true);
-        self.SendRequest(self.UsersToAssignUrl, { query: query, pageSize: pageSize }, function (response) {
-            sync(response.Users, response.TotalCountByQuery);
-        }, true, true, function() {
-            self.IsAssignToLoading(false);
-        });
-    }
-    self.AssignTo = ko.observable();
+    self.Users = self.CreateUsersViewModel(usersToAssignUrl);
 
     self.CanAssignTo = ko.computed(function() {
-        return !(self.IsNothingSelected && _.isUndefined(self.AssignTo()));
+        return !(self.IsNothingSelected && _.isUndefined(self.Users.AssignTo()));
     });
 
     self.Assign = function () {
 
         var commandName = "AssignInterviewerCommand";
-        var parametersFunc = function(item) { return { InterviewerId: self.AssignTo().UserId, InterviewId: item.InterviewId } };
-        var filterFunc = function(item) {
-            return item.CanBeReassigned()
-                && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.AssignTo().UserId);
-        };
+        var parametersFunc = function (item) { return { InterviewerId: self.Users.AssignTo().UserId, InterviewId: item.InterviewId } };
+
         var messageTemplateId = "#confirm-assign-template";
         var continueMessageTemplateId = "#confirm-continue-message-template";
         var onSuccessCommandExecuting = function() {
-            self.AssignTo(undefined);
+            self.Users.AssignTo(undefined);
         };
         var onCancelConfirmation = function () {
-            self.AssignTo(undefined);
+            self.Users.AssignTo(undefined);
         };
 
         var filteredItems = self.GetSelectedItemsAfterFilter(function(item) {
                                 return item.CanBeReassigned()
-                                    && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.AssignTo().UserId);
+                                    && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.Users.AssignTo().UserId);
                             });
         var receivedByInterviewerItems = _.filter(filteredItems, function(item) { return item.ReceivedByInterviewer() === true });
 
@@ -78,20 +65,73 @@
         self.sendCommandAfterFilterAndConfirm(
             "ApproveInterviewCommand",
             function (item) { return { InterviewId: item.InterviewId } },
-            function (item) { return item.CanApproveOrReject(); },
+            function (item) { return item.CanApprove(); },
             "#confirm-approve-template",
             "#confirm-continue-message-template"
         );
     };
 
     self.RejectInterview = function () {
-        self.sendCommandAfterFilterAndConfirm(
-            "RejectInterviewCommand",
-            function (item) { return { InterviewId: item.InterviewId } },
-            function (item) { return item.CanApproveOrReject(); },
-            "#confirm-reject-template",
-            "#confirm-continue-message-template"
-        );
+        var rejectToInterviewerCommandName = "RejectInterviewToInterviewerCommand";
+        var rejectCommandName = "RejectInterviewCommand";
+        var messageTemplateId = "#confirm-reject-template";
+        var continueMessageTemplateId = "#confirm-continue-message-template";
+
+        var filteredItems = self.GetSelectedItemsAfterFilter(function (item) { return item.CanReject(); });
+        var isNeedShowAssignInterviewers = filteredItems.some(function (item) { return item.IsNeedInterviewerAssign(); });
+        var countReadyToReject = 0;
+        for (var i = 0; i < filteredItems.length; i++) {
+            countReadyToReject += (!filteredItems[i].IsNeedInterviewerAssign());
+        }
+        var countAllInterviewsToReject = filteredItems.length;
+        var countInterviewsToReject = ko.observable(countReadyToReject);
+
+        var model = {
+            CountInterviewsToReject: countInterviewsToReject,
+            Users: self.CreateUsersViewModel(usersToAssignUrl),
+            StoreInteviewer: function () {
+                model.Users.AssignTo() == undefined
+                    ? countInterviewsToReject(countReadyToReject)
+                    : countInterviewsToReject(countAllInterviewsToReject);
+            },
+            IsNeedShowAssignInterviewers: isNeedShowAssignInterviewers,
+            ClearAssignTo: function () {
+                model.Users.AssignTo(undefined);
+                countInterviewsToReject(countReadyToReject);
+            }
+        }
+
+        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, model);
+
+        if (filteredItems.length === 0) {
+            bootbox.alert(messageHtml);
+            return;
+        }
+
+        messageHtml += $(continueMessageTemplateId).html();
+
+        bootbox.confirm(messageHtml, function (result) {
+            if (result) {
+                var interviewer = model.Users.AssignTo();
+                $.each(filteredItems, function (index, interview) {
+                    if (interview.IsNeedInterviewerAssign()) {
+                        if (interviewer != undefined)
+                        {
+                            self.sendCommand(rejectToInterviewerCommandName,
+                                function (interview) { return { InterviewId: interview.InterviewId, InterviewerId: interviewer.UserId } },
+                                [interview]);
+                        }
+                    } else {
+                        self.sendCommand(rejectCommandName,
+                            function (interview) { return { InterviewId: interview.InterviewId } },
+                            [ interview ]);
+                    }
+                });
+                
+            }
+        });
+
+        ko.applyBindings(model, $(".reject-interviewer")[0]);
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.SVInterviews, Supervisor.VM.InterviewsBase);

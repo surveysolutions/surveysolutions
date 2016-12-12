@@ -18,13 +18,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             variableId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var variableRosterVector = new[] {0m};
 
-            var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId);
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(new []
+            {
+                Create.Entity.FixedRoster(fixedTitles: new [] { Create.Entity.FixedTitle(0, "fixed")}, children: new []
+                {
+                    Create.Entity.Variable(variableId)
+                })
+            });
 
-            IQuestionnaireStorage questionnaireRepository =
-                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
-                    Create.Entity.PlainQuestionnaire(questionnaireDocument));
-
-            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = Setup.StatefulInterview(questionnaireDocument);
             interview.Apply(Create.Event.InterviewSynchronized(
                 Create.Entity.InterviewSynchronizationDto(variables: new Dictionary<InterviewItemId, object>
                 {

@@ -449,7 +449,7 @@
 
   <style name="Interview_Previous_Group_Navigation_Layout">
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_width">match_parent</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Previous_Group_Navigation_Layout_margin_top</item>
@@ -471,5 +471,18 @@
     <item name="android:textStyle">bold</item>
     <item name="android:letterSpacing">0.1</item>
     <item name="android:textAllCaps">true</item>
+  </style>
+
+  <style name="Interview_Variable_Description">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textStyle">bold|italic</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColor">@color/btn_default</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+    <item name="android:layout_marginTop">@dimen/Interview_Instructions_margin</item>
+    <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
 </resources>

@@ -2,27 +2,41 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
     public class QuestionnaireQuestionOptionsRepository : IQuestionOptionsRepository
     {
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity, ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, int? parentQuestionValue, string filter, Guid? translationId)
+        private readonly IQuestionnaireStorage questionnaireRepository;
+
+        public QuestionnaireQuestionOptionsRepository(IQuestionnaireStorage questionnaireRepository)
         {
-            return categoricalOptionsProvider.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter, translationId);
+            this.questionnaireRepository = questionnaireRepository;
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, string optionText, Guid? translationId)
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity, 
+            Guid questionId, int? parentQuestionValue, string filter, Translation translation)
         {
-            return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionText(questionId, optionText, translationId);
+            var questionnaire = questionnaireRepository.GetQuestionnaire(qestionnaireIdentity, translation?.Name);
+            
+            return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, filter);
+        }
+
+        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)
+        {
+            var questionnaire = questionnaireRepository.GetQuestionnaire(qestionnaireIdentity, translation?.Name);
+
+            return questionnaire.GetOptionForQuestionByOptionTextFromStructure(questionId, optionText, parentQuestionValue);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
-            ICategoricalOptionsProvider categoricalOptionsProvider, Guid questionId, decimal optionValue, Guid? translationId)
+             Guid questionId, decimal optionValue, Translation translation)
         {
-            return categoricalOptionsProvider.GetOptionForQuestionFromStructureByOptionValue(questionId, optionValue, translationId);
+            var questionnaire = questionnaireRepository.GetQuestionnaire(qestionnaireIdentity, translation?.Name);
+
+            return questionnaire.GetOptionForQuestionByOptionValueFromStructure(questionId, optionValue);
         }
     }
 }

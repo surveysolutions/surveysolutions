@@ -15,9 +15,10 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
  #pragma warning disable 612, 618
             this.jsonSerializerSettings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.All,
+                TypeNameHandling = TypeNameHandling.Auto,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
+                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
                 Binder = new PortableOldToNewAssemblyRedirectSerializationBinder()
             };
 #pragma warning restore 612, 618

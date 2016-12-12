@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -23,7 +24,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
-        private readonly IAnswerToStringService answerToStringService;
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
         private readonly CoverStateViewModel coverState;
@@ -35,7 +35,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected BaseInterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel, 
             BreadCrumbsViewModel breadCrumbsViewModel,
             NavigationState navigationState,
@@ -54,7 +53,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewRepository = interviewRepository;
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
-            this.answerToStringService = answerToStringService;
             this.groupState = groupState;
             this.interviewState = interviewState;
             this.coverState = coverState;

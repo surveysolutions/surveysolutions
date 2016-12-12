@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     {
                         Create.NumericIntegerQuestion(q3Id, variable: "age")
                     }),
-                    Create.Roster(roster1Id, variable:"r1", fixedRosterTitles: new [] { Create.FixedRosterTitle(1),  Create.FixedRosterTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
+                    Create.Roster(roster1Id, variable:"r1", fixedTitles: new [] { Create.FixedTitle(1),  Create.FixedTitle(2)}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(q5Id, variable: "ageFilter"),
                         Create.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id, linkedFilter: "age > current.ageFilter")
@@ -47,7 +47,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 var interview = SetupInterview(questionnaireDocument, precompiledState: interviewState);
 
-                interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1m, 2m, 3m });
+                interview.AnswerMultipleOptionsQuestion(userId, q2Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2, 3 });
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 20);
                 interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 15);
                 interview.AnswerNumericIntegerQuestion(userId, q5Id, Create.RosterVector(1), DateTime.Now, 18);

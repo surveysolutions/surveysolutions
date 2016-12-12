@@ -1,6 +1,7 @@
 ﻿extern alias designer;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using Group = Main.Core.Entities.SubEntities.Group;
@@ -43,8 +45,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>());
-            var persons = sharedPersons?.Select(id => new SharedPerson() {Id = id}) ?? new List<SharedPerson>();
+                Mock.Of<ITranslationsService>(),
+                Mock.Of<IQuestionnireHistotyVersionsService>());
+            var persons = sharedPersons?.Select(id => new SharedPerson() {UserId = id}) ?? new List<SharedPerson>();
             questAr.Initialize(questionnaire.PublicKey, questionnaire, persons);
             return questAr;
         }
@@ -62,16 +65,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(IEnumerable<IComposite> children = null, Guid? createdBy = null)
         {
-            var questionnaire = new QuestionnaireDocument();
-
-            if (children != null)
+            return new QuestionnaireDocument()
             {
-                questionnaire.Children.AddRange(children);
-            }
-
-            questionnaire.CreatedBy = createdBy;
-
-            return questionnaire;
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
+                CreatedBy = createdBy
+            };
         }
 
         protected static Group CreateGroup(Guid? groupId = null, string title = "Group X",
@@ -81,17 +79,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             {
                 PublicKey = groupId ?? Guid.NewGuid(),
                 Title = title,
+                Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
             };
-
-            if (children != null)
-            {
-                group.Children.AddRange(children);
-            }
-
-            if (setup != null)
-            {
-                setup(group);
-            }
+            
+            setup?.Invoke(@group);
 
             return group;
         }

@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -96,17 +97,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return this.GetDataFileByLevelName(allLevels, parentLevel.LevelName);
         }
 
-        public decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues)
+        public decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels)
         {
             if (parentIdValues == null || parentIdValues.Length == 0)
                 return null;
 
             var idIndexInParentDataFile = this.GetIdColumnIndex(parentDataFile);
             var parentIdColumnIndexesOfParentDataFile = this.GetParentIdColumnIndexes(parentDataFile)?? new int[0];
-            var row =
-                parentDataFile.Content.FirstOrDefault(
-                    record =>
-                        record[idIndexInParentDataFile] == parentIdValues.First() &&
+            var row = parentDataFile.Content.FirstOrDefault(record =>
+                            record[idIndexInParentDataFile] == parentIdValues.First() &&
                             parentIdColumnIndexesOfParentDataFile.Select(x => record[x]).SequenceEqual(parentIdValues.Skip(1)));
             if (row == null)
                 return null;
@@ -114,8 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (!this.rosterScopes.ContainsKey(levelScopeVector))
                 return null;
 
-            var rosterScopeDescription = this.rosterScopes[levelScopeVector];
-
+            RosterScopeDescription rosterScopeDescription = this.rosterScopes[levelScopeVector];
             if (rosterScopeDescription.Type == RosterScopeType.Fixed)
             {
                 return this.GroupsCache.ContainsKey(levelScopeVector.Last()) 
@@ -123,31 +121,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
                     : null;
             }
 
-            var rosterSizeQuestion = this.questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelScopeVector.Last());
-
-            var levelExportStructure = this.FindLevelInPreloadedData(parentDataFile.FileName);
+            HeaderStructureForLevel levelExportStructure = this.FindLevelInPreloadedData(parentDataFile.FileName);
             if (levelExportStructure == null)
                 return null;
 
-            var answerObject = this.BuildAnswerByVariableName(levelExportStructure, rosterSizeQuestion.StataExportCaption,
+            var rosterSizeQuestion = this.questionnaireDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == levelScopeVector.Last());
+            while (!levelExportStructure.ContainsQuestion(rosterSizeQuestion.PublicKey))
+            {
+                parentDataFile = this.GetParentDataFile(parentDataFile.FileName, allLevels);
+                levelExportStructure = this.FindLevelInPreloadedData(parentDataFile.FileName);
+
+                row = parentDataFile.Content.FirstOrDefault(record => record[idIndexInParentDataFile] == parentIdValues.First()) ??
+                      parentDataFile.Content.FirstOrDefault(record => record[idIndexInParentDataFile] == parentIdValues.Last());
+            }
+
+            var rosterSizeAnswer = this.BuildAnswerByVariableName(levelExportStructure, rosterSizeQuestion.StataExportCaption,
                 parentDataFile.Header, row);
 
-            if (answerObject == null)
+            if (rosterSizeAnswer == null)
                 return new decimal[0];
 
             if (rosterScopeDescription.Type == RosterScopeType.Numeric)
             {
-                return Enumerable.Range(0, (int)answerObject).Select(i => (decimal)i).ToArray();
+                return Enumerable.Range(0, ((NumericIntegerAnswer) rosterSizeAnswer).Value)
+                    .Select(i => (decimal) i).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
-                return answerObject as decimal[];
+                return ((CategoricalFixedMultiOptionAnswer) rosterSizeAnswer).CheckedValues
+                    .Select(v => (decimal) v).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.TextList)
             {
-                return ((Tuple<decimal, string>[])answerObject).Select(a => a.Item1).ToArray();
+                return ((TextListAnswer) rosterSizeAnswer).Rows
+                    .Select(a => a.Value).ToArray();
             }
             return null;
         }
@@ -162,8 +171,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             if (exportedQuestion == null)
                 return ValueParsingResult.OK;
 
+            AbstractAnswer parsedSingleColumnAnswer;
             return this.dataParser.TryParse(answer, columnName, this.GetQuestionByVariableName(exportedQuestion.VariableName),
-                out parsedValue);
+                out parsedValue, out parsedSingleColumnAnswer);
         }
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
@@ -413,12 +423,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return result.ToArray();
         }
 
-        private Dictionary<Guid, object> BuildAnswerForLevel(string[] row, string[] header, string levelFileName)
+        private Dictionary<Guid, AbstractAnswer> BuildAnswerForLevel(string[] row, string[] header, string levelFileName)
         {
             var levelExportStructure = this.FindLevelInPreloadedData(levelFileName);
             if (levelExportStructure == null)
                 return null;
-            var result = new Dictionary<Guid, object>();
+            var result = new Dictionary<Guid, AbstractAnswer>();
 
             var rowWithoutMissingValues = row.Select(v =>
                   v?.Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty)
@@ -435,7 +445,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             return result;
         }
 
-        private object BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
+        private AbstractAnswer BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
         {
             var exportedHeaderItem =
                 levelExportStructure.HeaderItems.Values.FirstOrDefault(

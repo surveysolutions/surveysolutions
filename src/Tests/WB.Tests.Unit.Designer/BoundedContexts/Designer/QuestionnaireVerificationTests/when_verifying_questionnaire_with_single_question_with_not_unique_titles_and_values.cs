@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -15,26 +16,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             singleQuestionId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(
-                new SingleQuestion
+            questionnaire = CreateQuestionnaireDocument(new SingleQuestion
+            {
+                PublicKey = singleQuestionId,
+                StataExportCaption = "var",
+                Answers = new List<Answer>()
                 {
-                    PublicKey = singleQuestionId,
-                    StataExportCaption = "var",
-                    Answers = new List<Answer>()
-                    {
-                        new Answer { AnswerValue = "1", AnswerText = "1" }, 
-                        new Answer { AnswerValue = "1", AnswerText = "1" }
-                    },
-                    QuestionType = QuestionType.SingleOption
-                });
+                    new Answer { AnswerValue = "1", AnswerText = "1" }, 
+                    new Answer { AnswerValue = "1", AnswerText = "1" }
+                },
+                QuestionType = QuestionType.SingleOption
+            });
 
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_2_messages = () =>
             verificationMessages.Count().ShouldEqual(2);

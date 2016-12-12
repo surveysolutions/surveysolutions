@@ -13,6 +13,16 @@ namespace WB.Tests.Unit.TestFactories
 {
     internal class OtherFactory
     {
+        public CommittedEvent CommittedEvent(UncommittedEvent evnt, Guid eventSourceId)
+            => new CommittedEvent(Guid.NewGuid(),
+                        evnt.Origin,
+                        evnt.EventIdentifier,
+                        eventSourceId,
+                        evnt.EventSequence,
+                        evnt.EventTimeStamp,
+                        0,
+                        evnt.Payload);
+
         public CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
             Guid? eventIdentifier = null, int eventSequence = 1, Guid? commitId = null)
             => new CommittedEvent(

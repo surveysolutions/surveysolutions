@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -8,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -61,10 +61,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry.Subscribe(this, interviewId);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetDateTimeAnswer(entityIdentity);
+            var answerModel = interview.GetDateTimeQuestion(entityIdentity);
             if (answerModel.IsAnswered)
             {
-                this.SetToView(answerModel.Answer.Value);
+                this.SetToView(answerModel.GetAnswer().Value);
             }
         }
 
@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void SetToView(DateTime answerValue)
         {
-            this.Answer = answerValue.ToLocalTime().ToString(CultureInfo.CurrentCulture);
+            this.Answer = AnswerUtils.AnswerToString(answerValue.ToLocalTime(), isTimestamp: true, cultureInfo: CultureInfo.CurrentCulture);
         }
 
         private string answer;

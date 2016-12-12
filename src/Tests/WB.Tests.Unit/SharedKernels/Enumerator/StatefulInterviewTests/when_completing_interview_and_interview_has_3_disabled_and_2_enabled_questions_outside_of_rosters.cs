@@ -33,12 +33,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.Identity(disabledQuestion3Id, RosterVector.Empty),
             }));
 
-            interview.Apply(Create.Event.QuestionsEnabled(new []
-            {
-                Create.Entity.Identity(enabledQuestion1Id, RosterVector.Empty),
-                Create.Entity.Identity(enabledQuestion2Id, RosterVector.Empty),
-            }));
-
             eventContext = Create.Other.EventContext();
         };
 
@@ -54,16 +48,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.Identity(disabledQuestion1Id, RosterVector.Empty),
                 Create.Entity.Identity(disabledQuestion2Id, RosterVector.Empty),
                 Create.Entity.Identity(disabledQuestion3Id, RosterVector.Empty),
-            });
-
-        It should_raise_QuestionsEnabled_event = () =>
-            eventContext.ShouldContainEvent<QuestionsEnabled>();
-
-        It should_raise_QuestionsEnabled_event_with_ids_of_enabled_questions_and_empty_roster_vectors = () =>
-            eventContext.GetEvent<QuestionsEnabled>().Questions.ShouldContainOnly(new[]
-            {
-                Create.Entity.Identity(enabledQuestion1Id, RosterVector.Empty),
-                Create.Entity.Identity(enabledQuestion2Id, RosterVector.Empty),
             });
 
         Cleanup stuff = () =>

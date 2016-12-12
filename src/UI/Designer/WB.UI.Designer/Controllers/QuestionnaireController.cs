@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -24,6 +25,7 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 
@@ -38,6 +40,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger logger;
+        private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
 
         public QuestionnaireController(
             ICommandService commandService,
@@ -47,7 +50,8 @@ namespace WB.UI.Designer.Controllers
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService, 
+            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -57,6 +61,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
             this.lookupTableService = lookupTableService;
+            this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
         }
 
         public ActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
@@ -180,6 +185,25 @@ namespace WB.UI.Designer.Controllers
             return this.Redirect(this.Request.UrlReferrer.ToString());
         }
 
+        [HttpPost]
+        public ActionResult Revert(Guid id, Guid commandId)
+        {
+            var historyReferenceId = commandId;
+
+            bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.UserHelper.WebUser.UserId);
+            if (!hasAccess)
+            {
+                this.Error("You don't  have permissions to restore operation for this questionnaire.");
+                return this.RedirectToAction("Index");
+            }
+
+            var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.UserHelper.WebUser.UserId);
+            this.commandService.Execute(command);
+
+            string sid = id.FormatGuid();
+            return this.RedirectToAction("Details", new {id =  sid});
+        }
+
         [AllowAnonymous]
         public ActionResult ExpressionGeneration(Guid? id)
         {
@@ -200,7 +224,17 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
-            var questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+            bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.UserHelper.WebUser.UserId);
+            if (!hasAccess)
+            {
+                this.Error(ErrorMessages.NoAccessToQuestionnaire);
+                return this.RedirectToAction("Index");
+            }
+            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id.FormatGuid(), this.UserHelper.WebUser.UserId);
+
+            QuestionnaireChangeHistory questionnairePublicListViewModels = questionnaireChangeHistoryFactory.Load(id, page ?? 1, GlobalHelper.GridPageItemsCount);
+            questionnairePublicListViewModels.ReadonlyMode = questionnaireInfoView.IsReadOnlyForUser;
+
             return this.View(questionnairePublicListViewModels);
         }
 

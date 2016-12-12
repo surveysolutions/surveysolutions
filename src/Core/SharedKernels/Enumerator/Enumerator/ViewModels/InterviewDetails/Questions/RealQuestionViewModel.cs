@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        const decimal jsonSerializerDecimalLimit = 9999999999999999m;
+        const double jsonSerializerDecimalLimit = 9999999999999999;
         
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -35,8 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; }
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
 
-        private decimal? answer;
-        public decimal? Answer
+        private double? answer;
+        public double? Answer
         {
             get { return this.answer; }
             set
@@ -117,16 +117,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetRealNumericAnswer(entityIdentity);
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.UseFormatting = questionnaire.ShouldUseFormatting(entityIdentity.Id);
             this.CountOfDecimalPlaces = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(entityIdentity.Id);
 
-            if (answerModel.IsAnswered)
+            var doubleQuestion = interview.GetDoubleQuestion(entityIdentity);
+            if (doubleQuestion.IsAnswered)
             {
-                this.Answer = answerModel.Answer;
+                this.Answer = doubleQuestion.GetAnswer().Value;
             }
         }
 

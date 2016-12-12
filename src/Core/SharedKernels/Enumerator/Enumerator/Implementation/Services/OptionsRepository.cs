@@ -21,26 +21,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage = optionsStorage;
         }
-        [Obsolete("Since V 5.10")]
-        public IReadOnlyList<CategoricalOption> GetQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId)
-        {
-            var questionnaireIdAsString = questionnaireId.ToString();
-            var questionIdAsString = questionId.FormatGuid();
-
-            var categoricalQuestionOptions = this.optionsStorage
-                .Where(x => x.QuestionnaireId == questionnaireIdAsString && 
-                            x.QuestionId == questionIdAsString)
-                .Select(x => new CategoricalOption
-                {
-                    ParentValue = x.ParentValue.HasValue ? Convert.ToInt32(x.ParentValue) : (int?)null,
-                    Value = Convert.ToInt32(x.Value),
-                    Title = x.Title
-                })
-                .OrderBy(x => x.Title)
-                .ToReadOnlyCollection();
-
-            return categoricalQuestionOptions;
-        }
 
         public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, 
             int? parentValue, string filter, Guid? translationId)
@@ -52,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             filter = filter ?? String.Empty;
             var parentValueAsDecimal = parentValue.HasValue ? Convert.ToDecimal(parentValue) : (decimal?) null;
 
-            int batchsize = 15;
+            int batchsize = 50;
             int lastLoadedSortIndex = -1;
 
             if (translationIdAsString == null)
@@ -132,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionTitle, Guid? translationId)
+        public CategoricalOption GetQuestionOption(QuestionnaireIdentity questionnaireId, Guid questionId, string optionTitle, int? parentQuestionValue, Guid? translationId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
             var questionIdAsString = questionId.FormatGuid();
@@ -145,6 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
                             x.Title == optionTitle &&
+                            x.ParentValue == parentQuestionValue &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
                 .OrderBy(x => x.TranslationId == null)
                 .FirstOrDefault();

@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -21,10 +16,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             eventContext = new EventContext();
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                => _.Version == questionnaireVersion);
 
-            interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
+            var questionnaireRepository =
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(),
+                    Create.Entity.PlainQuestionnaire(
+                        Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.StaticText())));
+
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository, userId: userId);
         };
 
         Cleanup stuff = () =>
@@ -33,8 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = null;
         };
 
-        Because of = () =>
-           interview.SynchronizeInterviewEvents(userId, questionnaireId, questionnaireVersion,
+        Because of = () => interview.SynchronizeInterviewEvents(userId, questionnaireId, questionnaireVersion,
                InterviewStatus.Completed, eventsToPublish, true);
 
         It should_raise_InterviewOnClientCreated_event = () =>
@@ -51,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static long questionnaireVersion = 18;
 
-        private static Interview interview;
+        private static StatefulInterview interview;
 
         private static IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
     }

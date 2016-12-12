@@ -33,6 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.answer = value; this.RaisePropertyChanged(); }
         }
 
+        public bool ShowLocationOnMap => this.settings.ShowLocationOnMap;
+
         private IMvxCommand saveAnswerCommand;
         public IMvxCommand SaveAnswerCommand
         {
@@ -98,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
             IUserInterfaceStateService userInterfaceStateService,
             AnsweringViewModel answering,
-             QuestionInstructionViewModel instructionViewModel,
+            QuestionInstructionViewModel instructionViewModel,
             ILiteEventRegistry liteEventRegistry,
             ILogger logger)
         {
@@ -132,14 +134,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
-            var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
-            if (answerModel.IsAnswered)
+            var questionModel = interview.GetGpsQuestion(entityIdentity);
+            if (questionModel.IsAnswered)
             {
-                this.Answer = new GpsLocation(answerModel.Accuracy.GetValueOrDefault(),
-                    answerModel.Altitude.GetValueOrDefault(),
-                    answerModel.Latitude.GetValueOrDefault(),
-                    answerModel.Longitude.GetValueOrDefault(),
-                    DateTimeOffset.MinValue);
+                var gpsAnswer = questionModel.GetAnswer().Value;
+
+                this.Answer = new GpsLocation(gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Latitude,
+                    gpsAnswer.Longitude, DateTimeOffset.MinValue);
             }
         }
 

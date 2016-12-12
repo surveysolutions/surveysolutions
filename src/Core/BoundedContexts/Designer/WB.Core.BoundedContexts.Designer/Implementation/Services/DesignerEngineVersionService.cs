@@ -136,13 +136,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                Version = 17, 
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
                     {
                           HasQuestionnaire = questionnaire =>  questionnaire.Translations.Any(),
                           Description = "Multilanguage questionnaire"
+                    }
+                }
+            },
+             new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                          HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.LinkedToQuestionId.HasValue && 
+                                questionnaire.FirstOrDefault<AbstractQuestion>(x => x.PublicKey == q.LinkedToQuestionId)?.QuestionType == QuestionType.TextList).Any(),
+                          Description = "Question linked to List question"
                     }
                 }
             }

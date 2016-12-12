@@ -15,16 +15,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new TextQuestion() { StataExportCaption = "var" });
-            questionnaire.Children.Add(
+            questionnaire = CreateQuestionnaireDocument(new TextQuestion() { StataExportCaption = "var" },
                    Create.FixedRoster(rosterId: rosterGroupId, variable:"a",
                         fixedTitles: new[] { "fixed title 1", " ", "fixed title 3" }));
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

@@ -15,9 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             multiQuestionId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(
+            questionnaire = CreateQuestionnaireDocument(
                 new MultyOptionsQuestion
                 {
                     PublicKey = multiQuestionId,
@@ -34,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_2_messages = () =>
             verificationMessages.Count().ShouldEqual(2);

@@ -43,7 +43,7 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<InMemoryKeyValueStorage<QuestionnaireDocument>>().InSingletonScope();
 
             this.Bind<SqliteSettings>().ToConstant(
-                new SqliteSettings()
+                new SqliteSettings
                 {
                     PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
                 });

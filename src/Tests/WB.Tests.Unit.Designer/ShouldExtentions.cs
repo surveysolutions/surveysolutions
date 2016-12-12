@@ -72,27 +72,29 @@ namespace WB.Tests.Unit.Designer
             }
         }
 
-        public static void ShouldContainWarning(
-            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code, string warningMessage =null)
+        public static void ShouldContainWarning(this IEnumerable<QuestionnaireVerificationMessage> messages, string code, string message = null)
         {
-            verificationMessages.ShouldContain(message
-                => message.MessageLevel == VerificationMessageLevel.Warning
-                   && message.Code == code && (warningMessage == null || message.Message == warningMessage));
+            if (message == null)
+            {
+                messages
+                    .Where(m => m.MessageLevel == VerificationMessageLevel.Warning)
+                    .Select(m => m.Code)
+                    .ShouldContain(code);
+            }
+            else
+            {
+                messages.ShouldContain(m
+                    => m.MessageLevel == VerificationMessageLevel.Warning
+                    && m.Code == code
+                    && m.Message == message);
+            }
         }
 
-        public static void ShouldContainError(
-            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
-        {
-            verificationMessages.ShouldContain(message
-                => message.MessageLevel == VerificationMessageLevel.General
-                && message.Code == code);
-        }
-
-        public static void ShouldNotContain(
-            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
-        {
-            verificationMessages.ShouldNotContain(message => message.Code == code);
-        }
+        public static void ShouldContainError(this IEnumerable<QuestionnaireVerificationMessage> messages, string code)
+            => messages
+                .Where(m => m.MessageLevel == VerificationMessageLevel.General)
+                .Select(m => m.Code)
+                .ShouldContain(code);
 
         public static void ShouldContainCritical(
             this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
@@ -102,11 +104,54 @@ namespace WB.Tests.Unit.Designer
                 && message.Code == code);
         }
 
-        public static void ShouldNotContainMessage(
-            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        public static void ShouldNotContainWarning(this IEnumerable<QuestionnaireVerificationMessage> messages, string code)
         {
-            verificationMessages.ShouldNotContain(message
-                => message.Code == code);
+            var warnings = messages
+                .Where(m => m.MessageLevel == VerificationMessageLevel.Warning)
+                .Where(m => m.Code == code)
+                .ToList();
+
+            if (warnings.Any())
+                throw new SpecificationException(
+                    $"Contains one or more warnings {code} but shouldn't:{Environment.NewLine}{FormatForAssertion(warnings)}");
         }
+
+        public static void ShouldNotContainError(this IEnumerable<QuestionnaireVerificationMessage> messages, string code)
+        {
+            var errors = messages
+                .Where(m => m.MessageLevel == VerificationMessageLevel.General)
+                .Where(m => m.Code == code)
+                .ToList();
+
+            if (errors.Any())
+                throw new SpecificationException(
+                    $"Contains one or more errors {code} but shouldn't:{Environment.NewLine}{FormatForAssertion(errors)}");
+        }
+
+        public static void ShouldNotContain(this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        {
+            var messages = verificationMessages
+                .Where(m => m.Code == code)
+                .ToList();
+
+            if (messages.Any())
+                throw new SpecificationException(
+                    $"Contains one or more message {code} but shouldn't:{Environment.NewLine}{FormatForAssertion(messages)}");
+        }
+
+        public static void ShouldNotContainMessage(this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+            => verificationMessages.ShouldNotContain(code);
+
+        private static string FormatForAssertion(IEnumerable<QuestionnaireVerificationMessage> warnings)
+            => string.Join(Environment.NewLine, warnings.Select(FormatForAssertion));
+
+        private static string FormatForAssertion(QuestionnaireVerificationMessage message, int index)
+            => $"{index + 1}. {message.MessageLevel} {message.Code}{Environment.NewLine}{FormatForAssertion(message.References)}";
+
+        private static string FormatForAssertion(IEnumerable<QuestionnaireNodeReference> references)
+            => string.Join(Environment.NewLine, references.Select(FormatForAssertion));
+
+        private static string FormatForAssertion(QuestionnaireNodeReference reference)
+            => $"  {reference.Type} {reference.ItemId}";
     }
 }

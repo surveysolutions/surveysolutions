@@ -1,0 +1,295 @@
+.filters{
+	@extend %aside;
+	width: 360px;
+	border-right: 3px solid $gray-super-light;
+	padding: 50px 15px 0 33px;
+	margin-left: 12px;
+}
+.foldback-button{
+	@include square(50px);
+	cursor: pointer;
+	@include absolute(0, 0, null, null);
+	margin: 10px;
+	border-radius: 4px;
+	z-index: 2;
+	@include transition(all, 0.5s, linear, 0.2s);
+	span{
+		display: block;
+		@include size(25px, 2px); 
+		margin: 15px 10px;
+		background-color: $gray_text;
+		@include rotate(45deg);
+		&:first-of-type{
+			@include rotate(-45deg);
+		}
+	}
+}
+input.checkbox-filter{
+  	display: none;
+  	& ~ label{
+  		position: relative;
+  		padding-left: 35px;
+  		cursor: pointer;
+  	}
+  	& ~ label .tick {
+	    @extend %tick;
+	    @include absolute(0, null, null, 0);
+	    height: 25px;
+	    background: transparent url("../img/chekboxes.png") no-repeat;
+	    background-size: 68px 350px;
+	    background-position: 0 0;
+	    margin-right: 10px;
+		@include image-2x("../img/chekboxes2k.png", 68px, 350px);
+  	}
+  	& ~ label:hover .tick,
+  	& ~ label:focus .tick{
+    	background-position: 0px -36px;
+  	}
+  	&:checked ~ label .tick {
+    	background-position: 0px -72px;
+  	}
+  	&:checked ~ label:hover .tick,
+  	&:checked ~ label:focus .tick {
+    	background-position: 0px -108px;
+  	}
+  	&:disabled ~ label .tick,
+  	&:checked:disabled ~ label .tick {
+    	background-position: 0px -144px;
+  	}
+  	&:disabled ~ label:hover .tick,
+  	&:checked:disabled ~ label:hover .tick,
+  	&:disabled ~ label:focus .tick,
+  	&:checked:disabled ~ label:focus .tick {
+    	background-position: 0px -180px;
+  	}
+}
+.filters-container {
+	color: $gray_text;
+	border-bottom: 3px solid $gray-super-light;
+	padding-bottom: 20px;
+	   
+	.block-filter{
+		margin-bottom: 30px;
+		select{
+			border-color: $gray_form;
+			max-width: 90%;
+			option{
+				width: 200px;
+			}
+		}
+		.form-group{
+			margin-bottom: 5px;
+			label{
+				font-size: 14px;
+			    line-height: 20px;
+			    font-family: inherit;
+			    font-weight: normal;
+			    margin: 0;
+			}
+		}
+		.form-date{
+			margin-bottom: 15px;
+			max-width: 275px;
+			.input-group.date{
+				label{
+					display: table-cell;
+					vertical-align: middle;
+					font-size: 14px;
+					line-height: 16px;
+					width: 50px;
+					font-weight: normal;
+				}
+				.form-control{
+					border-right: none;
+					border-color: $gray_form;
+					border-bottom-left-radius: 4px;
+					border-top-left-radius: 4px;
+				}
+				.input-group-addon{
+					background-color: transparent;
+					border-left: none;
+					border-color: $gray_form;
+					padding: 3px 10px; 
+					.calendar{
+						@include size(21px, 20px); 
+						display: inline-block;
+						background: url("../img/calendar.png") no-repeat;
+						@include image-2x("../img/calendar2k.png", 21px, 20px);
+					}
+				}
+			}
+		}
+	}
+}
+.preset-filters-container{
+	padding: 30px 0;
+	a{
+		@extend h5;
+		color: $blue;
+		display: block;
+	}
+}
+
+.btn-input {
+   display: block;
+   .dropdown-toggle{
+   		background-color: transparent;
+   		box-shadow: none;
+   		border: 1px solid $gray_form;
+   		border-radius: 4px;
+   		width: 295px;
+   		text-align: left;
+   		&:hover, &:focus{
+   			box-shadow: none;
+   		}
+   		span:first-child {
+		   left: 10px;
+		   @include text-overflow();
+		   position: absolute;
+		   right: 30px;
+		}
+		.caret-large {
+		    margin-top: -1px;
+		    position: absolute;
+		    right: 10px;
+		    top: 35%;
+		    @include size(0, 0); 
+		    display: block;
+		    border-top: 12px solid $gray-light;
+		    border-right: 7px solid transparent;
+		    border-left: 7px solid transparent;
+		}
+		
+   }
+   .dropdown-menu > li{	
+   		&> a{
+	   		white-space: pre-wrap;
+	   		padding: 7px 10px;
+	   		color: $gray_text;
+			&:hover, &:focus{
+	   			background-color: $gray-super-light;
+   			}
+  		}
+   }
+   	&.open {
+   		.caret-large{
+   			border-top: none;
+   			border-bottom: 12px solid $gray-light;
+   		}
+	   	&> .dropdown-menu {
+		    display: block;
+		    width: 295px;
+		    padding: 5px;
+	   		border: 1px solid $gray_form;
+	   		overflow: auto;
+	    	max-height: 300px;
+	    	border-radius: 4px;
+		} 
+   }
+   
+}
+.filters.hidden-filters{
+	left: -400px;
+	overflow: visible;
+
+	.foldback-button{
+		right: -100px;
+		top: 0;
+		background-color: $gray_form;
+	    border-top-right-radius: 4px;
+	    border-bottom-right-radius: 4px;
+		span{
+			margin-left: 13px;
+	    	margin-right: 13px;
+			@include rotate(-45deg);
+			&:first-of-type{
+				@include rotate(45deg);
+			}
+		}
+	}
+}
+@media (max-width: $screen-md-min){
+	.filters{
+		top: 60px;
+		width: 300px;
+		padding-top: 50px;
+		padding-left: 20px;
+		.dropdown-toggle{
+			width: 250px; 
+		}
+		.open > .dropdown-menu{
+			width: 250px;	
+		}
+		&.hidden-filters{
+			left: -330px;
+			position: absolute;
+			.foldback-button{
+				right: -90px;
+			}
+		}
+	}
+}
+@media (max-width: $screen-sm-min){
+	.filters{
+		@include absolute(60px, null, null, -330px);
+	   	border: none;
+	   	padding: 30px 0 0;
+	   	overflow: visible;
+	   	@include transition(background-color);
+	   	.filters-container, .preset-filters-container{
+	   		display: none;
+	   		border-color: transparent;
+	   		@include opacity(0);
+	   		visibility: hidden;
+	   		@include transition(opacity);
+
+	   	}
+    	.dropdown-toggle, .input-group-addon{
+	   		background-color: #fff !important;
+	   	}
+	   	.foldback-button{
+    		right: -86px;
+	    	background-color: $gray_form;
+	    	@include transition(none);
+	    	span{
+	   			position: relative;
+	   			@include rotate(-45deg);
+	   			&:first-of-type{
+	   				@include rotate(45deg);
+    			}
+	    	}
+	    }
+	   	&.hidden-filters{
+	   		left: 0;
+		    width: 100%;
+		    background-color: $gray-super-light;
+		    z-index: 1;
+		    margin: 0;
+		    .foldback-button{
+			    left: auto;
+			   	right: 0;
+			   	span{
+			   		top: -6px;
+			   		&:first-of-type{
+		   				top: 10px;
+		   			}
+		    	}
+		    }
+	    	.filters-container, .preset-filters-container{
+		   		display: block;
+		   		width: 300px;
+		   		margin: 0 auto;
+		   		border-color: $gray_form;
+		   		@include opacity(1);
+		    	visibility: visible;
+		    }
+	    }
+	}
+}
+@media (max-width: $screen-xs-min){
+	.filters.hidden-filters{
+		.filters-container, .preset-filters-container{
+			width: 250px;
+		}
+	}
+}

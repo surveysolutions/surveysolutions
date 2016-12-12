@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -15,14 +16,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new TextQuestion("random question") {StataExportCaption = "var"});
-            questionnaire.Children.Add(new Group() { PublicKey = rosterGroupId, VariableName = "a", IsRoster = true });
+            questionnaire = CreateQuestionnaireDocument(new IComposite[] {
+            new TextQuestion("random question") {StataExportCaption = "var"},
+            new Group() { PublicKey = rosterGroupId, VariableName = "a", IsRoster = true }});
+
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

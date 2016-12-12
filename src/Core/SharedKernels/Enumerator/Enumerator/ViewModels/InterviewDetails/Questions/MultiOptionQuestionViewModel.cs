@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
@@ -13,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -23,10 +21,12 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
+    public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged,
+        IMultiOptionQuestionViewModelToggleable,
         ICompositeQuestionWithChildren,
         IInterviewEntityViewModel,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
+        ILiteEventHandler<AnswersRemoved>,
         IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
         private bool areAnswersOrdered;
+        private IMvxMainThreadDispatcher mainThreadDispatcher;
 
         public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -58,7 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IUserInteractionService userInteraction,
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel, 
-            QuestionInstructionViewModel instructionViewModel)
+            QuestionInstructionViewModel instructionViewModel,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
             this.questionState = questionStateViewModel;
@@ -70,19 +72,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.instructionViewModel = instructionViewModel;
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
+            this.mainThreadDispatcher = mainThreadDispatcher;
         }
 
         public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.eventRegistry.Subscribe(this, interviewId);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.instructionViewModel.Init(interviewId, entityIdentity);
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, 200);
 
             this.questionIdentity = entityIdentity;
             this.userId = this.principal.CurrentUserIdentity.UserId;
@@ -102,21 +105,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateQuestionOptions()
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
-            MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(questionIdentity);
-            var optionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select((x, index) => this.ToViewModel(x, existingAnswer))
-                .ToList();
 
-            this.Options.ForEach(x => x.DisposeIfDisposable());
-            this.Options.Clear();
+            
+                    var answerOnMultiOptionQuestion =
+                        interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer()?.ToDecimals()?.ToArray();
+                    var optionViewModels = this.filteredOptionsViewModel.GetOptions()
+                        .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion))
+                        .ToList();
 
-            optionViewModels.ForEach(x => this.Options.Add(x));
+                    this.Options.ForEach(x => x.DisposeIfDisposable());
+                    this.Options.Clear();
+
+                    optionViewModels.ForEach(x => this.Options.Add(x));
+                
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
-            this.UpdateQuestionOptions();
-            this.RaisePropertyChanged(() => Options);
+            this.mainThreadDispatcher.RequestMainThreadAction(
+                () =>
+                {
+                    this.UpdateQuestionOptions();
+                    this.RaisePropertyChanged(() => Options);
+                });
         }
 
         public void Dispose()
@@ -132,17 +143,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasOptions => true;
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, MultiOptionAnswer multiOptionAnswer)
+        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, decimal[] multiOptionAnswer)
         {
             var result = new MultiOptionQuestionOptionViewModel(this)
             {
                 Value = model.Value,
                 Title = model.Title,
                 Checked = multiOptionAnswer != null &&
-                          multiOptionAnswer.IsAnswered &&
-                          multiOptionAnswer.Answers.Any(x => model.Value == x),
+                          multiOptionAnswer.Any(x => model.Value == x),
             };
-            var indexOfAnswer = Array.IndexOf(multiOptionAnswer.Answers ?? new decimal[]{}, model.Value);
+            var indexOfAnswer = Array.IndexOf(multiOptionAnswer ?? new decimal[]{}, model.Value);
 
             result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?) null;
             result.QuestionState = this.questionState;
@@ -150,11 +160,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return result;
         }
 
-        public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModel changedModel)
+        public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
         {
             List<MultiOptionQuestionOptionViewModel> allSelectedOptions = 
                 this.areAnswersOrdered ?
-                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder).ToList() :
+                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedTimeStamp).ThenBy(x => x.CheckedOrder ?? 0).ToList() :
                 this.Options.Where(x => x.Checked).ToList();
 
             if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
@@ -175,10 +185,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             }
 
-            var selectedValues = allSelectedOptions.OrderBy(x => x.CheckedTimeStamp)
-                .ThenBy(x => x.CheckedOrder)
-                .Select(x => x.Value)
-                .ToArray();
+            var selectedValues = allSelectedOptions.Select(x => x.Value).ToArray();
 
             var command = new AnswerMultipleOptionsQuestionCommand(
                 this.interviewId,
@@ -197,6 +204,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 changedModel.Checked = !changedModel.Checked;
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        public void Handle(AnswersRemoved @event)
+        {
+            if (@event.Questions.Any(x => x.Id == this.questionIdentity.Id && x.RosterVector.Identical(this.questionIdentity.RosterVector)))
+            {
+                foreach (var option in this.Options)
+                {
+                    option.Checked = false;
+                    option.CheckedOrder = null;
+                }
             }
         }
 

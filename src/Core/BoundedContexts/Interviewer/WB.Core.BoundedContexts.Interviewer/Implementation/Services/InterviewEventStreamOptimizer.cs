@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             || eventPayload is StaticTextsDeclaredValid
             || eventPayload is StaticTextsDeclaredInvalid
             || eventPayload is LinkedOptionsChanged
+            || eventPayload is LinkedToListOptionsChanged
             || eventPayload is VariablesDisabled
             || eventPayload is VariablesEnabled 
             || eventPayload is VariablesChanged

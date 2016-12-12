@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 {
@@ -16,23 +12,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         public void should_remove_view_models()
         {
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.Entity.FixedRoster(rosterId, fixedTitles:
+                    new[] {Create.Entity.FixedTitle(1), Create.Entity.FixedTitle(5)}));
 
-            var interview = new Mock<IStatefulInterview>();
+            var interview = Setup.StatefulInterview(questionnaire);
 
-            interview.Setup(x => x.GetRosterInstances(It.IsAny<Identity>(), rosterId))
-                .Returns(new ReadOnlyCollection<Identity>(new List<Identity>
-                {
-                    Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1)),
-                    Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2))
-                }));
+            var statefulInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
+            var viewModel = this.CreateViewModel(interviewRepository: statefulInterviewRepository);
+            var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
-            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview.Object);
+            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
+            viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
 
-            var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
-            viewModel.Init("interviewId", Create.Entity.Identity(rosterId), Create.Other.NavigationState());
-            viewModel.Handle(Create.Event.RosterInstancesRemoved(rosterId, new RosterVector[] { Create.Entity.RosterVector(1)}));
+            interview.Apply(Create.Event.RosterInstancesRemoved(rosterId, new[] { Create.Entity.RosterVector(1) }));
+            viewModel.Handle(Create.Event.RosterInstancesRemoved(rosterId, new [] { Create.Entity.RosterVector(1)}));
 
-            Assert.That(viewModel.RosterInstances.Count(), Is.EqualTo(1));
+            Assert.That(viewModel.RosterInstances.Select(x => x.Identity).ToArray(),
+                Is.EquivalentTo(new[] {Identity.Create(rosterId, Create.Entity.RosterVector(5))}));
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -11,14 +12,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class MultiLanguageQuestionnaireDocument
     {
-        public ReadOnlyQuestionnaireDocument Questionnaire { get; private set; }
-        public ReadOnlyCollection<ReadOnlyQuestionnaireDocument> TranslatedQuestionnaires { get; private set; }
+        public ReadOnlyQuestionnaireDocument Questionnaire { get; }
+        public IReadOnlyCollection<ReadOnlyQuestionnaireDocument> TranslatedQuestionnaires { get; }
+        public IReadOnlyCollection<SharedPerson> SharedPersons { get; }
 
         public MultiLanguageQuestionnaireDocument(ReadOnlyQuestionnaireDocument originalQuestionnaireDocument,
-            params ReadOnlyQuestionnaireDocument[] translatedQuestionnaireDocuments)
+            IEnumerable<ReadOnlyQuestionnaireDocument> translatedQuestionnaireDocuments,
+            IEnumerable<SharedPerson> sharedPersons)
         {
             this.Questionnaire = originalQuestionnaireDocument;
             this.TranslatedQuestionnaires = translatedQuestionnaireDocuments.ToReadOnlyCollection();
+            this.SharedPersons = sharedPersons.ToReadOnlyCollection();
         }
 
         public Dictionary<Guid, Macro> Macros => this.Questionnaire.Macros;
@@ -36,6 +40,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Questionnaire.Find<T>(condition);
+
+        public bool Has<T>(Func<T, bool> condition) where T : class
+            => this.Questionnaire.Find<T>(condition).Any();
 
         public IEnumerable<T> FindInGroup<T>(Guid groupId)
              => this.Questionnaire.FindInGroup<T>(groupId);

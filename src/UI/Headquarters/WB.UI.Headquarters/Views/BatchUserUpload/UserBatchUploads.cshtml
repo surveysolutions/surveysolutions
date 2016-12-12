@@ -7,7 +7,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/pages/batch-user-creation.js")
+    @Scripts.Render("~/js/batch-user-creation")
     <script type="text/javascript">
     var $importUserDetailsUrl = '@Url.Action("ImportUserDetails", "BatchUserUpload", new { area = string.Empty })';
     var $userPreloadigVerificationDetailsUrl = '@Url.Action("UserPreloadigVerificationDetails", "BatchUserUpload", new { area = string.Empty })';

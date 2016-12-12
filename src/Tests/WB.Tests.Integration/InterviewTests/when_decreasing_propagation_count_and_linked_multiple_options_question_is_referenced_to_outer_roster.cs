@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -26,14 +26,7 @@ namespace WB.Tests.Integration.InterviewTests
             referencedQuestionId = Guid.Parse("22220000000000000000000000000000");
             linkedQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            var questionnaireDocument = new QuestionnaireDocument
-            {
-                Children = new List<IComposite>
-                {
-                    new Group("Chapter")
-                    {
-                        Children = new List<IComposite>
-                        {
+            var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                             new NumericQuestion
                             {
                                 PublicKey = numericQuestionId,
@@ -70,14 +63,10 @@ namespace WB.Tests.Integration.InterviewTests
                                                 LinkedToQuestionId = referencedQuestionId,
                                                 StataExportCaption = "link_mul"
                                             }
-                                        }
+                                        }.ToReadOnlyCollection()
                                     }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
+                                }.ToReadOnlyCollection()
+                            });
 
             interview = SetupInterview(questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new decimal[] { }, answerTime, 3);

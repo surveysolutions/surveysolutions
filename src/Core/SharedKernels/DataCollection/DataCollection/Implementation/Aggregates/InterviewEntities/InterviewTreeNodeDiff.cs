@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -52,6 +53,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return new InterviewTreeNodeDiff(source, changed);
         }
+
+        public Identity Identity => this.ChangedNode?.Identity ?? this.SourceNode?.Identity;
     }
 
     public class InterviewTreeRosterDiff : InterviewTreeGroupDiff
@@ -75,6 +78,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeGroupDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode) : base(sourceNode, changedNode)
         {
         }
+        public bool IsTitleChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.IsNodeAdded && !this.ChangedNode.Title.HasSubstitutions) return false;
+                return this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+            }
+        }
     }
 
     public class InterviewTreeQuestionDiff : InterviewTreeNodeDiff
@@ -84,6 +96,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeQuestionDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode) : base(sourceNode, changedNode)
         {
+        }
+
+        public bool IsTitleChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.IsNodeAdded && !this.ChangedNode.Title.HasSubstitutions) return false;
+                return this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+            }
+        }
+
+        public bool AreValidationMessagesChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.ChangedNode.IsValid) return false;
+                var changedMessages = this.ChangedNode.ValidationMessages.Select(x => x.Text).ToArray();
+                if (this.IsNodeAdded && !changedMessages.Any()) return false;
+                var sourceMessages = this.SourceNode?.ValidationMessages.Select(x => x.Text).ToArray() ?? new string[0];
+                return !changedMessages.SequenceEqual(sourceMessages);
+            }
         }
 
         public bool IsValid => this.SourceNode == null || !this.SourceNode.IsValid && this.ChangedNode.IsValid;
@@ -113,28 +148,48 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (SourceNode.IsMultimedia) return !SourceNode.AsMultimedia.EqualByAnswer(ChangedNode.AsMultimedia);
                 if (SourceNode.IsQRBarcode) return !SourceNode.AsQRBarcode.EqualByAnswer(ChangedNode.AsQRBarcode);
                 if (SourceNode.IsGps) return !SourceNode.AsGps.EqualByAnswer(ChangedNode.AsGps);
-                if (SourceNode.IsSingleOption) return !SourceNode.AsSingleOption.EqualByAnswer(ChangedNode.AsSingleOption);
+                if (SourceNode.IsSingleFixedOption) return !SourceNode.AsSingleFixedOption.EqualByAnswer(ChangedNode.AsSingleFixedOption);
                 if (SourceNode.IsSingleLinkedOption) return !SourceNode.AsSingleLinkedOption.EqualByAnswer(ChangedNode.AsSingleLinkedOption);
-                if (SourceNode.IsMultiOption) return !SourceNode.AsMultiOption.EqualByAnswer(ChangedNode.AsMultiOption);
+                if (SourceNode.IsMultiFixedOption) return !SourceNode.AsMultiFixedOption.EqualByAnswer(ChangedNode.AsMultiFixedOption);
                 if (SourceNode.IsMultiLinkedOption) return !SourceNode.AsMultiLinkedOption.EqualByAnswer(ChangedNode.AsMultiLinkedOption);
                 if (SourceNode.IsYesNo) return !SourceNode.AsYesNo.EqualByAnswer(ChangedNode.AsYesNo);
                 if (SourceNode.IsTextList) return !SourceNode.AsTextList.EqualByAnswer(ChangedNode.AsTextList);
+                if (SourceNode.IsSingleLinkedToList) return !SourceNode.AsSingleLinkedToList.EqualByAnswer(ChangedNode.AsSingleLinkedToList);
+                if (SourceNode.IsMultiLinkedToList) return !SourceNode.AsMultiLinkedToList.EqualByAnswer(ChangedNode.AsMultiLinkedToList);
 
                 return false;
             }
         }
 
-        public bool IsOptionsChanged
+        public bool AreLinkedOptionsChanged
         {
             get
             {
                 if (ChangedNode == null) return false;
                 if (!ChangedNode.IsLinked) return false;
 
-                if (SourceNode?.AsLinked.Options.Count != ChangedNode.AsLinked.Options.Count)
+                var sourceOptions = this.SourceNode?.AsLinked.Options ?? new List<RosterVector>();
+
+                if (sourceOptions.Count  != ChangedNode.AsLinked.Options.Count)
                     return true;
 
-                return !SourceNode.AsLinked.Options.SequenceEqual(ChangedNode.AsLinked.Options);
+                return !sourceOptions.SequenceEqual(ChangedNode.AsLinked.Options);
+            }
+        }
+
+        public bool AreLinkedToListOptionsChanged
+        {
+            get
+            {
+                if (ChangedNode == null) return false;
+                if (!ChangedNode.IsLinkedToListQuestion) return false;
+
+                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? new List<decimal>();
+
+                if (sourceOptions.Count != ChangedNode.AsLinkedToList.Options.Count)
+                    return true;
+
+                return !sourceOptions.SequenceEqual(ChangedNode.AsLinkedToList.Options);
             }
         }
     }
@@ -153,6 +208,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsInvalid => this.SourceNode == null
             ? !this.ChangedNode.IsValid
             : this.SourceNode.IsValid && !this.ChangedNode.IsValid;
+
+        public bool IsTitleChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.IsNodeAdded && !this.ChangedNode.Title.HasSubstitutions) return false;
+                return this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
+            }
+        }
+
+        public bool AreValidationMessagesChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.ChangedNode.IsValid) return false;
+                var changedMessages = this.ChangedNode.ValidationMessages.Select(x => x.Text).ToArray();
+                if (this.IsNodeAdded && !changedMessages.Any()) return false;
+                var sourceMessages = this.SourceNode?.ValidationMessages.Select(x => x.Text).ToArray() ?? new string[0];
+                return !changedMessages.SequenceEqual(sourceMessages);
+            }
+        }
     }
 
     public class InterviewTreeVariableDiff : InterviewTreeNodeDiff

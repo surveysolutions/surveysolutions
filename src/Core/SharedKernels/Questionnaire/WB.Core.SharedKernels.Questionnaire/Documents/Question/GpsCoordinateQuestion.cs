@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.Composite;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
     public class GpsCoordinateQuestion : AbstractQuestion
     {
-        public GpsCoordinateQuestion()
-        {
-        }
-
-        public GpsCoordinateQuestion(string text)
-            : base(text)
-        {
-        }
+        public GpsCoordinateQuestion(string questionText = null, List<IComposite> children = null):base(questionText, children){ }
 
         public override void AddAnswer(Answer answer)
         {

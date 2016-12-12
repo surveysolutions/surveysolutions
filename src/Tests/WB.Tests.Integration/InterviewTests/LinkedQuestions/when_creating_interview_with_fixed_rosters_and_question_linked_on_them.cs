@@ -25,27 +25,21 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     Create.SingleQuestion(id: linkedToQuestionId, linkedToRosterId: roster2Id, variable: "linked"),
                     Create.Roster(id: roster1Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, variable: "r1",
-                        fixedRosterTitles: new[] {Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)},
+                        fixedTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)},
                         children: new IComposite[]
                         {
                             Create.Roster(id: roster2Id, rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
                                 variable: "r2", enablementCondition: "@rowcode == 1",
-                                fixedRosterTitles: new[] {Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)})
+                                fixedTitles: new[] {Create.FixedTitle(1), Create.FixedTitle(2)})
                         }),
                 });
 
-                var result = new InvokeResults();
+                var interview = SetupStatefullInterview(questionnaireDocument);
 
-                using (var eventContext = new EventContext())
+                return new InvokeResults
                 {
-                    var interview = SetupStatefullInterview(questionnaireDocument);
-
-                    var options = interview.FindReferencedRostersForLinkedQuestion(roster2Id, Create.Identity(linkedToQuestionId, RosterVector.Empty)).ToList();
-
-                    result.OptionsCountForLinkedToRosterQuestion = options.Count();
-                }
-
-                return result;
+                    OptionsCountForLinkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Identity.Create(linkedToQuestionId, RosterVector.Empty)).Options.Count
+                };
             });
 
         It should_return_2_options_for_linked_question = () =>

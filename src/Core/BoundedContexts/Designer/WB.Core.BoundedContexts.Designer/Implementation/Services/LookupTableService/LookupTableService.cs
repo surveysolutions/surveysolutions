@@ -46,27 +46,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
             var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableId);
 
-            DeleteLookupTableContent(questionnaireId, lookupTableId);
-
             this.lookupTableContentStorage.Store(lookupTableContent, lookupTableStorageId);
         }
 
-        public void DeleteLookupTableContent(Guid questionnaireId, Guid lookupTableId)
+        public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
+            //old instances are stuck
+
             var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null)
                 return;
 
-            if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
-                return;
+            foreach (var questionnaireLookupTable in questionnaire.LookupTables)
+            {
+                var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, questionnaireLookupTable.Key);
 
-            var lookupTable = questionnaire.LookupTables[lookupTableId];
-            if (lookupTable == null)
-                return;
-
-            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableId);
-
-            lookupTableContentStorage.Remove(lookupTableStorageId);
+                lookupTableContentStorage.Remove(lookupTableStorageId);
+            }
         }
 
         public LookupTableContent GetLookupTableContent(Guid questionnaireId, Guid lookupTableId)
@@ -236,6 +232,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                         {
                             decimal rowcodeAsDecumal;
                             if (!decimal.TryParse(record[i], out rowcodeAsDecumal))
+                            {
+                                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
+                            }
+                            if (rowcodeAsDecumal > long.MaxValue || rowcodeAsDecumal < long.MinValue)
                             {
                                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
                             }

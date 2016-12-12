@@ -87,9 +87,8 @@
       <HintPath>..\..\..\packages\DotNetZip.1.9.8\lib\net20\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Specifications">
       <HintPath>..\..\..\packages\Machine.Specifications.0.11.0\lib\net45\Machine.Specifications.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Machine.Specifications.Should, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.11.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
@@ -196,15 +195,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.0.1\lib\net45\SQLitePCLRaw.batteries_green.dll</HintPath>
+      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.0\lib\net45\SQLitePCLRaw.batteries_green.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.0\lib\net45\SQLitePCLRaw.batteries_v2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.core.1.0.1\lib\net45\SQLitePCLRaw.core.dll</HintPath>
+      <HintPath>..\..\..\packages\SQLitePCLRaw.core.1.1.0\lib\net45\SQLitePCLRaw.core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.provider.e_sqlite3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9c301db686d0bd12, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.0.1\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
+      <HintPath>..\..\..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.0\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StatData, Version=1.0.5592.33611, Culture=neutral, processorArchitecture=MSIL">
@@ -439,7 +442,9 @@
     <Compile Include="BoundedContexts\Headquarters\InterviewsExportDenormalizerTests\InterviewsExportDenormalizerNunitTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\RosterStructureServiceTests\RosterStructureServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\RosterStructureServiceTests\when_getting_roster_structures_for_questionnaire_with_multi_option_roster_title.cs" />
+    <Compile Include="BoundedContexts\Headquarters\Views\Interview\AllInterviewsFactoryTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\AttachmentsCleanupServiceTests.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_creating_census_interview_with_prefilled_questions.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_DateTimeQuestionAnswered_event_and_question_is_timestamp.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_DateTimeQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event_second_time.cs" />
@@ -483,18 +488,33 @@
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_declared_in_base_handler_types.cs" />
     <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
     <Compile Include="SharedKernels\DataCollection\IdentityTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering__NO__to_YesNo_roster_size_question_with_max_answers_set_to__1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\InterviewAssignTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_linked_to_List_question_and_answer_is_specified.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multi_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_featured_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_single_option_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_text_question_is_set.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqapprove_completed_interview.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events_but_interview_was_reassigned_to_supervisor_in_other_team.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events_for_interviews_created_before_version_5_15.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_child_interviewer_entities.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTreeTests.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTreeEventPublisherTests.cs" />
     <Compile Include="SharedKernels\Enumerator\CompositeCollectionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_ordered_roster_size_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\Services\InterviewViewModelFactoryTests\InterviewViewModelFactoryTest.cs" />
     <Compile Include="SharedKernels\Enumerator\SqliteStorageTests.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\CompositeCollectionInflationServiceTests\CompositeCollectionInflationServiceTests.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level__2__and_linked_question_is_on_level__3.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Preloading\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level0.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterview.CreateInterviewOnClient.Tests.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefullInterview.GetAnswerAsString.Tests.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_getting_answer_as_string_for_question_linked_to_roster.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_answering_prefilled_timestamp_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups_and_same_roster_instance_was_added_twice.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_invalid_interview_entities_having_hidden_and_supervisors_questions.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_option_by_value.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level2_and_linked_question_is_on_level3.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level1_and_linked_question_is_on_level0.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level1_and_linked_question_is_on_level1.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level2_and_linked_question_is_on_level0.cs" />
@@ -503,6 +523,8 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level1.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_answering_on_nested_roster_question_which_is_linked_to_question_and_sorce_in_different_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_answering_on_nested_roster_question_which_is_linked_to_question_from_roster.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_interviewer_leaves_a_comment.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_options_for_linked_to_list_question_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_roster_trigger_is_multioption_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_fixed_roster_has_substitution.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Translations\when_switching_language_with_fixed_rosters.cs" />
@@ -520,35 +542,52 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_options_for_regular_single_option.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_cloning_questionnaire_with_translations.cs" />
     <Compile Include="SharedKernels\Enumerator\OptionsRepositoryTests\OptionsRepositoryTests.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_timestamp_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_date_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_with_disabled_invalid_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_comments_.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_comments_from_restored_interview_state_from_sync_package.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_otions.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_parent_group_disabled.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_synchronizing_interview_with_fixed_rosters_and_translations.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnablementViewModelTests\EnablementViewModelTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnablementViewModelTests\when_question_enablement_model_updates_it_state_and_question_was_removed_from_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\FilteredOptionsViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_answering_any_question_for_options_with_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_initializing_options_with_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredOptionsViewModelTests\when_initializing_options_without_filter.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_changed_answer_for_filtered_question_with_filter_on_options.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_long_roster_size_numeric_question_with_201_and_question_was_answered.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_expanding_section_has_4_roster_instances_created_in_random_order.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_sections_model_has_disabled_items.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedToListQuestionViewModelTests\when_text_list_disabled.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedToListQuestionViewModelTests\when_text_list_enabled.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToListQuestionQuestionViewModelTests\when_text_list_enabled.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToListQuestionQuestionViewModelTests\when_text_list_disabled.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToListQuestionQuestionViewModelTests\when_ordered_question_answered.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToListQuestionQuestionViewModelTests\when_title_of_textlist_item_changed.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionQuestionViewModelTests\when_answer_removed.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionQuestionViewModelTests\when_checking_2_and_1_and_question_is_not_recording_order.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionQuestionViewModelTests\when_checking_2_and_1_and_question_is_recording_order.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\RosterViewModelTests\RosterViewModelTests.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\RosterViewModelTests\when_initializing.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\RosterViewModelTests\when_roster_instances_added.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\RosterViewModelTests\when_roster_instances_removed.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\StaticTextViewModelTests\when_initializing_and_static_text_is_invalid.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_init_view_model_with_199_items_and_this_questions_is_roster_size_with_maxAnswerCount_200.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\TextQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\when_answering_and_answer_is_whitespace.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\VariableViewModelTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultiOptionQuestionAnswered_with_empty_array_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_linked_multi_question_on_second_level_referenced_on_third.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_question_text_contains_html.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_all_interviews_for_team_containing_tags_in_prefield.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_all_interviews_containing_tags_in_prefield.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\InterviewEntityViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_group_title_has_substitution.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_validation_message_contains_substitution.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_with_substitutions_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_invalid_interview_entities_recursively.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_1_answered_timestamp_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Single_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Timestamp_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_and_some_anwers_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_and_some_answers_is_null.cs" />
@@ -561,6 +600,10 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_sample_data_with_no_answers_on_gps_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_date_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_called_for_GetQuestionnaire_and_params_provided.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_for_GetInterviewPackage_and__called_without_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_called_for_GetInterview_and_param_of_unexpected_type.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\WriteToSyncLogAttributeTestsContext.cs" />
     <Compile Include="SyncAsyncRunner.cs" />
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
@@ -575,6 +618,7 @@
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_integer.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\NumericTextFormatterTests\when_filter_formatted_decimal_with_errors.cs" />
+    <Compile Include="TestFactories\PreloadedAnswer.cs" />
     <Compile Include="TestFactories\StorageFactory.cs" />
     <Compile Include="TestFactories\ServiceFactory.cs" />
     <Compile Include="TestFactories\FakeFactory.cs" />
@@ -689,12 +733,7 @@
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_not_selected_no_option_code.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_not_selected_yes_option_code.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\YesNoAnswersTestContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_formatting_decimal_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_linked_on_roster_title_single_option_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_yesno_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_use_formatting_numeric_integer_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title_in_static_text.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewRepositoryTests\StatefulInterviewRepositoryNUnitTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_completing_interview_with_disabled_variable.cs" />
@@ -715,8 +754,6 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_questionnaire_has_such_group_and_group_is_not_in_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_0.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_1_and_referenced_answers_are_on_roster_level_1.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_staticTexts_recursively.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_variable_value_for_question_in_roster.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
@@ -727,10 +764,6 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_1_disabled_and_1_enabled_questions_in_fixed_roster_with_3_instances.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\AnswerToStringServiceTestsContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_linked_single_option_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_single_option_question.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_filtered_single_option_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\MaskTextTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_making_text_after_setting_mask.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_making_text_for_not_filled_mask.cs" />
@@ -745,8 +778,6 @@
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_filtering_text_without_setting_mask.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_filtering_text_coincidents_with_mask.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_filtering_text_partialy_coincidents_with_part_of_mask.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\RosterTitleSubstitutionServiceTestsContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package_and_disabled_or_valid_or_invalid_static_texts_are_null.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package_and_all_answers_are_null.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_synchronizing_interview_with_multiple_failed_validation_conditions.cs" />
@@ -826,7 +857,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_variable_value_changed_and_current_culture_is_russian.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_variable_value_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_sections_model_has_disabled_items.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_handling_groupEnabledEvent_and_roster_is_not_present.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_section_get_disable_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_initializing_sections_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_roster_instances_added.cs" />
@@ -1042,7 +1073,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_where_int_question_triggers_roster_and_answer_on_roster_titel_question_is_set.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_integer_question_which_triggers_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_interviewer_entities.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\InterviewStatusTimeSpanDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_approved_by_hq_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_completed_event_recived.cs" />
@@ -1265,7 +1295,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_qr_barcode_question_which_is_absent.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_qr_barcode_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_qr_barcode_question_with_incorrect_roster_vector.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_and_interview_restored_after_synch_and_contains_answer_on_not_linked_multioption_question_and_qu___.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_1_with_a_half.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_real_question_with_allowed_3_decimal_places_but_answer_has_4_decimal_places.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
@@ -1284,7 +1313,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_decreases_nested_roster_size.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_decreases_nested_roster_size_and_roster_s__.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_decreases_roster_size.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_decreases_roster_size_of_roster_with_nested_roster_with_answered_questions_inside_triggered_by_the_same_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_decreases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_nested_roster_size.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_nested_roster_size_and_roster_size_question_3_level_above.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_nested_roster_size_and_roster_s__.cs" />
@@ -1644,6 +1673,8 @@
       <SubType>Designer</SubType>
     </None>
     <Compile Include="TestFactories\ControllerFactory.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.Translations.Tests.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterview.Synchronization.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -1720,15 +1751,15 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
     <Error Condition="!Exists('..\..\..\packages\SQLitePCL.native.sqlite3.v110_xp.0.9.3\build\SQLitePCL.native.sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCL.native.sqlite3.v110_xp.0.9.3\build\SQLitePCL.native.sqlite3.v110_xp.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
   </Target>
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.0.1\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
   <Import Project="..\..\..\packages\SQLitePCL.native.sqlite3.v110_xp.0.9.3\build\SQLitePCL.native.sqlite3.v110_xp.targets" Condition="Exists('..\..\..\packages\SQLitePCL.native.sqlite3.v110_xp.0.9.3\build\SQLitePCL.native.sqlite3.v110_xp.targets')" />
+  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
+  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
+  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.0\build\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -366,14 +366,26 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             state.ResponsibleId = @event.Payload.SupervisorId;
             state.SupervisorId = @event.Payload.SupervisorId;
             state.ResponsibleRole = UserRoles.Supervisor;
+            state.IsMissingAssignToInterviewer = true;
             return state;
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewerAssigned> @event)
         {
-            state.ResponsibleId = @event.Payload.InterviewerId;
-            state.ResponsibleRole = UserRoles.Operator;
-            state.ReceivedByInterviewer = false;
+            if (@event.Payload.InterviewerId.HasValue)
+            {
+                state.ResponsibleId = @event.Payload.InterviewerId.Value;
+                state.ResponsibleRole = UserRoles.Operator;
+                state.ReceivedByInterviewer = false;
+                state.IsMissingAssignToInterviewer = false;
+            }
+            else
+            {
+                state.ResponsibleId = state.SupervisorId.Value;
+                state.ResponsibleRole = UserRoles.Supervisor;
+                state.ReceivedByInterviewer = false;
+                state.IsMissingAssignToInterviewer = true;
+            }
 
             return state;
         }

@@ -11,6 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public DateTime Date { get; set; }
         public Guid CommenterId { get; set; }
         public string CommenterName { get; set; }
-        public UserRoles? CommenterRole { get; set; }
+        public UserRoles CommenterRole { get; set; }
     }
 }

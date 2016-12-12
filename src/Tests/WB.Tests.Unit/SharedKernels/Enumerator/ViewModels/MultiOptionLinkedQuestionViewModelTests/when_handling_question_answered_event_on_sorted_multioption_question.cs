@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Moq;
-using Nito.AsyncEx.Synchronous;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
@@ -20,44 +15,50 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
     {
         Establish context = () =>
         {
-            interviewId = "interview";
+            
             questionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
-            Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-            var interview = Mock.Of<IStatefulInterview>(x =>
-                x.FindAnswersOfReferencedQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[]
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.FixedRoster(fixedTitles: new[] { new FixedRosterTitle(1, "fixed 1"), new FixedRosterTitle(2, "fixed 2") }, children:new []
                 {
-                    Create.Entity.TextAnswer("answer1", linkedToQuestionId, new []{1m}),
-                    Create.Entity.TextAnswer("answer2", linkedToQuestionId, new []{2m})
-                } &&
-                x.Answers == new Dictionary<string, BaseInterviewAnswer>()
+                    Create.Entity.TextQuestion(linkedToQuestionId)
+                }),
+                Create.Entity.MultyOptionsQuestion(questionId.Id, linkedToQuestionId: linkedToQuestionId, areAnswersOrdered: true)
                 );
 
-            var questionnaire = Mock.Of<IQuestionnaire>(_ 
-                => _.GetQuestionReferencedByLinkedQuestion(questionId.Id) == linkedToQuestionId
-                && _.ShouldQuestionRecordAnswersOrder(questionId.Id) == true);
+            interview = Setup.StatefulInterview(questionnaire);
+            interview.AnswerTextQuestion(interviewerId, linkedToQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, "option 1");
+            interview.AnswerTextQuestion(interviewerId, linkedToQuestionId, Create.Entity.RosterVector(2), DateTime.UtcNow, "option 2");
 
-            var interviews = new Mock<IStatefulInterviewRepository>();
-            var questionnaires = new Mock<IQuestionnaireStorage>();
+            var interviews = Setup.StatefulInterviewRepository(interview);
+            var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            interviews.SetReturnsDefault(interview);
-            questionnaires.SetReturnsDefault(questionnaire);
+            eventRegistry = Create.Service.LiteEventRegistry();
 
-            questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
-            questionViewModel.Init(interviewId, questionId, Create.Other.NavigationState());
+            questionViewModel = CreateViewModel(interviewRepository: interviews, questionnaireStorage: questionnaires, eventRegistry: eventRegistry);
+            questionViewModel.Init(interviewId.FormatGuid(), questionId, Create.Other.NavigationState());
         };
 
-        Because of = () => questionViewModel.Handle(Create.Event.MultipleOptionsLinkedQuestionAnswered(questionId:questionId.Id,
-            rosterVector: questionId.RosterVector,
-            selectedRosterVectors: new[] { new decimal[] { 2 }, new decimal[] { 1 } }));
+        Because of = () =>
+        {
+            interview.AnswerMultipleOptionsLinkedQuestion(interviewerId, questionId.Id, RosterVector.Empty,
+                DateTime.UtcNow, new[] {new decimal[] {2}, new decimal[] {1}});
+
+            Setup.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
+        };
 
         It should_put_answers_order_on_option1 = () => questionViewModel.Options.First().CheckedOrder.ShouldEqual(2);
         It should_put_answers_order_on_option2 = () => questionViewModel.Options.Second().CheckedOrder.ShouldEqual(1);
         It should_put_checked_on_checked_items = () => questionViewModel.Options.Count(x => x.Checked).ShouldEqual(2);
 
-        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
-        static string interviewId;
+        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
         static Identity questionId;
+        static StatefulInterview interview;
+        static LiteEventRegistry eventRegistry;
+        static Guid interviewId;
+        static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");
     }
 }
 

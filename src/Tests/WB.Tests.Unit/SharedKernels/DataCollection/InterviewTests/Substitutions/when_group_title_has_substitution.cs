@@ -5,6 +5,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -34,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
                             {
                                 Create.Entity.Group(groupId: group2Id, title: "GroupC - %subst%")
                             })
-                }
+                }.ToReadOnlyCollection()
             });
 
             Guid questionnaireId = Guid.NewGuid();
@@ -48,12 +50,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
 
         Because of = () => interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
 
-        It should_raise_title_changed_event_for_group_after_answer = () =>
-            events.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Groups.Length == 3 && 
-                x.Groups[0].Id == group1Id && 
-                x.Groups[1].Equals(Create.Entity.Identity(group2Id, Create.Entity.RosterVector(0))) &&
-                x.Groups[2].Equals(Create.Entity.Identity(group2Id, Create.Entity.RosterVector(1))) 
-            );
+        It should_raise_title_changed_event_for_3_groups = () =>
+            events.GetEvent<SubstitutionTitlesChanged>().Groups.Length.ShouldEqual(3);
+
+       It should_raise_title_changed_event_for_group_after_answer = () =>
+            events.GetEvent<SubstitutionTitlesChanged>().Groups.ShouldContainOnly(
+                Create.Entity.Identity(group2Id, Create.Entity.RosterVector(0)),
+                Create.Entity.Identity(group2Id, Create.Entity.RosterVector(1)),
+                Create.Entity.Identity(group1Id, RosterVector.Empty));
 
         static EventContext events;
         static Interview interview;

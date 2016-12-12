@@ -20,11 +20,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         Establish context = () =>
         {
             questionnaireView = Create.QuestionnaireDocument(Guid.NewGuid(),
-                Create.Roster(roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new List<IComposite>()
+                Create.Roster(roster1Id, rosterSizeQuestionId: rosterSizeQuestionId, rosterType: RosterSizeSourceType.Question, children: new List<IComposite>()
                 {
                     Create.TextQuestion(rosterTitleQuestionId),
                 }),
-                Create.Roster(roster2Id, rosterSizeQuestionId: otherRosterSizeQuestionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new List<IComposite>()
+                Create.Roster(roster2Id, rosterSizeQuestionId: otherRosterSizeQuestionId, rosterType: RosterSizeSourceType.Question, children: new List<IComposite>()
                 {
                     Create.TextQuestion(childTitleQuestionId),
                 }),
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result.ElementAt(2).Id.ShouldEqual(childTitleQuestionId.FormatGuid());
 
         private static QuestionnaireInfoFactory factory;
-        private static List<DropdownQuestionView> result;
+        private static List<DropdownEntityView> result;
         private static QuestionnaireDocument questionnaireView;
         private static readonly Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionDetailsReaderMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
         private static string questionnaireId = "11111111111111111111111111111111";

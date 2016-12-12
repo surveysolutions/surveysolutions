@@ -1,11 +1,25 @@
 ﻿@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.UI.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
-@model InterviewStatus
 
+@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewDetailsView
 
-@if (((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) 
-    || ((Model == InterviewStatus.ApprovedBySupervisor || Model == InterviewStatus.ApprovedByHeadquarters) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
+@{
+    InterviewStatus status = Model.Status;
+    bool isNotAssignedToInterviewer = !Model.IsAssignedToInterviewer;
+
+    bool isSupervisorApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
+    bool isHeadquarteerOrAdminApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.ApprovedBySupervisor) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+
+    bool isSupervisorRedjectSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor);
+    bool isHeadquarteerOrAdminRedjectSupport = (status == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator));
+
+    bool isHeadquarteerOrAdminUnapproveSupport = status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator);
+
+    bool isShowInterviewerSelectForRejectBySupervisor = isSupervisorRedjectSupport && isNotAssignedToInterviewer;
+}
+
+@if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
 {
     <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -25,7 +39,10 @@
             </div>
         </div>
     </div>
+}
 
+@if (isSupervisorRedjectSupport || isHeadquarteerOrAdminRedjectSupport)
+{
     <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -34,17 +51,36 @@
                     <h4 class="modal-title" id="rejectModalLabel">@Pages.ApproveRejectPartialView_RejectLAbel</h4>
                 </div>
                 <div class="modal-body">
+                    @if (isShowInterviewerSelectForRejectBySupervisor)
+                    {
+                        @Details.ChooseResponsibleInterviewer
+                        <br />
+                        <div class="btn-group">
+                            <div class="input-group">
+                                <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: Users.StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
+                                <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                                <div class="input-group-btn" data-bind="click: Users.ClearAssignTo">
+                                    <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                    }
                     <label>@Pages.ApproveRejectPartialView_CommentLabel :</label>
                     <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
-                    <button class="btn btn-danger" data-bind="click: @(GlobalInfo.IsSupervisor ? "rejectInterview" : "hQRejectInterview")">@Pages.ApproveRejectPartialView_RejectAction</button>
+                    <button class="btn btn-danger" data-bind="click: @(GlobalInfo.IsSupervisor ? "rejectInterview" : "hQRejectInterview"), @(isShowInterviewerSelectForRejectBySupervisor ? "enable: Users.AssignTo() != undefined" : "") ">@Pages.ApproveRejectPartialView_RejectAction</button>
                 </div>
             </div>
         </div>
     </div>
+}
 
+@if (isHeadquarteerOrAdminUnapproveSupport)
+{
     <div class="modal fade" id="unapproveByHeadquarterModal" tabindex="-1" role="dialog" aria-labelledby="unapproveInterviewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -34,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionInstructionViewModel InstructionViewModel { get; private set; }
         private readonly QuestionStateViewModel<TextListQuestionAnswered> questionState;
+        private IMvxMainThreadDispatcher mainThreadDispatcher;
 
         private TextListAddNewItemViewModel addNewItemViewModel
             => this.Answers?.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
@@ -50,12 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
             AnsweringViewModel answering,
-            QuestionInstructionViewModel instructionViewModel)
+            QuestionInstructionViewModel instructionViewModel,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-
+            this.mainThreadDispatcher = mainThreadDispatcher;
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.userInteractionService = userInteractionService;
@@ -77,15 +80,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var answerModel = interview.GetTextListAnswer(entityIdentity);
-
+            
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(this.questionIdentity.Id);
             this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(this.questionIdentity.Id);
 
-            if (answerModel.IsAnswered)
+            var textListQuestion = interview.GetTextListQuestion(entityIdentity);
+            if (textListQuestion.IsAnswered)
             {
-                var answerViewModels = answerModel.Answers.Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
+                var answerViewModels = textListQuestion.GetAnswer().ToTupleArray().Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
 
                 answerViewModels.ForEach(answerViewModel => this.Answers.Add(answerViewModel));
             }
@@ -179,8 +182,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.questionState.Validity.ExecutedWithoutExceptions();
-                this.ShowOrHideAddNewItem();
-            }
+                this.mainThreadDispatcher.RequestMainThreadAction(this.ShowOrHideAddNewItem);
+        }
             catch (InterviewException ex)
             {
                 this.questionState.Validity.ProcessException(ex);

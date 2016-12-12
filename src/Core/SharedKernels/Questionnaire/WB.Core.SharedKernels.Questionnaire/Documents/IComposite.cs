@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace Main.Core.Entities.Composite
 {
     public interface IComposite : IQuestionnaireEntity
     {
-        List<IComposite> Children { get; set; }
-
-        IComposite GetParent();
+        ReadOnlyCollection<IComposite> Children { get; set; }
 
         void SetParent(IComposite parent);
 
@@ -21,5 +20,9 @@ namespace Main.Core.Entities.Composite
         void ConnectChildrenWithParent();
 
         IComposite Clone();
+
+        void Insert(int index, IComposite itemToInsert, Guid? parent);
+
+        void RemoveChild(Guid child);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -17,6 +18,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -44,23 +46,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     new Group("Chapter")
                     {
                         PublicKey = Guid.Parse("FFF000AAA111EE2DD2EE111AAA000FFF"),
-                        Children = chapterChildren.ToList(),
+                        Children = chapterChildren?.ToReadOnlyCollection()?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                     }
-                }
+                }.ToReadOnlyCollection()
             };
-            questionnaireDocument.ConnectChildrenWithParent();
             return questionnaireDocument;
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(Dictionary<string, Guid> variableNameAndQuestionId)
         {
-            var questionnaire = new QuestionnaireDocument();
-
-            foreach (var question in variableNameAndQuestionId)
+            var questionnaire = new QuestionnaireDocument()
             {
-                questionnaire.Children.Add(new NumericQuestion() { StataExportCaption = question.Key, PublicKey = question.Value, QuestionType = QuestionType.Numeric });
-            }
-
+                Children = variableNameAndQuestionId?.Select(x => new NumericQuestion() { StataExportCaption = x.Key, PublicKey = x.Value, QuestionType = QuestionType.Numeric }).
+                    ToList<IComposite>().ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+            };
+            
             return questionnaire;
         }
 

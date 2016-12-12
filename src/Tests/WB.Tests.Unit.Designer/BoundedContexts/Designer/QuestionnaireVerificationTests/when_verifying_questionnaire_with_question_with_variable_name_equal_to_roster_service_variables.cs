@@ -13,33 +13,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
-            // "rowcode","rowname","rowindex","roster","Id"
-            questionnaire.Children.Add(new TextQuestion()
+            questionnaire = CreateQuestionnaireDocument(
+                new TextQuestion()
             {
                 PublicKey = Guid.NewGuid(),
                 StataExportCaption = "rowcode",
                 QuestionText = "hello rowcode"
-            });
-            questionnaire.Children.Add(new TextQuestion()
+            },
+                new TextQuestion()
             {
                 PublicKey = Guid.NewGuid(),
                 StataExportCaption = "rowname",
                 QuestionText = "hello rowname"
-            });
-            questionnaire.Children.Add(new TextQuestion()
+            },
+                new TextQuestion()
             {
                 PublicKey = Guid.NewGuid(),
                 StataExportCaption = "rowindex",
                 QuestionText = "hello rowindex"
-            });
-            questionnaire.Children.Add(new TextQuestion()
+            },
+                new TextQuestion()
             {
                 PublicKey = Guid.NewGuid(),
                 StataExportCaption = "roster",
                 QuestionText = "hello roster"
-            });
-            questionnaire.Children.Add(new TextQuestion()
+            },
+                new TextQuestion()
             {
                 PublicKey = Guid.NewGuid(),
                 StataExportCaption = "Id",
@@ -49,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_5_error = () =>
             verificationMessages.Count().ShouldEqual(5);

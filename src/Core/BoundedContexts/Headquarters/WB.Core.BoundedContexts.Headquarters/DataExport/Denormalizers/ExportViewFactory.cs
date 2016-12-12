@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
@@ -63,13 +64,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             if (questionnaire == null)
                 return null;
 
-            questionnaire.ConnectChildrenWithParent();
-
             var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
-
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id);
-            questionnaireDocument.ConnectChildrenWithParent();
-
+            
             var maxValuesForRosterSizeQuestions = GetMaxValuesForRosterSizeQuestions(questionnaireDocument);
 
             result.HeaderToLevelMap.Add(new ValueVector<Guid>(),
@@ -280,7 +277,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             exportedHeaderItem.VariableName = question.StataExportCaption;
             exportedHeaderItem.Titles = new[]
-            { string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel };
+            {
+                string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText.RemoveHtmlTags() : question.VariableLabel
+            };
             exportedHeaderItem.ColumnNames = new string[] { question.StataExportCaption };
 
             exportedHeaderItem.Labels = new Dictionary<Guid, LabelItem>();
@@ -456,15 +455,27 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     if (this.IsQuestionMultiOption(question))
                     {
-                        if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
+                        if (question.LinkedToRosterId.HasValue)
                             this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question, questionnaire, maxValuesForRosterSizeQuestions);
+                        else if (question.LinkedToQuestionId.HasValue)
+                        {
+                            var linkToQuestion =
+                                questionnaire.FirstOrDefault<IQuestion>(
+                                    x => x.PublicKey == question.LinkedToQuestionId.Value);
+
+                            if (linkToQuestion.QuestionType == QuestionType.TextList)
+                            {
+                                this.AddHeadersForLinkedToListMultiOptions(headerStructureForLevel.HeaderItems, question, linkToQuestion, questionnaire);
+                            }
+                            else
+                                this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question, questionnaire, maxValuesForRosterSizeQuestions);
+                        }
 
                         else this.AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question, questionnaire);
                     }
                     else if (this.IsQuestionTextList(question))
                     {
-                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question,
-                            questionnaire);
+                        this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question, questionnaire);
                     }
                     else
                     {
@@ -533,6 +544,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             headerItems.Add(question.PublicKey,
                 this.CreateExportedHeaderItem(question, maxCount,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
+        }
+
+        private void AddHeadersForLinkedToListMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, 
+            IQuestion question,
+            IQuestion linkToTextListQuestion,
+            QuestionnaireDocument questionnaire)
+        {
+            var textListQuestion = linkToTextListQuestion as ITextListQuestion;
+            var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
+
+            headerItems.Add(question.PublicKey,
+                 this.CreateExportedHeaderItem(question, maxCount,
+                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
         protected void AddHeadersForGpsQuestion(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,

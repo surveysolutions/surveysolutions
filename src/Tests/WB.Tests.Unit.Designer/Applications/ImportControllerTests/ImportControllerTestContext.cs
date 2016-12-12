@@ -17,7 +17,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
     {
         protected static ImportV2Controller CreateImportController(
             IQuestionnaireViewFactory questionnaireViewFactory = null,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory = null,
             IMembershipUserService membershipUserService = null,
             IDesignerEngineVersionService engineVersionService = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
@@ -30,11 +29,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 membershipUserService ?? Mock.Of<IMembershipUserService>(),
                 Mock.Of<IQuestionnaireListViewFactory>(),
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
-                sharedPersonsViewFactory ??
-                Mock.Of<IQuestionnaireSharedPersonsFactory>(),
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
-                expressionProcessorGenerator??Mock.Of<IExpressionProcessorGenerator>(),
-                Mock.Of<IQuestionnaireHelper>(),
+                expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
                 engineVersionService ?? Mock.Of<IDesignerEngineVersionService>(),
                 serializer??Mock.Of<ISerializer>(),
                 attachmentService: attachmentService ?? Mock.Of<IAttachmentService>());

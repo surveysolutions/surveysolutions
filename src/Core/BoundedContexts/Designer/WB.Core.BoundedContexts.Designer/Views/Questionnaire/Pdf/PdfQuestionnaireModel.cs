@@ -5,9 +5,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string GetGroupTitle(IGroup group) => group.Title;
 
-        public string GetGroupTitle(Guid groupId) => this.Find<Group>(groupId).Title;
+        public string GetGroupTitle(Guid groupId, bool removeHtmlTags = false) => removeHtmlTags ? this.Find<Group>(groupId).Title.RemoveHtmlTags() : this.Find<Group>(groupId).Title;
 
         public string GetStaticText(IStaticText staticText) => staticText.Text;
 

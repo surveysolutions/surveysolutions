@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.Roster(parentRosterId, variable: "parent", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, 
-                        fixedRosterTitles: new [] { Create.FixedRosterTitle(1, "Roster 1"), Create.FixedRosterTitle(2, "Roster 2") }, children: new IComposite[]
+                        fixedTitles: new [] { Create.FixedTitle(1, "Roster 1"), Create.FixedTitle(2, "Roster 2") }, children: new IComposite[]
                         {
                             Create.NumericIntegerQuestion(q1Id, variable: "q1"),
                             Create.Group(groupId, enablementCondition: "q1 == 1", children: new IComposite[]

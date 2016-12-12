@@ -28,8 +28,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         Create.Question(id: questionId, variable: "b", enablementCondition: "a > 0"),
                         Create.Group(variable: "i", enablementCondition: null),
                         Create.Group(id: groupId, variable: "groupConditional", enablementCondition: "a < 0"),
-                        Create.Roster(variable: "x", fixedTitles: new[] { "1", "2" }, enablementCondition: null),
-                        Create.Roster(id: rosterId, variable: "fixedConditional", fixedTitles: new[] { "1", "2" }, enablementCondition: "a == 0"),
+                        Create.Roster(variable: "x", obsoleteFixedTitles: new[] { "1", "2" }, enablementCondition: null),
+                        Create.Roster(id: rosterId, variable: "fixedConditional", obsoleteFixedTitles: new[] { "1", "2" }, enablementCondition: "a == 0"),
                     }),
                 });
 

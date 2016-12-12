@@ -10,6 +10,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -42,25 +43,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             ConditionExpression = "a>0",
                             StataExportCaption = "b"
                         }
-                    }
+                    }.ToReadOnlyCollection()
                 }
             });
 
-            var expressionProcessor = new Mock<IExpressionProcessor>();
-
-            expressionProcessor
-                .Setup(x => x.GetIdentifiersUsedInExpression("a>0"))
-                .Returns(new[] { "a" });
-
-            expressionProcessor
-                .Setup(x => x.GetIdentifiersUsedInExpression("b>0"))
-                .Returns(new[] { "b" });
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
+            verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_message_with_code__WB0056 = () =>
             verificationMessages.ShouldContainError("WB0056");

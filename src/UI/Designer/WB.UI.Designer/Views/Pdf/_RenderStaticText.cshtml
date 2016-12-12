@@ -40,7 +40,7 @@
                 }
             }
         </div>
-        <div id="@questionnaire.GetItemRef(staticText.PublicKey)" class="static_text">@questionnaire.GetStaticText(staticText)</div>
+        <div id="@questionnaire.GetItemRef(staticText.PublicKey)" class="static_text">@Html.Raw(questionnaire.GetStaticText(staticText))</div>
         @if (questionnaire.StaticTextHasAttachedImage(staticText))
         {
             <figure>

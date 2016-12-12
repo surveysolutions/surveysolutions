@@ -29,5 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public string CurrentTranslation { set; get; }
+
+        public bool IsAssignedToInterviewer { set; get; }
     }
 }

@@ -14,18 +14,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new Group()
+            questionnaire = CreateQuestionnaireDocument(
+                new Group()
             {
                 PublicKey = groupId,
                 IsRoster = true,
                 VariableName = "a",
                 RosterSizeSource = RosterSizeSourceType.Question,
                 RosterSizeQuestionId = rosterSizeQuestionId
-            });
-
-            questionnaire.Children.Add(new QRBarcodeQuestion()
+            },
+                new QRBarcodeQuestion()
             {
                 PublicKey = rosterSizeQuestionId,
                 StataExportCaption = "var"
@@ -35,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

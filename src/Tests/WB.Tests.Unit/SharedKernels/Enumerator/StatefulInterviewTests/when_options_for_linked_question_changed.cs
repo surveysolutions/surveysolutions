@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Linq;
 using Machine.Specifications;
-using NSubstitute;
+using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -26,9 +25,22 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                                          })
             };
 
-            IQuestionnaire questionnaire = Substitute.For<IQuestionnaire>();
-            questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
-                .Returns(linkSourceId);
+            var questionnaire =
+                Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Entity.FixedRoster(
+                        fixedTitles:
+                            new[]
+                            {
+                                new FixedRosterTitle(1, "first fixed roster"),
+                                new FixedRosterTitle(2, "second fixed roster")
+                            },
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion(linkSourceId)
+                        }),
+                    Create.Entity.MultyOptionsQuestion(linkedQuestionId, linkedToQuestionId: linkSourceId)
+                }));
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.Apply(Create.Event.TextQuestionAnswered(linkSourceId, Create.Entity.RosterVector(1), "one"));
@@ -39,8 +51,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         It should_calculate_state_of_options_for_linked_question = () =>
         {
-            var answers = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceId, linkedQuestionIdentity);
-            answers.Count().ShouldEqual(2);
+            interview.GetLinkedMultiOptionQuestion(linkedQuestionIdentity)
+                .Options.Count.ShouldEqual(2);
         };
 
         static StatefulInterview interview;

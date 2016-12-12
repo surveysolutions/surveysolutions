@@ -1,7 +1,8 @@
-﻿using System;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.Infrastructure.Implementation;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.Versions
 {
@@ -10,7 +11,7 @@ namespace WB.Tests.Integration.Versions
         Establish context = () =>
         {
             designerEngineVersionService = new DesignerEngineVersionService();
-            hqSupportedVersionProvider = new SupportedVersionProvider();
+            hqSupportedVersionProvider = new SupportedVersionProvider(new InMemoryPlainStorageAccessor<SupportedQuestionnaireVersion>());
         };
 
         Because of = () =>

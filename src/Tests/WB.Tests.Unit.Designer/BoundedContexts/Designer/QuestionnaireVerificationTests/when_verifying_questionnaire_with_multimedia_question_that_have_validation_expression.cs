@@ -16,9 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             var validationExpression = "some validation";
 
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new MultimediaQuestion()
+            questionnaire = CreateQuestionnaireDocument(new MultimediaQuestion()
             {
                 PublicKey = questionId,
                 StataExportCaption = "var",
@@ -30,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

@@ -20,5 +20,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsReceivedByInterviewer { get; set; }
         public bool WasCompleted { get; set; }
         public bool IsHardDeleted { get; set; }
+
+        private Guid? supervisorId;
+        public Guid? SupervisorId
+        {
+            get { return this.supervisorId; }
+            set { this.supervisorId = value.NullIfEmpty(); }
+        }
     }
 }

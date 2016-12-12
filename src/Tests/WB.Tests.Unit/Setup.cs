@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -15,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -92,18 +94,14 @@ namespace WB.Tests.Unit
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
-            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
-                questionnaireIdentity,
-                Create.Entity.PlainQuestionnaire(questionnaireDocument));
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire((IQuestionnaire) Create.Entity.PlainQuestionnaire(questionnaireDocument));
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
-            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
-                questionnaireIdentity,
-                Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
 
-        private static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
+
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire)
             => Stub<IQuestionnaireStorage>.Returning(questionnaire);
 
         private static IQuestionnaireStorage QuestionnaireRepository(QuestionnaireDocument questionnaireDocument)
@@ -243,8 +241,8 @@ namespace WB.Tests.Unit
             };
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int>())).Returns(options);
-            filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>()));
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>())).Returns(options);
+            filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
 
             return filteredOptionsViewModel.Object;
         }
@@ -266,6 +264,38 @@ namespace WB.Tests.Unit
                 interviewStore: new TestInMemoryWriter<InterviewData>(interviewId.FormatGuid(), interviewData),
                 eventSourcedRepository: Stub<IEventSourcedAggregateRootRepository>.Returning<IEventSourcedAggregateRoot>(interview),
                 merger: Stub<IInterviewDataAndQuestionnaireMerger>.Returning(interviewDetailsView));
+        }
+
+        internal static void ApplyInterviewEventsToViewModels(IEventSourcedAggregateRoot interview, ILiteEventRegistry eventRegistry, Guid interviewId)
+        {
+            foreach (var evnt in interview.GetUnCommittedChanges().Select(x => Create.Other.CommittedEvent(x, interviewId)))
+            {
+                foreach (var handler in eventRegistry.GetHandlers(evnt))
+                {
+                    handler.Invoke(evnt);
+                }
+            }
+        }
+
+        internal static StatefulInterview StatefulInterviewWithMultilanguageQuestionnaires(params KeyValuePair<string, IComposite[]>[] questionnaires)
+        {
+            var chapterId = Guid.Parse("33333333333333333333333333333333");
+
+            var questionnaireDocuments = new List<KeyValuePair<string, QuestionnaireDocument>>();
+            foreach (var questionnaire in questionnaires)
+            {
+                var questionnaireDocumentWithOneChapterAndLanguages = Create.Entity.QuestionnaireDocumentWithOneChapterAndLanguages(
+                        chapterId,
+                        questionnaires.Select(x => x.Key).Where(x => x != null).ToArray(),
+                        questionnaire.Value);
+
+                questionnaireDocuments.Add(new KeyValuePair<string, QuestionnaireDocument>(questionnaire.Key,
+                    questionnaireDocumentWithOneChapterAndLanguages));
+            }
+
+            var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
+
+            return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
         }
     }
 }

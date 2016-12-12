@@ -24,8 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void ThrowIfOtherInterviewerIsResponsible(Guid userId)
         {
-            if (this.InterviewProperties.InterviewerId.HasValue &&
-                userId != this.InterviewProperties.InterviewerId.Value)
+            if (userId != this.InterviewProperties.InterviewerId)
                 throw new InterviewException(
                     $"Interviewer with id {userId.FormatGuid()} is not responsible for the interview anymore, interviewer with id {this.InterviewProperties.InterviewerId} is.",
                     InterviewDomainExceptionType.OtherUserIsResponsible);

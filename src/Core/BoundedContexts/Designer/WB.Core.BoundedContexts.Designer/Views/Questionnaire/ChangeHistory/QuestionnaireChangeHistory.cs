@@ -11,7 +11,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             string title,
             List<QuestionnaireChangeHistoricalRecord> changeHistory, 
             int pageIndex, 
-            int totalCount, int pageSize)
+            int totalCount, 
+            int pageSize)
         {
             Id = id;
             Title = title;
@@ -27,5 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public int PageIndex { get; private set; }
         public int PageSize { get; private set; }
         public int TotalCount { get; private set; }
+        public bool ReadonlyMode { get; set; }
     }
 }

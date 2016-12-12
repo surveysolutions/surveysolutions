@@ -4,32 +4,31 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
 {
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires;
         private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly IAttachmentService attachmentService;
         private readonly IMembershipUserService membershipUserService;
 
         public QuestionnaireInfoViewFactory(
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires,
             IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IAttachmentService attachmentService,
             IMembershipUserService membershipUserService)
         {
-            this.sharedPersonsStorage = sharedPersonsStorage;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
+            this.questionnaires = questionnaires;
             this.accountsStorage = accountsStorage;
             this.attachmentService = attachmentService;
             this.membershipUserService = membershipUserService;
@@ -39,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         {
             QuestionnaireDocument questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
 
-            var questionnaireInfoView = new QuestionnaireInfoView()
+            var questionnaireInfoView = new QuestionnaireInfoView
             {
                 QuestionnaireId = questionnaireId,
                 Title = questionnaireDocument.Title,
@@ -84,26 +83,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.GroupsCount = groupsCount;
             questionnaireInfoView.RostersCount = rostersCount;
 
-            var sharedPersons = this.sharedPersonsStorage.GetById(questionnaireId)?.SharedPersons ?? new List<SharedPerson>();
+            var listItem = this.questionnaires.GetById(questionnaireId);
+            var sharedPersons = listItem.SharedPersons;
             
             if (questionnaireDocument.CreatedBy.HasValue &&
-                sharedPersons.All(x => x.Id != questionnaireDocument.CreatedBy))
+                sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
                 var owner = this.accountsStorage.GetById(questionnaireDocument.CreatedBy.Value.FormatGuid());
                 if (owner != null)
                 {
-                    sharedPersons.Insert(0, new SharedPerson
+                    sharedPersons.Add(new SharedPerson
                     {
                         Email = owner.Email,
-                        Id = questionnaireDocument.CreatedBy.Value,
+                        UserId = questionnaireDocument.CreatedBy.Value,
                         IsOwner = true
                     });
                 }
             }
 
-            var person = sharedPersons.FirstOrDefault(sharedPerson => sharedPerson.Id == viewerId);
+            var person = sharedPersons.FirstOrDefault(sharedPerson => sharedPerson.UserId == viewerId);
 
-            questionnaireInfoView.SharedPersons = sharedPersons;
+            questionnaireInfoView.SharedPersons = sharedPersons.ToList();
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
             questionnaireInfoView.HasViewerAdminRights = this.membershipUserService.WebUser.IsAdmin;
 

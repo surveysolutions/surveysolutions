@@ -10,6 +10,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -54,9 +55,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                                     QuestionType = QuestionType.Numeric,
                                     StataExportCaption = "q1"
                                 }
-                            }
+                            }.ToReadOnlyCollection()
                         }
-                    }
+                    }.ToReadOnlyCollection()
                 });
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();

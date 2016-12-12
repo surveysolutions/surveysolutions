@@ -15,9 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             multiQuestionId = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(
+            questionnaire = CreateQuestionnaireDocument(
                 new MultyOptionsQuestion
                 {
                     PublicKey = multiQuestionId,
@@ -30,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_not_return_error_with_code__WB0072__and__WB0073 = () =>
             verificationMessages.Select(x => x.Code).ShouldNotContain("WB0072", "WB0073");

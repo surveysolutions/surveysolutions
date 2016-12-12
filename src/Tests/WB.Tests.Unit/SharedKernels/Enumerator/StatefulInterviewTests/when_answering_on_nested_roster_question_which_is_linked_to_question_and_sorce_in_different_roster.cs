@@ -4,7 +4,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId),
                     Create.Entity.Roster(rosterId: rosterId, rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
                     {
-                        Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1m, 2m}),
+                        Create.Entity.MultipleOptionsQuestion(questionId: nestedRosterSizeQuestionId, answers: new [] {1, 2}),
                         Create.Entity.SingleQuestion(id: linkedSingleQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId),
                         Create.Entity.MultyOptionsQuestion(id: linkedMultiQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId)
                     }),
@@ -51,23 +51,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: plainQuestionnaire);
             interview.AnswerNumericIntegerQuestion(interviewerId, rosterSizeQuestionId, RosterVector.Empty, DateTime.UtcNow, 2);
-            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, new[] { 1m });
+            interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, new[] { 1 });
         };
 
         Because of = () => interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionIdentity.Id,
             sourceOfLinkedQuestionIdentity.RosterVector, DateTime.UtcNow, expectedLinkedOptionText);
 
-        It should_linked_single_question_has_1_option = () => ((TextAnswer)interview.FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId,
-            linkedSingleQuestionIdentity).First()).Answer.ShouldEqual(expectedLinkedOptionText);
+        It should_linked_single_question_has_1_option = () =>
+        {
+            interview.GetLinkedSingleOptionQuestion(linkedSingleQuestionIdentity)
+                .Options.ShouldContainOnly(Create.Entity.RosterVector(0, 1));
+        };
 
-        It should_linked_multi_question_has_1_option = () => ((TextAnswer)interview.FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkedQuestionId,
-            linkedMultiQuestionIdentity).First()).Answer.ShouldEqual(expectedLinkedOptionText);
-
-        It should_set_empty_options_set_for_linked_question_from_unanswered_branch = () =>
-            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(
-                sourceOfLinkedQuestionId,
-                Create.Entity.Identity(linkedSingleQuestionIdentity.Id, Create.Entity.RosterVector(1)))
-                .ShouldBeEmpty();
+        It should_linked_multi_question_has_1_option = () =>
+        {
+            interview.GetLinkedMultiOptionQuestion(linkedMultiQuestionIdentity)
+                .Options.ShouldContainOnly(Create.Entity.RosterVector(0, 1));
+        };
 
         static StatefulInterview interview;
         static Identity linkedSingleQuestionIdentity;

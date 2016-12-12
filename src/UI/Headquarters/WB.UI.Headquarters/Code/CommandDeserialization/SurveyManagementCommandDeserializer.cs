@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization
                         // statuses
                         { "ApproveInterviewCommand", typeof (ApproveInterviewCommand ) },
                         { "RejectInterviewCommand", typeof ( RejectInterviewCommand) },
+                        { "RejectInterviewToInterviewerCommand", typeof ( RejectInterviewToInterviewerCommand) },
 
                         { "HqApproveInterviewCommand", typeof (HqApproveInterviewCommand ) },
                         { "HqRejectInterviewCommand", typeof ( HqRejectInterviewCommand) },

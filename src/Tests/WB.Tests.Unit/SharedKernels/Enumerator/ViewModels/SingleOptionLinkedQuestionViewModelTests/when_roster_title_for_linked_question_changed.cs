@@ -4,12 +4,14 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Nito.AsyncEx.Synchronous;
+using Moq;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
@@ -23,6 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             var linkedQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             topRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             var questionIdentity = Create.Entity.Identity(linkedQuestionId, RosterVector.Empty);
+            var sourceIdentity = Create.Entity.Identity(linkToQuestionId, Create.Entity.RosterVector(1));
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextListQuestion(questionId: level1TriggerId),
@@ -34,20 +37,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                         Create.Entity.TextQuestion(questionId: linkToQuestionId)
                     })
                 }),
-                Create.Entity.SingleOptionQuestion(questionId: linkedQuestionId, linkedToQuestionId: linkToQuestionId)
-                );
+                Create.Entity.SingleOptionQuestion(questionId: linkedQuestionId, linkedToQuestionId: linkToQuestionId));
 
+            var newAnswer = Mock.Of<InterviewTreeSingleLinkedToRosterQuestion>(_
+                => _.IsAnswered == false
+                   && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1) });
             var interview = Substitute.For<IStatefulInterview>();
-            interview.GetParentRosterTitlesWithoutLast(linkToQuestionId, Create.Entity.RosterVector(1, 1))
-                .Returns(new List<string> {"title"});
-            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkToQuestionId, questionIdentity)
-                .Returns(new [] { Create.Entity.TextAnswer("subtitle", linkToQuestionId, Create.Entity.RosterVector(1, 1))});
+
+            interview.GetLinkedSingleOptionQuestion(questionIdentity).Returns(newAnswer);
+            interview.GetAnswerAsString(sourceIdentity).Returns("subtitle");
+            interview.GetLinkedOptionTitle(questionIdentity, Create.Entity.RosterVector(1)).Returns("title: subtitle");
 
             viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
             viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.Other.NavigationState());
         };
 
-        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
+        Because of = () => 
+            viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
 
         It should_refresh_list_of_options = () => viewModel.Options.Count.ShouldEqual(1);
 

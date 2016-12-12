@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
-using WB.Core.SharedKernels.Enumerator.Events;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -19,18 +19,41 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                => _.GetAnswerType(integerQuestionId) == AnswerType.Integer
-                && _.GetAnswerType(decimalQuestionId) == AnswerType.Decimal
-                && _.GetAnswerType(dateTimeQuestionId) == AnswerType.DateTime
-                && _.GetAnswerType(multiOptionQuestionId) == AnswerType.OptionCodeArray
-                && _.GetAnswerType(linkedMultiOptionQuestionId) == AnswerType.RosterVectorArray
-                && _.GetAnswerType(singleOptionQuestionId) == AnswerType.OptionCode
-                && _.GetAnswerType(linkedSingleOptionQuestionId) == AnswerType.RosterVector
-                && _.GetAnswerType(listQuestionId) == AnswerType.DecimalAndStringArray
-                && _.GetAnswerType(textQuestionId) == AnswerType.String
-                && _.GetAnswerType(gpsQestionId) == AnswerType.GpsData
-                && _.GetAnswerType(multimediaQuestionId) == AnswerType.FileName);
+            var fixedRosterIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"),
+                Create.Entity.RosterVector(1));
+            var fixedNestedRosterIdentity = Identity.Create(Guid.Parse("22222222222222222222222222222222"), rosterVector);
+            var fixedNestedNestedRosterIdentity = Identity.Create(Guid.Parse("33333333333333333333333333333333"),
+                Create.Entity.RosterVector(1, 0, 3));
+
+            IQuestionnaireStorage questionnaireRepository =
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                    questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                    {
+                        Create.Entity.FixedRoster(fixedRosterIdentity.Id, fixedTitles: new[] {new FixedRosterTitle(1, "fixed")},
+                            children: new[]
+                            {
+                                Create.Entity.FixedRoster(fixedNestedRosterIdentity.Id, fixedTitles: new[] {new FixedRosterTitle(0, "fixed 2")},
+                                    children: new IComposite[]
+                                    {
+                                        Create.Entity.NumericIntegerQuestion(integerQuestionId),
+                                        Create.Entity.NumericRealQuestion(decimalQuestionId),
+                                        Create.Entity.DateTimeQuestion(dateTimeQuestionId),
+                                        Create.Entity.MultyOptionsQuestion(multiOptionQuestionId),
+                                        Create.Entity.TextListQuestion(listQuestionId),
+                                        Create.Entity.TextQuestion(textQuestionId),
+                                        Create.Entity.GpsCoordinateQuestion(gpsQestionId),
+                                        Create.Entity.MultimediaQuestion(multimediaQuestionId),
+                                        Create.Entity.SingleOptionQuestion(singleOptionQuestionId),
+                                        Create.Entity.MultyOptionsQuestion(linkedMultiOptionQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId),
+                                        Create.Entity.SingleOptionQuestion(linkedSingleOptionQuestionId, linkedToQuestionId: sourceOfLinkedQuestionId),
+                                        Create.Entity.FixedRoster(fixedNestedNestedRosterIdentity.Id, fixedTitles: new[] {new FixedRosterTitle(3, "fixed 3")},
+                                            children: new[]
+                                            {
+                                                Create.Entity.TextQuestion(sourceOfLinkedQuestionId)
+                                            })
+                                    })
+                            })
+                    }));
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
@@ -49,7 +72,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 CreateAnsweredQuestionSynchronizationDto(multimediaQuestionId, rosterVector, multimediaAnswer),
             };
 
-            synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: answersDtos);
+            var rosterInstances = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
+            {
+                {
+                    Create.Entity.InterviewItemId(fixedRosterIdentity.Id, fixedRosterIdentity.RosterVector),
+                    new[] {Create.Entity.RosterSynchronizationDto(fixedRosterIdentity.Id, fixedRosterIdentity.RosterVector.Shrink(), fixedRosterIdentity.RosterVector.Last())}
+                },
+                {
+                    Create.Entity.InterviewItemId(fixedNestedRosterIdentity.Id, fixedNestedRosterIdentity.RosterVector),
+                    new[] {Create.Entity.RosterSynchronizationDto(fixedNestedRosterIdentity.Id, fixedNestedRosterIdentity.RosterVector.Shrink(), fixedNestedRosterIdentity.RosterVector.Last())}
+                },
+                {
+                    Create.Entity.InterviewItemId(fixedNestedNestedRosterIdentity.Id, fixedRosterIdentity.RosterVector),
+                    new[] {Create.Entity.RosterSynchronizationDto(fixedNestedNestedRosterIdentity.Id, fixedNestedNestedRosterIdentity.RosterVector.Shrink(), fixedNestedNestedRosterIdentity.RosterVector.Last())}
+                }
+            };
+            synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId,
+                userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
 
             eventContext = new EventContext();
         };
@@ -60,115 +99,94 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             eventContext = null;
         };
 
-        Because of = () =>
-             interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
+        Because of = () => interview.RestoreInterviewStateFromSyncPackage(userId, synchronizationDto);
 
         It should_rise_InterviewSynchronized_event = () =>
              eventContext.ShouldContainEvent<InterviewSynchronized>(x => x.InterviewData == synchronizationDto);
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_correct_userId = () =>
-             eventContext.ShouldContainEvent<InterviewAnswersFromSyncPackageRestored>(x => x.UserId == userId);
-
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_integerQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(integerQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.Integer);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(integerAnswer);
+            interview.GetIntegerQuestion(Identity.Create(integerQuestionId, rosterVector))
+                .GetAnswer()
+                .Value.ShouldEqual(integerAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_decimalQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(decimalQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.Decimal);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(decimalAnswer);
+            interview.GetDoubleQuestion(Identity.Create(decimalQuestionId, rosterVector))
+                .GetAnswer()
+                .Value.ShouldEqual(decimalAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_dateTimeQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(dateTimeQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.DateTime);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(dateTimeAnswer);
+            interview.GetDateTimeQuestion(Identity.Create(dateTimeQuestionId, rosterVector))
+                .GetAnswer()
+                .Value.ShouldEqual(dateTimeAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_singleOptionQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(singleOptionQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.OptionCode);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(singleOptionAnswer);
+            interview.GetSingleOptionQuestion(Identity.Create(singleOptionQuestionId, rosterVector))
+                .GetAnswer()
+                .SelectedValue.ShouldEqual(singleOptionAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedSingleOptionQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(linkedSingleOptionQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.RosterVector);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(linkedSingleAnswer);
+            interview.GetLinkedSingleOptionQuestion(Identity.Create(linkedSingleOptionQuestionId, rosterVector))
+                .GetAnswer()
+                .SelectedValue.ShouldEqual(linkedSingleAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multiOptionQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(multiOptionQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.OptionCodeArray);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(multiOptionAnswer);
+            interview.GetMultiOptionQuestion(Identity.Create(multiOptionQuestionId, rosterVector))
+                .GetAnswer()
+                .ToDecimals().ShouldEqual(multiOptionAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedMultiOptionQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(linkedMultiOptionQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.RosterVectorArray);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(linkedMultiAnswer);
+            interview.GetLinkedMultiOptionQuestion(Identity.Create(linkedMultiOptionQuestionId, rosterVector))
+                .GetAnswer().CheckedValues.ShouldEqual(linkedMultiAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_listQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(listQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.DecimalAndStringArray);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(listAnswer);
+            interview.GetTextListQuestion(Identity.Create(listQuestionId, rosterVector))
+                .GetAnswer()
+                .ToTupleArray().ShouldEqual(listAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_textQuestion = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(textQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.String);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(textAnswer);
+            interview.GetTextQuestion(Identity.Create(textQuestionId, rosterVector))
+                .GetAnswer()
+                .Value.ShouldEqual(textAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_gpsQestionId = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(gpsQestionId);
-            answerDto.Type.ShouldEqual(AnswerType.GpsData);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(gpsAnswer);
+            interview.GetGpsQuestion(Identity.Create(gpsQestionId, rosterVector))
+                .GetAnswer()
+                .Value.ShouldEqual(gpsAnswer);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multimediaQuestionId = () =>
         {
-            var answerDto = GetAnswerDtoFromEvent(multimediaQuestionId);
-            answerDto.Type.ShouldEqual(AnswerType.FileName);
-            answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(multimediaAnswer);
+            interview.GetMultimediaQuestion(Identity.Create(multimediaQuestionId, rosterVector))
+                .GetAnswer()
+                .FileName.ShouldEqual(multimediaAnswer);
         };
 
-        static InterviewAnswerDto GetAnswerDtoFromEvent(Guid questionId)
-        {
-            return eventContext.GetSingleEvent<InterviewAnswersFromSyncPackageRestored>().Answers.Single(x => x.Id == questionId);
-        }
-
         static readonly object integerAnswer = 1;
-        static readonly object decimalAnswer = 6.44455m;
+        static readonly object decimalAnswer = 6.44455;
         static readonly object dateTimeAnswer = DateTime.Now;
-        static readonly object singleOptionAnswer = 2m;
-        static readonly object linkedSingleAnswer = new []{ 0m, 2m};
+        static readonly int singleOptionAnswer = 2;
+        static readonly object linkedSingleAnswer = Create.Entity.RosterVector(0,2);
         static readonly object multiOptionAnswer = new[] { 1m };
-        static readonly object linkedMultiAnswer = new[] { new[] { 1m }, new[] { 2m } };
+        static readonly object linkedMultiAnswer = new [] { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2) };
         static readonly object listAnswer = new []{ new Tuple<decimal, string>(2,"Hello") };
         static readonly object textAnswer = "hello";
         static readonly object gpsAnswer = new GeoPosition(1, 2, 3, 4, DateTime.Now);
@@ -187,6 +205,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static readonly Guid textQuestionId = Guid.Parse("00000000000000000000000000000009");
         private static readonly Guid gpsQestionId = Guid.Parse("00000000000000000000000000000010");
         private static readonly Guid multimediaQuestionId = Guid.Parse("00000000000000000000000000000011");
+        private static readonly Guid sourceOfLinkedQuestionId = Guid.Parse("00000000000000000000000000000012");
         private static readonly decimal[] rosterVector = new decimal[] { 1m, 0m };
         private static readonly Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");

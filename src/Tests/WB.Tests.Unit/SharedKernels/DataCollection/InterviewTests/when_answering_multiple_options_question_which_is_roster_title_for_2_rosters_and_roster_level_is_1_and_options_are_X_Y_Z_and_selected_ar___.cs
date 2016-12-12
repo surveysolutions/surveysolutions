@@ -26,8 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             rosterBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             optionX = 1;
-            var optionY = (decimal) -2;
-            optionZ = (decimal) 3.2;
+            optionY = -2;
+            optionZ = 2;
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
@@ -92,9 +92,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static decimal[] rosterVector;
         private static Guid rosterAId;
         private static Guid rosterBId;
-        private static decimal optionX;
-        private static decimal optionZ;
+        private static int optionX;
+        private static int optionY;
+        private static int optionZ;
         private static Guid numericId = Guid.Parse("22222222222222222222222222222222");
-        
     }
 }

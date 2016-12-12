@@ -16,16 +16,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             supervisorTextListquestionId = Guid.Parse("10000000000000000000000000000000");
             textQuestionId = Guid.Parse("20000000000000000000000000000000"); 
-            questionnaire = CreateQuestionnaireDocument();
-
-            questionnaire.Children.Add(new TextListQuestion()
+            questionnaire = CreateQuestionnaireDocument(
+                new TextListQuestion()
             {
                 PublicKey = supervisorTextListquestionId,
                 StataExportCaption = "var1",
                 QuestionScope = QuestionScope.Supervisor
-            });
-
-            questionnaire.Children.Add(new TextListQuestion()
+            },
+                new TextListQuestion()
             {
                 StataExportCaption = "var2",
                 PublicKey = textQuestionId
@@ -35,7 +33,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

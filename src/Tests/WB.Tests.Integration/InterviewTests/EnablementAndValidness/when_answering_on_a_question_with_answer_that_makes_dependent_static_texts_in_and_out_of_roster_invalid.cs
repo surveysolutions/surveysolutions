@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Create.StaticText(dependentStaticTextOutsideRosterId,
                     validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable()),
 
-                Create.Roster(fixedRosterTitles: new [] { Create.FixedRosterTitle(1, "one") }, children: new IComposite[]
+                Create.Roster(fixedTitles: new [] { Create.FixedTitle(1, "one") }, children: new IComposite[]
                 {
                     Create.StaticText(dependentStaticTextInsideRosterId,
                         validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable()),

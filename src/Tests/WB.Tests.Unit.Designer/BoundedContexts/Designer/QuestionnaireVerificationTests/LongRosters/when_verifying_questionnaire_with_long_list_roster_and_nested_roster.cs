@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 Create.Chapter(children: new IComposite[]
                 {
                     Create.TextListQuestion(questionId, maxAnswerCount: 80),
-                    Create.Roster(rosterId, rosterSizeQuestionId: questionId, rosterSizeSourceType: RosterSizeSourceType.Question, children: new []
+                    Create.Roster(rosterId, rosterSizeQuestionId: questionId, rosterType: RosterSizeSourceType.Question, children: new []
                     {
-                        Create.Roster(roster2Id, rosterSizeQuestionId: questionId, rosterSizeSourceType: RosterSizeSourceType.Question)
+                        Create.Roster(roster2Id, rosterSizeQuestionId: questionId, rosterType: RosterSizeSourceType.Question)
                     })
                 })
             });
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_contain_error_WB0080 = () =>
             verificationMessages.ShouldContainError("WB0080");

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
 
         Because of = () =>
                 questionnaire.AddVariableAndMoveIfNeeded(
-                    new AddVariable(questionnaire.Id, entityId, new VariableData(variableType, variableName, variableExpression), responsibleId, chapterId, index));
+                    new AddVariable(questionnaire.Id, entityId, new VariableData(variableType, variableName, variableExpression, description), responsibleId, chapterId, index));
 
 
         It should_contains_Variable_with_EntityId_specified = () =>
@@ -36,6 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
         It should_contains_Variable_with_type_specified = () =>
             questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Type.ShouldEqual(variableType);
 
+        It should_change_variable_description = () =>
+          questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Label.ShouldEqual(description);
 
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
@@ -43,6 +45,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "name";
         private static string variableExpression = "expression";
+        private static string description = "description";
         private static VariableType variableType = VariableType.Double;
         private static int index = 5;
     }

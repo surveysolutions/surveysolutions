@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
@@ -37,7 +36,7 @@ namespace WB.Tests.Unit
                 {
                     PublicKey = groupId
                 };
-            document.Children.Add(@group);
+            document.Add(@group, null);
             return group;
         }
 
@@ -93,7 +92,7 @@ namespace WB.Tests.Unit
             question.ValidationExpression = string.Empty;
             question.ValidationMessage = string.Empty;
 
-            @group.Children.Add(question);
+            @group.Insert(Int32.MaxValue, question, null);
             return question;
         }
     }

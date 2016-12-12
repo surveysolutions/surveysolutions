@@ -50,7 +50,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
         }
 
-        public MvxDynamicImageHelper<Bitmap> Image { get { return this.imageHelper; } }
+        public MvxDynamicImageHelper<Bitmap> Image => this.imageHelper;
 
         private void ImageHelperOnImageChanged(object sender, MvxValueEventArgs<Bitmap> mvxValueEventArgs)
         {

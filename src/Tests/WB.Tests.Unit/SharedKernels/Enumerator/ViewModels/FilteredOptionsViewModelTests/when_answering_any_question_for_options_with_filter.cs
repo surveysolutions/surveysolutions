@@ -32,15 +32,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
                 new CategoricalOption() {Title = "a", Value = 1},
                 new CategoricalOption() {Title = "b", Value = 2},
                 new CategoricalOption() {Title = "c", Value = 3},
-            };
+            }.ToList();
             filteredOptions = new[]
             {
                 new CategoricalOption() {Title = "b", Value = 2}, 
                 new CategoricalOption() {Title = "c", Value = 3},
-            };
+            }.ToList();
             interview = Mock.Of<IStatefulInterview>(x =>
-                x.GetFilteredOptionsForQuestion(questionId, null, string.Empty) == options
-                && x.GetFilteredOptionsForQuestion(questionId, null, "a") == filteredOptions);
+                x.GetTopFilteredOptionsForQuestion(questionId, null, string.Empty, 200) == options
+                && x.GetTopFilteredOptionsForQuestion(questionId, null, "a", 200) == filteredOptions);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
             viewModel = CreateViewModel(questionnaireRepository: questionnaireStorage.Object, 
                 interviewRepository: interviewRepository.Object,
                 answerNotifier:  answerNotifier.Object);
-            viewModel.Init(interviewId, questionId);
+            viewModel.Init(interviewId, questionId, 200);
         };
 
         Because of = () => resultOptions = viewModel.GetOptions("a");
@@ -76,17 +76,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
 
         It should_get_twice_list_of_options = () =>
         {
-            Mock.Get(interview).Verify(x => x.GetFilteredOptionsForQuestion(questionId, null, String.Empty), Times.Once);
-            Mock.Get(interview).Verify(x => x.GetFilteredOptionsForQuestion(questionId, null, "a"), Times.Once);
+            Mock.Get(interview).Verify(x => x.GetTopFilteredOptionsForQuestion(questionId, null, String.Empty,200), Times.Once);
+            Mock.Get(interview).Verify(x => x.GetTopFilteredOptionsForQuestion(questionId, null, "a", 200), Times.Once);
         };
 
         static FilteredOptionsViewModel viewModel;
         static string interviewId;
         static Identity questionId;
         private static Guid questionGuid;
-        private static IEnumerable<CategoricalOption> options;
-        private static IEnumerable<CategoricalOption> resultOptions;
-        private static IEnumerable<CategoricalOption> filteredOptions;
+        private static List<CategoricalOption> options;
+        private static List<CategoricalOption> resultOptions;
+        private static List<CategoricalOption> filteredOptions;
         private static Mock<AnswerNotifier> answerNotifier;
         private static IStatefulInterview interview;
     }

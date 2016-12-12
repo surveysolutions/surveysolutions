@@ -9,6 +9,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewQuestionView : InterviewEntityView
     {
+
+        public InterviewQuestionView()
+        {
+            this.Options = new List<QuestionOptionView>();
+            this.FailedValidationMessages = new List<ValidationCondition>();
+            this.Comments = new List<InterviewQuestionCommentView>();
+        }
+
         public List<ValidationCondition> FailedValidationMessages { get; set; }
 
         public string AnswerString { get; set; }
@@ -41,6 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public object Answer { get; set; }
 
         public dynamic Settings { get; set; }
+        public Guid? LinkedToQuestionId { get; set; }
+        public Guid? LinkedToRosterId { get; set; }
     }
 
     public class TextQuestionSettings
@@ -67,7 +77,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public int? MaxAllowedAnswers { get; set; }
 
-        public bool IsLinked { get; set; }
+        public bool IsLinkedToRoster { get; set; }
+
+        public bool IsLinkedToListQuestion { get; set; }
     }
 
     public class SingleQuestionSettings
@@ -76,7 +88,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public bool IsCascade { get; set; }
 
-        public bool IsLinked { get; set; }
+        public bool IsLinkedToRoster { get; set; }
+
+        public bool IsLinkedToListQuestion { get; set; }
     }
 
     public class InterviewQuestionCommentView

@@ -6,8 +6,9 @@ using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -22,10 +23,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
     {
         Establish context = () =>
         {
-            var textListAnswer = Mock.Of<TextListAnswer>(_ => _.IsAnswered == false);
+            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.IsAnswered == false);
 
             var interview = Mock.Of<IStatefulInterview>(_ => _.QuestionnaireId == questionnaireId
-                && _.GetTextListAnswer(questionIdentity) == textListAnswer);
+                && _.GetTextListQuestion(questionIdentity) == textListAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 

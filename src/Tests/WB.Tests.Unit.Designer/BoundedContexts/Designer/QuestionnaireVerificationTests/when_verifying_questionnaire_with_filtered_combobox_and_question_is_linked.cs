@@ -16,10 +16,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group("Group")
-            {
-                Children = new List<IComposite>()
-                {
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                     Create.FixedRoster(variable: "varRoster",
                         fixedTitles: new[] {"fixed title", "fixed title 2"},
                         children: new IComposite[]
@@ -44,15 +41,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                 new Answer() {AnswerValue = "2", AnswerText = "text 2"}
                             },
                         LinkedToQuestionId = linkedQuestionId
-                    }
-                }
-            });
+                    });
 
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () => 
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

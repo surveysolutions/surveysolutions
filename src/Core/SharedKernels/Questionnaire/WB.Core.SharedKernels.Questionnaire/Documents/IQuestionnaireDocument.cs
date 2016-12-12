@@ -19,10 +19,6 @@ namespace Main.Core.Documents
 
         bool IsPublic { get; set; }
 
-        bool UsesCSharp { get; set; }
-
-        void Add(IComposite c, Guid? parentKey, Guid? parentPropagationKey);
-
-        void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey);
+        void Add(IComposite c, Guid? parentKey);
     }
 }

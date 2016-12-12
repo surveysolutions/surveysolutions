@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
@@ -42,7 +41,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<InterviewOnClientCreated>,
                                          ILitePublishedEventHandler<AnswerRemoved>,
 
-                                         ILitePublishedEventHandler<TranslationSwitched>
+                                         ILitePublishedEventHandler<TranslationSwitched>,
+                                         ILitePublishedEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+                                         ILitePublishedEventHandler<SingleOptionLinkedQuestionAnswered>
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
@@ -122,18 +123,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
             var prefilledQuestions = new List<PrefilledQuestionView>();
-            var featuredQuestions = questionnaireDocumentView.Find<IQuestion>(q => q.Featured).ToList();
+            var featuredQuestions = questionnaireDocumentView.Children
+                                                             .TreeToEnumerableDepthFirst(x => x.Children)
+                                                             .OfType<IQuestion>()
+                                                             .Where(q => q.Featured).ToList();
 
             InterviewGpsCoordinatesView gpsCoordinates = null;
             Guid? prefilledGpsQuestionId = null;
 
+            int prefilledQuestionSortIndex = 0;
             foreach (var featuredQuestion in featuredQuestions)
             {
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
 
                 if (featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
                 {
-                    prefilledQuestions.Add(this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewView.Language, interviewId));
+                    var answerOnPrefilledQuestion = this.GetAnswerOnPrefilledQuestion(featuredQuestion.PublicKey, questionnaire, item?.Answer, interviewId);
+                    answerOnPrefilledQuestion.SortIndex = prefilledQuestionSortIndex;
+                    prefilledQuestionSortIndex++;
+                    prefilledQuestions.Add(answerOnPrefilledQuestion);
                 }
                 else
                 {
@@ -189,7 +197,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             return null;
         }
 
-        private PrefilledQuestionView GetAnswerOnPrefilledQuestion(Guid prefilledQuestion, IQuestionnaire questionnaire, object answer, string language, Guid interviewId)
+        private PrefilledQuestionView GetAnswerOnPrefilledQuestion(Guid prefilledQuestion, IQuestionnaire questionnaire, object answer, Guid interviewId)
         {
             Func<decimal, string> getCategoricalOptionText = null;
 
@@ -349,7 +357,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 if (gpsCoordinates == null)
                 {
-                    interviewView.LocationQuestionId = null;
                     interviewView.LocationLongitude = interviewView.LocationLatitude = null;
                 }
                 else
@@ -360,7 +367,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             else
             {
-                var newPrefilledQuestionToStore = this.GetAnswerOnPrefilledQuestion(questionId, questionnaire, answer, interviewView.Language, interviewId);
+                var newPrefilledQuestionToStore = this.GetAnswerOnPrefilledQuestion(questionId, questionnaire, answer, interviewId);
 
                 var interviewPrefilledQuestion = this.prefilledQuestions.Where(question => question.QuestionId == questionId && question.InterviewId == interviewId).FirstOrDefault()
                        ?? newPrefilledQuestionToStore;
@@ -431,6 +438,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Handle(IPublishedEvent<PictureQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PictureFileName, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVectors, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVector, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)

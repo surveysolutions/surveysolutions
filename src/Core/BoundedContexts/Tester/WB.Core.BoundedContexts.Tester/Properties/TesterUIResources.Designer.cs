@@ -287,6 +287,33 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show variables.
+        /// </summary>
+        public static string Prefs_ShowVariables {
+            get {
+                return ResourceManager.GetString("Prefs_ShowVariables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variables are shown in the interview with value and description.
+        /// </summary>
+        public static string Prefs_ShowVariablesSummary_Checked {
+            get {
+                return ResourceManager.GetString("Prefs_ShowVariablesSummary_Checked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variables are hidden.
+        /// </summary>
+        public static string Prefs_ShowVariablesSummary_UnChecked {
+            get {
+                return ResourceManager.GetString("Prefs_ShowVariablesSummary_UnChecked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version: {0}.
         /// </summary>
         public static string Prefs_VersionSummaryFormat {

@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
 namespace WB.UI.Headquarters.API
 {
-    [ApiBasicAuth(new[] { UserRoles.ApiUser }, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
     [RoutePrefix(@"api/v1/export")]
     public class ExportController : ApiController
     {

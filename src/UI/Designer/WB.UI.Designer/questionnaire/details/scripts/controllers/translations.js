@@ -5,7 +5,7 @@
 
             $scope.downloadBaseUrl = '../../translations';
             $scope.isReadOnlyForUser = false;
-            
+
 
             var hideTranslationsPane = 'ctrl+shift+t';
 
@@ -20,7 +20,6 @@
 
             $scope.translations = [];
 
-            
             var dataBind = function (translation, translationDto) {
                 translation.initialTranslation = angular.copy(translationDto);
 
@@ -60,7 +59,7 @@
                 });
             };
 
-            
+
             $scope.isFolded = false;
 
             $scope.unfold = function () {
@@ -114,14 +113,16 @@
 
                 var fileNameLength = translation.name.length;
                 translation.name = translation.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
+                translation.oldTranslationId = translation.translationId;
+                translation.translationId = utilityService.guid();
 
                 if (!_.isUndefined(translation.form)) {
                     translation.form.$setDirty();
                 }
 
                 if (!_.isUndefined(callback)) {
-                            callback();
-                        }
+                    callback();
+                }
             }
 
             $scope.saveTranslation = function (translation) {
@@ -160,7 +161,7 @@
                 });
             };
 
-            $scope.getDefaultTemplate = function() {
+            $scope.getDefaultTemplate = function () {
             };
 
 

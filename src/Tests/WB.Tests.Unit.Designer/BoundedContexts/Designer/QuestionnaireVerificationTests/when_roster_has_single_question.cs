@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => { errors = verifier.Verify(questionnaire); };
+        Because of = () => { errors = verifier.Verify(Create.QuestionnaireView(questionnaire)); };
 
         It should_contain_WB0203_warning = () => errors.ShouldContain(item => item.Code == "WB0203" && item.MessageLevel == VerificationMessageLevel.Warning);
 

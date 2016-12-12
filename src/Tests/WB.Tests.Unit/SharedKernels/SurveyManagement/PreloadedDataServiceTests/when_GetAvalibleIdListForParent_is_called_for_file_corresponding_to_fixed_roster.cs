@@ -7,6 +7,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterGroupId,
-                        fixedTitles: new[] { "1", "2" }, title: "Roster Group"));
+                        obsoleteFixedTitles: new[] { "1", "2" }, title: "Roster Group"));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 result =
                     preloadedDataService.GetAvailableIdListForParent(
                         CreatePreloadedDataByFile(new string[] { "Id" }, new string[][] { new string[] { "1" } },
-                            questionnaireDocument.Title), new ValueVector<Guid> { rosterGroupId }, new []{"1"});
+                            questionnaireDocument.Title), new ValueVector<Guid> { rosterGroupId }, new []{"1"}, new PreloadedDataByFile[0]);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

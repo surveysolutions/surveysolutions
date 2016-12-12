@@ -10,7 +10,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviewers.js")
+    @Scripts.Render("~/js/interviewers")
     <script type="text/javascript">
         var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new { }, Request.Url.Scheme))';
         var $interviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})';

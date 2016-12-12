@@ -37,16 +37,16 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     Create.Roster(
                         id: parentRosterId,
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedRosterTitles: new FixedRosterTitle[] {
-                                Create.FixedRosterTitle(1, "Parent 1"),
-                                Create.FixedRosterTitle(2, "Parent 2") },
+                        fixedTitles: new FixedRosterTitle[] {
+                                Create.FixedTitle(1, "Parent 1"),
+                                Create.FixedTitle(2, "Parent 2") },
                         children: new IComposite[] {
                             Create.Roster(
                                 id: rosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new FixedRosterTitle[] {
-                                    Create.FixedRosterTitle(3, "Roster 1"),
-                                    Create.FixedRosterTitle(4, "Roster 2") },
+                                fixedTitles: new FixedRosterTitle[] {
+                                    Create.FixedTitle(3, "Roster 1"),
+                                    Create.FixedTitle(4, "Roster 2") },
                                 variable: "fixed_source",
                                 children: new IComposite[]
                                 {
@@ -56,9 +56,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                             Create.Roster(
                                 id: fixedRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new FixedRosterTitle[] {
-                                    Create.FixedRosterTitle(5, "Item 1"),
-                                    Create.FixedRosterTitle(6, "Item 2") },
+                                fixedTitles: new FixedRosterTitle[] {
+                                    Create.FixedTitle(5, "Item 1"),
+                                    Create.FixedTitle(6, "Item 2") },
                                 variable: "fix",
                                 children: new IComposite[]
                                 {
