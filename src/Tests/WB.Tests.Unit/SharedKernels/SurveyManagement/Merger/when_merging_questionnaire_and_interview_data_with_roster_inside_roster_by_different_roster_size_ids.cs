@@ -31,6 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 {
                     PublicKey = rosterId,
                     IsRoster = true,
+                    VariableName = "r1",
                     RosterSizeQuestionId = rosterSizeQuestionId,
                     Children = new List<IComposite>
                     {
@@ -44,6 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                         {
                             PublicKey = nestedRosterId,
                             IsRoster = true,
+                            VariableName = "r2",
                             RosterSizeQuestionId = nestedRosterSizeQuestionId,
                             Children =
                                 new List<IComposite>()

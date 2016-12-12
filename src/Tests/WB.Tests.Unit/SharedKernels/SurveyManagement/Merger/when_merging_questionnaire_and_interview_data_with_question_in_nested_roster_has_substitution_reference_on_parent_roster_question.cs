@@ -41,6 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             //  "nastya1";
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.FixedRoster(rosterId: parentRosterId,
+                    variable: "r1",
                     obsoleteFixedTitles: new[] {"1", "2"},
                     children: new IComposite[]
                     {
@@ -52,6 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                             StataExportCaption = "var_source"
                         },
                         Create.Entity.FixedRoster(rosterId: nestedRosterId,
+                            variable: "r2",
                             obsoleteFixedTitles: new[] {"a", "b"},
                             children: new IComposite[]
                             {
