@@ -1,21 +1,24 @@
 ﻿using System;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public struct AnswerComment
     {
         public Guid UserId { get; private set; }
+        public UserRoles UserRole { get; private set; }
         public DateTime CommentTime { get; private set; }
         public string Comment { get; private set; }
-        public string QuestionKey { get; private set; }
+        public Identity QuestionIdentity { get; private set; }
 
-        public AnswerComment(Guid userId, DateTime commentTime, string comment, Guid questionId, decimal[] rosterVector)
+        public AnswerComment(Guid userId, UserRoles userRole, DateTime commentTime, string comment, Identity questionIdentity)
             : this()
         {
             UserId = userId;
+            UserRole = userRole;
             CommentTime = commentTime;
             Comment = comment;
-            this.QuestionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
+            this.QuestionIdentity = questionIdentity;
         }
 
         #region equals
@@ -23,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool Equals(AnswerComment other)
         {
             return this.UserId.Equals(other.UserId) && this.CommentTime.Equals(other.CommentTime) &&
-                string.Equals(this.Comment, other.Comment) && string.Equals(this.QuestionKey, other.QuestionKey);
+                string.Equals(this.Comment, other.Comment) && this.QuestionIdentity.Equals(other.QuestionIdentity);
         }
 
         public override bool Equals(object obj)
@@ -39,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 int hashCode = this.UserId.GetHashCode();
                 hashCode = (hashCode*397) ^ this.CommentTime.GetHashCode();
                 hashCode = (hashCode*397) ^ (this.Comment != null ? this.Comment.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (this.QuestionKey != null ? this.QuestionKey.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (this.QuestionIdentity?.GetHashCode() ?? 0);
                 return hashCode;
             }
         }

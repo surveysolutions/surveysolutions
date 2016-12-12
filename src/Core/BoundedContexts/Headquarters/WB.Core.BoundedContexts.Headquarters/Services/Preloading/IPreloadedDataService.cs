@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 
         int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile);
 
-        decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues);
+        decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels);
 
         ValueParsingResult ParseQuestionInLevel(string answer, string columnName, HeaderStructureForLevel level, out object parsedValue);
 

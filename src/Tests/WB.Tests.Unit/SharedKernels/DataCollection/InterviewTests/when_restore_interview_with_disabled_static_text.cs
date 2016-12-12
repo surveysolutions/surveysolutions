@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -38,8 +39,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
                 => _.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object);
 
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
-                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
+                interviewExpressionStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interviewSynchronizationDto =
                 Create.Entity.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
@@ -74,7 +75,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
 
         private static EventContext eventContext;
-        private static Interview interview;
+        private static StatefulInterview interview;
         private static Guid userId;
         private static Guid staticTextId;
         private static InterviewSynchronizationDto interviewSynchronizationDto;

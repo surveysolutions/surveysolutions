@@ -66,8 +66,10 @@ namespace WB.Tests.Unit
         {
             if (condition == null)
             {
-                eventContext.Events.ShouldContain(@event
-                    => @event.Payload is TEvent);
+                eventContext
+                    .Events
+                    .Select(@event => @event.Payload.GetType().Name)
+                    .ShouldContain(typeof(TEvent).Name);
             }
             else
             {

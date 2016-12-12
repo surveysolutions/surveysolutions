@@ -44,23 +44,17 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
                 StatefulInterview interview = SetupStatefullInterview(questionnaireDocument);
 
-                interview.AnswerMultipleOptionsQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, new[] { 1m, 2m });
+                interview.AnswerMultipleOptionsQuestion(userId, q1Id, RosterVector.Empty, DateTime.Now, new[] { 1, 2 });
                 interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(1), DateTime.Now, 20);
                 interview.AnswerNumericIntegerQuestion(userId, q2Id, Create.RosterVector(2), DateTime.Now, 15);
-                //interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(1), DateTime.Now, 1);
-                var result = new InvokeResults();
+                interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 1);
 
-                using (var eventContext = new EventContext())
+                return new InvokeResults
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, q3Id, Create.RosterVector(2), DateTime.Now, 1);
+                    OptionsCountForQuestion4InRoster1 = interview.GetLinkedSingleOptionQuestion(Identity.Create(q4Id, Create.RosterVector(1))).Options.Count,
+                    OptionsCountForQuestion4InRoster2 = interview.GetLinkedSingleOptionQuestion(Identity.Create(q4Id, Create.RosterVector(2))).Options.Count
 
-                    result.OptionsCountForQuestion4InRoster1 = interview.FindReferencedRostersForLinkedQuestion(rosterId,
-                        Create.Identity(q4Id, Create.RosterVector(1))).Count();
-                    result.OptionsCountForQuestion4InRoster2 = interview.FindReferencedRostersForLinkedQuestion(rosterId,
-                        Create.Identity(q4Id, Create.RosterVector(2))).Count();
-                }
-
-                return result;
+                };
             });
 
         It should_return_1_option_for_linked_question_in_1_roster = () =>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -17,15 +17,15 @@ namespace WB.UI.Designer.Code.Implementation
     {
         private readonly IMembershipUserService userHelper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList;
 
         public CommandInflater(IMembershipUserService userHelper,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersons)
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList)
         {
             this.userHelper = userHelper;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
-            this.sharedPersons = sharedPersons;
+            this.questionnairesList = questionnairesList;
         }
 
         public void PrepareDeserializedCommandForExecution(ICommand command)
@@ -66,8 +66,8 @@ namespace WB.UI.Designer.Code.Implementation
             if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return questionnaire;
 
-            var sharedPersons = this.sharedPersons.GetById(id.FormatGuid());
-            if (sharedPersons == null || sharedPersons.SharedPersons.All(x => x.Id != this.userHelper.WebUser.UserId))
+            var questionnaireListItem = this.questionnairesList.GetById(id.FormatGuid());
+            if (questionnaireListItem == null || questionnaireListItem.SharedPersons.All(x => x.UserId != this.userHelper.WebUser.UserId))
             {
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");
             }

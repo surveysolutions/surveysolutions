@@ -11,6 +11,8 @@ using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
@@ -54,7 +56,7 @@ namespace WB.UI.Designer.App_Start
 
         private static IKernel CreateKernel()
         {
-            // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             var dynamicCompilerSettings = (ICompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
@@ -117,6 +119,7 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
             kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
             kernel.Bind<QuestionnaireDowngradeService>().ToSelf();
+            kernel.Bind<IQuestionnireHistotyVersionsService>().To<QuestionnireHistotyVersionsService>();
 
             return kernel;
         }

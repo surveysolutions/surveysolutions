@@ -58,6 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual bool WasCreatedOnClient { get; set; }
         public virtual bool ReceivedByInterviewer { get; set; }
+        public virtual bool IsAssignedToInterviewer { get; set; }
+
         public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
         {
             this.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer = answer;

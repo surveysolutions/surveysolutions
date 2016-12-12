@@ -40,5 +40,6 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("WB.Tests.Unit.Designer")]
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
+[assembly: InternalsVisibleTo("PerformanceTest")]
 [assembly: InternalsVisibleTo("event-store-scanner")]
 [assembly: InternalsVisibleTo("EventStoreToPlainStorageMigrator")]

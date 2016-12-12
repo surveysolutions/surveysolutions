@@ -514,6 +514,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Headquarters comment.
+        /// </summary>
+        public static string Interview_Headquarters_Comment_Caption {
+            get {
+                return ResourceManager.GetString("Interview_Headquarters_Comment_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show instruction.
         /// </summary>
         public static string Interview_Instruction_ShowInstruction {
@@ -528,6 +537,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Instruction_Title {
             get {
                 return ResourceManager.GetString("Interview_Instruction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer comment.
+        /// </summary>
+        public static string Interview_Interviewer_Comment_Caption {
+            get {
+                return ResourceManager.GetString("Interview_Interviewer_Comment_Caption", resourceCulture);
             }
         }
         
@@ -892,6 +910,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show location on map.
+        /// </summary>
+        public static string Prefs_ShowLocationOnMap {
+            get {
+                return ResourceManager.GetString("Prefs_ShowLocationOnMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load map do show location for GPS questions.
+        /// </summary>
+        public static string Prefs_ShowLocationOnMapSummary {
+            get {
+                return ResourceManager.GetString("Prefs_ShowLocationOnMapSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The tablet is going to vibrate when an answer didn&apos;t pass the validation.
         /// </summary>
         public static string Prefs_VibrateOnErrorSummary {
@@ -978,6 +1014,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Validity_NotAnswered_InterviewException_ErrorCaption {
             get {
                 return ResourceManager.GetString("Validity_NotAnswered_InterviewException_ErrorCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;empty&gt;.
+        /// </summary>
+        public static string VariableEmptyValue {
+            get {
+                return ResourceManager.GetString("VariableEmptyValue", resourceCulture);
             }
         }
         

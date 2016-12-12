@@ -3,43 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_roster_group_that_has_linked_multy_option_roster_size_question : QuestionnaireVerifierTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             referencedQuestionId = Guid.Parse("12222222222222222222222222222222");
-            questionnaire = CreateQuestionnaireDocument();
+            questionnaire = CreateQuestionnaireDocument(new IComposite[]
+            {
+                new MultyOptionsQuestion("question 1")
+                {
+                    PublicKey = rosterSizeQuestionId,
+                    StataExportCaption = "var1",
+                    LinkedToQuestionId = referencedQuestionId,
+                    QuestionType = QuestionType.MultyOption,
+                    Answers =
+                    {
+                        new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
+                        new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
+                    }
+                },
+                new Group()
+                {
+                    PublicKey = rosterGroupId,
+                    VariableName = "a",
+                    IsRoster = true,
+                    RosterSizeQuestionId = rosterSizeQuestionId,
 
-            questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
-            {
-                PublicKey = rosterSizeQuestionId,
-                StataExportCaption = "var1",
-                LinkedToQuestionId = referencedQuestionId,
-                QuestionType = QuestionType.MultyOption,
-                Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
+                    Children = new IComposite[]
+                    {
+                        new NumericQuestion()
+                        {
+                            PublicKey = referencedQuestionId,
+                            QuestionType = QuestionType.Numeric,
+                            StataExportCaption = "var2"
+                        }
+                    }.ToReadOnlyCollection()
+                }
             });
-            var rosterGroup = new Group() { PublicKey = rosterGroupId, VariableName = "a", IsRoster = true, RosterSizeQuestionId = rosterSizeQuestionId };
-            rosterGroup.Children.Add(new NumericQuestion()
-            {
-                PublicKey = referencedQuestionId,
-                QuestionType = QuestionType.Numeric,
-                StataExportCaption = "var2"
-            });
-            questionnaire.Children.Add(rosterGroup);
+
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

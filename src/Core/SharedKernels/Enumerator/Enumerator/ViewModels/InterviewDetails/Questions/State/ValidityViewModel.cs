@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
@@ -9,12 +7,8 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Utils;
-
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -29,34 +23,45 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
         protected ValidityViewModel() { }
 
         public ValidityViewModel(ILiteEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            IQuestionnaireStorage questionnaireRepository,
             IMvxMainThreadDispatcher mainThreadDispatcher,
             ErrorMessagesViewModel errorMessagesViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
-            this.questionnaireRepository = questionnaireRepository;
             this.mainThreadDispatcher = mainThreadDispatcher;
             this.Error = errorMessagesViewModel;
         }
 
         private string interviewId;
 
-        private Identity questionIdentity;
+        private Identity entityIdentity;
 
-        public void Init(string interviewId, Identity entityIdentity)
+        private bool isForStaticText = false;
+
+        public void InitForQuestion(string interviewId, Identity entityIdentity)
         {
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
+            this.Init(interviewId, entityIdentity);
+        }
+
+        public void InitForStaticText(string interviewId, Identity entityIdentity)
+        {
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
+            isForStaticText = true;
+            this.Init(interviewId, entityIdentity);
+        }
+
+        private void Init(string interviewId, Identity entityIdentity)
+        {
             this.interviewId = interviewId;
-            this.questionIdentity = entityIdentity;
+            this.entityIdentity = entityIdentity;
 
             this.Error.Init(interviewId, entityIdentity);
 
@@ -79,14 +84,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            bool isInvalidAnswer = !interview.IsValid(this.questionIdentity) && interview.WasAnswered(this.questionIdentity);
+            bool isInvalidAnswer = this.isForStaticText
+                ? !interview.IsValid(this.entityIdentity)
+                : !interview.IsValid(this.entityIdentity) && interview.WasAnswered(this.entityIdentity);
+
             bool wasError = this.exceptionErrorMessageFromViewModel != null;
 
             mainThreadDispatcher.RequestMainThreadAction(() =>
             {
                 if (isInvalidAnswer && !wasError)
                 {
-                    var validationMessages = this.GetValidationMessages(interview).ToList();
+                    var validationMessages = interview.GetFailedValidationMessages(this.entityIdentity);
 
                     this.Error.Caption = UIResources.Validity_Answered_Invalid_ErrorCaption;
                     this.Error.ChangeValidationErrors(validationMessages);
@@ -101,26 +109,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        private IEnumerable<string> GetValidationMessages(IStatefulInterview interview)
-        {
-            IReadOnlyList<FailedValidationCondition> failedConditions = interview.GetFailedValidationConditions(this.questionIdentity);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            var validationMessages = failedConditions.Select(x =>
-            {
-                var validationMessage = questionnaire.GetValidationMessage(this.questionIdentity.Id, x.FailedConditionIndex);
-                if (questionnaire.HasMoreThanOneValidationRule(this.questionIdentity.Id))
-                {
-                    validationMessage += $" [{x.FailedConditionIndex + 1}]";
-                }
-                return validationMessage;
-            });
-            return validationMessages;
-        }
-
-
         public void Handle(AnswersDeclaredValid @event)
         {
-            if (@event.Questions.Contains(this.questionIdentity))
+            if (@event.Questions.Contains(this.entityIdentity))
             {
                 this.UpdateValidState();
             }
@@ -128,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswersDeclaredInvalid @event)
         {
-            if (@event.FailedValidationConditions.Keys.Contains(this.questionIdentity))
+            if (@event.FailedValidationConditions.Keys.Contains(this.entityIdentity))
             {
                 this.UpdateValidState();
             }
@@ -136,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(StaticTextsDeclaredValid @event)
         {
-            if (@event.StaticTexts.Contains(this.questionIdentity))
+            if (@event.StaticTexts.Contains(this.entityIdentity))
             {
                 this.UpdateValidState();
             }
@@ -144,7 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(StaticTextsDeclaredInvalid @event)
         {
-            if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.questionIdentity))
+            if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.entityIdentity))
             {
                 this.UpdateValidState();
             }
@@ -152,7 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(QuestionsEnabled @event)
         {
-            if (@event.Questions.Contains(this.questionIdentity))
+            if (@event.Questions.Contains(this.entityIdentity))
             {
                 this.UpdateValidState();
             }
@@ -185,6 +176,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.liteEventRegistry.Unsubscribe(this);
+            this.Error.Dispose();
         }
     }
 }

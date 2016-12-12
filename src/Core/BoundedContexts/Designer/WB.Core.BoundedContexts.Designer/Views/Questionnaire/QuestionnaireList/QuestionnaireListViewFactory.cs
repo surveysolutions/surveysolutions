@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 ? notDeletedQuestionnaires
                 : notDeletedQuestionnaires.Where(questionnaire =>
                     questionnaire.CreatedBy == userId ||
-                    questionnaire.SharedPersons.Any(person => person == userId) ||
+                    questionnaire.SharedPersons.Any(person => person.UserId == userId) ||
                     questionnaire.IsPublic);
         }
 
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         result.Where(
                             x =>
                                 x.CreatedBy == input.ViewerId ||
-                                x.SharedPersons.Any(person => person == input.ViewerId));
+                                x.SharedPersons.Any(person => person.UserId == input.ViewerId));
                 }
             }
             else
@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         result.Where(
                             x =>
                                 x.CreatedBy == input.ViewerId ||
-                                x.SharedPersons.Any(person => person == input.ViewerId));
+                                x.SharedPersons.Any(person => person.UserId == input.ViewerId));
             }
             return result;
         }

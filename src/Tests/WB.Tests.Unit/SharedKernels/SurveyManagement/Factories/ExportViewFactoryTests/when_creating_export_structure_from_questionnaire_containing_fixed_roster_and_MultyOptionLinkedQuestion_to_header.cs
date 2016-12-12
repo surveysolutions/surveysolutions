@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.FixedRoster(rosterId: rosterGroupId,
-                    title: "roster group", fixedTitles: new[] {"1", "2"}, children: new IComposite[]
+                    title: "roster group", obsoleteFixedTitles: new[] {"1", "2"}, children: new IComposite[]
                     {
                         new NumericQuestion() {PublicKey = referencedQuestionId, QuestionType = QuestionType.Numeric},
                         new MultyOptionsQuestion()

@@ -6,7 +6,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_numeric_real_question : QuestionDataParserTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             answer = "1.22";
             questionDataParser = CreateQuestionDataParser();
@@ -19,13 +19,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             };
         };
 
-        private Because of =
-            () =>
-                parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName, question,
-                        out parcedValue);
+        Because of = () =>
+            parsingResult = questionDataParser.TryParse(answer, questionVarName, question, out parcedValue, out parsedSingleColumnAnswer);
 
-        private It should_result_be_equal_to_1_22 = () =>
+        It should_result_be_equal_to_1_22 = () =>
             parcedValue.ShouldEqual((decimal) 1.22);
     }
 }

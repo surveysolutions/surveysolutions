@@ -749,9 +749,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Contains more than 200 options..
         /// </summary>
-        internal static string WB0076_CategoricalOneAnswerOptionsCountMoreThan200 {
+        internal static string WB0076_CategoricalOptionsCountMoreThan200 {
             get {
-                return ResourceManager.GetString("WB0076_CategoricalOneAnswerOptionsCountMoreThan200", resourceCulture);
+                return ResourceManager.GetString("WB0076_CategoricalOptionsCountMoreThan200", resourceCulture);
             }
         }
         
@@ -1108,6 +1108,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked question references a list question from wrong level..
+        /// </summary>
+        internal static string WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope {
+            get {
+                return ResourceManager.GetString("WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linked to list question doen&apos;t support options filter.
+        /// </summary>
+        internal static string WB0117_LinkedToTextListQuestionDoesNotSupportFilters {
+            get {
+                return ResourceManager.GetString("WB0117_LinkedToTextListQuestionDoesNotSupportFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {
@@ -1180,11 +1198,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Most numeric questions can have validation conditions. Add validation conditions to improve data quality..
+        ///   Looks up a localized string similar to More than 50% of questions contain no validation conditions. Add validation conditions to improve data quality..
         /// </summary>
-        internal static string WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions {
+        internal static string WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions {
             get {
-                return ResourceManager.GetString("WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions", resourceCulture);
+                return ResourceManager.GetString("WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions", resourceCulture);
             }
         }
         
@@ -1248,6 +1266,213 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0215_UnusedAttachments {
             get {
                 return ResourceManager.GetString("WB0215_UnusedAttachments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No prefilled (identifying) questions are defined. Define at least one prefilled question..
+        /// </summary>
+        internal static string WB0216_NoPrefilledQuestions {
+            get {
+                return ResourceManager.GetString("WB0216_NoPrefilledQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable label is too long (more than 120 chars) and will be truncated in SPSS file export..
+        /// </summary>
+        internal static string WB0217_VariableLableMoreThan120Characters {
+            get {
+                return ResourceManager.GetString("WB0217_VariableLableMoreThan120Characters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section..
+        /// </summary>
+        internal static string WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions {
+            get {
+                return ResourceManager.GetString("WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple consecutive unconditional single choice options with 2 options. Consider one multiple choice question..
+        /// </summary>
+        internal static string WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options {
+            get {
+                return ResourceManager.GetString("WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using @rowindex with a multi-choice roster may be unstable. Consider using @rowcode instead..
+        /// </summary>
+        internal static string WB0220_RowIndexInMultiOptionBasedRoster {
+            get {
+                return ResourceManager.GetString("WB0220_RowIndexInMultiOptionBasedRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No current time question was found. Consider recording the date of interview in your questionnaire..
+        /// </summary>
+        internal static string WB0221_NoCurrentTimeQuestions {
+            get {
+                return ResourceManager.GetString("WB0221_NoCurrentTimeQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single-choice question is marked as prefilled. Consider using a text question..
+        /// </summary>
+        internal static string WB0222_SingleOptionPrefilled {
+            get {
+                return ResourceManager.GetString("WB0222_SingleOptionPrefilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section contains less than five questions. Consider joining with other sections..
+        /// </summary>
+        internal static string WB0223_SectionWithLessThan5Questions {
+            get {
+                return ResourceManager.GetString("WB0223_SectionWithLessThan5Questions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many sub-sections at one level. Consider hierarchical layout..
+        /// </summary>
+        internal static string WB0224_TooManySubsectionsAtOneLevel {
+            get {
+                return ResourceManager.GetString("WB0224_TooManySubsectionsAtOneLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop-down menu (combo box) contains less than 10 elements. Consider switching to a standard single choice representation..
+        /// </summary>
+        internal static string WB0225_ComboBoxWithLessThan10Elements {
+            get {
+                return ResourceManager.GetString("WB0225_ComboBoxWithLessThan10Elements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading combo box questions have the same parent question..
+        /// </summary>
+        internal static string WB0226_SameCascadingParentQuestion {
+            get {
+                return ResourceManager.GetString("WB0226_SameCascadingParentQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback..
+        /// </summary>
+        internal static string WB0227_NotShared {
+            get {
+                return ResourceManager.GetString("WB0227_NotShared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categorical question has nonconsecutive option codes. Check for omitted options..
+        /// </summary>
+        internal static string WB0228_OmittedOptions {
+            get {
+                return ResourceManager.GetString("WB0228_OmittedOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond..
+        /// </summary>
+        internal static string WB0229_SupervisorQuestionInValidation {
+            get {
+                return ResourceManager.GetString("WB0229_SupervisorQuestionInValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nonconsecutive cascade questions. Consider laying the cascading questions one after another..
+        /// </summary>
+        internal static string WB0230_NonconsecutiveCascadings {
+            get {
+                return ResourceManager.GetString("WB0230_NonconsecutiveCascadings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multichoice question contains too many (&gt;20) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible..
+        /// </summary>
+        internal static string WB0231_MultiOptionWithMoreThan20Options {
+            get {
+                return ResourceManager.GetString("WB0231_MultiOptionWithMoreThan20Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency..
+        /// </summary>
+        internal static string WB0232_FiveOrMoreQuestionsWithSameEnabling {
+            get {
+                return ResourceManager.GetString("WB0232_FiveOrMoreQuestionsWithSameEnabling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nested roster with three or more degrees of nesting. Try avoiding such complex structures that might lead to problems in data collection..
+        /// </summary>
+        internal static string WB0233_NestedRosterDegree3OrMore {
+            get {
+                return ResourceManager.GetString("WB0233_NestedRosterDegree3OrMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subordinate levels in a nested roster are based on the same parent question. Try revising, such rosters might lead to problems in data collection..
+        /// </summary>
+        internal static string WB0234_RosterInRosterWithSameSourceQuestion {
+            get {
+                return ResourceManager.GetString("WB0234_RosterInRosterWithSameSourceQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The same long enablement condition is used in several questions. You might want to create a Boolean variable to simplify the code management..
+        /// </summary>
+        internal static string WB0235_FewQuestionsWithSameLongEnablement {
+            get {
+                return ResourceManager.GetString("WB0235_FewQuestionsWithSameLongEnablement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The same long validation condition is used in several questions. You might want to create a Boolean variable to simplify the code management..
+        /// </summary>
+        internal static string WB0236_FewQuestionsWithSameLongValidation {
+            get {
+                return ResourceManager.GetString("WB0236_FewQuestionsWithSameLongValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;..
+        /// </summary>
+        internal static string WB0237_BitwiseAnd {
+            get {
+                return ResourceManager.GetString("WB0237_BitwiseAnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to | is used in expression. Make sure you understand the difference between | and || operators. In most cases, use ||..
+        /// </summary>
+        internal static string WB0238_BitwiseOr {
+            get {
+                return ResourceManager.GetString("WB0238_BitwiseOr", resourceCulture);
             }
         }
         
@@ -1342,7 +1567,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains rosters that cumulative size is not allowed..
+        ///   Looks up a localized string similar to Questionnaire contains rosters with total number of elements exceeding the system limits..
         /// </summary>
         internal static string WB0261_RosterStructureTooExplosive {
             get {
@@ -1365,6 +1590,42 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0263_FirstChapterHasEnablingCondition {
             get {
                 return ResourceManager.GetString("WB0263_FirstChapterHasEnablingCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have a GPS question. Tablets must support geolocation to be used with this questionnaire..
+        /// </summary>
+        internal static string WB0264_GpsQuestion {
+            get {
+                return ResourceManager.GetString("WB0264_GpsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More than 30% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead..
+        /// </summary>
+        internal static string WB0265_MoreThan30PercentQuestionsAreText {
+            get {
+                return ResourceManager.GetString("WB0265_MoreThan30PercentQuestionsAreText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate questions. (Questions have the same title.).
+        /// </summary>
+        internal static string WB0266_SameTitle {
+            get {
+                return ResourceManager.GetString("WB0266_SameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have a barcode question. Tablets must support autofocus to be used with this questionnaire..
+        /// </summary>
+        internal static string WB0267_QRBarcodeQuestion {
+            get {
+                return ResourceManager.GetString("WB0267_QRBarcodeQuestion", resourceCulture);
             }
         }
     }

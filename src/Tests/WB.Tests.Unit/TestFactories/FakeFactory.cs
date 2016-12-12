@@ -50,18 +50,23 @@ namespace WB.Tests.Unit.TestFactories
             var repository = new Mock<IQuestionnaireStorage>();
             IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
             repository.SetReturnsDefault(plainQuestionnaire);
+            repository.SetReturnsDefault(questionnaire);
             return repository.Object;
         }
 
-        public IRosterTitleSubstitutionService RosterTitleSubstitutionService()
+        public IQuestionnaireStorage QuestionnaireRepository(KeyValuePair<string, QuestionnaireDocument>[] questionnairesWithTranslations)
         {
-            var rosterTitleSubstitutionService = Mock.Of<IRosterTitleSubstitutionService>();
+            var questionnairesStorage = new Mock<IQuestionnaireStorage>();
 
-            Mock.Get(rosterTitleSubstitutionService)
-                .Setup(x => x.Substitute(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<string>()))
-                .Returns<string, Identity, string>((title, id, interviewId) => title);
+            foreach (var questionnaire in questionnairesWithTranslations)
+            {
+                IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire.Value);
 
-            return rosterTitleSubstitutionService;
+                questionnairesStorage.Setup(repository =>
+                    repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key)).Returns(plainQuestionnaire);
+            }
+            
+            return questionnairesStorage.Object;
         }
 
         public ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)

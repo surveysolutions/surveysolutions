@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class ErrorMessagesViewModel : MvxNotifyPropertyChanged
+    public class ErrorMessagesViewModel : MvxNotifyPropertyChanged,
+        IDisposable
     {
         private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
 
@@ -31,19 +34,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public ObservableCollection<DynamicTextViewModel> ValidationErrors { get; } = new ObservableCollection<DynamicTextViewModel>();
-
-        public void SetValidationErrors(IEnumerable<string> errors) => this.ChangeValidationErrors(errors);
-
+        
         public void ChangeValidationErrors(IEnumerable<string> errors)
         {
+            this.ValidationErrors.ForEach(x => x.Dispose());
             this.ValidationErrors.Clear();
 
             foreach (string error in errors)
             {
                 var errorViewModel = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-                errorViewModel.Init(this.interviewId, this.entityIdentity, error);
+                errorViewModel.InitAsStatic(error);
 
                 this.ValidationErrors.Add(errorViewModel);
+            }
+        }
+
+        public void Dispose()
+        {
+            foreach (var dynamicTextViewModel in this.ValidationErrors)
+            {
+                dynamicTextViewModel.Dispose();
             }
         }
     }

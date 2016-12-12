@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
                 {
                     Create.TextQuestion(Guid.Parse(questionId), text: questionTitle)
                 }),
-                Create.Roster(Guid.Parse(rosterId), title: rosterTitle, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []
+                Create.Roster(Guid.Parse(rosterId), title: rosterTitle, rosterType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: new []
                 {
                     Create.FixedRosterTitle(1, "Hello"), Create.FixedRosterTitle(2, "World")
                 })

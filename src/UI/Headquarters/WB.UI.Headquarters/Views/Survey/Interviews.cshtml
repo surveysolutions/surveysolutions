@@ -10,7 +10,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviews.base.js", "~/Scripts/viewmodels/pages/interview/sv.interviews.js")
+    @Scripts.Render("~/js/interviews-sv")
 
     <script type="text/javascript">
     var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
@@ -24,7 +24,7 @@
         var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsiblesUrl, usersToAssignUrl, $commandExecutionUrl);
         model.IsNothingSelected.subscribe(function (value) {
             if (value) {
-                model.AssignTo(undefined);
+                model.Users.AssignTo(undefined);
             }
         });
         ko.applyBindings(model);
@@ -42,10 +42,10 @@
     <div class="form-inline">
         <div class="btn-group">
             <div class="input-group">
-                <input class="form-control" placeholder="Interviewer name" data-bind="typeahead: AssignTo, typeaheadOptions: {source: Users, displayText: function(item){return item.UserName}, afterSelect: function(){ $root.Assign(); }}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text"/>
-                <span data-bind="spinner: IsAssignToLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                <input class="form-control" placeholder="Interviewer name" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: function(){ $root.Assign(); }}, valueupdate:'afterkeydown', disable: IsNothingSelected" type="text"/>
+                <span data-bind="spinner: Users.IsAssignToLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                 <div class="input-group-btn">
-                    <button class="btn btn-default" data-bind="click: function(){ AssignTo(undefined);}, disable: IsNothingSelected"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    <button class="btn btn-default" data-bind="click: Users.ClearAssignTo, disable: IsNothingSelected"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                 </div>
             </div>
         </div>
@@ -79,7 +79,7 @@
                 <!-- ko ifnot:SelectedTemplate() == '' -->
                 <!-- ko if:Items().length > 0-->
                 <!-- ko foreach:Items()[0].FeaturedQuestions -->
-                <th data-bind='text: Question'></th>
+                <th data-bind='html: Question'></th>
                 <!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
@@ -162,15 +162,32 @@
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-reject-template">
-        @Html.Raw(string.Format(Interviews.RejectConfirmMessage,
-            "<span class='text-normal' data-bind='text: length'></span>",
-            InterviewStatus.Completed.ToLocalizeString(),
-            InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
+        <div class='reject-interviewer'>
+            @Html.Raw(string.Format(Interviews.RejectConfirmMessage,
+                "<span class='text-normal' data-bind='text: CountInterviewsToReject'></span>",
+                InterviewStatus.Completed.ToLocalizeString(),
+                InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
+            <div data-bind="visible: IsNeedShowAssignInterviewers">
+                <br/>
+                <br/>
+                @Interviews.ChooseResponsibleInterviewer
+                <br/>
+                <div class="btn-group">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text"/>
+                        <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                        <div class="input-group-btn" data-bind="click: ClearAssignTo">
+                            <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
     </script>
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Interviews.ContinueConfirmMessage
     </script>
-
 }
 
 @section filters

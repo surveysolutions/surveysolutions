@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <menu xmlns:android="http://schemas.android.com/apk/res/android" 
-	  xmlns:local="http://schemas.android.com/apk/res-auto">
+	  xmlns:local="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/menu">
  <item
       android:id="@+id/dashboard_refresh"
       android:icon="@drawable/dashboard_refresh_icon"

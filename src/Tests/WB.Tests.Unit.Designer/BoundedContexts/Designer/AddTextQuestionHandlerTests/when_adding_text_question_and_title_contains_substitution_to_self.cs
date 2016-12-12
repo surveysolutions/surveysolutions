@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
@@ -17,27 +18,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
                 questionnaire.AddTextQuestion(
                     questionId: questionId,
                     parentId: chapterId,
                     title: titleWithSubstitutionToSelf,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
-                     mask: null,
-                    responsibleId: responsibleId));
+                    mask: null,
+                    responsibleId: responsibleId);
 
-        It should_not_throw_QuestionnaireException = () =>
-            exception.ShouldBeNull();
+        It should_update_question_text = () =>
+            questionnaire.QuestionnaireDocument.GetQuestion<TextQuestion>(questionId)
+                .QuestionText.ShouldEqual(titleWithSubstitutionToSelf);
         
         private static Questionnaire questionnaire;
-        private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

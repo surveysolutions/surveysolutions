@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(
+            questionnaire = CreateQuestionnaireDocument(
                 new TextQuestion(new string('q', 5 * 1024 * 1024))
                 {
                     StataExportCaption = "var0"
@@ -22,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () => 
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         
         It should_return_message_with_code__WB0098 = () =>

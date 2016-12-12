@@ -20,7 +20,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IPrincipal principal,
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
             NavigationState navigationState,
@@ -32,7 +31,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer)
-            : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
+            : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer)
         {
@@ -54,6 +53,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             else
             {
                 this.viewModelNavigationService.NavigateToDashboard();
+                this.Dispose();
             }
         }
 

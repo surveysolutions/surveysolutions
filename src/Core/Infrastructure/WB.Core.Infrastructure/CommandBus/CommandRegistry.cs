@@ -18,14 +18,7 @@ namespace WB.Core.Infrastructure.CommandBus
 
         private class HandlerDescriptor
         {
-            public HandlerDescriptor(
-                Type aggregateType, 
-                bool isInitializer, 
-                bool isStateless, 
-                Func<ICommand, Guid> idResolver,
-                Action<ICommand, IAggregateRoot> handler,
-                IEnumerable<Type> validators,
-                IEnumerable<Type> postProcessors)
+            public HandlerDescriptor(Type aggregateType, bool isInitializer, bool isStateless, Func<ICommand, Guid> idResolver, Action<ICommand, IAggregateRoot> handler, IEnumerable<Type> validators, IEnumerable<Type> postProcessors, IEnumerable<Type> preProcessors)
             {
                 this.AggregateType = aggregateType;
                 this.AggregateKind = DetermineAggregateKind(aggregateType);
@@ -35,6 +28,7 @@ namespace WB.Core.Infrastructure.CommandBus
                 this.Handler = handler;
                 this.Validators = validators != null ? new List<Type>(validators) : new List<Type>();
                 this.PostProcessors = postProcessors != null ? new List<Type>(postProcessors) : new List<Type>();
+                this.PreProcessors = preProcessors != null ? new List<Type>(preProcessors) : new List<Type>();
             }
 
             public Type AggregateType { get; }
@@ -45,6 +39,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public Action<ICommand, IAggregateRoot> Handler { get; }
             public List<Type> Validators { get; }
             public List<Type> PostProcessors { get; }
+            public List<Type> PreProcessors { get; }
 
             public void AppendValidators(List<Type> validators) => this.Validators.AddRange(validators);
             public void AppendPostProcessors(List<Type> postProcessors) => this.PostProcessors.AddRange(postProcessors);
@@ -234,7 +229,8 @@ namespace WB.Core.Infrastructure.CommandBus
                 idResolver: command => aggregateRootIdResolver.Invoke((TCommand) command),
                 handler: (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate),
                 validators: configuration.GetValidators(),
-                postProcessors: configuration.GetPostProcessors()));
+                postProcessors: configuration.GetPostProcessors(),
+                preProcessors: configuration.GetPreProcessors()));
         }
 
         internal static bool Contains(ICommand command)
@@ -272,9 +268,19 @@ namespace WB.Core.Infrastructure.CommandBus
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetPostProcessors(ICommand command, IServiceLocator serviceLocator)
         {
             var handlerDescriptor = GetHandlerDescriptor(command);
+            return GetProcessors(handlerDescriptor.PostProcessors, command, serviceLocator);
+        }
+        public static IEnumerable<Action<IAggregateRoot, ICommand>> GetPreProcessors(ICommand command, IServiceLocator serviceLocator)
+        {
+            var handlerDescriptor = GetHandlerDescriptor(command);
+            return GetProcessors(handlerDescriptor.PreProcessors, command, serviceLocator);
+        }
+        public static IEnumerable<Action<IAggregateRoot, ICommand>> GetProcessors(List<Type> processors, ICommand command, IServiceLocator serviceLocator)
+        {
+            var handlerDescriptor = GetHandlerDescriptor(command);
 
-            return handlerDescriptor.PostProcessors.Select(
-                postProcessorType => GetPostProcessingAction(postProcessorType, handlerDescriptor.AggregateType, command.GetType(), serviceLocator));
+            return processors.Select(
+                processorType => GetProcessingAction(processorType, handlerDescriptor.AggregateType, command.GetType(), serviceLocator));
         }
 
         private static Action<IAggregateRoot, ICommand> GetValidatingAction(Type validatorType, Type aggregateType, Type commandType, IServiceLocator serviceLocator)
@@ -302,17 +308,17 @@ namespace WB.Core.Infrastructure.CommandBus
             };
         }
 
-        private static Action<IAggregateRoot, ICommand> GetPostProcessingAction(Type postProcessorType, Type aggregateType, Type commandType, IServiceLocator serviceLocator)
+        private static Action<IAggregateRoot, ICommand> GetProcessingAction(Type processorType, Type aggregateType, Type commandType, IServiceLocator serviceLocator)
         {
-            object postProcessorInstance = serviceLocator.GetInstance(postProcessorType);
+            object postProcessorInstance = serviceLocator.GetInstance(processorType);
 
             if (postProcessorInstance == null)
-                throw new CommandRegistryException($"Unable to get instance of post processor {postProcessorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
+                throw new CommandRegistryException($"Unable to get instance of post processor {processorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
 
-            MethodInfo processMethod = postProcessorType.GetMethod("Process", new[] { aggregateType, commandType });
+            MethodInfo processMethod = processorType.GetMethod("Process", new[] { aggregateType, commandType });
 
             if (processMethod == null)
-                throw new CommandRegistryException($"Unable to resolve process method of post processor {postProcessorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
+                throw new CommandRegistryException($"Unable to resolve process method of post processor {processorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
 
             return (aggregate, command) =>
             {

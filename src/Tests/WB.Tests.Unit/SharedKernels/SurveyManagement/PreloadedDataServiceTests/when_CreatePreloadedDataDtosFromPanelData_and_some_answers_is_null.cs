@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                     new NumericQuestion() { StataExportCaption = "nq1", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() },
                     new TextQuestion() { StataExportCaption = "tq1", QuestionType = QuestionType.Text, PublicKey = Guid.NewGuid() },
                        Create.Entity.FixedRoster(rosterId: Guid.NewGuid(),
-                        fixedTitles: new[] { "t1", "t2" },
+                        obsoleteFixedTitles: new[] { "t1", "t2" },
                         children: new IComposite[]
                         { new NumericQuestion() { StataExportCaption = "nq2", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() }}));
 

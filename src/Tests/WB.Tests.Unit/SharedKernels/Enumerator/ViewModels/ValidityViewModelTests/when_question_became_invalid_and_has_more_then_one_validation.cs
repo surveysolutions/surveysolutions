@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Documents;
-using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -17,48 +14,29 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
     { 
         Establish context = () =>
         {
-            questionIdentity = Create.Entity.Identity(Guid.NewGuid(), RosterVector.Empty);
-            QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.Question(questionId: questionIdentity.Id,
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(questionId: questionIdentity.Id,
                 validationConditions: new List<ValidationCondition>
                 {
                     new ValidationCondition {Expression = "validation 1", Message = "message 1"},
                     new ValidationCondition {Expression = "validation 2", Message = "message 2"}
                 }));
-
-            failedValidationConditions = new List<FailedValidationCondition>
-            {
-                new FailedValidationCondition(1),
-                new FailedValidationCondition(0)
-            };
-
+            
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
-            var interview = Substitute.For<IStatefulInterview>();
-            interview.GetFailedValidationConditions(questionIdentity)
-                .Returns(failedValidationConditions);
-            interview.IsValid(questionIdentity).Returns(false);
-            interview.WasAnswered(questionIdentity).Returns(true);
+            var interview = Setup.StatefulInterview(questionnaire);
+            interview.Apply(Create.Event.TextQuestionAnswered(questionIdentity.Id, questionIdentity.RosterVector, "aaa"));
+            interview.Apply(answersDeclaredInvalid);
 
-            var statefulInterviewRepository = Substitute.For<IStatefulInterviewRepository>();
-            statefulInterviewRepository.Get(null).ReturnsForAnyArgs(interview);
+            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
 
             viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
-            viewModel.Init("interviewid", questionIdentity);
+            viewModel.InitForQuestion("interviewid", questionIdentity);
         };
 
-        Because of = () =>
-        {
-            viewModel.Handle(
-                Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
-                {
-                    {
-                        questionIdentity,
-                        failedValidationConditions
-                    }
-                }));
-        };
+        Because of = () => viewModel.Handle(answersDeclaredInvalid);
 
         It should_show_all_failed_validation_messages = () => viewModel.Error.ValidationErrors.Count.ShouldEqual(2);
 
@@ -68,8 +46,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             viewModel.Error.ValidationErrors.Second()?.PlainText.ShouldEqual("message 1 [1]");
         };
 
+        static Identity questionIdentity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
+        static AnswersDeclaredInvalid answersDeclaredInvalid =
+            Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
+            {
+                {
+                    questionIdentity,
+                    new List<FailedValidationCondition>
+                    {
+                        new FailedValidationCondition(1),
+                        new FailedValidationCondition(0)
+                    }
+                }
+            });
         static ValidityViewModel viewModel;
-        static Identity questionIdentity;
-        static List<FailedValidationCondition> failedValidationConditions;
     }
 }

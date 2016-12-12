@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () => 
-            verificationMessages = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(questionnaire));
+            verificationMessages = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
 
         It should_skip_empty_names_when_validating_uniqueness = () => 
             verificationMessages.Where(x => x.Code == "WB0062").ShouldBeEmpty();

@@ -44,7 +44,7 @@
     <Compile Include="ActionUtils.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
     <Compile Include="CustomCollections\OrderedAdditiveSet.cs" />
-    <Compile Include="DecimalExtensions.cs" />
+    <Compile Include="NumericExtensions.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventHandlerUtils.cs" />
@@ -83,7 +83,6 @@
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
     <Compile Include="Implementation\TopologicalSorter\Vertex.cs" />
-    <Compile Include="Int64Extensions.cs" />
     <Compile Include="IPasswordHasher.cs" />
     <Compile Include="ITopologicalSorter.cs" />
     <Compile Include="JsonDeserializationException.cs" />

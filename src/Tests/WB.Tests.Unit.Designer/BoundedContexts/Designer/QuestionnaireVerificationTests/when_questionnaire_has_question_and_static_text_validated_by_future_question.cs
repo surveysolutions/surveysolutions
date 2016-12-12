@@ -28,14 +28,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     validationExpression: futureVerifiction, variable: "q1", validationMessage: "test"),
                 Create.Question(questionId: futureQuestionId, questionType: QuestionType.Text, variable: "q2"));
 
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(futureVerifiction) ==
-                   new[] {"q2"});
-
-            verifier = CreateQuestionnaireVerifier(expressionProcessor: expressionProcessor);
+            verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => errors = verifier.Verify(questionnaire);
+        Because of = () => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         It should_return_WB0250_warning = () => errors.ShouldContainWarning("WB0250", "Validation condition #1 refers to a future question. Consider reversing the order.");
 

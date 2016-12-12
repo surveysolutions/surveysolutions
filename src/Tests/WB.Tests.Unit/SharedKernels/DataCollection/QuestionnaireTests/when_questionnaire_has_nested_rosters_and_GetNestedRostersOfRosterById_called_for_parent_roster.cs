@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -27,8 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     PublicKey = rosterGroupId,
                     IsRoster = true,
                     RosterSizeQuestionId = rosterSizeQuestionId,
-                    Children =
-                        new List<IComposite>()
+                    Children = new List<IComposite>()
                         {
                             new Group("nested roster")
                             {
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                                 IsRoster = true
                             }
-                        }
+                        }.ToReadOnlyCollection()
                 }
             });
         };

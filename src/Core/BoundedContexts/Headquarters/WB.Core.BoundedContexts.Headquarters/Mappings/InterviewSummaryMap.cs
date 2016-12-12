@@ -31,6 +31,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 cm.Default(false);
                 cm.NotNullable(true);
             }));
+            Property(x => x.IsAssignedToInterviewer, pm => pm.Column(cm =>
+            {
+                cm.Default(true);
+                cm.NotNullable(true);
+            }));
 
             Bag(x => x.AnswersToFeaturedQuestions,
                 collection => {

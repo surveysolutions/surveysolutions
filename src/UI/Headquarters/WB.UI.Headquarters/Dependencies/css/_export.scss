@@ -1,0 +1,325 @@
+@import "filters";
+main.export{
+	padding-left: 45px;
+	padding-top: 10px;
+	color: $gray_text;
+}
+.export-types{
+	padding: 40px 30px;
+	position: relative;
+	margin-left: 335px;
+	max-width: 900px;
+	@include transition(margin, 0.3s);
+	background-color: #fff;
+
+	h2{
+		margin-bottom: 45px;
+	}
+	.data{
+		width: 100%;
+		margin-bottom: 30px;
+		p{
+			font-size: 14px;
+			line-height: 16px;
+			margin-bottom: 0;
+			span{
+				display: block;
+			}
+			a{
+				color: $gray-text;
+				text-decoration: underline;
+				&:hover, &:focus{
+					text-decoration: none;
+				}
+			}
+		}
+		.table-data-header{
+			padding-left: 18px;
+			@extend %gray-uppercase;
+			overflow: hidden;
+			width: 100%;
+			display: table;
+
+			div{
+				float: right;
+				padding: 5px 20px 13px;
+			}
+		}
+		.table-data{
+			padding-left: 18px;
+			display: table;
+			@include size(100%, 60px); 
+			.cell-data{
+				display: table-cell;
+				vertical-align: middle;
+				padding: 0 20px;
+
+				.not-generated{
+					display: inline-block;
+				}
+				&.download-block{
+					padding: 0 5px;
+				}
+			}
+			.min-view{
+				display: none;
+			}
+			&:nth-of-type(2n){
+				background-color: $gray-super-light;
+			}
+			.format-data{
+				@include font(14px, 16px);
+				font-weight: bold;
+				width: 34%;
+				position: relative;
+				padding-left: 80px;
+				&:before{
+					display: block;
+					@include absolute(19%, null, null, 0);
+					@include size(63px, 41px);
+					content: "";
+					background: url("../img/data-image.png") no-repeat;
+					background-size: 63px 234px;
+					@include image-2x("../img/data-image2k.png", 63px, 234px);
+    				background-position: 0px -200px;
+				}
+				&.separated-data:before{
+    				background-position: 0px -120px;
+				}
+				&.xlsx:before{
+    				background-position: 0px -78px;
+				}
+				&.stata:before{
+    				background-position: 0px 4px;
+				}
+				&.spss:before{
+    				background-position: 0px -38px;
+				}
+				&.zip:before{
+    				background-position: 0px -165px;
+				}
+				span{
+					color: $blue;
+				}
+			}
+			.btn{
+				margin: 5px;
+				padding: 8px 0;
+				width: 86px;
+			}
+			.not-generated{
+				@extend %uppercase-font;
+				color: $gray_light;
+				padding: 0 20px; 
+			}
+		}
+		.size, .last-generated, .min-view{
+			color: $gray_light;
+			font: 12px/14px "TrebuchetMSBold";
+		}
+		.size{
+			width: 16%; 
+		}
+		.last-generated{
+			width: 19%; 
+			border-left: 1px solid #f2f4f4;
+			border-right: 1px solid #f2f4f4;
+		}
+	}
+}
+.progress-information{
+	max-width: 300px;
+	position: relative;
+	@extend %uppercase-font;
+	&>span{
+		display: block;
+		margin-bottom: 6px;
+		color: $green-btn;
+	}
+	.progress{
+		margin-bottom: 0;
+		max-width: 300px;
+		background-color: $green-progress;	
+	}
+}
+.export-types .data .table-data .btn.cancel{
+	outline: none;
+	background-color: transparent;
+	@include square(25px);
+	@include absolute(null, -45px, -6px, null);
+	padding: 0;
+	margin: 0;
+	&:before, &:after{
+		display: block;
+		content: "";
+		@include size(100%, 2px);
+		background-color: $gray_light;
+		@include rotate(45deg);
+		position: relative;
+	}
+	&:after{
+		@include rotate(-45deg);
+		left: -1px;
+    	top: -2px;
+	}
+}
+.progress-information.queued{
+	&>span{
+		color: $gray_light;
+	}
+	.progress{
+		background-color: $gray-super-light;
+		.progress-bar{
+			background-color: $gray_light;
+		}
+	}
+}
+.export-types.fulsscreen{
+	margin-left: 0;
+	padding-left: 45px;
+}
+@media (max-width: $screen-md-min){
+	html body main.export{
+		padding-right: 2%;
+		padding-left: 4%;
+	}
+  	.export-types{
+  		margin-left: 265px;
+  		.size, .last-generated{
+  			display: none;
+  		}
+	  	.data .table-data {
+	  		.min-view{
+	  			display: table-cell;
+	  			width: 35%;
+	  			padding: 0 5px;
+	  			div{
+	  				padding: 8px 0;
+	  			}
+	  		}
+	  		.size, .last-generated{
+	  			display: none;
+	  		}
+	  		.format-data{
+		  		width: 35%;
+		  		padding-left: 75px;
+		  	}
+		  	.not-generated{
+		  		padding: 0 10px;
+		  	}
+	  	}
+	  	.data p{
+	  		margin-bottom: 15px;
+	  	}
+  	}
+  	.export-types.fulsscreen{
+  		padding-left: 0;
+  		width: 100%;
+  		.size, .last-generated{
+  			display: table-cell;
+  		}
+	  	.data .table-data {
+	  		.min-view{
+	  			display: none;
+	  			width: 40%;
+	  			padding: 0 5px;
+	  			div{
+	  				padding: 8px 0;
+	  			}
+	  		}
+	  		.size, .last-generated{
+	  			display: table-cell;
+	  		}
+	  		.format-data{
+		  		width: 34%;
+		  		padding-left: 75px;
+		  	}
+		  	.last-generated{
+		  		width: 19%;
+		  	}
+		  	.not-generated{
+		  		padding: 0 10px;
+		  	}
+	  	}
+	  	.data p{
+	  		margin-bottom: 15px;
+	  	}
+  	}
+}
+@media (max-width: $screen-sm-min){
+	.export-types{
+		margin-left: 0;
+		padding: 50px 5px 20px;
+		h2{
+			margin-bottom: 25px;
+			@include font(24px, 26px);
+		}
+		.data .table-data {
+			padding: 0 10px;
+			.cell-data, .not-generated{
+				padding: 0 5px;
+				&.format-data{
+					padding-left: 75px;
+				}
+			}
+			.progress-information{
+				width: 60%;
+			}
+		}
+	}
+}
+@media (max-width: $screen-xs-min){
+	.export-types{
+		.data{
+			.table-data{
+				padding: 10px;
+				display: block;
+				height: auto;
+				
+				.cell-data{
+					text-align: center;
+					display: block;
+					margin-bottom: 15px;
+					.not-generated{
+			  			margin-top: 15px;
+			  		}
+					&.size, &.last-generated{
+			  			display: none;
+			  		}
+			  		&.format-data, &.min-view{
+			  			width: 100%;
+			  		}
+			  		&.format-data{
+			  			padding: 50px 0 0;
+			  			
+			  			&:before{
+			  				left: 41%;
+			  				top: 0;
+			  			}
+						&.stata:before{
+							left: 45%;
+						}
+			  		}
+			  		.progress-information{
+			  			display: inline-block;
+			  		}
+				}
+			}
+		}
+	}
+}
+.export-types .data .table-data.not-generated-data .cell-data {
+	.download, &.last-generated, &.size, &.min-view, &.progress-block{
+		@extend %inactive;
+	}
+}
+.export-types .data .table-data.generated-data .cell-data{
+	&.progress-block, .not-generated{
+		@extend %inactive;
+	}
+}
+.export-types .data .table-data.generation-in-progress .cell-data{
+	&.download-block, &.last-generated, &.size, &.min-view, .not-generated{
+		@extend %inactive;
+	}
+}

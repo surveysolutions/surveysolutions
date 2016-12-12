@@ -18,7 +18,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                 new QuestionnaireChangeHistoryFactory(
                     questionnaireChangeHistoryStorage ??
                     Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
-                    questionnaireDocumentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
+                    questionnaireDocumentStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>()
+                    );
         }
     }
 }

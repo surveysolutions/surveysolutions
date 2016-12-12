@@ -64,8 +64,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private List<SharedPerson> sharedPersons = new List<SharedPerson>();
-        private IEnumerable<Guid> ReadOnlyUsersIds => sharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.Id);
-        private IEnumerable<Guid> SharedUsersIds => sharedPersons.Select(p => p.Id);
+        private IEnumerable<Guid> ReadOnlyUsersIds => sharedPersons.Where(p => p.ShareType == ShareType.View).Select(p => p.UserId);
+        private IEnumerable<Guid> SharedUsersIds => sharedPersons.Select(p => p.UserId);
 
         public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
         public IEnumerable<SharedPerson> SharedPersons => this.sharedPersons;
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
             }
 
-            this.innerDocument.Add(newGroup, parentId, null);
+            this.innerDocument.Add(newGroup, parentId);
         }
 
         private void RemoveRosterFlagFromGroup(Guid groupId)
@@ -133,6 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
+        private readonly IQuestionnireHistotyVersionsService questionnireHistotyVersionsService;
         private int affectedByReplaceEntries;
 
         #endregion
@@ -145,7 +146,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IKeywordsProvider variableNameValidator, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
-            ITranslationsService translationService)
+            ITranslationsService translationService,
+            IQuestionnireHistotyVersionsService questionnireHistotyVersionsService)
         {
             this.logger = logger;
             this.clock = clock;
@@ -155,6 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationService = translationService;
+            this.questionnireHistotyVersionsService = questionnireHistotyVersionsService;
         }
 
         #region Questionnaire command handlers
@@ -537,6 +540,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             innerDocument.Attachments.RemoveAll(x => x.AttachmentId == command.AttachmentId);
+
+            if(command.OldAttachmentId.HasValue)
+                innerDocument.Attachments.RemoveAll(x => x.AttachmentId == command.OldAttachmentId.Value);
+
             innerDocument.Attachments.Add(new Attachment
             {
                 AttachmentId = command.AttachmentId,
@@ -565,6 +572,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Name = command.Name,
             };
             innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
+
+            if(command.OldTranslationId.HasValue)
+                innerDocument.Translations.RemoveAll(x => x.Id == command.OldTranslationId.Value);
+
             innerDocument.Translations.Add(translation);
         }
 
@@ -599,12 +610,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateLookupTable(UpdateLookupTable command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.LookupTableId, command.LookupTableName, DefaultVariableLengthLimit);
 
-            if (!this.innerDocument.LookupTables.ContainsKey(command.LookupTableId))
+            if (command.OldLookupTableId.HasValue)
             {
-                throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
+                if (innerDocument.LookupTables.ContainsKey(command.OldLookupTableId.Value))
+                    innerDocument.LookupTables.Remove(command.OldLookupTableId.Value);
             }
 
             innerDocument.LookupTables[command.LookupTableId] = new LookupTable
@@ -651,7 +662,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (parentGroupId.HasValue)
             {
-                this.innerDocument.ConnectChildrenWithParent();
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
                 this.ThrowIfTargetGroupHasReachedAllowedDepthLimit(parentGroupId.Value);
             }
@@ -717,8 +727,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: fixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(groupId));
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             var group = this.GetGroupById(groupId);
 
             var wasGroupAndBecomeARoster = !@group.IsRoster && isRoster;
@@ -782,7 +791,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
 
-            this.innerDocument.RemoveGroup(groupId);
+            this.innerDocument.RemoveEntity(groupId);
         }
 
         public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex, Guid responsibleId)
@@ -796,7 +805,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
             }
-            this.innerDocument.ConnectChildrenWithParent();
+
             var sourceGroup = this.GetGroupById(groupId);
 
             if (targetGroupId.HasValue)
@@ -865,8 +874,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentGroupId);
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
@@ -901,7 +909,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 linkedFilterExpression: null,
                 isTimestamp: false);
 
-            this.innerDocument.Add(question, command.ParentGroupId, null);
+            this.innerDocument.Add(question, command.ParentGroupId);
             
             if (command.Index.HasValue)
             {
@@ -949,8 +957,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     variableName: question.StataExportCaption,
                     parentGroup: targetGroup);
             }
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(question, targetGroup);
 
@@ -1500,7 +1507,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
-            this.innerDocument.ConnectChildrenWithParent();
+            
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
             var staticText = new StaticText(publicKey: command.EntityId,
@@ -1510,7 +1517,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationConditions: null,
                 attachmentName: null);
 
-            this.innerDocument.Add(c: staticText, parent: command.ParentId, parentPropagationKey: null);
+            this.innerDocument.Add(staticText, command.ParentId);
 
             if (command.Index.HasValue)
             {
@@ -1569,12 +1576,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
             this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
-            this.innerDocument.ConnectChildrenWithParent();
+            
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
             var variable = new Variable(command.EntityId, command.VariableData);
 
-            this.innerDocument.Add(c: variable, parent: command.ParentId, parentPropagationKey: null);
+            this.innerDocument.Add(variable, command.ParentId);
             
             if (command.Index.HasValue)
             {
@@ -1641,7 +1648,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.sharedPersons.Add(new SharedPerson()
             {
-                Id = personId,
+                UserId = personId,
                 ShareType = shareType,
                 Email = email,
             });
@@ -1658,7 +1665,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     "Couldn't remove user, because it doesn't exist in share list");
             }
 
-            this.sharedPersons.RemoveAll(sp => sp.Id == personId);
+            this.sharedPersons.RemoveAll(sp => sp.UserId == personId);
 
         }
 
@@ -1672,10 +1679,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.ItemToPasteAfterId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(pasteAfter.EntityId);
             ThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.SourceDocument, pasteAfter.SourceItemId);
-
-            this.innerDocument.ConnectChildrenWithParent();
-            pasteAfter.SourceDocument.ConnectChildrenWithParent();
-
+            
             var itemToInsertAfter = this.innerDocument.Find<IComposite>(pasteAfter.ItemToPasteAfterId);
             var targetToPasteIn = itemToInsertAfter.GetParent();
             var entityToInsert = pasteAfter.SourceDocument.Find<IComposite>(pasteAfter.SourceItemId);
@@ -1691,10 +1695,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteInto.ResponsibleId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(pasteInto.EntityId);
             ThrowDomainExceptionIfEntityDoesNotExists(pasteInto.SourceDocument, pasteInto.SourceItemId);
-
-            this.innerDocument.ConnectChildrenWithParent();
-            pasteInto.SourceDocument.ConnectChildrenWithParent();
-
+            
             this.ThrowDomainExceptionIfGroupDoesNotExist(pasteInto.ParentId);
 
             var entityToInsert = pasteInto.SourceDocument.Find<IComposite>(pasteInto.SourceItemId);
@@ -1849,8 +1850,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName, variableLengthLimit);
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, isPrefilled, parentGroup);
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
 
             if (parentGroup != null)
@@ -2310,6 +2310,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool typeOfLinkedQuestionIsNotSupported = !(
                 linkedToQuestion.QuestionType == QuestionType.DateTime ||
                     linkedToQuestion.QuestionType == QuestionType.Numeric ||
+                    linkedToQuestion.QuestionType == QuestionType.TextList ||
                     linkedToQuestion.QuestionType == QuestionType.Text);
 
             if (typeOfLinkedQuestionIsNotSupported)
@@ -2324,13 +2325,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
                     "Question that linked to another question can not be pre-filled");
-            }
-
-            if (!this.IsUnderPropagatableGroup(linkedToQuestion))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.LinkedQuestionIsNotInPropagateGroup,
-                    "Question that you are linked to is not in the roster group");
             }
         }
 
@@ -2612,9 +2606,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
 
             List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope;
-
-            this.innerDocument.ConnectChildrenWithParent(); //find all references and do it only once
-
+            
             this.ValidateSubstitutionReferences(entityId, variableName, parentGroup, substitutionReferences,
                 out unknownReferences,
                 out questionsIncorrectTypeOfReferenced,
@@ -2684,9 +2676,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (!GetGroupsByRosterTitleId(question.PublicKey).Any())
                 return;
-
-            this.innerDocument.ConnectChildrenWithParent();
-
+            
             IGroup sourceRoster = GetFirstRosterParentGroupOrNull(question);
             IGroup targetRoster = GetFirstRosterParentGroupOrNull(targetGroup);
 
@@ -3148,8 +3138,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private bool IsUnderPropagatableGroup(IComposite item)
         {
-            this.innerDocument.ConnectChildrenWithParent();
-
             return this.GetFirstRosterParentGroupOrNull(item) != null;
         }
 
@@ -3201,8 +3189,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 scopeIds.Add(GetScopeOrRoster(entityAsGroup));
             }
-
-            this.innerDocument.ConnectChildrenWithParent();
+            
             var currentParent = (IGroup)entity.GetParent();
             while (currentParent != null)
             {
@@ -3347,8 +3334,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private IEnumerable<IGroup> GetAllParentGroups(IComposite entity)
         {
-            this.innerDocument.ConnectChildrenWithParent();
-
             var currentParent = (IGroup)entity.GetParent();
 
             while (currentParent != null)
@@ -3666,5 +3651,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #endregion
+
+        public void RevertVersion(RevertVersionQuestionnaire command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            var historyReferanceId = command.HistoryReferanceId;
+            var questionnire = questionnireHistotyVersionsService.GetByHistoryVersion(historyReferanceId);
+            if (questionnire == null)
+                throw new ArgumentException($"Questionnire {Id} of version {historyReferanceId} didn't find");
+
+            this.innerDocument = questionnire;
+        }
     }
 }

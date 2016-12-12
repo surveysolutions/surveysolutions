@@ -12,7 +12,6 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
     {
         public static QuestionnairesController CreateQuestionnairesController(IMembershipUserService userHelper = null,
             IQuestionnaireViewFactory questionnaireViewFactory = null,
-            IQuestionnaireSharedPersonsFactory sharedPersonsViewFactory = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator = null,
             IQuestionnaireListViewFactory viewFactory = null,
@@ -21,7 +20,6 @@ namespace WB.Tests.Unit.Designer.Api.Tester.QuestionnairesControllerTests
             return new QuestionnairesController(
                 userHelper: userHelper ?? Substitute.For<IMembershipUserService>(),
                 questionnaireViewFactory: questionnaireViewFactory ?? Substitute.For<IQuestionnaireViewFactory>(),
-                sharedPersonsViewFactory: sharedPersonsViewFactory ?? Substitute.For<IQuestionnaireSharedPersonsFactory>(),
                 questionnaireVerifier: questionnaireVerifier ?? Substitute.For<IQuestionnaireVerifier>(),
                 expressionProcessorGenerator: expressionProcessorGenerator ?? Substitute.For<IExpressionProcessorGenerator>(),
                 viewFactory: viewFactory ?? Substitute.For<IQuestionnaireListViewFactory>(),

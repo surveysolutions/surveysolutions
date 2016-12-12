@@ -111,6 +111,16 @@ namespace WB.Tests.Unit.TestFactories
             => new LinkedOptionsChanged(
                 options ?? new ChangedLinkedOptions[] {});
 
+        public MultipleOptionsQuestionAnswered MultipleOptionsQuestionAnswered(
+            Guid? questionId = null,
+            decimal[] rosterVector = null,
+            decimal[] selectedOptions = null)
+            => new MultipleOptionsQuestionAnswered(Guid.NewGuid(),
+                questionId ?? Guid.NewGuid(),
+                rosterVector ?? new decimal[] { },
+                DateTime.Now,
+                selectedOptions ?? new decimal[] { });
+
         public MultipleOptionsLinkedQuestionAnswered MultipleOptionsLinkedQuestionAnswered(
             Guid? questionId = null,
             decimal[] rosterVector = null,
@@ -147,7 +157,7 @@ namespace WB.Tests.Unit.TestFactories
                 Create.Entity.Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty),
             });
 
-        public QuestionsEnabled QuestionsEnabled(Identity[] questions)
+        public QuestionsEnabled QuestionsEnabled(params Identity[] questions)
             => new QuestionsEnabled(questions);
 
         public QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
@@ -206,12 +216,22 @@ namespace WB.Tests.Unit.TestFactories
             => new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTexts)
-            => new StaticTextsDeclaredInvalid(
+            => this.StaticTextsDeclaredInvalid(new[] {0}, staticTexts);
+
+        public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(int[] failedConditionIndexes,
+            params Identity[] staticTexts)
+        {
+            var failedValidationConditions = failedConditionIndexes.Select(
+                x => Create.Entity.FailedValidationCondition(failedConditionIndex: x))
+                .ToReadOnlyCollection();
+               
+            return new StaticTextsDeclaredInvalid(
                 staticTexts
                     .Select(identity => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
                         identity,
-                        Create.Entity.FailedValidationCondition(failedConditionIndex: 0).ToEnumerable().ToReadOnlyCollection()))
+                        failedValidationConditions))
                     .ToList());
+        }
 
         public StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTexts)
             => new StaticTextsDeclaredValid(staticTexts);
@@ -276,5 +296,20 @@ namespace WB.Tests.Unit.TestFactories
                         rosterGroupId,
                         outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
                         rosterInstanceId: fullRosterVector.Last())).ToArray());
+
+        public SupervisorAssigned SupervisorAssigned(Guid userId, Guid supervisorId)
+            => new SupervisorAssigned(userId, supervisorId);
+
+        public InterviewerAssigned InterviewerAssigned(Guid userId, Guid interviewerId, DateTime? assignTime)
+            => new InterviewerAssigned(userId, interviewerId, assignTime);
+
+        public InterviewApproved InterviewApproved(Guid userId, string comment = null, DateTime? approveTime = null)
+            => new InterviewApproved(userId, comment, approveTime);
+
+        public InterviewRejectedByHQ InterviewRejectedByHQ(Guid userId, string comment = null)
+            => new InterviewRejectedByHQ(userId, comment);
+
+        public InterviewRejected InterviewRejected(Guid userId, string comment = null, DateTime? rejectTime = null)
+            => new InterviewRejected(userId, comment, rejectTime);
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
-using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -16,22 +13,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
     {
         Establish context = () =>
         {
-            var questionnaire = Mock.Of<IQuestionnaire>(_
-               => _.HasGroup(rosterGroupId) == true
-               && _.IsRosterGroup(rosterGroupId) == true
-               && _.GetGroupTitle(rosterGroupId) == "group title");
+            sectionIdentity = new Identity(rosterGroupId, new[] { 0m });
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new[]
+            {
+                Create.Entity.FixedRoster(sectionIdentity.Id, title: "group title", fixedTitles: new[] {Create.Entity.FixedTitle(0, "rosterTitle")})
+            });
+            var plainQuestionnaires = Create.Entity.PlainQuestionnaire(questionnaire);
 
-            var interview = Substitute.For<IStatefulInterview>();
-
-            viewModel = CreateViewModel(questionnaire: questionnaire, interview: interview);
-
-            sectionIdentity = new Identity(rosterGroupId, new[]{0m});
-            viewModel.Init("", NavigationIdentity.CreateForGroup(sectionIdentity), Substitute.For<SideBarSectionsViewModel>(), null, Substitute.For<GroupStateViewModel>(), Create.Other.NavigationState());
+            var interview = Setup.StatefulInterview(questionnaire);
+            
+            viewModel = CreateViewModel(questionnaire: plainQuestionnaires, interview: interview);
+            viewModel.Init("", NavigationIdentity.CreateForGroup(sectionIdentity),
+                Substitute.For<SideBarSectionsViewModel>(), null, Substitute.For<GroupStateViewModel>(),
+                Create.Other.NavigationState());
 
             viewModel.SectionIdentity = sectionIdentity;
         };
 
-        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: sectionIdentity.Id, 
+        Because of = () => viewModel.Title.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: sectionIdentity.Id, 
             rosterTitle: "rosterTitle", 
             outerRosterVector: Empty.RosterVector,
             instanceId: 0m));

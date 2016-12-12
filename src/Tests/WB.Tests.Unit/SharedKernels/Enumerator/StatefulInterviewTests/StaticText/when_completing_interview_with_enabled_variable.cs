@@ -35,8 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
         };
 
         Because of = () => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now);
-
-        It should_raize_variable_enabled_event = () => eventContext.ShouldContainEvent<VariablesEnabled>(v => v.Variables[0] == variableIdentity);
+        
         It should_not_raize_variable_disabled_event = () => eventContext.ShouldNotContainEvent<VariablesDisabled>();
         It should_raize_variable_changed_event = () => eventContext.ShouldContainEvent<VariablesChanged>(v => v.ChangedVariables[0].Identity == variableIdentity);
 

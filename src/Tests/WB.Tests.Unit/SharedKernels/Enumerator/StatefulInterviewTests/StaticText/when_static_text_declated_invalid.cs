@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticText
 {
@@ -14,13 +15,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
             staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(questionnaireId,
-                Create.Entity.Group(children: new List<IComposite>()
+            var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                 {
-                    Create.Entity.StaticText(staticTextIdentity.Id)
-                })));
-
-            var plainQuestionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+                    Create.Entity.StaticText(staticTextIdentity.Id,
+                        validationConditions:
+                            new List<Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()
+                            {
+                                new ValidationCondition("1=1", "invalid")
+                            })
+                }));
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
         };
 
@@ -28,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 
         It should_remember_validity_status = () => statefulInterview.IsValid(staticTextIdentity).ShouldBeFalse();
 
-        It should_return_failed_validation_index = () => statefulInterview.GetFailedValidationConditions(staticTextIdentity).ShouldNotBeEmpty();
+        It should_return_failed_validation_index = () => statefulInterview.GetFailedValidationMessages(staticTextIdentity).ShouldNotBeEmpty();
 
         It should_count_it_in_total_invalid_entities = () => statefulInterview.CountInvalidEntitiesInInterview().ShouldEqual(1);
 

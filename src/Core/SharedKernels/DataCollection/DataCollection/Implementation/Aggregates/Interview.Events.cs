@@ -1,35 +1,78 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        public void ApplyEvents(InterviewTree sourceInterview, InterviewTree changedInterview, Guid? responsibleId = null)
+        protected void ApplyPassiveEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
         {
-            var diff = sourceInterview.Compare(changedInterview);
-
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
-            var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
-            var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
-            var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.IsOptionsChanged).ToArray();
-            var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+            var questionsWithChangedOptionsSet = diffByQuestions.Where(x => x.AreLinkedOptionsChanged).ToArray();
+            var questionsWithChangedLinkedToListOptionsSet = diffByQuestions.Where(x => x.AreLinkedToListOptionsChanged).ToArray();
             var changedVariables = diff.OfType<InterviewTreeVariableDiff>().ToArray();
 
-            this.ApplyRosterEvents(changedRosters);
-            this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
-            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
             this.ApplyEnablementEvents(diff);
             this.ApplyValidityEvents(diff);
             this.ApplyVariableEvents(changedVariables);
             this.ApplyLinkedOptionsChangesEvents(questionsWithChangedOptionsSet);
+            this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
+            this.ApplySubstitutionEvents(diff);
+        }
+
+        protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
+        {
+            var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
+            var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
+
+            var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
+            var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+
+            this.NewApply(questionsWithChangedAnswer, changedRosters, responsibleId.Value);
+
+            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
+            this.ApplyPassiveEvents(diff);
+        }
+
+        private void NewApply(InterviewTreeQuestionDiff[] questionsWithChangedAnswer, InterviewTreeRosterDiff[] changedRosters, Guid responsibleId)
+        {
+            var questionsRosterLevels = questionsWithChangedAnswer.Select(x => x.Identity.RosterVector).ToHashSet();
+            var rosterLevels = changedRosters.Select(x => x.Identity.RosterVector).ToHashSet();
+            var intersection = questionsRosterLevels.Intersect(rosterLevels).ToList();
+
+            if (intersection.Count == 0)
+            {
+                // this is for tests only
+                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
+                this.ApplyRosterEvents(changedRosters);
+            }
+            else
+            {
+                var maxDepth = Math.Max(questionsRosterLevels.Max(x => x.Length), rosterLevels.Select(x => x.Length).Max());
+                for (int i = 0; i <= maxDepth; i++)
+                {
+                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId);
+                    this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
+                }
+            }
+        }
+
+
+        private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
+            var groupsWithChangedTitles = diff.OfType<InterviewTreeGroupDiff>().Where(x => x.IsTitleChanged).Select(x => x.ChangedNode.Identity).ToArray();
+            var questionsWithChangedTitles = diff.OfType<InterviewTreeQuestionDiff>().Where(x => x.IsTitleChanged || x.AreValidationMessagesChanged).Select(x => x.ChangedNode.Identity).ToArray();
+            var staticTextsWithChangedTitles = diff.OfType<InterviewTreeStaticTextDiff>().Where(x => x.IsTitleChanged || x.AreValidationMessagesChanged).Select(x => x.ChangedNode.Identity).ToArray();
+
+            if (groupsWithChangedTitles.Any() || questionsWithChangedTitles.Any() || staticTextsWithChangedTitles.Any())
+            {
+                this.ApplyEvent(new SubstitutionTitlesChanged(questionsWithChangedTitles, staticTextsWithChangedTitles, groupsWithChangedTitles));
+            }
         }
 
         private void ApplyLinkedOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
@@ -41,6 +84,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (changedLinkedOptions.Any())
             {
                 this.ApplyEvent(new LinkedOptionsChanged(changedLinkedOptions));
+            }
+        }
+
+        private void ApplyLinkedToListOptionsChangesEvents(InterviewTreeQuestionDiff[] questionsWithChangedOptionsSet)
+        {
+            var changedLinkedOptions = questionsWithChangedOptionsSet
+                .Select(x => new ChangedLinkedToListOptions(x.ChangedNode.Identity, x.ChangedNode.AsLinkedToList.Options.ToArray()))
+                .ToArray();
+
+            if (changedLinkedOptions.Any())
+            {
+                this.ApplyEvent(new LinkedToListOptionsChanged(changedLinkedOptions));
             }
         }
 
@@ -119,36 +174,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsText)
                 {
                     this.ApplyEvent(new TextQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsText.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsText.GetAnswer().Value));
                 }
 
                 if (changedQuestion.IsTextList)
                 {
                     this.ApplyEvent(new TextListQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsTextList.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsTextList.GetAnswer().ToTupleArray()));
                 }
 
                 if (changedQuestion.IsDouble)
                 {
                     this.ApplyEvent(new NumericRealQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, (decimal)changedQuestion.AsDouble.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, (decimal)changedQuestion.AsDouble.GetAnswer().Value));
                 }
 
                 if (changedQuestion.IsInteger)
                 {
                     this.ApplyEvent(new NumericIntegerQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsInteger.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsInteger.GetAnswer().Value));
                 }
 
                 if (changedQuestion.IsDateTime)
                 {
                     this.ApplyEvent(new DateTimeQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsDateTime.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsDateTime.GetAnswer().Value));
                 }
 
                 if (changedQuestion.IsGps)
                 {
-                    var gpsAnswer = changedQuestion.AsGps.GetAnswer();
+                    var gpsAnswer = changedQuestion.AsGps.GetAnswer().Value;
                     this.ApplyEvent(new GeoLocationQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, DateTime.UtcNow, gpsAnswer.Latitude, gpsAnswer.Longitude,
                         gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Timestamp));
@@ -157,43 +212,55 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (changedQuestion.IsQRBarcode)
                 {
                     this.ApplyEvent(new QRBarcodeQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsQRBarcode.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsQRBarcode.GetAnswer().DecodedText));
                 }
 
                 if (changedQuestion.IsMultimedia)
                 {
                     this.ApplyEvent(new PictureQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultimedia.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultimedia.GetAnswer().FileName));
                 }
 
                 if (changedQuestion.IsYesNo)
                 {
                     this.ApplyEvent(new YesNoQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsYesNo.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsYesNo.GetAnswer().ToAnsweredYesNoOptions().ToArray()));
                 }
 
-                if (changedQuestion.IsSingleOption)
+                if (changedQuestion.IsSingleFixedOption)
                 {
                     this.ApplyEvent(new SingleOptionQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleOption.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleFixedOption.GetAnswer().SelectedValue));
                 }
 
-                if (changedQuestion.IsMultiOption)
+                if (changedQuestion.IsMultiFixedOption)
                 {
                     this.ApplyEvent(new MultipleOptionsQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiOption.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiFixedOption.GetAnswer().ToDecimals().ToArray()));
                 }
 
                 if (changedQuestion.IsSingleLinkedOption)
                 {
                     this.ApplyEvent(new SingleOptionLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleLinkedOption.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleLinkedOption.GetAnswer().SelectedValue));
                 }
 
                 if (changedQuestion.IsMultiLinkedOption)
                 {
                     this.ApplyEvent(new MultipleOptionsLinkedQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedOption.GetAnswer()));
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedOption.GetAnswer().ToDecimalArrayArray()));
+                }
+
+                if (changedQuestion.IsSingleLinkedToList)
+                {
+                    this.ApplyEvent(new SingleOptionQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsSingleLinkedToList.GetAnswer().SelectedValue));
+                }
+
+                if (changedQuestion.IsMultiLinkedToList)
+                {
+                    this.ApplyEvent(new MultipleOptionsQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, changedQuestion.AsMultiLinkedToList.GetAnswer().ToDecimals().ToArray()));
                 }
             }
         }
@@ -222,49 +289,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new RosterInstancesTitleChanged(changedRosterTitles.Select(ToChangedRosterInstanceTitleDto).ToArray()));
         }
 
-        private void ApplySubstitutionEvents(InterviewTree tree, IQuestionnaire questionnaire, List<Identity> changedQuestionIdentities)
-        {
-            var changedQuestionTitles = new List<Identity>();
-            var changedStaticTextTitles = new List<Identity>();
-            var changedGroupTitles = new List<Identity>();
-            foreach (var questionIdentity in changedQuestionIdentities)
-            {
-                var rosterLevel = questionIdentity.RosterVector.Length;
-
-                var substitutedQuestionIds = questionnaire.GetSubstitutedQuestions(questionIdentity.Id);
-                foreach (var substitutedQuestionId in substitutedQuestionIds)
-                {
-                    changedQuestionTitles.AddRange(tree.FindEntity(substitutedQuestionId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
-                }
-
-                var substitutedStaticTextIds = questionnaire.GetSubstitutedStaticTexts(questionIdentity.Id);
-                foreach (var substitutedStaticTextId in substitutedStaticTextIds)
-                {
-                    changedStaticTextTitles.AddRange(tree.FindEntity(substitutedStaticTextId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
-                }
-
-                var substitutedGroupIds = questionnaire.GetSubstitutedGroups(questionIdentity.Id);
-                foreach (var substitutedGroupId in substitutedGroupIds)
-                {
-                    changedGroupTitles.AddRange(tree.FindEntity(substitutedGroupId)
-                        .Select(x => x.Identity)
-                        .Where(x => x.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector)));
-                }
-            }
-
-            if (changedQuestionTitles.Any() || changedStaticTextTitles.Any() || changedGroupTitles.Any())
-            {
-                this.ApplyEvent(new SubstitutionTitlesChanged(
-                    changedQuestionTitles.ToArray(),
-                    changedStaticTextTitles.ToArray(),
-                    changedGroupTitles.ToArray()));
-            }
-        }
-        
         private static ChangedRosterInstanceTitleDto ToChangedRosterInstanceTitleDto(InterviewTreeRoster roster)
             => new ChangedRosterInstanceTitleDto(ToRosterInstance(roster), roster.RosterTitle);
 

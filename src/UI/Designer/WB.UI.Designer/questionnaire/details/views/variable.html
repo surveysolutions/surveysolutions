@@ -1,4 +1,4 @@
-﻿<form role="form" id="question-editor" name="variableForm" unsaved-warning-form>
+﻿<form role="form" id="question-editor" name="variableForm" unsaved-warning-form  ng-show="activeVariable">
     <div class="form-holder">
         <div class="breadcrumbs-container">
             <div data-item-breadcrumbs data-crumbs="activeVariable.breadcrumbs"></div>
@@ -24,10 +24,10 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-5 pull-right">
-                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left" /></label>
+                <label for="edit-question-variable-name" class="wb-label">Variable name <help key="variableName" placement="left" /></label>
                 <br />
-                <input id="edit-question-variable-name" type="text" ng-model="activeVariable.variable" spellcheck="false"
-                       class="form-control" maxlength="32">
+                <input id="edit-question-variable-name" type="text" ng-model="activeVariable.variable" spellcheck="false" autocomplete="false"
+                       class="form-control" maxlength="32"/>
             </div>
         </div>
         <div class="form-group">
@@ -35,6 +35,10 @@
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}" ng-model="activeVariable.expression"></div>
             </div>
+        </div>
+        <div class="form-group">
+            <label for="variable-label" class="wb-label">Variable label <help key="variableDescription" /></label>
+            <textarea id="variable-label" ng-model="activeVariable.label" class="form-control" rows="10" msd-elastic></textarea>
         </div>
     </div>
     <div class="form-buttons-holder">

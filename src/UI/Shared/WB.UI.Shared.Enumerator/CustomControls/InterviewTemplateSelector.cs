@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -29,9 +30,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (MultimedaQuestionViewModel), Resource.Layout.interview_question_multimedia},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
+            {typeof (SingleOptionLinkedToListQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (MultiOptionLinkedToQuestionQuestionViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (MultiOptionLinkedToRosterQuestionQuestionViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (MultiOptionLinkedToListQuestionQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (MultiOptionLinkedToRosterQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
             {typeof (TimestampQuestionViewModel), Resource.Layout.interview_question_timestamp},
@@ -40,10 +43,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (YesNoQuestionViewModel), Resource.Layout.interview_question_yesno},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
-            {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
             {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
-
             {typeof (MultiOptionQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
             {typeof (MultiOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
             {typeof (SingleOptionQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
@@ -54,6 +55,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
             {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
             {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
+            {typeof (VariableViewModel), Resource.Layout.interview_variable},
         };
 
         public int GetItemViewType(object forItemObject)
@@ -62,7 +64,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             var typeOfViewModel = source.GetType();
 
-            if (typeOfViewModel.IsGenericType )
+            if (typeOfViewModel.IsGenericType)
             {
                 if (typeOfViewModel.GetGenericTypeDefinition() == typeof(OptionBorderViewModel<>))
                 {
@@ -96,6 +98,18 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
             }
 
+            if (source is GroupNavigationViewModel)
+            {
+                var groupViewModel = source as GroupNavigationViewModel;
+                if (groupViewModel.NavigationGroupType == NavigationGroupType.ToParentGroup)
+                {
+                    return Resource.Layout.interview_group_to_parent_navigation;
+                }
+                else
+                {
+                    return Resource.Layout.interview_group_navigation;
+                }
+            }
 
             return EntityTemplates.ContainsKey(typeOfViewModel)
                 ? EntityTemplates[typeOfViewModel]

@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -16,19 +15,25 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    internal class PlainQuestionnaire : IQuestionnaire, ICategoricalOptionsProvider
+    internal class PlainQuestionnaire : IQuestionnaire
     {
-        public ISubstitutionService SubstitutionService => this.substitutionService ?? (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
+        public ISubstitutionService SubstitutionService => 
+            this.substitutionService ?? 
+            (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
+
         private ISubstitutionService substitutionService;
 
-        public IQuestionOptionsRepository QuestionOptionsRepository => this.questionOptionsRepository ?? (this.questionOptionsRepository = ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>());
+        public IQuestionOptionsRepository QuestionOptionsRepository => 
+            this.questionOptionsRepository ?? 
+            (this.questionOptionsRepository = ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>());
+
         private IQuestionOptionsRepository questionOptionsRepository;
 
         #region State
@@ -68,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Guid? ResponsibleId => null;
 
-        private readonly Guid? translationId;
+        private readonly Translation translation;
 
         private Dictionary<Guid, IComposite> EntityCache
         {
@@ -170,14 +175,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #endregion
 
-        public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? translationId = null)
+        public PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null)
         {
-            InitializeQuestionnaireDocument(document);
-
             this.innerDocument = document;
             this.Version = version;
-
-            this.translationId = translationId;
+            this.translation = translation;
         }
 
         public void WarmUpPriorityCaches()
@@ -200,10 +202,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string Title => this.innerDocument.Title;
 
-        public void InitializeQuestionnaireDocument()
-        {
-            InitializeQuestionnaireDocument(this.innerDocument);
-        }
+        public Translation Translation => this.translation;
 
         public IQuestion GetQuestionByStataCaption(string stataCaption) => GetQuestionByStataCaption(this.QuestionCache, stataCaption);
 
@@ -261,6 +260,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public bool IsQuestionLinked(Guid questionId) => this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
+
+        public bool IsLinkedToListQuestion(Guid questionId)
+        {
+            var linkedQuestionId = this.GetQuestionOrThrow(questionId).LinkedToQuestionId;
+            if (linkedQuestionId == null)
+                return false;
+            return this.GetQuestionOrThrow(linkedQuestionId.Value).QuestionType == QuestionType.TextList;
+        } 
+
         public Guid[] GetQuestionsLinkedToRoster()
         {
             return this.QuestionCache.Values.Where(x => x.LinkedToRosterId.HasValue).Select(x => x.PublicKey).ToArray();
@@ -304,104 +312,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId)
              => this.cacheOfMultiSelectAnswerOptionsAsValues.GetOrAdd(questionId, x
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
-
-        //should be used on HQ only
-        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter, Guid? translationId)
-        {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            CheckShouldQestionProvideOptions(question, questionId);
-
-            return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
-        }
-
-        public CategoricalOption GetOptionForQuestionFromStructureByOptionText(Guid questionId, string optionText, Guid? translationId)
-        {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            CheckShouldQestionProvideOptions(question, questionId);
-
-            return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
-        }
-
-        public CategoricalOption GetOptionForQuestionFromStructureByOptionValue(Guid questionId, decimal optionValue, Guid? translationId)
-        {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            CheckShouldQestionProvideOptions(question, questionId);
-
-            if (question.Answers.Any(x => x.AnswerCode.HasValue))
-            {
-                return question.Answers.Single(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
-            }
-            else
-            {
-                return question.Answers.Single(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToCategoricalOption();
-            }
-        }
-
-        private static IEnumerable<CategoricalOption> GetFromQuestionCategoricalOptions(IQuestion question, int? parentQuestionValue, string filter)
-        {
-            if (question.Answers.Any(x => x.AnswerCode.HasValue))
-            {
-                foreach (var answer in question.Answers)
-                {
-                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
-                        answer.ParentCode == parentQuestionValue)
-                        yield return
-                            new CategoricalOption()
-                            {
-                                Value = Convert.ToInt32(answer.AnswerCode.Value),
-                                Title = answer.AnswerText,
-                                ParentValue =
-                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?)null
-                            };
-                }
-            }
-            else
-            {
-                foreach (var answer in question.Answers)
-                {
-                    var parentOption = string.IsNullOrEmpty(answer.ParentValue)
-                        ? (int?)null
-                        : Convert.ToInt32(ParseAnswerOptionParentValueOrThrow(answer.ParentValue, question.PublicKey));
-
-                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
-                        parentOption == parentQuestionValue)
-                        yield return
-                            new CategoricalOption()
-                            {
-                                Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
-                                Title = answer.AnswerText,
-                                ParentValue = parentOption
-                            };
-                }
-            }
-        }
-
+        
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
+            //filtered and cascadings
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version), this,
-                    questionId, parentQuestionValue, filter, this.translationId);
+                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                    questionId, parentQuestionValue, filter, this.translation);
             }
 
-            return GetFromQuestionCategoricalOptions(question, parentQuestionValue, filter);
+            //regular options
+            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter);
         }
 
-        public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText)
+        public CategoricalOption GetOptionForQuestionByOptionText(Guid questionId, string optionText, int? parentQuestionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(new QuestionnaireIdentity(this.QuestionnaireId, Version), this,
-                    questionId, optionText, this.translationId);
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(
+                    new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                    questionId,
+                    optionText, 
+                    parentQuestionValue,
+                    this.translation);
             }
 
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
@@ -412,14 +352,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            if (question.Answers.Any(x => x.AnswerCode.HasValue))
-            {
-                return question.Answers.Select(answer => answer.AnswerCode.Value).ToReadOnlyCollection();
-            }
-            else
-            {
-                return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToReadOnlyCollection();
-            }
+            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, null, null)
+                .Select(x => Convert.ToDecimal(x.Value)).ToReadOnlyCollection();
         }
 
         private void CheckShouldQestionProvideOptions(IQuestion question, Guid questionId)
@@ -430,6 +364,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (questionTypeDoesNotSupportAnswerOptions)
                 throw new QuestionnaireException(
                     $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+        }
+
+        public CategoricalOption GetOptionForQuestionByOptionValueFromStructure(Guid questionId, decimal optionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            CheckShouldQestionProvideOptions(question, questionId);
+
+            return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue);
         }
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue) => this.GetAnswerOption(questionId, answerOptionValue).Title;
@@ -455,23 +397,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestionByOptionValue(new QuestionnaireIdentity(this.QuestionnaireId, Version), this,
-                    questionId, optionValue, this.translationId);
+                return QuestionOptionsRepository.GetOptionForQuestionByOptionValue(new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                    questionId, optionValue, this.translation);
             }
 
-            if (question.Answers.Any(x => x.AnswerCode.HasValue))
-            {
-                return question.Answers.Single(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
-            }
-            else
-            {
-                return question.Answers.Single(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToCategoricalOption();
-            }
+            return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(Guid questionId, decimal optionValue)
         {
             return GetAnswerOption(questionId, optionValue);
+        }
+
+        public IEnumerable<CategoricalOption> GetOptionsForQuestionFromStructure(Guid questionId, int? parentQuestionValue, string filter)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            CheckShouldQestionProvideOptions(question, questionId);
+
+            return AnswerUtils.GetCategoricalOptionsFromQuestion(question, parentQuestionValue, filter);
+        }
+
+        public CategoricalOption GetOptionForQuestionByOptionTextFromStructure(Guid questionId, string optionText, int? parentQuestionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+            CheckShouldQestionProvideOptions(question, questionId);
+
+            return question.Answers.SingleOrDefault(x => x.AnswerText == optionText && x.ParentCode == parentQuestionValue).ToCategoricalOption();
         }
 
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
@@ -502,6 +453,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var question = this.GetQuestion(questionId);
 
+            return IsInterviewierQuestion(question);
+        }
+
+        private bool IsInterviewierQuestion(IQuestion question)
+        {
             return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         }
 
@@ -726,7 +682,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!this.cacheOfUnderlyingInterviewerQuestions.ContainsKey(groupId))
                 this.cacheOfUnderlyingInterviewerQuestions[groupId] = this
                     .GetGroupOrThrow(groupId)
-                    .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Interviewer && !question.Featured)
+                    .Find<IQuestion>(IsInterviewierQuestion)
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection();
 
@@ -799,17 +755,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid questionId)
+        public Guid? GetCommonParentRosterForLinkedQuestionAndItSource(Guid linkedQuestionId)
         {
-            var isQuestionLinkedToQuestion = this.IsQuestionLinked(questionId);
+            var isQuestionLinkedToQuestion = this.IsQuestionLinked(linkedQuestionId);
             var questionSourceId = isQuestionLinkedToQuestion
-                  ? this.GetQuestionReferencedByLinkedQuestion(questionId)
-                  : this.GetRosterReferencedByLinkedQuestion(questionId);
+                  ? this.GetQuestionReferencedByLinkedQuestion(linkedQuestionId)
+                  : this.GetRosterReferencedByLinkedQuestion(linkedQuestionId);
 
             var linkedSourceRosterScopes = this.GetRosterSizeSourcesForEntity(questionSourceId).Shrink();
-            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(questionId);
+            var linkedRosterScopes = this.GetRosterSizeSourcesForEntity(linkedQuestionId);
 
-            var mutualRosterSizeSources = linkedSourceRosterScopes.Intersect(linkedRosterScopes).ToList();
+            var mutualRosterSizeSources = linkedSourceRosterScopes.GetCommonPart(linkedRosterScopes).ToList();
 
             if (!mutualRosterSizeSources.Any())
                 return null;
@@ -833,6 +789,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return targetRoster;
         }
 
+        public string GetVariableLabel(Guid variableId) => this.GetVariable(variableId).Label;
+
+        public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
+
+        public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
+        public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
+
         private bool IsQuestionChildOfGroup(Guid questionId, Guid groupId)
         {
             return GetAllUnderlyingQuestions(groupId).Contains(questionId);
@@ -847,8 +810,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
             var result = GetChildEntityIds(groupId)
-                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewierQuestion(x)) ||
-                                      this.IsVariable(x));
+                        .Except(x => (this.IsQuestion(x) && !this.IsInterviewierQuestion(x)));
 
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
@@ -857,7 +819,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
                     .GetGroupOrThrow(groupId)
                     .Children.OfType<IQuestion>()
-                    .Where(question => !question.Featured && question.QuestionScope == QuestionScope.Interviewer)
+                    .Where(IsInterviewierQuestion)
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection());
 
@@ -898,6 +860,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             else if (IsStaticText(questionId))
             {
                 return this.GetStaticTextImpl(questionId).ValidationConditions[conditionIndex].Message;
+            }
+
+            return null;
+        }
+
+        public string[] GetValidationMessages(Guid entityId)
+        {
+            if (IsQuestion(entityId))
+            {
+                return this.GetQuestion(entityId).ValidationConditions.Select(x => x.Message).ToArray();
+            }
+            else if (IsStaticText(entityId))
+            {
+                return this.GetStaticTextImpl(entityId).ValidationConditions.Select(x => x.Message).ToArray();
             }
 
             return null;
@@ -1217,11 +1193,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }).Select(x => x.PublicKey);
         }
 
-        public bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue)
-        {
-            return GetOptionsForQuestion(questionId, Convert.ToInt32(parentValue), string.Empty).Any();
-        }
-
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedQuestions()
         {
             return this.GetSubstitutionReferencedEntities(this.AllQuestions);
@@ -1363,8 +1334,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestionImpl(Guid questionId)
         {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-
             IEnumerable<Guid> rostersAffectedByCurrentDomain =
                 from @group in this.AllGroups
                 where this.IsRosterGroup(@group.PublicKey) && @group.RosterTitleQuestionId == questionId
@@ -1458,33 +1427,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 group = (IGroup)group.GetParent();
             }
         }
-
-        private static decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
-        {
-            decimal parsedValue;
-
-            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
-                throw new QuestionnaireException(string.Format(
-                    "Cannot parse answer option value '{0}' as decimal. Question id: '{1}'.",
-                    value, questionId));
-
-            return parsedValue;
-        }
-
-        private static decimal ParseAnswerOptionParentValueOrThrow(string value, Guid questionId)
-        {
-            decimal parsedValue;
-
-            if (!decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
-                throw new QuestionnaireException(string.Format(
-                    "Cannot parse answer option parent value '{0}' as decimal. Question id: '{1}'.",
-                    value, questionId));
-
-            return parsedValue;
-        }
-
-        private static bool IsExpressionDefined(string expression) => !string.IsNullOrWhiteSpace(expression);
-
+        
         private bool DoesQuestionSupportRoster(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -1558,6 +1501,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
 
+        private IVariable GetVariable(Guid questionId) => GetVariable(this.VariablesCache, questionId);
+
         private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 
         private static string FormatQuestionForException(IQuestion question)
@@ -1566,11 +1511,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 question.QuestionText ?? "<<NO QUESTION TITLE>>",
                 question.StataExportCaption ?? "<<NO VARIABLE NAME>>",
                 question.PublicKey);
-        }
-
-        private static void InitializeQuestionnaireDocument(QuestionnaireDocument source)
-        {
-            source.ConnectChildrenWithParent();
         }
 
         private static IQuestion GetQuestionOrThrow(Dictionary<Guid, IQuestion> questions, Guid questionId)
@@ -1594,6 +1534,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         private static IQuestion GetQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId) => questions.GetOrNull(questionId);
+
+        private static IVariable GetVariable(Dictionary<Guid, IVariable> variables, Guid variableId) => variables.GetOrNull(variableId);
 
         private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId) => entities.GetOrNull(entityId);
 

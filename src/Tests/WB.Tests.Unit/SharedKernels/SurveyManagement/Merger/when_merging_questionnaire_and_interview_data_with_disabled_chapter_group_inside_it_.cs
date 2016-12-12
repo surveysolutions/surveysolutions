@@ -12,6 +12,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using It = Machine.Specifications.It;
@@ -45,11 +46,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                             QuestionType = QuestionType.Numeric,
                                             StataExportCaption = "q2"
                                         }
-                                    }
+                                    }.ToReadOnlyCollection()
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
 
             interview = CreateInterviewData(interviewId);

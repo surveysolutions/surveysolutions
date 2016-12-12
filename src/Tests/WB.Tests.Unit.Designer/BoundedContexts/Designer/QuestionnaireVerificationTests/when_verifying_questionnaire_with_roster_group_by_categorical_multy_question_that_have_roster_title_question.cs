@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -18,15 +19,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             rosterGroupId = Guid.Parse("10000000000000000000000000000000");
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             rosterTitleQuestionId = Guid.Parse("11333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
+            questionnaire = CreateQuestionnaireDocument(
+                new MultyOptionsQuestion("question 1")
             {
                 PublicKey = rosterSizeQuestionId,
                 StataExportCaption = "var1",
                 Answers = { new Answer() { AnswerValue = "1", AnswerText = "opt 1" }, new Answer() { AnswerValue = "2", AnswerText = "opt 2" } }
-            });
-
-            questionnaire.Children.Add(new Group()
+            },
+            new Group()
             {
                 PublicKey = rosterGroupId,
                 IsRoster = true,
@@ -41,13 +41,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         StataExportCaption = "var2",
                         PublicKey = rosterTitleQuestionId
                     }
-                }
+                }.ToReadOnlyCollection()
             });
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

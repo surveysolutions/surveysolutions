@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Code
         {
             this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
                 .WhenActionMethodHasNo<NoTransactionAttribute>();
-            this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
+            this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Global)
                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
 
             this.Bind<ICommandInflater>().To<CommandInflater>();

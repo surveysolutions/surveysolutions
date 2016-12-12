@@ -19,8 +19,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
         {
             rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestion = Guid.Parse("11111111111111111111111111111111");
+            var chapterId = Guid.Parse("22222222222222222222222222222222");
 
-            var nonTranslatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(
+            var nonTranslatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                chapterId,
                 Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion,
                     options: new List<Answer>
                     {
@@ -35,7 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             nonTranslatedQuestionnaire.Translations.Add(
                     Create.Entity.Translation(translationId, targetLanguage));
 
-            var translatedQuestionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion,
+            var translatedQuestionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.Entity.MultyOptionsQuestion(id: rosterSizeQuestion,
                     options: new List<Answer>
                     {
                         Create.Entity.Answer("тайтл1", 1)
@@ -57,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
                 questionnaireRepository: questionnaires
                 );
 
-            interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty, DateTime.Now, new decimal[] {1});
+            interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty, DateTime.Now, new [] {1});
             eventContext = new EventContext();
         };
 

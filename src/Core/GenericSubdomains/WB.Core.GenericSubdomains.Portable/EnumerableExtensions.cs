@@ -7,6 +7,14 @@ namespace WB.Core.GenericSubdomains.Portable
 {
     public static class EnumerableExtensions
     {
+        public static IEnumerable<T> GetCommonPart<T>(this IEnumerable<T> vector1, IEnumerable<T> vector2)
+            where T : struct
+            => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T? : null as T?).TakeWhile(x => x != null).Select(x => x.Value);
+
+        public static IEnumerable<T> GetCommonBeginning<T>(this IEnumerable<T> vector1, IEnumerable<T> vector2)
+            where T : class
+            => vector1.Zip(vector2, (x, y) => x.Equals(y) ? x as T : null as T).TakeWhile(x => x != null).Select(x => x);
+
         public static IEnumerable<T> DistinctBy<T, TIdentity>(this IEnumerable<T> source, Func<T, TIdentity> keySelector)
         {
             return source.Distinct(By(keySelector));
@@ -62,14 +70,12 @@ namespace WB.Core.GenericSubdomains.Portable
         }
 
         public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IList<T> source)
-        {
-            return new ReadOnlyCollection<T>(source);
-        }
+            => source as ReadOnlyCollection<T>
+            ?? new ReadOnlyCollection<T>(source);
 
         public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
-        {
-            return source.ToList().ToReadOnlyCollection();
-        }
+            => source as ReadOnlyCollection<T>
+            ?? source.ToList().ToReadOnlyCollection();
 
         public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {

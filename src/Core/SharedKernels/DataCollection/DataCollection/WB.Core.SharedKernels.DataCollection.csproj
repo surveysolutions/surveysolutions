@@ -72,10 +72,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
+    <Compile Include="Commands\Interview\RejectInterviewToInterviewerCommand.cs" />
     <Compile Include="Commands\Interview\SwitchTranslation.cs" />
     <Compile Include="Commands\Interview\UnapproveByHeadquartersCommand.cs" />
     <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
@@ -90,6 +90,8 @@
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\StaticTextsPassiveEvent.cs" />
+    <Compile Include="Events\Interview\Dtos\ChangedLinkedToListOptions.cs" />
+    <Compile Include="Events\Interview\LinkedToListOptionsChanged.cs" />
     <Compile Include="Events\Interview\TranslationSwitched.cs" />
     <Compile Include="Events\Interview\VariablesDisabled.cs" />
     <Compile Include="Events\Interview\VariablesEnabled.cs" />
@@ -149,7 +151,11 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeRoster.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeStaticText.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\InterviewTreeVariable.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitutionVariables.cs" />
+    <Compile Include="Services\ISubstitionTextFactory.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\RosterManager.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitionText.cs" />
+    <Compile Include="Implementation\Services\SubstitionTextFactory.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\Latest\InterviewExpressionStateV10ToLatestAdapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V10\InterviewExpressionStateV9ToV10Adapter.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V2\InterviewExpressionStateV1ToV2Adapter.cs" />
@@ -162,7 +168,6 @@
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IInterviewExpressionStateUpgrader.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ILatestInterviewExpressionState.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateUpgrader.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IReadOnlyInterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewPropertiesInvariants.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewTreeInvariants.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
@@ -219,7 +224,6 @@
     </Compile>
     <Compile Include="Events\Interview\PictureQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QRBarcodeQuestionAnswered.cs" />
-    <Compile Include="Events\Interview\InterviewForTestingCreated.cs" />
     <Compile Include="Events\Interview\MultipleOptionsLinkedQuestionAnswered.cs" />
     <Compile Include="Events\Interview\NumericIntegerQuestionAnswered.cs" />
     <Compile Include="Events\Interview\QuestionsDisabled.cs" />
@@ -237,7 +241,6 @@
     </Compile>
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterCalculationData.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterIdentity.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
@@ -305,7 +308,6 @@
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
-    <Compile Include="Implementation\Providers\ICategoricalOptionsProvider.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
@@ -388,6 +390,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Accessors\" />
     <Folder Include="Commands\Questionnaire\" />
     <Folder Include="Implementation\ReadSide\" />
     <Folder Include="ValueObjects\Questionnaire\" />

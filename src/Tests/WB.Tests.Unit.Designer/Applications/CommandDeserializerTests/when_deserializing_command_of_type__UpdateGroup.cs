@@ -12,19 +12,19 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
         {
             type = "UpdateGroup";
 
-            title = @"<b width='7'>MA<font color='red'>IN</font></b><img /><script>alert('hello world!')</script><script/>";
+            title = @"<b width='7'>MA<font color='red'>IN</font></b><img /><script> alert('hello world!')</script><script/>";
             questionnaireId = "11111111-1111-1111-1111-111111111111";
             groupId = "22222222-2222-2222-2222-222222222222";
             propagationKind = "AutoPropagated";
             condition = "1 == 2";
 
-            command = string.Format(@"{{
-                ""questionnaireId"": ""{0}"",
-                ""groupId"": ""{1}"",
-                ""title"": ""{2}"",
-                ""propagationKind"": ""{3}"",
-                ""condition"": ""{4}""
-            }}", questionnaireId, groupId, title, propagationKind, condition);
+            command = $@"{{
+                ""questionnaireId"": ""{questionnaireId}"",
+                ""groupId"": ""{groupId}"",
+                ""title"": ""{title}"",
+                ""propagationKind"": ""{propagationKind}"",
+                ""condition"": ""{condition}""
+            }}";
 
             deserializer = CreateCommandDeserializer();
         };

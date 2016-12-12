@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
     public class TextListQuestion : AbstractQuestion, ITextListQuestion
     {
-        public TextListQuestion(string text)
-            : base(text)
-        {
-        }
-
-        public TextListQuestion()
-        {
-        }
+        public TextListQuestion(string questionText = null, List<IComposite> children = null):base(questionText, children){ }
 
         public override void AddAnswer(Answer answer)
         {

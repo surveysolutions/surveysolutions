@@ -25,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             nestedRosterId = Guid.Parse("13333333333333333333333333333333");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Entity.FixedRoster(rosterId: rosterId, fixedTitles: new[] {"t1", "t2"},
+                Create.Entity.FixedRoster(rosterId: rosterId, obsoleteFixedTitles: new[] {"t1", "t2"},
                     children: new IComposite[]
                     {
-                        Create.Entity.FixedRoster(rosterId: nestedRosterId, fixedTitles: new[] {"t1", "t2"},
+                        Create.Entity.FixedRoster(rosterId: nestedRosterId, obsoleteFixedTitles: new[] {"t1", "t2"},
                             children: new IComposite[]
                             {
                                 new NumericQuestion()

@@ -38,17 +38,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.Roster(commonRosterId, variable: "common_roster",
                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                        fixedRosterTitles: new [] { Create.FixedRosterTitle(1), Create.FixedRosterTitle(2) },
+                        fixedTitles: new [] { Create.FixedTitle(1), Create.FixedTitle(2) },
                         children: new IComposite[] {
                             Create.Roster(parentLinkedSourceRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new [] { Create.FixedRosterTitle(3), Create.FixedRosterTitle(4) },
+                                fixedTitles: new [] { Create.FixedTitle(3), Create.FixedTitle(4) },
                                 variable: "parent_linked_source_roster",
                                 children: new IComposite[]
                                 {
                                     Create.Roster(linkedSourceRosterId,
                                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedRosterTitles: new [] { Create.FixedRosterTitle(5),  Create.FixedRosterTitle(6) },
+                                        fixedTitles: new [] { Create.FixedTitle(5),  Create.FixedTitle(6) },
                                         variable: "linked_source_roster",
                                         children: new IComposite[]
                                         {
@@ -58,13 +58,13 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                              Create.Roster(parentLinkedRosterId,
                                 rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                fixedRosterTitles: new [] { Create.FixedRosterTitle(7), Create.FixedRosterTitle(8) },
+                                fixedTitles: new [] { Create.FixedTitle(7), Create.FixedTitle(8) },
                                 variable: "parent_linked_roster",
                                 children: new IComposite[]
                                 {
                                     Create.Roster(linkedRosterId,
                                         rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
-                                        fixedRosterTitles: new [] { Create.FixedRosterTitle(9), Create.FixedRosterTitle(10) },
+                                        fixedTitles: new [] { Create.FixedTitle(9), Create.FixedTitle(10) },
                                         variable: "linked_roster",
                                         children: new IComposite[]
                                         {

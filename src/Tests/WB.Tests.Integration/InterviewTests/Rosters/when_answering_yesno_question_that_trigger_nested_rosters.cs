@@ -77,14 +77,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var sidebarViewModel = Setup.SidebarSectionViewModel(questionnaireDocument, interview);
                 sidebarViewModel.Sections.ElementAt(1).Expanded = true;
 
-                using (var eventContext = new EventContext())
-                {
-                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
-                    Yes(10), Yes(40), Yes(30)));
-
-                    sidebarViewModel.Handle(eventContext.GetSingleEvent<RosterInstancesAdded>());
-                    sidebarViewModel.Handle(eventContext.GetSingleEvent<RosterInstancesRemoved>());
-                }
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId,
+                    RosterVector.Empty, Yes(10), Yes(40), Yes(30)));
 
                 var rosterInstances = sidebarViewModel.Sections.First().Children;
                 result.FirstSectionContainsDuplicates = rosterInstances.Count != rosterInstances.Select(x => x.SectionIdentity).Distinct().Count();

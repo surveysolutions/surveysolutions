@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
     public interface ILookupTableService
     {
         void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string fileContent);
-        void DeleteLookupTableContent(Guid questionnaireId, Guid lookupTableId);
+        void DeleteAllByQuestionnaireId(Guid questionnaireId);
         LookupTableContent GetLookupTableContent(Guid questionnaireId, Guid lookupTableId);
         LookupTableContentFile GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId);
         Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId);

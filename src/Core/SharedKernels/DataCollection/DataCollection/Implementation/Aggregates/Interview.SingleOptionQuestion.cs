@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -13,25 +15,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
+            var isLinkedToList = this.Tree.GetQuestion(answeredQuestion).IsLinkedToListQuestion;
+            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion, this.Tree, isLinkedToList);
 
-            this.CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion, sourceInterviewTree);
+            var changedInterviewTree = this.Tree.Clone();
 
-            var changedInterviewTree = sourceInterviewTree.Clone();
-
-            var changedQuestionIdentities = new List<Identity> { answeredQuestion };
-            var question = changedInterviewTree.GetQuestion(answeredQuestion).AsSingleOption;
-            var questionWasAnsweredAndAnswerChanged = question.IsAnswered && question.GetAnswer() != selectedValue;
-            question.SetAnswer(Convert.ToInt32(selectedValue));
+            var givenAndRemovedAnswers = new List<Identity> { answeredQuestion };
+            var singleQuestion = changedInterviewTree.GetQuestion(answeredQuestion);
             
-            if (questionWasAnsweredAndAnswerChanged)
+            if (isLinkedToList)
             {
-                RemoveAnswersForDependendCascadingQuestions(answeredQuestion, changedInterviewTree, questionnaire, changedQuestionIdentities);
+                var question = singleQuestion.AsSingleLinkedToList;
+                question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(selectedValue)));
+            }
+            else
+            {
+                var question = singleQuestion.AsSingleFixedOption;
+                var questionWasAnsweredAndAnswerChanged = question.IsAnswered && question.GetAnswer().SelectedValue != selectedValue;
+                question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(selectedValue)));
+
+                if (questionWasAnsweredAndAnswerChanged)
+                {
+                    RemoveAnswersForDependendCascadingQuestions(answeredQuestion, changedInterviewTree, questionnaire, givenAndRemovedAnswers);
+                }
             }
 
-            this.ApplyTreeDiffChanges(userId, changedInterviewTree, questionnaire, changedQuestionIdentities, sourceInterviewTree);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, givenAndRemovedAnswers, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference, userId);
         }
     }
 }

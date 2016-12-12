@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
@@ -33,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "persons_n",
                 IsInteger = true
-            }, chapterId, null);
+            }, chapterId);
 
             var rosterId = Guid.Parse("23232323232323232323232323232322");
             questionnaireDocument.Add(new Group()
@@ -42,7 +43,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 VariableName = "r1"
-            }, chapterId, null);
+            }, chapterId);
 
             var rosterId1 = Guid.Parse("23232323232323232323232323232388");
             questionnaireDocument.Add(new Group()
@@ -51,7 +52,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 VariableName = "r2"
-            }, chapterId, null);
+            }, chapterId);
 
             questionnaireDocument.Add(new NumericQuestion()
             {
@@ -59,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 StataExportCaption = "q_22",
                 IsInteger = true,
                 QuestionType = QuestionType.Numeric
-            }, rosterId1, null);
+            }, rosterId1);
 
 
             Guid pets_questionId = Guid.Parse("23232323232323232323232323232317");
@@ -69,7 +70,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 StataExportCaption = "pets_n",
                 IsInteger = true,
                 QuestionType = QuestionType.Numeric
-            }, rosterId, null);
+            }, rosterId);
 
             var groupId = Guid.Parse("12345678912345678912345678912345");
             questionnaireDocument.Add(new Group()
@@ -77,7 +78,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 PublicKey = groupId,
                 IsRoster = false,
                 ConditionExpression = "pets_n > 0"
-            }, rosterId, null);
+            }, rosterId);
 
             questionnaireDocument.Add(new TextQuestion()
             {
@@ -86,7 +87,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 ConditionExpression = "pets_n > 0",
                 ValidationExpression = "pets_n == 0",
                 QuestionType = QuestionType.Text
-            }, groupId, null);
+            }, groupId);
 
             questionnaireDocument.Add(new Group()
             {
@@ -94,7 +95,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = pets_questionId,
                 ConditionExpression = "pets_text.Length > 0"
-            }, rosterId, null);
+            }, rosterId);
 
             return questionnaireDocument;
         }
@@ -120,7 +121,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 StataExportCaption = "test",
                 IsInteger = true,
                 ValidationExpression = "test > 3"
-            }, chapterId, null);
+            }, chapterId);
 
             questionnaireDocument.Add(new Group()
             {
@@ -129,7 +130,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 RosterSizeSource = RosterSizeSourceType.Question
-            }, chapterId, null);
+            }, chapterId);
 
             questionnaireDocument.Add(new Group()
             {
@@ -138,7 +139,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 RosterSizeSource = RosterSizeSourceType.Question
-            }, chapterId, null);
+            }, chapterId);
 
             questionnaireDocument.Add(new NumericQuestion()
             {
@@ -147,7 +148,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 StataExportCaption = "test_in_r",
                 IsInteger = true,
                 ValidationExpression = "test > 3"
-            }, roster2Id, null);
+            }, roster2Id);
 
             return questionnaireDocument;
         }
@@ -161,19 +162,16 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                 FixedRosterTitles = new[]
                                           {
-                                              Create.FixedRosterTitle(1, "Roster X-1"),
-                                              Create.FixedRosterTitle(2, "Roster X-2")
-                                          }
-            };
+                                              Create.FixedTitle(1, "Roster X-1"),
+                                              Create.FixedTitle(2, "Roster X-2")
+                                          },
+                Children = varNames.Select(varName => new TextQuestion(varName)
+                {
+                    PublicKey = Guid.NewGuid(),
+                    StataExportCaption = varName
+                } as IComposite).ToReadOnlyCollection()
 
-            foreach (var varName in varNames)
-            {
-                roster.Children.Add(new TextQuestion(varName)
-                                    {
-                                        PublicKey = Guid.NewGuid(),
-                                        StataExportCaption = varName
-                                    });
-            }
+            };
 
             return new QuestionnaireDocument()
             {
@@ -184,9 +182,9 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                         Children = new List<IComposite>()
                         {
                             roster
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 
@@ -208,8 +206,8 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                                 RosterSizeSource = RosterSizeSourceType.FixedTitles,
                                 FixedRosterTitles =   new[]
                                           {
-                                              Create.FixedRosterTitle(1, "Roster X-1"),
-                                              Create.FixedRosterTitle(2, "Roster X-2")
+                                              Create.FixedTitle(1, "Roster X-1"),
+                                              Create.FixedTitle(2, "Roster X-2")
                                           },
                                 Children = new List<IComposite>()
                                 {
@@ -218,7 +216,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                                         PublicKey = questionInRosterId,
                                         ValidationExpression = "if"
                                     }
-                                }
+                                }.ToReadOnlyCollection()
                             },
                             new TextQuestion("Text")
                             {
@@ -226,9 +224,9 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                                 PublicKey = questionId,
                                 ConditionExpression = "bool"
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 
@@ -249,7 +247,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 StataExportCaption = "test",
                 IsInteger = true,
                 ValidationExpression = "test >= 1"
-            }, chapterId, null);
+            }, chapterId);
 
             questionnaireDocument.Add(new Group()
             {
@@ -258,7 +256,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 RosterSizeSource = RosterSizeSourceType.Question
-            }, chapterId, null);
+            }, chapterId);
 
 
             questionnaireDocument.Add(new NumericQuestion()
@@ -268,7 +266,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 StataExportCaption = "test_in_roster",
                 IsInteger = true,
                 ValidationExpression = "test >= 1"
-            }, rosterId, null);
+            }, rosterId);
 
             return questionnaireDocument;
         }
@@ -289,7 +287,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "q1",
                 IsInteger = true,
-            }, questionnaireId, null);
+            }, questionnaireId);
 
             questionnaireDocument.Add(new NumericQuestion()
             {
@@ -298,13 +296,13 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 StataExportCaption = "q2",
                 IsInteger = true,
                 ConditionExpression = "q1 > 3"
-            }, questionnaireId, null);
+            }, questionnaireId);
 
             questionnaireDocument.Add(new Group()
             {
                 PublicKey = group1Id,
                 ConditionExpression = "q1 > 5"
-            }, questionnaireId, null);
+            }, questionnaireId);
 
 
             return questionnaireDocument;
@@ -321,7 +319,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "q1",
                 IsInteger = true,
-            }, questionnaireId, null);
+            }, questionnaireId);
 
 
             questionnaireDocument.Add(new Group()
@@ -330,7 +328,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 ConditionExpression = "q1 > 5"
-            }, questionnaireId, null);
+            }, questionnaireId);
 
             return questionnaireDocument;
         }
@@ -348,7 +346,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "q1",
                 IsInteger = true,
-            }, questionnaireId, null);
+            }, questionnaireId);
 
 
             questionnaireDocument.Add(new Group()
@@ -357,7 +355,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 VariableName = "R1"
-            }, questionnaireId, null);
+            }, questionnaireId);
 
 
             questionnaireDocument.Add(new NumericQuestion()
@@ -366,7 +364,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 PublicKey = question2Id,
                 StataExportCaption = "q2",
                 IsInteger = true,
-            }, roster1Id, null);
+            }, roster1Id);
 
             questionnaireDocument.Add(new Group()
             {
@@ -375,7 +373,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 RosterSizeQuestionId = questionId,
                 ConditionExpression = "q2 > 5",
                 VariableName = "R1_1"
-            }, roster1Id, null);
+            }, roster1Id);
 
             return questionnaireDocument;
         }
@@ -392,7 +390,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 PublicKey = questionId,
                 StataExportCaption = "q1",
                 IsInteger = true,
-            }, questionnaireId, null);
+            }, questionnaireId);
 
 
             questionnaireDocument.Add(new Group()
@@ -401,7 +399,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 IsRoster = true,
                 RosterSizeQuestionId = questionId,
                 VariableName = "R1"
-            }, questionnaireId, null);
+            }, questionnaireId);
 
 
             questionnaireDocument.Add(new NumericQuestion()
@@ -410,7 +408,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 PublicKey = question2Id,
                 StataExportCaption = "q2",
                 IsInteger = true,
-            }, roster1Id, null);
+            }, roster1Id);
 
             questionnaireDocument.Add(new Group()
             {
@@ -419,7 +417,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 RosterSizeQuestionId = questionId,
                 ConditionExpression = "q2 > 5",
                 VariableName = "R2"
-            }, questionnaireId, null);
+            }, questionnaireId);
 
             return questionnaireDocument;
         }
@@ -497,9 +495,9 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                                 PublicKey = questionId,
                                 ConditionExpression = "self > 0"
                             }
-                        }
+                        }.ToReadOnlyCollection()
                     }
-                }
+                }.ToReadOnlyCollection()
             };
         }
 
@@ -510,14 +508,23 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             Guid chapterId = Guid.Parse("23232323232323232323232323232323");
             
             questionnaireDocument.AddChapter(chapterId);
-            questionnaireDocument.Add(new NumericQuestion()
+
+            questionnaireDocument.Children = new List<IComposite>()
+                {new Group(string.Format("Chapter {0}", chapterId))
             {
-                QuestionType = QuestionType.Numeric,
-                PublicKey = questionId,
-                StataExportCaption = "test",
-                IsInteger = true,
-                ValidationExpression = "self >= 1"
-            }, chapterId, null);
+                Children = new List<IComposite>()
+                {
+                    new NumericQuestion()
+                    {
+                        QuestionType = QuestionType.Numeric,
+                        PublicKey = questionId,
+                        StataExportCaption = "test",
+                        IsInteger = true,
+                        ValidationExpression = "self >= 1"
+                    }
+                }.ToReadOnlyCollection()
+            }}.ToReadOnlyCollection();
+
 
             return questionnaireDocument;
         }

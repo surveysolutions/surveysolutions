@@ -114,9 +114,14 @@ namespace WB.UI.Headquarters.Controllers
                 var questionnairePackage = await this.restService.GetAsync<QuestionnaireCommunicationPackage>(
                     url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires/{request.Questionnaire.Id}",
                     credentials: designerUserCredentials,
-                    queryString: new { clientQuestionnaireContentVersion = supportedVersion });
+                    queryString: new
+                    {
+                        clientQuestionnaireContentVersion = supportedVersion,
+                        minSupportedQuestionnaireVersion = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer()
+                    });
 
-                QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
+                QuestionnaireDocument questionnaire =
+                    this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
 
@@ -124,7 +129,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     foreach (var questionnaireAttachment in questionnaire.Attachments)
                     {
-                        if(this.attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
+                        if (this.attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
                             continue;
 
                         var attachmentContent = await this.restService.DownloadFileAsync(
@@ -160,9 +165,9 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
                 this.CommandService.Execute(new ImportFromDesigner(
-                    this.GlobalInfo.GetCurrentUser().Id, 
+                    this.GlobalInfo.GetCurrentUser().Id,
                     questionnaire,
-                    request.AllowCensusMode, 
+                    request.AllowCensusMode,
                     questionnaireAssembly,
                     questionnaireContentVersion,
                     questionnaireVersion));
@@ -182,10 +187,12 @@ namespace WB.UI.Headquarters.Controllers
                         questionnaireVerificationResponse.ImportError = ex.Message;
                         break;
                     case HttpStatusCode.PreconditionFailed:
-                        questionnaireVerificationResponse.ImportError = string.Format(ErrorMessages.Questionnaire_verification_failed, request.Questionnaire.Title);
+                        questionnaireVerificationResponse.ImportError =
+                            string.Format(ErrorMessages.Questionnaire_verification_failed, request.Questionnaire.Title);
                         break;
                     case HttpStatusCode.NotFound:
-                        questionnaireVerificationResponse.ImportError = string.Format(ErrorMessages.TemplateNotFound, request.Questionnaire.Title);
+                        questionnaireVerificationResponse.ImportError = string.Format(ErrorMessages.TemplateNotFound,
+                            request.Questionnaire.Title);
                         break;
                     case HttpStatusCode.ServiceUnavailable:
                         questionnaireVerificationResponse.ImportError = ErrorMessages.ServiceUnavailable;
@@ -200,13 +207,23 @@ namespace WB.UI.Headquarters.Controllers
 
                 return questionnaireVerificationResponse;
             }
+            catch (QuestionnaireAssemblyAlreadyExistsException ex)
+            {
+                var questionnaireVerificationResponse = new QuestionnaireVerificationResponse
+                {
+                    ImportError = ex.Message
+                };
+                this.Logger.Error("Failed to import questionnaire from designer", ex);
+
+                return questionnaireVerificationResponse;
+            }
             catch (Exception ex)
             {
                 var domainEx = ex.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx != null) return new QuestionnaireVerificationResponse() {ImportError = domainEx.Message};
 
-                this.Logger.Error(
-                    string.Format("Designer: error when importing template #{0}", request.Questionnaire.Id), ex);
+                this.Logger.Error($"Designer: error when importing template #{request.Questionnaire.Id}", ex);
+
                 throw;
             }
         }

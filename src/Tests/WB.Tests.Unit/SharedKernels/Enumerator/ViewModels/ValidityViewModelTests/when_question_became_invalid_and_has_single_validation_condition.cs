@@ -5,7 +5,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -24,26 +23,29 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 {
                     new ValidationCondition {Expression = "validation 1", Message = "message 1"},
                 }));
-
-            failedValidationConditions = new List<FailedValidationCondition>
-            {
-                new FailedValidationCondition(0)
-            };
-
+            
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
-            var interview = Substitute.For<IStatefulInterview>();
-            interview.GetFailedValidationConditions(questionIdentity)
-                .Returns(failedValidationConditions);
-            interview.WasAnswered(questionIdentity).Returns(true);
+            var interview = Setup.StatefulInterview(questionnaire);
+            interview.Apply(Create.Event.TextQuestionAnswered(questionIdentity.Id, questionIdentity.RosterVector, "text answer"));
+            interview.Apply(
+                Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
+                {
+                    {
+                        questionIdentity,
+                        new List<FailedValidationCondition>
+                        {
+                            new FailedValidationCondition(0)
+                        }
+                    }
+                }));
 
-            var statefulInterviewRepository = Substitute.For<IStatefulInterviewRepository>();
-            statefulInterviewRepository.Get(null).ReturnsForAnyArgs(interview);
+            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
 
             viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
-            viewModel.Init("interviewid", questionIdentity);
+            viewModel.InitForQuestion("interviewid", questionIdentity);
         };
 
         Because of = () =>
@@ -53,7 +55,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 {
                     {
                         questionIdentity,
-                        failedValidationConditions
+                        new List<FailedValidationCondition>
+                        {
+                            new FailedValidationCondition(0)
+                        }
                     }
                 }));
         };
@@ -66,6 +71,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
 
         static ValidityViewModel viewModel;
         static Identity questionIdentity;
-        static List<FailedValidationCondition> failedValidationConditions;
     }
 }

@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -23,9 +24,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         {
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.FixedRoster(rosterId: independantRosterId,
-                    fixedTitles: new[] {"1", "2", "3"}),
+                    obsoleteFixedTitles: new[] {"1", "2", "3"}),
                 Create.Entity.FixedRoster(rosterId: rosterId,
-                    fixedTitles: new[] {"a", "b", ""},
+                    obsoleteFixedTitles: new[] {"a", "b", ""},
                     children: new IComposite[]
                     {
                         new Group()
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                                     QuestionText = "test %rostertitle%",
                                     StataExportCaption = "var"
                                 }
-                            }
+                            }.ToReadOnlyCollection()
                         }
                     }));
 

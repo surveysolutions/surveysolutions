@@ -21,5 +21,7 @@ namespace Main.Core.Entities.SubEntities
         FixedRosterTitle[] FixedRosterTitles { get; }
 
         Guid? RosterTitleQuestionId { get; }
+
+        void ReplaceChildEntityById(Guid id, IComposite newEntity);
     }
 }

@@ -19,8 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
                     rosterId: rosterId,
                     fixedRosterTitles: new[]
                     {
-                        Create.Entity.FixedRosterTitle(1, "one"),
-                        Create.Entity.FixedRosterTitle(2, "two")
+                        Create.Entity.FixedTitle(1, "one"),
+                        Create.Entity.FixedTitle(2, "two")
                     },
                     title: "Roster %subst%"));
 
@@ -33,7 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
             events = new EventContext();
         };
 
-        Because of = () => interview.AnswerTextQuestion(Guid.NewGuid(), questionId, Empty.RosterVector, DateTime.Now, "foo");
+        Because of = () => 
+            interview.AnswerTextQuestion(Guid.NewGuid(), questionId, Empty.RosterVector, DateTime.Now, "foo");
 
         It should_raise_title_changed_event_for_group_after_answer = () =>
         {

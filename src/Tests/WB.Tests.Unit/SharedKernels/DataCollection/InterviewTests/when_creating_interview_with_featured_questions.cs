@@ -6,6 +6,7 @@ using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
@@ -22,10 +23,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var prefilledQuestion1Id = Guid.Parse("ACDC1CCCCCCCCCCCCCCCCCCCCCCCCCCC");
             
-            answersToFeaturedQuestions = new Dictionary<Guid, object>
+            answersToFeaturedQuestions = new Dictionary<Guid, AbstractAnswer>
             {
-                {prefilledQuestionId, "answer"},
-                {prefilledQuestion1Id, "answer 1"}
+                {prefilledQuestionId, TextAnswer.FromString("answer")},
+                {prefilledQuestion1Id, TextAnswer.FromString("answer 1")}
             };
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
@@ -60,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId;
         private static Guid responsibleSupervisorId;
         private static Interview interview;
-        private static Dictionary<Guid, object> answersToFeaturedQuestions;
+        private static Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions;
         private static ILatestInterviewExpressionState expressionState;
     }
 }

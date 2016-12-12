@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using MvvmCross.Platform.Core;
 using MvvmCross.Test.Core;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -39,8 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             IPrincipal principal = null,
             IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
-            
-            IUserInteractionService userInteractionService = null)
+            IUserInteractionService userInteractionService = null,
+            IMvxMainThreadDispatcher mainThreadDispatcher = null)
         {
             return new TextListQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(),
@@ -49,7 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<TextListQuestionAnswered>>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                instructionViewModel: Mock.Of<QuestionInstructionViewModel>());
+                instructionViewModel: Mock.Of<QuestionInstructionViewModel>(),
+                mainThreadDispatcher: mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
         }
     }
 }

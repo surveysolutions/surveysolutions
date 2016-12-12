@@ -15,7 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class GroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         IInterviewEntityViewModel,
-        ICompositeEntity,
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -23,12 +22,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly AnswerNotifier answerNotifier;
 
         private string interviewId;
-
+        private bool isRoster;
         private NavigationState navigationState;
         protected Identity groupIdentity;
 
         public EnablementViewModel Enablement { get; }
-        public bool IsRoster { get; private set; }
 
         public DynamicTextViewModel GroupTitle { get; }
 
@@ -85,8 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             var statefulInterview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
 
-            this.IsRoster = questionnaire.IsRosterGroup(entityIdentity.Id);
-
+            this.isRoster = questionnaire.IsRosterGroup(entityIdentity.Id);
             this.navigationState = navigationState;
             this.groupIdentity = entityIdentity;
 
@@ -100,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.Enablement.Init(interviewId, entityIdentity);
             this.GroupState.Init(interviewId, entityIdentity);
 
-            this.GroupTitle.Init(interviewId, entityIdentity, questionnaire.GetGroupTitle(entityIdentity.Id));
+            this.GroupTitle.Init(interviewId, entityIdentity);
             this.RosterInstanceTitle = statefulInterview.GetRosterTitle(entityIdentity);
             
             if (groupWithAnswersToMonitor != null)
@@ -121,18 +118,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            if (!this.IsRoster) return;
+            if (!this.isRoster) return;
 
-            foreach (var changedInstance in @event.ChangedInstances.Where(changedInstance => this.Identity.Equals(changedInstance.RosterInstance.GetIdentity())))
-            {
+            var changedInstance =
+                @event.ChangedInstances.SingleOrDefault(x => this.Identity.Equals(x.RosterInstance.GetIdentity()));
+
+            if (changedInstance != null)
                 this.RosterInstanceTitle = changedInstance.Title;
-            }
         }
 
         public virtual void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
             this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
+            this.answerNotifier.Dispose();
+            this.GroupTitle.Dispose();
+            this.Enablement.Dispose();
         }
     }
 }

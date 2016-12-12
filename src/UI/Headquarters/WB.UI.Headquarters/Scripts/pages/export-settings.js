@@ -45,6 +45,23 @@
             false);
     };
 
+
+    self.onLogoSubmit = function() {
+        //check whether browser fully supports all File API
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            //get the file size and file type from file input field
+            var fsize = $('#logo')[0].files[0].size;
+
+            if (fsize > 1024*1024*10) //do something if file size more than 10 mb
+            {
+                alert('Logo image size should be less than 10mb');
+                return false;
+            } else {
+                return true;
+            }
+        }
+    };
+
     self.regeneratePass = function () {
         var confirmRegenerateHtml = self.getBindedHtmlTemplate("#confirm-regenerate-password");
 

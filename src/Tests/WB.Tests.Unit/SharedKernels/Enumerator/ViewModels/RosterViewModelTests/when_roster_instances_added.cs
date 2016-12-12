@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Moq;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 {
@@ -18,16 +12,32 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         public void should_append_new_roster_instances()
         {
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var interview = new Mock<IStatefulInterview>();
-            interview.Setup(x => x.GetRosterInstances(It.IsAny<Identity>(), rosterId))
-                .Returns(new List<Identity>().ToReadOnlyCollection());
+            var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var rosterSizeQuestion = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview.Object);
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.Entity.MultyOptionsQuestion(rosterSizeQuestion,
+                    new[]
+                    {
+                        Create.Entity.Answer("answer 1", 1), Create.Entity.Answer("answer 2", 2),
+                        Create.Entity.Answer("answer 3", 3)
+                    }),
+                Create.Entity.Roster(rosterId, rosterSizeQuestionId: rosterSizeQuestion));
 
-            var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
-            viewModel.Init("interviewId", Create.Entity.Identity(rosterId), Create.Other.NavigationState());
+            var interview = Setup.StatefulInterview(questionnaire);
+            interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
+                DateTime.UtcNow, new[] { 1 });
 
-            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(1), Create.Entity.RosterVector(2)));
+            var statefulInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
+            var viewModel = this.CreateViewModel(interviewRepository: statefulInterviewRepository);
+            var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
+
+            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
+            viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
+
+            interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
+                DateTime.UtcNow, new[] { 1, 3 });
+            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, new[] { Create.Entity.RosterVector(3) }));
 
             Assert.That(viewModel.RosterInstances.Count(), Is.EqualTo(2));
         }
@@ -36,26 +46,35 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         public void should_insert_item_inside_list()
         {
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var rosterSizeQuestion = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-            var interview = new Mock<IStatefulInterview>();
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.Entity.MultyOptionsQuestion(rosterSizeQuestion,
+                    new []
+                    {
+                        Create.Entity.Answer("answer 1", 1), Create.Entity.Answer("answer 2", 2),
+                        Create.Entity.Answer("answer 3", 3)
+                    }),
+                Create.Entity.Roster(rosterId, rosterSizeQuestionId: rosterSizeQuestion));
 
-            interview.Setup(x => x.GetRosterInstances(It.IsAny<Identity>(), rosterId))
-                .Returns(new ReadOnlyCollection<Identity>(new List<Identity>
-                {
-                    Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1)),
-                    Create.Entity.Identity(rosterId, Create.Entity.RosterVector(3))
-                }));
+            var interview = Setup.StatefulInterview(questionnaire);
+            interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
+                DateTime.UtcNow, new[] {1, 3});
 
-            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview.Object);
+            var statefulInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
+            var viewModel = this.CreateViewModel(interviewRepository: statefulInterviewRepository);
+            var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
-            var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
-            viewModel.Init("interviewId", Create.Entity.Identity(rosterId), Create.Other.NavigationState());
-            var parentRosterVectorOfAddedRoster = Empty.RosterVector;
-            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, parentRosterVectorOfAddedRoster, rosterInstanceId: 2, sortIndex: 1));
+            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
+            viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
 
-            Assert.That(viewModel.RosterInstances.Count, Is.EqualTo(3));
-            var groupViewModel = viewModel.RosterInstances.ElementAt(1) as GroupViewModel;
-            Assert.That(groupViewModel.Identity, Is.EqualTo(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2))));
+            interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
+                DateTime.UtcNow, new[] { 1, 2, 3 });
+
+            viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, new[] { Create.Entity.RosterVector(2) }));
+
+            Assert.That(viewModel.RosterInstances[1].Identity, Is.EqualTo(Identity.Create(rosterId, Create.Entity.RosterVector(2))));
         }
     }
 }

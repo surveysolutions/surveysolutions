@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
 
             interviewSynchronizationDtoFactoryMock.Verify(
                 x =>
-                    x.BuildFrom(Moq.It.IsAny<InterviewData>(), Moq.It.IsAny<Guid>(), InterviewStatus.InterviewerAssigned,
+                    x.BuildFrom(Moq.It.IsAny<InterviewData>(), Moq.It.IsAny<Guid>(), InterviewStatus.RejectedBySupervisor,
                         "comment", Moq.It.IsAny<DateTime>(), Moq.It.IsAny<DateTime>()), Times.Once);
         }
 

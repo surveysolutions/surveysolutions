@@ -1,3 +1,4 @@
+using MvvmCross.Platform.Core;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -28,12 +29,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public override void UpdateFromGroupModel()
         {           
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
-
+            
             this.QuestionsCount = interview.CountActiveQuestionsInInterview();
             this.SubgroupsCount = 0;
-            this.AnsweredQuestionsCount = interview.CountAnsweredQuestionsInInterview();
+            this.AnsweredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterview();
             this.InvalidAnswersCount = interview.CountInvalidEntitiesInInterview();
-
             this.SimpleStatus = this.CalculateInterviewSimpleStatus();
             this.Status = this.CalculateDetailedStatus();
         }

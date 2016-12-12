@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -40,12 +41,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                     PublicKey = Guid.NewGuid(),
                                     IsRoster = true,
                                     VariableName = "c",
-                                    RosterSizeQuestionId = rosterSizeQuestionId,
-                                    Children = new List<IComposite>()
+                                    RosterSizeQuestionId = rosterSizeQuestionId
                                 }
-                            }
+                            }.ToReadOnlyCollection()
                         }
-                    }
+                    }.ToReadOnlyCollection()
                 }
             });
 
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(2);

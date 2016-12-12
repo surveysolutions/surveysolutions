@@ -37,7 +37,7 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/components/bindings.js", "~/Scripts/pages/userpreloading.js")
+    @Scripts.Render("~/js/preloading")
     <script type="text/javascript">
         var updateVerificationStatusApiUrl = '@(Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UserPreloading", action = "UserPreloadingDetails"})+"/"+Model)';
         var viewModel = new Supervisor.VM.Preloading.UserPreloading(updateVerificationStatusApiUrl, [@((int)UserPrelodingState.CreatingUsers), @((int)UserPrelodingState.ReadyForUserCreation)]);

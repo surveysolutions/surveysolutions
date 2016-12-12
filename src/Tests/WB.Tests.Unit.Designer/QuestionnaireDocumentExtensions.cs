@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer
                 {
                     PublicKey = groupId
                 };
-            document.Children.Add(@group);
+            document.Add(@group, null);
             return group;
         }
 
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.Designer
             question.ValidationExpression = string.Empty;
             question.ValidationMessage = string.Empty;
 
-            @group.Children.Add(question);
+            @group.Insert(Int32.MaxValue, question, null);
             return question;
         }
     }

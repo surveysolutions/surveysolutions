@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         Answer = a.Answer,
                         Question = a.Title,
                         Type = a.Type
-                    }),
+                    }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
@@ -67,8 +67,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         || x.Status == InterviewStatus.SupervisorAssigned
                         || x.Status == InterviewStatus.InterviewerAssigned
                         || x.Status == InterviewStatus.SentToCapi,
-                    CanApproveOrReject = x.Status == InterviewStatus.ApprovedBySupervisor,
+                    CanApprove = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
+                    CanReject = x.Status == InterviewStatus.ApprovedBySupervisor,
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
+                    CanBeReassigned = x.Status == InterviewStatus.SupervisorAssigned
+                        || x.Status == InterviewStatus.InterviewerAssigned
+                        || x.Status == InterviewStatus.Completed
+                        || x.Status == InterviewStatus.RejectedBySupervisor
+                        || x.Status == InterviewStatus.RejectedByHeadquarters,
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
                     CreatedOnClient = x.WasCreatedOnClient,

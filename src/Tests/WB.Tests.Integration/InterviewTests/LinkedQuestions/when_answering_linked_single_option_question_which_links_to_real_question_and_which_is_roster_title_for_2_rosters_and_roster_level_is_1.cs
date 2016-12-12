@@ -32,9 +32,9 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var linkedOption1Vector = new decimal[] { 0 };
             linkedOption2Vector = new decimal[] { 1 };
             var linkedOption3Vector = new decimal[] { 2 };
-            var linkedOption1Answer = (decimal) 6.5;
-            var linkedOption2Answer = (decimal) 3.54;
-            var linkedOption3Answer = (decimal) -11.2;
+            var linkedOption1Answer = 6.5;
+            var linkedOption2Answer = 3.54;
+            var linkedOption3Answer = -11.2;
             linkedOption2TextInvariantCulture = "3.54";
 
             var triggerQuestionId = Guid.NewGuid();
@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     }),
                 Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question,
                     rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
-                Create.Roster(id: linkedToRosterId, variable: "ros3", fixedRosterTitles: new [] { Create.FixedRosterTitle(0), Create.FixedRosterTitle(1), Create.FixedRosterTitle(2)},
+                Create.Roster(id: linkedToRosterId, variable: "ros3", fixedTitles: new [] { Create.FixedTitle(0), Create.FixedTitle(1), Create.FixedTitle(2)},
                     children: new IComposite[]
                     {
                         Create.NumericRealQuestion(id: linkedToQuestionId, variable: "link_source"),

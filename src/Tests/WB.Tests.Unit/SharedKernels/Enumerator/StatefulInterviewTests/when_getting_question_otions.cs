@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -21,15 +19,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             options = new List<CategoricalOption>()
             {
                 new CategoricalOption() {Value = 1, Title = "1"},
-                new CategoricalOption() {Value = 1, Title = "2"}
-            }.ToReadOnlyCollection();
+                new CategoricalOption() {Value = 2, Title = "2"}
+            };
 
             IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
-                _ => _.GetOptionsForQuestion(questionId, null, String.Empty) == options);
+                _ => _.GetOptionsForQuestion(questionId, null, string.Empty) == options);
 
             var expressionState = new Mock<ILatestInterviewExpressionState>();
-
+            expressionState.Setup(_ => _.Clone()).Returns(expressionState.Object);
             expressionState.Setup(_ => _.FilterOptionsForQuestion(questionIdentity, options)).Returns(options);
+            expressionState.Setup(_ => _.GetStructuralChanges()).Returns(new StructuralChanges());
 
             var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(
                 provider => provider.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == expressionState.Object);
@@ -42,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         Because of = () =>
         {
             categoricalOptions =
-                statefulInterview.GetFilteredOptionsForQuestion(questionIdentity, null, string.Empty).ToList();
+                statefulInterview.GetFirstTopFilteredOptionsForQuestion(questionIdentity, null, string.Empty, 200).ToList();
         };
 
         It should_contains_2_elements = () =>
@@ -55,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         static readonly Guid questionId = Guid.Parse("11111111111111111111111111111113");
         static readonly Identity questionIdentity = new Identity(questionId, new decimal[0]);
-        static ReadOnlyCollection<CategoricalOption> options;
+        static IEnumerable<CategoricalOption> options;
 
         static List<CategoricalOption> categoricalOptions;
         static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111112");

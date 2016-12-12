@@ -9,20 +9,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public partial class Interview
     {
-        protected IQuestionnaire GetQuestionnaireOrThrow(Guid id, long version, string language)
+        public string Language { get; private set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
+        public string QuestionnaireId => this.QuestionnaireIdentity?.ToString();
+
+        protected IQuestionnaire GetQuestionnaireOrThrow()
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(new QuestionnaireIdentity(id, version), language);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.QuestionnaireIdentity, this.Language);
 
             if (questionnaire == null)
-                throw new InterviewException($"Questionnaire '{new QuestionnaireIdentity(id, version)}' was not found. InterviewId {EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
+                throw new InterviewException($"Questionnaire '{this.QuestionnaireIdentity}' was not found. InterviewId {EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
 
             return questionnaire;
         }
 
-        private static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
+        protected static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)
             => $"'{GetQuestionTitleForException(questionId, questionnaire)} [{GetQuestionVariableNameForException(questionId, questionnaire)}]'";
 
-        private static string FormatGroupForException(Guid groupId, IQuestionnaire questionnaire)
+        protected static string FormatGroupForException(Guid groupId, IQuestionnaire questionnaire)
             => $"'{GetGroupTitleForException(groupId, questionnaire)} ({groupId:N})'";
 
         private static string GetQuestionTitleForException(Guid questionId, IQuestionnaire questionnaire)
@@ -40,28 +44,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? questionnaire.GetGroupTitle(groupId) ?? "<<NO GROUP TITLE>>"
                 : "<<MISSING GROUP>>";
 
-        public virtual IEnumerable<CategoricalOption> GetFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter)
+        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int itemsCount = 200)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            var filteredOptions = questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter);
+            itemsCount = itemsCount > 200 ? 200 : itemsCount;
 
-            if (questionnaire.IsSupportFilteringForOptions(question.Id))
-                return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, filteredOptions);
-            else
-                return filteredOptions;
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            if (!questionnaire.IsSupportFilteringForOptions(question.Id))
+                return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter).Take(itemsCount).ToList();
+
+            return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question,
+                questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
         }
 
         public CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-
-            return questionnaire.GetOptionsForQuestion(question.Id, parentQuestionValue, string.Empty).FirstOrDefault(x => x.Value == value);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            return questionnaire.GetOptionForQuestionByOptionValue(question.Id, value);
         }
 
         public CategoricalOption GetOptionForQuestionWithFilter(Identity question, string optionText, int? parentQuestionValue = null)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-            var filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var filteredOption = questionnaire.GetOptionForQuestionByOptionText(question.Id, optionText, parentQuestionValue);
 
             if (filteredOption == null)
                 return null;

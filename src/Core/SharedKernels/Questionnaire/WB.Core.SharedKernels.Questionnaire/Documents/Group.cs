@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.Composite;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Entities.SubEntities
@@ -10,23 +12,39 @@ namespace Main.Core.Entities.SubEntities
     [DebuggerDisplay("Group {PublicKey}")]
     public class Group : IGroup
     {
-        public Group()
+        public Group(string title = null, List<IComposite> children = null)
         {
+            this.Title = title;
+
             this.PublicKey = Guid.NewGuid();
-            this.Children = new List<IComposite>();
+            this.children = new List<IComposite>();
             this.ConditionExpression = string.Empty;
             this.Description = string.Empty;
             this.Enabled = true;
             this.FixedRosterTitles = new FixedRosterTitle[0];
-        }
 
-        public Group(string text)
-            : this()
+            if (children == null)
+                this.children = new List<IComposite>();
+            else
+            {
+                this.children = children;
+                this.ConnectChildrenWithParent();
+            }
+        }
+        
+        private List<IComposite> children;
+
+        public ReadOnlyCollection<IComposite> Children
         {
-            this.Title = text;
+            get
+            {
+                return new ReadOnlyCollection<IComposite>(this.children);
+            }
+            set
+            {
+                children = new List<IComposite>(value);
+            }
         }
-
-        public List<IComposite> Children { get; set; }
 
         public string ConditionExpression { get; set; }
 
@@ -66,7 +84,7 @@ namespace Main.Core.Entities.SubEntities
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            foreach (IComposite child in this.Children)
+            foreach (IComposite child in this.children)
             {
                 if (child is T && child.PublicKey == publicKey)
                 {
@@ -96,27 +114,29 @@ namespace Main.Core.Entities.SubEntities
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        public void Insert(IComposite c, Guid? afterItem)
+        public void Insert(int index, IComposite itemToInsert, Guid? parent)
         {
-            try
+            if (index < 0)
             {
-                int index = this.Children.FindIndex(0, this.Children.Count, x => x.PublicKey == afterItem);
-                if (index != -1)
-                {
-                    this.Children.Insert(index + 1, c);
-                    return;
-                }
-                
-                this.Children.Insert(0, c);
-                return;
+                this.children.Insert(0, itemToInsert);
             }
-            catch (CompositeException)
+            else if (index >= this.children.Count)
             {
+                this.children.Add(itemToInsert);
             }
+            else
+                this.children.Insert(index, itemToInsert);
 
-            throw new CompositeException();
+            itemToInsert.SetParent(this);
+            itemToInsert.ConnectChildrenWithParent();
         }
-        
+
+        public void RemoveChild(Guid childId)
+        {
+            IComposite child = this.children.Find(c => c.PublicKey == childId);
+            this.children.Remove(child);
+        }
+
         public void ConnectChildrenWithParent()
         {
             foreach (var item in this.Children)
@@ -144,12 +164,22 @@ namespace Main.Core.Entities.SubEntities
                 FixedRosterTitles = this.FixedRosterTitles.Select(x => new FixedRosterTitle(x.Value, x.Title)).ToArray()
             };
 
-            foreach (var composite in this.Children)
+            var clonnedChildren = new List<IComposite>();
+
+            foreach (var composite in this.children)
             {
-                newGroup.Children.Add(composite.Clone());
+                clonnedChildren.Add(composite.Clone());
             }
+            newGroup.Children = clonnedChildren.ToReadOnlyCollection();
 
             return newGroup;
+        }
+
+        public void ReplaceChildEntityById(Guid id, IComposite newEntity)
+        {
+            int indexOfEntity = this.children.FindIndex(child => child.PublicKey == id);
+            this.children[indexOfEntity] = newEntity;
+            newEntity.SetParent(this);
         }
 
         public void Update(string groupText)

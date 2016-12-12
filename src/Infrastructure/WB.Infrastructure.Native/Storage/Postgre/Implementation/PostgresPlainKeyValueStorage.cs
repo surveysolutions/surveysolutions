@@ -14,8 +14,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IPlainSessionProvider sessionProvider;
 
-        public PostgresPlainKeyValueStorage(IPlainSessionProvider sessionProvider, PostgresPlainStorageSettings connectionSettings, ILogger logger)
-            : base(connectionSettings.ConnectionString, connectionSettings.SchemaName, logger)
+        public PostgresPlainKeyValueStorage(IPlainSessionProvider sessionProvider, PostgresPlainStorageSettings connectionSettings, ILogger logger, IEntitySerializer<TEntity> serializer)
+            : base(connectionSettings.ConnectionString, connectionSettings.SchemaName, logger, serializer)
         {
             this.sessionProvider = sessionProvider;
         }

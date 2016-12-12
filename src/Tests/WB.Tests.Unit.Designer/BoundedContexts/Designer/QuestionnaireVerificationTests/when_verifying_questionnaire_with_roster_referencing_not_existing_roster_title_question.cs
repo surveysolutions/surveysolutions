@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.NumericIntegerQuestion(id: rosterSizeQuestionId),
 
                     Create.Roster(
-                        rosterSizeSourceType: RosterSizeSourceType.Question,
+                        rosterType: RosterSizeSourceType.Question,
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         rosterTitleQuestionId: notExistingQuestionId),
                 }),
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         };
 
         Because of = () =>
-            verificationMessages = verifier.CheckForErrors(questionnaire);
+            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);

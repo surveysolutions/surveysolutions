@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,28 +16,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         QuestionnaireView Load(QuestionnaireViewInputModel input);
 
         bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
+
+        bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
     }
 
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
 
         public QuestionnaireViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
-            this.sharedPersonsStorage = sharedPersonsStorage;
             this.listItemStorage = listItemStorage;
         }
 
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
         {
             var doc = GetQuestionnaireDocument(input);
-            return doc == null ? null : new QuestionnaireView(doc);
+            var sharedPersons = this.GetSharedPersons(input.QuestionnaireId);
+            return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
         public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)
@@ -48,15 +49,39 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy == userId)
                 return true;
 
-            var sharedPersons = sharedPersonsStorage.GetById(questionnaireId.FormatGuid())?.SharedPersons ?? new List<SharedPerson>();
-            if (sharedPersons.Any(x => x.Id == userId))
-                return true;
-
             var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaireListItem.IsPublic)
                 return true;
 
+            if (questionnaireListItem.SharedPersons.Any(x => x.UserId == userId))
+                return true;
+
             return false;
+        }
+
+        public bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId)
+        {
+            var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            if (questionnaire == null || questionnaire.IsDeleted)
+                return false;
+
+            if (questionnaire.CreatedBy == userId)
+                return true;
+
+            var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+
+            var sharedPersons = listViewItem.SharedPersons;
+            if (sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit))
+                return true;
+
+            return false;
+        }
+
+        private List<SharedPerson> GetSharedPersons(Guid questionnaireId)
+        {
+            var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+            var sharedPersons = listViewItem.SharedPersons;
+            return sharedPersons.ToList();
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)

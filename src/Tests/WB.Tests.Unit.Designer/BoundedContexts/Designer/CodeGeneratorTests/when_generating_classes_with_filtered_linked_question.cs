@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 Create.Chapter(children: new IComposite[]
                 {
                     Create.SingleOptionQuestion(questionId: linkedQuestion, variable: "a", linkedToRosterId: rosterId),
-                    Create.Roster(rosterId, variable: "assets", rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles)
+                    Create.Roster(rosterId, variable: "assets", rosterType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: assetsTitles)
                 }),
             });
 

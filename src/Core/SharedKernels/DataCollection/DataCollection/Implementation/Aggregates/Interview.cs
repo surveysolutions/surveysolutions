@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -27,11 +24,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public Interview() { }
 
-        protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
+        private InterviewTree tree;
+        protected InterviewTree Tree => this.tree ?? (this.tree = this.BuildInterviewTree(this.GetQuestionnaireOrThrow()));
 
-        protected Guid questionnaireId;
-        protected long questionnaireVersion;
-        protected string language;
+        protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
 
         public override Guid EventSourceId
         {
@@ -51,7 +47,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (this.expressionProcessorStatePrototype == null)
                 {
-                    this.expressionProcessorStatePrototype = this.expressionProcessorStatePrototypeProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion);
+                    this.expressionProcessorStatePrototype = this.expressionProcessorStatePrototypeProvider.GetExpressionState(
+                            this.QuestionnaireIdentity.QuestionnaireId, this.QuestionnaireIdentity.Version);
+
                     this.expressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
                 }
 
@@ -64,8 +62,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
-
         /// <remarks>
         /// Repository operations are time-consuming.
         /// So this repository may be used only in command handlers.
@@ -75,183 +71,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
 
+        private readonly ISubstitionTextFactory substitionTextFactory;
 
-        public Interview(IQuestionnaireStorage questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
+        public Interview(IQuestionnaireStorage questionnaireRepository, 
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider, 
+            ISubstitionTextFactory substitionTextFactory)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.expressionProcessorStatePrototypeProvider = expressionProcessorStatePrototypeProvider;
+            this.substitionTextFactory = substitionTextFactory;
         }
 
-        private void SetQuestionnaireProperties(Guid questionnaireId, long questionnaireVersion)
-        {
-            this.questionnaireId = questionnaireId;
-            this.questionnaireVersion = questionnaireVersion;
-        }
-        
         #region StaticMethods
 
-        private static ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
-        {
-            return synchronizationDto.RosterGroupInstances.ToConcurrentDictionary(
-                pair => ConversionHelper.ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemRosterVector),
-                pair => new ConcurrentDistinctList<decimal>(pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList()));
-        }
+        private static AnswerComment ToAnswerComment(CommentSynchronizationDto answerComment,
+            AnsweredQuestionSynchronizationDto answerDto)
+            => new AnswerComment(answerComment.UserId, answerComment.UserRole, answerComment.Date, answerComment.Text,
+                Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
 
-        /// <remarks>
-        /// If roster vector should be extended, result will be a set of vectors depending on roster count of corresponding groups.
-        /// </remarks>
-        protected static IEnumerable<RosterVector> ExtendRosterVector(IReadOnlyInterviewStateDependentOnAnswers state, RosterVector rosterVector, int length, Guid[] rosterGroupsStartingFromTop)
-        {
-            if (length < rosterVector.Length)
-                throw new ArgumentException(string.Format(
-                    "Cannot extend vector with length {0} to smaller length {1}.", rosterVector.Length, length));
+        private static string JoinDecimalsWithComma(IEnumerable<decimal> values) => string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
 
-            if (length == rosterVector.Length)
-            {
-                yield return rosterVector;
-                yield break;
-            }
-
-            var outerVectorsForExtend = GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop, rosterVector);
-
-            foreach (var outerVectorForExtend in outerVectorsForExtend)
-            {
-                IEnumerable<decimal> rosterInstanceIds = state.GetRosterInstanceIds(rosterGroupsStartingFromTop.Last(), outerVectorForExtend);
-                foreach (decimal rosterInstanceId in rosterInstanceIds)
-                {
-                    yield return ((RosterVector)outerVectorForExtend).ExtendWithOneCoordinate(rosterInstanceId);
-                }
-            }
-        }
-
-        private static IEnumerable<decimal[]> GetOuterVectorForParentRoster(IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid[] rosterGroupsStartingFromTop, RosterVector rosterVector)
-        {
-            if (rosterGroupsStartingFromTop.Length <= 1 || rosterGroupsStartingFromTop.Length - 1 == rosterVector.Length)
-            {
-                yield return rosterVector;
-                yield break;
-            }
-
-            var indexOfPreviousRoster = rosterGroupsStartingFromTop.Length - 2;
-
-            var previousRoster = rosterGroupsStartingFromTop[rosterVector.Length];
-            var previousRosterInstances = state.GetRosterInstanceIds(previousRoster, rosterVector);
-            foreach (var previousRosterInstance in previousRosterInstances)
-            {
-                var extendedRoster = rosterVector.ExtendWithOneCoordinate(previousRosterInstance);
-                if (indexOfPreviousRoster == rosterVector.Length)
-                {
-                    yield return extendedRoster;
-                    continue;
-                }
-                foreach (var nextVector in GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop, extendedRoster))
-                {
-                    yield return nextVector;
-                }
-            }
-        }
-
-        private static string JoinDecimalsWithComma(IEnumerable<decimal> values)
-        {
-            return string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
-        }
-
-        private static ConcurrentHashSet<string> ToHashSetOfIdAndRosterVectorStrings(IEnumerable<InterviewItemId> synchronizationIdentities)
-        {
-            return new ConcurrentHashSet<string>(
-                synchronizationIdentities.Select(
-                    question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemRosterVector)));
-        }
-        
-        private static Identity GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
-            RosterVector rosterVector, IQuestionnaire questionnare)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-            int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
-
-            if (questionRosterLevel > vectorRosterLevel)
-                throw new InterviewException(string.Format(
-                    "Question {0} expected to have roster level not deeper than {1} but it is {2}.",
-                    FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel));
-
-            decimal[] questionRosterVector = rosterVector.Shrink(questionRosterLevel);
-
-            return new Identity(questionId, questionRosterVector);
-        }
-
-        protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> entityIds, RosterVector rosterVector, IQuestionnaire questionnare)
-        {
-            return entityIds.SelectMany(entityId =>
-                GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, entityId, rosterVector, questionnare));
-        }
-
-        protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid entityId,
-            RosterVector rosterVector,
-            IQuestionnaire questionnare)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-            int entityRosterLevel = questionnare.GetRosterLevelForEntity(entityId);
-
-            if (entityRosterLevel < vectorRosterLevel)
-                throw new InterviewException(string.Format(
-                    "Entity {0} expected to have roster level not upper than {1} but it is {2}. InterviewId: {3}",
-                    FormatQuestionForException(entityId, questionnare), vectorRosterLevel, entityRosterLevel, EventSourceId));
-
-            Guid[] parentRosterGroupsStartingFromTop =
-                questionnare.GetRostersFromTopToSpecifiedEntity(entityId).ToArray();
-
-            IEnumerable<RosterVector> entityRosterVectors = ExtendRosterVector(state,
-                rosterVector, entityRosterLevel, parentRosterGroupsStartingFromTop);
-
-            return entityRosterVectors.Select(entityRosterVector => new Identity(entityId, entityRosterVector));
-        }
-
-        protected IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(IReadOnlyInterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> groupIds, RosterVector rosterVector, IQuestionnaire questionnaire)
-        {
-            return groupIds.SelectMany(groupId =>
-                GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(state, groupId, rosterVector, questionnaire));
-        }
-
-        protected IEnumerable<Identity> GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid groupId, RosterVector rosterVector, IQuestionnaire questionnaire)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-            int groupRosterLevel = questionnaire.GetRosterLevelForGroup(groupId);
-
-            if (groupRosterLevel < vectorRosterLevel)
-                throw new InterviewException(string.Format(
-                    "Question {0} expected to have roster level not upper than {1} but it is {2}. InterviewId: {3}",
-                    FormatQuestionForException(groupId, questionnaire), vectorRosterLevel, groupRosterLevel, EventSourceId));
-
-            Guid[] parentRosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(groupId).ToArray();
-
-            IEnumerable<RosterVector> groupRosterVectors = ExtendRosterVector(state,
-                rosterVector, groupRosterLevel, parentRosterGroupsStartingFromTop);
-
-            return groupRosterVectors.Select(groupRosterVector => new Identity(groupId, groupRosterVector));
-        }
-
-        protected Identity GetInstanceOfGroupWithSameAndUpperRosterLevelOrThrow(Guid groupId, RosterVector rosterVector, IQuestionnaire questionnaire)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-
-            int groupRosterLevel = questionnaire.GetRosterLevelForGroup(groupId);
-
-            if (groupRosterLevel > vectorRosterLevel)
-                throw new InterviewException(string.Format(
-                    "Group {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
-                    FormatGroupForException(groupId, questionnaire), vectorRosterLevel, groupRosterLevel, this.EventSourceId));
-
-            decimal[] groupRosterVector = rosterVector.Shrink(groupRosterLevel);
-
-            return new Identity(groupId, groupRosterVector);
-        }
+        private static string JoinIntsWithComma(IEnumerable<int> values) => string.Join(", ", values.Select(value => value.ToString(CultureInfo.InvariantCulture)));
 
         #endregion
 
@@ -259,25 +99,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewWithPreloadedData(CreateInterviewWithPreloadedData command)
         {
-            this.SetQuestionnaireProperties(command.QuestionnaireId, command.Version);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(command.QuestionnaireId, command.Version);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(command.QuestionnaireId, command.Version, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var state = new InterviewStateDependentOnAnswers();
-
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, state);
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
 
             var orderedData = command.PreloadedData.Data.OrderBy(x => x.RosterVector.Length).ToArray();
-            var changedQuestionIdentities = orderedData.SelectMany(x => x.Answers.Select(y => new Identity(y.Key, x.RosterVector))).ToList();
+            var answeredQuestions = orderedData.SelectMany(x => x.Answers.Select(y => new Identity(y.Key, x.RosterVector))).ToList();
 
             for (int index = 0; index < orderedData.Length; index++)
             {
                 var preloadedLevel = orderedData[index];
                 var answersToFeaturedQuestions = preloadedLevel.Answers;
 
-                this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions,
-                    preloadedLevel.RosterVector, state, false);
+                this.ValidatePrefilledQuestions(changedInterviewTree, questionnaire, answersToFeaturedQuestions, preloadedLevel.RosterVector, false);
 
                 var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(
                     answersToFeaturedQuestion =>
@@ -297,12 +133,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            //apply events
-            this.ApplyEvent(new InterviewFromPreloadedDataCreated(command.UserId, questionnaireId, questionnaire.Version));
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, answeredQuestions, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyTreeDiffChanges(userId: command.UserId, questionnaire: questionnaire,
-                sourceInterviewTree: sourceInterviewTree, changedInterviewTree: changedInterviewTree,
-                changedQuestionIdentities: changedQuestionIdentities);
+            //apply events
+            this.ApplyEvent(new InterviewFromPreloadedDataCreated(command.UserId,
+                this.QuestionnaireIdentity.QuestionnaireId, this.QuestionnaireIdentity.Version));
+
+            this.ApplyEvents(treeDifference, command.UserId);
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
@@ -315,18 +153,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
-            Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
+            Dictionary<Guid, AbstractAnswer> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
-            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var state = new InterviewStateDependentOnAnswers();
+            var changedInterviewTree = this.Tree.Clone();
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, state);
-            this.ValidatePrefilledQuestions(sourceInterviewTree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty, state);
-            
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            this.ValidatePrefilledQuestions(this.Tree, questionnaire, answersToFeaturedQuestions, RosterVector.Empty);
 
             var prefilledQuestionsWithAnswers = answersToFeaturedQuestions.ToDictionary(x => new Identity(x.Key, RosterVector.Empty), x => x.Value);
             foreach (var answer in prefilledQuestionsWithAnswers)
@@ -334,45 +169,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 changedInterviewTree.GetQuestion(answer.Key).SetAnswer(answer.Value);
             }
 
+            var answeredQuestions = prefilledQuestionsWithAnswers.Keys.ToList();
+
+            changedInterviewTree.ActualizeTree();
+
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, answeredQuestions, questionnaire);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
             //apply events
             this.ApplyEvent(new InterviewCreated(userId, questionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
-            changedInterviewTree.ActualizeTree();
-            
-            this.ApplyTreeDiffChanges(userId: userId, questionnaire: questionnaire,
-                sourceInterviewTree: sourceInterviewTree, changedInterviewTree: changedInterviewTree,
-                changedQuestionIdentities: prefilledQuestionsWithAnswers.Keys.ToList());
+            this.ApplyEvents(treeDifference, userId);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-        }
-
-        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
-        {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, language: null);
-            this.SetQuestionnaireProperties(questionnaireIdentity.QuestionnaireId, questionnaire.Version);
-
-            var state = new InterviewStateDependentOnAnswers();
-
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, state);
-            var changedInterviewTree = sourceInterviewTree.Clone();
-
-            //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
-
-            changedInterviewTree.ActualizeTree();
-
-            this.ApplyTreeDiffChanges(userId: userId, questionnaire: questionnaire,
-                sourceInterviewTree: sourceInterviewTree, changedInterviewTree: changedInterviewTree,
-                changedQuestionIdentities: new List<Identity>());
-
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-
-            this.ApplyEvent(new InterviewerAssigned(userId, userId, answersTime));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
         }
 
         //todo should respect changes calculated in ExpressionState
@@ -386,10 +197,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             expressionProcessorState.SaveAllCurrentStatesAsPrevious();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, language: this.language);
-
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, this.interviewState);
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             this.UpdateTreeWithEnablementChanges(changedInterviewTree, enablementChanges);
@@ -397,7 +205,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
-            this.ApplyEvents(sourceInterviewTree, changedInterviewTree);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference);
 
             if (!this.HasInvalidAnswers())
             {
@@ -416,37 +226,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             IReadOnlyCollection<string> availableLanguages = questionnaire.GetTranslationLanguages();
 
             if (command.Language != null)
             {
                 if (availableLanguages.All(language => language != command.Language))
                     throw new InterviewException(
-                        $"Questionnaire does not have translation. Language: {command.Language}. Interview ID: {this.EventSourceId.FormatGuid()}. Questionnaire ID: {new QuestionnaireIdentity(this.questionnaireId, this.questionnaireVersion)}.");
+                        $"Questionnaire does not have translation. Language: {command.Language}. " +
+                        $"Interview ID: {this.EventSourceId.FormatGuid()}. " +
+                        $"Questionnaire ID: {this.QuestionnaireIdentity}.");
             }
-
-            var targetQuestionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, command.Language);
             
             this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
 
-            var sourceInterviewTree = this.BuildInterviewTree(questionnaire, new InterviewStateDependentOnAnswers());
+            var targetQuestionnaire = this.GetQuestionnaireOrThrow();
 
-            var changedInterviewTree = sourceInterviewTree.Clone();
+            var changedInterviewTree = this.Tree.Clone();
 
             this.UpdateRosterTitles(changedInterviewTree, targetQuestionnaire);
 
-            this.ApplyEvents(sourceInterviewTree, changedInterviewTree, command.UserId);
+            var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
+            this.ApplyEvents(treeDifference, command.UserId);
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-
-            var tree = this.BuildInterviewTree(questionnaire, this.interviewState);
-            var treeInvariants = new InterviewTreeInvariants(tree);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            
+            var treeInvariants = new InterviewTreeInvariants(this.Tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
@@ -458,10 +269,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-
-            var tree = this.BuildInterviewTree(questionnaire, this.interviewState);
-            var treeInvariants = new InterviewTreeInvariants(tree);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            
+            var treeInvariants = new InterviewTreeInvariants(this.Tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
@@ -473,10 +283,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion, this.language);
-
-            var tree = this.BuildInterviewTree(questionnaire, this.interviewState);
-            var treeInvariants = new InterviewTreeInvariants(tree);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            
+            var treeInvariants = new InterviewTreeInvariants(this.Tree);
 
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
@@ -489,10 +298,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.SupervisorAssigned);
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+
+            if (this.properties.InterviewerId.HasValue)
+            {
+                this.ApplyEvent(new InterviewerAssigned(userId, null, null));
+            }
+
+            if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
+            {
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            }
         }
 
         public void AssignInterviewer(Guid userId, Guid interviewerId, DateTime assignTime)
@@ -504,7 +322,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
-            if (!this.properties.WasCompleted && this.properties.Status != InterviewStatus.InterviewerAssigned)
+            if (!this.properties.WasCompleted && this.properties.Status == InterviewStatus.SupervisorAssigned)
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
@@ -588,12 +406,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
         }
 
+        public void RejectToInterviewer(Guid userId, Guid interviewerId, string comment, DateTime rejectTime)
+        {
+            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed,
+                InterviewStatus.ApprovedBySupervisor,
+                InterviewStatus.RejectedByHeadquarters);
+
+            this.ApplyEvent(new InterviewRejected(userId, comment, rejectTime));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
+            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, rejectTime));
+        }
+
         public void HqApprove(Guid userId, string comment)
         {
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewApprovedByHQ(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment));
@@ -623,7 +455,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var commentedAnswers = (
                 from answerDto in interviewDto.Answers
                 from answerComment in answerDto.AllComments
-                where !this.interviewState.AnswerComments.Contains(new AnswerComment(answerComment.UserId, answerComment.Date, answerComment.Text, answerDto.Id, answerDto.QuestionRosterVector))
+                where !this.Tree.GetQuestion(Identity.Create(answerDto.Id, answerDto.QuestionRosterVector)).AnswerComments.Contains(ToAnswerComment(answerComment, answerDto))
                 select new
                 {
                     UserId = answerComment.UserId,
@@ -649,7 +481,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var commentedAnswer in commentedAnswers)
             {
-                this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId, commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text));
+                this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId,
+                    commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text));
             }
         }
 
@@ -664,25 +497,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment));
         }
 
-        public void SynchronizeInterview(Guid userId, InterviewSynchronizationDto synchronizedInterview)
-        {
-            var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-
-            this.ApplyEvent(new InterviewSynchronized(synchronizedInterview));
-        }
-
         public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus, IEvent[] synchronizedEvents, bool createdOnClient)
         {
-            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId);
-
-            this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion, language: null);
 
             var isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
 
@@ -692,6 +512,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
+                propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(userId);
+
                 if (this.properties.Status == InterviewStatus.Deleted)
                     this.Restore(userId);
                 else
@@ -715,7 +537,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             bool valid,
             bool createdOnClient)
         {
-            this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -744,165 +566,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        private Dictionary<Identity, RosterVector[]> GetLinkedQuestionOptionsChanges(
-            ILatestInterviewExpressionState interviewExpressionState,
-            InterviewStateDependentOnAnswers updatedState,
-            IQuestionnaire questionnaire)
-        {
-            if (!interviewExpressionState.AreLinkedQuestionsSupported())
-                return this.CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(updatedState, questionnaire);
-
-            var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
-
-            if (processLinkedQuestionFilters == null)
-                return new Dictionary<Identity, RosterVector[]>();
-
-            if (processLinkedQuestionFilters.LinkedQuestionOptions.Count == 0)
-                return processLinkedQuestionFilters.LinkedQuestionOptionsSet;
-
-            //old v7 options handling 
-            var linkedOptions = new Dictionary<Identity, RosterVector[]>();
-
-            foreach (var linkedQuestionOption in processLinkedQuestionFilters.LinkedQuestionOptions)
-            {
-                IEnumerable<Identity> linkedQuestionInstances =
-                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, linkedQuestionOption.Key, new decimal[0], questionnaire);
-                linkedQuestionInstances.ForEach(x => linkedOptions.Add(x, linkedQuestionOption.Value));
-            }
-
-            return linkedOptions;
-        }
-
-        private Dictionary<Identity, RosterVector[]> CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(
-            InterviewStateDependentOnAnswers updatedState,
-            IQuestionnaire questionnaire)
-        {
-            var questionsLinkedOnRoster = questionnaire.GetQuestionsLinkedToRoster();
-            var questionsLinkedOnQuestion = questionnaire.GetQuestionsLinkedToQuestion();
-            if (!questionsLinkedOnRoster.Any() && !questionsLinkedOnQuestion.Any())
-                return new Dictionary<Identity, RosterVector[]>();
-
-            var result = new Dictionary<Identity, RosterVector[]>();
-            foreach (var questionLinkedOnRoster in questionsLinkedOnRoster)
-            {
-                var rosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionLinkedOnRoster);
-                IEnumerable<Identity> targetRosters =
-                    this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(updatedState,
-                        new[] { rosterId }, new decimal[0], questionnaire).ToArray();
-
-                var optionRosterVectors =
-                    targetRosters.Where(
-                        r =>
-                            !updatedState.IsGroupDisabled(r) && !string.IsNullOrEmpty(updatedState.GetRosterTitle(r.Id, r.RosterVector)))
-                        .Select(r => r.RosterVector)
-                        .ToArray();
-
-                IEnumerable<Identity> linkedQuestionInstances =
-                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, questionLinkedOnRoster, new decimal[0], questionnaire);
-
-                foreach (var linkedQuestionInstance in linkedQuestionInstances)
-                {
-                    result.Add(linkedQuestionInstance, optionRosterVectors);
-                }
-            }
-
-            foreach (var questionLinkedOnQuestion in questionsLinkedOnQuestion)
-            {
-                var referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionLinkedOnQuestion);
-                IEnumerable<Identity> targetQuestions =
-                    this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState,
-                        referencedQuestionId, new decimal[0], questionnaire);
-
-                var optionRosterVectors =
-                    targetQuestions.Where(q => !updatedState.IsQuestionDisabled(q) && updatedState.GetAnswerSupportedInExpressions(q) != null)
-                        .Select(q => q.RosterVector)
-                        .ToArray();
-
-                IEnumerable<Identity> linkedQuestionInstances =
-                   this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(updatedState, questionLinkedOnQuestion, new decimal[0], questionnaire);
-
-                foreach (var linkedQuestionInstance in linkedQuestionInstances)
-                {
-                    result.Add(linkedQuestionInstance, optionRosterVectors);
-                }
-            }
-            return result;
-        }
-
-        protected IEnumerable<ChangedLinkedOptions> CreateChangedLinkedOptions(
-            ILatestInterviewExpressionState interviewExpressionState,
-            InterviewStateDependentOnAnswers currentState,
-            IQuestionnaire questionnaire,
-            List<AnswerChange> interviewByAnswerChanges,
-            EnablementChanges enablementChanges,
-            RosterCalculationData rosterCalculationData,
-            Dictionary<Identity, string> rosterInstancesWithAffectedTitles)
-        {
-            var currentLinkedOptions = currentState.LinkedQuestionOptions;
-
-            var updatedState = currentState.Clone();
-
-            if (enablementChanges != null)
-                updatedState.ApplyEnablementChanges(enablementChanges);
-
-            if (rosterCalculationData != null)
-                updatedState.ApplyRosterData(rosterCalculationData);
-
-            if (rosterInstancesWithAffectedTitles != null)
-            {
-                updatedState.ChangeRosterTitles(
-                    rosterInstancesWithAffectedTitles.Select(
-                        r =>
-                            new ChangedRosterInstanceTitleDto(
-                                new RosterInstance(r.Key.Id, r.Key.RosterVector.WithoutLast().ToArray(), r.Key.RosterVector.Last()), r.Value)).ToArray());
-            }
-            if (interviewByAnswerChanges != null)
-            {
-                foreach (var interviewByAnswerChange in interviewByAnswerChanges)
-                {
-                    string questionKey =
-                        ConversionHelper.ConvertIdAndRosterVectorToString(interviewByAnswerChange.QuestionId,
-                            interviewByAnswerChange.RosterVector);
-                    updatedState.AnswersSupportedInExpressions[questionKey] = interviewByAnswerChange.Answer;
-                    updatedState.AnsweredQuestions.Add(questionKey);
-                }
-            }
-            var newCurrentLinkedOptions = GetLinkedQuestionOptionsChanges(interviewExpressionState, updatedState, questionnaire);
-
-            foreach (var linkedQuestionConditionalExecutionResult in newCurrentLinkedOptions)
-            {
-                Identity instanceOfTheLinkedQuestionsQuestions = linkedQuestionConditionalExecutionResult.Key;
-                RosterVector[] optionsForLinkedQuestion = linkedQuestionConditionalExecutionResult.Value;
-
-                var linkedQuestionId = instanceOfTheLinkedQuestionsQuestions.Id;
-                var referencedEntityId = questionnaire.IsQuestionLinkedToRoster(linkedQuestionId)
-                    ? questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestionId)
-                    : questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId);
-
-                var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(referencedEntityId, instanceOfTheLinkedQuestionsQuestions, questionnaire);
-
-                var changedOptionAvaliableForInstanceOfTheQuestion = optionsForLinkedQuestion.Where(o => rosterVectorToStartFrom.SequenceEqual(o.Take(rosterVectorToStartFrom.Length))).ToArray();
-
-                var questionIdentity = new Identity(instanceOfTheLinkedQuestionsQuestions.Id, instanceOfTheLinkedQuestionsQuestions.RosterVector);
-                if (!currentLinkedOptions.ContainsKey(questionIdentity))
-                {
-                    yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
-                    continue;
-                }
-
-                var presentLinkedOptions = currentLinkedOptions[questionIdentity];
-
-                bool hasNumberOfOptionsChanged = presentLinkedOptions.Length !=
-                                                changedOptionAvaliableForInstanceOfTheQuestion.Length;
-
-                bool doesNewOptionsListContainOptionsWhichWasNotPresentBefore =
-                    changedOptionAvaliableForInstanceOfTheQuestion.Any(o => !presentLinkedOptions.Contains(o));
-
-                if (hasNumberOfOptionsChanged || doesNewOptionsListContainOptionsWhichWasNotPresentBefore)
-                    yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
-            }
-        }
-
         protected decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
             Guid linkedToEntityId, Identity linkedQuestion, IQuestionnaire questionnaire)
         {
@@ -921,15 +584,60 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return linkedQuestion.RosterVector.Shrink(targetRosterLevel);
         }
 
-        protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any(x => !this.interviewState.DisabledQuestions.Contains(ConversionHelper.ConvertIdentityToString(x.Key)));
-        protected bool HasInvalidStaticTexts => this.interviewState.InvalidStaticTexts.Any(x => !this.interviewState.DisabledStaticTexts.Contains(x.Key));
+        public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsMultiLinkedOption;
+        public InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsSingleLinkedOption;
 
-        private void ApplyTreeDiffChanges(Guid userId, InterviewTree changedInterviewTree, IQuestionnaire questionnaire,
-            List<Identity> changedQuestionIdentities, InterviewTree sourceInterviewTree)
+        public string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option)
+        {
+            var linkedQuestion = this.Tree.GetQuestion(linkedQuestionIdentity);
+            if (!linkedQuestion.IsLinked) return string.Empty;
+
+            Identity sourceIdentity = Identity.Create(linkedQuestion.AsLinked.LinkedSourceId, option);
+
+            IInterviewTreeNode sourceNode = this.Tree.GetNodeByIdentity(sourceIdentity);
+
+            string optionTitle = string.Empty;
+            var skipBreadcrumsThreshold = 1;
+            if (sourceNode is InterviewTreeRoster)
+            {
+                var sourceRoster = sourceNode as InterviewTreeRoster;
+                optionTitle = sourceRoster.RosterTitle;
+                skipBreadcrumsThreshold = 0;
+            }
+            if (sourceNode is InterviewTreeQuestion)
+            {
+                var sourceQuestion = sourceNode as InterviewTreeQuestion;
+                optionTitle = sourceQuestion.GetAnswerAsString();
+            }
+
+            var sourceBreadcrumbsOfRosterTitles = sourceNode.Parents.OfType<InterviewTreeRoster>().ToArray();
+            var linkedBreadcrumbsOfRosterTitles = linkedQuestion.Parents.OfType<InterviewTreeRoster>().ToArray();
+
+            var common = sourceBreadcrumbsOfRosterTitles.Zip(linkedBreadcrumbsOfRosterTitles, (x, y) => x.RosterSizeId.Equals(y.RosterSizeId) ? x : null).TakeWhile(x => x != null).Count();
+
+            string[] breadcrumbsOfRosterTitles = sourceBreadcrumbsOfRosterTitles.Skip(common).Select(x => x.RosterTitle).ToArray();
+
+            var breadcrumbs = string.Join(": ", breadcrumbsOfRosterTitles);
+
+            return breadcrumbsOfRosterTitles.Length > skipBreadcrumsThreshold
+                ? $"{breadcrumbs}: {optionTitle}"
+                : optionTitle;
+        }
+
+        protected bool HasInvalidAnswers()
+            => this.Tree.FindQuestions().Any(question => !question.IsValid && !question.IsDisabled());
+
+        protected bool HasInvalidStaticTexts
+            => this.Tree.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
+
+        protected static IReadOnlyCollection<InterviewTreeNodeDiff> FindDifferenceBetweenTrees(InterviewTree sourceInterview, InterviewTree changedInterview)
+            => sourceInterview.Compare(changedInterview);
+
+        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IEnumerable<Identity> changedQuestions, IQuestionnaire questionnaire)
         {
             var expressionProcessorState = this.GetClonedExpressionState();
-            
-            this.UpdateExpressionState(sourceInterviewTree, changedInterviewTree, expressionProcessorState);
+
+            this.UpdateExpressionState(changedInterviewTree, expressionProcessorState);
 
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
 
@@ -937,10 +645,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var structuralChanges = expressionProcessorState.GetStructuralChanges();
             this.UpdateTreeWithStructuralChanges(changedInterviewTree, structuralChanges);
-
-            changedQuestionIdentities.AddRange(structuralChanges.ChangedMultiQuestions.Keys);
-            changedQuestionIdentities.AddRange(structuralChanges.ChangedSingleQuestions.Keys);
-            changedQuestionIdentities.AddRange(structuralChanges.ChangedYesNoQuestions.Keys);
 
             this.UpdateRosterTitles(changedInterviewTree, questionnaire);
 
@@ -952,10 +656,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
             this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
 
-            this.ApplySubstitutionEvents(changedInterviewTree, questionnaire, changedQuestionIdentities);
-
-            this.ApplyEvents(sourceInterviewTree, changedInterviewTree, userId);
+            changedInterviewTree.ReplaceSubstitutions();
         }
+
 
         private void UpdateTreeWithVariableChanges(InterviewTree tree, VariableValueChanges variableValueChanges)
             => variableValueChanges?.ChangedVariableValues.ForEach(x => tree.GetVariable(x.Key).SetValue(x.Value));
@@ -964,12 +667,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (validationChanges == null) return; // can be in tests only.
 
-            validationChanges.AnswersDeclaredValid.ForEach(x => tree.GetQuestion(x).MarkAsValid());
-            validationChanges.AnswersDeclaredInvalid.ForEach(x => tree.GetQuestion(x).MarkAsInvalid(new FailedValidationCondition(0).ToEnumerable()));
-            validationChanges.FailedValidationConditionsForQuestions.ForEach(x => tree.GetQuestion(x.Key).MarkAsInvalid(x.Value));
+            validationChanges.AnswersDeclaredValid.ForEach(x => tree.GetQuestion(x).MarkValid());
+            validationChanges.AnswersDeclaredInvalid.ForEach(x => tree.GetQuestion(x).MarkInvalid(new FailedValidationCondition(0).ToEnumerable()));
+            validationChanges.FailedValidationConditionsForQuestions.ForEach(x => tree.GetQuestion(x.Key).MarkInvalid(x.Value));
 
-            validationChanges.StaticTextsDeclaredValid.ForEach(x => tree.GetStaticText(x).MarkAsValid());
-            validationChanges.FailedValidationConditionsForStaticTexts.ForEach(x => tree.GetStaticText(x.Key).MarkAsInvalid(x.Value));
+            validationChanges.StaticTextsDeclaredValid.ForEach(x => tree.GetStaticText(x).MarkValid());
+            validationChanges.FailedValidationConditionsForStaticTexts.ForEach(x => tree.GetStaticText(x.Key).MarkInvalid(x.Value));
         }
 
         private void UpdateTreeWithEnablementChanges(InterviewTree tree, EnablementChanges enablementChanges)
@@ -1003,35 +706,61 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 else
                 {
                     roster.UpdateRosterTitle((questionId, answerOptionValue) =>
-                        questionnaire.GetOptionsForQuestion(questionId, null, string.Empty)
-                            .FirstOrDefault(x => x.Value == Convert.ToInt32(answerOptionValue))
-                            .Title);
+                        questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
                 }
             }
         }
 
-        private void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState)
+        protected void UpdateLinkedQuestions(InterviewTree tree, ILatestInterviewExpressionState interviewExpressionState, bool removeAnswersIfOptionsSetChanged = true)
         {
-            if (!interviewExpressionState.AreLinkedQuestionsSupported())
-            {
-                var linkedQuestions = tree.FindQuestions().Where(x => x.IsLinked);
-                foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
-                {
-                    linkedQuestion.CalculateLinkedOptions();
-                }
-            }
-            else
+            var expressionStateSupportLinkedOptionsCalculation = interviewExpressionState.AreLinkedQuestionsSupported();
+            if (expressionStateSupportLinkedOptionsCalculation)
             {
                 var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
-                foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptions)
-                {
-                    tree.FindQuestions(linkedQuestionWithOptions.Key).ForEach(x => x.AsLinked.SetOptions(linkedQuestionWithOptions.Value));
-                }
+               
                 foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
                 {
                     var linkedQuestion = tree.GetQuestion(linkedQuestionWithOptions.Key);
-                    linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value);
+                    linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value, removeAnswersIfOptionsSetChanged);
                 }
+
+                // backward compatibility with old assemblies
+                UpdateLinkedQuestionsCalculatedByObsoleteAlgorythm(tree, processLinkedQuestionFilters);
+            }
+            else
+            {
+                // backward compatibility if assembly cannot process linked questions
+                CalculateLinkedOptionsOnTree(tree);
+            }
+
+            CalculateLinkedToListOptionsOnTree(tree);
+        }
+
+        [Obsolete("v 5.10, release 01 jul 16")]
+        private static void UpdateLinkedQuestionsCalculatedByObsoleteAlgorythm(InterviewTree tree, LinkedQuestionOptionsChanges processLinkedQuestionFilters)
+        {
+            foreach (var linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptions)
+            {
+                tree.FindQuestions(linkedQuestionWithOptions.Key)
+                    .ForEach(x => x.AsLinked.SetOptions(linkedQuestionWithOptions.Value));
+            }
+        }
+
+        private static void CalculateLinkedOptionsOnTree(InterviewTree tree)
+        {
+            var linkedQuestions = tree.FindQuestions().Where(x => x.IsLinked);
+            foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
+            {
+                linkedQuestion.CalculateLinkedOptions();
+            }
+        }
+
+        protected static void CalculateLinkedToListOptionsOnTree(InterviewTree tree, bool resetAnswerOnOptionChange = true)
+        {
+            var linkedToListQuestions = tree.FindQuestions().Where(x => x.IsLinkedToListQuestion);
+            foreach (InterviewTreeQuestion linkedQuestion in linkedToListQuestions)
+            {
+                linkedQuestion.CalculateLinkedToListOptions(resetAnswerOnOptionChange);
             }
         }
 
@@ -1039,26 +768,90 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var changedMultiQuestion in structuralChanges.ChangedMultiQuestions)
             {
-                tree.GetQuestion(changedMultiQuestion.Key).AsMultiOption.SetAnswer(changedMultiQuestion.Value);
+                tree.GetQuestion(changedMultiQuestion.Key).AsMultiFixedOption.SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(changedMultiQuestion.Value));
             }
 
             foreach (var changedSingleQuestion in structuralChanges.ChangedSingleQuestions)
             {
-                var question = tree.GetQuestion(changedSingleQuestion.Key).AsSingleOption;
+                var question = tree.GetQuestion(changedSingleQuestion.Key).AsSingleFixedOption;
                 if (changedSingleQuestion.Value.HasValue)
-                    question.SetAnswer(changedSingleQuestion.Value.Value);
+                    question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(changedSingleQuestion.Value.Value));
                 else
                     question.RemoveAnswer();
             }
 
             foreach (var changedYesNoQuestion in structuralChanges.ChangedYesNoQuestions)
             {
-                tree.GetQuestion(changedYesNoQuestion.Key).AsYesNo.SetAnswer(changedYesNoQuestion.Value);
+                tree.GetQuestion(changedYesNoQuestion.Key).AsYesNo.SetAnswer(YesNoAnswer.FromYesNoAnswersOnly(changedYesNoQuestion.Value));
             }
 
             foreach (var removedRosterIdentity in structuralChanges.RemovedRosters)
             {
                 tree.RemoveNode(removedRosterIdentity);
+            }
+        }
+
+        protected void AddRosterToTree(RosterIdentity rosterIdentity)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var parentGroupId = questionnaire.GetParentGroup(rosterIdentity.GroupId);
+            if (!parentGroupId.HasValue) return;
+
+            var parentGroupIdentity = Identity.Create(parentGroupId.Value, rosterIdentity.OuterRosterVector);
+
+            var rosterManager = this.Tree.GetRosterManager(rosterIdentity.GroupId);
+            InterviewTreeRoster addedRoster = rosterManager.CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
+
+            var parentGroup = this.Tree.GetGroup(parentGroupIdentity);
+            parentGroup.AddChild(addedRoster);
+            parentGroup.UpdateSortIndexesForRosters(rosterIdentity.GroupId, rosterManager);
+            addedRoster.ActualizeChildren(skipRosters: true);
+        }
+
+        private void UpdateTitlesAndTexts(IQuestionnaire questionnaire)
+        {
+            foreach (var node in this.Tree.AllNodes)
+            {
+                var question = node as InterviewTreeQuestion;
+                if (question != null)
+                {
+                    SubstitionText title = this.substitionTextFactory.CreateText(question.Identity,
+                        questionnaire.GetQuestionTitle(question.Identity.Id), questionnaire);
+
+                    SubstitionText[] validationMessages = questionnaire.GetValidationMessages(question.Identity.Id)
+                        .Select(x => this.substitionTextFactory.CreateText(question.Identity, x, questionnaire))
+                        .ToArray();
+
+                    question.SetTitle(title);
+                    question.SetValidationMessages(validationMessages);
+                    question.ReplaceSubstitutions();
+                }
+
+                var groupOrRoster = node as InterviewTreeGroup;
+                if (groupOrRoster != null)
+                {
+                    SubstitionText title = this.substitionTextFactory.CreateText(groupOrRoster.Identity,
+                        questionnaire.GetGroupTitle(groupOrRoster.Identity.Id), questionnaire);
+
+                    groupOrRoster.SetTitle(title);
+                    groupOrRoster.ReplaceSubstitutions();
+                }
+
+                var staticText = node as InterviewTreeStaticText;
+                if (staticText != null)
+                {
+                    SubstitionText title = this.substitionTextFactory.CreateText(staticText.Identity,
+                       questionnaire.GetStaticText(staticText.Identity.Id), questionnaire);
+
+                    SubstitionText[] validationMessages = questionnaire.GetValidationMessages(staticText.Identity.Id)
+                        .Select(x => this.substitionTextFactory.CreateText(staticText.Identity, x, questionnaire))
+                        .ToArray();
+
+                    staticText.SetTitle(title);
+                    staticText.SetValidationMessages(validationMessages);
+                    staticText.ReplaceSubstitutions();
+                }
             }
         }
     }

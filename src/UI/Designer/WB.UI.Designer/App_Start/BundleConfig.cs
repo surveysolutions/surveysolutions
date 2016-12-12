@@ -36,7 +36,6 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new ScriptBundle("~/list").Include(
-                    "~/questionnaire/vendor/jquery/dist/jquery.js",
                     "~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js",
                     "~/questionnaire/vendor/perfect-scrollbar/src/perfect-scrollbar.js",
                     "~/Scripts/common.js"));

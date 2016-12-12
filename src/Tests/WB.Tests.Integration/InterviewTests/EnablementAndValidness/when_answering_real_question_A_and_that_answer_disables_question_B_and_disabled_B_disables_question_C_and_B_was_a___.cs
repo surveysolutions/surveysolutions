@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericRealQuestion(userId, questionAId, emptyRosterVector, answerTime, (decimal)+100.500);
+                    interview.AnswerNumericRealQuestion(userId, questionAId, emptyRosterVector, answerTime, +100.500);
 
                     return new InvokeResults
                     {

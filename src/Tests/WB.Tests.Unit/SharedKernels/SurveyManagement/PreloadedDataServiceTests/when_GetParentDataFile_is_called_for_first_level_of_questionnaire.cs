@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "Roster Group", variable: "roster",
-                        fixedTitles: new[] { "1" }));
+                        obsoleteFixedTitles: new[] { "1" }));
 
             preloadedDataService = CreatePreloadedDataService(questionnaireDocument);
         };

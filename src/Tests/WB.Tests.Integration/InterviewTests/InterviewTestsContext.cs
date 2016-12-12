@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,11 +13,15 @@ using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -79,14 +84,16 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            var result = new QuestionnaireDocument();
-            var chapter = new Group("Chapter");
-            result.Children.Add(chapter);
-
-            foreach (var child in children)
+            var result = new QuestionnaireDocument
             {
-                chapter.Children.Add(child);
-            }
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter")
+                    {
+                        Children = children.ToReadOnlyCollection()
+                    }
+                }.ToReadOnlyCollection()
+            };
 
             return result;
         }
@@ -96,24 +103,22 @@ namespace WB.Tests.Integration.InterviewTests
             IEnumerable<object> events = null, 
             ILatestInterviewExpressionState precompiledState = null, 
             bool useLatestEngine = true,
-            Dictionary<Guid, object> answersOnPrefilledQuestions = null)
+            Dictionary<Guid, AbstractAnswer> answersOnPrefilledQuestions = null,
+            QuestionnaireIdentity questionnaireIdentity = null)
         {
-            Guid questionnaireId = questionnaireDocument.PublicKey;
+            questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
 
             ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument, useLatestEngine);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
             var interview = Create.StatefulInterview(
-                questionnaireId: questionnaireId,
-                questionnaireRepository: questionnaireRepository,
+                questionnaireIdentity,
                 expressionProcessorStatePrototypeProvider: statePrototypeProvider,
-                answersOnPrefilledQuestions: answersOnPrefilledQuestions);
-
-            interview.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, 1);
+                answersOnPrefilledQuestions: answersOnPrefilledQuestions,
+                questionnaireRepository: Create.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument));
+            
             ApplyAllEvents(interview, events);
 
             return interview;
@@ -128,6 +133,10 @@ namespace WB.Tests.Integration.InterviewTests
             
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
+
+
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(questionnaireRepository);
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
             var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
 
@@ -158,7 +167,8 @@ namespace WB.Tests.Integration.InterviewTests
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+                statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                Create.SubstitionTextFactory());
 
             return interview;
         }

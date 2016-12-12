@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
@@ -25,7 +27,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
                 questionnaire.UpdateSingleOptionQuestion(
                     questionId: questionId,
                     title: titleWithSubstitutionToSelf,
@@ -40,14 +41,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                     options: options,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: ñascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties()));
+                    cascadeFromQuestionId: ñascadeFromQuestionId, validationConditions: new List<ValidationCondition>(),
+                linkedFilterExpression: null, properties: Create.QuestionProperties());
 
-        It should_not_throw_QuestionnaireException = () =>
-            exception.ShouldBeNull();
-        
+        It should_update_question_text = () =>
+            questionnaire.QuestionnaireDocument.GetQuestion<SingleQuestion>(questionId)
+                .QuestionText.ShouldEqual(titleWithSubstitutionToSelf);
+
         private static Questionnaire questionnaire;
-        private static Exception exception;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

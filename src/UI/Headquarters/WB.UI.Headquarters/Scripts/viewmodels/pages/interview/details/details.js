@@ -1,4 +1,4 @@
-Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultTranslation) {
+Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultTranslation, isAssignedToInterviewer) {
     Supervisor.VM.Details.superclass.constructor.apply(this, [settings.Urls.CommandExecution]);
 
     var self = this,
@@ -13,6 +13,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
         return combobox;
     });
     self.changeStateComment = ko.observable('');
+    self.Users = self.CreateUsersViewModel(settings.Urls.InterviewersToAssign);
 
     self.addComment = function (element, questionId, underscoreJoinedQuestionRosterVector) {
 
@@ -305,9 +306,11 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
                 filteredCombobox.selectedValue().id(selectedOptionId);
                 filteredCombobox.selectedValue().value(_.find(filteredCombobox.options, function (option) { return parseFloat(option.value) == selectedOptionId; }).label);
             }
-            ko.bindingHandlers.typeahead.init(filteredComboboxElement, function () {
-                return filteredCombobox.options;
-            }, filteredCombobox.selectedValue);
+
+            ko.bindingHandlers.simpletypeahead.init(filteredComboboxElement,
+                    function () { return filteredCombobox.options; },
+                    filteredCombobox.selectedValue);
+
         });
         updateCommentDates();
         setInterval(updateCommentDates, 60000);
@@ -329,7 +332,17 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
         self.changeState(config.commands.approveInterviewCommand);
     };
     self.rejectInterview = function () {
-        self.changeState(config.commands.rejectInterviewCommand);
+        if (isAssignedToInterviewer) {
+            self.changeState(config.commands.rejectInterviewCommand);
+        } else {
+            var interviewer = model.Users.AssignTo();
+            if (!_.isUndefined(interviewer)) {
+                self.changeState(config.commands.rejectInterviewToInterviewerCommand, { interviewerId: interviewer.UserId });
+            }
+        }
+    };
+    self.rejectInterviewToInterviewer = function () {
+        self.changeState(config.commands.rejectInterviewToInterviewerCommand);
     };
     
     self.hQApproveInterview = function () {
@@ -343,8 +356,9 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes, defaultT
         self.changeState(config.commands.unapproveByHeadquarterCommand);
     };
 
-    self.changeState = function (commandName) {
-        var command = datacontext.getCommand(commandName, { comment: self.changeStateComment() });
+    self.changeState = function (commandName, params) {
+        var args = $.extend({ comment: self.changeStateComment() }, params);
+        var command = datacontext.getCommand(commandName, args);
         self.SendCommand(command, function () {
             if (!_.isNull(settings.UrlReferrer)) {
                 window.location = settings.UrlReferrer;

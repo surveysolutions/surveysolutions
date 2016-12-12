@@ -100,7 +100,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 
                 interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Today, 1);
                 interview.AnswerSingleOptionQuestion(userId, rosterTitleQuestionIdentity.Id, rosterTitleQuestionIdentity.RosterVector, DateTime.Today, 1);
-                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, Create.RosterVector(0), DateTime.Today, new decimal[] { 1 });
+                interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, Create.RosterVector(0), DateTime.Today, new [] { 1 });
                 interview.AnswerYesNoQuestion(
                     new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, Create.RosterVector(0), DateTime.Today, 
                     new List<AnsweredYesNoOption>
@@ -118,10 +118,10 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                     result.RosterTitleBecomesEmpty = eventContext.AnyEvent<RosterInstancesTitleChanged>(x => x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterIdentity.Id && c.Title == null));
 
                     result.MultioptionRosterTriggeredTitleChanged = eventContext.AnyEvent<RosterInstancesTitleChanged>(x =>
-                        x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterWithMultioptionsTitle && c.Title == string.Empty));
+                        x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterWithMultioptionsTitle && string.IsNullOrEmpty(c.Title)));
 
                     result.YesNoRosterTriggeredRosterTitleChanged = eventContext.AnyEvent<RosterInstancesTitleChanged>(x =>
-                        x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterWithYesNoTitle && c.Title == string.Empty));
+                        x.ChangedInstances.Any(c => c.RosterInstance.GroupId == rosterWithYesNoTitle && string.IsNullOrEmpty(c.Title)));
                 }
 
                 return result;

@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
@@ -235,7 +239,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsText);
@@ -261,7 +266,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsInteger);
@@ -288,7 +294,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsDouble);
@@ -314,14 +321,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsTextList);
             Assert.AreEqual(clonedQuestion.AsTextList.GetAnswer(), question.AsTextList.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsTextList, question.AsTextList), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsTextList.GetAnswer(), question.AsTextList.GetAnswer()), Is.False);
         }
+
         [Test]
         public void When_Clone_DateTime_question_Then_should_return_copy_of_question_with_dif_references()
         {
@@ -340,13 +348,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsDateTime);
             Assert.AreEqual(clonedQuestion.AsDateTime.GetAnswer(), question.AsDateTime.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsDateTime, question.AsDateTime), Is.False);
         }
+
         [Test]
         public void When_Clone_GpsCoordinates_question_Then_should_return_copy_of_question_with_dif_references()
         {
@@ -365,14 +375,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsGps);
             Assert.AreEqual(clonedQuestion.AsGps.GetAnswer(), question.AsGps.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsGps, question.AsGps), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsGps.GetAnswer(), question.AsGps.GetAnswer()), Is.False);
         }
+
         [Test]
         public void When_Clone_Multimedia_question_Then_should_return_copy_of_question_with_dif_references()
         {
@@ -391,13 +402,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsMultimedia);
             Assert.AreEqual(clonedQuestion.AsMultimedia.GetAnswer(), question.AsMultimedia.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsMultimedia, question.AsMultimedia), Is.False);
         }
+
         [Test]
         public void When_Clone_MultiOption_question_Then_should_return_copy_of_question_with_dif_references()
         {
@@ -416,13 +429,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
-            Assert.NotNull(clonedQuestion.AsMultiOption);
-            Assert.AreEqual(clonedQuestion.AsMultiOption.GetAnswer(), question.AsMultiOption.GetAnswer());
-            Assert.That(ReferenceEquals(clonedQuestion.AsMultiOption, question.AsMultiOption), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsMultiOption.GetAnswer(), question.AsMultiOption.GetAnswer()), Is.False);
+            Assert.NotNull(clonedQuestion.AsMultiFixedOption);
+            Assert.AreEqual(clonedQuestion.AsMultiFixedOption.GetAnswer(), question.AsMultiFixedOption.GetAnswer());
+            Assert.That(ReferenceEquals(clonedQuestion.AsMultiFixedOption, question.AsMultiFixedOption), Is.False);
         }
 
         [Test]
@@ -444,15 +457,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsYesNo);
             Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer(), question.AsYesNo.GetAnswer());
-            Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().First(), question.AsYesNo.GetAnswer().First());
-            Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().Second(), question.AsYesNo.GetAnswer().Second());
+            Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().CheckedOptions.First(), question.AsYesNo.GetAnswer().CheckedOptions.First());
+            Assert.AreEqual(clonedQuestion.AsYesNo.GetAnswer().CheckedOptions.Second(), question.AsYesNo.GetAnswer().CheckedOptions.Second());
             Assert.That(ReferenceEquals(clonedQuestion.AsYesNo, question.AsYesNo), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsYesNo.GetAnswer(), question.AsYesNo.GetAnswer()), Is.False);
         }
 
         [Test]
@@ -475,7 +488,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsMultiLinkedOption);
@@ -502,12 +516,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
-            Assert.NotNull(clonedQuestion.AsSingleOption);
-            Assert.AreEqual(clonedQuestion.AsSingleOption.GetAnswer(), question.AsSingleOption.GetAnswer());
-            Assert.That(ReferenceEquals(clonedQuestion.AsSingleOption, question.AsSingleOption), Is.False);
+            Assert.NotNull(clonedQuestion.AsSingleFixedOption);
+            Assert.AreEqual(clonedQuestion.AsSingleFixedOption.GetAnswer(), question.AsSingleFixedOption.GetAnswer());
+            Assert.That(ReferenceEquals(clonedQuestion.AsSingleFixedOption, question.AsSingleFixedOption), Is.False);
         }
 
         [Test]
@@ -530,13 +545,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsSingleLinkedOption);
             Assert.AreEqual(clonedQuestion.AsSingleLinkedOption.GetAnswer(), question.AsSingleLinkedOption.GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.AsSingleLinkedOption, question.AsSingleLinkedOption), Is.False);
-            Assert.That(ReferenceEquals(clonedQuestion.AsSingleLinkedOption.GetAnswer(), question.AsSingleLinkedOption.GetAnswer()), Is.False);
             Assert.That(ReferenceEquals(clonedQuestion.AsSingleLinkedOption.Options, question.AsSingleLinkedOption.Options), Is.False);
         }
         [Test]
@@ -557,7 +572,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             //assert
             Assert.That(ReferenceEquals(clonedQuestion, question), Is.False);
             Assert.AreEqual(clonedQuestion.Identity, question.Identity);
-            Assert.AreEqual(clonedQuestion.Title, question.Title);
+            Assert.NotNull(clonedQuestion.Title);
+            Assert.AreEqual(clonedQuestion.Title.Text, question.Title.Text);
             Assert.AreEqual(clonedQuestion.VariableName, question.VariableName);
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.AsQRBarcode);
@@ -575,7 +591,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var clonedTree = sourceTree.Clone();
 
             //assert
-            Type[] ignoreTypes = new[] {typeof(Identity), typeof(RosterVector), typeof(string)};
+            Type[] ignoreTypes = new[] {typeof(Identity), typeof(RosterVector), typeof(string), typeof(ISubstitutionService), typeof(IVariableToUIStringService) };
             var sourceInterviewTreeNodes = sourceTree.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(s => s.Children).ToList();
             var clonedInterviewTreeNodes = clonedTree.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(s => s.Children).ToList();
             foreach (var pair in Enumerable.Zip(sourceInterviewTreeNodes, clonedInterviewTreeNodes, (s, c) => new { SourceNode = s, ClonedNode = c }))
@@ -614,7 +630,44 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             }
         }
 
+        [Test]
+        public void When_SetAnswer_yes_no_question_with_empty_value_Then_it_should_be_treated_as_not_answered()
+        {
+            //arrange
+            var question = Create.Entity.InterviewTreeQuestion(
+                questionIdentity: Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111")),
+                isDisabled: true,
+                title: "title",
+                variableName: "variable",
+                questionType: QuestionType.MultyOption,
+                answer: new AnsweredYesNoOption[] { new AnsweredYesNoOption(1, true), new AnsweredYesNoOption(4, false) },
+                isYesNo: true);
 
+            //act
+            question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(new List<CheckedYesNoAnswerOption>()));
+
+            //assert
+            Assert.That(question.IsAnswered, Is.False);
+        }
+
+        [Test]
+        public void When_SetAnswer_text_list_question_with_empty_value_Then_it_should_be_treated_as_not_answered()
+        {
+            //arrange
+            var question = Create.Entity.InterviewTreeQuestion(
+                questionIdentity: Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111")),
+                isDisabled: true,
+                title: "title",
+                variableName: "variable",
+                questionType: QuestionType.TextList,
+                answer: new[] { new Tuple<decimal, string>(1, "1") });
+
+            //act
+            question.SetAnswer(TextListAnswer.FromTupleArray(new Tuple<decimal, string>[] {}));
+
+            //assert
+            Assert.That(question.IsAnswered, Is.False);
+        }
 
         private static InterviewTree CreateSimpleTree(Guid interviewId, Identity sectionIdentity, Identity questionIdentity)
             => CreateSimpleTree(interviewId, sectionIdentity, Create.Entity.InterviewTreeQuestion(questionIdentity));
@@ -646,19 +699,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 }),
                 Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Guid.Parse("20111111111111111111111111111111")), children: new IInterviewTreeNode[]
                 {
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20222222222222222222222222222222")), questionType: QuestionType.Numeric),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20333333333333333333333333333333")), questionType: QuestionType.Text),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20444444444444444444444444444444")), questionType: QuestionType.DateTime),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20555555555555555555555555555555")), questionType: QuestionType.GpsCoordinates),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20666666666666666666666666666666")), questionType: QuestionType.Multimedia),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20777777777777777777777777777777")), questionType: QuestionType.MultyOption),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20888888888888888888888888888888")), questionType: QuestionType.MultyOption, linkedSourceId: Guid.NewGuid()),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20999999999999999999999999999999")), questionType: QuestionType.QRBarcode),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30111111111111111111111111111111")), questionType: QuestionType.TextList),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30222222222222222222222222222222")), questionType: QuestionType.SingleOption),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30333333333333333333333333333333")), questionType: QuestionType.SingleOption, linkedSourceId: Guid.NewGuid()),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30444444444444444444444444444444")), questionType: QuestionType.MultyOption, isYesNo: true),
-                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30555555555555555555555555555555")), questionType: QuestionType.Numeric, isDecimal: true),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20222222222222222222222222222222")), questionType: QuestionType.Numeric, answer: 5),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20333333333333333333333333333333")), questionType: QuestionType.Text, answer: "text"),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20444444444444444444444444444444")), questionType: QuestionType.DateTime, answer: DateTime.Now),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20555555555555555555555555555555")), questionType: QuestionType.GpsCoordinates, answer: new GeoPosition(1, 2, 3, 4, DateTimeOffset.Now)),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20666666666666666666666666666666")), questionType: QuestionType.Multimedia, answer: "filename"),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20777777777777777777777777777777")), questionType: QuestionType.MultyOption, answer: new decimal[] { 1.2m, 1.7m }),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20888888888888888888888888888888")), questionType: QuestionType.MultyOption, linkedSourceId: Guid.NewGuid(), answer: new decimal[][] { new decimal[] { 1.2m}, new decimal[] {16m, 2.3m} }),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("20999999999999999999999999999999")), questionType: QuestionType.QRBarcode, answer: "bar code"),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30111111111111111111111111111111")), questionType: QuestionType.TextList, answer: new string[] { "line1", "line2" }),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30222222222222222222222222222222")), questionType: QuestionType.SingleOption, answer: 4),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30333333333333333333333333333333")), questionType: QuestionType.SingleOption, linkedSourceId: Guid.NewGuid(), answer: new RosterVector(new decimal[] {5, 7 })),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30444444444444444444444444444444")), questionType: QuestionType.MultyOption, isYesNo: true, answer: new AnsweredYesNoOption[] { new AnsweredYesNoOption(5, true), new AnsweredYesNoOption(2, false), }),
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Guid.Parse("30555555555555555555555555555555")), questionType: QuestionType.Numeric, isDecimal: true, answer: 5.5),
                 }),
                 Create.Entity.InterviewTreeSubSection(Create.Entity.Identity(Guid.Parse("40111111111111111111111111111111")), children: new IInterviewTreeNode[]
                 {

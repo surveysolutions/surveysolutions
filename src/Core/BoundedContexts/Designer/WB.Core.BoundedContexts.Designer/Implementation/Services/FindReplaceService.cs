@@ -20,7 +20,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             var questionnaire = this.questionnaires.Get(questionnaireId);
-            questionnaire.QuestionnaireDocument.ConnectChildrenWithParent();
             return questionnaire.FindAllTexts(searchFor, matchCase, matchWholeWord, useRegex);
         }
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -47,13 +46,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             return result;
         }
 
-        private static string GetLastComment(InterviewQuestion question)
-        {
-            if (question.Comments == null || !question.Comments.Any())
-                return null;
-            return question.Comments.Last().Text;
-        }
-
         public InterviewSynchronizationDto BuildFrom(InterviewData interview,
             Guid userId, InterviewStatus status, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
         {
@@ -72,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
                     new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion));
 
-			if (questionnaire == null)
+            if (questionnaire == null)
                 throw new Exception("Questionnaire was not found");
             var rosterScopes = this.rostrerStructureService.GetRosterScopes(questionnaire);
             
@@ -98,7 +90,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     if (interviewQuestion.Value.IsInvalid())
                     {
                         invalidQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
-                        failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector), interviewQuestion.Value.FailedValidationConditions.ToList());
+                        failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector), 
+                            interviewQuestion.Value.FailedValidationConditions.ToList());
                     }
                     if (!interviewQuestion.Value.IsInvalid())
                     {
@@ -279,14 +272,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         {
             var result = new Dictionary<InterviewItemId, RosterVector[]>();
 
-            var questionnaire =
-                this.questionnaireStorage.GetQuestionnaireDocument(
-                    new QuestionnaireIdentity(interview.QuestionnaireId,
-                        interview.QuestionnaireVersion));
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
+                new QuestionnaireIdentity(interview.QuestionnaireId,
+                interview.QuestionnaireVersion));
 
-            questionnaire.ConnectChildrenWithParent();
+            var linkedQuestions = questionnaire.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).ToList();
 
-            var linkedQuestions = questionnaire.Find<IQuestion>(q => q.LinkedToRosterId.HasValue || q.LinkedToQuestionId.HasValue).ToArray();
+            foreach (var question in questionnaire.Find<IQuestion>(q => q.LinkedToQuestionId.HasValue))
+            {
+                if(questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == question.LinkedToQuestionId.Value).QuestionType != QuestionType.TextList)
+                    linkedQuestions.Add(question);
+            }
+
             var interviewLinkedQuestionOptions = this.interviewLinkedQuestionOptionsStore.GetById(interview.InterviewId);
 
             foreach (var linkedQuestion in linkedQuestions)

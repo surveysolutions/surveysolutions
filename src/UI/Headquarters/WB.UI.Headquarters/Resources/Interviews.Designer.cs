@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;..
+        ///&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
         /// </summary>
         public static string ApproveConfirmMessageHQ {
             get {
@@ -96,6 +96,25 @@ namespace WB.UI.Headquarters.Resources {
         public static string AssignReceivedConfirm {
             get {
                 return ResourceManager.GetString("AssignReceivedConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;
+        ///&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt; could be reassigned..
+        /// </summary>
+        public static string AssignToOtherTeamConfirmMessage {
+            get {
+                return ResourceManager.GetString("AssignToOtherTeamConfirmMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No responsible chosen for some interview(s). Please, choose responsible interviewer..
+        /// </summary>
+        public static string ChooseResponsibleInterviewer {
+            get {
+                return ResourceManager.GetString("ChooseResponsibleInterviewer", resourceCulture);
             }
         }
         

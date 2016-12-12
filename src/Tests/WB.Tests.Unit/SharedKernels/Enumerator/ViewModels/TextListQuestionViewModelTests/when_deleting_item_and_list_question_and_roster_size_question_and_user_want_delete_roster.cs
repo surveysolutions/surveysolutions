@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -23,11 +23,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
     {
         Establish context = () =>
         {
-            var textListAnswer = Mock.Of<TextListAnswer>(_ => _.Answers == savedAnswers && _.IsAnswered == true);
+            var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer() == savedAnswers && _.IsAnswered == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.QuestionnaireId == questionnaireId
-                   && _.GetTextListAnswer(questionIdentity) == textListAnswer);
+                   && _.GetTextListQuestion(questionIdentity) == textListAnswer);
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
@@ -61,8 +61,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
 
         It should_delete_item_with_index_equals__deletedItemIndex__ = () =>
             answerViewModels.Any(x
-                => x.Value == savedAnswers[deletedItemIndex].Item1
-                   && x.Title == savedAnswers[deletedItemIndex].Item2)
+                => x.Value == savedAnswers.ToTupleArray()[deletedItemIndex].Item1
+                   && x.Title == savedAnswers.ToTupleArray()[deletedItemIndex].Item2)
                 .ShouldBeFalse();
 
         It should_contain_add_new_item_view_model = () =>
@@ -85,14 +85,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         private static readonly string questionnaireId = "Questionnaire Id";
         private static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
 
-        private static readonly Tuple<decimal, string>[] savedAnswers = new[]
-                                                                        {
-                                                                            new Tuple<decimal, string>(1m, "Answer 1"),
-                                                                            new Tuple<decimal, string>(3m, "Answer 3"),
-                                                                            new Tuple<decimal, string>(4m, "Answer 5"),
-                                                                            new Tuple<decimal, string>(8m, "Answer 8"),
-                                                                            new Tuple<decimal, string>(9m, "Answer 9"),
-                                                                        };
+        private static readonly TextListAnswer savedAnswers = TextListAnswer.FromTupleArray(new[]
+        {
+            new Tuple<decimal, string>(1m, "Answer 1"),
+            new Tuple<decimal, string>(3m, "Answer 3"),
+            new Tuple<decimal, string>(4m, "Answer 5"),
+            new Tuple<decimal, string>(8m, "Answer 8"),
+            new Tuple<decimal, string>(9m, "Answer 9"),
+        });
 
         private static readonly int deletedItemIndex = 2;
         private static List<TextListItemViewModel> answerViewModels => listModel.Answers.OfType<TextListItemViewModel>().ToList();

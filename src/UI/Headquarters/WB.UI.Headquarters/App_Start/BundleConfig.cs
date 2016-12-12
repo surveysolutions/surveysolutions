@@ -92,7 +92,10 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.spin.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/details").Include(
-                "~/Scripts/typeahead.js",
+                "~/Scripts/bloodhound.js",
+                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/components/typeahead-extended.js", 
+                "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/components/bindings.js",
                 "~/Scripts/director.js",
                 "~/Scripts/viewmodels/pages/interview/details/config.js",
@@ -158,14 +161,85 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.numericformatter.js"
                 ));
 
-            bundles.Add(new ScriptBundle("~/Scripts/jqplot-area")
-                .Include(
-                    "~/Scripts/query-string.js"
-                    , "~/Scripts/jqPlot/jquery.jqplot.js"
-                    , "~/Scripts/jqPlot/plugins/jqplot.dateAxisRenderer.js"
-                    , "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js"
-                    , "~/Scripts/jqPlot/plugins/jqplot.cursor.js"
-                    , "~/Scripts/jqPlot/plugins/jqplot.enhancedLegendRenderer.js"
+            bundles.Add(new ScriptBundle("~/js/interviews-sv").Include(
+                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js", 
+                "~/Scripts/viewmodels/pages/interviews.base.js",
+                "~/Scripts/viewmodels/pages/interview/sv.interviews.js",
+                "~/Scripts/knockout/ko.numericformatter.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/surveysandstatuses").Include(
+                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js", 
+                "~/Scripts/viewmodels/pages/surveysandstatuses.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/interviewer").Include(
+                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js", 
+                "~/Scripts/viewmodels/pages/create-interviewer.js"
+                ));
+            bundles.Add(new ScriptBundle("~/js/interviewers").Include(
+                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js", 
+                "~/Scripts/viewmodels/pages/interviewers.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/users").Include(
+                "~/Scripts/viewmodels/pages/users.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/teamsandstatuses").Include(
+                "~/Scripts/viewmodels/pages/teamsandstatuses.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/questionnaires").Include(
+                "~/Scripts/viewmodels/pages/questionnaires.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/exportdata").Include(
+                "~/Scripts/viewmodels/pages/interviews.base.js",
+                "~/Scripts/pages/exportdata.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/statuslistview").Include(
+                "~/Scripts/vm/statuslistview.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/chart").Include(
+                "~/Scripts/query-string.js", 
+                "~/Scripts/jqPlot/jquery.jqplot.js", 
+                "~/Scripts/jqPlot/plugins/jqplot.dateAxisRenderer.js", 
+                "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js", 
+                "~/Scripts/jqPlot/plugins/jqplot.cursor.js", 
+                "~/Scripts/jqPlot/plugins/jqplot.enhancedLegendRenderer.js",
+                "~/Scripts/bootstrap-datepicker.js",
+                "~/Scripts/ko.datepicker.js",
+                "~/Scripts/viewmodels/pages/interviews.base.js",
+                "~/Scripts/pages/chart.js",
+                "~/Scripts/dateRangePicker/daterangepicker.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/preloading").Include(
+                "~/Scripts/components/bindings.js", 
+                "~/Scripts/pages/userpreloading.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/batch-user-creation").Include(
+                "~/Scripts/pages/batch-user-creation.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/export-settings").Include(
+                "~/Scripts/pages/export-settings.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/designerquestionnaires").Include(
+                "~/Scripts/viewmodels/pages/designerquestionnaires.js"
                 ));
         }
     }
