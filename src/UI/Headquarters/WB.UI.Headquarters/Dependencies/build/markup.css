@@ -6008,7 +6008,7 @@ html {
       .navbar .navbar-collapse li > a .caret {
         position: absolute;
         top: 31px;
-        right: 7px;
+        right: 17px;
         margin-left: 11px;
         border-top: 8px solid rgba(255, 255, 255, 0.7);
         border-right: 5px solid transparent;
@@ -6024,7 +6024,13 @@ html {
         margin-bottom: -1px;
         padding: 0 5px; }
     .navbar .navbar-collapse li.dropdown > a {
-      padding-right: 20px; }
+      padding-right: 25px; }
+    .navbar .navbar-collapse li .dropdown-menu li.active a {
+      color: #fff;
+      font-family: "RobotoLight";
+      border-radius: 0; }
+      .navbar .navbar-collapse li .dropdown-menu li.active a:hover, .navbar .navbar-collapse li .dropdown-menu li.active a:focus {
+        font-family: "RobotoBold"; }
     .navbar .navbar-collapse li .dropdown-menu li a {
       border-radius: 5px;
       padding: 10px;
@@ -6096,6 +6102,8 @@ html {
     padding: 40px 5%; }
     .navbar.navbar-fixed-top .navbar-collapse li.active a {
       color: white; }
+      .navbar.navbar-fixed-top .navbar-collapse li.active a:hover, .navbar.navbar-fixed-top .navbar-collapse li.active a:focus {
+        background-color: rgba(255, 255, 255, 0.4); }
     .navbar.navbar-fixed-top .navbar-collapse li > a {
       border-radius: 5px;
       padding: 15px 10px;
@@ -6105,6 +6113,12 @@ html {
         color: white; }
     .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li a {
       padding: 15px 10px; }
+    .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a {
+      border-radius: 5px;
+      background-color: rgba(42, 129, 203, 0.5); }
+      .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a:hover, .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a:focus {
+        font-family: "RobotoBold";
+        background-color: #2a81cb; }
     .navbar.navbar-fixed-top .navbar-collapse .navbar-right .badge.badge_nav {
       top: 0;
       left: 0;
@@ -6317,7 +6331,8 @@ input.wb-checkbox {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: 0;
+  margin-top: 0;
+  margin-bottom: 0;
   transform: translate(-50%, -50%);
   /*  margin-top: 115px; */ }
   .two-columns-form .left-column {
@@ -6403,6 +6418,12 @@ input.wb-checkbox {
     top: 0;
     left: 0;
     transform: translate(0, 0); } }
+
+@media (max-width: 880px) {
+  .log-in, main .two-columns-form .left-column p {
+    text-align: left;
+    max-width: 350px;
+    margin: 0 auto; } }
 
 .selection-box {
   background-color: #ececec;
@@ -6785,7 +6806,8 @@ main .two-columns-form .left-column {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: 0;
+  margin-top: 0;
+  margin-bottom: 0;
   transform: translate(-50%, -50%);
   /*  margin-top: 115px; */ }
   .two-columns-form .left-column {
@@ -6871,6 +6893,12 @@ main .two-columns-form .left-column {
     top: 0;
     left: 0;
     transform: translate(0, 0); } }
+
+@media (max-width: 880px) {
+  .log-in, main .two-columns-form .left-column p {
+    text-align: left;
+    max-width: 350px;
+    margin: 0 auto; } }
 
 .left-column #log-in {
   text-align: left; }
@@ -6961,12 +6989,15 @@ img#placeholder {
     height: 26.5px; }
   .interviewer-app {
     display: block; }
-  .left-column #log-in {
-    text-align: left;
-    max-width: 300px;
-    margin: 0 auto; }
+  /*     .left-column{
+        #log-in{
+            text-align: left;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+    } */
   html body main .two-columns-form .log-in .form-group .form-control {
-    width: 95%; } }
+    width: 100%; } }
 
 .text-page, .prefilled-data-info {
   font: 14px/16px "RobotoRegular"; }
