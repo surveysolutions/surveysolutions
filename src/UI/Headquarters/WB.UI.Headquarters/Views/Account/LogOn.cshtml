@@ -100,10 +100,10 @@
             <div class="row">
                 <div class="interviewer-app">
                     <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})" class="get-interviewer-app">
-                        <span>Download recent interviewer app for android</span>
+                        <span>Download latest interviewer app</span>
                         <span class="version">Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
                     </a>
-                    <a href="#">Installation instruction</a>
+                    <a href="http://docs.mysurvey.solutions/interviewer-installation">Installation instruction</a>
                 </div>
             </div>
         </div>

@@ -454,9 +454,7 @@
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
-    <Content Include="Dependencies\build\libs-d3d1d0504e.min.js" />
     <Content Include="Dependencies\build\libs.js" />
-    <Content Include="Dependencies\build\markup-8168242341.min.css" />
     <Content Include="Dependencies\build\markup.css" />
     <Content Include="Dependencies\css\markup.css">
       <DependentUpon>markup.scss</DependentUpon>
@@ -473,10 +471,19 @@
     <Content Include="Dependencies\fonts\TrebuchetMSBold.svg" />
     <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.svg" />
     <Content Include="Dependencies\gulpfile.js" />
+    <Content Include="Dependencies\img\calendar.png" />
+    <Content Include="Dependencies\img\calendar2k.png" />
+    <Content Include="Dependencies\img\chekboxes.png" />
+    <Content Include="Dependencies\img\chekboxes2k.png" />
+    <Content Include="Dependencies\img\data-image.png" />
+    <Content Include="Dependencies\img\data-image2k.png" />
     <Content Include="Dependencies\img\designer-logo.png" />
+    <Content Include="Dependencies\img\flags.png" />
+    <Content Include="Dependencies\img\flags2k.png" />
     <Content Include="Dependencies\img\headquarter_logo-retina.png" />
     <Content Include="Dependencies\img\headquarter_logo.png" />
     <Content Include="Dependencies\img\HQ-login-3_05.png" />
+    <Content Include="Dependencies\img\HQ-login-mobile-get-button-logo.png" />
     <Content Include="Dependencies\img\identity\favicon-hq-114x114.png" />
     <Content Include="Dependencies\img\identity\favicon-hq-120x120.png" />
     <Content Include="Dependencies\img\identity\favicon-hq-144x144.png" />
@@ -489,6 +496,11 @@
     <Content Include="Dependencies\img\logo-retina.png" />
     <Content Include="Dependencies\img\logo.png" />
     <Content Include="Dependencies\img\pretty-checkable-sprites.png" />
+    <Content Include="Dependencies\img\questionnaire-sprite.png" />
+    <Content Include="Dependencies\img\questionnaire-sprite2k.png" />
+    <Content Include="Dependencies\img\radio.png" />
+    <Content Include="Dependencies\img\search.png" />
+    <Content Include="Dependencies\img\search2k.png" />
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
