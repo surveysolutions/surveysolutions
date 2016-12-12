@@ -15,13 +15,24 @@ $(function () {
             headers: requestHeaders
         },
         "columns": [
-            { data: "title" },
-            { data: "lastModified" },
-            { data: {
+            {
+                data: "title",
+                "class": ""
+            },
+            {
+                data:
+                {
                     _: "lastModified.display",
                     sort: "lastModified.timestamp"
-            } },
-            { data: "createdBy" }
-        ]
+                },
+                "class": "changed-recently"
+            },
+            {
+                data: "createdBy",
+                "class": "created-by"
+            }
+        ],
+        "pagingType": "full_numbers",
+        "lengthChange": false,
     });
 });
