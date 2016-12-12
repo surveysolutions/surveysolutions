@@ -86,7 +86,7 @@ main{
 }
 .table-title{
     float: left;
-    margin-left: 15px;
+    margin-left: 20px;
     width: 60%;
     h2{
         margin-bottom: 30px;
@@ -238,7 +238,7 @@ main{
 #DataTables_Table_0_wrapper{
     position: relative;
     #DataTables_Table_0_filter{
-        @include absolute(0, null, null, 5px);
+        @include absolute(4px, null, null, 5px);
         z-index: 2;
         label{
             font-size: 0;
@@ -356,7 +356,7 @@ main{
 }
 @media (max-width: $screen-md-min){
     html body main.import-wrapper{
-        padding: 0 2% 0 4%;
+        padding: 25px 2% 0 4%;
     }
     .parameters{
         display: none;
@@ -411,6 +411,11 @@ main{
                 font-size: 10px;
                 line-height: 12px;
             }
+        }
+    }
+    #import-questionnaire-form {
+        .questionnaire-versioning, .flex-row{
+            margin-bottom: 0;
         }
     }
 }

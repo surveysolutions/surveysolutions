@@ -82,9 +82,7 @@ label.inactive{
 	}	
 }
 html body .details-interview{
-	padding-top: 0;
-	padding-bottom: 0;
-	padding-right: 0;
+	padding: 0;
 	article{
 		margin-left: 285px;
 	}
@@ -92,8 +90,8 @@ html body .details-interview{
 .content{
 	@extend %aside;
 	border-right: 3px solid $gray-super-light;
-	left: 372px;
-	width: 570px;
+	left: $content-left-indent;
+	width: $content-width;
 	padding-bottom: 40px;
 	@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
 	z-index: 3;
@@ -167,10 +165,10 @@ html body .details-interview{
 				}
 				a{
 					display: block;
-					font-size: 16px/18px "RobotoMedium";
+					font: 16px/18px "RobotoMedium";
 					font-weight: normal;
 					color: $blue;
-					padding: 15px 40px 15px 30px;
+					padding: 15px 20px 15px 25px;
 					position: relative;
 
 					&:hover, &:focus{
@@ -228,7 +226,8 @@ html body .details-interview{
 	}
 }
 .questionnaire{
-	margin-left: 855px;
+	min-width: $questionnaire-min-width;
+	margin-left: $questionnaire-margin-left;
 	.unit-title{
 		position: relative;
 		z-index: 2;
@@ -491,6 +490,7 @@ html body .details-interview{
 				margin: 0 0 5px;
 				max-width: 425px;
 				@extend %form;
+				position: relative;
 				&:last-of-type{
 					margin-bottom: 0;
 				}
@@ -585,12 +585,8 @@ html body .details-interview{
 	h5{
 		margin: 0;
 		.static-text-image{
-			padding: 30px;
-			display: block;
+			margin-top: 10px;
 			@include size($width-question-editor, auto);
-			img{
-				@include img-responsive();
-			}
 		}
 	}
 	&.invalid{
@@ -684,26 +680,29 @@ html body .details-interview{
 .gps-question{
 	&.answered, &.contains-error{
 		@extend %action-btn;
-		#map {
+		.map {
 	        height: 200px;
 	        width: 385px;
 	        margin-bottom: 10px;
 	    }
 	}
 }
+.image-zoom-box{
+	overflow: hidden;
+	margin-bottom: 10px;
+	img{
+		@include img-responsive();
+	}
+}
+span.image-zoom-box{
+	display: block;
+}
 .multimedia-question{
 	&.answered, &.contains-error{
 		@extend %action-btn;
-		.custom-photo-wrapper{
-			margin-bottom: 10px;
-		}	
 	}
-	.custom-photo-wrapper{
+	.image-wrapper{
 		@include size(385px, 200px);
-		overflow: hidden;
-		img{
-			@include img-responsive();
-		}
 	}
 }
 .qr-question, .current-time-question{
@@ -716,15 +715,15 @@ html body .details-interview{
 		}
 	}
 }
-
 .zoomImg {
     cursor: pointer;
-    transition: 0.3s;
+    @include transition(all, 0.3s);
 }
 
-.zoomImg:hover {
-
-	transform:scale(1.4);
+.zoomImg {
+	&:hover, &:focus{
+		@include scale(1.1);
+	}
 }
 
 
@@ -742,8 +741,8 @@ html body .details-interview{
     display: none; 
     .modal-content {
 		@include center-block();
-	    width: 75% !important;
-	    max-width: 80% !important;
+	    max-width: 70% !important;
+	    max-height: 80%;
 	}
 	.caption {
 	    width: 75%;
@@ -781,8 +780,67 @@ html body .details-interview{
     	@include scale(1);
     }
 } 
+.img-single-select-question{
+	label{
+		overflow: hidden;
+		span, .image-option{
+			float: left;
+		}
+	}
+}
+.image-option{
+	margin-left: 10px;
+	max-width: 70%;
+	@extend .image-zoom-box;
+}
+.fullscreen-hidden-filters {
+	.questionnaire{
+		margin-left: 495px;
+		.unit-title.is_stuck{
+			width: 100% !important;
+		}
+	}
+	.content{
+		left: 12px;
+		.questionnaire-content{
+			padding-left: 55px;
+		}
+	}
+}
+.fullscreen-hidden-content{
+	.content{
+		left: -597px;
+		@extend %hidden-foldback-button;
+		overflow: inherit;
+
+	}
+	.filters{
+		box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+		z-index: 3;
+	}
+	.questionnaire{
+		margin-left: $questionnaire-margin-left-hidden-content;
+	}
+}
+.fullscreen-hidden-filters.fullscreen-hidden-content{
+	.content .foldback-button{
+		top: 60px;
+	}
+	.questionnaire{
+		margin-left: 0;
+	}
+}
 @media only screen and (max-width: 700px){
     .modal-content {
         width: 100%;
     }
+}
+@media (max-width: $screen-md-min){
+    .content{
+        top: 60px;
+    }
+    .unit-title.is_stuck{
+        top: 60px !important;
+    }
+
 }

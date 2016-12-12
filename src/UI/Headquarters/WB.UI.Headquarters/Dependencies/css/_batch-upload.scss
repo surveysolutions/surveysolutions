@@ -70,7 +70,7 @@ main .flex-row{
 			margin: 20px 0 5px;
 		}
 		p{
-			margin: 3px;
+			margin: 3px 0;
 		}
 	}	
 }
@@ -98,14 +98,20 @@ main .flex-row{
 		display: block;
 	}
 } 
+@media (max-width: $screen-sm-min){
+	.prefilled-data-info{
+		margin-bottom: 0;
+	}
+}
 @media (max-width: $screen-xs-min){
 	.action-block{
-		text-align: center;
 		.btn-input{
 			display: inline-block;
 		}
+		.back-link{
+			margin: 0;
+		}
 		.float-box{
-			text-align: center;
 			.progress{
 				width: 100%;
 				float: none;
@@ -114,7 +120,7 @@ main .flex-row{
 				&.cancel-uploading{
 					float: none;
 				}
-				margin: 15px 5px;
+				margin: 0;
 			}
 		}
 		
