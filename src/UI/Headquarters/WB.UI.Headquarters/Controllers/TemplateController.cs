@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Template;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -49,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers
             set { this.Session[this.GlobalInfo.GetCurrentUser().Name] = value; }
         }
 
-        public ActionResult Import(QuestionnaireListInputModel model)
+        public ActionResult Import()
         {
             if (this.designerUserCredentials == null)
             {

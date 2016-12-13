@@ -244,10 +244,6 @@ namespace WB.UI.Headquarters
             bundles.Add(new ScriptBundle("~/js/export-settings").Include(
                 "~/Scripts/pages/export-settings.js"
                 ));
-
-            bundles.Add(new ScriptBundle("~/js/designerquestionnaires").Include(
-                "~/Scripts/viewmodels/pages/designerquestionnaires.js"
-                ));
         }
     }
 }
