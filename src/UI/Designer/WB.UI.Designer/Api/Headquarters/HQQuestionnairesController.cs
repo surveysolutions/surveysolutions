@@ -5,11 +5,14 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Resources;
@@ -26,6 +29,7 @@ namespace WB.UI.Designer.Api.Headquarters
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly ISerializer serializer;
         private readonly IStringCompressor zipUtils;
@@ -37,7 +41,8 @@ namespace WB.UI.Designer.Api.Headquarters
             IQuestionnaireListViewFactory viewFactory, 
             IDesignerEngineVersionService engineVersionService,
             ISerializer serializer,
-            IStringCompressor zipUtils)
+            IStringCompressor zipUtils, 
+            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -47,6 +52,7 @@ namespace WB.UI.Designer.Api.Headquarters
             this.engineVersionService = engineVersionService;
             this.serializer = serializer;
             this.zipUtils = zipUtils;
+            this.listItemStorage = listItemStorage;
         }
 
         [HttpGet]
@@ -106,6 +112,56 @@ namespace WB.UI.Designer.Api.Headquarters
                 QuestionnaireAssembly = resultAssembly,
                 QuestionnaireContentVersion = questionnaireContentVersion
             };
+        }
+
+        [HttpGet]
+        [Route("info/{id:guid}")]
+        public QuestionnaireInfo Info(Guid id)
+        {
+            var questionnaire = this.GetQuestionnaireViewOrThrow(id);
+            var listItem = this.listItemStorage.GetById(id.FormatGuid());
+
+            QuestionnaireInfo result = new QuestionnaireInfo
+            {
+                Id = questionnaire.PublicKey,
+                Name = questionnaire.Title,
+                CreatedAt = listItem.CreationDate,
+                LastUpdatedAt = listItem.LastEntryDate
+            };
+
+            foreach (var questionnaireEntry in questionnaire.Source.Children.TreeToEnumerable(x => x.Children))
+            {
+                var group = questionnaireEntry as IGroup;
+                if (group != null)
+                {
+                    if (group.GetParent().PublicKey == questionnaire.PublicKey)
+                    {
+                        result.ChaptersCount++;
+                    }
+                    else if (group.IsRoster)
+                    {
+                        result.RostersCount++;
+                    }
+                    else
+                    {
+                        result.GroupsCount++;
+                    }
+                }
+                else
+                {
+                    var question = questionnaireEntry as IQuestion;
+                    if (question != null)
+                    {
+                        result.QuestionsCount++;
+                        if (!string.IsNullOrEmpty(question.ConditionExpression))
+                        {
+                            result.QuestionsWithConditionsCount++;
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
 
         private void CheckInvariantsAndThrowIfInvalid(int clientVersion, QuestionnaireView questionnaireView)

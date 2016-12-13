@@ -3,15 +3,19 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Template;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Models;
+using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -20,11 +24,15 @@ namespace WB.UI.Headquarters.Controllers
     public class TemplateController : BaseController
     {
         private readonly IRestService designerQuestionnaireApiRestService;
+        private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IRestService designerQuestionnaireApiRestService)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider, IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
+            this.questionnaireVersionProvider = questionnaireVersionProvider;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (AppSettings.Instance.AcceptUnsignedCertificate)
@@ -51,6 +59,26 @@ namespace WB.UI.Headquarters.Controllers
 
             return
                 this.View("ImportOld");
+        }
+
+        public async Task<ActionResult> ImportMode(Guid id)
+        {
+            //if (this.designerUserCredentials == null)
+            //{
+            //    return this.RedirectToAction("LoginToDesigner");
+            //}
+
+            var questionnaireInfo = await this.designerQuestionnaireApiRestService
+                                              .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}", 
+                                                                           credentials: new RestCredentials
+                                                                           {
+                                                                               Login = "Admin",
+                                                                               Password = "q"
+                                                                           });
+            var model = new ImportModeModel();
+            model.QuestionnaireInfo = questionnaireInfo;
+            model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
+            return View(model);
         }
 
         public ActionResult LoginToDesigner()
