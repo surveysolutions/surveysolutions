@@ -694,7 +694,6 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <Content Include="Scripts\viewmodels\pages\create-interviewer.js" />
-    <Content Include="Scripts\viewmodels\pages\designerquestionnaires.js" />
     <Content Include="Scripts\viewmodels\pages\healthcheck.js" />
     <Content Include="Scripts\viewmodels\pages\interviewers.js" />
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
@@ -817,7 +816,6 @@
     <Content Include="Views\Install\Finish.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
-    <Content Include="Views\Template\ImportOld.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Views\HQ\BatchUpload.cshtml" />
@@ -1437,7 +1435,6 @@
     <Compile Include="Models\CypherSettingsModel.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
-    <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />

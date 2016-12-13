@@ -8,12 +8,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
+namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     public class UsersApiController : BaseApiController
@@ -98,21 +95,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Observer")]
         public UserListView Headquarters(UsersListViewModel data)
         {
-            return GetUsers(data, UserRoles.Headquarter);
+            return this.GetUsers(data, UserRoles.Headquarter);
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         public UserListView Observers(UsersListViewModel data)
         {
-            return GetUsers(data, UserRoles.Observer);
+            return this.GetUsers(data, UserRoles.Observer);
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         public UserListView ApiUsers(UsersListViewModel data)
         {
-            return GetUsers(data, UserRoles.ApiUser);
+            return this.GetUsers(data, UserRoles.ApiUser);
         }
 
         private UserListView GetUsers(UsersListViewModel data, UserRoles role, bool archived = false)
@@ -137,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var response = new JsonCommandResponse();
             try
             {
-                deleteSupervisorService.DeleteSupervisor(request.SupervisorId);
+                this.deleteSupervisorService.DeleteSupervisor(request.SupervisorId);
                 response.IsSuccess = true;
             }
             catch (Exception e)

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve">
-    <value>Before log in, please make sure that the 'Designer' website is available and it's not in the maintenance mode</value>
+    <value>Before log in, please make sure that the 'Designer' website is available</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
-    <value>Could not connect to designer. Please check that designer is available and try &lt;a href='{0}'&gt;again&lt;/a&gt;</value>
+    <value>Could not connect to Designer. Please check if Designer is available and try &lt;a href='{0}'&gt;again&lt;/a&gt;</value>
   </data>
   <data name="SignInToDesigner" xml:space="preserve">
     <value>Please sign in to designer</value>
@@ -133,7 +133,7 @@
     <value>Designer Questionnaires</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import as template</value>
+    <value>Import in Sample mode</value>
   </data>
   <data name="ImportInCensus" xml:space="preserve">
     <value>Import in census mode</value>
@@ -151,13 +151,13 @@
     <value>Chapters</value>
   </data>
   <data name="CreatedAt" xml:space="preserve">
-    <value>Created at</value>
+    <value>Created on</value>
   </data>
   <data name="Gropus" xml:space="preserve">
     <value>Sub-sections</value>
   </data>
   <data name="LastModifiedAt" xml:space="preserve">
-    <value>Last modified at</value>
+    <value>Last modified on</value>
   </data>
   <data name="Questions" xml:space="preserve">
     <value>Questions</value>
@@ -169,16 +169,16 @@
     <value>Rosters</value>
   </data>
   <data name="QuestionnaireExists" xml:space="preserve">
-    <value>This questionnaire is already exist on your list</value>
+    <value>This questionnaire already exists in your list</value>
   </data>
   <data name="CensusImportSubTitle" xml:space="preserve">
-    <value>This can automaticly add this questionnaire to all your devises</value>
+    <value>This action will automatically add this questionnaire to all your devises</value>
   </data>
   <data name="CensusImportTitle" xml:space="preserve">
     <value>Import this questionaire in census mode</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>Import it as new version, №{0}</value>
+    <value>Create new #{0} version of this questionnaire</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
     <value>Import this questionaire as a template for individual assignments</value>
