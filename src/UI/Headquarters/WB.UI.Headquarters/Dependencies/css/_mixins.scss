@@ -62,7 +62,7 @@
     }
 }
 @mixin accordion($initial-padding){
-    $padding : 30px;
+    $padding : $initial-padding;
     $cummulativePadding: $initial-padding;
     @include paccordion($cummulativePadding);
         $cummulativePadding: $cummulativePadding + $padding;
@@ -106,13 +106,14 @@
   ::-moz-placeholder          {@content}
   :-ms-input-placeholder      {@content}  
 }
-@mixin cancel($width, $top: null, $right: null, $bottom: null, $left: null){
+@mixin close($width, $top: null, $right: null, $bottom: null, $left: null){
     outline: none;
     background-color: transparent;
     @include square($width);
     @include absolute($top, $right, $bottom, $left);
     padding: 20px;
     margin: 0;
+    @include opacity(0.5);
     &:hover, &:focus, &:active{
         &:before, &:after{
             background-color: darken($gray_light, 30%);
@@ -266,7 +267,7 @@
             border-color: darken($gray_light, 10%);
         }
     }
-    .question-unit .options-group .field .btn.cancel{
+    .question-unit .options-group .field .close{
         top: -15px;
     }
     .block-with-data{

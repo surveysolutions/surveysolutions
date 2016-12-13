@@ -58,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return
-                this.View("ImportOld");
+                this.View();
         }
 
         public async Task<ActionResult> ImportMode(Guid id)

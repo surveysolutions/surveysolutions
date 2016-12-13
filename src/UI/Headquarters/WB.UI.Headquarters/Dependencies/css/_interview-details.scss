@@ -522,8 +522,8 @@ html body .details-interview{
 					padding-right: 30px;
 					border-radius: 5px;
 				}
-				.btn.cancel{
-					@include cancel(10px, -2px, -5px);
+				.close{
+					@include close(10px, -2px, -5px);
 					@include transition(all, 0.2s);
 					@extend %visibility-hidden;
 				}	
@@ -572,11 +572,11 @@ html body .details-interview{
 	}
 	.question-unit .options-group .field{
 		&.answered, &.contains-error{
-		 .btn.cancel{
+		 .close{
 				@extend %visibility-visible;
 			}
 		}
-		input:checked ~ .btn.cancel{
+		input:checked ~ .close{
 			@extend %visibility-visible;
 		}
 	}  
@@ -795,7 +795,7 @@ span.image-zoom-box{
 }
 .fullscreen-hidden-filters {
 	.questionnaire{
-		margin-left: 495px;
+		margin-left: $questionnaire-margin-left-hidden-filter;
 		.unit-title.is_stuck{
 			width: 100% !important;
 		}
@@ -827,8 +827,48 @@ span.image-zoom-box{
 		top: 60px;
 	}
 	.questionnaire{
-		margin-left: 0;
+		margin-left: 12px;
+		
+		.question{
+			padding-left: 85px;
+		}
 	}
+}
+@media only screen and (max-width: 1325px){
+	.details-interview{
+		.filters{
+			top: 70px;
+			width: $filter-small-width;
+			padding-top: 50px;
+			padding-left: 20px;
+			.dropdown-toggle{
+				width: 250px; 
+			}
+			.open > .dropdown-menu{
+				width: 250px;	
+			}
+			&.hidden-filters{
+				left: $hidden-filter-small-indent;
+				position: absolute;
+				.foldback-button{
+					right: -70px;
+				}
+			}
+		}
+	}
+	.content{
+		width: 440px;
+		left: 310px;
+		.panel-default{
+			@include accordion(15px);
+			& > .panel-heading h3 a{
+				font-size: 14px;
+				line-height: 16px;
+			}
+		}
+	}
+
+    
 }
 @media only screen and (max-width: 700px){
     .modal-content {
