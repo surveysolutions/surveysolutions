@@ -564,6 +564,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.pt.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.pt.resx" />
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImportQuestionnaire.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\LoginToDesigner.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginToDesigner.Designer.cs</LastGenOutput>
@@ -1408,6 +1412,8 @@
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
     <Compile Include="Models\Api\BatchUploadModel.cs" />
+    <Compile Include="Models\Api\DataTableResponseModel.cs" />
+    <Compile Include="Models\Api\DataTableRequestModel.cs" />
     <Compile Include="Models\Api\InterviewApiDetails.cs" />
     <Compile Include="Models\Api\InterviewApiItem.cs" />
     <Compile Include="Models\Api\InterviewApiView.cs" />
@@ -1489,6 +1495,7 @@
     <Compile Include="Models\SummaryListViewModel.cs" />
     <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
+    <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
     <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
@@ -1535,6 +1542,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ImportQuestionnaire.Designer.cs">
+      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Resources\LoginToDesigner.Designer.cs">
       <AutoGen>True</AutoGen>
