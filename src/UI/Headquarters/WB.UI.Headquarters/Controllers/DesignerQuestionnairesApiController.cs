@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Humanizer;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Template;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,6 +14,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Models.Api;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -62,78 +61,31 @@ namespace WB.UI.Headquarters.Controllers
             HttpContext.Current.Session[globalInfoProvider.GetCurrentUser().Name] = designerUserCredentials;
         }
 
-        public class TableInfo
-        {
-            public class SortOrder
-            {
-               public int Column { get; set; }
-               public OrderDirection Dir { get; set; }
-            }
-
-            public class SearchInfo
-            {
-                public string Value { get; set; }
-                public bool Regex { get; set; }
-            }
-
-            public class ColumnInfo
-            {
-                public int Title { get; set; }
-                public string Data { get; set; }
-                public string Name { get; set; }
-                public bool Searchable { get; set; }
-                public bool Orderable { get; set; }
-                public SearchInfo Search { get; set; }
-            }
-            public int Draw { get; set; }
-            public int Start { get; set; }
-            public int Length { get; set; }
-            public List<SortOrder> Order { get; set; }
-            public List<ColumnInfo> Columns { get; set; }
-            public SearchInfo Search { get; set; }
-            public int PageIndex => 1 + this.Start/this.Length;
-            public int PageSize => this.Length;
-
-            public string GetSortOrder()
-            {
-                var order = Order.FirstOrDefault();
-                if (order == null)
-                    return string.Empty;
-
-                var columnName = this.Columns[order.Column].Name;
-                var stringifiedOrder = order.Dir == OrderDirection.Asc ? string.Empty : OrderDirection.Desc.ToString();
-
-                return $"{columnName} {stringifiedOrder}";
-            }
-        }
-
         [HttpPost]
         [CamelCase]
-        public async Task<object> QuestionnairesListNew([FromBody] TableInfo info)
+        public async Task<DataTableResponse<QuestionnaireToBeImported>> QuestionnairesListNew([FromBody] DataTableRequest request)
         {
             var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
                 url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires",
                 credentials: this.designerUserCredentials,
                 queryString: new
                 {
-                    Filter = info.Search.Value,
-                    PageIndex = info.PageIndex,
-                    PageSize = info.PageSize,
-                    SortOrder = info.GetSortOrder()
+                    Filter = request.Search.Value,
+                    PageIndex = request.PageIndex,
+                    PageSize = request.PageSize,
+                    SortOrder = request.GetSortOrder()
                 });
 
-            return new 
+            return new DataTableResponse<QuestionnaireToBeImported>
             {
-                Draw = info.Draw + 1,
+                Draw = request.Draw + 1,
                 RecordsTotal = list.TotalCount,
                 RecordsFiltered = list.TotalCount,
-                Data = list.Items.Select(x => new {
+                Data = list.Items.Select(x => new QuestionnaireToBeImported
+                {
                     Id = x.Id,
                     Title = x.Title,
-                    LastModified = new {
-                        Display = HumanizeLastUpdateDate(x.LastModifiedDate),
-                        Timestamp= x.LastModifiedDate?.Ticks ?? 0
-                    },
+                    LastModified = HumanizeLastUpdateDate(x.LastModifiedDate),
                     CreatedBy = x.OwnerName ?? ""
                 })
             };
