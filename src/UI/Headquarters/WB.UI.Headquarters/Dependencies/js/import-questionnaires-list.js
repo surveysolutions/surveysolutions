@@ -40,25 +40,19 @@ $(function () {
                     }
                 },
                 {
-                    data:
-                    {
-                        _: "lastModified.display",
-                        sort: "lastModified.timestamp"
-                    },
+                    data: "lastModified",
                     name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
-                    "class": "changed-recently",
-                    sortable: true
+                    "class": "changed-recently"
                 },
                 {
                     data: "createdBy",
-
                     name: "CreatedBy",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                    "class": "created-by",
-                    sortable: true
+                    "class": "created-by"
                 }
             ],
-            pagingType: "full_numbers",
-            lengthChange: false,
-            pageLength: 50
+            rowId: 'id',
+            pagingType: "full_numbers", 
+            lengthChange: false, // do not show page size selector
+            pageLength: 50 // page size
         });
 });

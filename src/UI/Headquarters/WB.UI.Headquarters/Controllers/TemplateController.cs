@@ -10,12 +10,11 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Models;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.UI.Headquarters.Models.Template;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -57,10 +56,10 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("LoginToDesigner");
             }
 
-            return
-                this.View();
+            return this.View(new ImportQuestionnaireListModel { DesignerUserName = this.designerUserCredentials.Login });
         }
 
+      
         public async Task<ActionResult> ImportMode(Guid id)
         {
             if (this.designerUserCredentials == null)
@@ -104,6 +103,13 @@ namespace WB.UI.Headquarters.Controllers
             };
             return model;
         }
+
+        public ActionResult LogoutFromDesigner()
+        {
+            this.designerUserCredentials = null;
+            return this.RedirectToAction("LoginToDesigner");
+        }
+
 
         public ActionResult LoginToDesigner()
         {

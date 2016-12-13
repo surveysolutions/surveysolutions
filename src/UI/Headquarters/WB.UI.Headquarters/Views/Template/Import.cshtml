@@ -1,4 +1,6 @@
 ﻿@using System.Web.Optimization
+@using WB.UI.Headquarters.Models.Template
+@model WB.UI.Headquarters.Models.Template.ImportQuestionnaireListModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
@@ -14,14 +16,14 @@
         <div class="row">
             <div class="signed-name">
                 <div>
-                    You are signed in on Designer as <span>Uername</span> <a href="#">sign&nbsp;out</a>
+                    @Html.Raw(string.Format(@ImportQuestionnaire.SignedInBlock, string.Format("<span>{0}</span>", @Model.DesignerUserName))) <a href="@Url.Action("LogoutFromDesigner")">@ImportQuestionnaire.SignOut</a>
                 </div>
             </div>
             <div class="table-title">
                 <ol class="breadcrumb">
-                    <li><a href="">Questionnaires</a></li>
+                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
                 </ol>
-                <h2>Select Questionnaire for import (125 avalaible) </h2>
+                <h2>@ImportQuestionnaire.PageHeader</h2>
             </div>
         </div>
     </div>
@@ -31,9 +33,9 @@
             <table class="table import-interview">
                 <thead>
                 <tr>
-                    <th class="column-questionnaire-title">title</th>
-                    <th>last modified</th>
-                    <th class="created-by">created by</th>
+                    <th class="column-questionnaire-title">@ImportQuestionnaire.Table_Title</th>
+                    <th>@ImportQuestionnaire.Table_LastModified</th>
+                    <th class="created-by">@ImportQuestionnaire.Table_CreatedBy</th>
                 </tr>
                 </thead>
             </table>
