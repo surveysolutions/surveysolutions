@@ -25,14 +25,12 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IRestService designerQuestionnaireApiRestService;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
-        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
         public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider, IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
-            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (AppSettings.Instance.AcceptUnsignedCertificate)
@@ -126,6 +124,13 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return this.View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ImportQuestionnaire()
+        {
+            return View();
         }
     }
 }

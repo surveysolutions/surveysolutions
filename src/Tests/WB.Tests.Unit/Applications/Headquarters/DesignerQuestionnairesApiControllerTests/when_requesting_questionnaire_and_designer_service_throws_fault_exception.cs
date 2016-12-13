@@ -53,6 +53,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         private static string someFaultReason = "some fault reason";
         private static DesignerQuestionnairesApiController controller;
         private static ImportQuestionnaireRequest request;
-        private static QuestionnaireVerificationResponse response;
+        private static QuestionnaireImportResult response;
     }
 }

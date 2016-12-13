@@ -1,11 +1,13 @@
-﻿using System;
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
+namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public interface IGlobalInfoProvider
     {
         UserLight GetCurrentUser();
+
+        RestCredentials GetDesignerUserCredentials();
 
         bool IsAnyUserExist();
 

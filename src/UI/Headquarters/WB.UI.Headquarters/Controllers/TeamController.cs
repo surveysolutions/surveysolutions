@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
