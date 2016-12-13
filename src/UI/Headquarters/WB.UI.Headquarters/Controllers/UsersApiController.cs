@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteSupervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;

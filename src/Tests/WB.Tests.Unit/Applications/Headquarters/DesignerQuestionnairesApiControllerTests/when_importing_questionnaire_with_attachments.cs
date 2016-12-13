@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using Ncqrs.Commanding;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Template;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -37,8 +36,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             mockOfAttachmentContentService.Setup(x => x.HasAttachmentContent(questionnaireAttachments[0].ContentId)).Returns(true);
             mockOfAttachmentContentService.Setup(x => x.HasAttachmentContent(questionnaireAttachments[1].ContentId)).Returns(false);
             mockOfAttachmentContentService.Setup(x => x.HasAttachmentContent(questionnaireAttachments[2].ContentId)).Returns(false);
-
-            
 
             controller = CreateDesignerQuestionnairesApiController(attachmentContentService: mockOfAttachmentContentService.Object,
                 supportedVersionProvider: versionProvider, zipUtils: zipUtils, restService: mockOfRestService.Object);

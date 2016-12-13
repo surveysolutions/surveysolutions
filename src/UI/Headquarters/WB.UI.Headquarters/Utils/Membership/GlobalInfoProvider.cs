@@ -1,4 +1,7 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System.Web;
+using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
 {
@@ -18,6 +21,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
         public UserLight GetCurrentUser()
         {
             return GlobalInfo.GetCurrentUser();
+        }
+
+        public RestCredentials GetDesignerUserCredentials()
+        {
+            return (RestCredentials)HttpContext.Current.Session[this.GetCurrentUser().Name];
         }
 
         /// <summary>
