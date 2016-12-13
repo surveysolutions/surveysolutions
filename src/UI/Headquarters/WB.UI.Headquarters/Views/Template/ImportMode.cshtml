@@ -1,0 +1,103 @@
+﻿@using WB.UI.Headquarters.Utils
+@model WB.UI.Headquarters.Models.ImportModeModel
+
+@{
+    ViewBag.Title = QuestionnaireImport.ImportModeTitle;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-9 page-header">
+                <ol class="breadcrumb">
+                    <li>
+                        @Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")
+                    </li>
+                    <li>
+                        @Html.ActionLink(QuestionnaireImport.ListOfMyQuestionnaires, "Import")
+                    </li>
+                </ol>
+                <div class="page-title">
+                    @QuestionnaireImport.ImportModePageTitle
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <h2>
+                    @Model.QuestionnaireInfo.Name
+                </h2>
+            </div>
+        </div>
+        <div class="row questionnaire-statistics">
+            <div class="col-md-4 col-sm-5">
+                <ul>
+                    <li>@QuestionnaireImport.CreatedAt <span>@Model.QuestionnaireInfo.CreatedAt.FormatDateWithTime()</span></li>
+                    <li>@QuestionnaireImport.LastModifiedAt <span>@Model.QuestionnaireInfo.LastUpdatedAt.FormatDateWithTime()</span></li>
+                </ul>
+            </div>
+            <div class="col-md-4 col-sm-5">
+                <ul>
+                    <li>
+                        <ul class="questionnaire-content">
+                            <li>@QuestionnaireImport.Chapters: <span>@Model.QuestionnaireInfo.ChaptersCount</span>.</li>
+                            <li>@QuestionnaireImport.Gropus: <span>@Model.QuestionnaireInfo.GroupsCount</span>.</li>
+                            <li>@QuestionnaireImport.Rosters: <span>@Model.QuestionnaireInfo.RostersCount</span>.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        @QuestionnaireImport.Questions: <span>@Model.QuestionnaireInfo.QuestionsCount</span>
+                        (@string.Format(QuestionnaireImport.QuestionsWithConditions, Model.QuestionnaireInfo.QuestionsWithConditionsCount))
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form action="#" id="import-questionnaire-form">
+            @if (Model.NewVersionNumber > 1)
+            {
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h3>
+                            @QuestionnaireImport.QuestionnaireExists
+                        </h3>
+                    </div>
+                </div>
+                <div class="row questionnaire-versioning">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <div class="radio">
+                                <input class="wb-radio" type="radio" name="optionsRadios" id="imortAsNewVersion" value="new-version" checked />
+                                <label for="imortAsNewVersion">
+                                    <span class="tick"></span>@string.Format(QuestionnaireImport.ImportAsNewVersion, Model.NewVersionNumber)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row flex-row">
+                <div class="col-sm-6">
+                    <div class="flex-block selection-box">
+                        <div class="block">
+                            <h3>@QuestionnaireImport.RegularImportTitle</h3>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">@QuestionnaireImport.Import</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="flex-block selection-box">
+                        <div class="block">
+                            <h3>@QuestionnaireImport.CensusImportTitle</h3>
+                            <p>@QuestionnaireImport.CensusImportSubTitle</p>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">@QuestionnaireImport.ImportInCensus</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>

@@ -133,9 +133,54 @@
     <value>Designer Questionnaires</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import</value>
+    <value>Import as template</value>
   </data>
   <data name="ImportInCensus" xml:space="preserve">
     <value>Import with census mode</value>
+  </data>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>Questionnaire import mode</value>
+  </data>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>Import Questionnaire:</value>
+  </data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>list of my questionnaires</value>
+  </data>
+  <data name="Chapters" xml:space="preserve">
+    <value>Chapters</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Created at</value>
+  </data>
+  <data name="Gropus" xml:space="preserve">
+    <value>Sub-sections</value>
+  </data>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>Last modified at</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="QuestionsWithConditions" xml:space="preserve">
+    <value>{0} of them with conditions</value>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>Rosters</value>
+  </data>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>This questionnaire is already exist on your list</value>
+  </data>
+  <data name="CensusImportSubTitle" xml:space="preserve">
+    <value>This can automaticly add this questionnaire to all your devises</value>
+  </data>
+  <data name="CensusImportTitle" xml:space="preserve">
+    <value>Import this questionaire in census mode</value>
+  </data>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>Import it as new version, №{0}</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>Import this questionaire as a template for individual assignments</value>
   </data>
 </root>

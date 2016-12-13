@@ -928,6 +928,7 @@
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Views\Template\ImportMode.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1460,6 +1461,7 @@
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
+    <Compile Include="Models\ImportModeModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="Models\InterviewDetailsViewModel.cs" />
@@ -1737,6 +1739,7 @@
     <Content Include="App_GlobalResources\QuestionnaireImport.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>QuestionnaireImport.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Reports.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
