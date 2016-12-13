@@ -7205,7 +7205,7 @@ main .flex-row {
 .filters {
   width: 360px;
   border-right: 3px solid #ececec;
-  padding: 50px 15px 0 33px;
+  padding: 45px 15px 0 33px;
   margin-left: 12px; }
 
 input.checkbox-filter {
@@ -7298,7 +7298,7 @@ input.checkbox-filter {
               background-size: 21px 20px; } }
 
 .preset-filters-container {
-  padding: 30px 0; }
+  padding-top: 30px; }
   .preset-filters-container a {
     color: #2a81cb;
     display: block; }
@@ -7311,7 +7311,8 @@ input.checkbox-filter {
     border: 1px solid #dbdfe2;
     border-radius: 4px;
     width: 295px;
-    text-align: left; }
+    text-align: left;
+    padding: 7px 12px; }
     .btn-input .dropdown-toggle:hover, .btn-input .dropdown-toggle:focus {
       box-shadow: none; }
     .btn-input .dropdown-toggle span:first-child {
@@ -7357,15 +7358,15 @@ input.checkbox-filter {
 @media (max-width: 1210px) {
   .filters {
     top: 60px;
-    width: 300px;
-    padding-top: 50px;
-    padding-left: 20px; }
+    width: 270px;
+    padding-top: 45px;
+    padding-left: 15px; }
     .filters .dropdown-toggle {
-      width: 250px; }
+      width: 100%; }
     .filters .open > .dropdown-menu {
-      width: 250px; }
+      width: 100%; }
     .filters.hidden-filters {
-      left: -330px;
+      left: -300px;
       position: absolute; }
       .filters.hidden-filters .foldback-button {
         right: -70px; } }
@@ -7374,7 +7375,7 @@ input.checkbox-filter {
   .filters {
     position: absolute;
     top: 60px;
-    left: -330px;
+    left: -300px;
     border: none;
     padding: 30px 0 0;
     overflow: visible;
@@ -7433,6 +7434,7 @@ main.export {
 
 .export-types {
   padding: 30px;
+  padding-top: 25px;
   position: relative;
   margin-left: 335px;
   max-width: 900px;
@@ -7589,7 +7591,7 @@ main.export {
     padding-left: 4%; }
   .export-types {
     padding: 30px 0 30px 25px;
-    margin-left: 265px; }
+    margin-left: 235px; }
     .export-types .size, .export-types .last-generated {
       display: none; }
     .export-types .data .table-data .min-view {
@@ -7907,6 +7909,7 @@ html body .details-interview {
     margin-bottom: 50px; }
 
 .questionnaire {
+  transition: margin 0.3s linear 0s;
   min-width: 555px;
   margin-left: 942px; }
   .questionnaire .unit-title {
@@ -8421,6 +8424,8 @@ span.image-zoom-box, span.image-option {
 
 .fullscreen-hidden-content .questionnaire {
   margin-left: 372px; }
+  .fullscreen-hidden-content .questionnaire .unit-title.is_stuck {
+    width: 100% !important; }
 
 .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
   top: 60px; }
@@ -8430,43 +8435,57 @@ span.image-zoom-box, span.image-option {
   .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
     padding-left: 85px; }
 
-@media only screen and (max-width: 1325px) {
+@media only screen and (max-width: 1525px) {
   .details-interview .filters {
-    top: 70px;
-    width: 300px;
-    padding-top: 50px;
-    padding-left: 20px; }
+    top: 60px;
+    width: 270px;
+    padding-top: 45px;
+    padding-left: 15px; }
     .details-interview .filters .dropdown-toggle {
-      width: 250px; }
+      width: 100%; }
     .details-interview .filters .open > .dropdown-menu {
-      width: 250px; }
+      width: 100%; }
     .details-interview .filters.hidden-filters {
-      left: -330px;
+      left: -300px;
       position: absolute; }
       .details-interview .filters.hidden-filters .foldback-button {
         right: -70px; }
+  .details-interview .filters {
+    top: 70px; }
   .content {
-    width: 440px;
-    left: 310px; }
+    width: 330px;
+    left: 282px; }
     .content .panel-default > .panel-heading h3 a {
-      margin-left: 15px; }
+      margin-left: 10px; }
     .content .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 30px; }
+      margin-left: 20px; }
     .content .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 45px; }
+      margin-left: 30px; }
     .content .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 60px; }
+      margin-left: 40px; }
     .content .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 75px; }
+      margin-left: 50px; }
     .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 90px; }
+      margin-left: 60px; }
     .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 105px; }
+      margin-left: 70px; }
     .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 120px; }
+      margin-left: 80px; }
     .content .panel-default > .panel-heading h3 a {
       font-size: 14px;
-      line-height: 16px; } }
+      line-height: 16px; }
+    .content .questionnaire-content div h2, .content .questionnaire-content div button {
+      float: none; }
+  .questionnaire {
+    margin-left: 612px; }
+    .questionnaire .unit-title {
+      width: auto; }
+  .fullscreen-hidden-filters .questionnaire {
+    margin-left: 342px; }
+  .fullscreen-hidden-content .questionnaire {
+    margin-left: 282px; }
+  .questionnaire {
+    margin-left: 612px; } }
 
 @media only screen and (max-width: 700px) {
   .modal-content {

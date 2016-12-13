@@ -56,7 +56,7 @@
                 </ul>
             </div>
         </div>
-        <form action="@Url.Action("ImportMode")" method="post" id="import-questionnaire-form">
+        <form action="@Url.Action("ImportMode")" method="post" class="import-questionnaire-form">
             @Html.AntiForgeryToken()
             @Html.Hidden("id", Model.QuestionnaireInfo.Id)
             @Html.Hidden("name", Model.QuestionnaireInfo.Name)
