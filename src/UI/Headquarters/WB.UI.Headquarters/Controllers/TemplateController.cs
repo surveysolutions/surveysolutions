@@ -25,12 +25,14 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IRestService designerQuestionnaireApiRestService;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
+        private IQuestionnaireImportService importService;
 
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider, IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger, IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider, IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, IQuestionnaireImportService importService)
             : base(commandService, globalInfo, logger)
         {
             this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
+            this.importService = importService;
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (AppSettings.Instance.AcceptUnsignedCertificate)
@@ -61,22 +63,46 @@ namespace WB.UI.Headquarters.Controllers
 
         public async Task<ActionResult> ImportMode(Guid id)
         {
-            //if (this.designerUserCredentials == null)
-            //{
-            //    return this.RedirectToAction("LoginToDesigner");
-            //}
+            if (this.designerUserCredentials == null)
+            {
+                return this.RedirectToAction("LoginToDesigner");
+            }
 
-            var questionnaireInfo = await this.designerQuestionnaireApiRestService
-                                              .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}", 
-                                                                           credentials: new RestCredentials
-                                                                           {
-                                                                               Login = "Admin",
-                                                                               Password = "q"
-                                                                           });
-            var model = new ImportModeModel();
-            model.QuestionnaireInfo = questionnaireInfo;
-            model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
+            var model = await this.GetImportModel(id);
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ImportMode(Guid id, string name, string importMode)
+        {
+            if (this.designerUserCredentials == null)
+            {
+                return this.RedirectToAction("LoginToDesigner");
+            }
+
+            var result = await this.importService.Import(id, name, importMode == "Census");
+            if (result.IsSuccess)
+            {
+                return this.RedirectToAction("Index", "HQ");
+            }
+
+            var model = await GetImportModel(id);
+            model.ErrorMessage = result.ImportError;
+            return this.View(model);
+        }
+
+        private async Task<ImportModeModel> GetImportModel(Guid id)
+        {
+            var questionnaireInfo = await this.designerQuestionnaireApiRestService
+                .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}",
+                    credentials: this.designerUserCredentials);
+            var model = new ImportModeModel
+            {
+                QuestionnaireInfo = questionnaireInfo,
+                NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id)
+            };
+            return model;
         }
 
         public ActionResult LoginToDesigner()
@@ -89,7 +115,7 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LoginToDesigner(LogOnModel model)
         {
-            var designerUserCredentials = new RestCredentials {Login = model.UserName, Password = model.Password};
+            var designerUserCredentials = new RestCredentials { Login = model.UserName, Password = model.Password };
 
             try
             {
@@ -120,17 +146,12 @@ namespace WB.UI.Headquarters.Controllers
                 this.Error(string.Format(
                         QuestionnaireImport.LoginToDesignerError,
                         GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
-                    
+
             }
 
             return this.View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ImportQuestionnaire()
-        {
-            return View();
-        }
+
     }
 }

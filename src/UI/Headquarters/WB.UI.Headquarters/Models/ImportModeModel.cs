@@ -13,5 +13,6 @@ namespace WB.UI.Headquarters.Models
 
         public long NewVersionNumber { get; set; }
         public DateTime PreviousVersionUploadedDate { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }
