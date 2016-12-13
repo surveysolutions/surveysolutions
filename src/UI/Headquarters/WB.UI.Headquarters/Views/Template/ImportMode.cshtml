@@ -5,6 +5,10 @@
     ViewBag.Title = QuestionnaireImport.ImportModeTitle;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
+@section scripts
+{
+}
+
 <main>
     <div class="container">
         <div class="row">
@@ -52,7 +56,8 @@
                 </ul>
             </div>
         </div>
-        <form action="#" id="import-questionnaire-form">
+        <form action="@Url.Action("ImportQuestionnaire")" id="import-questionnaire-form">
+            @Html.AntiForgeryToken()
             @if (Model.NewVersionNumber > 1)
             {
                 <div class="row">
@@ -66,7 +71,7 @@
                     <div class="col-sm-8">
                         <div class="form-group">
                             <div class="radio">
-                                <input class="wb-radio" type="radio" name="optionsRadios" id="imortAsNewVersion" value="new-version" checked />
+                                <input class="wb-radio" type="radio" name="optionsRadios" id="imortAsNewVersion" value="new-version" checked/>
                                 <label for="imortAsNewVersion">
                                     <span class="tick"></span>@string.Format(QuestionnaireImport.ImportAsNewVersion, Model.NewVersionNumber)
                                 </label>
@@ -82,7 +87,7 @@
                             <h3>@QuestionnaireImport.RegularImportTitle</h3>
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary">@QuestionnaireImport.Import</button>
+                            <button type="submit" name="importMode" class="btn btn-primary" value="Regular">@QuestionnaireImport.Import</button>
                         </div>
                     </div>
                 </div>
@@ -93,7 +98,7 @@
                             <p>@QuestionnaireImport.CensusImportSubTitle</p>
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary">@QuestionnaireImport.ImportInCensus</button>
+                            <button type="submit" name="importMode" class="btn btn-primary" id="importCensus" value="Census">@QuestionnaireImport.ImportInCensus</button>
                         </div>
                     </div>
                 </div>

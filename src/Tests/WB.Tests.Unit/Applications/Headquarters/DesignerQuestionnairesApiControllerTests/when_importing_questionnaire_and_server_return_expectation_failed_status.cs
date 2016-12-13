@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
 
         It should_response_import_error_has_specified_error_message_from_server = () => response.ImportError.ShouldEqual(exprectedErrorMessageFromServer);
 
-        private static QuestionnaireVerificationResponse response;
+        private static QuestionnaireImportResult response;
         private static DesignerQuestionnairesApiController controller;
         private static ImportQuestionnaireRequest importRequest;
 

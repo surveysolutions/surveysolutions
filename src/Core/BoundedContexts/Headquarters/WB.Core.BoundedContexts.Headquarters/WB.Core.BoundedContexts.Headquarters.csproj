@@ -287,6 +287,7 @@
     <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\RostrerStructureService.cs" />
@@ -335,6 +336,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ErrorMessages.Designer.cs">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -372,7 +378,9 @@
     <Compile Include="Services\IBrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
     <Compile Include="Services\IFileNameService.cs" />
+    <Compile Include="Services\IGlobalInfoProvider.cs" />
     <Compile Include="Services\IInterviewPackagesService.cs" />
+    <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\IQuestionnaireVersionProvider.cs" />
     <Compile Include="Services\IRostrerStructureService.cs" />
@@ -387,6 +395,7 @@
     <Compile Include="HeadquartersBoundedContextModule.cs" />
     <Compile Include="Services\QuestionnaireAssemblyAlreadyExistsException.cs" />
     <Compile Include="Services\QuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Services\QuestionnaireImportResult.cs" />
     <Compile Include="Services\QuestionnaireVersionProvider.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundSchedulerTask.cs" />
@@ -679,6 +688,15 @@
       <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.zh.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.fr.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.pt.resx" />
     <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">

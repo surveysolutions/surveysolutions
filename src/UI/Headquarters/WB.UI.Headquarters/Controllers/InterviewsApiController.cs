@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;

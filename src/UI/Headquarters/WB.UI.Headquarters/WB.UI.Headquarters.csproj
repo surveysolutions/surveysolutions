@@ -557,7 +557,6 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <EmbeddedResource Include="Resources\Archived.pt.resx" />
     <EmbeddedResource Include="Resources\EnumNames.pt.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.pt.resx" />
     <EmbeddedResource Include="Resources\Details.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1483,7 +1482,6 @@
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
-    <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
@@ -1518,11 +1516,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumNames.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\ErrorMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\FieldsAndValidations.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1599,7 +1592,6 @@
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
-    <Compile Include="Utils\Membership\IGlobalInfoProvider.cs" />
     <Compile Include="Utils\Security\FormsAuthentication.cs" />
     <Compile Include="Utils\Security\IFormsAuthentication.cs" />
     <Compile Include="Utils\Security\QuestionnaireMembershipProvider.cs" />
@@ -1850,14 +1842,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.zh.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.fr.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.resx">
       <SubType>Designer</SubType>

@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -28,18 +29,27 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             IQuestionnaireVersionProvider questionnaireVersionProvider = null
             )
         {
-            return new DesignerQuestionnairesApiController(
-                supportedVersionProvider ??
-                new Mock<ISupportedVersionProvider> {DefaultValue = DefaultValue.Mock}.Object,
-                commandService ?? Mock.Of<ICommandService>(),
-                globalInfo ?? new Mock<IGlobalInfoProvider> {DefaultValue = DefaultValue.Mock}.Object,
-                zipUtils ?? new Mock<IStringCompressor> {DefaultValue = DefaultValue.Mock}.Object,
-                logger ?? Mock.Of<ILogger>(),
-                getDesignerUserCredentials ?? (_ => new Mock<RestCredentials> {DefaultValue = DefaultValue.Mock}.Object),
-                restService ?? Mock.Of<IRestService>(),
+            var designerUserCredentials = getDesignerUserCredentials ?? (_ => new Mock<RestCredentials> {DefaultValue = DefaultValue.Mock}.Object);
+
+            var service = restService ?? Mock.Of<IRestService>();
+            var globalInfoProvider = globalInfo ?? new Mock<IGlobalInfoProvider> {DefaultValue = DefaultValue.Mock}.Object;
+            var questionnaireImportService = new QuestionnaireImportService(
+                supportedVersionProvider ?? Mock.Of<ISupportedVersionProvider>(),
+                service,
+                globalInfoProvider,
+                zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
-                translationManagementService: Mock.Of<ITranslationManagementService>());
+                Mock.Of<ITranslationManagementService>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                Mock.Of<ILogger>()
+            );
+            return new DesignerQuestionnairesApiController(commandService ?? Mock.Of<ICommandService>(),
+                globalInfoProvider,
+                logger ?? Mock.Of<ILogger>(),
+                designerUserCredentials,
+                service,
+                questionnaireImportService);
         }
     }
 }
