@@ -63,31 +63,38 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LoginToDesigner(LogOnModel model)
         {
-            if (this.ModelState.IsValid)
+            var designerUserCredentials = new RestCredentials {Login = model.UserName, Password = model.Password};
+
+            try
             {
-                var designerUserCredentials = new RestCredentials {Login = model.UserName, Password = model.Password};
+                await this.designerQuestionnaireApiRestService.GetAsync(url: @"/api/hq/user/login", credentials: designerUserCredentials);
 
-                try
+                this.designerUserCredentials = designerUserCredentials;
+
+                return this.RedirectToAction("Import");
+            }
+            catch (RestException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    await this.designerQuestionnaireApiRestService.GetAsync(url: @"/api/hq/user/login", credentials: designerUserCredentials);
-
-                    this.designerUserCredentials = designerUserCredentials;
-
-                    return this.RedirectToAction("Import");
+                    this.ModelState.AddModelError("InvalidCredentials", string.Empty);
                 }
-                catch (RestException ex)
+                else
                 {
-                    this.Error(ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    this.Logger.Error("Could not connect to designer.", ex);
-
+                    this.Logger.Warn("Error communicating to designer", ex);
                     this.Error(string.Format(
-                            QuestionnaireImport.LoginToDesignerError,
-                            GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
-                    
+                        QuestionnaireImport.LoginToDesignerError,
+                        GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
                 }
+            }
+            catch (Exception ex)
+            {
+                this.Logger.Error("Could not connect to designer.", ex);
+
+                this.Error(string.Format(
+                        QuestionnaireImport.LoginToDesignerError,
+                        GlobalHelper.GenerateUrl("Import", "Template", new { area = string.Empty })));
+                    
             }
 
             return this.View(model);
