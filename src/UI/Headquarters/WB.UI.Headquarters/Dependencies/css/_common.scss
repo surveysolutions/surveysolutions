@@ -504,7 +504,7 @@ input.wb-checkbox{
 	@include absolute(5px, 0, null, null);
 	border-radius: 4px;
 	z-index: 2;
-	@include transition(all, 0.5s, linear, 0.2s);
+	@include transition();
 	&:hover, &:focus{
 	    span.arrow{
 	    	background-color: rgba(0, 0, 0, 1);
@@ -533,7 +533,25 @@ input.wb-checkbox{
 		left: 10px;
 	}
 }
-
 #hidden-links{
     display: none;
+}
+.alert{
+	margin-bottom: 20px;
+	background-color: transparent;
+	padding: 0;
+	border: none;
+	p{
+		margin-bottom: 10px;
+		color: $red_error; 
+	}
+	&.alert-danger{
+		color: $red_error; 
+	}
+	&.alert-success{
+		color: $green-light;
+	}
+	&.alert-info{
+		color: $blue;
+	}
 }

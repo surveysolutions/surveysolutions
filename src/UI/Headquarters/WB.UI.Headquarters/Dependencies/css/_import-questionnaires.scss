@@ -11,9 +11,6 @@ main{
         }
         .maintenance-mode{
             @extend %instructions;
-            .message-try-again{
-                color: $red_error; 
-            }
         }
     }
     .two-columns-form{
@@ -58,12 +55,12 @@ main{
         }
     }
 }
-#import-questionnaire-form{
+.import-questionnaire-form{
     .form-group{
         margin-bottom: 0;
     }
     .questionnaire-versioning{
-        margin-bottom: 65px;
+        margin-bottom: 50px;
         margin-top: 15px;
     }
 }
@@ -160,6 +157,9 @@ main{
                     border-bottom: 10px solid $blue;
                 }
             }
+            &.sorting_disabled:after{
+                display: none;
+            }
         }
         th:first-child{
             width: 44%;
@@ -245,8 +245,8 @@ main{
             font-size: 0;
             color: transparent;
             margin-bottom: 0;
-            min-width: 20px;
-            min-height: 20px;
+            /* min-width: 20px;*/
+            min-height: 30px; 
             &:after{
                 @include absolute(5px, null, null, 15px);
                 display: block;
@@ -275,19 +275,21 @@ main{
                     @extend %visibility-visible;
                     width: 300px;
                     background-color: #f7fbff;
+                    padding: 5px 10px;
+
                 }
             }
             input{
                 @include transition(all, 0.2s);
                 @extend %visibility-hidden;
                 width: 0;
-                margin-left: 45px;
+                margin-left: 40px;
                 font-size: 13px;
                 line-height: 15px;
                 color: $gray_text;
-                padding: 5px 10px;
                 border-radius: 5px;
                 outline: none;
+                padding: 5px 0;
             }
         }
     }
@@ -414,7 +416,7 @@ main{
             }
         }
     }
-    #import-questionnaire-form {
+    .import-questionnaire-form {
         .questionnaire-versioning, .flex-row{
             margin-bottom: 0;
         }
@@ -465,7 +467,6 @@ main{
         }
     }
 }
-
 .dataTables_processing{
     position: absolute;
     z-index: 100;

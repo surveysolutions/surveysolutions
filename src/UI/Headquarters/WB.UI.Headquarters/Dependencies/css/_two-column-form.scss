@@ -25,13 +25,8 @@
         border-left: 2px solid $gray_form;
     }
     .log-in{
-        .form-error{
-            margin-bottom: 20px;
-            margin-bottom: 35px;
-            p{
-                line-height: 21px;
-                color: $red_error; 
-            }
+        .alert-danger p{
+            color: $red_error; 
         }
         .form-group{
             margin-bottom: 10px;

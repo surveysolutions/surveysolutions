@@ -141,8 +141,8 @@ main.export{
 		background-color: $green-progress;	
 	}
 }
-.export-types .data .table-data .btn.cancel{
-	@include cancel(20px, null, -45px, -14px, null);
+.export-types .data .table-data .close{
+	@include close(20px, null, -45px, -14px, null);
 }
 .progress-information.queued{
 	&>span{

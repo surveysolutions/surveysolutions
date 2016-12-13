@@ -24,7 +24,8 @@
     "knockout-mapping": "^2.4.1",
     "moment": "^2.17.1",
     "lodash": "^4.17.2",
-    "datatables.net": "^1.10.13"
+    "datatables.net": "^1.10.13",
+    "datatables.net-select": "^1.2.1"
   },
   "devDependencies": {},
   "overrides": {
