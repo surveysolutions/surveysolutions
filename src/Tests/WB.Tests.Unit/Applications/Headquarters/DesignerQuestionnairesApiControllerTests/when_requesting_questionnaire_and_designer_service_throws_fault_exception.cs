@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             response = await controller.GetQuestionnaire(request);
 
         It should_handle_exception_and_set_response_status_IsSuccess_in_true = () => 
-            response.IsSuccess.ShouldBeTrue();
+            response.IsSuccess.ShouldBeFalse();
 
         It should_handle_exception_and_set_ImportError_in_someFaultReason = () =>
             response.ImportError.ShouldEqual(someFaultReason);
