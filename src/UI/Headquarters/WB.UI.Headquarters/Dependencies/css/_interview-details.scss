@@ -90,7 +90,7 @@ html body .details-interview{
 .content{
 	@extend %aside;
 	border-right: 3px solid $gray-super-light;
-	left: $content-left-indent;
+	left: $filter-width + 12px;
 	width: $content-width;
 	padding-bottom: 40px;
 	@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
@@ -226,6 +226,7 @@ html body .details-interview{
 	}
 }
 .questionnaire{
+	@include transition(margin, 0.3s);
 	min-width: $questionnaire-min-width;
 	margin-left: $questionnaire-margin-left;
 	.unit-title{
@@ -809,10 +810,9 @@ span.image-zoom-box{
 }
 .fullscreen-hidden-content{
 	.content{
-		left: -597px;
+		left: $fullscreen-hidden-content;
 		@extend %hidden-foldback-button;
 		overflow: inherit;
-
 	}
 	.filters{
 		box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
@@ -820,6 +820,9 @@ span.image-zoom-box{
 	}
 	.questionnaire{
 		margin-left: $questionnaire-margin-left-hidden-content;
+		.unit-title.is_stuck{
+			width: 100% !important;
+		}
 	}
 }
 .fullscreen-hidden-filters.fullscreen-hidden-content{
@@ -834,41 +837,53 @@ span.image-zoom-box{
 		}
 	}
 }
-@media only screen and (max-width: 1325px){
+@media only screen and (max-width: 1525px){
 	.details-interview{
+		@include tight-filters-aside();
 		.filters{
 			top: 70px;
-			width: $filter-small-width;
-			padding-top: 50px;
-			padding-left: 20px;
-			.dropdown-toggle{
-				width: 250px; 
-			}
-			.open > .dropdown-menu{
-				width: 250px;	
-			}
-			&.hidden-filters{
-				left: $hidden-filter-small-indent;
-				position: absolute;
-				.foldback-button{
-					right: -70px;
-				}
-			}
 		}
 	}
 	.content{
-		width: 440px;
-		left: 310px;
+		width: 330px;
+		left: 282px;
 		.panel-default{
-			@include accordion(15px);
+			@include accordion(10px);
 			& > .panel-heading h3 a{
 				font-size: 14px;
 				line-height: 16px;
 			}
 		}
+		.questionnaire-content{
+			div{
+				h2, button{
+					float: none;
+				}
+			}
+		}
 	}
-
-    
+	.questionnaire{
+		margin-left: 12px + $content-width-small + $filter-small-width;
+		.unit-title{
+			width: auto;
+		} 
+	}
+    .fullscreen-hidden-filters {
+		.questionnaire{
+			margin-left: 12px + $content-width-small;
+		}
+	}
+	.fullscreen-hidden-content{
+		.questionnaire{
+			margin-left: 12px + $filter-small-width;
+		}
+		.content{
+		
+		}
+	}
+	.questionnaire{
+		margin-left: $filter-small-width + 12px + $content-width-small;
+	}
 }
 @media only screen and (max-width: 700px){
     .modal-content {
