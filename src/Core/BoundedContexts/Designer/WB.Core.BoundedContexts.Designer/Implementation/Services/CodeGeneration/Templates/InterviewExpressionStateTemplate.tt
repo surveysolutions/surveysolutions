@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             var rosterLevel = parent.CreateChildRosterInstance(rosterId, rosterVector, rosterIdentityKey);
 
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
-            this.SetSiblings(rosterIdentityKey, rosterStringKey);
+            this.SetSiblings(rosterIdentityKey, rosterStringKey, sortIndex);
         }
 
 		public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
