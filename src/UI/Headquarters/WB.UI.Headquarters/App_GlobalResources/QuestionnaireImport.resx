@@ -136,7 +136,7 @@
     <value>Import as template</value>
   </data>
   <data name="ImportInCensus" xml:space="preserve">
-    <value>Import with census mode</value>
+    <value>Import in census mode</value>
   </data>
   <data name="ImportModeTitle" xml:space="preserve">
     <value>Questionnaire import mode</value>

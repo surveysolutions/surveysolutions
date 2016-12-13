@@ -142,7 +142,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import with census mode.
+        ///   Looks up a localized string similar to Import in census mode.
         /// </summary>
         internal static string ImportInCensus {
             get {
