@@ -8,7 +8,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiControllerTests
@@ -29,8 +28,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             IQuestionnaireVersionProvider questionnaireVersionProvider = null
             )
         {
-            var designerUserCredentials = getDesignerUserCredentials ?? (_ => new Mock<RestCredentials> {DefaultValue = DefaultValue.Mock}.Object);
-
             var service = restService ?? Mock.Of<IRestService>();
             var globalInfoProvider = globalInfo ?? new Mock<IGlobalInfoProvider> {DefaultValue = DefaultValue.Mock}.Object;
             var questionnaireImportService = new QuestionnaireImportService(
@@ -47,7 +44,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             return new DesignerQuestionnairesApiController(commandService ?? Mock.Of<ICommandService>(),
                 globalInfoProvider,
                 logger ?? Mock.Of<ILogger>(),
-                designerUserCredentials,
                 service,
                 questionnaireImportService);
         }

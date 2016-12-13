@@ -61,7 +61,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Before log in, please make sure that the &apos;Designer&apos; website is available and it&apos;s not in the maintenance mode.
+        ///   Looks up a localized string similar to Before log in, please make sure that the &apos;Designer&apos; website is available.
         /// </summary>
         internal static string BeforeSignInToDesigner {
             get {
@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This can automaticly add this questionnaire to all your devises.
+        ///   Looks up a localized string similar to This action will automatically add this questionnaire to all your devises.
         /// </summary>
         internal static string CensusImportSubTitle {
             get {
@@ -97,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created at.
+        ///   Looks up a localized string similar to Created on.
         /// </summary>
         internal static string CreatedAt {
             get {
@@ -124,7 +124,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import as template.
+        ///   Looks up a localized string similar to Import in Sample mode.
         /// </summary>
         internal static string Import {
             get {
@@ -133,7 +133,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import it as new version, №{0}.
+        ///   Looks up a localized string similar to Create new #{0} version of this questionnaire.
         /// </summary>
         internal static string ImportAsNewVersion {
             get {
@@ -169,7 +169,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last modified at.
+        ///   Looks up a localized string similar to Last modified on.
         /// </summary>
         internal static string LastModifiedAt {
             get {
@@ -187,7 +187,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not connect to designer. Please check that designer is available and try &lt;a href=&apos;{0}&apos;&gt;again&lt;/a&gt;.
+        ///   Looks up a localized string similar to Could not connect to Designer. Please check if Designer is available and try &lt;a href=&apos;{0}&apos;&gt;again&lt;/a&gt;.
         /// </summary>
         internal static string LoginToDesignerError {
             get {
@@ -196,7 +196,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This questionnaire is already exist on your list.
+        ///   Looks up a localized string similar to This questionnaire already exists in your list.
         /// </summary>
         internal static string QuestionnaireExists {
             get {

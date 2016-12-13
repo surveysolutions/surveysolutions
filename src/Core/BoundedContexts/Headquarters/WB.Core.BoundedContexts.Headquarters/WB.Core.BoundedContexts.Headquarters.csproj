@@ -620,8 +620,6 @@
     <Compile Include="Views\TakeNew\TakeNewInterviewViewFactory.cs" />
     <Compile Include="Views\TemplateLight.cs" />
     <Compile Include="Views\Template\DesignerQuestionnaireListViewItem.cs" />
-    <Compile Include="Views\Template\DesignerQuestionnairesView.cs" />
-    <Compile Include="Views\Template\QuestionnaireListInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesFactory.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesInputModel.cs" />
     <Compile Include="Views\UsersAndQuestionnaires\AllUsersAndQuestionnairesView.cs" />

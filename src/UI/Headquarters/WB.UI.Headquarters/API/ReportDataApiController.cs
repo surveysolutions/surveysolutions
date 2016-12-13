@@ -14,11 +14,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Controllers;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
+namespace WB.UI.Headquarters.API  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
     public class ReportDataApiController : BaseApiController
@@ -119,7 +118,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var input = new QuantityByInterviewersReportInputModel
             {
                SupervisorId = data.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id,
-               InterviewStatuses = GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
+               InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
                Page = data.PageIndex,
                PageSize = data.PageSize,
                QuestionnaireVersion = data.QuestionnaireVersion,
@@ -140,7 +139,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
-                InterviewStatuses = GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
+                InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
                 Period = data.Period,
                 ReportType = data.ReportType,
                 QuestionnaireVersion = data.QuestionnaireVersion,
@@ -160,7 +159,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
                 SupervisorId = data.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id,
-                InterviewStatuses = GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
+                InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
                 QuestionnaireVersion = data.QuestionnaireVersion,
                 QuestionnaireId = data.QuestionnaireId,
                 ColumnCount = data.ColumnCount,
@@ -185,8 +184,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Period = input.Period,
                 QuestionnaireId = input.QuestionnaireId,
                 QuestionnaireVersion = input.QuestionnaireVersion,
-                BeginInterviewStatuses = GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType)
+                BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
+                EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType)
             };
 
             return this.speedReport.Load(inputParameters);
@@ -204,8 +203,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Period = input.Period,
                 QuestionnaireId = input.QuestionnaireId,
                 QuestionnaireVersion = input.QuestionnaireVersion,
-                BeginInterviewStatuses = GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
+                BeginInterviewStatuses = this.GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
+                EndInterviewStatuses = this.GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
                 SupervisorId = input.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id
             };
 
@@ -218,7 +217,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Page = data.PageIndex,
                 PageSize = data.PageSize,
-                InterviewStatuses = GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
+                InterviewStatuses = this.GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
                 ColumnCount = data.ColumnCount,
                 From = data.From,
                 QuestionnaireVersion = data.QuestionnaireVersion,
