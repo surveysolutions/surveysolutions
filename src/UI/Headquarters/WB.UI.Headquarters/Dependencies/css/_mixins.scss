@@ -297,3 +297,24 @@
         }
     }
 }
+@mixin tight-filters-aside(){
+    .filters{
+        top: 60px;
+        width: $filter-small-width;
+        padding-top: 45px;
+        padding-left: 15px;
+        .dropdown-toggle{
+            width: 100%; 
+        }
+        .open > .dropdown-menu{
+            width: 100%;    
+        }
+        &.hidden-filters{
+            left: $hidden-filter-small-indent;
+            position: absolute;
+            .foldback-button{
+                right: -70px;
+            }
+        }
+    }
+}

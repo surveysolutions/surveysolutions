@@ -2,7 +2,7 @@
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
-	padding: 50px 15px 0 33px;
+	padding: 45px 15px 0 33px;
 	margin-left: 12px;
 }
 input.checkbox-filter{
@@ -106,7 +106,7 @@ input.checkbox-filter{
 	}
 }
 .preset-filters-container{
-	padding: 30px 0;
+	padding-top: 30px;
 	a{
 		@extend h5;
 		color: $blue;
@@ -122,6 +122,7 @@ input.checkbox-filter{
    		border-radius: 4px;
    		width: 295px;
    		text-align: left;
+   		padding: 7px 12px;
    		&:hover, &:focus{
    			box-shadow: none;
    		}
@@ -176,29 +177,11 @@ input.checkbox-filter{
 	@extend %hidden-foldback-button;
 }
 @media (max-width: $screen-md-min){
-	.filters{
-		top: 60px;
-		width: $filter-small-width;
-		padding-top: 50px;
-		padding-left: 20px;
-		.dropdown-toggle{
-			width: 250px; 
-		}
-		.open > .dropdown-menu{
-			width: 250px;	
-		}
-		&.hidden-filters{
-			left: $hidden-filter-small-indent;
-			position: absolute;
-			.foldback-button{
-				right: -70px;
-			}
-		}
-	}
+	@include tight-filters-aside();
 }
 @media (max-width: $screen-sm-min){
 	.filters{
-		@include absolute(60px, null, null, -330px);
+		@include absolute(60px, null, null, $hidden-filter-small-indent);
 	   	border: none;
 	   	padding: 30px 0 0;
 	   	overflow: visible;
