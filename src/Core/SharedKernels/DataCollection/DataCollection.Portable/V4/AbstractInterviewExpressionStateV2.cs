@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.DataCollection.V4
         }
         
         
-        protected void SetSiblings(Identity[] rosterKey, string rosterStringKey)
+        protected void SetSiblings(Identity[] rosterKey, string rosterStringKey, int? sortIndex = null)
         {
             var siblingsKey = Util.GetSiblingsKey(rosterKey);
 
@@ -88,7 +88,13 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             {
                 this.SiblingRosters.Add(siblingsKey, new List<string>());
             }
-            this.SiblingRosters[siblingsKey].Add(rosterStringKey);
+
+            if (sortIndex.HasValue && this.SiblingRosters[siblingsKey].Count > sortIndex.Value)
+            {
+                this.SiblingRosters[siblingsKey].Insert(sortIndex.Value, rosterStringKey);
+            }
+            else
+                this.SiblingRosters[siblingsKey].Add(rosterStringKey);
         }
 
         public Dictionary<string, IExpressionExecutableV2> InterviewScopes = new Dictionary<string, IExpressionExecutableV2>();

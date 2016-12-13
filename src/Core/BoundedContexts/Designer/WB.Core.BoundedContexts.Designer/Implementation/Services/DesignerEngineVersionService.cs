@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
              new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                Version = 18, 
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -158,7 +158,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                           Description = "Question linked to List question"
                     }
                 }
+            },
+             new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, /*When will be added new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                          HasQuestionnaire = questionnaire => 
+                            questionnaire.Find<IConditional>(q => !string.IsNullOrEmpty(q.ConditionExpression) 
+                                && q.ConditionExpression.Contains("rowindex")).Any()
+                          ||
+                            questionnaire.Find<IValidatable>(q => q.ValidationConditions.Count() == 1 
+                                &&!string.IsNullOrEmpty(q.ValidationConditions.First().Expression) 
+                                && q.ValidationConditions.First().Expression.Contains("rowindex")).Any(),
+                          Description = "Usage of @rowindex in expressions"
+                    }
+                }
             }
+
+             //@rowindex
         };
 
         public int LatestSupportedVersion => this.questionnaireContentVersions.Last().Version;
