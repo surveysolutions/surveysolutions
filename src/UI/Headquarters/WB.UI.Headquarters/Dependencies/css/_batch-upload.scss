@@ -1,3 +1,4 @@
+@import "add-interviews";
 .text-page{
 	font: 14px/16px "RobotoRegular";
 }
@@ -21,9 +22,6 @@
 }
 .btn-file input{
 	display: none;
-}
-main .flex-row{
-	margin-bottom: 40px;
 }
 .action-block{
 	margin-top: 20px;
@@ -75,7 +73,7 @@ main .flex-row{
 	}	
 }
 .processing-interview{
-	.progress-bar{
+	.progress-bar.progress-bar-success{
 		background-color: $green_btn;
 	}
 }

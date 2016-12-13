@@ -41,6 +41,7 @@
     </div>
 
     <div id="hidden-links">
-        <a id="questionnaireListUrl"  title="questionnaire list" href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesListNew" })"></a>
+        <a id="questionnaireListUrl" title="questionnaire list" href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesListNew" })"></a>
+        <a id="questionnaireImportModeUrl"  title="questionnaire import mode" href="@Url.Action("ImportMode", "Template")"></a>
     </div>
 </main>

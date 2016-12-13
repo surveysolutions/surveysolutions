@@ -80,6 +80,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 public int Title { get; set; }
                 public string Data { get; set; }
+                public string Name { get; set; }
                 public bool Searchable { get; set; }
                 public bool Orderable { get; set; }
                 public SearchInfo Search { get; set; }
@@ -92,13 +93,24 @@ namespace WB.UI.Headquarters.Controllers
             public SearchInfo Search { get; set; }
             public int PageIndex => 1 + this.Start/this.Length;
             public int PageSize => this.Length;
+
+            public string GetSortOrder()
+            {
+                var order = Order.FirstOrDefault();
+                if (order == null)
+                    return string.Empty;
+
+                var columnName = this.Columns[order.Column].Name;
+                var stringifiedOrder = order.Dir == OrderDirection.Asc ? string.Empty : OrderDirection.Desc.ToString();
+
+                return $"{columnName} {stringifiedOrder}";
+            }
         }
 
         [HttpPost]
         [CamelCase]
         public async Task<object> QuestionnairesListNew([FromBody] TableInfo info)
         {
-            var sortOrder = String.Join(",", info.Order?.Select(o => info.Columns[o.Column].Title + (o.Dir == OrderDirection.Asc ? String.Empty : " Desc")));
             var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
                 url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires",
                 credentials: this.designerUserCredentials,
@@ -107,7 +119,7 @@ namespace WB.UI.Headquarters.Controllers
                     Filter = info.Search.Value,
                     PageIndex = info.PageIndex,
                     PageSize = info.PageSize,
-                    //SortOrder = null
+                    SortOrder = info.GetSortOrder()
                 });
 
             return new 
@@ -116,14 +128,14 @@ namespace WB.UI.Headquarters.Controllers
                 RecordsTotal = list.TotalCount,
                 RecordsFiltered = list.TotalCount,
                 Data = list.Items.Select(x => new {
-                    DT_RowId = x.Id,
+                    Id = x.Id,
                     Title = x.Title,
                     LastModified = new {
                         Display = HumanizeLastUpdateDate(x.LastModifiedDate),
                         Timestamp= x.LastModifiedDate?.Ticks ?? 0
                     },
                     CreatedBy = x.OwnerName ?? ""
-                }),
+                })
             };
         }
 
