@@ -52,7 +52,7 @@
                     <div class="centered-box-table-cell">
                         <form action="@Url.Action("LoginToDesigner", "Template")" method="post" id="import-log-in" class="log-in" autocomplete="off">
                             @Html.AntiForgeryToken()
-                            @if (!ViewData.ModelState.IsValid)
+                            @if (ViewData.ModelState.ContainsKey("InvalidCredentials") && ViewData.ModelState["InvalidCredentials"].Errors.Any())
                             {
                                 <div class="form-error">
                                     <p>
