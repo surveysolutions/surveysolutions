@@ -5923,11 +5923,11 @@ input.checkbox-filter ~ label .tick {
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 629px 18px; } }
 
-#DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input, .question-editor .question-unit .options-group .field.answered .btn.cancel, .question-editor .question-unit .options-group .field.contains-error .btn.cancel, .question-editor .question-unit .options-group .field input:checked ~ .btn.cancel {
+#DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input, .question-editor .question-unit .options-group .field.answered .close, .question-editor .question-unit .options-group .field.contains-error .close, .question-editor .question-unit .options-group .field input:checked ~ .close {
   visibility: visible;
   opacity: 1; }
 
-#DataTables_Table_0_wrapper #DataTables_Table_0_filter label input, .question-editor .question-unit .options-group .field .btn.cancel {
+#DataTables_Table_0_wrapper #DataTables_Table_0_filter label input, .question-editor .question-unit .options-group .field .close {
   opacity: 0;
   visibility: hidden; }
 
@@ -5936,7 +5936,7 @@ input.checkbox-filter ~ label .tick {
   .gps-question.answered .question-unit .options-group .action-btn-holder .action-btn:hover, .gps-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:hover, .multimedia-question.answered .question-unit .options-group .action-btn-holder .action-btn:hover, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:hover, .qr-question.answered .question-unit .options-group .action-btn-holder .action-btn:hover, .qr-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:hover, .current-time-question.answered .question-unit .options-group .action-btn-holder .action-btn:hover, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:hover, .gps-question.answered .question-unit .options-group .action-btn-holder .action-btn:focus, .gps-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:focus, .multimedia-question.answered .question-unit .options-group .action-btn-holder .action-btn:focus, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:focus, .qr-question.answered .question-unit .options-group .action-btn-holder .action-btn:focus, .qr-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:focus, .current-time-question.answered .question-unit .options-group .action-btn-holder .action-btn:focus, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:focus, .gps-question.answered .question-unit .options-group .action-btn-holder .action-btn:active, .gps-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:active, .multimedia-question.answered .question-unit .options-group .action-btn-holder .action-btn:active, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:active, .qr-question.answered .question-unit .options-group .action-btn-holder .action-btn:active, .qr-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:active, .current-time-question.answered .question-unit .options-group .action-btn-holder .action-btn:active, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:active {
     border-color: #8c8f90; }
 
-.gps-question.answered .question-unit .options-group .field .btn.cancel, .gps-question.contains-error .question-unit .options-group .field .btn.cancel, .multimedia-question.answered .question-unit .options-group .field .btn.cancel, .multimedia-question.contains-error .question-unit .options-group .field .btn.cancel, .qr-question.answered .question-unit .options-group .field .btn.cancel, .qr-question.contains-error .question-unit .options-group .field .btn.cancel, .current-time-question.answered .question-unit .options-group .field .btn.cancel, .current-time-question.contains-error .question-unit .options-group .field .btn.cancel {
+.gps-question.answered .question-unit .options-group .field .close, .gps-question.contains-error .question-unit .options-group .field .close, .multimedia-question.answered .question-unit .options-group .field .close, .multimedia-question.contains-error .question-unit .options-group .field .close, .qr-question.answered .question-unit .options-group .field .close, .qr-question.contains-error .question-unit .options-group .field .close, .current-time-question.answered .question-unit .options-group .field .close, .current-time-question.contains-error .question-unit .options-group .field .close {
   top: -15px; }
 
 .gps-question.answered .block-with-data, .gps-question.contains-error .block-with-data, .multimedia-question.answered .block-with-data, .multimedia-question.contains-error .block-with-data, .qr-question.answered .block-with-data, .qr-question.contains-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.contains-error .block-with-data {
@@ -6459,11 +6459,11 @@ input.wb-checkbox {
   right: 0;
   border-radius: 4px;
   z-index: 2;
-  -webkit-transition: all 0.5s linear 0.2s;
-  -moz-transition: all 0.5s linear 0.2s;
-  -ms-transition: all 0.5s linear 0.2s;
-  -o-transition: all 0.5s linear 0.2s;
-  transition: all 0.5s linear 0.2s; }
+  -webkit-transition: all 0.5s linear 0s;
+  -moz-transition: all 0.5s linear 0s;
+  -ms-transition: all 0.5s linear 0s;
+  -o-transition: all 0.5s linear 0s;
+  transition: all 0.5s linear 0s; }
   .foldback-button:hover span.arrow, .foldback-button:focus span.arrow {
     background-color: black; }
   .foldback-button:hover .glyphicon, .foldback-button:focus .glyphicon {
@@ -6497,6 +6497,21 @@ input.wb-checkbox {
 #hidden-links {
   display: none; }
 
+.alert {
+  margin-bottom: 20px;
+  background-color: transparent;
+  padding: 0;
+  border: none; }
+  .alert p {
+    margin-bottom: 10px;
+    color: #e74924; }
+  .alert.alert-danger {
+    color: #e74924; }
+  .alert.alert-success {
+    color: #22c015; }
+  .alert.alert-info {
+    color: #2a81cb; }
+
 .btn-lg, .btn-group-lg > .btn {
   padding: 12px 15px; }
 
@@ -6522,12 +6537,8 @@ input.wb-checkbox {
   .two-columns-form .right-column {
     padding: 10px 8% 10px 3%;
     border-left: 2px solid #dbdfe2; }
-  .two-columns-form .log-in .form-error {
-    margin-bottom: 20px;
-    margin-bottom: 35px; }
-    .two-columns-form .log-in .form-error p {
-      line-height: 21px;
-      color: #e74924; }
+  .two-columns-form .log-in .alert-danger p {
+    color: #e74924; }
   .two-columns-form .log-in .form-group {
     margin-bottom: 10px; }
     .two-columns-form .log-in .form-group label {
@@ -6611,6 +6622,9 @@ input.wb-checkbox {
     max-width: 350px;
     margin: 0 auto; } }
 
+main .flex-row {
+  margin-bottom: 30px; }
+
 .selection-box {
   background-color: #ececec;
   border-radius: 5px;
@@ -6637,8 +6651,6 @@ main .page-header {
   padding-bottom: 0;
   margin: 0;
   border: none; }
-  main .page-header .maintenance-mode .message-try-again {
-    color: #e74924; }
 
 main .two-columns-form .left-column {
   text-align: center; }
@@ -6673,11 +6685,11 @@ main .two-columns-form .left-column {
       margin-right: 10px;
       margin-bottom: 0; }
 
-#import-questionnaire-form .form-group {
+.import-questionnaire-form .form-group {
   margin-bottom: 0; }
 
-#import-questionnaire-form .questionnaire-versioning {
-  margin-bottom: 65px;
+.import-questionnaire-form .questionnaire-versioning {
+  margin-bottom: 50px;
   margin-top: 15px; }
 
 .flex-block {
@@ -6761,6 +6773,8 @@ main .two-columns-form .left-column {
         .import-interview thead tr th.sorting_desc:after {
           border-top: none;
           border-bottom: 10px solid #2a81cb; }
+      .import-interview thead tr th.sorting_disabled:after {
+        display: none; }
     .import-interview thead th:first-child {
       width: 44%;
       padding-left: 50px;
@@ -6827,8 +6841,8 @@ main .two-columns-form .left-column {
       font-size: 0;
       color: transparent;
       margin-bottom: 0;
-      min-width: 20px;
-      min-height: 20px; }
+      /* min-width: 20px;*/
+      min-height: 30px; }
       #DataTables_Table_0_wrapper #DataTables_Table_0_filter label:after {
         position: absolute;
         top: 5px;
@@ -6855,7 +6869,8 @@ main .two-columns-form .left-column {
       #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
         border: 1px solid #dbdfe2;
         width: 300px;
-        background-color: #f7fbff; }
+        background-color: #f7fbff;
+        padding: 5px 10px; }
       #DataTables_Table_0_wrapper #DataTables_Table_0_filter label input {
         -webkit-transition: all 0.2s linear 0s;
         -moz-transition: all 0.2s linear 0s;
@@ -6863,13 +6878,13 @@ main .two-columns-form .left-column {
         -o-transition: all 0.2s linear 0s;
         transition: all 0.2s linear 0s;
         width: 0;
-        margin-left: 45px;
+        margin-left: 40px;
         font-size: 13px;
         line-height: 15px;
         color: #3f3f3f;
-        padding: 5px 10px;
         border-radius: 5px;
-        outline: none; }
+        outline: none;
+        padding: 5px 0; }
 
 .dataTables_wrapper .dataTables_info {
   clear: both;
@@ -6962,7 +6977,7 @@ main .two-columns-form .left-column {
     width: 30%;
     font-size: 10px;
     line-height: 12px; }
-  #import-questionnaire-form .questionnaire-versioning, #import-questionnaire-form .flex-row {
+  .import-questionnaire-form .questionnaire-versioning, .import-questionnaire-form .flex-row {
     margin-bottom: 0; } }
 
 @media (max-width: 481px) {
@@ -7026,12 +7041,8 @@ main .two-columns-form .left-column {
   .two-columns-form .right-column {
     padding: 10px 8% 10px 3%;
     border-left: 2px solid #dbdfe2; }
-  .two-columns-form .log-in .form-error {
-    margin-bottom: 20px;
-    margin-bottom: 35px; }
-    .two-columns-form .log-in .form-error p {
-      line-height: 21px;
-      color: #e74924; }
+  .two-columns-form .log-in .alert-danger p {
+    color: #e74924; }
   .two-columns-form .log-in .form-group {
     margin-bottom: 10px; }
     .two-columns-form .log-in .form-group label {
@@ -7225,6 +7236,31 @@ img#placeholder {
   html body main .two-columns-form .log-in .form-group .form-control {
     width: 100%; } }
 
+main .flex-row {
+  margin-bottom: 30px; }
+
+.selection-box {
+  background-color: #ececec;
+  border-radius: 5px;
+  padding: 30px;
+  margin-right: 20px;
+  margin-left: -30px; }
+  .selection-box p {
+    font: 13px/15px "RobotoRegular";
+    margin-bottom: 0; }
+  .selection-box .block {
+    margin-bottom: 25px; }
+
+@media (max-width: 1210px) {
+  .selection-box {
+    margin-left: 0;
+    margin-right: -15px; } }
+
+@media (max-width: 880px) {
+  .selection-box {
+    margin-right: 0;
+    margin-bottom: 15px; } }
+
 .text-page, .prefilled-data-info {
   font: 14px/16px "RobotoRegular"; }
 
@@ -7242,9 +7278,6 @@ img#placeholder {
 
 .btn-file input {
   display: none; }
-
-main .flex-row {
-  margin-bottom: 40px; }
 
 .action-block {
   margin-top: 20px; }
@@ -7278,7 +7311,7 @@ main .flex-row {
   .action-block .error-block p {
     margin: 3px 0; }
 
-.processing-interview .progress-bar {
+.processing-interview .progress-bar.progress-bar-success {
   background-color: #2fc507; }
 
 .action-block.preloading-done-with-errors h4 {
@@ -7327,7 +7360,7 @@ main .flex-row {
 .filters {
   width: 360px;
   border-right: 3px solid #ececec;
-  padding: 50px 15px 0 33px;
+  padding: 45px 15px 0 33px;
   margin-left: 12px; }
 
 input.checkbox-filter {
@@ -7420,7 +7453,7 @@ input.checkbox-filter {
               background-size: 21px 20px; } }
 
 .preset-filters-container {
-  padding: 30px 0; }
+  padding-top: 30px; }
   .preset-filters-container a {
     color: #2a81cb;
     display: block; }
@@ -7433,7 +7466,8 @@ input.checkbox-filter {
     border: 1px solid #dbdfe2;
     border-radius: 4px;
     width: 295px;
-    text-align: left; }
+    text-align: left;
+    padding: 7px 12px; }
     .btn-input .dropdown-toggle:hover, .btn-input .dropdown-toggle:focus {
       box-shadow: none; }
     .btn-input .dropdown-toggle span:first-child {
@@ -7479,15 +7513,15 @@ input.checkbox-filter {
 @media (max-width: 1210px) {
   .filters {
     top: 60px;
-    width: 300px;
-    padding-top: 50px;
-    padding-left: 20px; }
+    width: 270px;
+    padding-top: 45px;
+    padding-left: 15px; }
     .filters .dropdown-toggle {
-      width: 250px; }
+      width: 100%; }
     .filters .open > .dropdown-menu {
-      width: 250px; }
+      width: 100%; }
     .filters.hidden-filters {
-      left: -330px;
+      left: -300px;
       position: absolute; }
       .filters.hidden-filters .foldback-button {
         right: -70px; } }
@@ -7496,7 +7530,7 @@ input.checkbox-filter {
   .filters {
     position: absolute;
     top: 60px;
-    left: -330px;
+    left: -300px;
     border: none;
     padding: 30px 0 0;
     overflow: visible;
@@ -7573,6 +7607,7 @@ main.export {
 
 .export-types {
   padding: 30px;
+  padding-top: 25px;
   position: relative;
   margin-left: 335px;
   max-width: 900px;
@@ -7688,7 +7723,7 @@ main.export {
     max-width: 300px;
     background-color: #cbe1cc; }
 
-.export-types .data .table-data .btn.cancel {
+.export-types .data .table-data .close {
   outline: none;
   background-color: transparent;
   width: 20px;
@@ -7697,10 +7732,12 @@ main.export {
   right: -45px;
   bottom: -14px;
   padding: 20px;
-  margin: 0; }
-  .export-types .data .table-data .btn.cancel:hover:before, .export-types .data .table-data .btn.cancel:hover:after, .export-types .data .table-data .btn.cancel:focus:before, .export-types .data .table-data .btn.cancel:focus:after, .export-types .data .table-data .btn.cancel:active:before, .export-types .data .table-data .btn.cancel:active:after {
+  margin: 0;
+  opacity: 0.5;
+  filter: alpha(opacity=50); }
+  .export-types .data .table-data .close:hover:before, .export-types .data .table-data .close:hover:after, .export-types .data .table-data .close:focus:before, .export-types .data .table-data .close:focus:after, .export-types .data .table-data .close:active:before, .export-types .data .table-data .close:active:after {
     background-color: #595c5d; }
-  .export-types .data .table-data .btn.cancel:before, .export-types .data .table-data .btn.cancel:after {
+  .export-types .data .table-data .close:before, .export-types .data .table-data .close:after {
     display: block;
     content: "";
     width: 28px;
@@ -7712,7 +7749,7 @@ main.export {
     transform: rotate(45deg);
     position: relative;
     left: -12px; }
-  .export-types .data .table-data .btn.cancel:after {
+  .export-types .data .table-data .close:after {
     -webkit-transform: rotate(-45deg);
     -ms-transform: rotate(-45deg);
     -o-transform: rotate(-45deg);
@@ -7737,7 +7774,7 @@ main.export {
     padding-left: 4%; }
   .export-types {
     padding: 30px 0 30px 25px;
-    margin-left: 265px; }
+    margin-left: 235px; }
     .export-types .size, .export-types .last-generated {
       display: none; }
     .export-types .data .table-data .min-view {
@@ -8074,8 +8111,13 @@ html body .details-interview {
     margin-bottom: 50px; }
 
 .questionnaire {
+  -webkit-transition: margin 0.3s linear 0s;
+  -moz-transition: margin 0.3s linear 0s;
+  -ms-transition: margin 0.3s linear 0s;
+  -o-transition: margin 0.3s linear 0s;
+  transition: margin 0.3s linear 0s;
   min-width: 555px;
-  margin-left: 855px; }
+  margin-left: 942px; }
   .questionnaire .unit-title {
     position: relative;
     z-index: 2;
@@ -8360,7 +8402,7 @@ html body .details-interview {
         font-weight: bold;
         padding-right: 30px;
         border-radius: 5px; }
-      .question-editor .question-unit .options-group .field .btn.cancel {
+      .question-editor .question-unit .options-group .field .close {
         outline: none;
         background-color: transparent;
         width: 10px;
@@ -8370,14 +8412,16 @@ html body .details-interview {
         right: -5px;
         padding: 20px;
         margin: 0;
+        opacity: 0.5;
+        filter: alpha(opacity=50);
         -webkit-transition: all 0.2s linear 0s;
         -moz-transition: all 0.2s linear 0s;
         -ms-transition: all 0.2s linear 0s;
         -o-transition: all 0.2s linear 0s;
         transition: all 0.2s linear 0s; }
-        .question-editor .question-unit .options-group .field .btn.cancel:hover:before, .question-editor .question-unit .options-group .field .btn.cancel:hover:after, .question-editor .question-unit .options-group .field .btn.cancel:focus:before, .question-editor .question-unit .options-group .field .btn.cancel:focus:after, .question-editor .question-unit .options-group .field .btn.cancel:active:before, .question-editor .question-unit .options-group .field .btn.cancel:active:after {
+        .question-editor .question-unit .options-group .field .close:hover:before, .question-editor .question-unit .options-group .field .close:hover:after, .question-editor .question-unit .options-group .field .close:focus:before, .question-editor .question-unit .options-group .field .close:focus:after, .question-editor .question-unit .options-group .field .close:active:before, .question-editor .question-unit .options-group .field .close:active:after {
           background-color: #595c5d; }
-        .question-editor .question-unit .options-group .field .btn.cancel:before, .question-editor .question-unit .options-group .field .btn.cancel:after {
+        .question-editor .question-unit .options-group .field .close:before, .question-editor .question-unit .options-group .field .close:after {
           display: block;
           content: "";
           width: 14px;
@@ -8389,7 +8433,7 @@ html body .details-interview {
           transform: rotate(45deg);
           position: relative;
           left: -12px; }
-        .question-editor .question-unit .options-group .field .btn.cancel:after {
+        .question-editor .question-unit .options-group .field .close:after {
           -webkit-transform: rotate(-45deg);
           -ms-transform: rotate(-45deg);
           -o-transform: rotate(-45deg);
@@ -8657,7 +8701,7 @@ span.image-zoom-box, span.image-option {
   max-width: 70%; }
 
 .fullscreen-hidden-filters .questionnaire {
-  margin-left: 495px; }
+  margin-left: 582px; }
   .fullscreen-hidden-filters .questionnaire .unit-title.is_stuck {
     width: 100% !important; }
 
@@ -8675,13 +8719,69 @@ span.image-zoom-box, span.image-option {
   z-index: 3; }
 
 .fullscreen-hidden-content .questionnaire {
-  margin-left: 285px; }
+  margin-left: 372px; }
+  .fullscreen-hidden-content .questionnaire .unit-title.is_stuck {
+    width: 100% !important; }
 
 .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
   top: 60px; }
 
 .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire {
-  margin-left: 0; }
+  margin-left: 12px; }
+  .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
+    padding-left: 85px; }
+
+@media only screen and (max-width: 1525px) {
+  .details-interview .filters {
+    top: 60px;
+    width: 270px;
+    padding-top: 45px;
+    padding-left: 15px; }
+    .details-interview .filters .dropdown-toggle {
+      width: 100%; }
+    .details-interview .filters .open > .dropdown-menu {
+      width: 100%; }
+    .details-interview .filters.hidden-filters {
+      left: -300px;
+      position: absolute; }
+      .details-interview .filters.hidden-filters .foldback-button {
+        right: -70px; }
+  .details-interview .filters {
+    top: 70px; }
+  .content {
+    width: 330px;
+    left: 282px; }
+    .content .panel-default > .panel-heading h3 a {
+      margin-left: 10px; }
+    .content .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 20px; }
+    .content .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 30px; }
+    .content .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 40px; }
+    .content .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 50px; }
+    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 60px; }
+    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 70px; }
+    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 80px; }
+    .content .panel-default > .panel-heading h3 a {
+      font-size: 14px;
+      line-height: 16px; }
+    .content .questionnaire-content div h2, .content .questionnaire-content div button {
+      float: none; }
+  .questionnaire {
+    margin-left: 612px; }
+    .questionnaire .unit-title {
+      width: auto; }
+  .fullscreen-hidden-filters .questionnaire {
+    margin-left: 342px; }
+  .fullscreen-hidden-content .questionnaire {
+    margin-left: 282px; }
+  .questionnaire {
+    margin-left: 612px; } }
 
 @media only screen and (max-width: 700px) {
   .modal-content {
