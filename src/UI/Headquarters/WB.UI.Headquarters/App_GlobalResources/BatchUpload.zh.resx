@@ -162,9 +162,6 @@
   <data name="DownloadInvalidInterviews" xml:space="preserve">
     <value>下载无效的访谈</value>
   </data>
-  <data name="DownloadTemplateArchive" xml:space="preserve">
-    <value>下载模板</value>
-  </data>
   <data name="EstimatedTime" xml:space="preserve">
     <value>预计时间</value>
   </data>

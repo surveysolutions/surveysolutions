@@ -154,7 +154,7 @@
     <value>Детали</value>
   </data>
   <data name="DownloadTemplateArchive" xml:space="preserve">
-    <value>Скачать архив шаблона</value>
+    <value>Скачать zip шаблон для этого опросника</value>
   </data>
   <data name="FileName" xml:space="preserve">
     <value>Имя файла</value>
@@ -329,5 +329,11 @@
   </data>
   <data name="RunningInterviewImportProcess" xml:space="preserve">
     <value>Перейти к запущенному процессу импорта интервью</value>
+  </data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve">
+    <value>Создать множество интервью используя файл</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Опросник</value>
   </data>
 </root>
