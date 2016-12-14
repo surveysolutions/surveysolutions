@@ -55,10 +55,18 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                         Resource.Animation.slide_from_right,
                         Resource.Animation.abc_fade_out);
 
-                default:
+                case NavigationDirection.Inside:
                     return transaction.SetCustomAnimations(
                         Resource.Animation.zoom_in_from_center,
                         Resource.Animation.abc_fade_out);
+
+                case NavigationDirection.Outside:
+                    return transaction.SetCustomAnimations(
+                        Resource.Animation.zoom_out_to_center,
+                        Resource.Animation.abc_fade_out);
+
+                default:
+                    return transaction;
             }
         }
     }
