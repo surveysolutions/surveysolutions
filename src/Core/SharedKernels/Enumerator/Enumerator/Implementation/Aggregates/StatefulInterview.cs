@@ -402,7 +402,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
 
         public Identity GetParentGroup(Identity groupOrQuestion)
-            => this.Tree.GetNodeByIdentity(groupOrQuestion).Parent.Identity;
+            => this.Tree.GetNodeByIdentity(groupOrQuestion).Parent?.Identity;
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.Tree.GetGroup(groupIdentity).Children

@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -194,7 +195,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                         case ScreenType.Complete: return NavigationDirection.Previous;
 
                         default:
-                            return NavigationDirection.Inside;
+                            if (eventArgs.PreviousGroup == null || eventArgs.TargetGroup == null)
+                                return NavigationDirection.Next;
+
+                            var isTargetGroupInsidePrevious = eventArgs.TargetGroup.UnwrapReferences(this.interview.GetParentGroup).Contains(eventArgs.PreviousGroup);
+                            if (isTargetGroupInsidePrevious)
+                                return NavigationDirection.Inside;
+
+                            var isPreviousGroupInsideTarget = eventArgs.PreviousGroup.UnwrapReferences(this.interview.GetParentGroup).Contains(eventArgs.TargetGroup);
+                            if (isPreviousGroupInsideTarget)
+                                return NavigationDirection.Outside;
+
+                            return NavigationDirection.Next;
                     }
             }
         }
