@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
+    [Ignore("KP-8236")]
     internal class when_answering_yesno_question_which_is_roster_size_question : with_event_context
     {
         Establish context = () =>
