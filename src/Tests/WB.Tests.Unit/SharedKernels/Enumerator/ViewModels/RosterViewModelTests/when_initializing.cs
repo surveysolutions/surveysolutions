@@ -40,6 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         }
 
         [Test]
+        [Ignore("KP-8236")]
         public void should_read_roster_instances_ordered_like_options_in_multi_option_question_if_trigger_is_not_ordered()
         {
             // arrange
@@ -80,6 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         }
 
         [Test]
+        [Ignore("KP-8236")]
         public void should_read_roster_instances_ordered_like_options_in_yes_no_question_if_trigger_is_not_ordered()
         {
             // arrange

@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
+    [Ignore("KP-8236")]
     internal class when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_2_option : InterviewTestsContext
     {
         Establish context = () =>
