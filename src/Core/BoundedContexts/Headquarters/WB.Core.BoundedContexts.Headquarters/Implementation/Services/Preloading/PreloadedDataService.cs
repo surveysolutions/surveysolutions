@@ -149,8 +149,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
 
             if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
-                return ((CategoricalFixedMultiOptionAnswer) rosterSizeAnswer).CheckedValues
-                    .Select(v => (decimal) v).ToArray();
+                var multiOptionAnswer = rosterSizeAnswer as CategoricalFixedMultiOptionAnswer;
+                if (multiOptionAnswer != null)
+                    return multiOptionAnswer.CheckedValues.Select(v => (decimal) v).ToArray();
+
+                var yesNoAnswer = rosterSizeAnswer as YesNoAnswer;
+                if(yesNoAnswer != null)
+                    return yesNoAnswer.CheckedOptions.Where(v=>v.Yes).Select(v => (decimal)v.Value).ToArray();
             }
 
             if (rosterScopeDescription.Type == RosterScopeType.TextList)
