@@ -359,4 +359,13 @@
     <value>Create set of interviews by uploading file with all required prefilled data.
 You can optionaly adding interviews to supervisors (and enumerators) by their usernames.</value>
   </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>Upload .tab file</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>Upload .zip file</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>View list of required prefilled data</value>
+  </data>
 </root>
