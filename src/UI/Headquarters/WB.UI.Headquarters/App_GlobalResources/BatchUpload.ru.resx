@@ -336,4 +336,36 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Опросник</value>
   </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Загрузить архив с заполненым tab файлом и собранными данными.
+Вы можете использовать файлы полученные с помощью "Экспорта данных"</value>
+  </data>
+  <data name="BatchTitle" xml:space="preserve">
+    <value>Предзаполенные и собранные данные (архив)</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>Если супервизор не указан в загружаемом файле, вы должны будите указать одного для всех интервью на последнем шаге импорта.</value>
+  </data>
+  <data name="ManualModeWithLink" xml:space="preserve">
+    <value>Вы можите создать одно интервью с помощбю ввода всех обязательных данных в &amp;lt;a href='{0}'&amp;gt;ручном режиме&amp;lt;/a&amp;gt;</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Загрузите tab форматированные данные со всеми необходимыми предзаполненными данными и ответственными людьми (опционально)</value>
+  </data>
+  <data name="SimpleTitle" xml:space="preserve">
+    <value>Только предзаполненные данные (один файл)</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Создание множества интервью с помощью загрузки файла с обязательными предзаполненными данными.
+Вы можите выборочно добавить ответственных для интервью (супервизоров и интервьюверов) по их именам.</value>
+  </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>Загрузить .tab файл</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>Загрузить .zip файл</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>Посмотреть список обязательных данных</value>
+  </data>
 </root>

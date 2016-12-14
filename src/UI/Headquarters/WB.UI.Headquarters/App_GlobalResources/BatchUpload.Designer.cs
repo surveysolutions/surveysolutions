@@ -224,6 +224,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download .tab template for this questionnaire.
+        /// </summary>
+        internal static string DownloadTabTemplate {
+            get {
+                return ResourceManager.GetString("DownloadTabTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download .zip template for this questionnaire.
         /// </summary>
         internal static string DownloadTemplateArchive {
