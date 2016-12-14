@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
+    [Ignore("KP-8236")]
     internal class when_answering_yesno_question_that_trigger_nested_rosters : InterviewTestsContext
     {
         Establish context = () =>
