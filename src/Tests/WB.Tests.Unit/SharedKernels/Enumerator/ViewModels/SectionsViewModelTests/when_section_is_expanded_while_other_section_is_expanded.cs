@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
 
         Because of = () =>
         {
-            navigationState.ScreenChanged += Raise.Event<GroupChanged>(new ScreenChangedEventArgs { TargetGroup = secondSection.SectionIdentity });
+            navigationState.ScreenChanged += Raise.Event<GroupChanged>(Create.Entity.ScreenChangedEventArgs(targetGroup: secondSection.SectionIdentity));
         };
 
         It should_collapse_previous_group = () => firstSelectedSection.Expanded.ShouldBeFalse();

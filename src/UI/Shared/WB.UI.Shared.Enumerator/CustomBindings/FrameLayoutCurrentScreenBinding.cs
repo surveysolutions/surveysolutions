@@ -34,14 +34,32 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             var topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
             var activity = (FragmentActivity)topActivity.Activity;
+            var transaction = activity.SupportFragmentManager.BeginTransaction();
 
-            activity.SupportFragmentManager
-                .BeginTransaction()
-                .SetCustomAnimations(
-                    Resource.Animation.zoom_in_from_center,
-                    Resource.Animation.abc_fade_out)
-                .Replace(frameLayout.Id, mvxFragment)
-                .Commit();
+            SetCustomAnimations(transaction, stageViewModel.Direction);
+            transaction.Replace(frameLayout.Id, mvxFragment);
+            transaction.Commit();
+        }
+
+        private static FragmentTransaction SetCustomAnimations(FragmentTransaction transaction, NavigationDirection direction)
+        {
+            switch (direction)
+            {
+                case NavigationDirection.Previous:
+                    return transaction.SetCustomAnimations(
+                        Resource.Animation.slide_from_left,
+                        Resource.Animation.abc_fade_out);
+
+                case NavigationDirection.Next:
+                    return transaction.SetCustomAnimations(
+                        Resource.Animation.slide_from_right,
+                        Resource.Animation.abc_fade_out);
+
+                default:
+                    return transaction.SetCustomAnimations(
+                        Resource.Animation.zoom_in_from_center,
+                        Resource.Animation.abc_fade_out);
+            }
         }
     }
 }

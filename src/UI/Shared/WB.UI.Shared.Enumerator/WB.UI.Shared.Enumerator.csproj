@@ -351,6 +351,8 @@
     <Compile Include="ValueCombiners\SpannableGroupTitleValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\anim\slide_from_left.xml" />
+    <AndroidResource Include="Resources\anim\slide_from_right.xml" />
     <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
   </ItemGroup>
   <ItemGroup>
