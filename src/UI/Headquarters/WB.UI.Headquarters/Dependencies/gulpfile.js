@@ -29,7 +29,6 @@ var config = {
     cssSource: './css/markup.scss',
     cssAppInject: 'cssApp',
     cssLibsInject: 'cssLibs',
-    jsAppInject: 'jsApp',
     jsLibsInject: 'jsLibs'
 };
 
@@ -78,7 +77,6 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], function () {
     if (config.production) {
         var cssApp = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
         var cssLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
-        var jsApp = gulp.src(config.buildDir + '/app-*.min.js', { read: false });
         var jsLibs = gulp.src(config.buildDir + '/libs-*.min.js', { read: false });
 
         var tasks = config.filesToInject.map(function (fileToInject) {
@@ -88,7 +86,6 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], function () {
                 .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }))
                 .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }))
                 .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }))
-                .pipe(plugins.inject(jsApp, { relative: true, name: config.jsAppInject }))
                 .pipe(gulp.dest(fileToInject.folder));
         });
 
