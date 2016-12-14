@@ -143,17 +143,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.CurrentGroup = navigationIdentity.TargetGroup;
             this.CurrentScreenType = navigationIdentity.TargetScreen;
 
-            if (this.ScreenChanged != null)
+            this.ScreenChanged?.Invoke(new ScreenChangedEventArgs
             {
-                var screenChangedEventArgs = new ScreenChangedEventArgs
-                {
-                    TargetGroup = navigationIdentity.TargetGroup,
-                    AnchoredElementIdentity = navigationIdentity.AnchoredElementIdentity,
-                    TargetScreen = navigationIdentity.TargetScreen
-                };
-
-                this.ScreenChanged?.Invoke(screenChangedEventArgs);
-            }
+                TargetGroup = navigationIdentity.TargetGroup,
+                AnchoredElementIdentity = navigationIdentity.AnchoredElementIdentity,
+                TargetScreen = navigationIdentity.TargetScreen
+            });
         }
     }
 

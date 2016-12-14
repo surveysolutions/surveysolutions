@@ -29,11 +29,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             mvxFragment.ViewModel = frameViewModel;
 
-            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            var topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
             var activity = (FragmentActivity)topActivity.Activity;
-            var trans = activity.SupportFragmentManager.BeginTransaction();
-            trans.Replace(frameLayout.Id, mvxFragment);
-            trans.Commit();
+
+            activity.SupportFragmentManager
+                .BeginTransaction()
+                .SetCustomAnimations(
+                    Resource.Animation.zoom_in_from_center,
+                    Resource.Animation.abc_fade_out)
+                .Replace(frameLayout.Id, mvxFragment)
+                .Commit();
         }
     }
 }
