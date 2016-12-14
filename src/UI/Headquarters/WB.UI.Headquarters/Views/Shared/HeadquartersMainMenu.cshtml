@@ -1,13 +1,11 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
-@using WB.Core.SharedKernels.SurveyManagement.Web.Models
-@using WB.UI.Headquarters.Resources
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
-<ul class="nav navbar-nav" role="menu">
+<ul class="nav navbar-nav">
     <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-            @MainMenu.Reports <b class="caret"></b>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
+            @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("SurveysAndStatuses", "HQ", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
@@ -18,10 +16,11 @@
             @Html.MainMenuItem("SpeedBySupervisors", "PeriodicStatusReport", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
         </ul>
     </li>
-   @Html.MainMenuItem("Interviews", "HQ", @MainMenu.Interviews, MenuItem.Docs)
-    <li class="@(page == MenuItem.Teams || page == MenuItem.Interviewers ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-            @MainMenu.TeamsAndRoles <b class="caret"></b>
+    @Html.MainMenuItem("Interviews", "HQ", @MainMenu.Interviews, MenuItem.Docs)
+
+    <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Interviewers ? "active" : "")">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.TeamsAndRoles">
+            @MainMenu.TeamsAndRoles <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Supervisor", @MainMenu.Supervisors, MenuItem.Teams)
@@ -30,20 +29,17 @@
         </ul>
     </li>
     @Html.MainMenuItem("Index", "HQ", @MainMenu.Questionnaires, MenuItem.Questionnaires)
-    @if (!(User.Identity.IsObserver()))
-    {
-        @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
-    }
+    @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
-    <li class="active glow-animate" style="display: none" id="IncomingPackagesQueueIndicator">
+    <li class="glow-animate" style="display: none" id="IncomingPackagesQueueIndicator">
         <a href="javascript:void(0);" title="@MainMenu.QueueSizeTitle">
             <i class="glyphicon glyphicon-cloud-upload"></i>
             <span class="sync-queue-size">-</span>
         </a>
     </li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><strong>@User.Identity.Name</strong> <b class="caret"></b></a>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@User.Identity.Name"><strong>@User.Identity.Name</strong> <span class="caret"></span></a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Manage", "Account", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
@@ -54,6 +50,6 @@
             <i class="glyphicon glyphicon-question-sign"></i>
         </a>
     </li>
+
     @Html.Partial("LimitsIndicator")
 </ul>
-
