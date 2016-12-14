@@ -18,14 +18,24 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
+    public enum NavigationDirection
+    {
+        Inside = 1,
+        Outside = 2,
+        Next = 3,
+        Previous = 4,
+    }
+
     public class InterviewStageViewModel : MvxViewModel, IDisposable
     {
-        public InterviewStageViewModel(MvxViewModel stage)
+        public InterviewStageViewModel(MvxViewModel stage, NavigationDirection direction)
         {
             this.Stage = stage;
+            this.Direction = direction;
         }
 
         public MvxViewModel Stage { get; }
+        public NavigationDirection Direction { get; }
         public void Dispose() => this.Stage.DisposeIfDisposable();
     }
 
@@ -143,7 +153,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            switch (eventArgs.TargetScreen)
+            switch (eventArgs.TargetStage)
             {
                 case ScreenType.Complete:
                     this.interviewState.Init(this.navigationState.InterviewId, null);
@@ -161,8 +171,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.CurrentStage.DisposeIfDisposable();
-            this.CurrentStage = new InterviewStageViewModel(this.UpdateCurrentScreenViewModel(eventArgs));
+            this.CurrentStage = this.GetInterviewStageViewModel(eventArgs);
             this.RaisePropertyChanged(() => this.CurrentStage);
+        }
+
+        private InterviewStageViewModel GetInterviewStageViewModel(ScreenChangedEventArgs eventArgs)
+            => new InterviewStageViewModel(
+                this.UpdateCurrentScreenViewModel(eventArgs),
+                this.GetNavigationDirection(eventArgs));
+
+        private NavigationDirection GetNavigationDirection(ScreenChangedEventArgs eventArgs)
+        {
+            switch (eventArgs.TargetStage)
+            {
+                case ScreenType.Cover: return NavigationDirection.Previous;
+                case ScreenType.Complete: return NavigationDirection.Next;
+                default: return NavigationDirection.Inside;
+            }
         }
 
         protected abstract MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs);
