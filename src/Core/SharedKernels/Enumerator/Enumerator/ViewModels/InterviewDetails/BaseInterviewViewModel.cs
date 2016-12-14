@@ -186,7 +186,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 case ScreenType.Cover: return NavigationDirection.Previous;
                 case ScreenType.Complete: return NavigationDirection.Next;
-                default: return NavigationDirection.Inside;
+
+                default:
+                    switch (eventArgs.PreviousStage)
+                    {
+                        case ScreenType.Cover: return NavigationDirection.Next;
+                        case ScreenType.Complete: return NavigationDirection.Previous;
+
+                        default:
+                            return NavigationDirection.Inside;
+                    }
             }
         }
 
