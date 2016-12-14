@@ -807,7 +807,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewTreeRoster addedRoster = rosterManager.CreateRoster(parentGroupIdentity, rosterIdentity.ToIdentity(), rosterIdentity.SortIndex ?? 0);
 
             var parentGroup = this.Tree.GetGroup(parentGroupIdentity);
-            parentGroup.AddRosterAndFixOrder(addedRoster);
+            parentGroup.InsertRoster(addedRoster);
             addedRoster.ActualizeChildren(skipRosters: true);
         }
 
