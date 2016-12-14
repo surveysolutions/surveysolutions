@@ -44,7 +44,7 @@
     </li>
     <li><a href="http://docs.mysurvey.solutions/headquarters.pdf" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name"><span class="caret"></span>@User.Identity.Name</a>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
             @Html.MainMenuItem("Manage", "Account", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)

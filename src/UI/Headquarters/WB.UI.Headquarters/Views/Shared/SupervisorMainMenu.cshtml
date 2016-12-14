@@ -5,7 +5,7 @@
 <ul class="nav navbar-nav" role="menu">
     <li class="dropdown @(page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
-            <i class="glyphicon glyphicon-th"></i> @MainMenu.Reports <b class="caret"></b>
+            <i class="glyphicon glyphicon-th"></i> @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Survey", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
@@ -28,7 +28,7 @@
     </li>
     <li><a href="http://docs.mysurvey.solutions/headquarters.pdf" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><strong>@User.Identity.Name</strong> <b class="caret"></b></a>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name <span class="caret"></span></a>
         <ul class="dropdown-menu">
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
         </ul>

@@ -1,4 +1,5 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -29,7 +30,10 @@
         </ul>
     </li>
     @Html.MainMenuItem("Index", "HQ", @MainMenu.Questionnaires, MenuItem.Questionnaires)
-    @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
+    @if (!User.Identity.IsObserver())
+    {
+        @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
+    }
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
     <li class="glow-animate" style="display: none" id="IncomingPackagesQueueIndicator">
@@ -39,7 +43,7 @@
         </a>
     </li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@User.Identity.Name"><strong>@User.Identity.Name</strong> <span class="caret"></span></a>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Manage", "Account", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
