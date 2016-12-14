@@ -6,18 +6,21 @@ using MvvmCross.Core.Views;
 using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class FrameLayoutCurrentScreenBinding : BaseBinding<FrameLayout, MvxViewModel>
+    public class FrameLayoutCurrentScreenBinding : BaseBinding<FrameLayout, InterviewStageViewModel>
     {
         public FrameLayoutCurrentScreenBinding(FrameLayout frameLayout)
             : base(frameLayout) {}
 
-        protected override void SetValueToView(FrameLayout frameLayout, MvxViewModel frameViewModel)
+        protected override void SetValueToView(FrameLayout frameLayout, InterviewStageViewModel stageViewModel)
         {
-            if (frameViewModel == null)
+            if (stageViewModel == null)
                 return;
+
+            var frameViewModel = stageViewModel.Stage;
 
             var viewModelType = frameViewModel.GetType();
             var mvxViewFinder = Mvx.Resolve<IMvxViewsContainer>();
