@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var entityWithErrorsViewModel = this.interviewViewModelFactory.GetNew<T>();
 
-                var navigationIdentity = interview.GetInterviewTreeQuestion(invalidEntity)?.IsPrefilled == true 
+                var navigationIdentity = interview.IsQuestionPrefield(invalidEntity)
                     ? NavigationIdentity.CreateForPrefieldScreen()
                     : NavigationIdentity.CreateForGroup(interview.GetParentGroup(invalidEntity), invalidEntity);
 

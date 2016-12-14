@@ -35,6 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         return NavigationIdentity.CreateForCompleteScreen();
                     case ScreenType.Cover:
                         return NavigationIdentity.CreateForCoverScreen();
+                    case ScreenType.PrefieldScreen:
+                        return NavigationIdentity.CreateForPrefieldScreen();
                     default:
                         return NavigationIdentity.CreateForGroup(this.CurrentGroup);
                 }
@@ -81,29 +83,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (navigationItem.TargetScreen == ScreenType.PrefieldScreen)
             {
                 viewModelNavigationService.NavigateToPrefilledQuestions(InterviewId);
-                return;
             }
-
-            if (navigationItem.TargetScreen == ScreenType.Group)
+            else
             {
-                if (!this.CanNavigateTo(navigationItem)) return;
 
-                while (this.navigationStack.Any(x => x.TargetGroup != null && x.TargetGroup.Equals(navigationItem.TargetGroup)))
+                if (navigationItem.TargetScreen == ScreenType.Group)
                 {
-                    this.navigationStack.Pop();
+                    if (!this.CanNavigateTo(navigationItem)) return;
+
+                    while (
+                        this.navigationStack.Any(
+                            x => x.TargetGroup != null && x.TargetGroup.Equals(navigationItem.TargetGroup)))
+                    {
+                        this.navigationStack.Pop();
+                    }
                 }
+
+                this.navigationStack.Push(navigationItem);
+
+                this.ChangeCurrentGroupAndFireEvent(navigationItem);
             }
-
-            this.navigationStack.Push(navigationItem);
-
-            this.ChangeCurrentGroupAndFireEvent(navigationItem);
         }
 
         private bool CanNavigateTo(NavigationIdentity navigationIdentity)
         {
             var interview = this.interviewRepository.Get(this.InterviewId);
 
-            if (navigationIdentity.TargetScreen == ScreenType.Complete || navigationIdentity.TargetScreen == ScreenType.Cover)
+            if (navigationIdentity.TargetScreen == ScreenType.Complete || navigationIdentity.TargetScreen == ScreenType.Cover || navigationIdentity.TargetScreen == ScreenType.PrefieldScreen)
                 return true;
 
             return interview.HasGroup(navigationIdentity.TargetGroup) && interview.IsEnabled(navigationIdentity.TargetGroup);
