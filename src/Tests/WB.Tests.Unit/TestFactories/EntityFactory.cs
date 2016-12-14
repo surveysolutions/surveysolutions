@@ -1104,13 +1104,18 @@ namespace WB.Tests.Unit.TestFactories
         public InterviewTreeYesNoQuestion InterviewTreeYesNoQuestion(AnsweredYesNoOption[] answer)
             => new InterviewTreeYesNoQuestion(answer);
 
-        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, int[] answers = null, bool ordered = false, int? maxAnswersCount = null)
-            => Create.Entity.MultipleOptionsQuestion(
+        public MultyOptionsQuestion YesNoQuestion(Guid? questionId = null, int[] answers = null, bool ordered = false,
+            int? maxAnswersCount = null, string variable = null)
+        {
+            var yesNo = Create.Entity.MultipleOptionsQuestion(
                 isYesNo: true,
                 questionId: questionId,
-                answers: answers ?? new int[] { },
+                answers: answers ?? new int[] {},
                 areAnswersOrdered: ordered,
                 maxAllowedAnswers: maxAnswersCount);
+            yesNo.StataExportCaption = variable;
+            return yesNo;
+        }
 
         public TranslationInstance TranslationInstance(string value = null,
             Guid? translationId = null, 
