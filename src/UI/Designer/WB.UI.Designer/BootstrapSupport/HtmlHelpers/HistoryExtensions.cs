@@ -97,7 +97,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             var questionnireTitle = record.TargetTitle;
             var questionnireDateTime = record.TargetDateTime;
             return questionnireDateTime.HasValue
-                ? string.Format(QuestionnaireHistoryResources.reverted_to, questionnireTitle, questionnireDateTime.Value.ToString())
+                ? string.Format(QuestionnaireHistoryResources.reverted_to, questionnireTitle, questionnireDateTime.Value.ToString("s"))
                 : string.Format(QuestionnaireHistoryResources.reverted, questionnireTitle);
         }
 
