@@ -392,11 +392,6 @@
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_editing_api_user.cs" />
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_editing_api_user_and_user_does_not_exist.cs" />
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_creating_api_user.cs" />
-    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
-    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_and_server_return_expectation_failed_status.cs" />
-    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_with_attachments.cs" />
-    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
-    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\ExportControllerTestsContext.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_process_details_for_paradata.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_process_details.cs" />
@@ -419,6 +414,7 @@
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_file_with_unexpected__export_type.cs" />
     <Compile Include="Applications\Headquarters\ExportApiTests\when_getting_export_file_and_questionnaire_identity_is_invalid.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
+    <Compile Include="Applications\Headquarters\QuestionnaireImportServiceTests.cs" />
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\InterviewImportServiceTestsContext.cs" />
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_and_csv_file_parser_returns_null.cs" />
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_with_nonprintable_symbols.cs" />
