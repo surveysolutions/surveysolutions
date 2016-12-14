@@ -9,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Shared.Web.Filters;
@@ -31,18 +30,15 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         private readonly IRestService restService;
-        private readonly IQuestionnaireImportService importService;
 
         public DesignerQuestionnairesApiController(
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
             ILogger logger, 
-            IRestService restService, 
-            IQuestionnaireImportService importService)
+            IRestService restService)
             : base(commandService, globalInfo, logger)
         {
             this.restService = restService;
-            this.importService = importService;
         }
 
         [HttpPost]
@@ -88,13 +84,6 @@ namespace WB.UI.Headquarters.Controllers
                 return localDate.ToString("d MMM yyyy, HH:mm");
             
             return localDate.Humanize();
-        }
-
-        [HttpPost]
-        [Obsolete("Delete when KP-8251 ")]
-        public async Task<QuestionnaireImportResult> GetQuestionnaire(ImportQuestionnaireRequest request)
-        {
-            return await this.importService.Import(request.Questionnaire.Id, request.Questionnaire.Title, request.AllowCensusMode);
         }
     }
 }
