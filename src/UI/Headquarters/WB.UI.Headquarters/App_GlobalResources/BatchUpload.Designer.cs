@@ -675,6 +675,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload .tab file.
+        /// </summary>
+        internal static string UploadTabFile {
+            get {
+                return ResourceManager.GetString("UploadTabFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Batch User Upload.
         /// </summary>
         internal static string UploadUsers {
@@ -698,6 +707,15 @@ namespace Resources {
         internal static string UploadUsers_Title {
             get {
                 return ResourceManager.GetString("UploadUsers_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload .zip file.
+        /// </summary>
+        internal static string UploadZipFile {
+            get {
+                return ResourceManager.GetString("UploadZipFile", resourceCulture);
             }
         }
         
@@ -779,6 +797,15 @@ namespace Resources {
         internal static string VerifySampleData {
             get {
                 return ResourceManager.GetString("VerifySampleData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View list of required prefilled data.
+        /// </summary>
+        internal static string ViewListPrefilledData {
+            get {
+                return ResourceManager.GetString("ViewListPrefilledData", resourceCulture);
             }
         }
     }
