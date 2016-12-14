@@ -18,6 +18,17 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
+    public class InterviewStageViewModel : MvxViewModel, IDisposable
+    {
+        public InterviewStageViewModel(MvxViewModel stage)
+        {
+            this.Stage = stage;
+        }
+
+        public MvxViewModel Stage { get; }
+        public void Dispose() => this.Stage.DisposeIfDisposable();
+    }
+
     public abstract class BaseInterviewViewModel : SingleInterviewViewModel, IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -150,7 +161,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.CurrentStage.DisposeIfDisposable();
-            this.CurrentStage = this.UpdateCurrentScreenViewModel(eventArgs);
+            this.CurrentStage = new InterviewStageViewModel(this.UpdateCurrentScreenViewModel(eventArgs));
             this.RaisePropertyChanged(() => this.CurrentStage);
         }
 
@@ -184,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public bool HasCommentsFromSupervior { get; set; }
         public bool HasNotEmptyNoteFromSupervior { get; set; }
 
-        public MvxViewModel CurrentStage { get; private set; }
+        public InterviewStageViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
 
         private string currentLanguage;
