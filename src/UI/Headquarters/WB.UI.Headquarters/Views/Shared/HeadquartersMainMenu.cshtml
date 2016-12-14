@@ -5,8 +5,6 @@
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
 <ul class="nav navbar-nav" role="menu">
-    <a class="navbar-brand" href="@Url.Action("Index", "HQ", new {area = ""})">@Users.Headquarters</a>
-
     <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.InterviewsChart ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
             @MainMenu.Reports <b class="caret"></b>
