@@ -84,10 +84,12 @@ namespace WB.UI.Interviewer.ViewModel
                     var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
                     coverInterviewViewModel.Init(this.interviewId, this.navigationState);
                     return coverInterviewViewModel;
-                default:
+                case ScreenType.Group:
                     var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
                     activeStageViewModel.Init(this.interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                     return activeStageViewModel;
+                default:
+                    return null;
             }
         }
     }

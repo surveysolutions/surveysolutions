@@ -319,9 +319,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
             => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
-        public InterviewTreeQuestion GetInterviewTreeQuestion(Identity entityIdentity)
+        public bool IsQuestionPrefield(Identity entityIdentity)
         {
-            return this.Tree.GetQuestion(entityIdentity);
+            return this.Tree.GetQuestion(entityIdentity)?.IsPrefilled ?? false;
         }
 
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity)
