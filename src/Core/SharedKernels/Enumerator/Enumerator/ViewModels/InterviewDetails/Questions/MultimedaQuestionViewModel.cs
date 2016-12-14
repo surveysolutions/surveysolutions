@@ -11,8 +11,10 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
@@ -102,32 +104,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var pictureFileName = this.GetPictureFileName();
 
-            using (Stream pictureStream = await this.pictureChooser.TakePicture())
+            try
             {
-                if (pictureStream != null)
+                using (Stream pictureStream = await this.pictureChooser.TakePicture())
                 {
-                    this.StorePictureFile(pictureStream, pictureFileName);
-
-                    var command = new AnswerPictureQuestionCommand(
-                        this.interviewId,
-                        this.userId,
-                        this.questionIdentity.Id,
-                        this.questionIdentity.RosterVector,
-                        DateTime.UtcNow,
-                        pictureFileName);
-
-                    try
+                    if (pictureStream != null)
                     {
-                        await this.Answering.SendAnswerQuestionCommandAsync(command);
-                        this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
-                        this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    }
-                    catch (InterviewException ex)
-                    {
-                        this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
-                        this.QuestionState.Validity.ProcessException(ex);
+                        this.StorePictureFile(pictureStream, pictureFileName);
+
+                        var command = new AnswerPictureQuestionCommand(
+                            this.interviewId,
+                            this.userId,
+                            this.questionIdentity.Id,
+                            this.questionIdentity.RosterVector,
+                            DateTime.UtcNow,
+                            pictureFileName);
+
+                        try
+                        {
+                            await this.Answering.SendAnswerQuestionCommandAsync(command);
+                            this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
+                            this.QuestionState.Validity.ExecutedWithoutExceptions();
+                        }
+                        catch (InterviewException ex)
+                        {
+                            this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                            this.QuestionState.Validity.ProcessException(ex);
+                        }
                     }
                 }
+            }
+            catch (MissingPermissionsException)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
             }
         }
 
