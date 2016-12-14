@@ -111,10 +111,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (this.ScreenType != eventArgs.TargetScreen)
+            if (this.ScreenType != eventArgs.TargetStage)
                 return;
 
-            switch (eventArgs.TargetScreen)
+            switch (eventArgs.TargetStage)
             {
                 case ScreenType.Complete:
                 case ScreenType.Cover:
