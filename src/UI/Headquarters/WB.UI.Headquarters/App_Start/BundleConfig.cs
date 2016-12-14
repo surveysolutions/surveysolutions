@@ -42,6 +42,10 @@ namespace WB.UI.Headquarters
                 "~/Content/controlpanel.css"
                 ));
 
+            bundles.Add(new ScriptBundle("~/js/import-questionnaire-list").Include(
+                "~/Dependencies/js/import-questionnaires-list.js"
+                ));
+
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/moment.js",
