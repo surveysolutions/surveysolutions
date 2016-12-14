@@ -54,7 +54,7 @@
                             @Html.AntiForgeryToken()
                             @if (ViewData.ModelState.ContainsKey("InvalidCredentials") && ViewData.ModelState["InvalidCredentials"].Errors.Any())
                             {
-                                <div class="form-error">
+                                <div class="alert alert-danger">
                                     <p>
                                         @LoginToDesigner.InvalidCredentials
                                     </p>
