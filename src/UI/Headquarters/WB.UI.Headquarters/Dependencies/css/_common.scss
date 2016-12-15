@@ -29,6 +29,7 @@ html {
   position: relative;
   min-height: 100%;
 	body {
+		min-width: 400px;
 		margin-bottom: 60px;
 		font-family: Arial, sans-serif;
 		font-size: 16px;
@@ -57,12 +58,18 @@ html {
 		}
 	}
 }
-
+.underline-link{
+	text-decoration: underline;
+	&:hover, &:focus{
+		text-decoration: none;
+	}
+}
 //navigation
 .navbar-fixed-top .navbar-collapse, .navbar-fixed-bottom .navbar-collapse{
 	max-height: 360px;
 }
 .navbar{
+	min-width: 400px;
 	min-height: 60px;
 	.container-fluid{
 		padding: 0 45px;
@@ -112,10 +119,12 @@ html {
 			}
 			&>a{
 				@extend %font-header;
-				padding: 24px 12px 25px;
+				padding: 24px 9px;
 				text-align: center;
 				@include transition();
-				
+				&.notifications{
+					padding-left: 45px;
+				}
 				&:hover, &:focus{
 					font-family: "RobotoBold";
 					span{
@@ -126,8 +135,8 @@ html {
 					}
 				}
 				.caret{
-					@include absolute(31px, 17px);
-					margin-left: 11px;
+					@include absolute(31px, 10px);
+					margin-left: 0;
 					border-top: 8px solid rgba(255, 255, 255, 0.7);
 					border-right: 5px solid transparent;
 					border-left: 5px solid transparent;
@@ -145,28 +154,47 @@ html {
 				}
 			}
 			&.dropdown > a{
-				padding-right: 25px;
+				padding-right: 20px;
 			}
-			.dropdown-menu li{ 
-				&.active {
-					a{
-						color: $white;
-						font-family: "RobotoLight";
-						border-radius: 0;
-						&:hover, &:focus{
-							font-family: "RobotoBold";
+			.dropdown-menu{ 
+				margin-top: 1px;
+				li{ 
+					&.active {
+						a{
+							color: $white;
+							font-family: "RobotoLight";
+							border-radius: 0;
+							&:hover, &:focus{
+								font-family: "RobotoBold";
+							}
 						}
 					}
+					a{
+						border-radius: 5px;
+						padding: 10px;
+						text-align: left;
+						color: $gray_text;
+						@include transition();
+					}
 				}
-				a{
-					border-radius: 5px;
-					padding: 10px;
-					text-align: left;
-					color: $gray_text;
-					@include transition();
+			}
+			&.glow-animate{
+				&>a:after{
+					display: none;
 				}
 			}
 		}
+	}
+}
+.dataTables_processing{
+	background: rgba(0,0,0, 0.2);
+	div{
+		background-color: white;
+	    padding: 30px 40px;
+	    display: inline-block;
+	    font: 24px/26px "RobotoLight";
+	    margin-top: 10px;
+	    box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
 	}
 }
 .retina{
@@ -181,7 +209,7 @@ html {
 	background-color: #2a81cb;
 	border-radius: 100%;
 	padding: 9px;
-	@include absolute($top: 18px, $left: -30px);
+	@include absolute($top: 15px, $left: 5px);
 	font-size: 18px;
 	line-height: 20px;
 }
@@ -190,8 +218,10 @@ html {
 	.badge.badge_nav{
 		display: none;
 	}
+	.number-of-synchronized-interviews{
+		display: none;
+	}
 }
-
 .active-page{
 	display: none;
 	color: $white;
@@ -263,18 +293,17 @@ html {
 					padding: 15px 10px;
 				}
 				&.active {
-						a{
-							border-radius: 5px;
-							background-color: rgba(42, 129, 203, 0.5);
-							&:hover, &:focus{
-								font-family: "RobotoBold";
-								background-color: rgba(42, 129, 203, 1);
-							}
+					a{
+						border-radius: 5px;
+						background-color: rgba(42, 129, 203, 0.5);
+						&:hover, &:focus{
+							font-family: "RobotoBold";
+							background-color: rgba(42, 129, 203, 1);
 						}
 					}
+				}
 			}
 		}
-		
 		.navbar-right .badge.badge_nav{
 			top: 0;
 			left: 0;
@@ -286,8 +315,9 @@ html {
 			left: 0;
 			position: relative;
 			margin: 0;
-			margin-right: 10px;
+			margin-left: 10px;
 		}
+
 	} 
 	.navbar-fixed-top .navbar-nav > .active > a, 
 	.navbar-fixed-top .navbar-nav > .active > a:hover, 
@@ -318,7 +348,17 @@ html {
 		position: relative;
 		top: 0;
 		left: 0;
-		margin: 6px 15px 6px 0;
+		margin: 6px 15px 6px 10px;
+	}
+	.navbar-header .number-of-synchronized-interviews{
+		display: block;
+		float: right;
+		padding: 15px 10px;
+		color: $white;
+		&:hover, &:focus{
+			text-decoration: none;
+			color: white;
+		}
 	}
 }
 @media (max-width: $screen-sm){
@@ -545,7 +585,7 @@ input.wb-checkbox{
 		margin-bottom: 10px;
 		color: $red_error; 
 	}
-	&.alert-danger{
+	&.alert-danger, .help-block{
 		color: $red_error; 
 	}
 	&.alert-success{

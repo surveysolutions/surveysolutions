@@ -76,7 +76,7 @@ img#placeholder {
         }        
     }
     .get-interviewer-app{
-        @include size(248px, 81px);
+        width: 248px;
         background: #000  url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
         background-size: 55px;
         margin-bottom: 25px;
