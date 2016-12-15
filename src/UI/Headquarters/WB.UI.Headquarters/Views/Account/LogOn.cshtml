@@ -64,12 +64,12 @@
                                 <div class="retina headquarter">Survey Solutions Headquarters</div>
                                 if (!modelState.IsValid)
                                 {
-                                    <div class="form-error">
+                                    <div class="form-group has-error">
                                         <p>
                                             @Pages.LogOn_UnsuccessfulLogin
                                             @foreach (var error in modelState.Keys.SelectMany(key => modelState[key].Errors))
                                             {
-                                                <span>@error.ErrorMessage</span>
+                                                <span class="help-block">@error.ErrorMessage</span>
                                             }
                                         </p>
                                     </div>
