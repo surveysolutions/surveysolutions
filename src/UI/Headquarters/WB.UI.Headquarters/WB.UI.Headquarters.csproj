@@ -844,7 +844,7 @@
     <Content Include="Views\Observer\Edit.cshtml" />
     <Content Include="Views\Observer\Index.cshtml" />
     <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
-    <Content Include="Views\DataExport\Index.cshtml" />
+    <Content Include="Views\DataExport\IndexOld.cshtml" />
     <Content Include="Views\Supervisor\Archived.cshtml" />
     <Content Include="Views\BatchUserUpload\NewUserBatchUpload.cshtml" />
     <Content Include="Views\BatchUserUpload\ImportUserDetails.cshtml" />
@@ -935,6 +935,8 @@
     <Content Include="Views\HQ\InterviewImportConfirmation.cshtml" />
     <Content Include="Views\HQ\ImportInterviews.cshtml" />
     <Content Include="Views\HQ\InterviewImportProgress.cshtml" />
+    <Content Include="Views\DataExport\Index.cshtml" />
+    <Content Include="Views\DataExport\IndexOld.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1724,6 +1726,7 @@
     <Content Include="App_GlobalResources\DataExport.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireClonning.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>

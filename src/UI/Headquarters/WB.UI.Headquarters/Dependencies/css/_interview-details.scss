@@ -728,7 +728,7 @@ span.image-zoom-box{
 }
 
 
-.modal {
+.modal-img {
 	position: fixed; 
     z-index: 50; 
     padding-top: 50px; 
@@ -740,7 +740,7 @@ span.image-zoom-box{
     background-color: rgba(0,0,0,0.9); 
     text-align: center;
     display: none; 
-    .modal-content {
+    .modal-img-content {
 		@include center-block();
 	    max-width: 70% !important;
 	    max-height: 80%;
@@ -768,7 +768,7 @@ span.image-zoom-box{
 	}
 }
 
-.modal-content, .caption {    
+.modal-img-content, .caption {    
     @include animation-name(zoom);
     @include animation-duration(0.5s);
 }
@@ -916,7 +916,7 @@ span.image-zoom-box{
 	} */
 }
 @media only screen and (max-width: 700px){
-    .modal-content {
+    .modal-img-content {
         width: 100%;
     }
 }

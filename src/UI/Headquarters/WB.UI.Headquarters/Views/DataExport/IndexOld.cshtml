@@ -1,0 +1,230 @@
+﻿@using System
+@using System.Web.Optimization
+@using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
+@model WB.UI.Headquarters.Models.ExportModel
+
+@{
+    ViewBag.Title = DataExport.DataExport_Title;
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+}
+
+@section scripts
+{
+
+    @Scripts.Render("~/js/exportdata")
+
+    <script type="text/javascript">
+
+        var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "AllData"})';
+        var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"})';
+        var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata"})';
+        var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"})';
+
+        var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"})';
+        var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire"})';
+        var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
+        $(function() {
+            var templates = [
+                @foreach (var item in Model.Questionnaires)
+                {
+                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)' },</text>
+                }
+            ];
+            var exportFromats = [];
+            @foreach (DataExportFormat formatValue in Enum.GetValues(typeof (DataExportFormat)))
+            {
+                <text>exportFromats[@((int) formatValue)] = '@formatValue.ToString()'</text>
+            }
+
+            var statuses = [
+                { status: null, title: 'Any' },
+                @foreach (var item in Model.ExportStatuses)
+                {
+                <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
+                }
+            ];
+
+            var model = new Supervisor.VM.ExportData(templates,
+                statuses,
+                $ExportedDataReferencesForQuestionnaireUrl,
+                $UpdateHistoryUrl,
+                exportFromats,
+                $DeleteDataExportProcessUrl,
+                $UpdateTabularDataUrl);
+            ko.applyBindings(model);
+        });
+
+        $('#umbrella').hide();
+    </script>
+}
+
+
+@section header
+{
+    <h3>@DataExport.DataExport_Header</h3>
+}
+
+@section actionbar
+{
+    <h4 class="sinle-line-header text-italic" data-bind="text: selectedTemplate().title"></h4>
+}
+
+@section filters
+{
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">@Common.Template</h4>
+            <p class="list-group-item-text">
+                <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="form-control"></select>
+            </p>
+        </li>
+    </ul>
+}
+
+<table class="table table-bordered table-condensed">
+    <thead>
+        <tr>
+            <th>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="ddlStatus" class="control-label"> @Common.Status :</label>
+                        <select class="form-control" id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title'"></select>
+                    </div>
+                </div>
+            </th>
+            <th>@DataExport.BinaryData</th>
+            <th>@DataExport.DDI</th>
+            @if (this.ViewBag.EnableInterviewHistory)
+            {
+                <th>@DataExport.ParaData</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <!-- ko if:selectedTemplateTitle() != null -->
+        <tr>
+            <td>
+                @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
+            </td>
+            <td>
+                @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/binary.png", addFromat: true)
+            </td>
+            <td>
+                <table class="table table-condensed"  style="margin-bottom: 0px;">
+                    <thead>
+                        <tr>
+                            <td><img src="@Url.Content("~/Content/icons/ddi.ico")" alt="ddi" /></td>
+                            <td> @DataExport.Metadata</td>
+                            <td>
+
+                                <a class="btn btn-default" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                                    <i class="glyphicon glyphicon-download">
+                                    </i>
+                                </a>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+            </td>
+            @if (this.ViewBag.EnableInterviewHistory)
+            {
+                <td>
+                    @DataExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl")
+                </td>
+            }
+        </tr>
+        <tr>
+            <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)</td>
+            <td></td>
+            <td></td>
+            @if (this.ViewBag.EnableInterviewHistory)
+            {
+                <td></td>
+            }
+        </tr>
+        <tr>
+            <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPSS, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)</td>
+            <td></td>
+            <td></td>
+            @if (this.ViewBag.EnableInterviewHistory)
+            {
+                <td></td>
+            }
+        </tr>
+        <!-- /ko  -->
+    </tbody>
+</table>
+
+<div>
+
+    <!-- ko if:RunningDataExportProcesses().length>0 -->
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>@DataExport.Name</th>
+                <th>@DataExport.Format</th>
+                <th>@DataExport.StartDate</th>
+                <th>@DataExport.LastUpdateDate</th>
+                <th>@DataExport.Progress</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach:RunningDataExportProcesses -->
+            <tr>
+                <td><span data-bind="text: DataExportProcessName"></span></td>
+                <td><span data-bind="text: $root.exportFormatName($data)"></span></td>
+                <td><span data-bind="text: $root.formatDate($data.BeginDate())"></span></td>
+                <td><span data-bind="text: $root.formatDate($data.LastUpdateDate())"></span></td>
+                <td><span data-bind="text: $root.exportFormatProgress($data.Progress())"></span></td>
+                <td>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-danger" data-bind="click : $root.stopExportProcess">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </a>
+                        </div>
+                    }
+                </td>
+            </tr> <!-- /ko -->
+        </tbody>
+    </table>
+    <!-- /ko -->
+</div>
+
+
+@helper DataExportTemplate(DataExportType type, DataExportFormat format, string dataUrl, string iconUrl = null, bool addFromat = false)
+{
+var exportParameters = "'" + (int)type + "','" + (int)format + "'";
+    <table class="table table-condensed" style="margin-bottom: 0px;">
+        <thead>
+            <tr>
+                @if (!string.IsNullOrEmpty(iconUrl))
+                {
+                    <td><img src="@Url.Content(iconUrl)" /></td>
+                }
+                <td><i data-bind="text:lastUpdateDate(@exportParameters)"></i></td>
+                <td>
+                    <a class="btn btn-default" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">
+                        <i class="glyphicon glyphicon-refresh">
+                        </i>
+                    </a>
+                </td>
+                <td>
+
+                    <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                    </a>
+                </td>
+            </tr>
+        </thead>
+    </table>
+}
+<script type="text/html" id="confirm-delete-template">
+    <h3>
+        @DataExport.ConfirmStop <b>'<span class='text-normal' data-bind='text: DataExportProcessName'></span>'</b> <span class='text-normal' data-bind='text: exportFormatName($data)'></span> @DataExport.export ?
+    </h3>
+</script>
