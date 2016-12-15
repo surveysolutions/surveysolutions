@@ -1,7 +1,9 @@
 {
   "name": "headquarters",
   "version": "1.0.0",
+  "description": "Survey Solutions Headquarters js module",
   "devDependencies": {
+    "bower": "^1.8.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
@@ -19,6 +21,9 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "main-bower-files": "^2.13.1"
+  },
+  "scripts": {
+    "install": "node_modules\\.bin\\bower install --force"  
   },
   "dependencies": {
     "gulp-install": "^0.6.0"
