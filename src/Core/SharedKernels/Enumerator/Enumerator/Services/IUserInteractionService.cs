@@ -4,9 +4,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IUserInteractionService
     {
-        Task<bool> ConfirmAsync(string message, string title = "", string okButton = "OK", string cancelButton = "Cancel", bool isHtml = true);
-        Task<string> ConfirmWithTextInputAsync(string message, string title = "", string okButton = "OK", string cancelButton = "Cancel", bool isTextInputPassword = false);
-        Task AlertAsync(string message, string title = "", string okButton = "OK");
+        Task<bool> ConfirmAsync(string message, string title = "", string okButton = null, string cancelButton = null, bool isHtml = true);
+        Task<string> ConfirmWithTextInputAsync(string message, string title = "", string okButton = null, string cancelButton = null, bool isTextInputPassword = false);
+        Task AlertAsync(string message, string title = "", string okButton = null);
 
         Task WaitPendingUserInteractionsAsync();
 
