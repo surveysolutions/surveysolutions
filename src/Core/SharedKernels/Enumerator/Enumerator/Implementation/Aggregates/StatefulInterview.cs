@@ -345,6 +345,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts().Concat(this.GetEnabledInvalidQuestions());
 
+        public bool IsFirstEntityBeforeSecond(Identity first, Identity second)
+        {
+            List<Identity> orderedIdentities = this.Tree.GetAllNodesInEnumeratorOrder().Select(node => node.Identity).ToList();
+
+            return orderedIdentities.IndexOf(first) < orderedIdentities.IndexOf(second);
+        }
+
         private IEnumerable<Identity> GetEnabledInvalidStaticTexts()
             => this.Tree.FindStaticTexts()
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
