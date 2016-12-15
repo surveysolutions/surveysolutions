@@ -112,7 +112,6 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult LoginToDesigner()
         {
-            this.Attention(QuestionnaireImport.BeforeSignInToDesigner);
             return this.View();
         }
 
