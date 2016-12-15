@@ -17,23 +17,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void When_CreateText_with_referance_one_parent_rosteres_Then_should_return_substition_text_with_substitions()
         {
             //arrange
-            var questionnireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var questionId     = Guid.Parse("44444444444444444444444444444444");
+            var questionId = Guid.Parse("44444444444444444444444444444444");
 
-            var questionnireDocument = Create.Entity.QuestionnaireDocument(questionnireId, new IComposite[]
+            var questionnireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Entity.Roster(variable: "r1", children: new IComposite[]
+                {
+                    Create.Entity.Roster(variable: "r2", children: new IComposite[]
                     {
-                        Create.Entity.Roster(variable: "r2", children: new IComposite[]
-                            {
-                                Create.Entity.NumericQuestion(questionId, variableName: "n1")
-                            })
+                        Create.Entity.NumericQuestion(questionId)
                     })
+                })
             });
 
             var questionnire = Create.Entity.PlainQuestionnaire(questionnireDocument);
             var substitionTextFactory = Create.Service.SubstitionTextFactory();
-            var questionIdentity = Create.Entity.Identity(questionId, new RosterVector(new decimal[] {1, 1}));
+            var questionIdentity = Create.Entity.Identity(questionId, Create.Entity.RosterVector(1, 1));
 
             //act
             var substitionText = substitionTextFactory.CreateText(questionIdentity, "title %r1% %r2%", questionnire);
