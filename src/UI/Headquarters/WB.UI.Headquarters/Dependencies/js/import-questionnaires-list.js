@@ -25,6 +25,10 @@ $(function () {
         .on('init.dt', onTableInitComplete)
         .DataTable({
             processing: true,
+            language:
+            {
+			    "processing": "<div>Loading, please wait</div>"
+			},
             serverSide: true,
             ajax: {
                 url: questionnaireListUrl,
