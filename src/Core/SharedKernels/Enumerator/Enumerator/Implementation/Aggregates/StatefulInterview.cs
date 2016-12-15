@@ -350,6 +350,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts().Concat(this.GetEnabledInvalidQuestions());
 
+        public bool IsFirstEntityBeforeSecond(Identity first, Identity second)
+        {
+            List<Identity> orderedIdentities = this.Tree.GetAllNodesInEnumeratorOrder().Select(node => node.Identity).ToList();
+
+            return orderedIdentities.IndexOf(first) < orderedIdentities.IndexOf(second);
+        }
+
         private IEnumerable<Identity> GetEnabledInvalidStaticTexts()
             => this.Tree.FindStaticTexts()
                 .Where(staticText => !staticText.IsDisabled() && !staticText.IsValid)
@@ -407,7 +414,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
 
         public Identity GetParentGroup(Identity groupOrQuestion)
-            => this.Tree.GetNodeByIdentity(groupOrQuestion).Parent.Identity;
+            => this.Tree.GetNodeByIdentity(groupOrQuestion).Parent?.Identity;
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.Tree.GetGroup(groupIdentity).Children
