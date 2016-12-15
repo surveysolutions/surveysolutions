@@ -166,7 +166,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult PanelBatchUpload(BatchUploadModel model)
+        public ActionResult PanelBatchUploadAndVerify(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
@@ -177,7 +177,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
-            var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
+            PreloadedContentMetaData preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(preloadedDataId);
 
             //clean up for security reasons
             if (preloadedMetadata == null)
@@ -187,7 +187,40 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
-            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
+            PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(preloadedMetadata.Id);
+
+            VerificationStatus verificationStatus = this.preloadedDataVerifier.VerifyPanel(model.QuestionnaireId, model.QuestionnaireVersion, preloadedPanelData);
+
+            //clean up for security reasons
+            if (verificationStatus.Errors.Any())
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfPanel(preloadedMetadata.Id);
+                return this.View("VerificationErrors", new PreloadedDataVerificationErrorsView(
+                    model.QuestionnaireId,
+                    model.QuestionnaireVersion,
+                    questionnaireInfo?.Title,
+                    verificationStatus.Errors.ToArray(),
+                    verificationStatus.WasResponsibleProvided,
+                    preloadedMetadata.Id,
+                    PreloadedContentType.Panel,
+                    model.File.FileName));
+            }
+
+            return this.View("InterviewImportConfirmation", new PreloadedDataConfirmationModel
+            {
+                QuestionnaireId = model.QuestionnaireId,
+                Version = model.QuestionnaireVersion,
+                QuestionnaireTitle = questionnaireInfo?.Title,
+                WasSupervsorProvided = verificationStatus.WasResponsibleProvided,
+                Id = preloadedMetadata.Id,
+                PreloadedContentType = PreloadedContentType.Panel,
+                FileName = model.File.FileName,
+                EnumeratorsCount = 13,
+                SupervisorsCount = 8,
+                InterviewsCount = 105
+            });
+
+            //return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
         }
 
         [HttpPost]
@@ -221,10 +254,7 @@ namespace WB.UI.Headquarters.Controllers
             if (verificationStatus.Errors.Any())
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedSample.Id);
-            }
-
-            if (verificationStatus.Errors.Any())
-            {
+            
                 return this.View("VerificationErrors", new PreloadedDataVerificationErrorsView(
                     model.QuestionnaireId, 
                     model.QuestionnaireVersion, 
