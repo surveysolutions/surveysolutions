@@ -502,6 +502,7 @@
     <Content Include="Dependencies\img\search2k.png" />
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
+    <Content Include="Dependencies\js\batch-upload-start-interview-creation.js" />
     <Content Include="Dependencies\js\import-questionnaires-list.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -931,6 +932,9 @@
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\ImportMode.cshtml" />
     <Content Include="Views\HQ\VerificationErrors.cshtml" />
+    <Content Include="Views\HQ\InterviewImportConfirmation.cshtml" />
+    <Content Include="Views\HQ\ImportInterviews.cshtml" />
+    <Content Include="Views\HQ\InterviewImportProgress.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

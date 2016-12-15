@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Mvc;
 using Resources;
 using Main.Core.Entities.SubEntities;
@@ -25,6 +27,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
@@ -219,23 +222,76 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedSample.Id);
             }
 
-             var view = new PreloadedDataVerificationErrorsView(
-                model.QuestionnaireId, 
-                model.QuestionnaireVersion, 
-                questionnaireInfo?.Title, 
-                verificationStatus.Errors.ToArray(), 
-                verificationStatus.WasResponsibleProvided, 
-                preloadedMetadata.Id, 
-                PreloadedContentType.Sample,
-                preloadedSample.FileName);
-
             if (verificationStatus.Errors.Any())
             {
-                return this.View("VerificationErrors", view);
+                return this.View("VerificationErrors", new PreloadedDataVerificationErrorsView(
+                    model.QuestionnaireId, 
+                    model.QuestionnaireVersion, 
+                    questionnaireInfo?.Title, 
+                    verificationStatus.Errors.ToArray(), 
+                    verificationStatus.WasResponsibleProvided, 
+                    preloadedMetadata.Id, 
+                    PreloadedContentType.Sample,
+                    preloadedSample.FileName));
             }
 
-            return this.View("VerifySample", view);
-            //return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
+            return this.View("InterviewImportConfirmation", new PreloadedDataConfirmationModel
+            {
+                QuestionnaireId=  model.QuestionnaireId,
+                Version = model.QuestionnaireVersion,
+                QuestionnaireTitle = questionnaireInfo?.Title,
+                WasSupervsorProvided =  verificationStatus.WasResponsibleProvided,
+                Id = preloadedMetadata.Id,
+                PreloadedContentType = PreloadedContentType.Sample,
+                FileName = preloadedSample.FileName,
+                EnumeratorsCount = 13,
+                SupervisorsCount = 8,
+                InterviewsCount = 105
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult InterviewImportConfirmation(PreloadedDataConfirmationModel model)
+        {
+            if (this.interviewImportService.Status.IsInProgress)
+            {
+                this.ModelState.AddModelError(string.Empty, "Import interviews is in progress. Wait until current operation is finished.");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.Version));
+                model.QuestionnaireTitle = questionnaireInfo.Title;
+                return this.View(model);
+            }
+
+            var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
+            var headquartersId = this.GlobalInfo.GetCurrentUser().Id;
+
+            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+
+            try
+            {
+                this.interviewImportService.ImportInterviews(supervisorId: model.SupervisorId,
+                    questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: model.Id,
+                    isPanel: model.PreloadedContentType == PreloadedContentType.Panel,
+                    headquartersId: headquartersId);
+            }
+            finally
+            {
+                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+            }
+
+            return this.RedirectToAction("InterviewImportProgress");
+        }
+
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult InterviewImportProgress(Guid id, long version)
+        {
+            return this.View();
         }
 
         public ActionResult SimpleTemplateDownload(Guid id, long version)
