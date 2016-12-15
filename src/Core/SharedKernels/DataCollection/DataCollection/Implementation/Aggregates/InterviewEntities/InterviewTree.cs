@@ -414,6 +414,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             return questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
         }
+
+        public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder()
+            => this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerableDepthFirst(node => node.Children);
     }
 
     public interface IInterviewTreeNode

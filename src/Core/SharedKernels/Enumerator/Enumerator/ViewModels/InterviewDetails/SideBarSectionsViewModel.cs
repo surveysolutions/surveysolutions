@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             SideBarSectionViewModel selectedGroup = allTreeElements
                 .FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(eventArgs.TargetGroup));
 
-            if (eventArgs.TargetScreen == ScreenType.Complete || eventArgs.TargetScreen == ScreenType.Cover)
+            if (eventArgs.TargetStage == ScreenType.Complete || eventArgs.TargetStage == ScreenType.Cover)
             {
                 this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
                 this.Sections.Where(x => x.Expanded).ForEach(x => x.Expanded = false);
