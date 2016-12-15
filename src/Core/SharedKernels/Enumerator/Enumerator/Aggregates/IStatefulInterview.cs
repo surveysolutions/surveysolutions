@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
 
-        bool IsQuestionPrefield(Identity entityIdentity);
+        bool IsQuestionPrefilled(Identity entityIdentity);
 
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
     }

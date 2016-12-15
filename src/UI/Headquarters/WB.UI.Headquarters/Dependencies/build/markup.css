@@ -5765,7 +5765,7 @@ input.checkbox-filter ~ label .tick {
   background: transparent url("../img/pretty-checkable-sprites.png") no-repeat;
   vertical-align: middle; }
 
-.selection-box .btn, .table thead, .dataTables_wrapper .dataTables_paginate, .signed-name span, .interviewer-app .get-interviewer-app, .selection-box a, .export-types .data .table-data .not-generated, .progress-information {
+.selection-box .btn, .table thead, .dataTables_wrapper .dataTables_paginate, .signed-name span, .interviewer-app .get-interviewer-app, .selection-box a, .export-types .data .table-data .not-generated, .export-types .data .table-data .no-data-available, .progress-information {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
   letter-spacing: 0.5px; }
@@ -7519,6 +7519,7 @@ main.export {
         .export-types .data p a:hover, .export-types .data p a:focus {
           text-decoration: none; }
     .export-types .data .table-data-header {
+      min-height: 32px;
       padding-left: 18px;
       overflow: hidden;
       width: 100%;
@@ -7586,6 +7587,10 @@ main.export {
       .export-types .data .table-data .not-generated {
         color: #a6a8a9;
         padding: 0 20px; }
+      .export-types .data .table-data .no-data-available {
+        color: #a6a8a9;
+        display: none;
+        padding: 0 10px; }
     .export-types .data .size, .export-types .data .last-generated, .export-types .data .min-view {
       color: #a6a8a9;
       font: 12px/14px "TrebuchetMSBold"; }
@@ -7656,6 +7661,8 @@ main.export {
     margin-left: 235px; }
     .export-types .size, .export-types .last-generated {
       display: none; }
+    .export-types .data .table-data-header {
+      min-height: auto; }
     .export-types .data .table-data .min-view {
       display: table-cell;
       width: 35%;
@@ -7673,6 +7680,8 @@ main.export {
       width: 80%; }
     .export-types .data p {
       margin-bottom: 15px; }
+    .export-types .data.metadata .container-data {
+      padding-top: 0; }
   .fullscreen .export-types {
     padding-top: 40px;
     padding-left: 0;
@@ -7733,7 +7742,7 @@ main.export {
       .export-types .data .table-data .cell-data.format-data {
         padding: 50px 0 0; }
         .export-types .data .table-data .cell-data.format-data:before {
-          left: 41%;
+          left: 43%;
           top: 0; }
         .export-types .data .table-data .cell-data.format-data.stata:before {
           left: 45%; }
@@ -8408,7 +8417,7 @@ span.image-zoom-box, span.image-option {
 .zoomImg:hover, .zoomImg:focus {
   transform: scale(1.1); }
 
-.modal {
+.modal-img {
   position: fixed;
   z-index: 50;
   padding-top: 50px;
@@ -8420,13 +8429,13 @@ span.image-zoom-box, span.image-option {
   background-color: rgba(0, 0, 0, 0.9);
   text-align: center;
   display: none; }
-  .modal .modal-content {
+  .modal-img .modal-img-content {
     display: block;
     margin-left: auto;
     margin-right: auto;
     max-width: 70% !important;
     max-height: 80%; }
-  .modal .caption {
+  .modal-img .caption {
     width: 75%;
     text-align: center;
     color: #ececec;
@@ -8434,20 +8443,20 @@ span.image-zoom-box, span.image-option {
     display: block;
     margin-left: auto;
     margin-right: auto; }
-    .modal .caption:first-letter {
+    .modal-img .caption:first-letter {
       text-transform: capitalize; }
-  .modal .close-zoomming-img {
+  .modal-img .close-zoomming-img {
     position: absolute;
     top: 40px;
     right: 40px;
     color: #ececec;
     font-size: 40px;
     transition: all 0.2s linear 0s; }
-    .modal .close-zoomming-img:hover, .modal .close-zoomming-img:focus {
+    .modal-img .close-zoomming-img:hover, .modal-img .close-zoomming-img:focus {
       color: #a6a8a9;
       cursor: pointer; }
 
-.modal-content, .caption {
+.modal-img-content, .caption {
   animation-name: zoom;
   animation-duration: 0.5s; }
 
@@ -8581,7 +8590,7 @@ span.image-zoom-box, span.image-option {
 	} */ }
 
 @media only screen and (max-width: 700px) {
-  .modal-content {
+  .modal-img-content {
     width: 100%; } }
 
 @media (max-width: 1210px) {

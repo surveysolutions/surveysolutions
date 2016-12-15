@@ -319,7 +319,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
             => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
 
-        public bool IsQuestionPrefield(Identity entityIdentity)
+        public bool IsQuestionPrefilled(Identity entityIdentity)
         {
             return this.Tree.GetQuestion(entityIdentity)?.IsPrefilled ?? false;
         }
