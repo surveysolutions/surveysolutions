@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
@@ -26,7 +25,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
@@ -191,14 +189,13 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult SampleBatchUpload(BatchUploadModel model)
+        public ActionResult SampleBatchUploadAndVerify(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction("BatchUpload",
-                    new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
+                return this.RedirectToAction("BatchUpload", new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
@@ -212,7 +209,33 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
-            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
+            var preloadedSample = this.preloadedDataRepository.GetPreloadedDataOfSample(preloadedMetadata.Id);
+
+            var verificationStatus = this.preloadedDataVerifier.VerifySample(model.QuestionnaireId, model.QuestionnaireVersion, preloadedSample);
+
+            //clean up for security reasons
+            if (verificationStatus.Errors.Any())
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedSample.Id);
+            }
+
+             var view = new PreloadedDataVerificationErrorsView(
+                model.QuestionnaireId, 
+                model.QuestionnaireVersion, 
+                questionnaireInfo?.Title, 
+                verificationStatus.Errors.ToArray(), 
+                verificationStatus.WasResponsibleProvided, 
+                preloadedMetadata.Id, 
+                PreloadedContentType.Sample,
+                preloadedSample.FileName);
+
+            if (verificationStatus.Errors.Any())
+            {
+                return this.View("VerificationErrors", view);
+            }
+
+            return this.View("VerifySample", view);
+            //return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
         }
 
         public ActionResult SimpleTemplateDownload(Guid id, long version)
