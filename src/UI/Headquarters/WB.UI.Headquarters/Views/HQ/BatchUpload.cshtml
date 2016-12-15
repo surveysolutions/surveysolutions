@@ -18,6 +18,10 @@
                     $(".prefilled-file-upload").val('');
                 }
             });
+            $('.toggle-prefilled-table').click(function () {
+                $('.prefilled-table').toggle();
+                return false;
+            });
         });
     </script>
 }
@@ -46,16 +50,7 @@
 
                 @if (Model != null && Model.FeaturedQuestions != null)
                 {
-                    <a href="#" class="list-required-prefilled-data toggle-prefilled-table">@BatchUpload.ViewListPrefilledData</a>
-
-                    <script type="text/javascript">
-                        $(function () {
-                            $('.toggle-prefilled-table').click(function () {
-                                $('.prefilled-table').toggle();
-                                return false;
-                            });
-                        });
-                    </script>
+                    <a href="javascript:void(0);" class="list-required-prefilled-data toggle-prefilled-table">@BatchUpload.ViewListPrefilledData</a>
 
                     <div class="prefilled-table" style="overflow-x: scroll; display: none;">
                         <br />
