@@ -28,6 +28,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Threading;
+using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
@@ -259,15 +260,15 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.ModelState.AddModelError(string.Empty, "Import interviews is in progress. Wait until current operation is finished.");
             }
+            var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
 
             if (!this.ModelState.IsValid)
             {
-                var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.Version));
+                var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
                 model.QuestionnaireTitle = questionnaireInfo.Title;
                 return this.View(model);
             }
 
-            var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
             var headquartersId = this.GlobalInfo.GetCurrentUser().Id;
 
             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
@@ -284,14 +285,23 @@ namespace WB.UI.Headquarters.Controllers
                 ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
             }
 
-            return this.RedirectToAction("InterviewImportProgress");
+            return this.RedirectToAction("InterviewImportProgress", new { id = model.Id });
         }
 
-        [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult InterviewImportProgress(Guid id, long version)
+        public ActionResult InterviewImportProgress(Guid id)
         {
-            return this.View();
+            InterviewImportStatus status = this.interviewImportService.Status;
+
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(status.QuestionnaireId, status.QuestionnaireVersion));
+
+            return this.View(new PreloadedDataInterviewProgressModel
+            {
+                Status = status,
+                QuestionnaireId = status.QuestionnaireId,
+                Version = status.QuestionnaireVersion,
+                QuestionnaireTitle = questionnaireInfo.Title
+            });
         }
 
         public ActionResult SimpleTemplateDownload(Guid id, long version)
