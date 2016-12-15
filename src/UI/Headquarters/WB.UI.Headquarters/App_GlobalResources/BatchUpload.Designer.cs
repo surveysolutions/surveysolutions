@@ -413,11 +413,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can create single interiew by entering all required data in &lt;a href=&apos;{0}&apos;&gt;manual mode&lt;/a&gt;.
+        ///   Looks up a localized string similar to You can create single interiew by entering all required data in {0}.
         /// </summary>
-        internal static string ManualModeWithLink {
+        internal static string ManualModeDescription {
             get {
-                return ResourceManager.GetString("ManualModeWithLink", resourceCulture);
+                return ResourceManager.GetString("ManualModeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to manual mode.
+        /// </summary>
+        internal static string ManualModeLinkTitle {
+            get {
+                return ResourceManager.GetString("ManualModeLinkTitle", resourceCulture);
             }
         }
         

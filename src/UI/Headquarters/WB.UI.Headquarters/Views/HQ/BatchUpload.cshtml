@@ -85,6 +85,7 @@
                     <div class="block">
                         <h3>@BatchUpload.SimpleTitle</h3>
                         <p>@BatchUpload.SimpleDescription</p>
+                        <a href="@Url.Action("SimpleTemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTabTemplate</a>
                     </div>
                     <div>
                         @using (Html.BeginForm("SampleBatchUpload", "HQ", new { questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -130,7 +131,11 @@
         <div class="row">
             <div class="col-md-4 col-sm-5 text-page">
                 <p>
-                    @Html.Raw(string.Format(BatchUpload.ManualModeWithLink, Url.Action("TakeNew", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion })))
+                    @{
+                        string link = string.Format("<a href='{0}'>{1}</a>", Url.Action("TakeNew", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }), BatchUpload.ManualModeLinkTitle);
+                        string textWithLink = string.Format(BatchUpload.ManualModeDescription, link);
+                    }
+                    @Html.Raw(textWithLink)
                 </p>
             </div>
         </div>
