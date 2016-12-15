@@ -478,6 +478,7 @@
     </None>
     <Content Include="Content\pdf.less" />
     <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
+    <Content Include="Configuration\vgl.Designer.Web.config" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />

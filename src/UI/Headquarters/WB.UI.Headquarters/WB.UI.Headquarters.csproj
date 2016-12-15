@@ -625,6 +625,7 @@
     <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.woff" />
     <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.woff2" />
     <Content Include="Scripts\bloodhound.min.js" />
+    <Content Include="Configuration\vgl.Headquarters.Web.config" />
     <Content Include="Dependencies\css\_filters.scss" />
     <Content Include="Dependencies\css\_interview-details.scss" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.eot" />
