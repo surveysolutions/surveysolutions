@@ -343,8 +343,11 @@
   <data name="EmptySupervisorDescription" xml:space="preserve">
     <value>If supervisor is not set in uploaded file you will be required to assign one for all interviews on the last stage of import.</value>
   </data>
-  <data name="ManualModeWithLink" xml:space="preserve">
-    <value>You can create single interiew by entering all required data in &lt;a href='{0}'&gt;manual mode&lt;/a&gt;</value>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>You can create single interiew by entering all required data in {0}</value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>manual mode</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
@@ -367,5 +370,8 @@ You can optionaly adding interviews to supervisors (and enumerators) by their us
   </data>
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>View list of required prefilled data</value>
+  </data>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>Download .tab template for this questionnaire</value>
   </data>
 </root>

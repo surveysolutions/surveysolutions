@@ -346,8 +346,8 @@
   <data name="EmptySupervisorDescription" xml:space="preserve">
     <value>Если супервизор не указан в загружаемом файле, вы должны будите указать одного для всех интервью на последнем шаге импорта.</value>
   </data>
-  <data name="ManualModeWithLink" xml:space="preserve">
-    <value>Вы можите создать одно интервью с помощбю ввода всех обязательных данных в &amp;lt;a href='{0}'&amp;gt;ручном режиме&amp;lt;/a&amp;gt;</value>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>Вы можите создать одно интервью с помощбю ввода всех обязательных данных используя {0}</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
     <value>Загрузите tab форматированные данные со всеми необходимыми предзаполненными данными и ответственными людьми (опционально)</value>
@@ -367,5 +367,11 @@
   </data>
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>Посмотреть список обязательных данных</value>
+  </data>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>Скачать tab шаблон для этого опросника</value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>ручной режим</value>
   </data>
 </root>
