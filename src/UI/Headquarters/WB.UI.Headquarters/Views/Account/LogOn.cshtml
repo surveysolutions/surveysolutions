@@ -66,7 +66,6 @@
                                 {
                                     <div class="form-group has-error">
                                         <p>
-                                            @Pages.LogOn_UnsuccessfulLogin
                                             @foreach (var error in modelState.Keys.SelectMany(key => modelState[key].Errors))
                                             {
                                                 <span class="help-block">@error.ErrorMessage</span>
