@@ -1227,8 +1227,10 @@ namespace WB.Tests.Unit.TestFactories
             return subSection;
         }
 
-        public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity, bool isDisabled = false, params IInterviewTreeNode[] children)
+        public InterviewTreeSection InterviewTreeSection(Identity sectionIdentity = null, bool isDisabled = false, params IInterviewTreeNode[] children)
         {
+            sectionIdentity = sectionIdentity ?? Create.Entity.Identity(Guid.NewGuid());
+
             var titleWithSubstitutions = Create.Entity.SubstitionText(sectionIdentity, "Title");
             var section = new InterviewTreeSection(sectionIdentity, titleWithSubstitutions, Enumerable.Empty<QuestionnaireItemReference>());
             section.AddChildren(children);
@@ -1280,10 +1282,14 @@ namespace WB.Tests.Unit.TestFactories
         }
 
 
-        public InterviewTree InterviewTree(Guid interviewId, params InterviewTreeSection[] sections)
+        public InterviewTree InterviewTree(Guid? interviewId = null, params InterviewTreeSection[] sections)
         {
-            var tree = new InterviewTree(interviewId, Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
+            var tree = new InterviewTree(
+                interviewId ?? Guid.NewGuid(),
+                Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()), Create.Service.SubstitionTextFactory());
+
             tree.SetSections(sections);
+
             return tree;
         }
 
