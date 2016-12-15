@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
         private Identity questionIdentity;
-        private Guid interviewId;
+        private Guid interviewGuid;
         protected IStatefulInterview interview;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -114,7 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
 
             this.questionIdentity = entityIdentity;
-            this.interviewId = interview.Id;
+            this.interviewGuid = interview.Id;
 
             if (!questionnaire.IsQuestionFilteredCombobox(entityIdentity.Id))
             {
@@ -164,7 +164,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
+                    new RemoveAnswerCommand(this.interviewGuid,
                         this.principal.CurrentUserIdentity.UserId,
                         this.questionIdentity,
                         DateTime.UtcNow));
@@ -230,8 +230,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.suggestionListCancelationSource?.Cancel(true);
             this.suggestionListCancelationSource = new CancellationTokenSource();
 
-            this.StartLoadingProgress().ConfigureAwait(false);
-
+            this.StartLoadingProgress();
+          
             try
             {
                 var cancelationToken = this.suggestionListCancelationSource.Token;
@@ -268,7 +268,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly ActionThrottler actionDelay = new ActionThrottler();
 
-        private async Task StartLoadingProgress()
+        private async void StartLoadingProgress()
         {
             await this.actionDelay.RunDelayed(
                 () => InvokeOnMainThread(Answering.StartInProgressIndicator), 
@@ -370,7 +370,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerValue = answerCategoricalOption.Value;
 
             var command = new AnswerSingleOptionQuestionCommand(
-                this.interviewId,
+                this.interviewGuid,
                 this.principal.CurrentUserIdentity.UserId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
