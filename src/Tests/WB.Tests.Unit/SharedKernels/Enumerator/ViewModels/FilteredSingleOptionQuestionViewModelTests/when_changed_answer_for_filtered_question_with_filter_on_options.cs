@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -17,11 +18,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 {
     internal class when_changed_answer_for_filtered_question_with_filter_on_options : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
+            Stub.InitMvxMainThreadDispatcher();
+
             var interviewId = "interviewId";
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
-
             
             var interview = new Mock<IStatefulInterview>();
 
@@ -47,16 +49,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
-
+            Thread.Sleep(1000);
             filteredOptionsViewModel.ResetCalls();
         };
 
-        Because of = () =>
+        Because of = () => {
             filteredOptionsViewModel.Raise(_ => _.OptionsChanged -= null, EventArgs.Empty);
+            Thread.Sleep(1000);
+        };
 
         It should_update_suggestions_list = () =>
             filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>()), Times.Once);
-
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static Mock<FilteredOptionsViewModel> filteredOptionsViewModel;
