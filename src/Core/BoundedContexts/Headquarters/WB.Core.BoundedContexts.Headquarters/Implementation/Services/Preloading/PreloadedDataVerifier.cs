@@ -72,6 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             var errors = new List<PreloadedDataVerificationError>();
 
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
+            //var datas = new[] { new PreloadedDataByFile(data.Id, data.FileName, data.Header, data.Content) };
 
             errors.AddRange(
                 this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
