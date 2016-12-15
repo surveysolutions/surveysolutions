@@ -1,0 +1,200 @@
+.table.table-striped {
+    &> tbody > tr:nth-of-type(odd){
+        background-color: $gray-super-light;
+    }
+    tbody tr td, th{
+        border-left: 1px solid $gray-highlighting;
+        &:first-child{
+            border-left: none;
+        }
+    }
+    &>thead, &>tbody, &>tfoot{
+        &>tr{
+            &>th, &>td{
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+        }
+    }
+}
+.table{
+    width: 100% !important;
+    tr{
+        @include transition(all, 0.1s);
+        height: 35px;
+    }
+    thead{
+        @extend %uppercase-font;
+        color: $gray_light;
+        tr th{
+            padding-right: 0;
+            font-weight: normal;
+            position: relative;
+            cursor: pointer;
+            &:after{
+                display: inline-block;
+                content: "";
+                position: relative;
+                right: -8px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid $gray_form;
+                border-right: 6px solid transparent;
+                border-left: 6px solid transparent;
+            }
+            &.sorting_asc{
+                color: $blue;
+                &:after{
+                    border-top-color: $blue;
+                }
+            }
+            &.sorting_desc{
+                color: $blue;
+                &:after{
+                    border-top: none;
+                    border-bottom: 10px solid $blue;
+                }
+            }
+            &.sorting_disabled:after{
+                display: none;
+            }
+        }
+        th:first-child{
+            padding-left: 20px;
+        }
+        th.column-questionnaire-title{
+            padding-left: 50px;
+            @include transition(all, 0.2s);
+        }
+    }
+    tbody{
+        border-bottom: 2px solid #ddd;
+        tr{
+            border-bottom: 1px solid #ddd;
+            &:hover, &:focus{
+                background-color: $blue-super-light;
+            }
+            td{
+                border: none;
+                height: 35px;
+                span{
+                    color: $gray_light;
+                }
+                &:first-child{
+                    padding-left: 20px;
+                    font-style: normal;
+                    
+                    a{
+                        text-overflow: ellipsis;
+                        color: $gray_text;
+                        &:hover, &:focus{
+                            color: $blue;
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+#DataTables_Table_0_wrapper{
+    position: relative;
+    #DataTables_Table_0_filter{
+        @include absolute(4px, null, null, 5px);
+        z-index: 2;
+        label{
+            font-size: 0;
+            color: transparent;
+            margin-bottom: 0;
+            /* min-width: 20px;*/
+            min-height: 30px; 
+            &:after{
+                @include absolute(5px, null, null, 15px);
+                display: block;
+                content: "";
+                @include square(20px);
+                background: url('../img/search.png') no-repeat;
+                background-position: 0 0;
+                background-size: 80px 20px;
+                @include image-2x("../img/search2k.png", 80px, 20px);
+                cursor: pointer;
+            }
+            &:hover{
+                &:after{
+                    background-position: -20px 0;
+                }
+            }
+            &.active{
+                &:after{background-position: -40px 0;}
+                &:hover{
+                    &:after{
+                       background-position: -60px 0; 
+                    } 
+                }
+                input{
+                    border: 1px solid $gray_form;
+                    @extend %visibility-visible;
+                    width: 300px;
+                    background-color: #f7fbff;
+                    padding: 5px 10px;
+
+                }
+            }
+            input{
+                @include transition(all, 0.2s);
+                @extend %visibility-hidden;
+                width: 0;
+                margin-left: 40px;
+                font-size: 13px;
+                line-height: 15px;
+                color: $gray_text;
+                border-radius: 5px;
+                outline: none;
+                padding: 5px 0;
+            }
+        }
+    }
+}
+.dataTables_wrapper {
+    .dataTables_info{
+        clear: both;
+        float: right;
+        padding-top: 0.755em;
+        font-size: 13px;
+        line-height: 15px;
+        padding-left: 20px;
+        text-align: right;
+    }
+    .dataTables_paginate{
+        float: left;
+        position: relative;
+        padding: 40px 0 0 10px;
+        overflow: hidden;
+        @extend %uppercase-font;
+        font-size: 14px;
+        line-height: 16px;
+        &>span{
+            display: block;
+            @include absolute(10px, null, null, 8px);
+        }
+        .paginate_button{
+            padding: 6px 12px;
+            cursor: pointer;
+            &:hover{
+            }
+            &.disabled, &.disabled:hover, &.disabled:active{
+                color: $gray_light;
+                text-decoration: none;
+                cursor: not-allowed;
+            }
+            &.current, &.current:hover{
+                color: $gray_light !important;
+            }
+        }
+        &>.paginate_button{
+            float: left;
+            color: $green;
+            padding: 5px 12px;
+        }
+    }
+}
