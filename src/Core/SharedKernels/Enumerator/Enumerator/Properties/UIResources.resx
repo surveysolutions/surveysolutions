@@ -452,4 +452,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MissingPermission" xml:space="preserve">
     <value>Application has not enough permissions to execute requested action</value>
   </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
 </root>

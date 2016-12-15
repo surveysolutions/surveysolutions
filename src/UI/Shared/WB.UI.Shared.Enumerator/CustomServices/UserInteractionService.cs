@@ -6,6 +6,7 @@ using Android.Text;
 using Android.Widget;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Utils;
@@ -23,11 +24,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public Task<bool> ConfirmAsync(
             string message,
             string title = "",
-            string okButton = "OK",
-            string cancelButton = "Cancel", 
+            string okButton = null,
+            string cancelButton = null, 
             bool isHtml = true)
         {
             var tcs = new TaskCompletionSource<bool>();
+            okButton = okButton ?? UIResources.Ok;
+            cancelButton = cancelButton ?? UIResources.Cancel;
+
             this.Confirm(message, k => tcs.TrySetResult(k), title, okButton, cancelButton, isHtml);
             return tcs.Task;
         }
@@ -35,20 +39,24 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public Task<string> ConfirmWithTextInputAsync(
            string message,
            string title = "",
-           string okButton = "OK",
-           string cancelButton = "Cancel",
+           string okButton = null,
+           string cancelButton = null,
            bool isTextInputPassword=false)
         {
             var tcs = new TaskCompletionSource<string>();
+            okButton = okButton ?? UIResources.Ok;
+            cancelButton = cancelButton ?? UIResources.Cancel;
+
             this.ConfirmWithTextInputImpl(message, k => tcs.TrySetResult(k ?? String.Empty),
                 () => tcs.TrySetResult(null), title,
                 okButton, cancelButton, isTextInputPassword);
             return tcs.Task;
         }
 
-        public Task AlertAsync(string message, string title = "", string okButton = "OK")
+        public Task AlertAsync(string message, string title = "", string okButton = null)
         {
             var tcs = new TaskCompletionSource<object>();
+            okButton = okButton ?? UIResources.Ok;
             this.Alert(message, () => tcs.TrySetResult(null), title, okButton);
             return tcs.Task;
         }
@@ -80,14 +88,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             string message,
             Action<bool> answer,
             string title = null,
-            string okButton = "OK",
-            string cancelButton = "Cancel",
+            string okButton = null,
+            string cancelButton = null,
             bool isHtml = true)
         {
             this.ConfirmImpl(message, answer, title, okButton, cancelButton, isHtml);
         }
 
-        private void Alert(string message, Action done = null, string title = "", string okButton = "OK")
+        private void Alert(string message, Action done = null, string title = "", string okButton = null)
         {
             this.AlertImpl(message, done, title, okButton);
         }
@@ -95,6 +103,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void ConfirmImpl(string message, Action<bool> callback, string title, string okButton, string cancelButton, bool isHtml)
         {
             var userInteractionId = Guid.NewGuid();
+            okButton = okButton ?? UIResources.Ok;
+            cancelButton = cancelButton ?? UIResources.Cancel;
 
             try
             {
