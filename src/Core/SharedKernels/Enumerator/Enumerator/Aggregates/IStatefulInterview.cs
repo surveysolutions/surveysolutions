@@ -108,6 +108,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();
 
+        bool IsFirstEntityBeforeSecond(Identity first, Identity second);
+
         List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize);
 
         CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null);

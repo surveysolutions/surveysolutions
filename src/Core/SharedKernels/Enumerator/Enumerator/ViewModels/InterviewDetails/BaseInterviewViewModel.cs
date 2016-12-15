@@ -206,7 +206,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                             if (isPreviousGroupInsideTarget)
                                 return NavigationDirection.Outside;
 
-                            return NavigationDirection.Next;
+                            return this.interview.IsFirstEntityBeforeSecond(eventArgs.PreviousGroup, eventArgs.TargetGroup)
+                                ? NavigationDirection.Next
+                                : NavigationDirection.Previous;
                     }
             }
         }
