@@ -41,6 +41,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -1333,5 +1334,11 @@ namespace WB.Tests.Unit.TestFactories
 
         public ScreenChangedEventArgs ScreenChangedEventArgs(ScreenType targetStage = ScreenType.Group, Identity targetGroup = null)
             => new ScreenChangedEventArgs(targetStage, targetGroup, null, ScreenType.Group, null);
+        
+        public FeaturedQuestionItem FeaturedQuestionItem(Guid? id = null, string title = "title", string caption = "caption") 
+            => new FeaturedQuestionItem(id ?? Guid.NewGuid(), title,  caption);
+
+        public SampleUploadView SampleUploadView(Guid? questionnaireId = null, int? version = null, List<FeaturedQuestionItem> featuredQuestionItems = null) 
+            => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems);
     }
 }
