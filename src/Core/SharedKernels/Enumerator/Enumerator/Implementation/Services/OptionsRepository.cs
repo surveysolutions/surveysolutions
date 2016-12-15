@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             this.optionsStorage = optionsStorage;
         }
-
+        
         public IEnumerable<CategoricalOption> GetFilteredQuestionOptions(QuestionnaireIdentity questionnaireId, Guid questionId, 
             int? parentValue, string filter, Guid? translationId)
         {
@@ -61,8 +61,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             Title = option.Title
                         };
                     }
+
                     lastLoadedSortIndex = optionViews.LastOrDefault()?.SortOrder ?? 0;
 
+                    // increasing batch zise on each query iteration, but no more then 1000
+                    batchsize = Math.Min((int) (batchsize*2), 1000);
                 } while (optionViews.Any());
             }
 
