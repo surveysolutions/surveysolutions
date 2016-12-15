@@ -26,7 +26,7 @@
                                        local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                        local:MvxBind="ColorByInterviewStatus Status;">
       <TextView style="@style/InterviewToolbarTitle"
-                local:MvxBind="Text CurrentStage.Name.PlainText" />
+                local:MvxBind="Text CurrentStage.Stage.Name.PlainText" />
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
