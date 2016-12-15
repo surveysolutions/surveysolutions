@@ -112,7 +112,7 @@
                         <a href="@Url.Action("TemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTemplateArchive</a>
                     </div>
                     <div>
-                        @using (Html.BeginForm("PanelBatchUpload", "HQ", routeValues: new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("PanelBatchUploadAndVerify", "HQ", routeValues: new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
                         {
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)
