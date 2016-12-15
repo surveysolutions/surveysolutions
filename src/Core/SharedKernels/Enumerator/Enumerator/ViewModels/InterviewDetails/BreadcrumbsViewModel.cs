@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         
         void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (eventArgs.TargetScreen != ScreenType.Group)
+            if (eventArgs.TargetStage != ScreenType.Group)
             {
                 this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(new List<BreadCrumbItemViewModel>());
             }

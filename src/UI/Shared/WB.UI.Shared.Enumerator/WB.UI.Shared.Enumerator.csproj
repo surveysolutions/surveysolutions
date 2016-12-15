@@ -351,6 +351,8 @@
     <Compile Include="ValueCombiners\SpannableGroupTitleValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\anim\slide_from_left.xml" />
+    <AndroidResource Include="Resources\anim\slide_from_right.xml" />
     <AndroidResource Include="Resources\color\bread_crumb_transparency.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -1203,6 +1205,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-v21\to_parent_group_started.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\anim\zoom_in_from_center.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\anim\zoom_out_to_center.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

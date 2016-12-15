@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
         };
 
         It should_navigate_to_complete_screen = () =>
-            navigatedTo.TargetScreen.ShouldEqual(ScreenType.Complete);
+            navigatedTo.TargetStage.ShouldEqual(ScreenType.Complete);
 
         static NavigationState navigationState;
         static Identity section1Identity;

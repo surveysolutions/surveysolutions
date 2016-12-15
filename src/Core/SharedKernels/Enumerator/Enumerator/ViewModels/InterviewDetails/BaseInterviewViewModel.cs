@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -18,6 +19,27 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
+    public enum NavigationDirection
+    {
+        Inside = 1,
+        Outside = 2,
+        Next = 3,
+        Previous = 4,
+    }
+
+    public class InterviewStageViewModel : MvxViewModel, IDisposable
+    {
+        public InterviewStageViewModel(MvxViewModel stage, NavigationDirection direction)
+        {
+            this.Stage = stage;
+            this.Direction = direction;
+        }
+
+        public MvxViewModel Stage { get; }
+        public NavigationDirection Direction { get; }
+        public void Dispose() => this.Stage.DisposeIfDisposable();
+    }
+
     public abstract class BaseInterviewViewModel : SingleInterviewViewModel, IDisposable
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -132,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            switch (eventArgs.TargetScreen)
+            switch (eventArgs.TargetStage)
             {
                 case ScreenType.Complete:
                     this.interviewState.Init(this.navigationState.InterviewId, null);
@@ -150,8 +172,45 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.CurrentStage.DisposeIfDisposable();
-            this.CurrentStage = this.UpdateCurrentScreenViewModel(eventArgs);
+            this.CurrentStage = this.GetInterviewStageViewModel(eventArgs);
             this.RaisePropertyChanged(() => this.CurrentStage);
+        }
+
+        private InterviewStageViewModel GetInterviewStageViewModel(ScreenChangedEventArgs eventArgs)
+            => new InterviewStageViewModel(
+                this.UpdateCurrentScreenViewModel(eventArgs),
+                this.GetNavigationDirection(eventArgs));
+
+        private NavigationDirection GetNavigationDirection(ScreenChangedEventArgs eventArgs)
+        {
+            switch (eventArgs.TargetStage)
+            {
+                case ScreenType.Cover: return NavigationDirection.Previous;
+                case ScreenType.Complete: return NavigationDirection.Next;
+
+                default:
+                    switch (eventArgs.PreviousStage)
+                    {
+                        case ScreenType.Cover: return NavigationDirection.Next;
+                        case ScreenType.Complete: return NavigationDirection.Previous;
+
+                        default:
+                            if (eventArgs.PreviousGroup == null || eventArgs.TargetGroup == null)
+                                return NavigationDirection.Next;
+
+                            var isTargetGroupInsidePrevious = eventArgs.TargetGroup.UnwrapReferences(this.interview.GetParentGroup).Contains(eventArgs.PreviousGroup);
+                            if (isTargetGroupInsidePrevious)
+                                return NavigationDirection.Inside;
+
+                            var isPreviousGroupInsideTarget = eventArgs.PreviousGroup.UnwrapReferences(this.interview.GetParentGroup).Contains(eventArgs.TargetGroup);
+                            if (isPreviousGroupInsideTarget)
+                                return NavigationDirection.Outside;
+
+                            return this.interview.IsFirstEntityBeforeSecond(eventArgs.PreviousGroup, eventArgs.TargetGroup)
+                                ? NavigationDirection.Next
+                                : NavigationDirection.Previous;
+                    }
+            }
         }
 
         protected abstract MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs);
@@ -184,7 +243,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public bool HasCommentsFromSupervior { get; set; }
         public bool HasNotEmptyNoteFromSupervior { get; set; }
 
-        public MvxViewModel CurrentStage { get; private set; }
+        public InterviewStageViewModel CurrentStage { get; private set; }
         public string Title { get; private set; }
 
         private string currentLanguage;
