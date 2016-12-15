@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -9,10 +10,12 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -76,6 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
+            IQuestionnaireStorage questionnaireRepository,
             QuestionInstructionViewModel instructionViewModel,
             FilteredOptionsViewModel filteredOptionsViewModel)
         {
@@ -87,6 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry = eventRegistry;
 
             this.questionState = questionStateViewModel;
+            this.questionnaireRepository = questionnaireRepository;
             this.Answering = answering;
             this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
@@ -105,10 +110,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
 
             interview = this.interviewRepository.Get(interviewId);
+
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
+
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.UpdateOptionsState();
+            if (!questionnaire.IsQuestionFilteredCombobox(entityIdentity.Id))
+            {
+                this.UpdateOptionsState();
+            }
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
@@ -123,13 +134,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var selectedValue = singleOptionQuestion.GetAnswer().SelectedValue;
                 var answerOption = ToViewModel(this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, selectedValue));
+
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;
             }
             else
             {
-                this.UpdateAutoCompleteList();
+                this.UpdateAutoCompleteList().ConfigureAwait(false);
             }
         }
 
@@ -143,7 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             return optionViewModel;
         }
-        
+
         public IMvxCommand ValueChangeCommand => new MvxCommand<string>(this.SendAnswerFilteredComboboxQuestionCommand);
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
@@ -182,6 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private FilteredComboboxItemViewModel selectedObject;
+
         public FilteredComboboxItemViewModel SelectedObject
         {
             get { return this.selectedObject; }
@@ -195,6 +208,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public string DefaultText { get; set; }
 
         private string filterText;
+
         public string FilterText
         {
             get { return this.filterText; }
@@ -204,28 +218,71 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.filterText = value;
-
-                this.UpdateAutoCompleteList();
-
+                this.UpdateAutoCompleteList().ConfigureAwait(false);
                 this.RaisePropertyChanged();
             }
         }
 
-        private void UpdateAutoCompleteList()
-        {
-            var list = this.GetSuggestionsList(this.filterText).ToList();
+        private CancellationTokenSource suggestionListCancelationSource;
 
-            if (list.Any())
+        private async Task UpdateAutoCompleteList()
+        {
+            this.suggestionListCancelationSource?.Cancel(true);
+            this.suggestionListCancelationSource = new CancellationTokenSource();
+
+            this.StartLoadingProgress().ConfigureAwait(false);
+
+            try
             {
-                this.AutoCompleteSuggestions = list;
+                var cancelationToken = this.suggestionListCancelationSource.Token;
+
+                await Task.Run(() =>
+                {
+                    var list = this.GetSuggestionsList(this.filterText).ToList();
+
+                    if (cancelationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    this.InvokeOnMainThread(() =>
+                    {
+                        if (list.Any())
+                        {
+                            this.AutoCompleteSuggestions = list;
+                        }
+                        else
+                        {
+                            this.SetSuggestionsEmpty();
+                        }
+
+                        this.FinishLoadingProgress();
+                    });
+                }, this.suggestionListCancelationSource.Token).ConfigureAwait(false);
             }
-            else
+            catch (TaskCanceledException)
             {
-                this.SetSuggestionsEmpty();
+                /* nom nom nom */
             }
         }
 
+        private readonly ActionThrottler actionDelay = new ActionThrottler();
+
+        private async Task StartLoadingProgress()
+        {
+            await this.actionDelay.RunDelayed(
+                () => InvokeOnMainThread(Answering.StartInProgressIndicator), 
+                TimeSpan.FromMilliseconds(500)).ConfigureAwait(false);
+        }
+
+        private void FinishLoadingProgress()
+        {
+            this.actionDelay.Complete();
+            this.Answering.FinishInProgressIndicator();
+        }
+
         private string resetTextInEditor;
+
         public string ResetTextInEditor
         {
             get { return this.resetTextInEditor; }
@@ -244,8 +301,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
             var options = this.filteredOptionsViewModel.GetOptions(searchFor)
-                .Select(this.ToViewModel)
-                .ToList();
+               .Select(this.ToViewModel).ToList();
 
             foreach (var model in options)
             {
@@ -285,6 +341,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<FilteredComboboxItemViewModel> autoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
         private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public List<FilteredComboboxItemViewModel> AutoCompleteSuggestions
         {
@@ -339,6 +396,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
+            this.FinishLoadingProgress();
+            suggestionListCancelationSource?.Cancel();
+
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
 
             this.filteredOptionsViewModel.Dispose();

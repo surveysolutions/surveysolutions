@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using It = Machine.Specifications.It;
+using System.Threading;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
@@ -20,6 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
     {
         Establish context = () =>
         {
+            Stub.InitMvxMainThreadDispatcher();
+
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             var option = new CategoricalOption() {Value = 1, Title = "dfdf" + answerValue };
 
@@ -49,8 +52,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
-        Because of = () =>
+        Because of = () => {
             viewModel.FilterText = answerValue;
+            Thread.Sleep(1000);
+        };
 
         It should_set_value = () =>
             viewModel.FilterText.ShouldEqual(answerValue);

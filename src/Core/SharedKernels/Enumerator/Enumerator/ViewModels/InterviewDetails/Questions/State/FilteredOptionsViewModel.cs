@@ -43,8 +43,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             AnswerNotifier answerNotifier)
         {
-            if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
+            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
+            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
 
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -64,7 +64,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
 
-            this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, null, Filter, this.Count);
+            if (!questionnaire.IsQuestionFilteredCombobox(entityIdentity.Id))
+            {
+                this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, null, Filter, this.Count);
+            }
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
             {

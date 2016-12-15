@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -24,7 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
 
-
+            Stub.InitMvxMainThreadDispatcher();
+     
             var interview = Mock.Of<IStatefulInterview>(_
                => _.QuestionnaireIdentity == questionnaireId
                   && _.GetSingleOptionQuestion(questionIdentity) == singleOptionAnswer &&
@@ -52,11 +53,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             var navigationState = Create.Other.NavigationState();
+            
             viewModel.Init(interviewId, questionIdentity, navigationState);
+            
         };
 
-        Because of = () =>
+        Because of = () => {
             viewModel.FilterText = answerValue;
+            Thread.Sleep(1000);
+        };
 
         It should_update_suggestions_list = () =>
             viewModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
