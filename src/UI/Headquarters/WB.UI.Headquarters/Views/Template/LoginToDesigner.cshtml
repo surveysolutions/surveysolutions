@@ -21,8 +21,7 @@
                 <div class="page-title">
                     @LoginToDesigner.PageHeader
                 </div>
-                @if (TempData[Alerts.ERROR] != null)
-            {
+                @if (TempData[Alerts.ERROR] != null) {
                     <div class="maintenance-mode">
                         @LoginToDesigner.UnableToImportNewQuestionnaire
                         <div class="message-try-again">
@@ -30,6 +29,8 @@
                         </div>
                     </div>
                 }
+                
+
                 @Html.ActionLink("Back to questionnaires", "Index", "HQ", null, new { @class = "back-link" })
             </div>
         </div>
@@ -59,6 +60,12 @@
                                         @LoginToDesigner.InvalidCredentials
                                     </p>
                                     <p>@LoginToDesigner.UserDesignerCredentials</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert attention">
+                                    @QuestionnaireImport.BeforeSignInToDesigner
                                 </div>
                             }
                             <div class="form-group">
