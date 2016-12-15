@@ -244,7 +244,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application needs to have a permission to use location of current device in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use device location..
+        ///   Looks up a localized string similar to Application needs to have a permission to use location of current device in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup then go to Settings and allow application to use device location..
         /// </summary>
         public static string GpsQuestion_MissingPermissions {
             get {
