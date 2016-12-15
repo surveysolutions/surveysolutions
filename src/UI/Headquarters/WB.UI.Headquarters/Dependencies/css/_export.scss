@@ -34,6 +34,7 @@ main.export{
 			}
 		}
 		.table-data-header{
+			min-height: 32px;
 			padding-left: 18px;
 			@extend %gray-uppercase;
 			overflow: hidden;
@@ -112,6 +113,12 @@ main.export{
 				color: $gray_light;
 				padding: 0 20px; 
 			}
+			.no-data-available{
+				@extend %uppercase-font;
+				color: $gray_light;
+				display: none;
+				padding: 0 10px;
+			}
 		}
 		.size, .last-generated, .min-view{
 			color: $gray_light;
@@ -171,6 +178,9 @@ main.export{
   		.size, .last-generated{
   			display: none;
   		}
+  		.data .table-data-header{
+  			min-height: auto;
+  		}
 	  	.data .table-data {
 	  		.min-view{
 	  			display: table-cell;
@@ -197,6 +207,9 @@ main.export{
 	  	.data p{
 	  		margin-bottom: 15px;
 	  	}
+	  	.data.metadata .container-data {
+			padding-top: 0;
+		}
   	}
   	.fullscreen .export-types{
   		padding-top: 40px;
@@ -281,7 +294,7 @@ main.export{
 			  			padding: 50px 0 0;
 			  			
 			  			&:before{
-			  				left: 41%;
+			  				left: 43%;
 			  				top: 0;
 			  			}
 						&.stata:before{

@@ -5,13 +5,14 @@
 @model WB.UI.Headquarters.Models.ExportModel
 
 @{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = DataExport.DataExport_Title;
-    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
 
 @section scripts
 {
-
+    @Scripts.Render("~/js/main-no-libs")
+    @Scripts.Render("~/js/list")
     @Scripts.Render("~/js/exportdata")
 
     <script type="text/javascript">
@@ -41,7 +42,7 @@
                 { status: null, title: 'Any' },
                 @foreach (var item in Model.ExportStatuses)
                 {
-                <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
+                    <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
                 }
             ];
 
@@ -57,143 +58,111 @@
 
         $('#umbrella').hide();
     </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            $("#hide-filters").click(function () {
+                $(".filters").toggleClass("hidden-filters");
+                $(this).parents('.row').toggleClass("fullscreen");
+            });
+            $("body").removeClass("hold-transition");
+        });
+    </script>
 }
 
-
-@section header
-{
-    <h3>@DataExport.DataExport_Header</h3>
-}
-
-@section actionbar
-{
-    <h4 class="sinle-line-header text-italic" data-bind="text: selectedTemplate().title"></h4>
-}
-
-@section filters
-{
-    <ul class="list-group">
-        <li class="list-group-item">
-            <h4 class="list-group-item-heading">@Common.Template</h4>
-            <p class="list-group-item-text">
-                <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="form-control"></select>
-            </p>
-        </li>
-    </ul>
-}
-
-<table class="table table-bordered table-condensed">
-    <thead>
-        <tr>
-            <th>
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label for="ddlStatus" class="control-label"> @Common.Status :</label>
+<main class="export">
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+                <div class="filters-container">
+                    <h4>Export range:</h4>
+                    <div class="block-filter">
+                        <h5>Survey template (questionnaire version)</h5>
+                        <div class="btn-group btn-input clearfix">
+                            <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="block-filter checkbox-block">
+                        <h5>Status of exported interviews</h5>
                         <select class="form-control" id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title'"></select>
                     </div>
                 </div>
-            </th>
-            <th>@DataExport.BinaryData</th>
-            <th>@DataExport.DDI</th>
-            @if (this.ViewBag.EnableInterviewHistory)
-            {
-                <th>@DataExport.ParaData</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        <!-- ko if:selectedTemplateTitle() != null -->
-        <tr>
-            <td>
-                @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
-            </td>
-            <td>
-                @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/binary.png", addFromat: true)
-            </td>
-            <td>
-                <table class="table table-condensed"  style="margin-bottom: 0px;">
-                    <thead>
-                        <tr>
-                            <td><img src="@Url.Content("~/Content/icons/ddi.ico")" alt="ddi" /></td>
-                            <td> @DataExport.Metadata</td>
-                            <td>
-
-                                <a class="btn btn-default" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                                    <i class="glyphicon glyphicon-download">
-                                    </i>
-                                </a>
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-            </td>
-            @if (this.ViewBag.EnableInterviewHistory)
-            {
-                <td>
-                    @DataExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl")
-                </td>
-            }
-        </tr>
-        <tr>
-            <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)</td>
-            <td></td>
-            <td></td>
-            @if (this.ViewBag.EnableInterviewHistory)
-            {
-                <td></td>
-            }
-        </tr>
-        <tr>
-            <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPSS, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)</td>
-            <td></td>
-            <td></td>
-            @if (this.ViewBag.EnableInterviewHistory)
-            {
-                <td></td>
-            }
-        </tr>
-        <!-- /ko  -->
-    </tbody>
-</table>
-
-<div>
-
-    <!-- ko if:RunningDataExportProcesses().length>0 -->
-    <table class="table table-striped table-bordered table-condensed table-hover">
-        <thead>
-            <tr>
-                <th>@DataExport.Name</th>
-                <th>@DataExport.Format</th>
-                <th>@DataExport.StartDate</th>
-                <th>@DataExport.LastUpdateDate</th>
-                <th>@DataExport.Progress</th>
-                <th> </th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- ko foreach:RunningDataExportProcesses -->
-            <tr>
-                <td><span data-bind="text: DataExportProcessName"></span></td>
-                <td><span data-bind="text: $root.exportFormatName($data)"></span></td>
-                <td><span data-bind="text: $root.formatDate($data.BeginDate())"></span></td>
-                <td><span data-bind="text: $root.formatDate($data.LastUpdateDate())"></span></td>
-                <td><span data-bind="text: $root.exportFormatProgress($data.Progress())"></span></td>
-                <td>
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-danger" data-bind="click : $root.stopExportProcess">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </a>
+            </aside>
+            <div class="export-types">
+                <h2 data-bind="text: selectedTemplate().title"></h2>
+                <!-- ko if:selectedTemplateTitle() != null -->
+                <div class="main  data">
+                    <h3>Main Survey Data</h3>
+                    <p>Zip archive with all collected text interview data</p>
+                    <div class="container-data">
+                        <div class="table-data-header">
+                            <div class="cell-data size">File size</div>
+                            <div class="cell-data last-generated">Last generated</div>
                         </div>
-                    }
-                </td>
-            </tr> <!-- /ko -->
-        </tbody>
-    </table>
-    <!-- /ko -->
-</div>
-
+                        
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, styleName:"stata", dataUrl: "$AllDataUrl", addFromat: true)
+                        
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPSS, styleName: "spss", dataUrl: "$AllDataUrl",  addFromat: true)
+                        
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, styleName: "separated-data", dataUrl: "$AllDataUrl", addFromat: true)
+                        
+                    </div>
+                </div>
+                <div class="binary data">
+                    <h3>@DataExport.BinaryData</h3>
+                    <p>All collected external binary data (e.g. pictures)</p>
+                    <div class="container-data">
+                        <div class="table-data-header">
+                            <div class="cell-data size">File size</div>
+                            <div class="cell-data last-generated">Last generated</div>
+                        </div>
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", styleName: "zip", addFromat: true)
+                    </div>
+                </div>
+                <div class="metadata data">
+                    <h3>@DataExport.DDI</h3>
+                    <p>
+                        <span>Data Documentation Initiative XML data</span>
+                        <span>Version 3.2 of the DDI</span>
+                    </p>
+                    <div class="container-data">
+                        <div class="table-data-header"></div>
+                        <div class="table-data generated-data">
+                            <div class="cell-data format-data">XML structured file</div>
+                            <div class="cell-data  download-block">
+                                <a type="button" class="btn btn-primary btn-lg download" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">Download</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (this.ViewBag.EnableInterviewHistory)
+                {
+                    <div class="paradata data">
+                        <h3>@DataExport.ParaData</h3>
+                        <p>
+                            <span>Available data about the process by which the survey</span>
+                            <span>data were collected </span>
+                        </p>
+                        <div class="container-data">
+                            <div class="table-data-header">
+                                <div class="cell-data size">File size</div>
+                                <div class="cell-data last-generated">Last generated</div>
+                            </div>
+                            @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl", styleName: "separated-data")
+                        </div>
+                    </div>
+                }
+                <!-- /ko  -->
+            </div>
+        </div>
+    </div>
+</main>
 
 @helper DataExportTemplate(DataExportType type, DataExportFormat format, string dataUrl, string iconUrl = null, bool addFromat = false)
 {
@@ -223,8 +192,56 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
         </thead>
     </table>
 }
-<script type="text/html" id="confirm-delete-template">
+
+@helper ExportTemplate(DataExportType type, DataExportFormat format, string styleName, string dataUrl, bool addFromat = false)
+{
+
+var exportParameters = "'" + (int)type + "','" + (int)format + "'";
+
+    <div data-bind="css: {'table-data': true, 'generated-data': (showRefreshButton(@exportParameters) && showDownloadButton(@exportParameters)), 'generation-in-progress' : (!showRefreshButton(@exportParameters)), 'not-generated-data': (showRefreshButton(@exportParameters) && !showDownloadButton(@exportParameters))}" >
+        <div class="cell-data format-data @styleName">@format format</div>
+        <div class="cell-data  download-block">
+            <button type="button" class="btn btn-success btn-lg generate" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">Generate</button>
+            <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">Download</a>
+            <div class="not-generated " >NOT GENERATED YET</div>    
+        </div>
+        <div class="cell-data last-generated " data-bind="visible: showDownloadButton(@exportParameters)"> <i data-bind="text:lastUpdateDate(@exportParameters)"></i>
+        </div>
+        <div class="cell-data size " data-bind="visible: showDownloadButton(@exportParameters)"><i data-bind="text:fileSize(@exportParameters) + ' bytes'"></i></div>
+        <div class="cell-data min-view " data-bind="visible: showDownloadButton(@exportParameters)">
+            <div>Last generated: <span data-bind="text:lastUpdateDate(@exportParameters)"></span></div>
+            <div>File size: <span><i data-bind="text:fileSize(@exportParameters) + ' bytes'"></i></span></div>
+        </div>
+
+        <div class="cell-data progress-block" >
+            <div class="progress-information queued" data-bind="visible: hasAnyDataToBePrepared(@exportParameters) && (getProgressInPercents(@exportParameters) < 1)">
+                <span>Queued</span>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
+                        <span class="sr-only">Queued</span>
+                    </div>
+                </div>
+                <button type="button" class="close" data-bind="click : requestStopExportProcess(@exportParameters)"></button>
+            </div>
+        
+            <div class="progress-information" data-bind="visible: hasAnyDataToBePrepared(@exportParameters) && (getProgressInPercents(@exportParameters) > 0)">
+                <span data-bind="text:'Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-bind="style:{ width: getProgressInPercents(@exportParameters) + '%' } ">
+                        <span class="sr-only" data-bind="text: getProgressInPercents(@exportParameters) + '% Complete'"></span>
+                    </div>
+                </div>
+                <button type="button" class="close" data-bind="click : requestStopExportProcess(@exportParameters)"></button>
+            </div>
+        </div>
+        
+        <div class="not-generated cell-data" data-bind="visible: !hasAnyDataToBePrepared(@exportParameters)">No Data available</div>
+
+    </div>
+}
+
+<script type="text/html" id="confirm-stop-export">
     <h3>
-        @DataExport.ConfirmStop <b>'<span class='text-normal' data-bind='text: DataExportProcessName'></span>'</b> <span class='text-normal' data-bind='text: exportFormatName($data)'></span> @DataExport.export ?
+        @DataExport.ConfirmStop @DataExport.export ?
     </h3>
 </script>

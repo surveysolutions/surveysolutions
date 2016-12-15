@@ -112,9 +112,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             {
                 DataExportFormat = dataFormat,
                 DataExportType = dataType,
-                CanRefreshBeRequested = CanRefreshBeRequested(dataType, dataFormat, interviewStatus, questionnaireIdentity, questionnaire, runningProcess),
                 StatusOfLatestExportProcess = GetStatusOfExportProcess(dataType, dataFormat, questionnaireIdentity, allProcesses)
             };
+
+            SetCanRefreshBeRequested(dataExportView, dataType, dataFormat, interviewStatus, questionnaireIdentity, questionnaire, runningProcess);
 
             string path = string.Empty;
             switch (dataType)
@@ -127,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                     path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataFormat, interviewStatus);
                     break;
             }
-            SetDataExportLastUpdateTimeIfFilePresent(dataExportView, path);
+            SetDataExportLastUpdateTimeAndSizeIfFilePresent(dataExportView, path);
             return dataExportView;
         }
 
@@ -138,7 +139,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 x.QuestionnaireIdentity.Equals(questionnaireIdentity) && x.Format == dataFormat &&
                 x.Type == dataType)?.ProcessStatus ?? DataExportStatus.NotStarted;
 
-        private bool CanRefreshBeRequested(DataExportType dataType, 
+        private void SetCanRefreshBeRequested(
+            DataExportView dataExportView,
+            DataExportType dataType, 
             DataExportFormat dataFormat, 
             InterviewStatus? interviewStatus, 
             QuestionnaireIdentity questionnaireIdentity, 
@@ -152,23 +155,41 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                         l => l.HeaderItems.Values.Where(q => q.QuestionType == QuestionType.Multimedia)).Any();
 
                 if (!hasMultimediaQuestions)
-                    return false;
+                {
+                    dataExportView.CanRefreshBeRequested = false;
+                    dataExportView.HasAnyDataToBePrepared = false;
+                    return;
+                }
             }
-            return !runningProcess.Any(
-                p =>
+
+            dataExportView.HasAnyDataToBePrepared = true;
+            var process = runningProcess.FirstOrDefault(p =>
                     p.Format == dataFormat &&
                     p.Type == dataType &&
                     p.InterviewStatus == interviewStatus &&
                     (p.QuestionnaireIdentity == null || p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
+
+            if (process == null)
+            {
+                dataExportView.CanRefreshBeRequested = true;
+                return;
+                
+            }
+
+            dataExportView.CanRefreshBeRequested = false;
+            dataExportView.DataExportProcessId = process.DataExportProcessId;
         }
 
-        private void SetDataExportLastUpdateTimeIfFilePresent(DataExportView dataExportView, string filePath)
+        private void SetDataExportLastUpdateTimeAndSizeIfFilePresent(DataExportView dataExportView, string filePath)
         {
             if (fileSystemAccessor.IsFileExists(filePath))
             {
                 dataExportView.LastUpdateDate = this.fileSystemAccessor.GetModificationTime(filePath);
+                dataExportView.FileSize = this.fileSystemAccessor.GetFileSize(filePath);
                 dataExportView.HasDataToExport = true;
             }
         }
+
+        
     }
 }
