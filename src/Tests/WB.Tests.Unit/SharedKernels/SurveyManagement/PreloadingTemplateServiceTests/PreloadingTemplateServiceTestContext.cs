@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
@@ -23,7 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
             return new PreloadingTemplateService(currentFileSystemAccessor, "",
                 tabularFormatExportService ?? Mock.Of<ITabularFormatExportService>(),
                 Mock.Of<IArchiveUtils>(),
-                exportFileNameService ?? Mock.Of<IExportFileNameService>());
+                exportFileNameService ?? Mock.Of<IExportFileNameService>(),
+                Mock.Of<ISampleUploadViewFactory>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()
