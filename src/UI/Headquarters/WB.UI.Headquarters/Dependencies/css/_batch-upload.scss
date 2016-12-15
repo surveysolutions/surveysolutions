@@ -4,14 +4,25 @@
 }
 .prefilled-data-info{
 	@extend .text-page;
-	margin-bottom: 60px;
+	margin-bottom: 20px;
 	p{
 		margin-bottom: 20px;
+
 	}
-	a{
-		&.list-required-prefilled-data{
-			display: block;
-			margin-top: 30px;
+	&>a{
+		display: block;
+		margin-bottom: 30px;
+		&.hide-list-of-required-prefilled-data{
+			display: none;
+		}
+	}
+	ul{
+		margin-left: 30px;
+		display: none;
+		margin-bottom: 20px;
+		font-family: "RobotoBold";
+		li{
+			margin: 5px 0;
 		}
 	}
 }
@@ -39,7 +50,7 @@
 			padding: 8px 12px;
 			margin: 0 2px;
 			&:last-of-type{
-				margin-right: 20px;
+				margin-right: 25px;
 			}
 			&.cancel-uploading{
 				float: left;
@@ -53,9 +64,6 @@
 		span{
 			display: block;
 		}
-	}
-	.back-link{
-		margin: 0 5px;
 	}
 	.btn-input{
 		margin-bottom: 40px;		
