@@ -46,6 +46,16 @@ namespace WB.UI.Headquarters
                 "~/Dependencies/js/import-questionnaires-list.js"
                 ));
 
+            bundles.Add(new ScriptBundle("~/js/batch-upload-start-interview-creation").Include(
+                "~/Scripts/bootstrap3-typeahead.js",
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js",
+                "~/Scripts/knockout/ko.extenders.js",
+                "~/Scripts/spin.js",
+                "~/Scripts/knockout/ko.spin.js",
+                "~/Dependencies/js/batch-upload-start-interview-creation.js"
+               ));
+
             bundles.Add(new ScriptBundle("~/js/main").Include(
                 "~/Scripts/jquery-{version}.js",
                 "~/Scripts/moment.js",

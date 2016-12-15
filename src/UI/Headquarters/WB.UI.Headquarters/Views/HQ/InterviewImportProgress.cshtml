@@ -1,0 +1,151 @@
+﻿@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataConfirmationModel
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = BatchUpload.VerifySampleData;
+    var modelState = ViewContext.ViewData.ModelState;
+}
+
+@section scripts
+{
+    @Scripts.Render("~/js/batch-upload-start-interview-creation")
+    <script type="text/javascript">
+        var StartInterviewCreationModel = function () {
+
+            var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+
+            var self = this;
+
+            self.isResponsiblesLoading = ko.observable(false);
+            self.responsibles = function (query, sync, pageSize) {
+                self.isResponsiblesLoading(true);
+                sendRequest($responsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
+                    sync(response.Users, response.TotalCountByQuery);
+                }, true, true, function () {
+                    self.isResponsiblesLoading(false);
+                });
+            }
+            self.selectedResponsible = ko.observable(undefined).extend({ required: { shouldValidateOnStart: false } });
+
+            self.selectedSupervisorId = ko.computed(function () {
+                return _.isUndefined(self.selectedResponsible()) ? "" : self.selectedResponsible().UserId;
+            });
+
+            self.IsSupervisorSelected = ko.computed(function () {
+                return !_.isUndefined(self.selectedResponsible());
+            });
+
+
+            // should be moved to injected service, no inheritance needed
+            self.IsPageLoaded = ko.observable(false);
+            self.IsAjaxComplete = ko.observable(true);
+
+            var sendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
+
+                if (!skipInProgressCheck && !self.IsAjaxComplete()) {
+                    self.CheckForRequestComplete();
+                    return;
+                }
+
+                self.IsAjaxComplete(false);
+
+                var requestHeaders = {};
+                requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+                $.ajax({
+                    url: requestUrl,
+                    type: allowGet === true ? 'get' : 'post',
+                    data: args,
+                    headers: requestHeaders,
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (!_.isUndefined(onSuccess)) {
+                        onSuccess(data);
+                    }
+                }).fail(function (jqXhr, textStatus, errorThrown) {
+                    if (jqXhr.status === 403) {
+                        if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
+                            self.ShowError(input.settings.messages.forbiddenMessage);
+                        }
+                        else {
+                            self.ShowError(jqXhr.responseText);
+                        }
+                    } else {
+                        self.ShowError(input.settings.messages.unhandledExceptionMessage);
+                    }
+                }).always(function () {
+                    self.IsPageLoaded(true);
+                    self.IsAjaxComplete(true);
+                    if (!_.isUndefined(onDone)) {
+                        onDone();
+                    }
+                });
+            };
+        };
+
+        $(function () {
+            var model = new StartInterviewCreationModel();
+            ko.applyBindings(model);
+        });
+    </script>
+}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-8 page-header">
+                <ol class="breadcrumb">
+                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
+                    <li>@Html.ActionLink("creating multiple interviews", "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                </ol>
+                <div class="page-title">
+                    Creating multiple interviews with batch upload
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7">
+                <h3>Importing information from @Model.FileName for @Model.QuestionnaireTitle&nbsp;(ver.&nbsp;@Model.Version)</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 col-xs-12 action-block">
+                <h4>
+                    <span class="success-text">Verification complete</span>Information for @Model.InterviewsCount interviews found
+                    @if (Model.WasSupervsorProvided)
+                    {
+                        <span>Assigned to @Model.SupervisorsCount supervisors and @Model.EnumeratorsCount enumerators</span>
+                    }
+                </h4>
+                @using (Html.BeginForm("InterviewImportConfirmation", "HQ", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
+                {
+                    @Html.HiddenFor(x => x.InterviewsCount)
+                    @Html.HiddenFor(x => x.EnumeratorsCount)
+                    @Html.HiddenFor(x => x.SupervisorsCount)
+                    @Html.HiddenFor(x => x.FileName)
+                    @Html.HiddenFor(x => x.WasSupervsorProvided)
+                    @Html.HiddenFor(x => x.PreloadedContentType)
+
+                    <input id="supervisorId" name="supervisorId" type="hidden" data-bind="value: selectedSupervisorId">
+                    @Html.ValidationSummary(true)
+                    if (!Model.WasSupervsorProvided)
+                    {
+                        <div class="form-group @(modelState.Keys.Contains("SupervisorId")? "has-error" : "")">
+                            <label class="control-label" >Select supervisor to assign this interview to</label>
+                            <div class="input-group">
+                                <input class="form-control" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                                <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
+                                    <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(x => x.SupervisorId, null, new { @class = "help-block" })
+                        </div>
+                    }
+                    <div>
+                        <button type="submit" class="btn btn-success" >create interviews</button>
+                        <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">Back to import</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</main>

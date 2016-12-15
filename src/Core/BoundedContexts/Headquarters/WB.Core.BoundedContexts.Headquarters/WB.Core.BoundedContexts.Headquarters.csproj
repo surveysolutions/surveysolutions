@@ -115,6 +115,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -529,6 +530,7 @@
     <Compile Include="Views\PreloadedData\PreloadedContentMetaData.cs" />
     <Compile Include="Views\PreloadedData\PreloadedContentType.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataByFile.cs" />
+    <Compile Include="Views\PreloadedData\PreloadedDataConfirmationModel.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataVerificationErrorsView.cs" />
     <Compile Include="Views\PreloadedData\PreloadedFileMetaData.cs" />
     <Compile Include="Views\PreloadedData\PreloadedMetaDataView.cs" />
