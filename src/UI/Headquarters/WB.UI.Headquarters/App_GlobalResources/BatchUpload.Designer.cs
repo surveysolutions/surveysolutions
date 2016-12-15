@@ -242,7 +242,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If supervisor is not set in uploaded file you will be required to assign one for all interviews on the last stage of import..
+        ///   Looks up a localized string similar to If usernames are not specified you will need to assign a supervisor to all interviews later..
         /// </summary>
         internal static string EmptySupervisorDescription {
             get {
@@ -593,7 +593,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload tab separated data table which all nececary prefilled data and Assignees (optionaly).
+        ///   Looks up a localized string similar to Upload tab separated file with necessary prefilled data. Optionaly, specify usernames of supervisors or enumerators in _responsible column..
         /// </summary>
         internal static string SimpleDescription {
             get {
@@ -602,7 +602,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Just prefilled data (single file).
+        ///   Looks up a localized string similar to Prefilled data only.
         /// </summary>
         internal static string SimpleTitle {
             get {
@@ -638,8 +638,8 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create set of interviews by uploading file with all required prefilled data.
-        ///You can optionaly adding interviews to supervisors (and enumerators) by their usernames..
+        ///   Looks up a localized string similar to Upload a file with prefilled data to create new interviews.
+        ///Specify usernames for supervisors or enumerators to make batch interview assignments..
         /// </summary>
         internal static string UploadDescription {
             get {
