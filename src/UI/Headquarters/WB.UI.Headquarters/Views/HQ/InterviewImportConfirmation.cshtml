@@ -117,6 +117,7 @@
                 </h4>
                 @using (Html.BeginForm("InterviewImportConfirmation", "HQ", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
                 {
+                    @Html.AntiForgeryToken()
                     @Html.HiddenFor(x => x.InterviewsCount)
                     @Html.HiddenFor(x => x.EnumeratorsCount)
                     @Html.HiddenFor(x => x.SupervisorsCount)
