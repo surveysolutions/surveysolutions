@@ -1213,9 +1213,11 @@ namespace WB.Tests.Unit.TestFactories
             params IInterviewTreeNode[] children)
         {
             var titleWithSubstitutions = Create.Entity.SubstitionText(rosterIdentity, "Title");
-            return new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, children, rosterType: rosterType,
+            var roster =  new InterviewTreeRoster(rosterIdentity, titleWithSubstitutions, rosterType: rosterType,
                 rosterSizeQuestion: rosterSizeQuestion,
                 childrenReferences: Enumerable.Empty<QuestionnaireItemReference>()) {RosterTitle = rosterTitle};
+            roster.SetChildren(children.ToList());
+            return roster;
         }
 
         public InterviewTreeSubSection InterviewTreeSubSection(Identity groupIdentity, bool isDisabled = false, 

@@ -145,7 +145,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
 
-            var parentGroupsToRefresh = @event.Instances.Select(x => interview.GetParentGroup(x.GetIdentity())).Distinct();
+            IEnumerable<Identity> parentGroupsToRefresh =
+                @event.Instances.Select(x => interview.GetParentGroup(x.GetIdentity()))
+                    .Distinct()
+                    .Where(x => this.AllVisibleSections.Any(y => y.SectionIdentity.Equals(x)));
 
             foreach (var identity in parentGroupsToRefresh)
             {
@@ -194,7 +197,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void RefreshSectionChildItemsIfVisible(Identity sectionId, IStatefulInterview interview)
         {
-            var sectionToAddTo = this.AllVisibleSections.FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(sectionId));
+            var sectionToAddTo = this.AllVisibleSections.FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(sectionId) && x.Expanded);
 
             if (sectionToAddTo != null)
             {
