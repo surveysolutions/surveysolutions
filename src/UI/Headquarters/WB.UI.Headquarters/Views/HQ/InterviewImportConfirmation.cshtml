@@ -30,7 +30,7 @@
                 return _.isUndefined(self.selectedResponsible()) ? "" : self.selectedResponsible().UserId;
             });
 
-            self.IsSupervisorSelected = ko.computed(function () {
+            self.isSupervisorSelected = ko.computed(function () {
                 return !_.isUndefined(self.selectedResponsible());
             });
 
@@ -108,13 +108,14 @@
         </div>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block">
-                <h4>
-                    <span class="success-text">Verification complete</span>Information for @Model.InterviewsCount interviews found
+                <div class="import-progress">
+                    <p class="success-text">Verification complete</p>
+                    <p>Information for @Model.InterviewsCount interviews found</p>
                     @if (Model.WasSupervsorProvided)
                     {
-                        <span>Assigned to @Model.SupervisorsCount supervisors and @Model.EnumeratorsCount enumerators</span>
+                        <p>Assigned to @Model.SupervisorsCount supervisors and @Model.EnumeratorsCount enumerators</p>
                     }
-                </h4>
+                </div>
                 @using (Html.BeginForm("InterviewImportConfirmation", "HQ", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
@@ -141,8 +142,8 @@
                             @Html.ValidationMessageFor(x => x.SupervisorId, null, new { @class = "help-block" })
                         </div>
                     }
-                    <div>
-                        <button type="submit" class="btn btn-success" >create interviews</button>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervsorProvided){<text>enable: isSupervisorSelected</text>}">create interviews</button>
                         <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">Back to import</a>
                     </div>
                 }

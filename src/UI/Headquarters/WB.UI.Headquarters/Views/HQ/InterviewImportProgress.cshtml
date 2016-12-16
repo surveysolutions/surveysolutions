@@ -9,6 +9,108 @@
     @Scripts.Render("~/js/batch-upload-start-interview-creation")
     <script type="text/javascript">
         var InterviewCreationProgressModel = function () {
+            var $importInterviewsStatusUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
+
+            var self = this;
+
+            self.questionnaireId = '@Model.QuestionnaireId';
+            self.questionnaireVersion= @Model.Version;
+            self.interviewImportProcessId = '@Model.Status.InterviewImportProcessId';
+            self.questionnaireTitle = '@Model.QuestionnaireTitle';
+
+            self.status = {
+                createdInterviewsCount: ko.observable(@Model.Status.CreatedInterviewsCount),
+                totalInterviewsCount: ko.observable(@Model.Status.TotalInterviewsCount),
+                interviewsWithError: ko.observable(@Model.Status.State.Errors.Count),
+                elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
+                estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
+                isInProgress: ko.observable(true),
+                hasErrors: ko.observable(false)
+            };
+
+            self.isStatusLoaded = ko.observable(false);
+
+            var shouldStopRequestUpdates = function(data) {
+                if (_.isNull(data.interviewImportProcessId))
+                    return true;
+
+                if (data.totalInterviewsCount === 0)
+                    return true;
+
+                if (data.isInProgress === false)
+                    return true;
+
+                if (data.interviewImportProcessId !== self.interviewImportProcessId)
+                    return true;
+
+                return false;
+            }
+
+            self.updateStatusByInterviewsImport = function () {
+                sendRequest($importInterviewsStatusUrl, {}, function (data) {
+                    self.status.isInProgress(data.isInProgress);
+                    self.status.createdInterviewsCount(data.createdInterviewsCount);
+                    self.status.totalInterviewsCount(data.totalInterviewsCount);
+                    self.status.interviewsWithError(data.interviewsWithError);
+
+                    self.status.elapsedTime(data.elapsedTime);
+                    self.status.estimatedTime(data.estimatedTime);
+                    self.status.hasErrors(data.hasErrors);
+                    self.isStatusLoaded(true);
+
+                    if (shouldStopRequestUpdates(data) === false) {
+                        _.delay(self.updateStatusByInterviewsImport, 3000);
+                    }
+                }, true, true);
+            };
+
+            // should be moved to injected service, no inheritance
+            self.IsPageLoaded = ko.observable(false);
+            self.IsAjaxComplete = ko.observable(true);
+
+            var sendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
+
+                if (!skipInProgressCheck && !self.IsAjaxComplete()) {
+                    self.CheckForRequestComplete();
+                    return;
+                }
+
+                self.IsAjaxComplete(false);
+
+                var requestHeaders = {};
+                requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+                $.ajax({
+                    url: requestUrl,
+                    type: allowGet === true ? 'get' : 'post',
+                    data: args,
+                    headers: requestHeaders,
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (!_.isUndefined(onSuccess)) {
+                        onSuccess(data);
+                    }
+                }).fail(function (jqXhr, textStatus, errorThrown) {
+                    if (jqXhr.status === 403) {
+                        if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
+                            self.ShowError(input.settings.messages.forbiddenMessage);
+                        }
+                        else {
+                            self.ShowError(jqXhr.responseText);
+                        }
+                    } else {
+                        self.ShowError(input.settings.messages.unhandledExceptionMessage);
+                    }
+                }).always(function () {
+                    self.IsPageLoaded(true);
+                    self.IsAjaxComplete(true);
+                    if (!_.isUndefined(onDone)) {
+                        onDone();
+                    }
+                });
+            };
+
+            self.updateStatusByInterviewsImport();
         };
 
         $(function () {
@@ -37,39 +139,26 @@
         </div>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block">
-                <h4>
-                    @if (Model.Status.IsInProgress)
-                    {
-                        @:Processing interview @Model.Status.CreatedInterviewsCount of @Model.Status.TotalInterviewsCount...
-                    }
-                    else
-                    {
-                        @:Done:
-                    }
-                    @if (Model.Status.CreatedInterviewsCount > 0)
-                    {
-                        <span class="success-text">@Model.Status.CreatedInterviewsCount interviews created</span>
-                    }
-                    @if (!Model.Status.State.Errors.Any())
-                    {
-                        <span class="default-text">None failed</span>
-                    }
-                    else
-                    {
-                        <span class="default-text">@Model.Status.State.Errors.Count interviews failed to be created</span>
-                    }
-                </h4>
-                @if (Model.Status.IsInProgress)
-                {
-                    <div>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@Model.Status.CreatedInterviewsCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalInterviewsCount">
-                                <span class="sr-only"></span>
-                            </div>
+                <div class="import-progress">
+                    <p data-bind="if: status.isInProgress">Processing interview <span data-bind="text: status.createdInterviewsCount"></span> of <span data-bind="text: status.totalInterviewsCount"></span>...</p>
+                    <p data-bind="ifnot: status.isInProgress">Done:</p>
+                    <p class="success-text" data-bind="if: status.createdInterviewsCount()>0"><span data-bind="text: (status.createdInterviewsCount() - status.interviewsWithError())">@Model.Status.CreatedInterviewsCount</span> interviews created</p>
+                    <p class="default-text" data-bind="ifnot: status.hasErrors">None failed</p>
+                    <p class="error-text" data-bind="if: status.hasErrors"><span data-bind="text: status.createdInterviewsCount">@Model.Status.State.Errors.Count</span> interviews failed to be created</p>
+                </div>
+                <a data-bind="if: status.hasErrors() && status.isInProgress()===false" href="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetInvalidInterviewsByLastImport"})">Download data assosiated with failed interviews</a>
+                <div class="cancelable-progress">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.createdInterviewsCount()/status.totalInterviewsCount()) + '%' }, attr: {'aria-valuemax': status.totalInterviewsCount, 'aria-valuenow': status.createdInterviewsCount}" role="progressbar" aria-valuenow="@Model.Status.CreatedInterviewsCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalInterviewsCount">
+                            <span class="sr-only"></span>
                         </div>
-                        @*<button class="btn cancel-uploading" type="button">abort import</button>*@
                     </div>
-                }
+                </div>
+                <div class="action-buttons" data-bind="ifnot: status.isInProgress">
+                    <a class="btn btn-primary" href="@Url.Action("Interviews", "HQ")">interviews</a>
+                    <a class="btn btn-primary" href="@Url.Action("Index", "HQ")">questionnaires</a>
+                    @Html.ActionLink("Back to import", "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { @class = "back-link" })
+                </div>
             </div>
         </div>
     </div>

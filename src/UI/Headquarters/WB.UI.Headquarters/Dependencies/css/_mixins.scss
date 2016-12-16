@@ -133,6 +133,35 @@
         top: -2px;
     }
 }
+@mixin cancel($width: 14px){
+    $height: 2px; 
+    outline: none;
+    background-color: transparent;
+    @include square($width);
+    position: relative;
+    margin: 0;
+    @include opacity(0.5);
+    display: block;
+         box-sizing: content-box;
+    &:hover, &:focus, &:active{
+        &:before, &:after{
+            background-color: darken($gray_light, 30%);
+        }
+    }
+    &:before, &:after{
+        display: block;
+        content: "";
+        @include size($width, $height);
+        background-color: $gray_light;
+        @include rotate(45deg);
+        position: relative;
+        top: ($width - $height)/2;
+    }
+    &:after{
+        @include rotate(-45deg);
+        top: ($width/2 - $height - 1px);
+    }
+}
 @mixin question_title_colors($default, $with_error, $filled){
     .unit-title{
         background-color: lighten($blue, $default);

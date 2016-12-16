@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Infrastructure.Native.Threading;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
@@ -46,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers
 
         
         [HttpGet]
+        [CamelCase]
         public InterviewImportStatusApiView GetImportInterviewsStatus()
         {
             var status = this.interviewImportService.Status;
@@ -60,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers
                 EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
                 ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss"),
                 HasErrors = status.State.Errors.Any(),
+                InterviewsWithError = status.State.Errors.Count,
                 InterviewImportProcessId = status.InterviewImportProcessId
             };
         }
@@ -166,6 +169,7 @@ namespace WB.UI.Headquarters.Controllers
             public bool IsInProgress { get; set; }
             public int TotalInterviewsCount { get; set; }
             public int CreatedInterviewsCount { get; set; }
+            public int InterviewsWithError { get; set; }
             public string ElapsedTime { get; set; }
             public string EstimatedTime { get; set; }
             public bool HasErrors { get; set; }

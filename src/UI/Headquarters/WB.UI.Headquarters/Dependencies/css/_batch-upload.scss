@@ -31,51 +31,59 @@
 	display: none;
 }
 .action-block{
-	margin-top: 20px;
-	.float-box{
-		width: 100%;
-		overflow: hidden;
-		.progress{
-			width: 66%;
-			float: left;
-			background-color: $gray_form;
-			margin-right: 30px;
-		}
-		
-		.btn{
-			padding: 8px 12px;
-			margin: 0 2px;
-			&:last-of-type{
-				margin-right: 25px;
-			}
-			&.cancel-uploading{
-				float: left;
-				@extend %gray-uppercase;
-				@extend %clean-btn;
-			}
-		}
-	}
-	h4 {
-		margin-bottom: 40px;
-		span{
-			display: block;
-		}
-	}
-	.btn-input{
-		margin-bottom: 40px;		
-	}
-	.error-block{
-		&:last-of-type{
-			margin-bottom: 30px;
-		}
-		h5{
-			margin: 20px 0 5px;
-		}
-		p{
-			margin: 3px 0;
-		}
-	}	
+	margin-top: 30px;
 }
+.action-buttons{
+	margin-top: 40px;
+	width: 100%;
+	overflow: hidden;
+	.btn{
+		padding: 8px 12px;
+		margin: 0 2px;
+		&:last-of-type{
+			margin-right: 25px;
+		}
+		&.cancel-uploading{
+			float: left;
+		}
+	}
+}
+.cancelable-progress{
+	margin-top: 40px;
+	.progress{
+		width: 66%;
+		float: left;
+		background-color: $gray_form;
+		margin-right: 30px;
+		margin-top: 8px;
+	}
+	.btn-link{
+		float: left;
+	}
+}
+
+.import-progress {
+	@extend h4;
+	margin-top: 0;
+	p{
+		margin: 0;
+	}
+}
+.btn-input{
+	margin-bottom: 40px;		
+}
+.error-block{
+	&:last-of-type{
+		margin-bottom: 30px;
+	}
+	h5{
+		margin: 20px 0 5px;
+	}
+	p{
+		margin: 3px 0;
+	}
+}	
+
 .processing-interview{
 	.progress-bar.progress-bar-success{
 		background-color: $green_btn;
@@ -88,7 +96,6 @@
 	&>a{
     	font: 14px/16px "TrebuchetMSBold";
 		display: inline-block;
-		margin-bottom: 40px;
 		width: 38%;
 	}
 }
@@ -100,6 +107,14 @@
 		display: block;
 	}
 } 
+.verification-complete-choose-supervisor{
+	.input-group{
+		.typeahead{
+			width: 100%;
+			border-color: $gray-form;
+		}
+	}
+}
 @media (max-width: $screen-sm-min){
 	.prefilled-data-info{
 		margin-bottom: 0;
@@ -111,18 +126,19 @@
 			display: inline-block;
 		}
 		.back-link{
-			margin: 0;
+			margin: 30px 0 0;
 		}
-		.float-box{
+		.cancelable-progress{
 			.progress{
 				width: 100%;
 				float: none;
 			}
 			.btn{
-				&.cancel-uploading{
+				&.btn-link{
 					float: none;
 				}
 				margin: 0;
+				padding: 6px 0;
 			}
 		}
 		
@@ -135,7 +151,7 @@
 	}
 }
 @media (max-width: 400px){
-	.action-block .float-box .btn:last-of-type{
+	.action-block .action-buttons .btn:last-of-type{
 		margin-right: 5px;
 	}
 }
