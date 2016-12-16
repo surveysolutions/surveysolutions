@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -43,18 +44,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             await this.ExecuteCommand(answerCommand).ConfigureAwait(false);
         }
 
-        public virtual async Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
+        public virtual Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
         {
-            await this.ExecuteCommand(command);
+            return this.ExecuteCommand(command);
         }
 
-        private async Task ExecuteCommand(ICommand answerCommand)
+        public async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default(CancellationToken))
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken); //cancellationSource ?? new CancellationTokenSource();
 
             try
             {
                 this.StartInProgressIndicator();
+
                 await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
 
                 lock (this.cancellationLockObject)
@@ -63,10 +65,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.RegisterCancellationTokenOfCurrentCommand(cancellationTokenSource);
                 }
 
-                await
-                    this.commandService.ExecuteAsync(answerCommand, cancellationToken: cancellationTokenSource.Token).ConfigureAwait(false);
+                cancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                await action(cancellationTokenSource.Token);
             }
-            catch (OperationCanceledException) {}
+            catch (OperationCanceledException) { }
             finally
             {
                 lock (this.cancellationLockObject)
@@ -78,12 +81,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
+        private Task ExecuteCommand(ICommand answerCommand)
+        {
+            return ExecuteActionAsync(token => this.commandService.ExecuteAsync(answerCommand, cancellationToken: token));
+        }
+
         private void TryCancelLastExecutedCommand()
         {
-            if (this.currentCancellationTokenSource == null)
-                return;
-
-            this.currentCancellationTokenSource.Cancel();
+            this.currentCancellationTokenSource?.Cancel();
             this.currentCancellationTokenSource = null;
         }
 
@@ -103,18 +108,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void StartInProgressIndicator()
         {
             Interlocked.Increment(ref this.inProgressDepth);
-            this.UpdateInProgressFlag();
+            this.UpdateInProgressFlag(true);
         }
 
         public void FinishInProgressIndicator()
         {
             Interlocked.Decrement(ref this.inProgressDepth);
-            this.UpdateInProgressFlag();
+            this.UpdateInProgressFlag(false);
         }
 
-        private void UpdateInProgressFlag()
+        readonly ActionThrottler trottler = new ActionThrottler();
+
+        private void UpdateInProgressFlag(bool useDelay)
         {
-            this.InProgress = this.inProgressDepth > 0;
+            if (Delay != TimeSpan.Zero && useDelay && this.inProgress == false && this.inProgressDepth > 0)
+            {
+                this.trottler.RunDelayed(() => this.InProgress = this.inProgressDepth > 0, Delay).ConfigureAwait(false);
+            }
+            else
+            {
+                this.InProgress = this.inProgressDepth > 0;
+            }
         }
+
+        public TimeSpan Delay { get; set; } = TimeSpan.Zero;
     }
 }
