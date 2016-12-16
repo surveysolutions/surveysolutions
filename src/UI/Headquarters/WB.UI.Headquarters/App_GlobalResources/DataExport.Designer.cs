@@ -70,6 +70,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All collected external binary data (e.g. pictures).
+        /// </summary>
+        internal static string BinaryDescription {
+            get {
+                return ResourceManager.GetString("BinaryDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to bytes.
+        /// </summary>
+        internal static string Bytes {
+            get {
+                return ResourceManager.GetString("Bytes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        internal static string Completed {
+            get {
+                return ResourceManager.GetString("Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to stop.
         /// </summary>
         internal static string ConfirmStop {
@@ -97,11 +124,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NOT GENERATED YET.
+        /// </summary>
+        internal static string DataWasNotGenerated {
+            get {
+                return ResourceManager.GetString("DataWasNotGenerated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DDI.
         /// </summary>
         internal static string DDI {
             get {
                 return ResourceManager.GetString("DDI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Documentation Initiative XML data.
+        /// </summary>
+        internal static string DDIDescription {
+            get {
+                return ResourceManager.GetString("DDIDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        internal static string Download {
+            get {
+                return ResourceManager.GetString("Download", resourceCulture);
             }
         }
         
@@ -115,6 +169,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export range:.
+        /// </summary>
+        internal static string ExportRange {
+            get {
+                return ResourceManager.GetString("ExportRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File size.
+        /// </summary>
+        internal static string FileSizeTitle {
+            get {
+                return ResourceManager.GetString("FileSizeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Format.
         /// </summary>
         internal static string Format {
@@ -124,11 +196,56 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to format.
+        /// </summary>
+        internal static string FormatTitle {
+            get {
+                return ResourceManager.GetString("FormatTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate.
+        /// </summary>
+        internal static string Generate {
+            get {
+                return ResourceManager.GetString("Generate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generating.
+        /// </summary>
+        internal static string Generating {
+            get {
+                return ResourceManager.GetString("Generating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last generated.
+        /// </summary>
+        internal static string LastGeneratedTitle {
+            get {
+                return ResourceManager.GetString("LastGeneratedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last update date.
         /// </summary>
         internal static string LastUpdateDate {
             get {
                 return ResourceManager.GetString("LastUpdateDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Survey Data.
+        /// </summary>
+        internal static string MainSurveyDataTitle {
+            get {
+                return ResourceManager.GetString("MainSurveyDataTitle", resourceCulture);
             }
         }
         
@@ -151,11 +268,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Data available.
+        /// </summary>
+        internal static string NoDataAvailable {
+            get {
+                return ResourceManager.GetString("NoDataAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Para Data.
         /// </summary>
         internal static string ParaData {
             get {
                 return ResourceManager.GetString("ParaData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available data about the process by which the survey was conducted.
+        /// </summary>
+        internal static string ParadataDescription {
+            get {
+                return ResourceManager.GetString("ParadataDescription", resourceCulture);
             }
         }
         
@@ -169,11 +304,47 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Queued.
+        /// </summary>
+        internal static string QueuedTitle {
+            get {
+                return ResourceManager.GetString("QueuedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start date.
         /// </summary>
         internal static string StartDate {
             get {
                 return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status of exported interviews.
+        /// </summary>
+        internal static string StatusOfExportTitle {
+            get {
+                return ResourceManager.GetString("StatusOfExportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey template (questionnaire version).
+        /// </summary>
+        internal static string SurveyTemplateTitle {
+            get {
+                return ResourceManager.GetString("SurveyTemplateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zip archive with all collected text interview data.
+        /// </summary>
+        internal static string ZipArchiveDescription {
+            get {
+                return ResourceManager.GetString("ZipArchiveDescription", resourceCulture);
             }
         }
     }

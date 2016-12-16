@@ -49,27 +49,5 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.View(export);
         }
-
-        [ObserverNotAllowed]
-        public ActionResult IndexOld()
-        {
-            this.ViewBag.ActivePage = MenuItem.DataExport;
-            this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
-
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
-
-            ExportModel export = new ExportModel();
-            export.Questionnaires = usersAndQuestionnaires.Questionnaires;
-            export.ExportStatuses = new List<InterviewStatus>
-            {
-                InterviewStatus.InterviewerAssigned,
-                InterviewStatus.Completed,
-                InterviewStatus.ApprovedBySupervisor,
-                InterviewStatus.ApprovedByHeadquarters
-            };
-
-            return this.View(export);
-        }
     }
 }

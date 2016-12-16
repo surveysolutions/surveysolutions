@@ -156,4 +156,61 @@
   <data name="StartDate" xml:space="preserve">
     <value>Дата начала</value>
   </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>Собранные бинарные данные (изображения)</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>байт</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Обработано</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>Не создавалось</value>
+  </data>
+  <data name="DDIDescription" xml:space="preserve">
+    <value>DDI данные в формате XML</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>Диапазон экспорта:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>Размер файла</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>формат</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="Generating" xml:space="preserve">
+    <value>Создается</value>
+  </data>
+  <data name="LastGeneratedTitle" xml:space="preserve">
+    <value>Дата генерации</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>Основные данные обследования</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>Данные недоступны</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>Доступные данные, описывающие процесс сбора</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>Поставлено в очередь</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>Статус  экспортируемых интервью</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>Шаблон обследования (версия опросника)</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>Зип архив с собранными данными</value>
+  </data>
 </root>
