@@ -374,4 +374,16 @@
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>ручной режим</value>
   </data>
+  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+    <value>Список полей который обязательны дл создания интервью вы можите закрузить используя</value>
+  </data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+    <value>tab. шаблон для опросника</value>
+  </data>
+  <data name="HideListPrefilledData" xml:space="preserve">
+    <value>Спрятать список обязательных данных</value>
+  </data>
+  <data name="PrefieldRequiredData" xml:space="preserve">
+    <value>Обязательные поля для заполнения для опросника</value>
+  </data>
 </root>
