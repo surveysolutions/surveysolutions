@@ -44,8 +44,7 @@ namespace WB.UI.Interviewer.Services
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            var isBackupFolderExists = this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath);
-            if (!isBackupFolderExists)
+            if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
             this.BackupSqliteDbs();
