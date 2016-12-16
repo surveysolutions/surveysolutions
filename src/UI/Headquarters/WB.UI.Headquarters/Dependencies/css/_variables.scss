@@ -8,6 +8,7 @@ $grid-gutter-width:         30px;
 $container-tablet:             (768px + $grid-gutter-width);
 $container-desktop:            (960px + $grid-gutter-width);
 $container-large-desktop:      (960px + $grid-gutter-width);
+$input-height-base: 40px;
 
 $blue: #2a81cb;
 $light-blue: #5fd3c6;
@@ -33,6 +34,13 @@ $red-super-light: #f6d6d0;
 
 $pink: #ed45aa;
 
+$state-success-text:             $green;
+$state-info-text:                $blue;
+$state-warning-text:             #8a6d3b;
+$state-danger-text:              $red_error;
+
+/* Indent for filters */
+
 $width-question-editor: 445px;
 
 $filter-width: 360px;
@@ -47,3 +55,7 @@ $content-width: 570px;
 $content-width-small: 330px;
 
 $questionnaire-min-width: 555px;
+
+
+
+
