@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal class DesignerEngineVersionService : IDesignerEngineVersionService
     {
-        private const int OldestQuestionnaireContentVersion = 10;
+        private const int OldestQuestionnaireContentVersion = 16;
         private class QuestionnaireContentVersion
         {
             public int Version { get; set; }
@@ -27,113 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private readonly List<QuestionnaireContentVersion> questionnaireContentVersions = new List<QuestionnaireContentVersion>
         {
-            new QuestionnaireContentVersion
-            {
-                Version = 11,
-                NewFeatures = new[]
-                {
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.LookupTables.Count > 0,
-                        Description = "Lookup tables"
-                    },
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IMultyOptionsQuestion>(q => q.YesNoView).Any(),
-                        Description = "Yes/No questions"
-                    },
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.ConditionExpression) &&
-                                                                                                 q.ConditionExpression.Contains("IsValidEmail")).Any() 
-                                                              ||
-                                                              questionnaire.Find<IQuestion>(q => q.ValidationConditions.Count() == 1 &&
-                                                                                                 !string.IsNullOrEmpty(q.ValidationConditions.First().Expression) &&
-                                                                                                 q.ValidationConditions.First().Expression.Contains("IsValidEmail")).Any(),
-                        Description = "Expression uses IsValidEmail"
-                    }
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 12,
-                NewFeatures = new[]
-                {
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).Any(),
-                        Description = "Linked on roster title question"
-                    },
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IQuestion>(q => q.ValidationConditions.Count() > 1).Any(),
-                        Description = "Multiple validations"
-                    }
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 13,
-                NewFeatures = new[]
-                {
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.LinkedFilterExpression)).Any(),
-                        Description = "Filtered linked questions"
-                    },
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<StaticText>(q => !string.IsNullOrWhiteSpace(q.AttachmentName)).Any(),
-                        Description = "Attachments: Images in static texts"
-                    }
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 14,
-                NewFeatures = new[]
-                {
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<StaticText>(x => x.ValidationConditions.Any() || !string.IsNullOrWhiteSpace(x.ConditionExpression)).Any(),
-                        Description = "Static texts: enablement conditions and validations"
-                    }
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 15,
-                NewFeatures = new[]
-                {
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<Variable>().Any(),
-                        Description = "Variables"
-                    }
-                }
-            },
-            new QuestionnaireContentVersion
-            {
-                Version = 16 ,
-                NewFeatures = new[]
-                {
-                    new QuestionnaireFeature
-                    {
-                          HasQuestionnaire = (questionnaire) =>  questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.LinkedFilterExpression)&& q.LinkedFilterExpression.Contains("current")).Any(),
-                          Description = "Filtered linked questions that uses @current variable"
-                    },
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<DateTimeQuestion>(dateTimeQuestion => dateTimeQuestion.IsTimestamp).Any(),
-                        Description = "Current time questions"
-                    },
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = (questionnaire) => questionnaire.Find<AbstractQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression)).Any(),
-                        Description = "Filtered options for categorical questions"
-                    }
-                }
-            },
             new QuestionnaireContentVersion
             {
                 Version = 17, 
@@ -177,8 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     }
                 }
             }
-
-             //@rowindex
+             
         };
 
         public int LatestSupportedVersion => this.questionnaireContentVersions.Last().Version;
