@@ -1,11 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Shared.Enumerator;
@@ -59,7 +62,28 @@ namespace WB.UI.Interviewer.Services
 
             return backupFilePath;
         }
-           
+
+        public async Task<RestorePackageInfo> GetRestorePackageInfo(string restoreFolder)
+        {
+            await this.permissions.AssureHasPermission(Permission.Storage);
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(restoreFolder))
+                this.fileSystemAccessor.CreateDirectory(restoreFolder);
+
+            string[] filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(restoreFolder);
+
+            if (filesInRestoreFolder.Length > 0)
+            {
+                RestorePackageInfo result = new RestorePackageInfo();
+                result.FileLocation = filesInRestoreFolder[0];
+                result.FileSize = this.fileSystemAccessor.GetFileSize(result.FileLocation);
+                result.FileCreationDate = this.fileSystemAccessor.GetCreationTime(result.FileLocation);
+                return result;
+            }
+
+            return null;
+        }
+
         private void Cleanup()
         {
             foreach (var tempBackupFile in Directory.GetFiles(this.privateStorage, "*.sqlite3.back", SearchOption.AllDirectories))
