@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -7171,11 +7171,8 @@ main .flex-row {
   .prefilled-data-info > a {
     display: block;
     margin-bottom: 30px; }
-    .prefilled-data-info > a.hide-list-of-required-prefilled-data {
-      display: none; }
   .prefilled-data-info ul {
     margin-left: 30px;
-    display: none;
     margin-bottom: 20px;
     font-family: "RobotoBold"; }
     .prefilled-data-info ul li {
