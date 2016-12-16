@@ -94,7 +94,7 @@
             <div class="col-md-8 col-sm-8 page-header">
                 <ol class="breadcrumb">
                     <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
-                    <li>@Html.ActionLink("creating multiple interviews", "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                    <li>@Html.ActionLink("creating multiple interviews", "BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version}, new {})</li>
                 </ol>
                 <div class="page-title">
                     Creating multiple interviews with batch upload
@@ -110,13 +110,13 @@
             <div class="col-sm-7 col-xs-12 action-block">
                 <div class="import-progress">
                     <p class="success-text">Verification complete</p>
-                    <p>Information for @Model.InterviewsCount interviews found</p>
+                    <p>Information for @Model.InterviewsCount interview@(Pluralize(Model.InterviewsCount)) found</p>
                     @if (Model.WasSupervsorProvided)
                     {
-                        <p>Assigned to @Model.SupervisorsCount supervisors and @Model.EnumeratorsCount enumerators</p>
+                        <p>Assigned to @Model.SupervisorsCount supervisor@(Pluralize(Model.SupervisorsCount)) and @Model.EnumeratorsCount enumerator@(Pluralize(Model.EnumeratorsCount))</p>
                     }
                 </div>
-                @using (Html.BeginForm("InterviewImportConfirmation", "HQ", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
+                @using (Html.BeginForm("InterviewImportConfirmation", "HQ", new {Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version}, FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(x => x.InterviewsCount)
@@ -130,20 +130,21 @@
                     @Html.ValidationSummary(true)
                     if (!Model.WasSupervsorProvided)
                     {
-                        <div class="form-group @(modelState.Keys.Contains("SupervisorId")? "has-error" : "")">
-                            <label class="control-label" >Select supervisor to assign this interview to</label>
+                        <div class="form-group @(modelState.Keys.Contains("SupervisorId") ? "has-error" : "")">
+                            <label class="control-label">Select supervisor to assign this interview to</label>
                             <div class="input-group">
-                                <input class="form-control" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                <input class="form-control" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
                                 <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                                 <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
                                     <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                                 </div>
                             </div>
-                            @Html.ValidationMessageFor(x => x.SupervisorId, null, new { @class = "help-block" })
+                            @Html.ValidationMessageFor(x => x.SupervisorId, null, new {@class = "help-block"})
                         </div>
                     }
                     <div class="action-buttons">
-                        <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervsorProvided){<text>enable: isSupervisorSelected</text>}">create interviews</button>
+                        <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervsorProvided)
+                                                                                 {<text>enable: isSupervisorSelected</text>}">create interviews</button>
                         <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">Back to import</a>
                     </div>
                 }
@@ -151,3 +152,8 @@
         </div>
     </div>
 </main>
+
+@helper Pluralize(int count)
+{
+    @(count == 1 ? "" : "s")
+}

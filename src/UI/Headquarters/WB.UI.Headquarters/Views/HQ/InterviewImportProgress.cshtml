@@ -147,7 +147,7 @@
                     <p class="error-text" data-bind="if: status.hasErrors"><span data-bind="text: status.createdInterviewsCount">@Model.Status.State.Errors.Count</span> interviews failed to be created</p>
                 </div>
                 <a data-bind="if: status.hasErrors() && status.isInProgress()===false" href="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetInvalidInterviewsByLastImport"})">Download data assosiated with failed interviews</a>
-                <div class="cancelable-progress">
+                <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.createdInterviewsCount()/status.totalInterviewsCount()) + '%' }, attr: {'aria-valuemax': status.totalInterviewsCount, 'aria-valuenow': status.createdInterviewsCount}" role="progressbar" aria-valuenow="@Model.Status.CreatedInterviewsCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalInterviewsCount">
                             <span class="sr-only"></span>

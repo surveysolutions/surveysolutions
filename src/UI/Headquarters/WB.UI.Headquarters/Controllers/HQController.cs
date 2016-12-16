@@ -190,7 +190,7 @@ namespace WB.UI.Headquarters.Controllers
             if (verificationStatus.Errors.Any())
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfPanel(preloadedMetadata.Id);
-                return this.View("ImportVerificationErrors", new PreloadedDataVerificationErrorsView(
+                return this.View("InterviewImportVerificationErrors", new PreloadedDataVerificationErrorsView(
                     model.QuestionnaireId,
                     model.QuestionnaireVersion,
                     questionnaireInfo?.Title,
@@ -210,9 +210,9 @@ namespace WB.UI.Headquarters.Controllers
                 Id = preloadedMetadata.Id,
                 PreloadedContentType = PreloadedContentType.Panel,
                 FileName = model.File.FileName,
-                EnumeratorsCount = 13,
-                SupervisorsCount = 8,
-                InterviewsCount = 105
+                EnumeratorsCount = verificationStatus.EnumeratorsCount,
+                SupervisorsCount = verificationStatus.SupervisorsCount,
+                InterviewsCount = verificationStatus.InterviewsCount
             });
         }
 
@@ -248,7 +248,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedSample.Id);
             
-                return this.View("ImportVerificationErrors", new PreloadedDataVerificationErrorsView(
+                return this.View("InterviewImportVerificationErrors", new PreloadedDataVerificationErrorsView(
                     model.QuestionnaireId, 
                     model.QuestionnaireVersion, 
                     questionnaireInfo?.Title, 
@@ -268,9 +268,9 @@ namespace WB.UI.Headquarters.Controllers
                 Id = preloadedMetadata.Id,
                 PreloadedContentType = PreloadedContentType.Sample,
                 FileName = preloadedSample.FileName,
-                EnumeratorsCount = 13,
-                SupervisorsCount = 8,
-                InterviewsCount = 105
+                EnumeratorsCount = verificationStatus.EnumeratorsCount,
+                SupervisorsCount = verificationStatus.SupervisorsCount,
+                InterviewsCount = verificationStatus.InterviewsCount
             });
         }
 
@@ -343,62 +343,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             var pathToFile = this.preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
             return this.File(this.fileSystemAccessor.ReadFile(pathToFile), "application/zip", fileDownloadName: this.fileSystemAccessor.GetFileName(pathToFile));
-        }
-
-        public ActionResult VerifySample(Guid questionnaireId, long version, string id)
-        {
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
-
-            if (this.interviewImportService.Status.InterviewImportProcessId == id)
-            {
-                var inProgressModel = new PreloadedDataVerificationErrorsView(questionnaireId, version,
-                    questionnaireInfo?.Title, new PreloadedDataVerificationError[0],
-                    true, id, PreloadedContentType.Sample);
-
-                return this.View(inProgressModel);
-            }
-
-            var preloadedSample = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
-            //null is handled inside 
-            var verificationStatus = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample);
-
-            //clean up for security reasons
-            if (verificationStatus.Errors.Any())
-            {
-                this.preloadedDataRepository.DeletePreloadedDataOfSample(id);
-            }
-
-            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
-                verificationStatus.WasResponsibleProvided, id, PreloadedContentType.Sample);
-            return this.View(model);
-        }
-
-        public ActionResult VerifyPanel(Guid questionnaireId, long version, string id)
-        {
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
-
-            if (this.interviewImportService.Status.InterviewImportProcessId == id)
-            {
-                var inProgressModel = new PreloadedDataVerificationErrorsView(questionnaireId, version,
-                    questionnaireInfo?.Title, new PreloadedDataVerificationError[0],
-                    true, id, PreloadedContentType.Sample);
-
-                return this.View("VerifySample", inProgressModel);
-            }
-
-            var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
-            var verificationStatus = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData);
-            
-            //clean up for security reasons
-            if (verificationStatus.Errors.Any())
-            {
-                this.preloadedDataRepository.DeletePreloadedDataOfPanel(id);
-            }
-
-            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
-                verificationStatus.WasResponsibleProvided, id, PreloadedContentType.Panel);
-
-            return this.View("VerifySample", model);
         }
 
         public ActionResult TakeNew(Guid id, long? version)
