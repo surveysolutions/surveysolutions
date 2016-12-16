@@ -27,7 +27,10 @@
         </div>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block">
-                <h4><span class="error-text">Batch file verification failed</span> Interviews are not created</h4>
+                <div class="import-progress">
+                    <p class="error-text">Batch file verification failed</p>
+                    <p>Interviews are not created</p>
+                </div>
                 <h3 class="error-text">@Model.Errors.Length @(@Model.Errors.Length == 1 ? "error" : "errors") were found</h3>
                 @foreach (var error in Model.Errors)
                 {
@@ -47,7 +50,9 @@
                         }
                     </div>
                 }
-                <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">Back to import</a>
+                <div class="action-buttons">
+                    <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">Back to import</a>
+                </div>
             </div>
         </div>
     </div>
