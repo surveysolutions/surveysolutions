@@ -49,10 +49,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ReplaceSubstitutions()
         {
-            if (!HasSubstitutions)
-            {
+            if (!this.HasSubstitutions)
                 return;
-            }
 
             var textWithReplacedSubstitutions = this.originalText;
             foreach (var substitution in this.substitutionVariables.ByRosters)

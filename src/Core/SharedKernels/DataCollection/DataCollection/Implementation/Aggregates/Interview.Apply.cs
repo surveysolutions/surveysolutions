@@ -284,8 +284,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var questionnaire = this.GetQuestionnaireOrThrow();
 
-            this.UpdateTitlesAndTexts(questionnaire);
             this.Tree.SwitchQuestionnaire(questionnaire);
+            this.UpdateTitlesAndTexts(questionnaire);
         }
 
         public virtual void Apply(FlagRemovedFromAnswer @event) { }
