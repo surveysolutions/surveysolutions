@@ -437,16 +437,8 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_multiple_validations.cs" />
     <Compile Include="BoundedContexts\Designer\DeleteVariableHandlerTests\when_deleting_variable_and_all_parameters_specified.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_a_variable.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_linked_question_with_filter_and_uses_current_keyword.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_validation_condition.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_enablement_condition.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_a_variable_and_client_version_is_14.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_hidden_question.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_linked_on_roster_question.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_question_with_multiple_validations.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_static_text_with_attachment.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_static_text_with_attachment_and_client_version_is_11.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_question_and_isemailvalid_usage.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_deleting_lookup_tables_by_questionnaire.cs" />
@@ -627,8 +619,6 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_models_with_lookup_table.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question_and_client_version_is_10.cs" />
-    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question_and_client_version_is_11.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_without_5001_rows.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_without_data.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_without_rowcode_column.cs" />

@@ -342,7 +342,8 @@ namespace WB.Tests.Integration
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, 
             Guid? linkedToRosterId=null, 
             bool yesNo = false,
-            string optionsFilter = null)
+            string optionsFilter = null,
+            string linkedFilter = null)
         {
             var multyOptionsQuestion = new MultyOptionsQuestion
             {
@@ -353,6 +354,7 @@ namespace WB.Tests.Integration
                 StataExportCaption = variable,
                 LinkedToRosterId = linkedToRosterId,
                 YesNoView = yesNo,
+                LinkedFilterExpression = linkedFilter,
                 Properties = {OptionsFilterExpression = optionsFilter}
             };
             return multyOptionsQuestion;
