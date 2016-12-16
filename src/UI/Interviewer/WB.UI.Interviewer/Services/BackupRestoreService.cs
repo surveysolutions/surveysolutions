@@ -50,7 +50,7 @@ namespace WB.UI.Interviewer.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
-            this.BackupSqliteDbs();
+            await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
             var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
