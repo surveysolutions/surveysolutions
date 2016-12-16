@@ -6922,9 +6922,10 @@ main .two-columns-form .left-column {
     margin-bottom: 0; }
     main .two-columns-form .left-column p a {
       color: #a6a8a9;
-      text-decoration: underline; }
-      main .two-columns-form .left-column p a:hover {
-        text-decoration: none; }
+      box-shadow: 0 2px 0 #a6a8a9; }
+      main .two-columns-form .left-column p a:hover, main .two-columns-form .left-column p a:focus {
+        text-decoration: none;
+        box-shadow: none; }
 
 .questionnaire-statistics {
   margin-bottom: 30px; }
