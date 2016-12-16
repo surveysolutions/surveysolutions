@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers
                     return this.RedirectToLocal(returnUrl);
                 }
             }
-            else this.ModelState.AddModelError(string.Empty, ErrorMessages.IncorrectUserNameOrPassword);
+            else this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
 
             return this.View(model);
         }
