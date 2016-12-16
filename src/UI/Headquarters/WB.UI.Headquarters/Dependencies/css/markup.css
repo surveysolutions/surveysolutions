@@ -7407,10 +7407,10 @@ main .flex-row {
   .action-buttons .btn {
     padding: 8px 12px;
     margin: 0 2px; }
-    .action-buttons .btn:last-of-type {
-      margin-right: 25px; }
     .action-buttons .btn.cancel-uploading {
       float: left; }
+    .action-buttons .btn + .back-link {
+      margin-left: 25px; }
 
 .cancelable-progress {
   margin-top: 40px; }
