@@ -176,6 +176,7 @@
     <Compile Include="Services\ISynchronizationProcess.cs" />
     <Compile Include="Services\ITabletDiagnosticService.cs" />
     <Compile Include="Services\IBackupRestoreService.cs" />
+    <Compile Include="Services\RestorePackageInfo.cs" />
     <Compile Include="Services\SynchronizationProcess.cs" />
     <Compile Include="Services\SyncProgressDto.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />

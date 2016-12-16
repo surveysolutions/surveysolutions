@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -124,21 +125,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 var restoreFolder = this.interviewerSettings.RestoreFolder;
 
-                if (!this.fileSystemAccessor.IsDirectoryExists(restoreFolder))
-                    this.fileSystemAccessor.CreateDirectory(restoreFolder);
-
-                var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(restoreFolder);
-                if (filesInRestoreFolder.Any())
+                try
                 {
-                    this.IsRestoreVisible = true;
-                    this.IsBackupCreated = false;
-                    this.RestoreLocation = filesInRestoreFolder[0];
-                    this.RestoreScope = FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(this.RestoreLocation));
-                    this.RestoreCreationDate = this.fileSystemAccessor.GetCreationTime(this.RestoreLocation);
+                    var package = await this.backupRestoreService.GetRestorePackageInfo(restoreFolder);
+                    if (package != null)
+                    {
+                        this.IsRestoreVisible = true;
+                        this.IsBackupCreated = false;
+                        this.RestoreLocation = package.FileLocation;
+                        this.RestoreScope = FileSizeUtils.SizeSuffix(package.FileSize);
+                        this.RestoreCreationDate = package.FileCreationDate;
+                    }
+                    else 
+                    {
+                        await this.userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoreFolderIsEmpty.FormatString(restoreFolder));
+                    }
                 }
-                else
+                catch (MissingPermissionsException e)
                 {
-                    await this.userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoreFolderIsEmpty.FormatString(restoreFolder));
+                    await this.userInteractionService.AlertAsync(e.Message);
                 }
             }
         }
