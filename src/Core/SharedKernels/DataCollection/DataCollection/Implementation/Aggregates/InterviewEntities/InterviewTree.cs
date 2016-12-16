@@ -412,7 +412,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue)
         {
-            return questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
+            return this.questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
         }
 
         public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder()
