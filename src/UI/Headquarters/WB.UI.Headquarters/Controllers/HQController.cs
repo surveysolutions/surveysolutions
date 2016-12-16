@@ -337,8 +337,10 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult SimpleTemplateDownload(Guid id, long version)
         {
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
-            string fileName = this.fileSystemAccessor.MakeValidFileName(questionnaireInfo.Title + ".tab");
+            if (questionnaireInfo == null || questionnaireInfo.IsDeleted)
+                return this.HttpNotFound();
 
+            string fileName = this.fileSystemAccessor.MakeValidFileName(questionnaireInfo.Title + ".tab");
             byte[] templateFile = this.preloadingTemplateService.GetPrefilledPreloadingTemplateFile(id, version);
             return this.File(templateFile, "text/tab-separated-values", fileDownloadName: fileName);
         }
