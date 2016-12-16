@@ -11,6 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
+            var userId = Guid.Parse("11111111111111111111111111111111");
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 id: questionnaireId,
                 chapterId: selectedGroupIdentity.Id,
@@ -19,8 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.NumericIntegerQuestion(id: questionId),
                     Create.Entity.Roster(rosterId, rosterSizeQuestionId: questionId),
                 });
-
+            
             statefulInterview = Setup.StatefulInterview(questionnaire);
+            statefulInterview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, 1);
         };
 
         Because of = () =>

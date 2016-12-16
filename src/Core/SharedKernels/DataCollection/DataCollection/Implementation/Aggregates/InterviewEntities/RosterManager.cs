@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -27,7 +26,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public abstract List<Identity> CalcuateExpectedIdentities(Identity parentIdentity);
-        public abstract InterviewTreeRoster CreateRoster(Identity parentIdentity, Identity rosterIdentity, int index);
+        public abstract InterviewTreeRoster CreateRoster(Guid id);
+
+        public virtual void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
+        {
+            roster.SetIdentity(rosterIdentity);
+            roster.SortIndex = sortIndex;
+            roster.SetTitle(GetGroupTitle(rosterIdentity));
+        }
 
         protected InterviewTreeQuestion GetRosterSizeQuestion(Identity parentIdentity, Guid sizeQuestionId)
         {
@@ -58,17 +64,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return rosterTitles.Select(x => new RosterIdentity(rosterId, parentIdentity.RosterVector, x.Value).ToIdentity()).ToList();
         }
 
-        public override InterviewTreeRoster CreateRoster(Identity identity, Identity rosterIdentity, int index)
+        public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
+            rosterType: RosterType.Fixed,
+            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+
+        public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {
+            base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
+
             var rosterTitle = this.rosterTitles.Single(x => x.Value == rosterIdentity.RosterVector.Last());
-            var title = GetGroupTitle(rosterIdentity);
-            return new InterviewTreeRoster(rosterIdentity,
-                                     title,
-                                     Enumerable.Empty<IInterviewTreeNode>(),
-                                     sortIndex: index,
-                                     rosterType: RosterType.Fixed,
-                                     rosterTitle: rosterTitle.Title,
-                                     childrenReferences: this.questionnaire.GetChidrenReferences(rosterIdentity.Id));
+            roster.SetRosterTitle(rosterTitle.Title);
         }
     }
 
@@ -93,22 +98,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .ToList();
         }
 
-        public override InterviewTreeRoster CreateRoster(Identity parentIdentity, Identity rosterIdentity, int index)
+        public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
+            rosterType: RosterType.Numeric,
+            rosterSizeQuestion: this.rosterSizeQuestionId,
+            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+
+        public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {
+            base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
+
             var rosterTitle = rosterTitleQuestionId.HasValue ? null : (rosterIdentity.RosterVector.Last() + 1).ToString(CultureInfo.InvariantCulture);
-            var rosterTitleQuestionIdentity = this.rosterTitleQuestionId.HasValue 
+            var rosterTitleQuestionIdentity = this.rosterTitleQuestionId.HasValue
                 ? new Identity(this.rosterTitleQuestionId.Value, rosterIdentity.RosterVector)
                 : null;
-            var title = GetGroupTitle(rosterIdentity);
-            return new InterviewTreeRoster(rosterIdentity,
-                                    title,
-                                    Enumerable.Empty<IInterviewTreeNode>(),
-                                    sortIndex: index,
-                                    rosterType: RosterType.Numeric,
-                                    rosterTitle: rosterTitle,
-                                    rosterSizeQuestion: rosterSizeQuestionId,
-                                    rosterTitleQuestionIdentity: rosterTitleQuestionIdentity,
-                                    childrenReferences: this.questionnaire.GetChidrenReferences(rosterIdentity.Id));
+
+            roster.AsNumeric.RosterTitleQuestionIdentity = rosterTitleQuestionIdentity;
+            roster.SetRosterTitle(rosterTitle);
         }
     }
 
@@ -130,22 +135,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .ToList();
         }
 
-        public override InterviewTreeRoster CreateRoster(Identity parentIdentity, Identity rosterIdentity, int index)
+        public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
+            rosterType: RosterType.List,
+            rosterSizeQuestion: this.rosterSizeQuestionId,
+            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+
+        public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {
+            base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
+
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
             var rosterTitle = rosterSizeQuestion.AsTextList.GetTitleByItemCode(rosterIdentity.RosterVector.Last());
-            var title = GetGroupTitle(rosterIdentity);
-
-            return new InterviewTreeRoster(rosterIdentity,
-                                    title,
-                                    Enumerable.Empty<IInterviewTreeNode>(),
-                                    sortIndex: index,
-                                    rosterType: RosterType.List,
-                                    rosterTitle: rosterTitle,
-                                    rosterSizeQuestion: rosterSizeQuestionId,
-                                    childrenReferences: this.questionnaire.GetChidrenReferences(rosterIdentity.Id));
+            
+            roster.SetRosterTitle(rosterTitle);
         }
-
     }
 
     public class MultiRosterManager : RosterManager
@@ -164,47 +167,44 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsMultiFixedOption;
             decimal[] newMultiAnswer = rosterSizeQuestion?.IsAnswered ?? false ? rosterSizeQuestion.GetAnswer().ToDecimals().ToArray() : new decimal[0];
 
-            var userDefinedOrder = newMultiAnswer
-                .Select((optionValue, i) => new RosterIdentity(this.rosterId, parentIdentity.RosterVector, optionValue, i).ToIdentity())
-                .ToList();
-            return userDefinedOrder;
+            return this.shouldQuestionRecordAnswersOrder
+                ? this.GetIdentitiesByUserDefinedOrder(parentIdentity, newMultiAnswer)
+                : this.GetIdentitiesByQuestionnaireDefinedOrder(parentIdentity, newMultiAnswer);
         }
 
-        public List<Identity> GetOrderedExpectedRostersIdentities(Identity parentIdentity)
+        private List<Identity> GetIdentitiesByQuestionnaireDefinedOrder(Identity parentIdentity, decimal[] newMultiAnswer)
         {
-            if (shouldQuestionRecordAnswersOrder)
-            {
-                return CalcuateExpectedIdentities(parentIdentity);
-            }
-
-            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.AsMultiFixedOption;
-            decimal[] newMultiAnswer = rosterSizeQuestion?.IsAnswered ?? false ? rosterSizeQuestion.GetAnswer().ToDecimals().ToArray() : new decimal[0];
-
             var questionnaireDefinedOrder = new List<Identity>();
             var index = 0;
             foreach (var optionValue in this.questionnaire.GetMultiSelectAnswerOptionsAsValues(this.rosterSizeQuestionId))
             {
                 if (!newMultiAnswer.Contains(optionValue)) continue;
-                questionnaireDefinedOrder.Add(new RosterIdentity(this.rosterId, parentIdentity.RosterVector, optionValue, index).ToIdentity());
+                questionnaireDefinedOrder.Add(
+                    new RosterIdentity(this.rosterId, parentIdentity.RosterVector, optionValue, index).ToIdentity());
                 index++;
             }
 
             return questionnaireDefinedOrder;
         }
 
-        public override InterviewTreeRoster CreateRoster(Identity parentIdentity, Identity rosterIdentity, int index)
-        {
-            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last());
-            var title = GetGroupTitle(rosterIdentity);
+        private List<Identity> GetIdentitiesByUserDefinedOrder(Identity parentIdentity, decimal[] newMultiAnswer)
+            => newMultiAnswer
+                .Select((optionValue, i) =>
+                    new RosterIdentity(this.rosterId, parentIdentity.RosterVector, optionValue, i).ToIdentity())
+                .ToList();
 
-            return new InterviewTreeRoster(rosterIdentity,
-                                    title,
-                                    Enumerable.Empty<IInterviewTreeNode>(),
-                                    sortIndex: index,
-                                    rosterType: RosterType.Multi,
-                                    rosterTitle: rosterTitle,
-                                    rosterSizeQuestion: rosterSizeQuestionId,
-                                    childrenReferences: this.questionnaire.GetChidrenReferences(rosterIdentity.Id));
+
+        public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
+            rosterType: RosterType.Multi,
+            rosterSizeQuestion: this.rosterSizeQuestionId,
+            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+
+        public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
+        {
+            base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
+
+            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last());
+            roster.SetRosterTitle(rosterTitle);
         }
     }
 
@@ -223,48 +223,47 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
             var newYesNoAnswer = rosterSizeQuestion.AsYesNo.IsAnswered ? rosterSizeQuestion.AsYesNo.GetAnswer().ToAnsweredYesNoOptions() : new AnsweredYesNoOption[0];
-            return newYesNoAnswer
+
+            return this.shouldQuestionRecordAnswersOrder
+                ? this.GetIdentitiesByUserDefinedOrder(parentIdentity, newYesNoAnswer)
+                : this.GetIdentitiesByQuestionnaireDefinedOrder(parentIdentity, newYesNoAnswer);
+        }
+
+        private List<Identity> GetIdentitiesByUserDefinedOrder(Identity parentIdentity, IEnumerable<AnsweredYesNoOption> newYesNoAnswer)
+            => newYesNoAnswer
                 .Where(x => x.Yes)
-                .Select((selectedYesOption, index) => new RosterIdentity(rosterId, parentIdentity.RosterVector, selectedYesOption.OptionValue, index).ToIdentity())
+                .Select((selectedYesOption, index) =>
+                    new RosterIdentity(this.rosterId, parentIdentity.RosterVector, selectedYesOption.OptionValue, index).ToIdentity())
                 .ToList();
-        }
 
-        public override InterviewTreeRoster CreateRoster(Identity parentIdentity, Identity rosterIdentity, int index)
+        private List<Identity> GetIdentitiesByQuestionnaireDefinedOrder(Identity parentIdentity, IEnumerable<AnsweredYesNoOption> newYesNoAnswer)
         {
-            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last());
-            var title = GetGroupTitle(rosterIdentity);
-            return new InterviewTreeRoster(rosterIdentity,
-                                    title,
-                                    Enumerable.Empty<IInterviewTreeNode>(),
-                                    sortIndex: index,
-                                    rosterType: RosterType.YesNo,
-                                    rosterTitle: rosterTitle,
-                                    rosterSizeQuestion: rosterSizeQuestionId,
-                                    childrenReferences: this.questionnaire.GetChidrenReferences(rosterIdentity.Id));
-        }
-
-        public List<Identity> GetOrderedExpectedRostersIdentities(Identity parentIdentity)
-        {
-            if (shouldQuestionRecordAnswersOrder)
-            {
-                return CalcuateExpectedIdentities(parentIdentity);
-            }
-
-            var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
-            var newYesNoAnswer = rosterSizeQuestion.AsYesNo.IsAnswered ? rosterSizeQuestion.AsYesNo.GetAnswer().ToAnsweredYesNoOptions() : new AnsweredYesNoOption[0];
-
             var questionnaireDefinedOrder = new List<Identity>();
             var index = 0;
             foreach (var optionValue in this.questionnaire.GetMultiSelectAnswerOptionsAsValues(this.rosterSizeQuestionId))
             {
                 if (newYesNoAnswer.Any(x => x.Yes && x.OptionValue == optionValue))
                 {
-                    questionnaireDefinedOrder.Add(new RosterIdentity(this.rosterId, parentIdentity.RosterVector, optionValue, index).ToIdentity());
+                    questionnaireDefinedOrder.Add(
+                        new RosterIdentity(this.rosterId, parentIdentity.RosterVector, optionValue, index).ToIdentity());
                     index++;
                 }
             }
 
             return questionnaireDefinedOrder;
+        }
+
+        public override InterviewTreeRoster CreateRoster(Guid id) => new InterviewTreeRoster(
+            rosterType: RosterType.YesNo,
+            rosterSizeQuestion: this.rosterSizeQuestionId,
+            childrenReferences: this.questionnaire.GetChidrenReferences(id));
+
+        public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
+        {
+            base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
+
+            var rosterTitle = questionnaire.GetAnswerOptionTitle(rosterSizeQuestionId, rosterIdentity.RosterVector.Last());
+            roster.SetRosterTitle(rosterTitle);
         }
     }
 }

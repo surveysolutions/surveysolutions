@@ -60,39 +60,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 @event.InterviewData.QuestionnaireVersion);
 
             this.sourceInterview = this.Tree.Clone();
+            this.Tree.ActualizeTree();
 
             this.properties.Status = @event.InterviewData.Status;
             this.properties.WasCompleted = @event.InterviewData.WasCompleted;
-
-            var maxRosterDepth = @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Select(x => x.OuterScopeRosterVector.Length).DefaultIfEmpty(0).Max();
-            var maxQuestionDepth = @event.InterviewData.Answers.Select(x => x.QuestionRosterVector.Length).DefaultIfEmpty(0).Max();
-
-            int maxDepth = Math.Max(maxRosterDepth, maxQuestionDepth);
-
-            for (int i = 0; i <= maxDepth; i++)
+            
+            foreach (var answerDto in @event.InterviewData.Answers.OrderBy(x => x.QuestionRosterVector.Length))
             {
-                var answersByScope = @event.InterviewData.Answers
-                    .Where(x => x.QuestionRosterVector.Length == i);
+                var question = this.Tree.GetQuestion(Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
 
-                foreach (var answerDto in answersByScope)
+                if (answerDto.Answer != null)
                 {
-                    var question = this.Tree.GetQuestion(Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
-
-                    if (answerDto.Answer != null)
-                    {
-                        question.SetObjectAnswer(answerDto.Answer);
-                    }
-
-                    if (answerDto.AllComments != null)
-                        question.AnswerComments = answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)).ToList();
+                    question.SetObjectAnswer(answerDto.Answer);
                 }
 
-                foreach (var rosterDto in @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Where(x => x.OuterScopeRosterVector.Length == i))
-                {
-                    var rosterIdentity = new RosterIdentity(rosterDto.RosterId, rosterDto.OuterScopeRosterVector, rosterDto.RosterInstanceId, rosterDto.SortIndex);
-                    this.AddRosterToTree(rosterIdentity);
-                    this.Tree.GetRoster(rosterIdentity.ToIdentity()).SetRosterTitle(rosterDto.RosterTitle);
-                }
+                if (answerDto.AllComments != null)
+                    question.AnswerComments = answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)).ToList();
+
+                this.ActualizeRostersIfQuestionIsRosterSize(answerDto.Id);
             }
 
             foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
