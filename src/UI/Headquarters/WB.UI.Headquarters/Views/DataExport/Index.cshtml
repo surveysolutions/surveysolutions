@@ -1,6 +1,7 @@
 ﻿@using System
 @using System.Web.Optimization
 @using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
+@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 @model WB.UI.Headquarters.Models.ExportModel
 
@@ -81,15 +82,15 @@
                     <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
-                    <h4>Export range:</h4>
+                    <h4>@DataExport.ExportRange</h4>
                     <div class="block-filter">
-                        <h5>Survey template (questionnaire version)</h5>
+                        <h5>@DataExport.SurveyTemplateTitle</h5>
                         <div class="btn-group btn-input clearfix">
                             <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="form-control"></select>
                         </div>
                     </div>
                     <div class="block-filter checkbox-block">
-                        <h5>Status of exported interviews</h5>
+                        <h5>@DataExport.StatusOfExportTitle</h5>
                         <select class="form-control" id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title'"></select>
                     </div>
                 </div>
@@ -98,12 +99,12 @@
                 <h2 data-bind="text: selectedTemplate().title"></h2>
                 <!-- ko if:selectedTemplateTitle() != null -->
                 <div class="main  data">
-                    <h3>Main Survey Data</h3>
-                    <p>Zip archive with all collected text interview data</p>
+                    <h3>@DataExport.MainSurveyDataTitle</h3>
+                    <p>@DataExport.ZipArchiveDescription</p>
                     <div class="container-data">
                         <div class="table-data-header">
-                            <div class="cell-data size">File size</div>
-                            <div class="cell-data last-generated">Last generated</div>
+                            <div class="cell-data size">@DataExport.FileSizeTitle</div>
+                            <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                         </div>
                         
                         @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, styleName:"stata", dataUrl: "$AllDataUrl", addFromat: true)
@@ -116,11 +117,11 @@
                 </div>
                 <div class="binary data">
                     <h3>@DataExport.BinaryData</h3>
-                    <p>All collected external binary data (e.g. pictures)</p>
+                    <p>@DataExport.BinaryDescription</p>
                     <div class="container-data">
                         <div class="table-data-header">
-                            <div class="cell-data size">File size</div>
-                            <div class="cell-data last-generated">Last generated</div>
+                            <div class="cell-data size">@DataExport.FileSizeTitle</div>
+                            <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                         </div>
                         @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", styleName: "zip", addFromat: true)
                     </div>
@@ -128,15 +129,14 @@
                 <div class="metadata data">
                     <h3>@DataExport.DDI</h3>
                     <p>
-                        <span>Data Documentation Initiative XML data</span>
-                        <span>Version 3.2 of the DDI</span>
+                        <span>@DataExport.DDIDescription</span>
                     </p>
                     <div class="container-data">
                         <div class="table-data-header"></div>
                         <div class="table-data generated-data">
                             <div class="cell-data format-data">XML structured file</div>
                             <div class="cell-data  download-block">
-                                <a type="button" class="btn btn-primary btn-lg download" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">Download</a>
+                                <a type="button" class="btn btn-primary btn-lg download" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">@DataExport.Download</a>
                             </div>
                         </div>
                     </div>
@@ -146,13 +146,12 @@
                     <div class="paradata data">
                         <h3>@DataExport.ParaData</h3>
                         <p>
-                            <span>Available data about the process by which the survey</span>
-                            <span>data were collected </span>
+                            <span>@DataExport.ParadataDescription</span>
                         </p>
                         <div class="container-data">
                             <div class="table-data-header">
-                                <div class="cell-data size">File size</div>
-                                <div class="cell-data last-generated">Last generated</div>
+                                <div class="cell-data size">@DataExport.FileSizeTitle</div>
+                                <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                             </div>
                             @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl", styleName: "separated-data")
                         </div>
@@ -164,78 +163,48 @@
     </div>
 </main>
 
-@helper DataExportTemplate(DataExportType type, DataExportFormat format, string dataUrl, string iconUrl = null, bool addFromat = false)
-{
-var exportParameters = "'" + (int)type + "','" + (int)format + "'";
-    <table class="table table-condensed" style="margin-bottom: 0px;">
-        <thead>
-            <tr>
-                @if (!string.IsNullOrEmpty(iconUrl))
-                {
-                    <td><img src="@Url.Content(iconUrl)" /></td>
-                }
-                <td><i data-bind="text:lastUpdateDate(@exportParameters)"></i></td>
-                <td>
-                    <a class="btn btn-default" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">
-                        <i class="glyphicon glyphicon-refresh">
-                        </i>
-                    </a>
-                </td>
-                <td>
-
-                    <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">
-                        <i class="glyphicon glyphicon-download">
-                        </i>
-                    </a>
-                </td>
-            </tr>
-        </thead>
-    </table>
-}
-
 @helper ExportTemplate(DataExportType type, DataExportFormat format, string styleName, string dataUrl, bool addFromat = false)
 {
-
-var exportParameters = "'" + (int)type + "','" + (int)format + "'";
+    var exportParameters = "'" + (int)type + "','" + (int)format + "'";
 
     <div data-bind="css: {'table-data': true, 'generated-data': (showRefreshButton(@exportParameters) && showDownloadButton(@exportParameters)), 'generation-in-progress' : (!showRefreshButton(@exportParameters)), 'not-generated-data': (showRefreshButton(@exportParameters) && !showDownloadButton(@exportParameters))}" >
-        <div class="cell-data format-data @styleName">@format format</div>
+        <div class="cell-data format-data @styleName">@format @DataExport.FormatTitle</div>
         <div class="cell-data  download-block">
-            <button type="button" class="btn btn-success btn-lg generate" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">Generate</button>
-            <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">Download</a>
-            <div class="not-generated " >NOT GENERATED YET</div>    
+            <button type="button" class="btn btn-success btn-lg generate" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
+            <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">@DataExport.Download</a>
+            <div class="not-generated " >@DataExport.DataWasNotGenerated</div>    
         </div>
         <div class="cell-data last-generated " data-bind="visible: showDownloadButton(@exportParameters)"> <i data-bind="text:lastUpdateDate(@exportParameters)"></i>
         </div>
-        <div class="cell-data size " data-bind="visible: showDownloadButton(@exportParameters)"><i data-bind="text:fileSize(@exportParameters) + ' bytes'"></i></div>
+        <div class="cell-data size " data-bind="visible: showDownloadButton(@exportParameters)"><i data-bind="text:fileSize(@exportParameters) + ' @DataExport.Bytes'"></i></div>
         <div class="cell-data min-view " data-bind="visible: showDownloadButton(@exportParameters)">
-            <div>Last generated: <span data-bind="text:lastUpdateDate(@exportParameters)"></span></div>
-            <div>File size: <span><i data-bind="text:fileSize(@exportParameters) + ' bytes'"></i></span></div>
+            <div>@DataExport.LastGeneratedTitle: <span data-bind="text:lastUpdateDate(@exportParameters)"></span></div>
+            <div>@DataExport.FileSizeTitle: <span><i data-bind="text:fileSize(@exportParameters) + ' @DataExport.Bytes'"></i></span></div>
         </div>
 
         <div class="cell-data progress-block" >
             <div class="progress-information queued" data-bind="visible: hasAnyDataToBePrepared(@exportParameters) && (getProgressInPercents(@exportParameters) < 1)">
-                <span>Queued</span>
+                <span>@DataExport.QueuedTitle</span>
                 <div class="progress">
                     <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
-                        <span class="sr-only">Queued</span>
+                        <span class="sr-only">@DataExport.QueuedTitle</span>
                     </div>
                 </div>
                 <button type="button" class="close" data-bind="click : requestStopExportProcess(@exportParameters)"></button>
             </div>
         
             <div class="progress-information" data-bind="visible: hasAnyDataToBePrepared(@exportParameters) && (getProgressInPercents(@exportParameters) > 0)">
-                <span data-bind="text:'Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                <span data-bind="text:'@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
                 <div class="progress">
                     <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-bind="style:{ width: getProgressInPercents(@exportParameters) + '%' } ">
-                        <span class="sr-only" data-bind="text: getProgressInPercents(@exportParameters) + '% Complete'"></span>
+                        <span class="sr-only" data-bind="text: getProgressInPercents(@exportParameters) + '% @DataExport.Completed'"></span>
                     </div>
                 </div>
                 <button type="button" class="close" data-bind="click : requestStopExportProcess(@exportParameters)"></button>
             </div>
         </div>
         
-        <div class="not-generated cell-data" data-bind="visible: !hasAnyDataToBePrepared(@exportParameters)">No Data available</div>
+        <div class="not-generated cell-data" data-bind="visible: !hasAnyDataToBePrepared(@exportParameters)">@DataExport.NoDataAvailable</div>
 
     </div>
 }
