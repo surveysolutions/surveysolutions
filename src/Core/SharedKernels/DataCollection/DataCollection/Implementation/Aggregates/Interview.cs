@@ -238,16 +238,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         $"Questionnaire ID: {this.QuestionnaireIdentity}.");
             }
             
-            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
-
-            var targetQuestionnaire = this.GetQuestionnaireOrThrow();
+            var targetQuestionnaire = this.GetQuestionnaireOrThrow(command.Language);
 
             var changedInterviewTree = this.Tree.Clone();
+            changedInterviewTree.SwitchQuestionnaire(targetQuestionnaire);
 
             this.UpdateRosterTitles(changedInterviewTree, targetQuestionnaire);
 
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
+            this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
             this.ApplyEvents(treeDifference, command.UserId);
         }
 
