@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -172,6 +173,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Preloadin
             status.Errors = errorsMessagess.ToArray();
 
             var topLevel = preloadedDataService.GetTopLevelData(data);
+
+            status.InterviewsCount = topLevel?.Content?.Length ?? 0;
+            if (!status.Errors.Any() && topLevel!=null)
+            {
+                CountResposiblesInDataFile(topLevel.ToEnumerable().ToArray(), preloadedDataService, status);
+            }
 
             var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.ResponsibleColumnName);
             status.WasResponsibleProvided = responsibleNameIndex >= 0;
