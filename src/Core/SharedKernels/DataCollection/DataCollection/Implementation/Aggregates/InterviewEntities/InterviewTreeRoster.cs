@@ -9,9 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeRoster : InterviewTreeGroup
     {
-        public InterviewTreeRoster(Identity identity,
-            SubstitionText title,
-            IEnumerable<IInterviewTreeNode> children,
+        public InterviewTreeRoster(Identity identity = null,
+            SubstitionText title = null,
             string rosterTitle = null,
             int sortIndex = 0,
             RosterType rosterType = RosterType.Fixed,
@@ -22,7 +21,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.RosterTitle = rosterTitle;
             this.SortIndex = sortIndex;
-            this.AddChildren(children);
             switch (rosterType)
             {
                 case RosterType.Fixed:
