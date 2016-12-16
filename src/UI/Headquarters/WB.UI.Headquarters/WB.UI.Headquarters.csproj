@@ -930,7 +930,7 @@
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\ImportMode.cshtml" />
-    <Content Include="Views\HQ\ImportVerificationErrors.cshtml" />
+    <Content Include="Views\HQ\InterviewImportVerificationErrors.cshtml" />
     <Content Include="Views\HQ\InterviewImportConfirmation.cshtml" />
     <Content Include="Views\HQ\ImportInterviews.cshtml" />
     <Content Include="Views\HQ\InterviewImportProgress.cshtml" />

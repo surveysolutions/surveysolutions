@@ -23,9 +23,10 @@ main{
                 margin-bottom: 0;
                 a{
                     color: $gray_light;
-                    text-decoration: underline;
-                    &:hover{
+                    box-shadow: 0 2px 0 $gray_light;
+                    &:hover, &:focus{
                         text-decoration: none;
+                        box-shadow: none;
                     }
                 }
             }
