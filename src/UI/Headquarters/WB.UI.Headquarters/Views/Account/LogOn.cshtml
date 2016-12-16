@@ -62,14 +62,13 @@
                             @using (Html.BeginForm("LogOn", "Account", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new {id = "log-in", @class = "log-in"}))
                             {
                                 <div class="retina headquarter">Survey Solutions Headquarters</div>
-                                if (!modelState.IsValid)
+                                if (ViewData.ModelState.ContainsKey("InvalidCredentials") && ViewData.ModelState["InvalidCredentials"].Errors.Any())
                                 {
                                     <div class="form-group has-error">
                                         <p>
-                                            @foreach (var error in modelState.Keys.SelectMany(key => modelState[key].Errors))
-                                            {
-                                                <span class="help-block">@error.ErrorMessage</span>
-                                            }
+                                            <span class="help-block">
+                                                @Html.ValidationMessage("InvalidCredentials")
+                                            </span>
                                         </p>
                                     </div>
                                 }
