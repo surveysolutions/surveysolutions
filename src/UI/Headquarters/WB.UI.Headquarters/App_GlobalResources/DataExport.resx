@@ -156,4 +156,61 @@
   <data name="Metadata" xml:space="preserve">
     <value>Metadata</value>
   </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>All collected external binary data (e.g. pictures)</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>bytes</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>NOT GENERATED YET</value>
+  </data>
+  <data name="DDIDescription" xml:space="preserve">
+    <value>Data Documentation Initiative XML data</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>Export range:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>File size</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>format</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="Generating" xml:space="preserve">
+    <value>Generating</value>
+  </data>
+  <data name="LastGeneratedTitle" xml:space="preserve">
+    <value>Last generated</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>Main Survey Data</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>No Data available</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>Available data about the process by which the survey was conducted</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>Queued</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>Status of exported interviews</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>Survey template (questionnaire version)</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>Zip archive with all collected text interview data</value>
+  </data>
 </root>

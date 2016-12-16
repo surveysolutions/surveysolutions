@@ -115,7 +115,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 StatusOfLatestExportProcess = GetStatusOfExportProcess(dataType, dataFormat, questionnaireIdentity, allProcesses)
             };
 
-            SetCanRefreshBeRequested(dataExportView, dataType, dataFormat, interviewStatus, questionnaireIdentity, questionnaire, runningProcess);
+            if (dataFormat == DataExportFormat.Binary && 
+                !questionnaire.HeaderToLevelMap.Values.SelectMany(l => l.HeaderItems.Values.Where(q => q.QuestionType == QuestionType.Multimedia)).Any())
+            {
+                dataExportView.CanRefreshBeRequested = false;
+                dataExportView.HasAnyDataToBePrepared = false;
+            }
+            else
+            {
+                dataExportView.HasAnyDataToBePrepared = true;
+                var process = runningProcess.FirstOrDefault(p =>
+                    p.Format == dataFormat &&
+                    p.Type == dataType &&
+                    p.InterviewStatus == interviewStatus &&
+                    (p.QuestionnaireIdentity == null || p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
+
+                dataExportView.CanRefreshBeRequested = (process == null);
+                dataExportView.DataExportProcessId = process?.DataExportProcessId;
+            }
 
             string path = string.Empty;
             switch (dataType)
@@ -138,47 +155,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 x.QuestionnaireIdentity == null ||
                 x.QuestionnaireIdentity.Equals(questionnaireIdentity) && x.Format == dataFormat &&
                 x.Type == dataType)?.ProcessStatus ?? DataExportStatus.NotStarted;
-
-        private void SetCanRefreshBeRequested(
-            DataExportView dataExportView,
-            DataExportType dataType, 
-            DataExportFormat dataFormat, 
-            InterviewStatus? interviewStatus, 
-            QuestionnaireIdentity questionnaireIdentity, 
-            QuestionnaireExportStructure questionnaire, 
-            RunningDataExportProcessView[] runningProcess)
-        {
-            if (dataFormat == DataExportFormat.Binary)
-            {
-                var hasMultimediaQuestions =
-                    questionnaire.HeaderToLevelMap.Values.SelectMany(
-                        l => l.HeaderItems.Values.Where(q => q.QuestionType == QuestionType.Multimedia)).Any();
-
-                if (!hasMultimediaQuestions)
-                {
-                    dataExportView.CanRefreshBeRequested = false;
-                    dataExportView.HasAnyDataToBePrepared = false;
-                    return;
-                }
-            }
-
-            dataExportView.HasAnyDataToBePrepared = true;
-            var process = runningProcess.FirstOrDefault(p =>
-                    p.Format == dataFormat &&
-                    p.Type == dataType &&
-                    p.InterviewStatus == interviewStatus &&
-                    (p.QuestionnaireIdentity == null || p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
-
-            if (process == null)
-            {
-                dataExportView.CanRefreshBeRequested = true;
-                return;
-                
-            }
-
-            dataExportView.CanRefreshBeRequested = false;
-            dataExportView.DataExportProcessId = process.DataExportProcessId;
-        }
 
         private void SetDataExportLastUpdateTimeAndSizeIfFilePresent(DataExportView dataExportView, string filePath)
         {
