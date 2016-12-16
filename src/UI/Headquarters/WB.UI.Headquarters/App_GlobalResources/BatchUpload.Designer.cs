@@ -215,11 +215,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List of data fields which are required for creating interview assigment you can download.
+        /// </summary>
+        internal static string DownloadDescListRequiredPreffiledData {
+            get {
+                return ResourceManager.GetString("DownloadDescListRequiredPreffiledData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download invalid interviews.
         /// </summary>
         internal static string DownloadInvalidInterviews {
             get {
                 return ResourceManager.GetString("DownloadInvalidInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tab. template for this questionnire.
+        /// </summary>
+        internal static string DownloadLinkTitleListRequiredPreffiledData {
+            get {
+                return ResourceManager.GetString("DownloadLinkTitleListRequiredPreffiledData", resourceCulture);
             }
         }
         
@@ -328,6 +346,15 @@ namespace Resources {
         internal static string FormatNotSupported {
             get {
                 return ResourceManager.GetString("FormatNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide list of required prefilled data.
+        /// </summary>
+        internal static string HideListPrefilledData {
+            get {
+                return ResourceManager.GetString("HideListPrefilledData", resourceCulture);
             }
         }
         
@@ -463,6 +490,15 @@ namespace Resources {
         internal static string PleaseWait {
             get {
                 return ResourceManager.GetString("PleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefield data required for this questionnire.
+        /// </summary>
+        internal static string PrefieldRequiredData {
+            get {
+                return ResourceManager.GetString("PrefieldRequiredData", resourceCulture);
             }
         }
         

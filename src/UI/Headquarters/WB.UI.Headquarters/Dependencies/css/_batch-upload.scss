@@ -12,13 +12,9 @@
 	&>a{
 		display: block;
 		margin-bottom: 30px;
-		&.hide-list-of-required-prefilled-data{
-			display: none;
-		}
 	}
 	ul{
 		margin-left: 30px;
-		display: none;
 		margin-bottom: 20px;
 		font-family: "RobotoBold";
 		li{
