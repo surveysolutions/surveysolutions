@@ -79,7 +79,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            IQuestionnaireStorage questionnaireRepository,
             QuestionInstructionViewModel instructionViewModel,
             FilteredOptionsViewModel filteredOptionsViewModel)
         {
@@ -91,8 +90,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry = eventRegistry;
 
             this.questionState = questionStateViewModel;
-            this.questionnaireRepository = questionnaireRepository;
             this.Answering = answering;
+            answering.Delay = TimeSpan.FromMilliseconds(500);
             this.InstructionViewModel = instructionViewModel;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
@@ -111,15 +110,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             interview = this.interviewRepository.Get(interviewId);
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
-
             this.questionIdentity = entityIdentity;
             this.interviewGuid = interview.Id;
-
-            if (!questionnaire.IsQuestionFilteredCombobox(entityIdentity.Id))
-            {
-                this.UpdateOptionsState();
-            }
+            this.UpdateOptionsState();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
@@ -141,7 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                this.UpdateAutoCompleteList().ConfigureAwait(false);
+                UpdateAutoCompleteList(this.FilterText ?? DefaultText ?? string.Empty);
             }
         }
 
@@ -218,67 +211,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.filterText = value;
-                this.UpdateAutoCompleteList().ConfigureAwait(false);
+                this.UpdateAutoCompleteList(value);
                 this.RaisePropertyChanged();
             }
         }
 
-        private CancellationTokenSource suggestionListCancelationSource;
-
-        private async Task UpdateAutoCompleteList()
+        private CancellationTokenSource suggestionsCancellation = null;
+        
+        private void UpdateAutoCompleteList(string filter)
         {
-            this.suggestionListCancelationSource?.Cancel(true);
-            this.suggestionListCancelationSource = new CancellationTokenSource();
+            this.suggestionsCancellation?.Cancel();
+            this.suggestionsCancellation = new CancellationTokenSource();
 
-            this.StartLoadingProgress();
-          
-            try
+            Answering.ExecuteActionAsync(token => Task.Run(() =>
             {
-                var cancelationToken = this.suggestionListCancelationSource.Token;
+                token.ThrowIfCancellationRequested();
 
-                await Task.Run(() =>
+                var list = this.GetSuggestionsList(filter).ToList();
+
+                token.ThrowIfCancellationRequested();
+
+                if (filter != this.filterText) return;
+
+                this.InvokeOnMainThread(() =>
                 {
-                    var list = this.GetSuggestionsList(this.filterText).ToList();
-
-                    if (cancelationToken.IsCancellationRequested)
+                    if (list.Any())
                     {
-                        return;
+                        this.AutoCompleteSuggestions = list;
                     }
-
-                    this.InvokeOnMainThread(() =>
+                    else
                     {
-                        if (list.Any())
-                        {
-                            this.AutoCompleteSuggestions = list;
-                        }
-                        else
-                        {
-                            this.SetSuggestionsEmpty();
-                        }
-
-                        this.FinishLoadingProgress();
-                    });
-                }, this.suggestionListCancelationSource.Token).ConfigureAwait(false);
-            }
-            catch (TaskCanceledException)
-            {
-                /* nom nom nom */
-            }
-        }
-
-        private readonly ActionThrottler actionDelay = new ActionThrottler();
-
-        private async void StartLoadingProgress()
-        {
-            await this.actionDelay.RunDelayed(
-                () => InvokeOnMainThread(Answering.StartInProgressIndicator), 
-                TimeSpan.FromMilliseconds(500)).ConfigureAwait(false);
-        }
-
-        private void FinishLoadingProgress()
-        {
-            this.actionDelay.Complete();
-            this.Answering.FinishInProgressIndicator();
+                        this.SetSuggestionsEmpty();
+                    }
+                });
+            }, token), suggestionsCancellation.Token).ConfigureAwait(false);
         }
 
         private string resetTextInEditor;
@@ -341,7 +307,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<FilteredComboboxItemViewModel> autoCompleteSuggestions = new List<FilteredComboboxItemViewModel>();
         private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
-        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public List<FilteredComboboxItemViewModel> AutoCompleteSuggestions
         {
@@ -396,9 +361,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.FinishLoadingProgress();
-            suggestionListCancelationSource?.Cancel();
-
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
 
             this.filteredOptionsViewModel.Dispose();
