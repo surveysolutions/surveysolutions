@@ -77,7 +77,7 @@ namespace WB.UI.Designer.Api.Headquarters
                     Id = questionnaireListItem.PublicId,
                     Title = questionnaireListItem.Title,
                     LastModifiedDate = questionnaireListItem.LastEntryDate,
-                    OwnerName = questionnaireListItem.CreatorName
+                    OwnerName = questionnaireListItem.Owner
                 }).ToList()
             };
 
