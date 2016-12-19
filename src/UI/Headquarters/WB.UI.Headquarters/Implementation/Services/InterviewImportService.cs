@@ -16,6 +16,7 @@ using WB.UI.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Implementation.Services
 {
@@ -82,7 +83,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 {
                     this.Status.State.Errors.Add(new InterviewImportError
                     {
-                        ErrorMessage = BatchUpload.ImportInterviews_IncorrectDatafile
+                        ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile
                     });
 
                     return;
@@ -102,7 +103,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                             this.Status.State.Errors.Add(new InterviewImportError()
                             {
                                 ErrorMessage =
-                                    string.Format(BatchUpload.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(importedInterview))
+                                    string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(importedInterview))
                             });
                             return;
                         }
@@ -125,7 +126,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                         catch (Exception ex)
                         {
                             var errorMessage =
-                                string.Format(BatchUpload.ImportInterviews_GenericError, this.FormatInterviewImportData(importedInterview), responsibleSupervisorId, importedInterview.InterviewerId, questionnaireIdentity, headquartersId, ex.Message);
+                                string.Format(Interviews.ImportInterviews_GenericError, this.FormatInterviewImportData(importedInterview), responsibleSupervisorId, importedInterview.InterviewerId, questionnaireIdentity, headquartersId, ex.Message);
 
                             this.logger.Error(errorMessage, ex);
 
