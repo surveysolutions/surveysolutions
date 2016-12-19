@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         };
 
         Because of = () => 
-            interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId",false, null, Guid.Parse("22222222222222222222222222222222"));
+            interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId", false, null, Guid.Parse("22222222222222222222222222222222"));
 
         It should_in_progress_be_false = () =>
             interviewImportService.Status.IsInProgress.ShouldBeFalse();

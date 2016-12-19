@@ -503,33 +503,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with prefilled questions {0}. Resposible supervisor is missing.
-        /// </summary>
-        internal static string ImportInterviews_FailedToImportInterview_NoSupervisor {
-            get {
-                return ResourceManager.GetString("ImportInterviews_FailedToImportInterview_NoSupervisor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with prefilled questions {0}. SupervisorId {1}, InterviewerId {2}, QuestionnaireId {3}, HeadquartersId: {4}Exception: {5}.
-        /// </summary>
-        internal static string ImportInterviews_GenericError {
-            get {
-                return ResourceManager.GetString("ImportInterviews_GenericError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Datafile is incorrect.
-        /// </summary>
-        internal static string ImportInterviews_IncorrectDatafile {
-            get {
-                return ResourceManager.GetString("ImportInterviews_IncorrectDatafile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to None failed.
         /// </summary>
         internal static string ImportInterviews_NoneFailed {
