@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,7 +27,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly SampleImportSettings sampleImportSettings;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
-        private object lockStart = new object();
+        private readonly object lockStart = new object();
 
         private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
@@ -79,9 +80,9 @@ namespace WB.UI.Headquarters.Implementation.Services
 
                 if (interviewsToImport == null)
                 {
-                    this.Status.State.Errors.Add(new InterviewImportError()
+                    this.Status.State.Errors.Add(new InterviewImportError
                     {
-                        ErrorMessage = $"Datafile is incorrect"
+                        ErrorMessage = BatchUpload.ImportInterviews_IncorrectDatafile
                     });
 
                     return;
@@ -101,7 +102,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                             this.Status.State.Errors.Add(new InterviewImportError()
                             {
                                 ErrorMessage =
-                                    $"Error during import of interview with prefilled questions {FormatInterviewImportData(importedInterview)}. Resposible supervisor is missing"
+                                    string.Format(BatchUpload.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(importedInterview))
                             });
                             return;
                         }
@@ -124,16 +125,11 @@ namespace WB.UI.Headquarters.Implementation.Services
                         catch (Exception ex)
                         {
                             var errorMessage =
-                                $"Error during import of interview with prefilled questions {FormatInterviewImportData(importedInterview)}. " +
-                                $"SupervisorId {responsibleSupervisorId}, " +
-                                $"InterviewerId {importedInterview.InterviewerId}, " +
-                                $"QuestionnaireId {questionnaireIdentity}, " +
-                                $"HeadquartersId: {headquartersId}" +
-                                $"Exception: {ex.Message}";
+                                string.Format(BatchUpload.ImportInterviews_GenericError, this.FormatInterviewImportData(importedInterview), responsibleSupervisorId, importedInterview.InterviewerId, questionnaireIdentity, headquartersId, ex.Message);
 
                             this.logger.Error(errorMessage, ex);
 
-                            this.Status.State.Errors.Add(new InterviewImportError() {ErrorMessage = errorMessage});
+                            this.Status.State.Errors.Add(new InterviewImportError {ErrorMessage = errorMessage});
                         }
                         finally
                         {
@@ -147,9 +143,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                         this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;
                     });
 
-                this.logger.Info(
-                    $"Imported {this.Status.TotalInterviewsCount:N0} of interviews. " +
-                    $"Took {elapsedTime.Elapsed:c} to complete");
+                this.logger.Info($"Imported {this.Status.TotalInterviewsCount:N0} of interviews. Took {elapsedTime.Elapsed:c} to complete");
             }
             finally
             {

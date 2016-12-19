@@ -160,11 +160,11 @@
                     </p>
                     <p class="default-text" data-bind="ifnot: status.hasErrors">@BatchUpload.ImportInterviews_NoneFailed</p>
                     <p class="error-text" data-bind="if: status.hasErrors">
-                        <!-- ko if: status.createdInterviewsCount() == 1 -->
+                        <!-- ko if: status.interviewsWithError() == 1 -->
                         @BatchUpload.SingleInterviewFailedToBeCreated
                         <!-- /ko -->
-                        <!-- ko if: status.createdInterviewsCount() > 1 -->
-                        @Html.Raw(string.Format(BatchUpload.MultipleInterviewFailedToBeCreated, "<span data-bind='text: status.createdInterviewsCount'></span>"))
+                        <!-- ko if: status.interviewsWithError() > 1 -->
+                        @Html.Raw(string.Format(BatchUpload.MultipleInterviewFailedToBeCreated, "<span data-bind='text: status.interviewsWithError'></span>"))
                         <!-- /ko -->
                     </p>
                 </div>
