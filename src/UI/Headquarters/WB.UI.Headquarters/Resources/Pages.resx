@@ -585,4 +585,8 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+  </data>
 </root>
