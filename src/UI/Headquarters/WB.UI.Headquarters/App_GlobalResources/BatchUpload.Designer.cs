@@ -458,6 +458,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Importing.
+        /// </summary>
+        internal static string Importing {
+            get {
+                return ResourceManager.GetString("Importing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Other interview import process is running. Only one interview import process at a time is allowed.Wait until the process is finished and upload the sample again. Follow the link if you want to get more detailed progress information about the other import process..
         /// </summary>
         internal static string ImportInProgress {
@@ -467,11 +476,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Importing interviews for {0}.
+        /// </summary>
+        internal static string ImportInterviewsFor {
+            get {
+                return ResourceManager.GetString("ImportInterviewsFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must choose a file to upload.
         /// </summary>
         internal static string ImportInterviews_ChooseFile {
             get {
                 return ResourceManager.GetString("ImportInterviews_ChooseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done:.
+        /// </summary>
+        internal static string ImportInterviews_Done {
+            get {
+                return ResourceManager.GetString("ImportInterviews_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None failed.
+        /// </summary>
+        internal static string ImportInterviews_NoneFailed {
+            get {
+                return ResourceManager.GetString("ImportInterviews_NoneFailed", resourceCulture);
             }
         }
         
@@ -503,6 +539,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} of {1}.
+        /// </summary>
+        internal static string ImportProgressFormat {
+            get {
+                return ResourceManager.GetString("ImportProgressFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import sample.
         /// </summary>
         internal static string ImportSample {
@@ -526,6 +571,15 @@ namespace Resources {
         internal static string InterviewsAreNotCreated {
             get {
                 return ResourceManager.GetString("InterviewsAreNotCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing interviews.
+        /// </summary>
+        internal static string InterviewsImport_ImportingProgressPageTitle {
+            get {
+                return ResourceManager.GetString("InterviewsImport_ImportingProgressPageTitle", resourceCulture);
             }
         }
         
@@ -589,6 +643,24 @@ namespace Resources {
         internal static string MultipleErrorsWereFound {
             get {
                 return ResourceManager.GetString("MultipleErrorsWereFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interview failed to be created.
+        /// </summary>
+        internal static string MultipleInterviewFailedToBeCreated {
+            get {
+                return ResourceManager.GetString("MultipleInterviewFailedToBeCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews created.
+        /// </summary>
+        internal static string MultipleInterviewsCreated {
+            get {
+                return ResourceManager.GetString("MultipleInterviewsCreated", resourceCulture);
             }
         }
         
@@ -787,6 +859,24 @@ namespace Resources {
         internal static string SingleErrorFound {
             get {
                 return ResourceManager.GetString("SingleErrorFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 interview created.
+        /// </summary>
+        internal static string SingleInterviewCreated {
+            get {
+                return ResourceManager.GetString("SingleInterviewCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 interview failed to be created.
+        /// </summary>
+        internal static string SingleInterviewFailedToBeCreated {
+            get {
+                return ResourceManager.GetString("SingleInterviewFailedToBeCreated", resourceCulture);
             }
         }
         

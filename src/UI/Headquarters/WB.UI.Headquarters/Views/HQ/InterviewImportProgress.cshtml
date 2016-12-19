@@ -1,20 +1,21 @@
 ﻿@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    ViewBag.Title = BatchUpload.VerifySampleData;
+    ViewBag.Title = BatchUpload.InterviewsImport_ImportingProgressPageTitle;
 }
 
 @section scripts
 {
     @Scripts.Render("~/js/batch-upload-start-interview-creation")
     <script type="text/javascript">
-        var InterviewCreationProgressModel = function () {
-            var $importInterviewsStatusUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
+        var InterviewCreationProgressModel = function() {
+            var $importInterviewsStatusUrl =
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
 
             var self = this;
 
             self.questionnaireId = '@Model.QuestionnaireId';
-            self.questionnaireVersion= @Model.Version;
+            self.questionnaireVersion = @Model.Version;
             self.interviewImportProcessId = '@Model.Status.InterviewImportProcessId';
             self.questionnaireTitle = '@Model.QuestionnaireTitle';
 
@@ -27,7 +28,6 @@
                 isInProgress: ko.observable(true),
                 hasErrors: ko.observable(false)
             };
-
             self.isStatusLoaded = ko.observable(false);
 
             var shouldStopRequestUpdates = function(data) {
@@ -46,29 +46,33 @@
                 return false;
             }
 
-            self.updateStatusByInterviewsImport = function () {
-                sendRequest($importInterviewsStatusUrl, {}, function (data) {
-                    self.status.isInProgress(data.isInProgress);
-                    self.status.createdInterviewsCount(data.createdInterviewsCount);
-                    self.status.totalInterviewsCount(data.totalInterviewsCount);
-                    self.status.interviewsWithError(data.interviewsWithError);
+            self.updateStatusByInterviewsImport = function() {
+                sendRequest($importInterviewsStatusUrl,
+                    {},
+                    function(data) {
+                        self.status.isInProgress(data.isInProgress);
+                        self.status.createdInterviewsCount(data.createdInterviewsCount);
+                        self.status.totalInterviewsCount(data.totalInterviewsCount);
+                        self.status.interviewsWithError(data.interviewsWithError);
 
-                    self.status.elapsedTime(data.elapsedTime);
-                    self.status.estimatedTime(data.estimatedTime);
-                    self.status.hasErrors(data.hasErrors);
-                    self.isStatusLoaded(true);
+                        self.status.elapsedTime(data.elapsedTime);
+                        self.status.estimatedTime(data.estimatedTime);
+                        self.status.hasErrors(data.hasErrors);
+                        self.isStatusLoaded(true);
 
-                    if (shouldStopRequestUpdates(data) === false) {
-                        _.delay(self.updateStatusByInterviewsImport, 3000);
-                    }
-                }, true, true);
+                        if (shouldStopRequestUpdates(data) === false) {
+                            _.delay(self.updateStatusByInterviewsImport, 3000);
+                        }
+                    },
+                    true,
+                    true);
             };
 
             // should be moved to injected service, no inheritance
             self.IsPageLoaded = ko.observable(false);
             self.IsAjaxComplete = ko.observable(true);
 
-            var sendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
+            var sendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
 
                 if (!skipInProgressCheck && !self.IsAjaxComplete()) {
                     self.CheckForRequestComplete();
@@ -86,22 +90,21 @@
                     data: args,
                     headers: requestHeaders,
                     dataType: 'json'
-                }).done(function (data) {
+                }).done(function(data) {
                     if (!_.isUndefined(onSuccess)) {
                         onSuccess(data);
                     }
-                }).fail(function (jqXhr, textStatus, errorThrown) {
+                }).fail(function(jqXhr, textStatus, errorThrown) {
                     if (jqXhr.status === 403) {
                         if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
                             self.ShowError(input.settings.messages.forbiddenMessage);
-                        }
-                        else {
+                        } else {
                             self.ShowError(jqXhr.responseText);
                         }
                     } else {
                         self.ShowError(input.settings.messages.unhandledExceptionMessage);
                     }
-                }).always(function () {
+                }).always(function() {
                     self.IsPageLoaded(true);
                     self.IsAjaxComplete(true);
                     if (!_.isUndefined(onDone)) {
@@ -113,7 +116,7 @@
             self.updateStatusByInterviewsImport();
         };
 
-        $(function () {
+        $(function() {
             var model = new InterviewCreationProgressModel();
             ko.applyBindings(model);
         });
@@ -125,28 +128,49 @@
             <div class="col-md-8 col-sm-8 page-header">
                 <ol class="breadcrumb">
                     <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
-                    <li>@Html.ActionLink("creating multiple interviews", "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
                 </ol>
                 <div class="page-title">
-                    Creating multiple interviews with batch upload
+                    @BatchUpload.CreatingMultipleInterviews
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-7">
-                <h3>Importing information for @Model.QuestionnaireTitle&nbsp;(ver.&nbsp;@Model.Version)</h3>
+                <h3>
+                    @string.Format(BatchUpload.ImportInterviewsFor, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Version))
+                </h3>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block">
                 <div class="import-progress">
-                    <p data-bind="if: status.isInProgress">Processing interview <span data-bind="text: status.createdInterviewsCount"></span> of <span data-bind="text: status.totalInterviewsCount"></span>...</p>
-                    <p data-bind="ifnot: status.isInProgress">Done:</p>
-                    <p class="success-text" data-bind="if: status.createdInterviewsCount()>0"><span data-bind="text: (status.createdInterviewsCount() - status.interviewsWithError())">@Model.Status.CreatedInterviewsCount</span> interviews created</p>
-                    <p class="default-text" data-bind="ifnot: status.hasErrors">None failed</p>
-                    <p class="error-text" data-bind="if: status.hasErrors"><span data-bind="text: status.createdInterviewsCount">@Model.Status.State.Errors.Count</span> interviews failed to be created</p>
+                    <p data-bind="if: status.isInProgress">
+                        @BatchUpload.Importing
+                        (@Html.Raw(string.Format(BatchUpload.ImportProgressFormat, "<span data-bind='text: status.createdInterviewsCount'></span>", "<span data-bind='text: status.totalInterviewsCount'></span>")))
+                    </p>
+                    <p data-bind="ifnot: status.isInProgress">@BatchUpload.ImportInterviews_Done</p>
+                    <p class="success-text" data-bind="if: status.createdInterviewsCount() > 0">
+                        <!-- ko if: (status.createdInterviewsCount() - status.interviewsWithError()) == 1 -->
+                        @BatchUpload.SingleInterviewCreated
+                        <!-- /ko -->
+                        <!-- ko if: (status.createdInterviewsCount() - status.interviewsWithError()) > 1 -->
+                        @Html.Raw(string.Format(BatchUpload.MultipleInterviewsCreated, "<span data-bind='text: (status.createdInterviewsCount() - status.interviewsWithError())'></span>"))
+                        <!-- /ko -->
+                    </p>
+                    <p class="default-text" data-bind="ifnot: status.hasErrors">@BatchUpload.ImportInterviews_NoneFailed</p>
+                    <p class="error-text" data-bind="if: status.hasErrors">
+                        <!-- ko if: status.createdInterviewsCount() == 1 -->
+                        @BatchUpload.SingleInterviewFailedToBeCreated
+                        <!-- /ko -->
+                        <!-- ko if: status.createdInterviewsCount() > 1 -->
+                        @Html.Raw(string.Format(BatchUpload.MultipleInterviewFailedToBeCreated, "<span data-bind='text: status.createdInterviewsCount'></span>"))
+                        <!-- /ko -->
+                    </p>
                 </div>
-                <a data-bind="if: status.hasErrors() && status.isInProgress()===false" href="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetInvalidInterviewsByLastImport"})">Download data assosiated with failed interviews</a>
+                <a data-bind="if: status.hasErrors() && status.isInProgress()===false" href="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetInvalidInterviewsByLastImport"})">
+                    @BatchUpload.DownloadInvalidInterviews
+                </a>
                 <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.createdInterviewsCount()/status.totalInterviewsCount()) + '%' }, attr: {'aria-valuemax': status.totalInterviewsCount, 'aria-valuenow': status.createdInterviewsCount}" role="progressbar" aria-valuenow="@Model.Status.CreatedInterviewsCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalInterviewsCount">
@@ -155,9 +179,9 @@
                     </div>
                 </div>
                 <div class="action-buttons" data-bind="ifnot: status.isInProgress">
-                    <a class="btn btn-primary" href="@Url.Action("Interviews", "HQ")">interviews</a>
-                    <a class="btn btn-primary" href="@Url.Action("Index", "HQ")">questionnaires</a>
-                    @Html.ActionLink("Back to import", "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { @class = "back-link" })
+                    <a class="btn btn-primary" href="@Url.Action("Interviews", "HQ", new { templateId = Model.QuestionnaireId, templateVersion = Model.Version})">@MainMenu.Interviews</a>
+                    <a class="btn btn-primary" href="@Url.Action("Index", "HQ")">@MainMenu.Questionnaires</a>
+                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { @class = "back-link" })
                 </div>
             </div>
         </div>
