@@ -213,4 +213,7 @@
   <data name="ZipArchiveDescription" xml:space="preserve">
     <value>Зип архив с собранными данными</value>
   </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>XML формат</value>
+  </data>
 </root>
