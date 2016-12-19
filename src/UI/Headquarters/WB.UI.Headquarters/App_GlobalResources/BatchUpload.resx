@@ -436,8 +436,42 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="DataForSingleInterviewFound" xml:space="preserve">
     <value>Data for 1 interview found</value>
   </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Importing</value>
+  </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>Importing interviews for {0}</value>
+    <comment>{0} - questionnaire name and version</comment>
+  </data>
+  <data name="ImportInterviews_Done" xml:space="preserve">
+    <value>Done:</value>
+  </data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+    <value>None failed</value>
+  </data>
+  <data name="ImportProgressFormat" xml:space="preserve">
+    <value>{0} of {1}</value>
+    <comment>{0} - count of created interviews; {1} - total number to be created</comment>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Importing interviews</value>
+  </data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>{0} interview failed to be created</value>
+    <comment>{0} - count of created interviews (always &gt; 1)</comment>
+  </data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve">
+    <value>{0} interviews created</value>
+    <comment>{0} - count of created interviews (always &gt; 1)</comment>
+  </data>
   <data name="SelectSupervisorToAssign" xml:space="preserve">
     <value>Select supervisor to assign this batch to </value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 interview created</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>1 interview failed to be created</value>
   </data>
   <data name="VerificationCompleted" xml:space="preserve">
     <value>Verification completed</value>

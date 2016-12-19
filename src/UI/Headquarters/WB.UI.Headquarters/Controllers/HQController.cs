@@ -279,6 +279,8 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult InterviewImportConfirmation(PreloadedDataConfirmationModel model)
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
             if (this.interviewImportService.Status.IsInProgress)
             {
                 this.ModelState.AddModelError(string.Empty, "Import interviews is in progress. Wait until current operation is finished.");
@@ -316,16 +318,22 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult InterviewImportProgress(Guid id)
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
             InterviewImportStatus status = this.interviewImportService.Status;
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(status.QuestionnaireId, status.QuestionnaireVersion));
 
+            if (questionnaireInfo == null)
+            {
+                return RedirectToAction("Index"); }
+
             return this.View(new PreloadedDataInterviewProgressModel
             {
                 Status = status,
-                QuestionnaireId = status.QuestionnaireId,
-                Version = status.QuestionnaireVersion,
-                QuestionnaireTitle = questionnaireInfo?.Title
+                QuestionnaireId = questionnaireInfo.QuestionnaireId,
+                Version = questionnaireInfo.Version,
+                QuestionnaireTitle = questionnaireInfo.Title
             });
         }
 
