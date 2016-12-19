@@ -1,4 +1,4 @@
-@using Microsoft.Practices.ServiceLocation
+﻿@using Microsoft.Practices.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Headquarters.Resources
@@ -131,23 +131,7 @@
 
     @Html.Partial("Clickjacking")
     <!-- jsLibs:js -->
-    <script src="../../Dependencies/vendor/jquery/dist/jquery.js"></script>
-    <script src="../../Dependencies/vendor/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
-    <script src="../../Dependencies/vendor/knockout/dist/knockout.js"></script>
-    <script src="../../Dependencies/vendor/knockout-mapping/build/output/knockout.mapping-latest.js"></script>
-    <script src="../../Dependencies/vendor/moment/moment.js"></script>
-    <script src="../../Dependencies/vendor/lodash/lodash.js"></script>
-    <script src="../../Dependencies/vendor/datatables.net/js/jquery.dataTables.js"></script>
-    <script src="../../Dependencies/vendor/datatables.net-select/js/dataTables.select.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.animate.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.buttons.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.callbacks.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.confirm.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.desktop.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.history.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.mobile.js"></script>
-    <script src="../../Dependencies/vendor/pnotify/dist/pnotify.nonblock.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
     <!-- endinject -->
 
     <!-- jsApp:js -->
