@@ -27,6 +27,11 @@ namespace ASP
             return new MvcHtmlString(GetMenuItemTitle(page));
         }
 
+        public static string QuestionnaireName(this HtmlHelper html, string name, long version)
+        {
+            return string.Format(Pages.QuestionnaireNameFormat, name, version);
+        }
+
         private static string GetMenuItemTitle(MenuItem page)
         {
             switch (page)

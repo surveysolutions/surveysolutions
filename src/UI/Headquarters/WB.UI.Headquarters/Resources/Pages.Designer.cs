@@ -1159,6 +1159,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} (ver. {1}).
+        /// </summary>
+        public static string QuestionnaireNameFormat {
+            get {
+                return ResourceManager.GetString("QuestionnaireNameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rejected by headquarters.
         /// </summary>
         public static string RejectedByHeadquarters {
