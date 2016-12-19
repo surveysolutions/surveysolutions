@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.Controllers
                 // from Designer
                 return localDate.ToString("d MMM yyyy, HH:mm");
             
-            return localDate.Humanize();
+            return localDate.Humanize(false);
         }
     }
 }
