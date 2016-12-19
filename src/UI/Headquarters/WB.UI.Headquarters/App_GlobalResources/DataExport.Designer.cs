@@ -124,7 +124,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NOT GENERATED YET.
+        ///   Looks up a localized string similar to Not generated.
         /// </summary>
         internal static string DataWasNotGenerated {
             get {
@@ -336,6 +336,15 @@ namespace Resources {
         internal static string SurveyTemplateTitle {
             get {
                 return ResourceManager.GetString("SurveyTemplateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML format.
+        /// </summary>
+        internal static string XMLFileDescription {
+            get {
+                return ResourceManager.GetString("XMLFileDescription", resourceCulture);
             }
         }
         

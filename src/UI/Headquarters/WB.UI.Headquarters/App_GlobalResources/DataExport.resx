@@ -166,7 +166,7 @@
     <value>Completed</value>
   </data>
   <data name="DataWasNotGenerated" xml:space="preserve">
-    <value>NOT GENERATED YET</value>
+    <value>Not generated</value>
   </data>
   <data name="DDIDescription" xml:space="preserve">
     <value>Data Documentation Initiative XML data</value>
@@ -212,5 +212,8 @@
   </data>
   <data name="ZipArchiveDescription" xml:space="preserve">
     <value>Zip archive with all collected text interview data</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>XML format</value>
   </data>
 </root>
