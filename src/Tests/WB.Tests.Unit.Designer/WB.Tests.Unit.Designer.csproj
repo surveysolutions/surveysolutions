@@ -499,6 +499,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_two_attachments_with_same_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_variable_with_expression_longer_10000_chars.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_circular_reference_in_option_filter_and_enablement_condition.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_option_filter_using_own_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_title_that_references_not_existing_substitutions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_fixed_roster_and_nested_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\LongRosters\when_verifying_questionnaire_with_long_list_roster_and_it_is_nested_intro_other_roster.cs" />

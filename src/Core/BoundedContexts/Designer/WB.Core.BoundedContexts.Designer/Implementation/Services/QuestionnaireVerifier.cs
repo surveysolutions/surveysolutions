@@ -1532,7 +1532,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             foreach (var question in questionsWithOptionsFilter)
             {
                 if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
-                    dependencies.Add(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression, questionnaire).ToArray());
+                {
+                    var identifiers = this.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression, questionnaire);
+
+                    identifiers = ReplaceOwnVariableWithSelf(question, identifiers);
+
+                    dependencies.Add(question.StataExportCaption, identifiers.ToArray());
+                }
             }
 
             foreach (var variable in variables)
@@ -1553,6 +1559,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
             }
+        }
+
+        private static IEnumerable<string> ReplaceOwnVariableWithSelf(IQuestion question, IEnumerable<string> identifiers)
+        {
+            var questionVariable = question.GetVariable();
+            return identifiers.Select(id => id == questionVariable ? "self" : id);
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
