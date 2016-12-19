@@ -596,14 +596,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 var rosterScope = document.GetRosterScope(roster);
                 filteredQuestions = document.Find<IQuestion>()
-                    .Where(x => x.QuestionType != QuestionType.Multimedia)
+                    .Where(x => x.QuestionType != QuestionType.Multimedia && x.QuestionType != QuestionType.GpsCoordinates)
                     .Where(x => document.GetRosterScope(x).Equals(rosterScope))
                     .ToList();
             }
             else
             {
                 filteredQuestions = document.Find<IQuestion>()
-                    .Where(x => x.QuestionType != QuestionType.Multimedia)
+                    .Where(x => x.QuestionType != QuestionType.Multimedia && x.QuestionType != QuestionType.GpsCoordinates)
                     .Where(x => x.GetParent()?.PublicKey == roster.PublicKey)
                     .ToList();
             }
