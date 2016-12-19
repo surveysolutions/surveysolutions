@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using AppDomainToolkit;
+using EventStore.Common.Utils;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -51,14 +53,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     interview.AnswerNumericIntegerQuestion(userId, q4Id, RosterVector.Empty, DateTime.Now, 1);
 
-                    result.QuestionsToRemoveAnswer = eventContext.GetSingleEvent<AnswersRemoved>().Questions;
+                    result.HasLinkedQuestionToRemoveAnswer = eventContext.GetSingleEvent<AnswersRemoved>().Questions.Any(x => x.Id == q3Id && x.RosterVector == RosterVector.Empty);
                 }
 
                 return result;
             });
 
         It should_raise_AnswersRemoved_for_linked = () =>
-            results.QuestionsToRemoveAnswer.ShouldContain(new Identity(q3Id, RosterVector.Empty));
+            results.HasLinkedQuestionToRemoveAnswer.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -79,7 +81,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         [Serializable]
         internal class InvokeResults
         {
-            public Identity[] QuestionsToRemoveAnswer { get; set; }
+            public bool HasLinkedQuestionToRemoveAnswer { get; set; }
         }
     }
 }
