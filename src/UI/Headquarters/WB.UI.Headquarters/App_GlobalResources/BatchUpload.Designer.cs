@@ -97,6 +97,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assigned to {0} enumerators.
+        /// </summary>
+        internal static string AssignedToMultipleEnumerators {
+            get {
+                return ResourceManager.GetString("AssignedToMultipleEnumerators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assigned to {0} supervisors.
+        /// </summary>
+        internal static string AssignedToMultipleSupervisors {
+            get {
+                return ResourceManager.GetString("AssignedToMultipleSupervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assigned to 1 enumerator.
+        /// </summary>
+        internal static string AssignedToSingleEnumerator {
+            get {
+                return ResourceManager.GetString("AssignedToSingleEnumerator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assigned to 1 supervisor.
+        /// </summary>
+        internal static string AssignedToSingleSupervisor {
+            get {
+                return ResourceManager.GetString("AssignedToSingleSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to import.
         /// </summary>
         internal static string BackToImport {
@@ -179,6 +215,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create interviews.
+        /// </summary>
+        internal static string CreateInterviews {
+            get {
+                return ResourceManager.GetString("CreateInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create interviews from this data.
         /// </summary>
         internal static string CreateSample {
@@ -211,6 +256,24 @@ namespace Resources {
         internal static string CreatingUsers {
             get {
                 return ResourceManager.GetString("CreatingUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data for {0} interviews found.
+        /// </summary>
+        internal static string DataForMultipleInterviewsFound {
+            get {
+                return ResourceManager.GetString("DataForMultipleInterviewsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data for 1 interview found.
+        /// </summary>
+        internal static string DataForSingleInterviewFound {
+            get {
+                return ResourceManager.GetString("DataForSingleInterviewFound", resourceCulture);
             }
         }
         
@@ -692,6 +755,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select supervisor to assign this batch to .
+        /// </summary>
+        internal static string SelectSupervisorToAssign {
+            get {
+                return ResourceManager.GetString("SelectSupervisorToAssign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload tab separated file with necessary prefilled data. Optionaly, specify usernames of supervisors or enumerators in _responsible column..
         /// </summary>
         internal static string SimpleDescription {
@@ -896,6 +968,15 @@ namespace Resources {
         internal static string ValidationFinishedWithError {
             get {
                 return ResourceManager.GetString("ValidationFinishedWithError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification completed.
+        /// </summary>
+        internal static string VerificationCompleted {
+            get {
+                return ResourceManager.GetString("VerificationCompleted", resourceCulture);
             }
         }
         

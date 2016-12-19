@@ -1,4 +1,5 @@
-﻿@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataConfirmationModel
+﻿@using NHibernate.Loader.Collection
+@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataConfirmationModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
@@ -94,26 +95,35 @@
             <div class="col-md-8 col-sm-8 page-header">
                 <ol class="breadcrumb">
                     <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
-                    <li>@Html.ActionLink("creating multiple interviews", "BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version}, new {})</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version}, new {})</li>
                 </ol>
                 <div class="page-title">
-                    Creating multiple interviews with batch upload
+                    @BatchUpload.CreatingMultipleInterviews
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-7">
-                <h3>Importing information from @Model.FileName for @Model.QuestionnaireTitle&nbsp;(ver.&nbsp;@Model.Version)</h3>
+                <h3>
+                    @string.Format(BatchUpload.ImportFrom, Model.FileName, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Version))
+                </h3>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block">
                 <div class="import-progress">
-                    <p class="success-text">Verification complete</p>
-                    <p>Information for @Model.InterviewsCount interview@(Pluralize(Model.InterviewsCount)) found</p>
+                    <p class="success-text">@BatchUpload.VerificationCompleted</p>
+                    <p>
+                        @(Model.InterviewsCount == 1 ? BatchUpload.DataForSingleInterviewFound : string.Format(BatchUpload.DataForMultipleInterviewsFound, Model.InterviewsCount))
+                    </p>
                     @if (Model.WasSupervsorProvided)
                     {
-                        <p>Assigned to @Model.SupervisorsCount supervisor@(Pluralize(Model.SupervisorsCount)) and @Model.EnumeratorsCount enumerator@(Pluralize(Model.EnumeratorsCount))</p>
+                        <p>
+                            @(Model.SupervisorsCount == 1 ? BatchUpload.AssignedToSingleSupervisor : string.Format(BatchUpload.AssignedToMultipleSupervisors, Model.SupervisorsCount))
+                        </p>
+                        <p>
+                            @(Model.EnumeratorsCount == 1 ? BatchUpload.AssignedToSingleEnumerator : string.Format(BatchUpload.AssignedToMultipleEnumerators, Model.EnumeratorsCount))
+                        </p>
                     }
                 </div>
                 @using (Html.BeginForm("InterviewImportConfirmation", "HQ", new {Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version}, FormMethod.Post))
@@ -131,9 +141,9 @@
                     if (!Model.WasSupervsorProvided)
                     {
                         <div class="form-group @(modelState.Keys.Contains("SupervisorId") ? "has-error" : "")">
-                            <label class="control-label">Select supervisor to assign this interview to</label>
+                            <label class="control-label">@BatchUpload.SelectSupervisorToAssign</label>
                             <div class="input-group">
-                                <input placeholder="Select supervisor" class="form-control" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                                <input placeholder="@BatchUpload.ImportInterviews_SelectSupervisor" class="form-control" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
                                 <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                                 <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
                                     <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
@@ -144,16 +154,13 @@
                     }
                     <div class="action-buttons">
                         <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervsorProvided)
-                                                                                 {<text>enable: isSupervisorSelected</text>}">create interviews</button>
-                        <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">Back to import</a>
+                                                                                 {<text>enable: isSupervisorSelected</text>}">@BatchUpload.CreateInterviews</button>
+                        <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
+                            @BatchUpload.BackToImport
+                        </a>
                     </div>
                 }
             </div>
         </div>
     </div>
 </main>
-
-@helper Pluralize(int count)
-{
-    @(count == 1 ? "" : "s")
-}
