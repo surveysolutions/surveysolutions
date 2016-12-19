@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.extenders.js",
                 "~/Scripts/spin.js",
                 "~/Scripts/knockout/ko.spin.js",
-                "~/Dependencies/js/batch-upload-start-interview-creation.js"
+                "~/Dependencies/js/ajax.js"
                ));
 
             bundles.Add(new ScriptBundle("~/js/main").Include(
