@@ -412,4 +412,34 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="BackToImport" xml:space="preserve">
     <value>Back to import</value>
   </data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+    <value>Assigned to {0} enumerators</value>
+    <comment>{0} - count of enumerators (always &gt; 1)</comment>
+  </data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+    <value>Assigned to {0} supervisors</value>
+    <comment>{0} - count of supervisors (always &gt; 1)</comment>
+  </data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve">
+    <value>Assigned to 1 enumerator</value>
+  </data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve">
+    <value>Assigned to 1 supervisor</value>
+  </data>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>Create interviews</value>
+  </data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>Data for {0} interviews found</value>
+    <comment>{0} - count of interviews (always &gt; 1)</comment>
+  </data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve">
+    <value>Data for 1 interview found</value>
+  </data>
+  <data name="SelectSupervisorToAssign" xml:space="preserve">
+    <value>Select supervisor to assign this batch to </value>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>Verification completed</value>
+  </data>
 </root>
