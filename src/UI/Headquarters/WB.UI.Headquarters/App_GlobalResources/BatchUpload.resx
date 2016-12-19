@@ -386,4 +386,30 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="PrefieldRequiredData" xml:space="preserve">
     <value>Prefield data required for this questionnire</value>
   </data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>Batch file verification failed</value>
+  </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>creating multiple interviews</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+    <value>Importing information from {0} for {1}</value>
+    <comment>{0} - imported file name, {1} - questionnaire name and version </comment>
+  </data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>Creating multiple interviews with batch upload</value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>Interviews are not created</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+    <value>{0} errors were found</value>
+    <comment>{0} - count of founded errors</comment>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>1 error was found</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Back to import</value>
+  </data>
 </root>
