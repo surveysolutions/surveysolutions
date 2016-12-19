@@ -10,21 +10,21 @@
 {
     @Scripts.Render("~/js/batch-upload-start-interview-creation")
     <script type="text/javascript">
-        var StartInterviewCreationModel = function () {
-
+        var StartInterviewCreationModel = function (ajax) {
             var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
 
             var self = this;
 
             self.isResponsiblesLoading = ko.observable(false);
-            self.responsibles = function (query, sync, pageSize) {
+            self.responsibles = function(query, sync, pageSize) {
                 self.isResponsiblesLoading(true);
-                sendRequest($responsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
+                ajax.sendRequest($responsiblesUrl, { query: query, pageSize: pageSize }, function(response) {
                     sync(response.Users, response.TotalCountByQuery);
-                }, true, true, function () {
+                }, true, true, function() {
                     self.isResponsiblesLoading(false);
                 });
-            }
+            };
+
             self.selectedResponsible = ko.observable(undefined).extend({ required: { shouldValidateOnStart: false } });
 
             self.selectedSupervisorId = ko.computed(function () {
@@ -34,57 +34,10 @@
             self.isSupervisorSelected = ko.computed(function () {
                 return !_.isUndefined(self.selectedResponsible());
             });
-
-
-            // should be moved to injected service, no inheritance
-            self.IsPageLoaded = ko.observable(false);
-            self.IsAjaxComplete = ko.observable(true);
-
-            var sendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
-
-                if (!skipInProgressCheck && !self.IsAjaxComplete()) {
-                    self.CheckForRequestComplete();
-                    return;
-                }
-
-                self.IsAjaxComplete(false);
-
-                var requestHeaders = {};
-                requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
-
-                $.ajax({
-                    url: requestUrl,
-                    type: allowGet === true ? 'get' : 'post',
-                    data: args,
-                    headers: requestHeaders,
-                    dataType: 'json'
-                }).done(function (data) {
-                    if (!_.isUndefined(onSuccess)) {
-                        onSuccess(data);
-                    }
-                }).fail(function (jqXhr, textStatus, errorThrown) {
-                    if (jqXhr.status === 403) {
-                        if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
-                            self.ShowError(input.settings.messages.forbiddenMessage);
-                        }
-                        else {
-                            self.ShowError(jqXhr.responseText);
-                        }
-                    } else {
-                        self.ShowError(input.settings.messages.unhandledExceptionMessage);
-                    }
-                }).always(function () {
-                    self.IsPageLoaded(true);
-                    self.IsAjaxComplete(true);
-                    if (!_.isUndefined(onDone)) {
-                        onDone();
-                    }
-                });
-            };
         };
 
         $(function () {
-            var model = new StartInterviewCreationModel();
+            var model = new StartInterviewCreationModel(new Ajax(new Notifier()));
             ko.applyBindings(model);
         });
     </script>

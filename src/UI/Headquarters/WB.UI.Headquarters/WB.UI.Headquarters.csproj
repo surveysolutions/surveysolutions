@@ -502,7 +502,7 @@
     <Content Include="Dependencies\img\search2k.png" />
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
-    <Content Include="Dependencies\js\batch-upload-start-interview-creation.js" />
+    <Content Include="Dependencies\js\ajax.js" />
     <Content Include="Dependencies\js\import-questionnaires-list.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -687,7 +687,6 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\pages\batch-user-creation.js" />
     <Content Include="Scripts\pages\exportdata.js" />
-    <Content Include="Scripts\pages\import-interviews.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Scripts\pages\export-settings.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
@@ -860,7 +859,6 @@
     <Content Include="Views\ApiUser\Create.cshtml" />
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
-    <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\ControlPanel\RestoreAllDeletedQuestionnaireProjections.cshtml" />
     <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
