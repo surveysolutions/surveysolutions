@@ -394,13 +394,13 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 YesNoView = isYesNo,
                 Answers = answersList ?? answers.Select(a => Create.Answer(a.ToString(), a)).ToList(),
-                QuestionText = title,
+                QuestionText = title
             };
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
-            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null,
+            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null, string optionsFilterExpression = null,
             int? maxAllowedAnswers = null, string title = null)
         {
             return new MultyOptionsQuestion
@@ -414,7 +414,11 @@ namespace WB.Tests.Unit.Designer
                 YesNoView = yesNoView,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                MaxAllowedAnswers = maxAllowedAnswers
+                MaxAllowedAnswers = maxAllowedAnswers,
+                Properties = new QuestionProperties(false, true)
+                {
+                    OptionsFilterExpression = optionsFilterExpression
+                }
             };
         }
 
