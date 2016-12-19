@@ -27,7 +27,6 @@ var config = {
     ],
     cssFilesToWatch: './css/*.scss"',
     cssSource: './css/markup.scss',
-    cssDevDest: './css/markup.css',
     cssAppInject: 'cssApp',
     cssLibsInject: 'cssLibs',
     jsLibsInject: 'jsLibs'
@@ -41,7 +40,6 @@ gulp.task('styles', ['move-bootstrap-fonts'], function () {
     return gulp.src(config.cssSource)
         .pipe(sass())
         .pipe(autoprefixer('last 2 version'))
-        .pipe(gulp.dest(config.cssDevDest, { overwrite: true }))
         .pipe(gulp.dest(config.buildDir))
         .pipe(rename({ suffix: '.min' }))
         .pipe(plugins.rev())
@@ -76,29 +74,25 @@ gulp.task('bowerCss', function () {
 });
 
 gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], function () {
-    var cssApp = config.production
-        ? gulp.src(config.buildDir + '/markup-*.min.css', { read: false })
-        : gulp.src(config.cssDevDest, { read: false });
+    if (config.production) {
+        var cssApp = gulp.src(config.buildDir + '/markup-*.min.css', { read: false });
+        var cssLibs = gulp.src(config.buildDir + '/libs-*.min.css', { read: false });
+        var jsLibs = gulp.src(config.buildDir + '/libs-*.min.js', { read: false });
 
-    var cssLibs = config.production
-        ? gulp.src(config.buildDir + '/libs-*.min.css', { read: false })
-        : gulp.src(mainBowerFiles('**/*.css'));
+        var tasks = config.filesToInject.map(function (fileToInject) {
+            var target = gulp.src(fileToInject.folder + fileToInject.file);
 
-    var jsLibs = config.production
-        ? gulp.src(config.buildDir + '/libs-*.min.js', { read: false })
-        : gulp.src(mainBowerFiles('**/*.js'));
+            return target
+                .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }))
+                .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }))
+                .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }))
+                .pipe(gulp.dest(fileToInject.folder));
+        });
 
-    var tasks = config.filesToInject.map(function(fileToInject) {
-        var target = gulp.src(fileToInject.folder + fileToInject.file);
+        return tasks;
+    }
 
-        return target
-            .pipe(plugins.inject(cssApp, { relative: true, name: config.cssAppInject }))
-            .pipe(plugins.inject(cssLibs, { relative: true, name: config.cssLibsInject }))
-            .pipe(plugins.inject(jsLibs, { relative: true, name: config.jsLibsInject }))
-            .pipe(gulp.dest(fileToInject.folder));
-    });
-
-    return tasks;
+    return util.noop();
 });
 
 gulp.task('clean', function () {
