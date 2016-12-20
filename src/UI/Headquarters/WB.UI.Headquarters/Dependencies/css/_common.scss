@@ -632,3 +632,22 @@ input.wb-checkbox{
 		color: darken($gray_light, 25%);
 	}
 }
+
+.ui-pnotify
+{
+	.alert{
+        background: #fff;
+        border-radius: 0;
+        padding:5px;
+        &.alert-warning{
+            border-top: 6px solid $blue;
+            color: $blue;
+        }
+
+		.ui-pnotify-title{
+		}
+		
+		.ui-pnotify-text{
+		}
+	}
+}

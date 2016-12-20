@@ -91,6 +91,32 @@ gulp.task('inject', ['styles', 'bowerCss', 'bowerJs'], function () {
 
         return tasks;
     }
+    // DEV: to include files not in batch
+    //else {
+    //    var cssLibs = gulp.src(mainBowerFiles('**/*.css'));
+    //    var jsLibs = gulp.src(mainBowerFiles('**/*.js'));
+
+    //    var tasks = config.filesToInject.map(function (fileToInject) {
+    //        var target = gulp.src(fileToInject.folder + fileToInject.file);
+
+    //        return target
+    //            .pipe(plugins.inject(cssLibs, {
+    //                relative: true, name: config.cssLibsInject, transform: function (filepath) {
+    //                    var newFileName = '@Url.Content("~/' + filepath.substring(6) + '")';
+    //                    return '<link rel="stylesheet" href="' + newFileName + '" />';
+    //                }
+    //            }))
+    //            .pipe(plugins.inject(jsLibs, {
+    //                relative: true, name: config.jsLibsInject, transform: function (filepath) {
+    //                    var newFileName = '@Url.Content("~/' + filepath.substring(6) + '")';
+    //                    return '<script src="' + newFileName + '"></script>';
+    //                }
+    //            }))
+    //            .pipe(gulp.dest(fileToInject.folder));
+    //    });
+
+    //    return tasks;
+    //}
 
     return util.noop();
 });
