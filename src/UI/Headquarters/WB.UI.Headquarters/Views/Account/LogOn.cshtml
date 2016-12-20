@@ -42,8 +42,8 @@
                         <div class="col-lg-1 col-lg-offset-9 col-md-1 col-md-offset-8 col-sm-2 col-sm-offset-6 col-xs-4 col-xs-offset-2">
                             <div class="centered-box-table">
                                 <div class="centered-box-table-cell">
-                                    <a href="http://docs.mysurvey.solutions/headquarters.pdf" title="Help" target="_blank" class="help">
-                                        Help
+                                    <a href="http://docs.mysurvey.solutions/headquarters.pdf" title="@Pages.Help" target="_blank" class="help">
+                                        @Pages.Help
                                     </a>
                                 </div>
                             </div>
@@ -98,10 +98,10 @@
             <div class="row">
                 <div class="interviewer-app">
                     <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})" class="get-interviewer-app">
-                        <span>Download latest interviewer app</span>
+                        <span>@Pages.GetLatestApp</span>
                         <span class="version">Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
                     </a>
-                    <a href="http://docs.mysurvey.solutions/interviewer-installation">Installation instruction</a>
+                    <a href="http://docs.mysurvey.solutions/interviewer-installation">@Pages.InstallationInstruction</a>
                 </div>
             </div>
         </div>
