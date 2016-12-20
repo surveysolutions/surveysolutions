@@ -939,6 +939,7 @@
     <Content Include="Views\HQ\ImportInterviews.cshtml" />
     <Content Include="Views\HQ\InterviewImportProgress.cshtml" />
     <Content Include="Views\DataExport\Index.cshtml" />
+    <Content Include="Views\HQ\InterviewImportIsInProgress.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
