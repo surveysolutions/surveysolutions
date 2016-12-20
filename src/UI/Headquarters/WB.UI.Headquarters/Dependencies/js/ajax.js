@@ -17,8 +17,6 @@
 var Ajax = function (notifier) {
     var self = this;
 
-    notifier.showNotification("Hello", "World");
-
     self.isAjaxComplete = ko.observable(true);
 
     self.checkForRequestComplete = function () {
@@ -28,7 +26,6 @@ var Ajax = function (notifier) {
     };
 
     self.sendRequest = function (requestUrl, method, args, skipInProgressCheck, onSuccess, onDone, onError) {
-        notifier.showError("Hello1", "World1");
         if (!skipInProgressCheck && !self.isAjaxComplete()) {
             self.checkForRequestComplete();
             return;

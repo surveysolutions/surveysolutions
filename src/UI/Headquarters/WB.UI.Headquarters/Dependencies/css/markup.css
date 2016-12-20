@@ -6602,6 +6602,14 @@ input.wb-checkbox {
   text-decoration: none;
   color: #66686a; }
 
+.ui-pnotify .alert {
+  background: #fff;
+  border-radius: 0;
+  padding: 5px; }
+  .ui-pnotify .alert.alert-warning {
+    border-top: 6px solid #2a81cb;
+    color: #2a81cb; }
+
 .btn-lg, .btn-group-lg > .btn {
   padding: 12px 15px; }
 

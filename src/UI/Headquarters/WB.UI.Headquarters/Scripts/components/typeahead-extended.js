@@ -211,6 +211,7 @@
         // here's where hacks get applied and we don't feel bad about it
         hacks: function () {
             var self = this;
+
             // if there's scrollable overflow, ie doesn't support
             // blur cancellations when the scrollbar is clicked
             //
@@ -219,7 +220,32 @@
                 var active = $(document.activeElement);
                 var isActive = self.$menu.parent().is(active);
 
-                if (Supervisor.Framework.Browser.isMsie() && isActive) {
+                var isMsie = function () {
+                    var ua = window.navigator.userAgent;
+
+                    var msie = ua.indexOf('MSIE ');
+                    if (msie > 0) {
+                        // IE 10 or older
+                        return true;
+                    }
+
+                    var trident = ua.indexOf('Trident/');
+                    if (trident > 0) {
+                        // IE 11
+                        return true;
+                    }
+
+                    var edge = ua.indexOf('Edge/');
+                    if (edge > 0) {
+                        // IE 12
+                        return true;
+                    }
+
+                    // other browser
+                    return false;
+                };
+
+                if (isMsie() && isActive) {
                     $e.preventDefault();
                     // stop immediate in order to prevent Input#_onBlur from
                     // getting exectued
