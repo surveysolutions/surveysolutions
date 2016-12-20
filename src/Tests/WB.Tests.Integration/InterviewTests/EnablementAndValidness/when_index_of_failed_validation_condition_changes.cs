@@ -2,26 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
+using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    [TestFixture]
-    [TestOf(typeof(Interview))]
     internal class when_index_of_failed_validation_condition_changes : InterviewTestsContext
     {
-        [OneTimeSetUp]
-        public void Setup()
+        Establish context = () =>
         {
-           var appDomainContext = AppDomainContext.Create();
+            appDomainContext = AppDomainContext.Create();
+        };
+
+        public Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 AssemblyContext.SetupServiceLocator();
@@ -48,15 +44,11 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        }
-
-        [Test]
-        public void should_mark_question_as_invalid_with_new_failed_condition_index()
-        {
-            Assert.That(results.AnswerDeclaredInvalid, Is.True);
-        }
-
+        It should_mark_question_as_invalid_with_new_failed_condition_index = () =>  results.AnswerDeclaredInvalid.ShouldBeTrue();
+        
         private static InvokeResults results;
+        private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
         [Serializable]
         internal class InvokeResults
         {
