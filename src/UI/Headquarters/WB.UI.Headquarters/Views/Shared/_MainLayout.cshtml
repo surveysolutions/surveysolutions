@@ -78,6 +78,9 @@
         </div>
     </header>
     @RenderBody()
+    
+@if (ViewBag.HideFooter == null || (ViewBag.HideFooter != null && !ViewBag.HideFooter))
+{
     <footer class="footer">
         <div class="container-fluid">
             <div class="text-left">
@@ -86,12 +89,12 @@
             <div class="text-left">
                 @(ServiceLocator.Current.GetInstance<IProductVersion>())
                 @if (AppSettings.IsDebugBuilded)
-            {
+                {
                     <span id="build-config">[.NET Debug]</span>
                 }
 
                 @if (HttpContext.Current.IsDebuggingEnabled)
-            {
+                {
                     <span id="compile-config" style="color: red">Web Debug</span>
                 }
                 <span>|</span>
@@ -99,7 +102,7 @@
             </div>
         </div>
     </footer>
-
+}
     <!-- jsApp:js -->
     <!-- endinject -->
 
