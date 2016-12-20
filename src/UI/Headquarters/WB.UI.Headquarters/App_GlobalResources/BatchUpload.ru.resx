@@ -383,7 +383,7 @@
   <data name="HideListPrefilledData" xml:space="preserve">
     <value>Спрятать список обязательных данных</value>
   </data>
-  <data name="PrefieldRequiredData" xml:space="preserve">
+  <data name="PrefilledRequiredData" xml:space="preserve">
     <value>Обязательные поля для заполнения для опросника</value>
   </data>
 </root>
