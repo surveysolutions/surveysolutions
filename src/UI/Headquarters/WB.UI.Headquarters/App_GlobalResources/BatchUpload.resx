@@ -375,16 +375,16 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>Download .tab template for this questionnaire</value>
   </data>
   <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
-    <value>List of data fields which are required for creating interview assigment you can download</value>
+    <value>List of data fields which are required for creating interview assignment you can download</value>
   </data>
   <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
-    <value>tab. template for this questionnire</value>
+    <value>tab. template for this questionnaire</value>
   </data>
   <data name="HideListPrefilledData" xml:space="preserve">
     <value>Hide list of required prefilled data</value>
   </data>
-  <data name="PrefieldRequiredData" xml:space="preserve">
-    <value>Prefield data required for this questionnire</value>
+  <data name="PrefilledRequiredData" xml:space="preserve">
+    <value>Prefilled data required for this questionnaire</value>
   </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>Batch file verification failed</value>
