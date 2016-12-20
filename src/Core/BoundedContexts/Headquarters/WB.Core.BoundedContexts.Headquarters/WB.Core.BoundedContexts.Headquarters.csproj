@@ -687,6 +687,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandValidatorsMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CommandValidatorsMessages.ru.resx" />
     <EmbeddedResource Include="Resources\CommandValidatorsMessages.zh.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx" />
