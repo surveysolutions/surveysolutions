@@ -121,6 +121,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
+        public bool IsFailedValidationIndexChanged
+        {
+            get
+            {
+                if (IsNodeRemoved) return false;
+                if (this.ChangedNode.IsValid) return false;
+                var targetChangedValidations = this.ChangedNode.FailedValidations;
+                if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
+
+                var sourceMessages = this.SourceNode?.FailedValidations ?? new List<FailedValidationCondition>();
+                return !targetChangedValidations.SequenceEqual(sourceMessages);
+            }
+        }
+
         public bool IsValid => this.SourceNode == null || !this.SourceNode.IsValid && this.ChangedNode.IsValid;
 
         public bool IsInvalid => this.SourceNode == null
