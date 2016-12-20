@@ -142,6 +142,7 @@
     <Compile Include="Utils\ActionThrottler.cs" />
     <Compile Include="Utils\CompositeCollection.cs" />
     <Compile Include="Utils\CovariantObservableCollection.cs" />
+    <Compile Include="Utils\DisposableCovariantObservableCollection.cs" />
     <Compile Include="Utils\IObservableCollection.cs" />
     <Compile Include="Utils\MissingPermissionsException.cs" />
     <Compile Include="Utils\NumericTextFormatter.cs" />
