@@ -32,6 +32,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.DataExport;
+            this.ViewBag.HideFooter = true;
             this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
