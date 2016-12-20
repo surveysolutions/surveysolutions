@@ -305,7 +305,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List of data fields which are required for creating interview assigment you can download.
+        ///   Looks up a localized string similar to List of data fields which are required for creating interview assignment you can download.
         /// </summary>
         internal static string DownloadDescListRequiredPreffiledData {
             get {
@@ -323,7 +323,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to tab. template for this questionnire.
+        ///   Looks up a localized string similar to tab. template for this questionnaire.
         /// </summary>
         internal static string DownloadLinkTitleListRequiredPreffiledData {
             get {
@@ -692,20 +692,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefield data required for this questionnire.
-        /// </summary>
-        internal static string PrefieldRequiredData {
-            get {
-                return ResourceManager.GetString("PrefieldRequiredData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File does not contain required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;.
         /// </summary>
         internal static string PrefilledQuestionsRequired {
             get {
                 return ResourceManager.GetString("PrefilledQuestionsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefilled data required for this questionnaire.
+        /// </summary>
+        internal static string PrefilledRequiredData {
+            get {
+                return ResourceManager.GetString("PrefilledRequiredData", resourceCulture);
             }
         }
         
