@@ -21,5 +21,47 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 
         public static RosterInstance CreateFromIdentity(Identity identity)
             => new RosterInstance(identity.Id, identity.RosterVector.Shrink(identity.RosterVector.Length - 1), identity.RosterVector.Coordinates.Last());
+
+        private int? hashCode;
+
+        private bool Equals(RosterInstance other)
+        {
+            return this.GroupId == other.GroupId &&
+                   this.RosterInstanceId == other.RosterInstanceId &&
+                   this.OuterRosterVector.Length == other.OuterRosterVector.Length &&
+                   this.OuterRosterVector.SequenceEqual(other.OuterRosterVector);
+        }
+
+        public override int GetHashCode()
+        {
+            if (!this.hashCode.HasValue)
+            {
+                int hashOfOuterRosterVector = this.OuterRosterVector.Aggregate(0, (current, el) => current ^ el.GetHashCode());
+                this.hashCode = this.GroupId.GetHashCode() ^ this.RosterInstanceId.GetHashCode() ^ hashOfOuterRosterVector;
+            }
+
+            return this.hashCode.Value;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return this.Equals((RosterInstance)obj);
+        }
+        
+        public static bool operator ==(RosterInstance a, RosterInstance b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if (((object)a == null) || ((object)b == null))
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(RosterInstance a, RosterInstance b) => !(a == b);
     }
 }
