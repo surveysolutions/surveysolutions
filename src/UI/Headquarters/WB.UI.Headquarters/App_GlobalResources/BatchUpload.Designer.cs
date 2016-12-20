@@ -323,7 +323,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to tab. template for this questionnaire.
+        ///   Looks up a localized string similar to .tab template for this questionnaire.
         /// </summary>
         internal static string DownloadLinkTitleListRequiredPreffiledData {
             get {
@@ -715,15 +715,6 @@ namespace Resources {
         internal static string Processing {
             get {
                 return ResourceManager.GetString("Processing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Questionnaire.
-        /// </summary>
-        internal static string Questionnaire {
-            get {
-                return ResourceManager.GetString("Questionnaire", resourceCulture);
             }
         }
         
