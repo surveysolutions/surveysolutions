@@ -201,7 +201,7 @@ namespace WB.UI.Headquarters.Controllers
                     model.File.FileName));
             }
 
-            return this.View("InterviewImportConfirmation", new PreloadedDataConfirmationModel
+            this.TempData[$"InterviewImportConfirmation-{preloadedMetadata.Id}"] = new PreloadedDataConfirmationModel
             {
                 QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
@@ -213,7 +213,9 @@ namespace WB.UI.Headquarters.Controllers
                 EnumeratorsCount = verificationStatus.EnumeratorsCount,
                 SupervisorsCount = verificationStatus.SupervisorsCount,
                 InterviewsCount = verificationStatus.InterviewsCount
-            });
+            };
+
+            return RedirectToAction("InterviewImportConfirmation", new { id = preloadedMetadata.Id, questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
         }
 
         [HttpPost]
@@ -226,6 +228,11 @@ namespace WB.UI.Headquarters.Controllers
             if (!this.ModelState.IsValid)
             {
                 return this.RedirectToAction("BatchUpload", new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
+            }
+
+            if (this.interviewImportService.Status.IsInProgress)
+            {
+                return RedirectToAction("InterviewImportIsInProgress", new { questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
             }
 
             var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
@@ -241,6 +248,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var preloadedSample = this.preloadedDataRepository.GetPreloadedDataOfSample(preloadedMetadata.Id);
 
+            // save in future
             var verificationStatus = this.preloadedDataVerifier.VerifySample(model.QuestionnaireId, model.QuestionnaireVersion, preloadedSample);
 
             //clean up for security reasons
@@ -259,19 +267,66 @@ namespace WB.UI.Headquarters.Controllers
                     preloadedSample.FileName));
             }
 
-            return this.View("InterviewImportConfirmation", new PreloadedDataConfirmationModel
+            this.TempData[$"InterviewImportConfirmation-{preloadedMetadata.Id}"] = new PreloadedDataConfirmationModel
             {
-                QuestionnaireId=  model.QuestionnaireId,
+                QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                WasSupervsorProvided =  verificationStatus.WasResponsibleProvided,
+                WasSupervsorProvided = verificationStatus.WasResponsibleProvided,
                 Id = preloadedMetadata.Id,
                 PreloadedContentType = PreloadedContentType.Sample,
                 FileName = preloadedSample.FileName,
                 EnumeratorsCount = verificationStatus.EnumeratorsCount,
                 SupervisorsCount = verificationStatus.SupervisorsCount,
                 InterviewsCount = verificationStatus.InterviewsCount
+            };
+
+            return RedirectToAction("InterviewImportConfirmation", new { id = preloadedMetadata.Id, questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
+        }
+
+        [HttpGet]
+        public ActionResult InterviewImportIsInProgress(Guid questionnaireId, long version)
+        {
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+
+            return this.View(new PreloadedDataQuestionnaireModel
+            {
+                QuestionnaireId = questionnaireId,
+                Version = version,
+                QuestionnaireTitle = questionnaireInfo?.Title
             });
+        }
+
+        [HttpGet]
+        public ActionResult InterviewImportConfirmation(string id, Guid questionnaireId, long version )
+        {
+            if (this.interviewImportService.Status.IsInProgress)
+            {
+                return RedirectToAction("InterviewImportIsInProgress", new { questionnaireId = questionnaireId, version = version});
+            }
+
+            var key = $"InterviewImportConfirmation-{id}";
+            PreloadedDataConfirmationModel model = null;
+            if (this.TempData.ContainsKey(key))
+            {
+                model = this.TempData[key] as PreloadedDataConfirmationModel;
+            }
+            if (model == null)
+            {
+                // load persisted state in future
+                var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+                model = new PreloadedDataConfirmationModel
+                {
+                    Id = id,
+                    QuestionnaireId = questionnaireId,
+                    Version = version,
+                    QuestionnaireTitle = questionnaireInfo?.Title
+                };
+            }
+
+           
+
+            return this.View(model);
         }
 
         [HttpPost]
@@ -283,8 +338,9 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.interviewImportService.Status.IsInProgress)
             {
-                this.ModelState.AddModelError(string.Empty, "Import interviews is in progress. Wait until current operation is finished.");
+                return RedirectToAction("InterviewImportIsInProgress", new { questionnaireId = model.QuestionnaireId, version = model.Version });
             }
+
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
 
             if (!this.ModelState.IsValid)

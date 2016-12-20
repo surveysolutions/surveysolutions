@@ -1,9 +1,9 @@
-﻿@using NHibernate.Loader.Collection
-@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataConfirmationModel
+﻿@model WB.Core.BoundedContexts.Headquarters.Views.PreloadedData.PreloadedDataConfirmationModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
     var modelState = ViewContext.ViewData.ModelState;
+    var hasModelLevelErrors = modelState[""] != null && modelState[""].Errors.Any();
 }
 
 @section scripts
@@ -94,7 +94,12 @@
                     @Html.HiddenFor(x => x.PreloadedContentType)
 
                     <input id="supervisorId" name="supervisorId" type="hidden" data-bind="value: selectedSupervisorId">
-                    @Html.ValidationSummary(true)
+                    if (hasModelLevelErrors)
+                    {
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary(true)
+                        </div>
+                    }
                     if (!Model.WasSupervsorProvided)
                     {
                         <div class="form-group @(modelState.Keys.Contains("SupervisorId") ? "has-error" : "")">
@@ -110,14 +115,11 @@
                         </div>
                     }
                     <div class="action-buttons">
-                        <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervsorProvided)
-                                                                                 {<text>enable: isSupervisorSelected</text>}">
-                            @BatchUpload.CreateInterviews
-                                                                            </button>
-                                                                            <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
-                                                                                @BatchUpload.BackToImport
-                                                                            </a>
-                                                                        </div>
+                        <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervsorProvided) { <text>enable: isSupervisorSelected</text> }">@BatchUpload.CreateInterviews</button>
+                        <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
+                            @BatchUpload.BackToImport
+                        </a>
+                    </div>
                 }
             </div>
         </div>
