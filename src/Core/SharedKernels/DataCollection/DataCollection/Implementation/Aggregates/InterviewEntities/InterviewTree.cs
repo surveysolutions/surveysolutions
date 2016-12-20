@@ -122,8 +122,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsStaticTextInalid(diff as InterviewTreeStaticTextDiff) ||
                     IsVariableChanged(diff as InterviewTreeVariableDiff) ||
                     IsOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
-                    IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff))
+                    IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
+                    IsFailedValidationIndexChanged(diff as InterviewTreeQuestionDiff))
                 .ToReadOnlyCollection();
+        }
+
+        private bool IsFailedValidationIndexChanged(InterviewTreeQuestionDiff diff)
+        {
+            return diff != null && diff.IsFailedValidationIndexChanged;
         }
 
         private bool IsTitleChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)

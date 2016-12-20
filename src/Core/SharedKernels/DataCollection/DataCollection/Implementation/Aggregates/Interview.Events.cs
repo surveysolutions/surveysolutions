@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var allChangedStaticTextDiffs = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
 
             var validQuestionIdentities = allChangedQuestionDiffs.Where(x => x.IsValid).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.IsInvalid).Select(x => x.ChangedNode)
+            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.IsInvalid || x.IsFailedValidationIndexChanged).Select(x => x.ChangedNode)
                 .ToDictionary(x => x.Identity, x => x.FailedValidations);
 
             var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.IsValid).Select(x => x.ChangedNode.Identity).ToArray();
