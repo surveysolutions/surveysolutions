@@ -568,6 +568,7 @@
       <LastGenOutput>Details.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.ru.resx" />
     <EmbeddedResource Include="Resources\Interviews.pt.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.pt.resx" />
     <EmbeddedResource Include="Resources\ImportQuestionnaire.resx">
