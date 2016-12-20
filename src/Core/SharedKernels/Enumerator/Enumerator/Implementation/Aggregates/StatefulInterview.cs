@@ -339,22 +339,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             var orderedIdentities = this.Tree.GetAllNodesInEnumeratorOrder().Select(node => node.Identity);
 
-            int? firstIndex = null;
-            int? secondIndex = null;
-            int index = 0;
-
             foreach (var identity in orderedIdentities)
             {
-                if (!firstIndex.HasValue && identity == first)
-                    firstIndex = index;
+                if (identity == first)
+                    return true;
 
-                if (!secondIndex.HasValue && identity == second)
-                    secondIndex = index;
-
-                if (firstIndex.HasValue && secondIndex.HasValue)
-                    return firstIndex.Value < secondIndex.Value;
-
-                index++;
+                if (identity == second)
+                    return false;
             }
 
             return false;
