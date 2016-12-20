@@ -556,6 +556,11 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <EmbeddedResource Include="Resources\Archived.pt.resx" />
+    <EmbeddedResource Include="Resources\DataTables.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataTables.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataTables.ru.resx" />
     <EmbeddedResource Include="Resources\EnumNames.pt.resx" />
     <EmbeddedResource Include="Resources\FieldsAndValidations.pt.resx" />
     <EmbeddedResource Include="Resources\Details.resx">
@@ -984,6 +989,7 @@
     <Compile Include="API\QuestionnairesController.cs" />
     <Compile Include="API\ReportDataApiController.cs" />
     <Compile Include="API\Resources\CompanyLogoController.cs" />
+    <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\UsersController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
@@ -1521,6 +1527,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Archived.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\DataTables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataTables.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\EnumNames.Designer.cs">
       <AutoGen>True</AutoGen>
