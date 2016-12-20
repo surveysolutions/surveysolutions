@@ -124,7 +124,7 @@
     <value>Дублировать вопросник</value>
   </data>
   <data name="inCensusMode" xml:space="preserve">
-    <value>в census режиме</value>
+    <value>в режиме переписи</value>
   </data>
   <data name="inRegularMode" xml:space="preserve">
     <value>в обычном режиме</value>
