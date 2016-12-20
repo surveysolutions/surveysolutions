@@ -576,4 +576,17 @@
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
   </data>
+  <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+    <value>Дата создания учетной записи интервьювера</value>
+  </data>
+  <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+    <value>Имя супервизора</value>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTooltip" xml:space="preserve">
+    <value>Была ли произведена первая успешная синхронизация с его/её планшетом</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (вер. {1})</value>
+    <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
+  </data>
 </root>
