@@ -4,6 +4,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
 {
+    public class PreloadedDataQuestionnaireModel
+    {
+        public Guid QuestionnaireId { get; set; }
+
+        public long Version { get; set; }
+
+        public string QuestionnaireTitle { get; set; }
+    }
+
     public class PreloadedDataConfirmationModel : IValidatableObject
     {
         public string Id { get; set; }
@@ -29,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
         {
             if (!this.WasSupervsorProvided && !this.SupervisorId.HasValue)
             {
-                yield return new ValidationResult("Supervisor must be selected", new []{ nameof(SupervisorId) });
+                yield return new ValidationResult("Supervisor must be selected", new[] { nameof(SupervisorId) });
             }
         }
     }
