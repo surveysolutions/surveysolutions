@@ -27,8 +27,8 @@ $(function () {
             processing: true,
             language:
             {
-			    "processing": "<div>Loading, please wait</div>"
-			},
+                "url": window.input.settings.config.dataTableTranslationsUrl
+            },
             serverSide: true,
             ajax: {
                 url: questionnaireListUrl,
@@ -39,7 +39,7 @@ $(function () {
                 {
                     data: "title",
                     name: "Title", // case-sensitive!
-                    render: function(data, type, row) {
+                    render: function (data, type, row) {
                         return "<a href=" + questionnaireImportModeUrl + "/" + row.id + ">" + data + "</a>";
                     }
                 },
@@ -55,7 +55,7 @@ $(function () {
                 }
             ],
             rowId: 'id',
-            pagingType: "full_numbers", 
+            pagingType: "full_numbers",
             lengthChange: false, // do not show page size selector
             pageLength: 50 // page size
         });
