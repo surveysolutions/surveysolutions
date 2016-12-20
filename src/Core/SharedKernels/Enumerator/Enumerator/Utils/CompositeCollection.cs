@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     /// For instance it will not notify indexer change (http://stackoverflow.com/questions/657675/propertychanged-for-indexer-property) because we do not use such bindings.
     /// The same is applied for other features.
     /// </remarks>
-    public class CompositeCollection<T> : IObservableCollection<T>
+    public class CompositeCollection<T> : IObservableCollection<T>, IDisposable
     {
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
@@ -155,6 +155,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         private void OnPropertyChanged(string name)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public void Dispose()
+        {
+            var disposableItems = this.collections.OfType<IDisposable>().ToArray();
+
+            foreach (var disposableItem in disposableItems)
+            {
+                disposableItem.Dispose();
+            }
         }
     }
 }
