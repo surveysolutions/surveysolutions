@@ -333,9 +333,6 @@
   <data name="CreatingMultipleInterviews" xml:space="preserve">
     <value>Создать множество интервью используя файл</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Опросник</value>
-  </data>
   <data name="BatchDescription" xml:space="preserve">
     <value>Загрузить архив с заполненым tab файлом и собранными данными.
 Вы можете использовать файлы полученные с помощью "Экспорта данных"</value>
