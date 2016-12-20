@@ -337,18 +337,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public bool IsFirstEntityBeforeSecond(Identity first, Identity second)
         {
-            var orderedIdentities = this.Tree.GetAllNodesInEnumeratorOrder().Select(node => node.Identity);
-
-            foreach (var identity in orderedIdentities)
-            {
-                if (identity == first)
-                    return true;
-
-                if (identity == second)
-                    return false;
-            }
-
-            return false;
+            return first == this.Tree.GetAllNodesInEnumeratorOrder()
+                               .Select(node => node.Identity)
+                               .FirstOrDefault(identity => identity == first || identity == second);
         }
 
         private IEnumerable<Identity> GetEnabledInvalidStaticTexts()
