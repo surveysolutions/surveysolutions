@@ -127,7 +127,7 @@
     <value>Импорт</value>
   </data>
   <data name="ImportInCensus" xml:space="preserve">
-    <value>Импорт census</value>
+    <value>Импорт как "перепись"</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
     <value>Не удалось подключиться к Designer. Пожалуйста проверьте, что Designer доступен и попробуйте &lt;a href='{0}'&gt;еще раз&lt;/a&gt;</value>
@@ -137,5 +137,50 @@
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
     <value>Войдите в Designer</value>
+  </data>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>Режим импорта опросника</value>
+  </data>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>Импорт Опросника</value>
+  </data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>список моих опросников</value>
+  </data>
+  <data name="Chapters" xml:space="preserve">
+    <value>Секции </value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Создано</value>
+  </data>
+  <data name="Gropus" xml:space="preserve">
+    <value>Саб-секции</value>
+  </data>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>Обновлено</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Вопросы</value>
+  </data>
+  <data name="QuestionsWithConditions" xml:space="preserve">
+    <value>{0} с условиями </value>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>Ростеры</value>
+  </data>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>Этот опросник был ранее импортирован </value>
+  </data>
+  <data name="CensusImportSubTitle" xml:space="preserve">
+    <value>После этого действия опросник будет отправлен на все планшеты</value>
+  </data>
+  <data name="CensusImportTitle" xml:space="preserve">
+    <value>Иморт опросника в режиме "переписи"</value>
+  </data>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>Создать новую #{0} версию опросника</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>Импортировать опросник как шаблон для индивидуальных назначений </value>
   </data>
 </root>
