@@ -148,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IEnumerable<Identity> parentGroupsToRefresh =
                 @event.Instances.Select(x => interview.GetParentGroup(x.GetIdentity()))
                     .Distinct()
-                    .Where(x => this.AllVisibleSections.Any(y => y.SectionIdentity.Equals(x)));
+                    .Where(x => this.AllVisibleSections.Any(y => y.SectionIdentity?.Equals(x) ?? false));
 
             foreach (var identity in parentGroupsToRefresh)
             {
