@@ -21,8 +21,13 @@ $(function () {
         });
     };
 
+    $.fn.dataTable.ext.errMode = 'none';
+
     var table = $('table.import-interview')
         .on('init.dt', onTableInitComplete)
+        .on('error.dt', function (e, settings, techNote, message) {
+                location.reload();
+            })
         .DataTable({
             processing: true,
             language:
