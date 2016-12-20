@@ -589,4 +589,13 @@
     <value>{0} (вер. {1})</value>
     <comment>{0} - Questionnaire name, {1} - Questionnaire version</comment>
   </data>
+  <data name="GetLatestApp" xml:space="preserve">
+    <value>Скачать последнюю версию</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Помощь</value>
+  </data>
+  <data name="InstallationInstruction" xml:space="preserve">
+    <value>Инструкции установки</value>
+  </data>
 </root>
