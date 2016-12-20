@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         bool IsCompleted { get; }
         bool CreatedOnClient { get; }
 
+        InterviewTreeGroup GetGroup(Identity identity);
         InterviewTreeRoster GetRoster(Identity identity);
 
         InterviewTreeGpsQuestion GetGpsQuestion(Identity identity);

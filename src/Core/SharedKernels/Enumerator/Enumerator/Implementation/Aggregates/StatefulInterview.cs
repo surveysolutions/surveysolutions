@@ -190,7 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public bool HasErrors { get; private set; }
 
         public bool IsCompleted { get; private set; }
-
+        public InterviewTreeGroup GetGroup(Identity identity) => this.Tree.GetGroup(identity);
         public InterviewTreeRoster GetRoster(Identity identity) => this.Tree.GetRoster(identity);
         public InterviewTreeGpsQuestion GetGpsQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsGps;
         public InterviewTreeDateTimeQuestion GetDateTimeQuestion(Identity identity) => this.Tree.GetQuestion(identity).AsDateTime;

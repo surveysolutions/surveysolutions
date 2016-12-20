@@ -36,8 +36,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 this.RemoveFocusFromEditText();
                 this.HideKeyboard(drawerLayout.WindowToken);
-                var viewModel = this.ViewModel;
-                viewModel.Sections.UpdateStatuses.Execute(null); // for some reason custom binding on drawerlayout is not working. 
             };
         }
 
