@@ -187,12 +187,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 case ScreenType.Cover: return NavigationDirection.Previous;
                 case ScreenType.Complete: return NavigationDirection.Next;
+                case ScreenType.PrefieldScreen:
+                    switch (eventArgs.PreviousStage)
+                    {
+                        case ScreenType.Cover: return NavigationDirection.Next;
+                        default: return NavigationDirection.Previous;
+                    }
 
                 default:
                     switch (eventArgs.PreviousStage)
                     {
                         case ScreenType.Cover: return NavigationDirection.Next;
                         case ScreenType.Complete: return NavigationDirection.Previous;
+                        case ScreenType.PrefieldScreen: return NavigationDirection.Next;
 
                         default:
                             if (eventArgs.PreviousGroup == null || eventArgs.TargetGroup == null)
