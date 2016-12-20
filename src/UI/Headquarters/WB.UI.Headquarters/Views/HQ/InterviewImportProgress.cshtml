@@ -8,7 +8,7 @@
 {
     @Scripts.Render("~/js/batch-upload-start-interview-creation")
     <script type="text/javascript">
-        var InterviewCreationProgressModel = function() {
+        var InterviewCreationProgressModel = function(ajax) {
             var $importInterviewsStatusUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
 
@@ -47,8 +47,7 @@
             }
 
             self.updateStatusByInterviewsImport = function() {
-                sendRequest($importInterviewsStatusUrl,
-                    {},
+                ajax.sendRequest($importInterviewsStatusUrl, 'get', {}, true,
                     function(data) {
                         self.status.isInProgress(data.isInProgress);
                         self.status.createdInterviewsCount(data.createdInterviewsCount);
@@ -63,61 +62,13 @@
                         if (shouldStopRequestUpdates(data) === false) {
                             _.delay(self.updateStatusByInterviewsImport, 3000);
                         }
-                    },
-                    true,
-                    true);
+                    });
             };
-
-            // should be moved to injected service, no inheritance
-            self.IsPageLoaded = ko.observable(false);
-            self.IsAjaxComplete = ko.observable(true);
-
-            var sendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
-
-                if (!skipInProgressCheck && !self.IsAjaxComplete()) {
-                    self.CheckForRequestComplete();
-                    return;
-                }
-
-                self.IsAjaxComplete(false);
-
-                var requestHeaders = {};
-                requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
-
-                $.ajax({
-                    url: requestUrl,
-                    type: allowGet === true ? 'get' : 'post',
-                    data: args,
-                    headers: requestHeaders,
-                    dataType: 'json'
-                }).done(function(data) {
-                    if (!_.isUndefined(onSuccess)) {
-                        onSuccess(data);
-                    }
-                }).fail(function(jqXhr, textStatus, errorThrown) {
-                    if (jqXhr.status === 403) {
-                        if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
-                            self.ShowError(input.settings.messages.forbiddenMessage);
-                        } else {
-                            self.ShowError(jqXhr.responseText);
-                        }
-                    } else {
-                        self.ShowError(input.settings.messages.unhandledExceptionMessage);
-                    }
-                }).always(function() {
-                    self.IsPageLoaded(true);
-                    self.IsAjaxComplete(true);
-                    if (!_.isUndefined(onDone)) {
-                        onDone();
-                    }
-                });
-            };
-
             self.updateStatusByInterviewsImport();
         };
 
         $(function() {
-            var model = new InterviewCreationProgressModel();
+            var model = new InterviewCreationProgressModel(new Ajax(new Notifier()));
             ko.applyBindings(model);
         });
     </script>
