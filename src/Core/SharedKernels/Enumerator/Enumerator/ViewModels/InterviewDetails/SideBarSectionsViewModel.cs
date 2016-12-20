@@ -2,308 +2,212 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
-        ILiteEventHandler<RosterInstancesAdded>,
-        ILiteEventHandler<RosterInstancesRemoved>,
-        ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>, IDisposable
+    public class SideBarSectionsViewModel : MvxNotifyPropertyChanged, IDisposable
     {
+        private readonly IMvxMessenger messenger;
         private NavigationState navigationState;
 
         private readonly IQuestionnaireStorage questionnaireRepository;
-        readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private QuestionnaireIdentity questionnaireIdentity;
         private string interviewId;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly MvxSubscriptionToken sectionExpandSubscriptionToken;
+        private readonly MvxSubscriptionToken sectionCollapseSubscriptionToken;
+        private readonly MvxSubscriptionToken sectionRemoveSubscriptionToken;
+        private readonly MvxSubscriptionToken sectionUpdateSubscriptionToken;
 
-        protected SideBarSectionsViewModel()
-        {
+        private ObservableCollection<ISideBarItem> allVisibleSections;
+        public ObservableCollection<ISideBarItem> AllVisibleSections {
+            get {return this.allVisibleSections;}
+            set { this.RaiseAndSetIfChanged(ref this.allVisibleSections, value); }
         }
 
-        public ObservableCollection<SideBarSectionViewModel> Sections { get; set; }
-        public ObservableCollection<SideBarSectionViewModel> AllVisibleSections { get; set; }
+        private IEnumerable<ISideBarSectionItem> sectionViewModels => this.AllVisibleSections.OfType<ISideBarSectionItem>();
 
-        public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
+        public SideBarSectionsViewModel(
+            IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
-            ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMessenger messenger)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.eventRegistry = eventRegistry;
             this.modelsFactory = modelsFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.mainThreadDispatcher = mainThreadDispatcher;
+            this.messenger = messenger;
+            this.sectionExpandSubscriptionToken = this.messenger.Subscribe<SideBarSectionExpandMessage>(OnSideBarSectionExpanded);
+            this.sectionCollapseSubscriptionToken = this.messenger.Subscribe<SideBarSectionCollapseMessage>(OnSideBarSectionCollapsed);
+            this.sectionRemoveSubscriptionToken = this.messenger.Subscribe<SideBarSectionRemoveMessage>(OnSideBarSectionRemoved);
+            this.sectionUpdateSubscriptionToken = this.messenger.Subscribe<SideBarSectionUpdateMessage>(OnSideBarSectionUpdated);
         }
 
-        public void Init(string interviewId,
-            QuestionnaireIdentity questionnaireId,
-            NavigationState navigationState)
+        public void Init(string interviewId, QuestionnaireIdentity questionnaireId, NavigationState navigationState)
         {
-            if (navigationState == null) throw new ArgumentNullException("navigationState");
+            if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (questionnaireId == null) throw new ArgumentNullException(nameof(questionnaireId));
+
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (questionnaireId == null) throw new ArgumentNullException("questionnaireId");
 
             this.interviewId = interviewId;
-            this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
-            this.navigationState.ScreenChanged += this.OnScreenChanged;
             this.questionnaireIdentity = questionnaireId;
+            this.navigationState.ScreenChanged += this.OnScreenChanged;
 
-            this.BuildSectionsList();
+            this.CreateCoverAndCompleteSections();
         }
 
-        private void BuildSectionsList()
+        private void OnScreenChanged(ScreenChangedEventArgs e) => this.UpdateSectionsList(e.TargetGroup);
+
+        private void UpdateSectionsList(Identity expandedGroupIdentity = null)
         {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
-            List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
 
-            sections.Add(this.modelsFactory.BuildCoverScreenSectionItem(navigationState, interviewId));
+            var enabledSections = questionnaire.GetAllSections()
+                .Select(sectionId => Identity.Create(sectionId, RosterVector.Empty))
+                .Where(interview.IsEnabled)
+                .ToList();
 
-            foreach (Guid sectionId in questionnaire.GetAllSections())
+            var allSubSections = this.sectionViewModels.Where(
+                sectionViewModel => !enabledSections.Contains(sectionViewModel.SectionIdentity)).ToList();
+            foreach (var subSection in allSubSections)
             {
-                var groupIdentity = new Identity(sectionId, new decimal[] { });
-                if (interview.IsEnabled(groupIdentity))
-                {
-                    var sectionViewModel = this.BuildSectionItem(null, groupIdentity);
-                    sections.Add(sectionViewModel);
-                }
+                this.DisposeAndRemoveSectionViewModel(subSection);
             }
 
-            sections.Add(this.modelsFactory.BuildCompleteScreenSectionItem(navigationState, interviewId));
+            foreach (var sectionIdentity in enabledSections)
+            {
+                if (this.sectionViewModels.Any(section => section.SectionIdentity == sectionIdentity))
+                    continue;
 
-            this.Sections = new ObservableCollection<SideBarSectionViewModel>(sections);
-            this.UpdateSideBarTree();
+                var sectionViewModel = this.modelsFactory.BuildSectionItem(sectionIdentity,
+                    this.navigationState, this.interviewId);
+
+                this.AllVisibleSections.Insert(enabledSections.IndexOf(sectionIdentity) + 1, sectionViewModel);
+            }
+
+            if (expandedGroupIdentity == null) return;
+
+            var expandedSections = interview.GetGroup(expandedGroupIdentity)
+                .Parents?.Select(parentGroup => parentGroup.Identity) ?? Enumerable.Empty<Identity>();
+
+            foreach (var expandedGroup in expandedSections.Concat(new[] {expandedGroupIdentity}))
+                this.ExpandSection(expandedGroup);
         }
 
-        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
+        private void CreateCoverAndCompleteSections()
         {
-            this.HighlightCurrentSection(eventArgs);
+            this.AllVisibleSections = new ObservableCollection<ISideBarItem>
+            {
+                this.modelsFactory.BuildCoverItem(this.navigationState),
+                this.modelsFactory.BuildCompleteItem(this.navigationState, this.interviewId)
+            };
         }
 
-        private void HighlightCurrentSection(ScreenChangedEventArgs eventArgs)
+        private void OnSideBarSectionUpdated(SideBarSectionUpdateMessage e)
         {
-            var allTreeElements = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections)
-                .TreeToEnumerable(x => x.Children).ToList();
-            SideBarSectionViewModel selectedGroup = allTreeElements
-                .FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(eventArgs.TargetGroup));
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
-            if (eventArgs.TargetStage == ScreenType.Complete || eventArgs.TargetStage == ScreenType.Cover)
+            var updatedGroupViewModel = this.sectionViewModels.FirstOrDefault(x => x.SectionIdentity == e.UpdatedGroup);
+            if (updatedGroupViewModel == null) return;
+
+            var indexOfUpdatedGroup = this.AllVisibleSections.IndexOf(updatedGroupViewModel);
+
+            var enabledSubSections = interview.GetEnabledSubgroups(e.UpdatedGroup).ToList();
+
+            foreach (var sectionIdentity in enabledSubSections)
             {
-                this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
-                this.Sections.Where(x => x.Expanded).ForEach(x => x.Expanded = false);
-                this.UpdateSideBarTree();
-                return;
-            }
+                if (this.sectionViewModels.Any(section => section.SectionIdentity == sectionIdentity))
+                    continue;
 
-            var sideBarSectionToHighlight = selectedGroup;
-            if (sideBarSectionToHighlight == null)
-            {
-                return;
-            }
+                var sectionViewModel = this.modelsFactory.BuildSectionItem(sectionIdentity,
+                    this.navigationState, this.interviewId);
 
-            while (sideBarSectionToHighlight.Parent != null)
-            {
-                sideBarSectionToHighlight = sideBarSectionToHighlight.Parent;
-            }
-
-            this.Sections.Where(x => x != sideBarSectionToHighlight && x.IsSelected).ForEach(x => x.IsSelected = false);
-            this.Sections.Where(x => x != sideBarSectionToHighlight && x.Expanded).ForEach(x => x.Expanded = false);
-
-            sideBarSectionToHighlight.IsSelected = true;
-            sideBarSectionToHighlight.Expanded = true;
-            sideBarSectionToHighlight.TreeToEnumerable(s => s.Children)
-                .Where(s => !s.IsSelected)
-                .ForEach(s => s.IsSelected = true);
-            selectedGroup.Expanded = true;
-
-            this.UpdateSideBarTree();
-        }
-
-        public void Handle(RosterInstancesAdded @event)
-        {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-
-            IEnumerable<Identity> parentGroupsToRefresh =
-                @event.Instances.Select(x => interview.GetParentGroup(x.GetIdentity()))
-                    .Distinct()
-                    .Where(x => this.AllVisibleSections.Any(y => y.SectionIdentity?.Equals(x) ?? false));
-
-            foreach (var identity in parentGroupsToRefresh)
-            {
-                this.RefreshSectionChildItemsIfVisible(identity, interview);
-            }
-
-            this.RefreshHasChildrenFlags();
-            this.UpdateSideBarTree();
-        }
-
-        public void Handle(GroupsEnabled @event)
-        {
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity, interview.Language);
-
-            var allSections = questionnaire.GetAllSections().ToHashSet();
-
-            var sectionsIdToAdd = @event.Groups.Select(x => x.Id).Where(x => allSections.Contains(x));
-            foreach (Guid sectionIdToAdd in sectionsIdToAdd)
-            {
-                this.AddSection(sectionIdToAdd, questionnaire, interview);
-            }
-            
-            var groupsToRefresh = @event.Groups.Where(x => !allSections.Contains(x.Id) && interview.HasGroup(x)).Select(x => interview.GetParentGroup(x)).Distinct();
-            foreach (Identity parentGroupToRefresh in groupsToRefresh)
-            {
-                this.RefreshSectionChildItemsIfVisible(parentGroupToRefresh, interview);
-            }
-
-            this.RefreshHasChildrenFlags();
-            this.UpdateSideBarTree();
-        }
-
-        private void AddSection(Guid sectionId, IQuestionnaire questionnaire, IStatefulInterview interview)
-        {
-            var sectionIdentity = new Identity(sectionId, new decimal[0]);
-            var sectionViewModel = this.BuildSectionItem(null, sectionIdentity);
-            var index = questionnaire.GetAllSections()
-                .Where(sId => interview.IsEnabled(new Identity(sId, new decimal[0])))
-                .ToList()
-                .IndexOf(sectionId);
-
-            var sectionsOffsetBecauseCoverLink = 1;
-            this.Sections.Insert(index + sectionsOffsetBecauseCoverLink, sectionViewModel);
-        }
-
-        private void RefreshSectionChildItemsIfVisible(Identity sectionId, IStatefulInterview interview)
-        {
-            var sectionToAddTo = this.AllVisibleSections.FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(sectionId) && x.Expanded);
-
-            if (sectionToAddTo != null)
-            {
-                List<Identity> enabledSubgroups = interview.GetEnabledSubgroups(sectionId).ToList();
-                for (int i = 0; i < enabledSubgroups.Count; i++)
-                {
-                    var enabledSubgroupIdentity = enabledSubgroups[i];
-                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children.Any(x => x.SectionIdentity.Equals(enabledSubgroupIdentity)))
-                    {
-                        var sideBarItem = this.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity);
-                        if (i < sectionToAddTo.Children.Count)
-                        {
-                            sectionToAddTo.Children.Insert(i, sideBarItem);
-                        }
-                        else
-                        {
-                            sectionToAddTo.Children.Add(sideBarItem);
-                        }
-                    }
-                }
+                var indexOfSubsection = indexOfUpdatedGroup + enabledSubSections.IndexOf(sectionIdentity) + 1;
+                this.AllVisibleSections.Insert(indexOfSubsection, sectionViewModel);
             }
         }
 
-        public void Handle(GroupsDisabled @event)
-        {
-            var identities = @event.Groups.Select(i => new Identity(i.Id, i.RosterVector)).ToArray();
-            this.RemoveFromSections(identities);
-            this.RemoveFromChildrenSections(identities);
-            this.RefreshHasChildrenFlags();
-            this.UpdateSideBarTree();
-        }
+        private void OnSideBarSectionRemoved(SideBarSectionRemoveMessage e)
+            => this.DisposeAndRemoveSection(e.RemovedGroup);
 
-        public void Handle(RosterInstancesRemoved @event)
+        private void OnSideBarSectionCollapsed(SideBarSectionCollapseMessage e)
         {
-            var identities = @event.Instances.Select(ri => ri.GetIdentity()).ToArray();
-            this.RemoveFromChildrenSections(identities);
-            this.RefreshHasChildrenFlags();
-            this.UpdateSideBarTree();
-        }
-
-        private void RemoveFromChildrenSections(Identity[] identities)
-        {
-            foreach (var groupIdentity in identities)
+            var collapsedViewModels = this.sectionViewModels.Where(
+                    sectionViewModel => sectionViewModel.ParentsIdentities.Contains(e.CollapsedGroup)).ToList();
+            foreach (var collapsedViewModel in collapsedViewModels)
             {
-                var section = this.AllVisibleSections.FirstOrDefault(s => s.ScreenType == ScreenType.Group && s.SectionIdentity.Equals(groupIdentity));
-                if (section != null)
-                {
-                    section.Parent?.Children.Remove(section);
-
-                    section.RemoveMe();
-                }
+                this.DisposeAndRemoveSectionViewModel(collapsedViewModel);
             }
         }
 
-        private void RemoveFromSections(Identity[] identities)
+        private void OnSideBarSectionExpanded(SideBarSectionExpandMessage e) => this.ExpandSection(e.ExpandedGroup);
+
+        private void ExpandSection(Identity expandedSection)
         {
-            foreach (var groupIdentity in identities)
+            var expandedGroupViewModel = this.sectionViewModels
+                .FirstOrDefault(section => section.SectionIdentity == expandedSection);
+
+            if (expandedGroupViewModel == null) return;
+
+            var indexOfExpandedGroup = this.AllVisibleSections.IndexOf(expandedGroupViewModel);
+
+            foreach (var subSection in this.GetSubSections(expandedSection))
             {
-                var topLevelSectionToRemove = this.Sections.FirstOrDefault(s => s.ScreenType == ScreenType.Group && s.SectionIdentity.Equals(groupIdentity));
-                if (topLevelSectionToRemove != null)
-                {
-                    this.Sections.Remove(topLevelSectionToRemove);
-                    topLevelSectionToRemove.RemoveMe();
-                }
+                this.AllVisibleSections.Insert(++indexOfExpandedGroup, subSection);
             }
         }
 
-        private void RefreshHasChildrenFlags()
+        private IEnumerable<ISideBarItem> GetSubSections(Identity expandedGroup)
         {
-            foreach (var section in this.AllVisibleSections)
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+
+            foreach (var subSectionIdentity in interview.GetEnabledSubgroups(expandedGroup))
             {
-                section.RefreshHasChildrenFlag();
+                yield return this.modelsFactory.BuildSectionItem(subSectionIdentity,
+                    this.navigationState, this.interviewId);
             }
         }
 
-        public void UpdateSideBarTree()
+        private void DisposeAndRemoveSection(Identity sectionIdentity)
         {
-            var tree = this.Sections.TreeToEnumerableDepthFirst(x => x.Expanded ? x.Children : Enumerable.Empty<SideBarSectionViewModel>()).ToList();
-            this.AllVisibleSections = new ObservableCollection<SideBarSectionViewModel>(tree);
-            this.RaisePropertyChanged(() => this.AllVisibleSections);
-        }
+            var sectionWithChildrenViewModels = this.sectionViewModels
+                .Where(section =>
+                    section.SectionIdentity == sectionIdentity || section.ParentsIdentities.Contains(sectionIdentity))
+                .ToList();
 
-        private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity)
-        {
-            return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, NavigationIdentity.CreateForGroup(enabledSubgroupIdentity), this.navigationState, this.interviewId);
-        }
 
-        public ICommand UpdateStatuses
-        {
-            get
+            foreach (var sectionWithChildrenViewModel in sectionWithChildrenViewModels)
             {
-                return new MvxAsyncCommand(async () => await Task.Run(() =>
-                {
-                    mainThreadDispatcher.RequestMainThreadAction(() =>
-                    {
-                        this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromGroupModel());
-                    });
-                }));
+                this.DisposeAndRemoveSectionViewModel(sectionWithChildrenViewModel);
             }
+        }
+
+        private void DisposeAndRemoveSectionViewModel(ISideBarSectionItem section)
+        {
+            section.Dispose();
+            this.AllVisibleSections.Remove(section);
         }
 
         public void Dispose()
         {
-            this.eventRegistry.Unsubscribe(this);
-            this.Sections.ForEach(x => x.Dispose());
-            this.navigationState.ScreenChanged -= this.OnScreenChanged;
+            this.messenger.Unsubscribe<SideBarSectionCollapseMessage>(this.sectionCollapseSubscriptionToken);
+            this.messenger.Unsubscribe<SideBarSectionExpandMessage>(this.sectionExpandSubscriptionToken);
+            this.messenger.Unsubscribe<SideBarSectionRemoveMessage>(this.sectionRemoveSubscriptionToken);
+            this.messenger.Unsubscribe<SideBarSectionUpdateMessage>(this.sectionUpdateSubscriptionToken);
+
+            this.AllVisibleSections.ForEach(x => x.Dispose());
         }
     }
 }

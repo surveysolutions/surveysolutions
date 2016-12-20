@@ -1,292 +1,223 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     [DebuggerDisplay("Title = {Title}, Id = {SectionIdentity}")]
-    public class SideBarSectionViewModel : MvxNotifyPropertyChanged, IDisposable
+    public class SideBarSectionViewModel : MvxNotifyPropertyChanged, ISideBarSectionItem,
+        ILiteEventHandler<RosterInstancesAdded>,
+        ILiteEventHandler<RosterInstancesRemoved>,
+        ILiteEventHandler<GroupsEnabled>,
+        ILiteEventHandler<GroupsDisabled>
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly ISideBarSectionViewModelsFactory modelsFactory;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IMvxMessenger messenger;
+        private readonly ILiteEventRegistry eventRegistry;
 
+        private readonly AnswerNotifier answerNotifier;
         public DynamicTextViewModel Title { get; }
 
         private string interviewId;
-
-        private SideBarSectionsViewModel root;
+        private RosterInstance sectionIdentityAsRosterInstance;
+        private Guid[] rostersInGroup;
+        private bool isRoster;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
-            ISideBarSectionViewModelsFactory modelsFactory,
+            IQuestionnaireStorage questionnaireStorage,
             IMvxMessenger messenger,
-            DynamicTextViewModel dynamicTextViewModel)
+            ILiteEventRegistry eventRegistry,
+            DynamicTextViewModel dynamicTextViewModel,
+            AnswerNotifier answerNotifier)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.modelsFactory = modelsFactory;
+            this.questionnaireStorage = questionnaireStorage;
             this.messenger = messenger;
+            this.eventRegistry = eventRegistry;
+            this.answerNotifier = answerNotifier;
 
             this.Title = dynamicTextViewModel;
-
-            this.Children = new List<SideBarSectionViewModel>();
         }
 
-        public void Init(string interviewId,
-            NavigationIdentity navigationIdentity,
-            SideBarSectionsViewModel root,
-            SideBarSectionViewModel parent,
-            GroupStateViewModel groupStateViewModel,
+        public void Init(string interviewId, Identity sectionIdentity, GroupStateViewModel groupStateViewModel,
             NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            
+            this.eventRegistry.Subscribe(this, interviewId);
+
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
-            groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
-            this.root = root;
-            this.Parent = parent;
-            this.SectionIdentity = navigationIdentity.TargetGroup;
-            this.HasChildren = interview.GetEnabledSubgroups(navigationIdentity.TargetGroup).Any();
-            this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
-            this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
+            this.SectionIdentity = sectionIdentity;
+
+            this.isRoster = interview.GetRoster(this.SectionIdentity) != null;
+            if (this.isRoster)
+                this.sectionIdentityAsRosterInstance = RosterInstance.CreateFromIdentity(this.SectionIdentity);
+
+            this.rostersInGroup = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language)
+                    .GetAllUnderlyingChildRosters(this.SectionIdentity.Id).ToArray();
+
+            groupStateViewModel.Init(interviewId, sectionIdentity);
+
+            this.ParentsIdentities =
+                interview.GetGroup(this.SectionIdentity).Parents?.Select(section => section?.Identity)?.ToArray() ??
+                Enumerable.Empty<Identity>().ToArray();
+
+            this.NodeDepth = this.ParentsIdentities.Length;
             this.Title.Init(interviewId, this.SectionIdentity);
-            if (this.Parent != null)
-            {
-                this.IsSelected = this.Parent.IsSelected;
-            }
-           
             this.SideBarGroupState = groupStateViewModel;
-            this.ScreenType = navigationIdentity.TargetScreen;
             this.NavigationState = navigationState;
             this.NavigationState.ScreenChanged += this.OnScreenChanged;
-            this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
+
+            this.UpdateHasChildren();
+            this.UpdateSelection(navigationState.CurrentGroup);
+            
+            this.answerNotifier.Init(this.interviewId);
+            this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
         }
 
-        public void InitCompleteScreenItem(string interviewId, GroupStateViewModel groupStateViewModel, NavigationState navigationState)
+        private void QuestionAnswered(object sender, EventArgs e)
         {
-            this.InitServiceItem(interviewId, groupStateViewModel, navigationState,
-                ScreenType.Complete, UIResources.Interview_Complete_Screen_Title);
+            this.SideBarGroupState.UpdateFromGroupModel();
+            this.RaisePropertyChanged(() => this.SideBarGroupState);
         }
 
-        public void InitCoverScreenItem(string interviewId, CoverStateViewModel coverStateViewModel, NavigationState navigationState)
-        {
-            this.InitServiceItem(interviewId, coverStateViewModel, navigationState, 
-                ScreenType.Cover, UIResources.Interview_Cover_Screen_Title);
-        }
-
-        private void InitServiceItem(string interviewId, GroupStateViewModel coverStateViewModel,
-            NavigationState navigationState, ScreenType screenType, string screenTitle)
-        {
-            this.interviewId = interviewId;
-
-            this.Parent = null;
-            this.HasChildren = false;
-            this.NodeDepth = 0;
-            this.IsCurrent = navigationState.CurrentScreenType == screenType;
-            this.Title.InitAsStatic(screenTitle);
-            coverStateViewModel.Init(interviewId, null);
-
-            this.SideBarGroupState = coverStateViewModel;
-            this.ScreenType = screenType;
-            this.NavigationState = navigationState;
-            this.NavigationState.ScreenChanged += this.OnScreenChanged;
-            this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
-        }
-
-        void OnBeforeScreenChanged(BeforeScreenChangedEventArgs eventArgs)
-        {
-            this.IsCurrent = false;
-        }
-
-        void OnScreenChanged(ScreenChangedEventArgs eventArgs)
-        {
-            if (this.ScreenType != eventArgs.TargetStage)
-                return;
-
-            switch (eventArgs.TargetStage)
-            {
-                case ScreenType.Complete:
-                case ScreenType.Cover:
-                    this.IsCurrent = true;
-                    break;
-                default:
-                    if (this.SectionIdentity.Equals(eventArgs.TargetGroup))
-                    {
-                        this.IsCurrent = true;
-                        if (!this.Expanded)
-                        {
-                            this.Expanded = true;
-                        }
-                    }
-                    break;
-            }
-        }
-
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs) => this.UpdateSelection(eventArgs.TargetGroup);
+        
         public GroupStateViewModel SideBarGroupState { get; private set; }
 
         public NavigationState NavigationState { get; set; }
-        public Identity SectionIdentity { get; set; }
-        public ScreenType ScreenType { get; set; }
+
+        public Identity SectionIdentity { get; private set; }
+        public Identity[] ParentsIdentities { get; private set; }
 
         private bool isSelected;
         public bool IsSelected
         {
             get { return this.isSelected; }
-            set
-            {
-                if (this.isSelected == value) return;
-                this.isSelected = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.RaiseAndSetIfChanged(ref this.isSelected, value); }
         }
 
         private bool isCurrent;
         public bool IsCurrent
         {
             get { return this.isCurrent; }
-            set
-            {
-                if (this.isCurrent == value) return;
-                this.isCurrent = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.RaiseAndSetIfChanged(ref this.isCurrent, value); }
         }
 
         private bool hasChildren;
         public bool HasChildren
         {
             get { return this.hasChildren; }
-            set
-            {
-                if (this.hasChildren == value) return;
-                this.hasChildren = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.RaiseAndSetIfChanged(ref this.hasChildren, value); }
         }
 
         private bool expanded;
         public bool Expanded
         {
             get { return this.expanded; }
-            set
-            {
-                if (this.Expanded != value)
-                {
-                    this.expanded = value;
-                    if (this.expanded)
-                    {
-                        this.Children = this.GenerateChildNodes();
-                    }
-                    else
-                    {
-                        this.Children.TreeToEnumerable(x => x.Children)
-                                .ToList()
-                                .ForEach(x => x.Dispose());
-
-                        this.Children = new List<SideBarSectionViewModel>();
-                    }
-
-                    this.RaisePropertyChanged();
-                }
-            }
+            set { this.RaiseAndSetIfChanged(ref this.expanded, value); }
         }
 
         public int NodeDepth { get; set; }
-
-        private List<SideBarSectionViewModel> children;
-        public List<SideBarSectionViewModel> Children
-        {
-            get { return this.children; }
-            set
-            {
-                this.children = value;
-                this.RaisePropertyChanged();
-            }
-        }
         public ICommand NavigateToSectionCommand => new MvxCommand(this.NavigateToSection);
 
-        public ICommand Toggle
+        public ICommand ToggleCommand => new MvxCommand(this.Toggle);
+
+        private void Toggle()
         {
-            get
-            {
-                return new MvxCommand(() =>
-                {
-                    this.Expanded = !this.Expanded;
-                    this.root.UpdateSideBarTree();
-                });
-            }
+            if(this.Expanded)
+                this.messenger.Publish(new SideBarSectionCollapseMessage(this, this.SectionIdentity));
+            else
+                this.messenger.Publish(new SideBarSectionExpandMessage(this, this.SectionIdentity));
+
+            this.Expanded = !this.Expanded;
         }
 
         private void NavigateToSection()
         {
             this.messenger.Publish(new SectionChangeMessage(this));
-
-            NavigationIdentity navigationIdentity;
-            switch (this.ScreenType)
-            {
-                case ScreenType.Complete:
-                    navigationIdentity = NavigationIdentity.CreateForCompleteScreen();
-                    break;
-                case ScreenType.Cover:
-                    navigationIdentity = NavigationIdentity.CreateForCoverScreen();
-                    break;
-                default:
-                    navigationIdentity = NavigationIdentity.CreateForGroup(this.SectionIdentity);
-                    break;
-            }
-
-            this.NavigationState.NavigateTo(navigationIdentity);
+            this.NavigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.SectionIdentity));
         }
 
-        private List<SideBarSectionViewModel> GenerateChildNodes()
+        private void UpdateSelection(Identity targetGroup)
         {
-            if (this.SectionIdentity == null)
-                return new List<SideBarSectionViewModel>();
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
-            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
+            var isParentSelected = targetGroup != null && (interview.GetGroup(targetGroup)
+                .Parents?.Any(x => x.Identity == this.SectionIdentity) ?? false);
 
-            var enabledSubgroups = interview.GetEnabledSubgroups(this.SectionIdentity).ToList();
-
-            var result = enabledSubgroups.Select(groupInstance => this.modelsFactory.BuildSectionItem(this.root, this, NavigationIdentity.CreateForGroup(groupInstance), 
-                                                                                               this.NavigationState, this.NavigationState.InterviewId));
-
-            return new List<SideBarSectionViewModel>(result);
+            this.IsCurrent = this.SectionIdentity.Equals(targetGroup);
+            this.Expanded = this.IsSelected = this.IsCurrent || isParentSelected;
         }
 
-        public SideBarSectionViewModel Parent { get; set; }
-
-        public void RemoveMe()
+        private void UpdateHasChildren()
         {
-            this.RefreshHasChildrenFlag();
-            this.Dispose();
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            this.HasChildren = interview.GetEnabledSubgroups(this.SectionIdentity).Any();
+        }
+
+        private void UpdateSubGroups(Identity[] addedSubGroups)
+        {
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+
+            if (addedSubGroups.Any(x => interview.GetGroup(x)?.Parent?.Identity == this.SectionIdentity))
+                this.messenger.Publish(new SideBarSectionUpdateMessage(this, this.SectionIdentity));
+        }
+
+        public void Handle(RosterInstancesAdded @event)
+        {
+            if (@event.Instances.Select(rosterInstance => rosterInstance.GroupId).Any(rosterId => this.rostersInGroup.Contains(rosterId)))
+                this.UpdateHasChildren();
+
+            if (!this.Expanded) return;
+
+            this.UpdateSubGroups(@event.Instances.Select(x => x.GetIdentity()).ToArray());
+        }
+
+        public void Handle(RosterInstancesRemoved @event)
+        {
+            if (this.isRoster && @event.Instances.Contains(this.sectionIdentityAsRosterInstance))
+                this.messenger.Publish(new SideBarSectionRemoveMessage(this, this.SectionIdentity));
+            else if (@event.Instances.Select(rosterInstance => rosterInstance.GroupId).Any(rosterId => this.rostersInGroup.Contains(rosterId)))
+                this.UpdateHasChildren();
+        }
+
+        public void Handle(GroupsEnabled @event)
+        {
+            if (!this.Expanded) return;
+
+            this.UpdateSubGroups(@event.Groups);
+        }
+
+        public void Handle(GroupsDisabled @event)
+        {
+            if (@event.Groups.Contains(this.SectionIdentity))
+                this.messenger.Publish(new SideBarSectionRemoveMessage(this, this.SectionIdentity));
+            else if (@event.Groups.Select(group => group.Id).Any(groupId => this.rostersInGroup.Contains(groupId)))
+                this.UpdateHasChildren();
         }
 
         public void Dispose()
         {
+            this.eventRegistry.Unsubscribe(this);
+
+            this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
+            this.answerNotifier.Dispose();
+
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;
-            this.NavigationState.BeforeScreenChanged -= this.OnBeforeScreenChanged;
             this.Title.Dispose();
-            this.Children?.ForEach(x => x.Dispose());
-        }
-
-        public void RefreshHasChildrenFlag()
-        {
-            if (ScreenType == ScreenType.Complete || ScreenType == ScreenType.Cover)
-                return;
-
-            var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            this.HasChildren = interview.GetEnabledSubgroups(this.SectionIdentity).Any();
         }
     }
 }
