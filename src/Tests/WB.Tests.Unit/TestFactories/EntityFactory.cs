@@ -36,6 +36,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -44,6 +45,7 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -1342,5 +1344,8 @@ namespace WB.Tests.Unit.TestFactories
 
         public SampleUploadView SampleUploadView(Guid? questionnaireId = null, int? version = null, List<FeaturedQuestionItem> featuredQuestionItems = null) 
             => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems);
+
+        public AnswerNotifier AnswerNotifier(LiteEventRegistry liteEventRegistry)
+            => new AnswerNotifier(liteEventRegistry);
     }
 }
