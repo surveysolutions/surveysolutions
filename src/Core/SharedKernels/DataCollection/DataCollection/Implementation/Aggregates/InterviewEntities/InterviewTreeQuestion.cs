@@ -382,7 +382,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsInteger) return AnswerUtils.AnswerToString(this.AsInteger.GetAnswer()?.Value);
             if (this.IsDouble) return AnswerUtils.AnswerToString(this.AsDouble.GetAnswer()?.Value);
             if (this.IsDateTime)
-                return AnswerUtils.AnswerToString(this.AsDateTime.GetAnswer()?.Value, cultureInfo: cultureInfo, isTimestamp: this.AsDateTime.IsTimestamp);
+            {
+                var dateTime = this.AsDateTime.GetAnswer()?.Value.ToLocalTime();
+                return AnswerUtils.AnswerToString(dateTime, cultureInfo: cultureInfo, isTimestamp: this.AsDateTime.IsTimestamp);
+            }
             if (this.IsGps) return AnswerUtils.AnswerToString(this.AsGps.GetAnswer()?.Value);
             if (this.IsTextList) return AnswerUtils.AnswerToString(this.AsTextList.GetAnswer()?.ToTupleArray());
 
