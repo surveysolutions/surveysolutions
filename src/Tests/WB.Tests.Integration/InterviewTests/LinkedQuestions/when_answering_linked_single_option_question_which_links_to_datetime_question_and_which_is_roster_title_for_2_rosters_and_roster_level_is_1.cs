@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var linkedOption1Answer = new DateTime(2014, 2, 23);
             var linkedOption2Answer = new DateTime(2014, 3, 8);
             var linkedOption3Answer = new DateTime(2014, 5, 9);
-            linkedOption2TextInvariantCulture = linkedOption2Answer.ToShortDateString();//"03/08/2014";
+            linkedOption2TextInvariantCulture = linkedOption2Answer.ToLocalTime().ToShortDateString();//"03/08/2014";
 
             var triggerQuestionId = Guid.NewGuid();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
