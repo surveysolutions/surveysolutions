@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select questionnaire to import.
+        ///   Looks up a localized string similar to Select a questionnaire to import.
         /// </summary>
         public static string PageHeader {
             get {

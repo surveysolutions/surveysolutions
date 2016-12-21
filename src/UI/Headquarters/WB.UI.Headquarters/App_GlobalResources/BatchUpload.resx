@@ -338,7 +338,7 @@
     <value>Prefilled and collected data (archive)</value>
   </data>
   <data name="CreatingMultipleInterviews" xml:space="preserve">
-    <value>Creating multiple interviews by batch upload</value>
+    <value>Creating multiple interviews</value>
   </data>
   <data name="EmptySupervisorDescription" xml:space="preserve">
     <value>If usernames are not specified you will need to assign a supervisor to all interviews later.</value>
@@ -350,7 +350,7 @@
     <value>manual mode</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Upload tab separated file with necessary prefilled data. Optionaly, specify usernames of supervisors or enumerators in _responsible column.</value>
+    <value>Upload tab separated file with necessary prefilled data. Optionally, specify usernames of supervisors or enumerators in the _responsible column.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Prefilled data only</value>
@@ -372,19 +372,19 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>Download .tab template for this questionnaire</value>
   </data>
   <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
-    <value>List of data fields which are required for creating interview assignment you can download</value>
+    <value>List of variables, marked as Prefilled in Designer, required to create an interview. Download a</value>
   </data>
   <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
-    <value>.tab template for this questionnaire</value>
+    <value>.tab template.</value>
   </data>
   <data name="HideListPrefilledData" xml:space="preserve">
     <value>Hide list of required prefilled data</value>
   </data>
   <data name="PrefilledRequiredData" xml:space="preserve">
-    <value>Prefilled data required for this questionnaire</value>
+    <value>Required prefilled data</value>
   </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
-    <value>Batch file verification failed</value>
+    <value>Verification of uploaded file failed</value>
   </data>
   <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
     <value>creating multiple interviews</value>
@@ -397,14 +397,14 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>Creating multiple interviews with batch upload</value>
   </data>
   <data name="InterviewsAreNotCreated" xml:space="preserve">
-    <value>Interviews are not created</value>
+    <value>No interviews were created</value>
   </data>
   <data name="MultipleErrorsWereFound" xml:space="preserve">
-    <value>{0} errors were found</value>
+    <value>{0} errors found</value>
     <comment>{0} - count of founded errors</comment>
   </data>
   <data name="SingleErrorFound" xml:space="preserve">
-    <value>1 error was found</value>
+    <value>1 error found</value>
   </data>
   <data name="BackToImport" xml:space="preserve">
     <value>Back to import</value>
@@ -462,7 +462,7 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <comment>{0} - count of created interviews (always &gt; 1)</comment>
   </data>
   <data name="SelectSupervisorToAssign" xml:space="preserve">
-    <value>Select supervisor to assign this batch to </value>
+    <value>Select the supervisor for this batch</value>
   </data>
   <data name="SingleInterviewCreated" xml:space="preserve">
     <value>1 interview created</value>
@@ -471,6 +471,6 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
     <value>1 interview failed to be created</value>
   </data>
   <data name="VerificationCompleted" xml:space="preserve">
-    <value>Verification completed</value>
+    <value>Verification complete</value>
   </data>
 </root>

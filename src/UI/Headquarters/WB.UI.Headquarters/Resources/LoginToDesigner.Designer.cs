@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use your Survey Solutions Designer credentials to get access to your questionnaires..
+        ///   Looks up a localized string similar to Use your Survey Solutions Designer credentials to access your questionnaires..
         /// </summary>
         public static string PageHeader {
             get {
