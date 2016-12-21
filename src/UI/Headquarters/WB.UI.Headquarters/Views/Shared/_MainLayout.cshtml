@@ -30,6 +30,7 @@
                 $(".top-menu").toggleClass("top-animate");
                 $(".mid-menu").toggleClass("mid-animate");
                 $(".bottom-menu").toggleClass("bottom-animate");
+                $("main").toggleClass("hidden");
             });
         });
     </script>
@@ -50,9 +51,7 @@
                             <span class="icon-bar mid-menu"></span>
                             <span class="icon-bar bottom-menu"></span>
                         </button>
-                        <a class="navbar-brand" href="@Url.Action("Index", "Account")">
-                            <div class="retina logo">Survey Solutions</div>
-                        </a>
+                        <a class="navbar-brand rotate-brand" href="@Url.Action("Index", "Account")"></a>
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbar">

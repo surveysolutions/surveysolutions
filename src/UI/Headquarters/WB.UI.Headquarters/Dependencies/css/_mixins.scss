@@ -1,7 +1,9 @@
 @mixin fontface($family){
 	@font-face {
     font-family: '#{$family}';
-    src: url('../fonts/#{$family}.woff2') format('woff2'),
+    src: url('../fonts/#{$family}.eot');
+    src: url('../fonts/#{$family}.eot') format('embedded-opentype'),
+         url('../fonts/#{$family}.woff2') format('woff2'),
          url('../fonts/#{$family}.woff') format('woff'),
          url('../fonts/#{$family}.ttf') format('truetype'),
          url('../fonts/#{$family}.svg##{$family}') format('svg');}
@@ -140,12 +142,8 @@
     margin: 0;
     @include opacity(0.5);
     display: block;
-         box-sizing: content-box;
-    &:hover, &:focus, &:active{
-        &:before, &:after{
-            background-color: darken($gray_light, 30%);
-        }
-    }
+    @include box-sizing(content-box);
+    
     &:before, &:after{
         display: block;
         content: "";
@@ -158,6 +156,11 @@
     &:after{
         @include rotate(-45deg);
         top: ($width/2 - $height - 1px);
+    }
+    &:hover, &:focus, &:active{
+        &:before, &:after{
+            background-color: darken($gray_light, 30%);
+        }
     }
 }
 @mixin question_title_colors($default, $with_error, $filled){
@@ -199,8 +202,8 @@
     background-size: 365px 329px !important;
 }
 %retina-headquarter-size{
-    @include size(269px, 96px);
-    background-size: 269px 96px !important;
+    @include size(260px, 82px);
+    background-size: 260px 82px !important;
 }
 %retina-world-bank-size{
     @include size(270px, 53px);
@@ -306,8 +309,7 @@
 }
 %hidden-foldback-button{
     .foldback-button{
-        right: -80px;
-        top: 5px;
+        right: - $width-foldback-button;
         background-color: $gray_form;
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
@@ -330,17 +332,17 @@
         width: $filter-small-width;
         padding-top: 45px;
         padding-left: 15px;
-        .dropdown-toggle{
-            width: 100%; 
-        }
+        .bootstrap-select.btn-group{
+            width: 100% !important;   
+        } 
         .open > .dropdown-menu{
             width: 100%;    
         }
         &.hidden-filters{
-            left: $hidden-filter-small-indent;
+            left: - $filter-small-width - 12px;
             position: absolute;
             .foldback-button{
-                right: -70px;
+                right: - $width-foldback-button;
             }
         }
     }

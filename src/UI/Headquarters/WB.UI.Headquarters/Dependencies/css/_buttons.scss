@@ -1,0 +1,69 @@
+.btn{
+	font: 12px/14px "TrebuchetMSBold";
+	text-transform: uppercase;
+    letter-spacing: 0.13em;
+    outline: none;
+	&:disabled{
+		background: $gray-super-light repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
+		border-color: transparent;	
+		&:hover, &:focus{
+			border-color: $gray-super-light;
+		}
+	}
+}
+.btn-link{
+	@extend %gray-uppercase;
+	&:hover, &:focus{
+		outline: none;
+		text-decoration: none;
+		color: darken($gray_light, 25%);
+	}
+}
+.foldback-button{
+	@include size($width-foldback-button, 46px);
+	cursor: pointer;
+	@include absolute(5px, 0, null, null);
+	border-radius: 4px;
+	z-index: 2;
+	@include transition();
+	&:hover, &:focus{
+	    span.arrow{
+	    	background-color: rgba(0, 0, 0, 1);
+	    }
+	    .glyphicon{
+	    	color: rgba(0, 0, 0, 1);
+		}
+	}
+	span.arrow{
+		display: inline-block;
+		@include size(20px, 2px); 
+		margin: 15px 10px;
+		background-color: rgba(0, 0, 0, 0.5);
+		@include absolute(0, 0);
+		@include rotate(-45deg);
+		&:first-of-type{
+			@include rotate(45deg);
+			top: 13px;
+		}
+	}
+	.glyphicon{
+		display: none;
+		color: rgba(0, 0, 0, 0.5);
+		font-size: 18px;
+		top: 14px;
+		left: 10px;
+	}
+}
+.back-link{
+    text-transform: uppercase;
+    font: 12.5px/14px "TrebuchetMSBold";
+    letter-spacing: 0.13em;
+    display: inline-block;
+}
+#hidden-links{
+    display: none;
+}
+.cancel{
+	border: none;
+	outline: none;
+}

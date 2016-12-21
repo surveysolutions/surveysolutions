@@ -9,7 +9,10 @@ $container-tablet:             (768px + $grid-gutter-width);
 $container-desktop:            (960px + $grid-gutter-width);
 $container-large-desktop:      (960px + $grid-gutter-width);
 $input-height-base: 40px;
+$padding-base-vertical: 10px;
+$padding-base-horizontal: 9px;
 
+/* Colors */
 $blue: #2a81cb;
 $light-blue: #5fd3c6;
 $blue-super-light: #eff4f8;
@@ -34,22 +37,36 @@ $red-super-light: #f6d6d0;
 
 $pink: #ed45aa;
 
+/* Changed default value */
+
 $state-success-text:             $green;
 $state-info-text:                $blue;
 $state-warning-text:             #8a6d3b;
 $state-danger-text:              $red_error;
+$btn-success-bg:				 $green_btn;
+$btn-danger-bg:            	 	 $red;
+$btn-primary-bg:				 $blue;
+$btn-success-border:			 $green_btn;
+$btn-danger-border:        	 	 $red;
+$btn-primary-border:			 $blue;
+$progress-bar-success-bg:		 $green_btn;
+$progress-bar-info-bg:			 $blue;
+$progress-bar-danger-bg:		 $red;
+$label-primary-bg:				 $blue;
+$label-success-bg:				 $green_btn;
+$label-danger-bg:				 $red;
+
+$margin-container: 90px;
+$margin-container-md-screen: 35px;
+
+$width-search-input: 300px;
 
 /* Indent for filters */
 
 $width-question-editor: 445px;
-
+$width-foldback-button: 50px;
 $filter-width: 360px;
 $filter-small-width: 270px;
-$hidden-filters-indent: -400px;
-$hidden-filter-small-indent:-300px;
-
-$export-types-margin-left: 335px;
-$small-export-types-margin-left: 235px;
 
 $content-width: 570px;
 $content-width-small: 330px;

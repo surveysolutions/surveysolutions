@@ -17,7 +17,7 @@ $(function () {
             else {
                 $(this).addClass("active");
             }
-            $(".column-questionnaire-title").toggleClass("padding-left-lide");
+            $(".column-questionnaire-title").toggleClass("padding-left-slide");
         });
     };
 

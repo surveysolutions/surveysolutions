@@ -3,6 +3,11 @@ $icon-font-path: '../fonts/';
 @import "../vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
 @import "mixins";
+@import "tables";
+@import "buttons";
+@import "navbar";
+@import "progress-bars";
+@import "forms";
 
 @import "common";
 @import "import-questionnaires";

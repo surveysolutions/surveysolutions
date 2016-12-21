@@ -75,6 +75,7 @@ input.checkbox-filter{
 			margin-bottom: 15px;
 			max-width: 275px;
 			.input-group.date{
+				width: 100%;
 				label{
 					display: table-cell;
 					vertical-align: middle;
@@ -113,67 +114,9 @@ input.checkbox-filter{
 		display: block;
 	}
 }
-.btn-input {
-   display: block;
-   .dropdown-toggle{
-   		background-color: transparent;
-   		box-shadow: none;
-   		border: 1px solid $gray_form;
-   		border-radius: 4px;
-   		width: 295px;
-   		text-align: left;
-   		padding: 7px 12px;
-   		&:hover, &:focus{
-   			box-shadow: none;
-   		}
-   		span:first-child {
-		   left: 10px;
-		   @include text-overflow();
-		   position: absolute;
-		   right: 30px;
-		}
-		.caret-large {
-		    margin-top: -1px;
-		    position: absolute;
-		    right: 10px;
-		    top: 35%;
-		    @include size(0, 0); 
-		    display: block;
-		    border-top: 12px solid $gray-light;
-		    border-right: 7px solid transparent;
-		    border-left: 7px solid transparent;
-		}
-   }
-   .dropdown-menu > li{	
-   		&> a{
-	   		white-space: pre-wrap;
-	   		padding: 7px 10px;
-	   		color: $gray_text;
-			&:hover, &:focus{
-	   			background-color: $gray-super-light;
-   			}
-  		}
-   }
-   	&.open {
-   		.caret-large{
-   			border-top: none;
-   			border-bottom: 12px solid $gray-light;
-   		}
-	   	&> .dropdown-menu {
-		    display: block;
-		    width: 295px;
-		    padding: 5px;
-	   		border: 1px solid $gray_form;
-	   		overflow: auto;
-	    	max-height: 300px;
-	    	border-radius: 4px;
-		} 
-   }
-}
 .filters.hidden-filters{
-	left: $hidden-filters-indent;
+	left: - $filter-width - 12px;
 	overflow: visible;
-
 	@extend %hidden-foldback-button;
 }
 @media (max-width: $screen-md-min){
@@ -181,7 +124,7 @@ input.checkbox-filter{
 }
 @media (max-width: $screen-sm-min){
 	.filters{
-		@include absolute(60px, null, null, $hidden-filter-small-indent);
+		@include absolute(60px, null, null, (-$filter-small-width - 12px));
 	   	border: none;
 	   	padding: 30px 0 0;
 	   	overflow: visible;
@@ -198,7 +141,7 @@ input.checkbox-filter{
 	   		background-color: #fff !important;
 	   	}
 	   	.foldback-button{
-    		right: -70px;
+    		right: -$width-foldback-button;
 	    	background-color: $gray_form;
 	    	@include transition(none);
 	    	span.arrow{
@@ -221,7 +164,7 @@ input.checkbox-filter{
 		    margin: 0;
 		    .foldback-button{
 			    left: auto;
-			   	right: 0;
+			   	right: 5px;
 			   	span.arrow{
 			   		top: 6px;
 			   		right: 12px;
@@ -239,6 +182,9 @@ input.checkbox-filter{
 		    	visibility: visible;
 		    }
 	    }
+	}
+	.fullscreen .export-types{
+		display: none;
 	}
 }
 @media (max-width: $screen-xs-min){
