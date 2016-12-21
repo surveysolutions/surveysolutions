@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire cannot be found.
+        /// </summary>
+        public static string QuestionnaireCannotBeFound {
+            get {
+                return ResourceManager.GetString("QuestionnaireCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are signed in on Designer as {0}..
         /// </summary>
         public static string SignedInBlock {
