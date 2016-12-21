@@ -2,6 +2,8 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using FluentMigrator.Infrastructure;
+using Flurl.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -14,6 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.Models.Template;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -92,14 +95,24 @@ namespace WB.UI.Headquarters.Controllers
 
         private async Task<ImportModeModel> GetImportModel(Guid id)
         {
-            var questionnaireInfo = await this.designerQuestionnaireApiRestService
-                .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}",
-                    credentials: this.designerUserCredentials);
-            var model = new ImportModeModel
+            QuestionnaireInfo questionnaireInfo = null;
+            ImportModeModel model = new ImportModeModel();
+            try
             {
-                QuestionnaireInfo = questionnaireInfo,
-                NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id)
-            };
+                questionnaireInfo = await this.designerQuestionnaireApiRestService
+                    .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}",
+                        credentials: this.designerUserCredentials);
+            }
+            catch (RestException e)
+            {
+                if (e.StatusCode == HttpStatusCode.NotFound)
+                {
+                    model.ErrorMessage = ImportQuestionnaire.QuestionnaireCannotBeFound;
+                    return model;
+                }
+            }
+            model.QuestionnaireInfo = questionnaireInfo;
+            model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
             return model;
         }
 
