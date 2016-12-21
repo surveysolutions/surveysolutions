@@ -113,7 +113,8 @@ namespace WB.Tests.Integration
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
-                messenger: mvxMessenger);
+                messenger: mvxMessenger,
+                mainThreadDispatcher: Mock.Of<IMvxMainThreadDispatcher>());
 
             sidebarViewModel.Init("", new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), navigationState);
 
