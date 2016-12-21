@@ -148,7 +148,7 @@
     <value>list of my questionnaires</value>
   </data>
   <data name="Chapters" xml:space="preserve">
-    <value>Chapters</value>
+    <value>Sections</value>
   </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Created on</value>
@@ -169,18 +169,21 @@
     <value>Rosters</value>
   </data>
   <data name="QuestionnaireExists" xml:space="preserve">
-    <value>This questionnaire already exists in your list</value>
+    <value>You have already imported this questionnaire</value>
   </data>
   <data name="CensusImportSubTitle" xml:space="preserve">
-    <value>This action will automatically add this questionnaire to all your devises</value>
+    <value>This will allow interviewers to create assignments in the field, and the questionnaire will be downloaded on all devices.</value>
   </data>
   <data name="CensusImportTitle" xml:space="preserve">
-    <value>Import this questionaire in census mode</value>
+    <value>Census mode import</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
-    <value>Create new #{0} version of this questionnaire</value>
+    <value>Create a new version  (#{0})</value>
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
-    <value>Import this questionaire as a template for individual assignments</value>
+    <value>Sample mode import</value>
+  </data>
+  <data name="RegularImportSubTitle" xml:space="preserve">
+    <value>This will allow you to create individual assignments that may contain pre-filled data, and only those assignments will appear on interviewer devices.</value>
   </data>
 </root>

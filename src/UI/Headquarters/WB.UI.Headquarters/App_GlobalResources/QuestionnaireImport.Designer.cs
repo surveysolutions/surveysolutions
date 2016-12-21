@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This action will automatically add this questionnaire to all your devises.
+        ///   Looks up a localized string similar to This will allow interviewers to create assignments in the field, and the questionnaire will be downloaded on all devices..
         /// </summary>
         internal static string CensusImportSubTitle {
             get {
@@ -79,7 +79,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import this questionaire in census mode.
+        ///   Looks up a localized string similar to Census mode import.
         /// </summary>
         internal static string CensusImportTitle {
             get {
@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chapters.
+        ///   Looks up a localized string similar to Sections.
         /// </summary>
         internal static string Chapters {
             get {
@@ -133,7 +133,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new #{0} version of this questionnaire.
+        ///   Looks up a localized string similar to Create a new version  (#{0}).
         /// </summary>
         internal static string ImportAsNewVersion {
             get {
@@ -196,7 +196,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This questionnaire already exists in your list.
+        ///   Looks up a localized string similar to You have already imported this questionnaire.
         /// </summary>
         internal static string QuestionnaireExists {
             get {
@@ -223,7 +223,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import this questionaire as a template for individual assignments.
+        ///   Looks up a localized string similar to This will allow you to create individual assignments that may contain pre-filled data, and only those assignments will appear on interviewer devices..
+        /// </summary>
+        internal static string RegularImportSubTitle {
+            get {
+                return ResourceManager.GetString("RegularImportSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample mode import.
         /// </summary>
         internal static string RegularImportTitle {
             get {
