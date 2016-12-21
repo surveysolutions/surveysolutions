@@ -161,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             if (fileSystemAccessor.IsFileExists(filePath))
             {
                 dataExportView.LastUpdateDate = this.fileSystemAccessor.GetModificationTime(filePath);
-                dataExportView.FileSize = this.fileSystemAccessor.GetFileSize(filePath);
+                dataExportView.FileSize = this.fileSystemAccessor.GetFileSize(filePath)/(1024 * 1024);
                 dataExportView.HasDataToExport = true;
             }
         }

@@ -160,7 +160,7 @@
     <value>All collected external binary data (e.g. pictures)</value>
   </data>
   <data name="Bytes" xml:space="preserve">
-    <value>bytes</value>
+    <value>MB</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>Completed</value>
