@@ -930,6 +930,9 @@ namespace WB.Tests.Integration
                 interviewRepository: interviewRepository,
                 substitutionService: Create.SubstitutionService());
 
+        public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)
+            =>new AnswerNotifier(registry ?? Create.LiteEventRegistry());
+
         public static ISubstitutionService SubstitutionService()
             => new SubstitutionService();
 
