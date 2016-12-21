@@ -126,17 +126,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var enabledSubSections = interview.GetEnabledSubgroups(e.UpdatedGroup).ToList();
 
-            foreach (var sectionIdentity in enabledSubSections)
-            {
-                if (this.sectionViewModels.Any(section => section.SectionIdentity == sectionIdentity))
-                    continue;
+            this.InvokeOnMainThread(() =>
+                {
+                    foreach (var sectionIdentity in enabledSubSections)
+                    {
+                        if (this.sectionViewModels.Any(section => section.SectionIdentity == sectionIdentity))
+                            continue;
 
-                var sectionViewModel = this.modelsFactory.BuildSectionItem(sectionIdentity,
-                    this.navigationState, this.interviewId);
+                        var sectionViewModel = this.modelsFactory.BuildSectionItem(sectionIdentity,
+                            this.navigationState, this.interviewId);
 
-                var indexOfSubsection = indexOfUpdatedGroup + enabledSubSections.IndexOf(sectionIdentity) + 1;
-                this.AllVisibleSections.Insert(indexOfSubsection, sectionViewModel);
-            }
+                        var indexOfSubsection = indexOfUpdatedGroup + enabledSubSections.IndexOf(sectionIdentity) + 1;
+                        this.AllVisibleSections.Insert(indexOfSubsection, sectionViewModel);
+                    }
+                }
+            );
         }
 
         private void OnSideBarSectionRemoved(SideBarSectionRemoveMessage e)
