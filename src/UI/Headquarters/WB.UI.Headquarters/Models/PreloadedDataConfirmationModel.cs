@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.PreloadedData;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
+namespace WB.UI.Headquarters.Models
 {
     public class PreloadedDataQuestionnaireModel
     {
@@ -38,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.PreloadedData
         {
             if (!this.WasSupervsorProvided && !this.SupervisorId.HasValue)
             {
-                yield return new ValidationResult("Supervisor must be selected", new[] { nameof(SupervisorId) });
+                yield return new ValidationResult(BatchUpload.SupervisorMustBeSelected, new[] { nameof(this.SupervisorId) });
             }
         }
     }
