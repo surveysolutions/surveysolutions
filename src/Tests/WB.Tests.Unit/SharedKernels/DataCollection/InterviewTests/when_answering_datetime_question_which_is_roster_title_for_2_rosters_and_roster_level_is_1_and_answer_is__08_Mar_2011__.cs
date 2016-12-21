@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.AnswerDateTimeQuestion(userId, questionId, rosterVector, DateTime.Now, new DateTime(2011, 03, 08));
+            interview.AnswerDateTimeQuestion(userId, questionId, rosterVector, DateTime.Now, dateAnswer);
 
         Cleanup stuff = () =>
         {
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_set_title_to__3_slash_8_slash_2011__in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.Title == "03/08/2011"));
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.Title == dateAnswer.ToLocalTime().ToShortDateString()));
 
         private static EventContext eventContext;
         private static Interview interview;
@@ -85,6 +85,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid rosterAId;
         private static Guid rosterBId;
         private static Guid numericQuestionId = Guid.Parse("22222222222222222222222222222222");
-
+        private static DateTime dateAnswer = new DateTime(2011, 03, 08);
     }
 }

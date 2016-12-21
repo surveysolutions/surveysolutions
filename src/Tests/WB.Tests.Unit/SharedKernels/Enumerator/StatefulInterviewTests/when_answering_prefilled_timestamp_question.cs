@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         };
 
         Because of = () =>
-            interview.AnswerDateTimeQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, new DateTime(2011, 03, 08, 14, 29, 33));
+            interview.AnswerDateTimeQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, dateAnswer);
 
         Cleanup stuff = () =>
         {
@@ -41,12 +41,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_DateTimeQuestionAnswered_event = () =>
             interview
                 .GetAnswerAsString(Create.Entity.Identity(questionId, RosterVector.Empty), new CultureInfo("ru-RU"))
-                .ShouldEqual("08.03.2011 14:29:33");
+                .ShouldEqual(dateAnswer.ToLocalTime().ToString("ru-RU"));
 
         private static EventContext eventContext;
         private static StatefulInterview interview;
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
-
+        private static DateTime dateAnswer = new DateTime(2011, 03, 08, 14, 29, 33);
     }
 }
