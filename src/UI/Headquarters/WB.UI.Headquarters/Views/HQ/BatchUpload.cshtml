@@ -29,15 +29,13 @@
 <main>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-sm-9 page-header">
+            <div class="page-header">
                 <ol class="breadcrumb">
                     <li>
                         @Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")
                     </li>
                 </ol>
-                <div class="page-title">
-                    @BatchUpload.CreatingMultipleInterviews
-                </div>
+                <h1>@BatchUpload.CreatingMultipleInterviews</h1>
             </div>
         </div>
         <div class="row">
@@ -95,10 +93,10 @@
                     <div class="block">
                         <h3>@BatchUpload.SimpleTitle</h3>
                         <p>@BatchUpload.SimpleDescription</p>
-                        <a href="@Url.Action("SimpleTemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTabTemplate</a>
                     </div>
                     <div>
-                        @using (Html.BeginForm("SampleBatchUploadAndVerify", "HQ", new { questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        <a href="@Url.Action("SimpleTemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTabTemplate</a>
+                        @using (Html.BeginForm("SampleBatchUploadAndVerify", "HQ", new {questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, FormMethod.Post, new {enctype = "multipart/form-data"}))
                         {
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)
@@ -106,9 +104,9 @@
 
                             <label class="btn btn-success btn-file">
                                 @BatchUpload.UploadTabFile
-                                @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt, .zip", onchange = "this.form.submit()" })
+                                @Html.TextBoxFor(m => m.File, new {type = "file", accept = ".tab, .txt, .zip", onchange = "this.form.submit()"})
                             </label>
-                            @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
+                            @Html.ValidationMessageFor(x => x.File, null, new {@class = "help-block"})
                         }
                     </div>
                 </div>
@@ -118,11 +116,10 @@
                     <div class="block">
                         <h3>@BatchUpload.BatchTitle</h3>
                         <p>@BatchUpload.BatchDescription</p>
-
-                        <a href="@Url.Action("TemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTemplateArchive</a>
                     </div>
                     <div>
-                        @using (Html.BeginForm("PanelBatchUploadAndVerify", "HQ", routeValues: new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
+                        <a href="@Url.Action("TemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTemplateArchive</a>
+                        @using (Html.BeginForm("PanelBatchUploadAndVerify", "HQ", routeValues: new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, method: FormMethod.Post, htmlAttributes: new {enctype = "multipart/form-data"}))
                         {
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)
@@ -130,9 +127,9 @@
 
                             <label class="btn btn-success btn-file">
                                 @BatchUpload.UploadZipFile
-                                @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".zip", onchange = "this.form.submit()" })
+                                @Html.TextBoxFor(m => m.File, new {type = "file", accept = ".zip", onchange = "this.form.submit()"})
                             </label>
-                            @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
+                            @Html.ValidationMessageFor(x => x.File, null, new {@class = "help-block"})
                         }
                     </div>
                 </div>
