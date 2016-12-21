@@ -254,7 +254,8 @@ namespace WB.UI.Headquarters.Controllers
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
             {
-                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedSample.Id);
+                if (preloadedSample != null)
+                    this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedSample.Id);
             
                 return this.View("InterviewImportVerificationErrors", new PreloadedDataVerificationErrorsView(
                     model.QuestionnaireId, 
@@ -264,7 +265,7 @@ namespace WB.UI.Headquarters.Controllers
                     verificationStatus.WasResponsibleProvided, 
                     preloadedMetadata.Id, 
                     PreloadedContentType.Sample,
-                    preloadedSample.FileName));
+                    preloadedSample?.FileName));
             }
 
             this.TempData[$"InterviewImportConfirmation-{preloadedMetadata.Id}"] = new PreloadedDataConfirmationModel
