@@ -42,13 +42,13 @@
                 border-right: 6px solid transparent;
                 border-left: 6px solid transparent;
             }
-            &.sorting_asc{
+            &.sorting-up, &.sorting_asc{
                 color: $blue;
                 &:after{
                     border-top-color: $blue;
                 }
             }
-            &.sorting_desc{
+            &.sorting-down, &.sorting_desc{
                 color: $blue;
                 &:after{
                     border-top: none;

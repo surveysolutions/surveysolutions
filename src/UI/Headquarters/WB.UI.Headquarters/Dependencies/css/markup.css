@@ -5970,42 +5970,42 @@ input.checkbox-filter ~ label .tick {
 @font-face {
   font-family: "RobotoRegular";
   src: url("../fonts/RobotoRegular.eot");
-  src: url("../fonts/RobotoRegular.eot") format("embedded-opentype"), url("../fonts/RobotoRegular.woff2") format("woff2"), url("../fonts/RobotoRegular.woff") format("woff"), url("../fonts/RobotoRegular.ttf") format("truetype"), url("../fonts/RobotoRegular.svg#RobotoRegular") format("svg"); }
+  src: url("../fonts/RobotoRegular.eot?#iefix") format("embedded-opentype"), url("../fonts/RobotoRegular.woff2") format("woff2"), url("../fonts/RobotoRegular.woff") format("woff"), url("../fonts/RobotoRegular.ttf") format("truetype"), url("../fonts/RobotoRegular.svg#RobotoRegular") format("svg"); }
 
 @font-face {
   font-family: "RobotoItalic";
   src: url("../fonts/RobotoItalic.eot");
-  src: url("../fonts/RobotoItalic.eot") format("embedded-opentype"), url("../fonts/RobotoItalic.woff2") format("woff2"), url("../fonts/RobotoItalic.woff") format("woff"), url("../fonts/RobotoItalic.ttf") format("truetype"), url("../fonts/RobotoItalic.svg#RobotoItalic") format("svg"); }
+  src: url("../fonts/RobotoItalic.eot?#iefix") format("embedded-opentype"), url("../fonts/RobotoItalic.woff2") format("woff2"), url("../fonts/RobotoItalic.woff") format("woff"), url("../fonts/RobotoItalic.ttf") format("truetype"), url("../fonts/RobotoItalic.svg#RobotoItalic") format("svg"); }
 
 @font-face {
   font-family: "RobotoLight";
   src: url("../fonts/RobotoLight.eot");
-  src: url("../fonts/RobotoLight.eot") format("embedded-opentype"), url("../fonts/RobotoLight.woff2") format("woff2"), url("../fonts/RobotoLight.woff") format("woff"), url("../fonts/RobotoLight.ttf") format("truetype"), url("../fonts/RobotoLight.svg#RobotoLight") format("svg"); }
+  src: url("../fonts/RobotoLight.eot?#iefix") format("embedded-opentype"), url("../fonts/RobotoLight.woff2") format("woff2"), url("../fonts/RobotoLight.woff") format("woff"), url("../fonts/RobotoLight.ttf") format("truetype"), url("../fonts/RobotoLight.svg#RobotoLight") format("svg"); }
 
 @font-face {
   font-family: "RobotoBold";
   src: url("../fonts/RobotoBold.eot");
-  src: url("../fonts/RobotoBold.eot") format("embedded-opentype"), url("../fonts/RobotoBold.woff2") format("woff2"), url("../fonts/RobotoBold.woff") format("woff"), url("../fonts/RobotoBold.ttf") format("truetype"), url("../fonts/RobotoBold.svg#RobotoBold") format("svg"); }
+  src: url("../fonts/RobotoBold.eot?#iefix") format("embedded-opentype"), url("../fonts/RobotoBold.woff2") format("woff2"), url("../fonts/RobotoBold.woff") format("woff"), url("../fonts/RobotoBold.ttf") format("truetype"), url("../fonts/RobotoBold.svg#RobotoBold") format("svg"); }
 
 @font-face {
   font-family: "TrebuchetMSBold";
   src: url("../fonts/TrebuchetMSBold.eot");
-  src: url("../fonts/TrebuchetMSBold.eot") format("embedded-opentype"), url("../fonts/TrebuchetMSBold.woff2") format("woff2"), url("../fonts/TrebuchetMSBold.woff") format("woff"), url("../fonts/TrebuchetMSBold.ttf") format("truetype"), url("../fonts/TrebuchetMSBold.svg#TrebuchetMSBold") format("svg"); }
+  src: url("../fonts/TrebuchetMSBold.eot?#iefix") format("embedded-opentype"), url("../fonts/TrebuchetMSBold.woff2") format("woff2"), url("../fonts/TrebuchetMSBold.woff") format("woff"), url("../fonts/TrebuchetMSBold.ttf") format("truetype"), url("../fonts/TrebuchetMSBold.svg#TrebuchetMSBold") format("svg"); }
 
 @font-face {
   font-family: "ufonts_com_lucidaconsole";
   src: url("../fonts/ufonts_com_lucidaconsole.eot");
-  src: url("../fonts/ufonts_com_lucidaconsole.eot") format("embedded-opentype"), url("../fonts/ufonts_com_lucidaconsole.woff2") format("woff2"), url("../fonts/ufonts_com_lucidaconsole.woff") format("woff"), url("../fonts/ufonts_com_lucidaconsole.ttf") format("truetype"), url("../fonts/ufonts_com_lucidaconsole.svg#ufonts_com_lucidaconsole") format("svg"); }
+  src: url("../fonts/ufonts_com_lucidaconsole.eot?#iefix") format("embedded-opentype"), url("../fonts/ufonts_com_lucidaconsole.woff2") format("woff2"), url("../fonts/ufonts_com_lucidaconsole.woff") format("woff"), url("../fonts/ufonts_com_lucidaconsole.ttf") format("truetype"), url("../fonts/ufonts_com_lucidaconsole.svg#ufonts_com_lucidaconsole") format("svg"); }
 
 @font-face {
   font-family: "TrebuchetMS";
   src: url("../fonts/TrebuchetMS.eot");
-  src: url("../fonts/TrebuchetMS.eot") format("embedded-opentype"), url("../fonts/TrebuchetMS.woff2") format("woff2"), url("../fonts/TrebuchetMS.woff") format("woff"), url("../fonts/TrebuchetMS.ttf") format("truetype"), url("../fonts/TrebuchetMS.svg#TrebuchetMS") format("svg"); }
+  src: url("../fonts/TrebuchetMS.eot?#iefix") format("embedded-opentype"), url("../fonts/TrebuchetMS.woff2") format("woff2"), url("../fonts/TrebuchetMS.woff") format("woff"), url("../fonts/TrebuchetMS.ttf") format("truetype"), url("../fonts/TrebuchetMS.svg#TrebuchetMS") format("svg"); }
 
 @font-face {
   font-family: "RobotoMedium";
   src: url("../fonts/RobotoMedium.eot");
-  src: url("../fonts/RobotoMedium.eot") format("embedded-opentype"), url("../fonts/RobotoMedium.woff2") format("woff2"), url("../fonts/RobotoMedium.woff") format("woff"), url("../fonts/RobotoMedium.ttf") format("truetype"), url("../fonts/RobotoMedium.svg#RobotoMedium") format("svg"); }
+  src: url("../fonts/RobotoMedium.eot?#iefix") format("embedded-opentype"), url("../fonts/RobotoMedium.woff2") format("woff2"), url("../fonts/RobotoMedium.woff") format("woff"), url("../fonts/RobotoMedium.ttf") format("truetype"), url("../fonts/RobotoMedium.svg#RobotoMedium") format("svg"); }
 
 input[type=number] {
   -moz-appearance: textfield;
@@ -6783,13 +6783,13 @@ main .flex-row {
         border-top: 10px solid #dbdfe2;
         border-right: 6px solid transparent;
         border-left: 6px solid transparent; }
-      .table thead tr th.sorting_asc {
+      .table thead tr th.sorting-up, .table thead tr th.sorting_asc {
         color: #2a81cb; }
-        .table thead tr th.sorting_asc:after {
+        .table thead tr th.sorting-up:after, .table thead tr th.sorting_asc:after {
           border-top-color: #2a81cb; }
-      .table thead tr th.sorting_desc {
+      .table thead tr th.sorting-down, .table thead tr th.sorting_desc {
         color: #2a81cb; }
-        .table thead tr th.sorting_desc:after {
+        .table thead tr th.sorting-down:after, .table thead tr th.sorting_desc:after {
           border-top: none;
           border-bottom: 10px solid #2a81cb; }
       .table thead tr th.sorting_disabled:after {
