@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -15,6 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged, IDisposable
     {
         private readonly IMvxMessenger messenger;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
         private NavigationState navigationState;
 
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -39,12 +41,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
             ISideBarSectionViewModelsFactory modelsFactory,
-            IMvxMessenger messenger)
+            IMvxMessenger messenger,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.modelsFactory = modelsFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.messenger = messenger;
+            this.mainThreadDispatcher = mainThreadDispatcher;
             this.sectionExpandSubscriptionToken = this.messenger.Subscribe<SideBarSectionExpandMessage>(OnSideBarSectionExpanded);
             this.sectionCollapseSubscriptionToken = this.messenger.Subscribe<SideBarSectionCollapseMessage>(OnSideBarSectionCollapsed);
             this.sectionRemoveSubscriptionToken = this.messenger.Subscribe<SideBarSectionRemoveMessage>(OnSideBarSectionRemoved);
@@ -126,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var enabledSubSections = interview.GetEnabledSubgroups(e.UpdatedGroup).ToList();
 
-            this.InvokeOnMainThread(() =>
+            mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
                     foreach (var sectionIdentity in enabledSubSections)
                     {
