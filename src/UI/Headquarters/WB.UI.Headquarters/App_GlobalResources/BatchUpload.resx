@@ -473,4 +473,7 @@ Specify usernames for supervisors or enumerators to make batch interview assignm
   <data name="VerificationCompleted" xml:space="preserve">
     <value>Verification complete</value>
   </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>Supervisor must be selected</value>
+  </data>
 </root>

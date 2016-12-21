@@ -1496,6 +1496,7 @@
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
+    <Compile Include="Models\PreloadedDataConfirmationModel.cs" />
     <Compile Include="Models\PreloadedDataInterviewProgressModel.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />

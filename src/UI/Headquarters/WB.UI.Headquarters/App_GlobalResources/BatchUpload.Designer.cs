@@ -881,6 +881,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor must be selected.
+        /// </summary>
+        internal static string SupervisorMustBeSelected {
+            get {
+                return ResourceManager.GetString("SupervisorMustBeSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload.
         /// </summary>
         internal static string Upload {

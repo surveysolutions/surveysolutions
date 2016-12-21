@@ -288,6 +288,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         public ActionResult InterviewImportIsInProgress(Guid questionnaireId, long version)
         {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
             return this.View(new PreloadedDataQuestionnaireModel
