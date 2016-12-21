@@ -491,6 +491,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.CategoricalMulti.Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Interview.CategoricalSingle.Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\InterviewAssignTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_apply_SubstitutionTitlesChanged_for_question_from_deleted_roster_instance.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multi_linked_to_List_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_creating_interview_with_featured_questions.cs" />
