@@ -592,9 +592,6 @@
   <data name="GetLatestApp" xml:space="preserve">
     <value>Download latest interviewer app</value>
   </data>
-  <data name="Help" xml:space="preserve">
-    <value>Help</value>
-  </data>
   <data name="InstallationInstruction" xml:space="preserve">
     <value>Installation instruction</value>
   </data>
