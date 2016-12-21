@@ -160,7 +160,7 @@
     <value>Собранные бинарные данные (изображения)</value>
   </data>
   <data name="Bytes" xml:space="preserve">
-    <value>байт</value>
+    <value>МБ</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>Обработано</value>

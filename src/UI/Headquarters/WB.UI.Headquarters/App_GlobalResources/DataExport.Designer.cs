@@ -79,7 +79,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bytes.
+        ///   Looks up a localized string similar to MB.
         /// </summary>
         internal static string Bytes {
             get {
