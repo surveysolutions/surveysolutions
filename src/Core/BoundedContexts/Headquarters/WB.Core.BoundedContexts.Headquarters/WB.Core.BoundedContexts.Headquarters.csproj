@@ -38,6 +38,9 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="App_GlobalResources.xesor9ik">
+      <HintPath>C:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\headquarters\3cdb5966\_shadow\d2d7cce\8568\App_GlobalResources.xesor9ik.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
@@ -530,7 +533,6 @@
     <Compile Include="Views\PreloadedData\PreloadedContentMetaData.cs" />
     <Compile Include="Views\PreloadedData\PreloadedContentType.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataByFile.cs" />
-    <Compile Include="Views\PreloadedData\PreloadedDataConfirmationModel.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataVerificationErrorsView.cs" />
     <Compile Include="Views\PreloadedData\PreloadedFileMetaData.cs" />
     <Compile Include="Views\PreloadedData\PreloadedMetaDataView.cs" />
