@@ -20,8 +20,8 @@ namespace WB.UI.Headquarters.API.Resources
                 sInfoPostFix = DataTables.InfoPostFix,
                 sInfoThousands = DataTables.InfoThousands,
                 sLengthMenu = DataTables.LengthMenu,
-                sLoadingRecords = DataTables.LoadingRecords,
-                sProcessing = DataTables.Processing,
+                sLoadingRecords = "<div>" + DataTables.LoadingRecords + "</div>",
+                sProcessing = "<div>" + DataTables.Processing + "</div>",
                 sSearch = DataTables.Search,
                 sZeroRecords = DataTables.ZeroRecords,
                 oPaginate = new
