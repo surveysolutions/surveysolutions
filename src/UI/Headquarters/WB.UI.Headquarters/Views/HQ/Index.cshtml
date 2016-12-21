@@ -32,34 +32,37 @@
     </script>
 }
 <main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="page-header">
+                <h1>@Dashboard.Questionnaires</h1>
+            </div>
+        </div>
+        <div class="well well-sm">
+            <div class="btn-group">
+                @if (!(User.Identity.IsObserver()))
+                {
+                    <div class="form-inline">
+                        <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
+                            <i class="glyphicon glyphicon-import">
+                            </i> @Dashboard.ImportTemplate
+                        </a>
+                    </div>
+                }
+            </div>
 
-    <h3 class="sinle-line-header">@Dashboard.Questionnaires</h3>
-
-    <div class="well well-sm">
-        <div class="btn-group">
-            @if (!(User.Identity.IsObserver()))
-            {
-                <div class="form-inline">
-                    <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
-                        <i class="glyphicon glyphicon-import">
-                        </i> @Dashboard.ImportTemplate
-                    </a>
-                </div>
-            }
         </div>
 
-    </div>
-
-    <div id="list">
-        <!-- ko if:IsPageLoaded()  -->
-        <!-- ko ifnot:Pager().TotalItemCount() > 0  -->
-        <p class="text-center">
-            @Pages.NoResults
-        </p>
-        <!-- /ko -->
-        <!-- ko if:Pager().TotalItemCount() > 0 -->
-        <table class="table table-striped table-bordered table-condensed table-hover">
-            <thead>
+        <div id="list">
+            <!-- ko if:IsPageLoaded() -->
+            <!-- ko ifnot:Pager().TotalItemCount() > 0 -->
+            <p class="text-center">
+                @Pages.NoResults
+            </p>
+            <!-- /ko -->
+            <!-- ko if:Pager().TotalItemCount() > 0 -->
+            <table class="table table-striped table-bordered table-condensed table-hover">
+                <thead>
                 <tr>
                     <th class="fit-column-by-content" data-bind='sortby : "AllowCensusMode"'>@Dashboard.Census</th>
                     <th data-bind='sortby : "Title"'>@Dashboard.Title</th>
@@ -69,8 +72,8 @@
                     <th data-bind='sortby : "LastEntryDate"'>@Dashboard.LastEntryDate</th>
                     <th>@Dashboard.Actions</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <!-- ko foreach:Items -->
                 <tr data-bind="css: {'text-muted':Disabled }">
                     <td style="vertical-align: middle">
@@ -126,15 +129,16 @@
                     </td>
                 </tr>
                 <!-- /ko -->
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-        <!-- ko if:Pager().LastPage() > 1 -->
-        <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
-        <!-- /ko -->
-        <!-- /ko -->
-        <!-- /ko -->
+            <!-- ko if:Pager().LastPage() > 1 -->
+            <div class="pagination pagination-right" data-bind="template: { name: 'tpl-pager', data: Pager }"></div>
+            <!-- /ko -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
+
+        @Html.Partial("_ListViewPagingScript")
     </div>
-
-    @Html.Partial("_ListViewPagingScript")
 </main>

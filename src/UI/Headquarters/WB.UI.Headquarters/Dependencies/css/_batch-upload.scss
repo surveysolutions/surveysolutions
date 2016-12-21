@@ -39,7 +39,8 @@
 	overflow: hidden;
 	.btn{
 		padding: 8px 12px;
-		margin: 0 2px;
+		margin: 0;
+		margin-right: 5px;
 		&.cancel-uploading{
 			float: left;
 		}
@@ -48,30 +49,17 @@
 		}
 	}
 }
-.cancelable-progress{
-	margin-top: 40px;
-	.progress{
-		width: 66%;
-		float: left;
-		background-color: $gray_form;
-		margin-right: 30px;
-		margin-top: 8px;
-	}
-	.btn-link{
-		float: left;
-	}
-}
-
 .import-progress {
+	margin-bottom: 40px;
 	@extend h4;
 	margin-top: 0;
 	p{
 		margin: 0;
 	}
 }
-.btn-input{
+/* .btn-input{
 	margin-bottom: 40px;		
-}
+} */
 .error-block{
 	&:last-of-type{
 		margin-bottom: 30px;
@@ -83,12 +71,6 @@
 		margin: 3px 0;
 	}
 }	
-
-.processing-interview{
-	.progress-bar.progress-bar-success{
-		background-color: $green_btn;
-	}
-}
 .action-block.preloading-done-with-errors{
 	h4{
 		margin-bottom: 10px;
@@ -99,7 +81,7 @@
 		width: 38%;
 	}
 }
- .uploading-verifying, .verification-failed, 
+.uploading-verifying, .verification-failed, 
 .verification-complete, .verification-complete-choose-supervisor,
 .processing-interview, .preloading-done, .preloading-done-with-errors{
 	display: none;
@@ -128,19 +110,7 @@
 		.back-link{
 			margin: 30px 0 0;
 		}
-		.cancelable-progress{
-			.progress{
-				width: 100%;
-				float: none;
-			}
-			.btn{
-				&.btn-link{
-					float: none;
-				}
-				margin: 0;
-				padding: 6px 0;
-			}
-		}
+		
 		
 		.btn-input .dropdown-toggle{
 			width: 250px;

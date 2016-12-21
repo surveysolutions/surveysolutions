@@ -1,6 +1,3 @@
-.btn-lg{
-    padding: 12px 15px;
-}
 .two-columns-form, .flex-row{
     display: flex;
 }
@@ -12,12 +9,25 @@
     margin-top: 0;
     margin-bottom: 0;
     @include translate(-50%,-50%);
-/*  margin-top: 115px; */
   
     .left-column{
         padding: 10px 3% 10px 8%;
+        text-align: center;
         img{
             margin-bottom: 25px;
+        }
+        p{
+            @include font(17px, 22px);
+            color: $gray_light;
+            margin-bottom: 0;
+            a{
+                color: $gray_light;
+                box-shadow: 0 1px 0 $gray_light;
+                &:hover, &:focus{
+                    text-decoration: none;
+                    box-shadow: none;
+                }
+            }
         }
     }
     .right-column{

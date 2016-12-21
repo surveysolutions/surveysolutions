@@ -1,13 +1,8 @@
 @import "filters";
-main.export{
-	padding-left: 45px;
-	color: $gray_text;
-}
 .export-types{
-	padding: 30px;
-	padding-top: 25px;
+	padding: 50px 30px 0;
 	position: relative;
-	margin-left: $export-types-margin-left;
+	margin-left: $filter-width - $margin-container + 15px + 12px;
 	max-width: 900px;
 	@include transition(margin, 0.3s);
 	background-color: #fff;
@@ -33,6 +28,9 @@ main.export{
 				}
 			}
 		}
+		&.metadata .table-data-header{
+			height: 32px;
+		}
 		.table-data-header{
 			min-height: 32px;
 			padding-left: 18px;
@@ -43,7 +41,7 @@ main.export{
 
 			div{
 				float: right;
-				padding: 5px 20px 13px;
+				padding: 5px 10px 13px;
 			}
 		}
 		.table-data{
@@ -105,8 +103,9 @@ main.export{
 			}
 			.btn{
 				margin: 5px;
-				padding: 8px 0;
-				width: 86px;
+				width: 100px;
+				padding-left: 0;
+				padding-right: 0;
 			}
 			.not-generated{
 				@extend %uppercase-font;
@@ -134,53 +133,33 @@ main.export{
 		}
 	}
 }
-.progress-information{
-	max-width: 300px;
-	position: relative;
-	@extend %uppercase-font;
-	&>span{
-		display: block;
-		margin-bottom: 6px;
-		color: $green-btn;
-	}
-	.progress{
-		margin-bottom: 0;
-		max-width: 300px;
-		background-color: $green-progress;	
-	}
-}
-.export-types .data .table-data .close{
-	@include close(20px, null, -45px, -14px, null);
-}
-.progress-information.queued{
-	&>span{
-		color: $gray_light;
-	}
-	.progress{
-		background-color: $gray-super-light;
-		.progress-bar{
-			background-color: $gray_light;
-		}
-	}
+.cancel{
+	$cross-height: 24px;
+	@include cancel($cross-height);
 }
 .fullscreen .export-types{
 	margin-left: 0;
-	padding-left: 45px;
+	padding-left: 12px;
+}
+.footer{
+	@include transition(padding, 0.2s);
+	&.footer-adaptive{
+		padding-left: $filter-width - $margin-container + 12px +30px;
+	}
 }
 @media (max-width: $screen-md-min){
-	html body main.export{
-		padding-right: 2%;
-		padding-left: 4%;
-	}
   	.export-types{
-  		padding: 30px 0 30px 25px;
-  		margin-left: $small-export-types-margin-left;
+  		padding: 50px 20px 0 30px;
+  		margin-left:  $filter-small-width - $margin-container-md-screen + 15px + 12px;
   		.size, .last-generated{
   			display: none;
   		}
   		.data .table-data-header{
   			min-height: auto;
   		}
+  		.data.metadata .table-data-header{
+			height: auto;
+		}
 	  	.data .table-data {
 	  		.min-view{
 	  			display: table-cell;
@@ -212,8 +191,7 @@ main.export{
 		}
   	}
   	.fullscreen .export-types{
-  		padding-top: 40px;
-  		padding-left: 0;
+  		padding: 55px 20px 0;
   		width: 100%;
   		.size, .last-generated{
   			display: table-cell;
@@ -246,11 +224,16 @@ main.export{
 	  		margin-bottom: 15px;
 	  	}
   	}
+  	.footer{
+		&.footer-adaptive{
+			padding-left: $filter-small-width - $margin-container-md-screen + 12px +30px;
+		}
+	}
 }
 @media (max-width: $screen-sm-min){
 	.export-types{
 		margin-left: 0;
-		padding: 35px 5px 0;
+		padding: 55px 15px 0;
 		h2{
 			margin-bottom: 25px;
 			@include font(24px, 26px);
@@ -266,6 +249,11 @@ main.export{
 			.progress-information{
 				width: 60%;
 			}
+		}
+	}
+	.footer{
+		&.footer-adaptive{
+			padding-left: 0;
 		}
 	}
 }
@@ -300,9 +288,6 @@ main.export{
 						&.stata:before{
 							left: 45%;
 						}
-			  		}
-			  		.progress-information{
-			  			display: inline-block;
 			  		}
 				}
 			}

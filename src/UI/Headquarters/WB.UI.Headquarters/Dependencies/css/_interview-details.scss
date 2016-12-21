@@ -674,10 +674,6 @@ html body .details-interview{
 		}
 	}
 }
-@include placeholder {
-    font-weight: normal !important;
-    font-style: italic;
-}
 .gps-question{
 	&.answered, &.contains-error{
 		@extend %action-btn;

@@ -30,16 +30,13 @@ html {
   min-height: 100%;
 	body {
 		min-width: 400px;
-		margin-bottom: 60px;
+		margin-bottom: 100px;
 		font-family: Arial, sans-serif;
 		font-size: 16px;
 		line-height: 18px;
 		@include gradient($gray_form, $gray_form, null, null);
 		background-size: 12px 100%;
 		padding-top: 70px;
-		main{
-			padding: 25px 45px 40px 88px;
-		}
 		.footer {
 			position: absolute;
 			bottom: 0;
@@ -47,7 +44,6 @@ html {
 			text-align: left;
 			color: $gray_light;
 			@include font(12px, 16px);
-			padding: 0 45px 0 75px;
 			a{
 				color: $gray_light;
 				text-decoration: underline;
@@ -58,324 +54,37 @@ html {
 		}
 	}
 }
-.underline-link{
-	text-decoration: underline;
-	&:hover, &:focus{
-		text-decoration: none;
-	}
+.container, .container-fluid{
+	padding: 0  ($margin-container/2) 0 ($margin-container);
 }
-//navigation
-.navbar-fixed-top .navbar-collapse, .navbar-fixed-bottom .navbar-collapse{
-	max-height: 360px;
-}
-.navbar{
-	min-width: 400px;
-	min-height: 60px;
-	.container-fluid{
-		padding: 0 45px;
+main{
+	.container{
+		margin-left: 0;
+		margin-right: 0;
 	}
-	.navbar-brand{
-		height: 50px;
-		div{
-			float: left;
-		}
-		.brand-name{
-			@extend %font-header;
-			padding: 9px 0 0 28px;
-			&:hover, &:focus{
-				font-family: "RobotoBold";
-			}
-			&::after {
-				   display:block;
-				    font-family: "RobotoBold";
-				    content:attr(title);
-				    height:1px;
-				    color:transparent;
-				    overflow:hidden;
-				    visibility:hidden;
-				    margin-bottom:-1px;
-				}
-		}
-		.retina.logo{
-			@include size(15px, 41px);
-			background: url(../img/logo.png) no-repeat;
-			background-size: 15px 41px;
-			@include image-2x("../img/logo-retina.png", 15px, 41px);
-		}
-	}
-	.navbar-collapse{
-		li{
-			position: relative;
-			
-			&.active>a{
-				@include transition;
-				font-family: "RobotoBold";
-				span{
-					font-family: "RobotoLight";
-				}
-				& > .caret{
-					border-top-color: $white;
-				}
-			}
-			&>a{
-				@extend %font-header;
-				padding: 24px 9px;
-				text-align: center;
-				@include transition();
-				&.notifications{
-					padding-left: 45px;
-				}
-				&:hover, &:focus{
-					font-family: "RobotoBold";
-					span{
-						font-family: "RobotoLight";
-					}
-					& > .caret{
-						border-top-color: $white;
-					}
-				}
-				.caret{
-					@include absolute(31px, 10px);
-					margin-left: 0;
-					border-top: 8px solid rgba(255, 255, 255, 0.7);
-					border-right: 5px solid transparent;
-					border-left: 5px solid transparent;
-				}
-				&::after {
-				    display:block;
-				    font-family: "RobotoBold";
-				    content:attr(title);
-				    height:1px;
-				    color:transparent;
-				    overflow:hidden;
-				    visibility:hidden;
-				    margin-bottom:-1px;
-				    padding: 0 5px;
-				}
-			}
-			&.dropdown > a{
-				padding-right: 20px;
-			}
-			.dropdown-menu{ 
-				margin-top: 1px;
-				li{ 
-					&.active {
-						a{
-							color: $white;
-							font-family: "RobotoLight";
-							border-radius: 0;
-							&:hover, &:focus{
-								font-family: "RobotoBold";
-							}
-						}
-					}
-					a{
-						border-radius: 5px;
-						padding: 10px;
-						text-align: left;
-						color: $gray_text;
-						@include transition();
-					}
-				}
-			}
-			&.glow-animate{
-				&>a:after{
-					display: none;
-				}
-			}
-		}
-	}
+
 }
-.dataTables_processing{
-	background: rgba(0,0,0, 0.2);
-	div{
-		background-color: white;
-	    padding: 30px 40px;
-	    display: inline-block;
-	    font: 24px/26px "RobotoLight";
-	    margin-top: 10px;
-	    box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
-	}
-}
-.retina{
-	font-size: 0;
-	line-height: 0;
-}
-.container{
-	margin: 0;
-	padding: 0;
-}
-.badge.badge_nav{
-	background-color: #2a81cb;
-	border-radius: 100%;
-	padding: 9px;
-	@include absolute($top: 15px, $left: 5px);
-	font-size: 18px;
-	line-height: 20px;
-}
-.navbar-header {
-	text-align: center;
-	.badge.badge_nav{
-		display: none;
-	}
-	.number-of-synchronized-interviews{
-		display: none;
-	}
-}
-.active-page{
-	display: none;
-	color: $white;
-	font-family: "RobotoBold";
-	font-size: 18px;
-	line-height: 50px;
-	&:hover, &:focus{
-		color: white;
-	}
-}
-@media (max-width: $screen-md-min) {
-	html body main, html body .footer, .navbar .container-fluid{
-		padding: 0 2% 0 4%;
-	}
+@media (max-width: $screen-md-min){
 	html body {
 		padding-top: 60px;
-		main{
-			padding-bottom: 45px;
-			padding-top: 25px;
-		}
 	}
-	.active-page{
-		display: inline-block;
-	}
-	.navbar-nav{
-		margin: 0;
-	}	
-	.navbar-brand{
-		transform: rotate(270deg);
-		.brand-name{
-			display: none;
-		}
-	}
-	.navbar-toggle{
-		z-index: 25;
-	}
-	.navbar-header{
-		margin: 5px 0;
-	}
-	.navbar.navbar-fixed-top .navbar-collapse{
-		max-height: 100%;
-		top: 0;
-		left: 0;
-		z-index: 10;
-		display: none;
-		position: fixed;
-		@include size(100%, 100%);
-		background: black;
-		margin: 0;
-		padding: 40px 5%;
-		li {
-			&.active a{
-				color: white;
-				&:hover, &:focus{
-					background-color: rgba(255, 255, 255, 0.4);
-				}
-			}
-			&> a{
-				border-radius: 5px;
-				padding: 15px 10px;
-				text-align: left;
-				color: $gray_light;
-				&:hover, &:focus{
-					color: white;
-				}
-			}
-			.dropdown-menu li {
-				a{
-					padding: 15px 10px;
-				}
-				&.active {
-					a{
-						border-radius: 5px;
-						background-color: rgba(42, 129, 203, 0.5);
-						&:hover, &:focus{
-							font-family: "RobotoBold";
-							background-color: rgba(42, 129, 203, 1);
-						}
-					}
-				}
-			}
-		}
-		.navbar-right .badge.badge_nav{
-			top: 0;
-			left: 0;
-			position: relative;
-			margin-right: 10px;
-		}
-		li .caret{
-			top: 0;
-			left: 0;
-			position: relative;
-			margin: 0;
-			margin-left: 10px;
-		}
-
-	} 
-	.navbar-fixed-top .navbar-nav > .active > a, 
-	.navbar-fixed-top .navbar-nav > .active > a:hover, 
-	.navbar-fixed-top .navbar-nav > .active > a:focus{
-		background-color: #333;
-	}
-	.icon-bar{
-		@include transition;
-	}
-	.navbar-inverse .navbar-toggle{
-		background-color: transparent;
-		border: none;
-	}
-	.top-animate {
-	  @include rotate(225deg);
-	  position: relative;
-	  top: 6px;
-	}
-	.mid-animate { opacity: 0; }
-	.bottom-animate {
-		bottom: 6px;
-		position: relative;
-	    @include rotate(-225deg);
-	}
-	.navbar-header .badge.badge_nav{
-		display: block;
-		float: right;
-		position: relative;
-		top: 0;
-		left: 0;
-		margin: 6px 15px 6px 10px;
-	}
-	.navbar-header .number-of-synchronized-interviews{
-		display: block;
-		float: right;
-		padding: 15px 10px;
-		color: $white;
-		&:hover, &:focus{
-			text-decoration: none;
-			color: white;
-		}
+	.container, .container-fluid {
+	    padding: 0 ($margin-container-md-screen - 15px) 0 $margin-container-md-screen;
 	}
 }
+
 @media (max-width: $screen-sm){
-	html body .container{
+	main .container{
 		width: auto;
-		padding-left: 15px;
-		padding-right: 15px;
 		margin-left: auto;
 		margin-right: auto;
 	}
 }
-@media (max-width: $screen-xs-min){
-	.breadcrumb li a, .breadcrumb > li + li:before{
-			padding: 0 2px;
-			font-size: 8px;
-			line-height: 10px;
-	}	
+h1{
+	font: 26px/28px "RobotoLight";
+	margin: 0;
+    color: $gray_text;
+    padding: 0 0 30px;
 }
 h2{
 	font: 26px/28px "RobotoLight";
@@ -402,39 +111,6 @@ h5{
  -ms-transition: none !important;
  -o-transition: none !important;
 } 
-.progress{
-	height: 10px;
-	.progress-bar{
-		border-radius: 4px;
-	}
-}
-.back-link{
-    text-transform: uppercase;
-    font: 12.5px/14px "TrebuchetMSBold";
-    letter-spacing: 0.13em;
-    display: inline-block;
-}
-.btn-success, .btn-primary, .btn-danger, .btn-default{
-    font: 12px/14px "TrebuchetMSBold";
-    outline: none;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.btn-success{
-	background-color: $green_btn;
-}
-.btn-primary{
-	background-color: $blue;
-}
-.btn{
-	&:disabled{
-		background: $gray-super-light repeating-linear-gradient(-45deg, #d7d7d7, #d7d7d7 3px, $gray_light 2px, $gray_light 6px); 
-		border-color: transparent;	
-		&:hover, &:focus{
-			border-color: $gray-super-light;
-		}
-	}
-}
 .breadcrumb{
     background-color: transparent;
     margin: 0;
@@ -453,128 +129,22 @@ h5{
         @extend %gray-uppercase;
     } 
 }
-
-.error-text{
-	color: $red_error;
+@media (max-width: $screen-xs-min){
+	.breadcrumb li a, .breadcrumb > li + li:before{
+			padding: 0 2px;
+			font-size: 10px;
+			line-height: 12px;
+	}	
 }
-.success-text{
-	color: $green_btn;
-}
-.default-text{
-	color: $gray_form;
-}
-.radio{
-	label{
-	    color: $gray_light;
-	    font-weight: normal;
-	    padding: 7px 0;
-	}
-    input.wb-radio{
-        display: none;
-	    @extend %questionnaire-sprite;
-	    &:checked + label{
-            color:  $gray_text;
-            font-weight: bold;
-        }
-       	& + label .tick {background-position: -324px 0px;}
-
-	    & + label:hover .tick,
-	  	& + label:focus .tick{
-	    	background-position: -365px 0px;
-	  	}
-	  	&:checked + label .tick {
-	    	background-position: -406px 0px;
-	  	}
-	  	&:checked + label:hover .tick,
-	  	&:checked + label:focus .tick {
-	    	background-position: -447px 0px;
-	  	}
-	  	&:disabled + label .tick {
-	    	background-position: -570px 0px;
-	  	}
-	  	&:disabled + label:hover .tick,
-	  	&:disabled + label:focus .tick{
-	    	background-position: -611px 0px;
-	  	}
-	  	&:checked:disabled + label .tick{
-	    	background-position: -488px 0px;
-	  	}
-	  	&:checked:disabled + label:hover .tick,
-	  	&:checked:disabled + label:focus .tick{
-	    	background-position: -529px 0px;
-	  	}
+.page-header{
+    padding-bottom: 0;
+    margin: 0;
+    border: none;
+    padding-left: 15px;
+    padding-top: 40px;
+    .maintenance-mode{
+        @extend %instructions;
     }
-}
-input.wb-checkbox{
-    display: none;
-    @extend %questionnaire-sprite;
-    & ~ label:hover .tick,
-  	& ~ label:focus .tick{
-    	background-position: -37px 0px;
-  	}
-  	&:checked ~ label .tick {
-    	background-position: -78px 0px;
-  	}
-  	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick {
-    	background-position: -119px 0px;
-  	}
-  	&:disabled ~ label .tick {
-    	background-position: -160px 0px;
-  	}
-  	&:disabled ~ label:hover .tick,
-  	&:disabled ~ label:focus .tick{
-    	background-position: -201px 0px;
-  	}
-  	&:checked:disabled ~ label .tick{
-    	background-position: -242px 0px;
-  	}
-  	&:checked:disabled ~ label:hover .tick,
-  	&:checked:disabled ~ label:focus .tick{
-    	background-position: -283px 0px;
-  	}
-}
-@include placeholder {
-    font-weight: normal !important;
-    font-style: italic;
-}
-.foldback-button{
-	@include size(50px, 46px);
-	cursor: pointer;
-	@include absolute(5px, 0, null, null);
-	border-radius: 4px;
-	z-index: 2;
-	@include transition();
-	&:hover, &:focus{
-	    span.arrow{
-	    	background-color: rgba(0, 0, 0, 1);
-	    }
-	    .glyphicon{
-	    	color: rgba(0, 0, 0, 1);
-		}
-	}
-	span.arrow{
-		display: inline-block;
-		@include size(20px, 2px); 
-		margin: 15px 10px;
-		background-color: rgba(0, 0, 0, 0.5);
-		@include absolute(0, 0);
-		@include rotate(-45deg);
-		&:first-of-type{
-			@include rotate(45deg);
-			top: 13px;
-		}
-	}
-	.glyphicon{
-		display: none;
-		color: rgba(0, 0, 0, 0.5);
-		font-size: 18px;
-		top: 14px;
-		left: 10px;
-	}
-}
-#hidden-links{
-    display: none;
 }
 .alert{
 	margin-bottom: 20px;
@@ -594,60 +164,50 @@ input.wb-checkbox{
 	&.alert-info{
 		color: $blue;
 	}
-}
-.control-label{
-	font-size: 14px;
-	line-height: 16px;
-	display: block;
-	margin-bottom: 15px; 
-}
-.input-group{
-	width: 315px; 
-	.form-control{
-		border-color: $gray_form;
-		box-shadow: none;
-		input {
-			ul{
-				width: 100%;
-				top: 34px; 
-				left: 0px; 
-			}
-		}
-	}
-	.input-group-btn .btn{
-		height: $input-height-base;
-		border-color: $gray-form;
-		span{
-			$cross-height: 16px;
-			@include cancel($cross-height);
-			padding: ($input-height-base - 2*1px /*border*/ - 2*$padding-base-vertical - $cross-height)/2 0;
-		}
+	div ul li{
+		margin: 10px 0;
 	}
 }
-.btn-link{
-	@extend %gray-uppercase;
-	&:hover, &:focus{
-		outline: none;
-		text-decoration: none;
-		color: darken($gray_light, 25%);
-	}
-}
-
-.ui-pnotify
-{
-	.alert{
-        background: #fff;
-        border-radius: 0;
-        padding:5px;
+.ui-pnotify{
+	border-radius: 4px;
+	background: #fff;
+	box-shadow: 0 0 30px #323232;
+ 	.alert{
+ 		font-family: "RobotoMedium";
+        padding: 15px;
         &.alert-warning{
-            border-top: 6px solid $blue;
+            border-top: 10px solid $blue;
             color: $blue;
         }
-
-		.ui-pnotify-title{
-		}
-		
-		.ui-pnotify-text{
-		}
-	}
+        &.alert-success{
+            border-top: 10px solid $green;
+            color: $green;
+        }
+        &.alert-info{
+            border-top: 10px solid $blue;
+            color: $blue;
+        }
+        &.alert-danger{
+            border-top: 10px solid $red;
+            color: $red;
+        }
+	  	.ui-pnotify-title{
+	  		font: 16px/18px "RobotoMedium";
+	  	}
+	  	.ui-pnotify-text{
+	  		font-size: 14px;
+	  		line-height: 16px;
+	  	}
+ 	}
 }
+.error-text{
+	color: $red_error;
+}
+.success-text{
+	color: $green_btn;
+}
+.default-text{
+	color: $gray_form;
+}
+
+
