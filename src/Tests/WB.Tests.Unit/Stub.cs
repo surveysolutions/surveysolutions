@@ -64,12 +64,15 @@ namespace WB.Tests.Unit
 
         public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
         {
+            var liteEventRegistry = Create.Service.LiteEventRegistry();
             var sideBarSectionViewModelsFactory = new Mock<ISideBarSectionViewModelsFactory>();
             var sideBarSectionViewModel = new SideBarSectionViewModel(
                 Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of < ISideBarSectionViewModelsFactory>(),
+                Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IMvxMessenger>(),
-                Create.ViewModel.DynamicTextViewModel());
+                liteEventRegistry,
+                Create.ViewModel.DynamicTextViewModel(liteEventRegistry),
+                Create.Entity.AnswerNotifier(liteEventRegistry));
             sideBarSectionViewModel.NavigationState = Create.Other.NavigationState();
             sideBarSectionViewModelsFactory.SetReturnsDefault(sideBarSectionViewModel);
             return sideBarSectionViewModelsFactory.Object;

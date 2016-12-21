@@ -60,14 +60,20 @@ namespace WB.Tests.Integration
 
             var navigationState = Mock.Of<NavigationState>(_ => _.InterviewId == interview.Id.FormatGuid());
 
+            var liteEventRegistry = Create.LiteEventRegistry();
+            var mvxMessenger = Mock.Of<IMvxMessenger>();
+
             Func<SideBarSectionViewModel> sideBarSectionViewModel = ()
                 => new SideBarSectionViewModel(
                     interviewsRepository,
-                    sideBarSectionViewModelsFactory,
-                    Mock.Of<IMvxMessenger>(),
+                    questionnaireRepository,
+                    mvxMessenger,
+                    liteEventRegistry,
                     Create.DynamicTextViewModel(
+                        liteEventRegistry,
                         questionnaireRepository: questionnaireRepository,
-                        interviewRepository: interviewsRepository))
+                        interviewRepository: interviewsRepository),
+                    Create.AnswerNotifier(liteEventRegistry))
                 {
                     NavigationState = navigationState,
                 };
@@ -77,7 +83,27 @@ namespace WB.Tests.Integration
                 .Setup(_ => _.RequestMainThreadAction(It.IsAny<Action>()))
                 .Callback<Action>(action => action.Invoke());
 
+            Setup.InstanceToMockedServiceLocator<CoverStateViewModel>(Mock.Of<CoverStateViewModel>());
             Setup.InstanceToMockedServiceLocator<GroupStateViewModel>(Mock.Of<GroupStateViewModel>());
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
+                .Returns(sideBarSectionViewModel);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
+                .Returns(()=>new SideBarCoverSectionViewModel(mvxMessenger, Create.DynamicTextViewModel(
+                        liteEventRegistry,
+                        questionnaireRepository: questionnaireRepository,
+                        interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
+                .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.DynamicTextViewModel(
+                        liteEventRegistry,
+                        questionnaireRepository: questionnaireRepository,
+                        interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(),
+                        Create.AnswerNotifier(liteEventRegistry)));
+
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns(sideBarSectionViewModel);
@@ -86,9 +112,8 @@ namespace WB.Tests.Integration
             var sidebarViewModel = new SideBarSectionsViewModel(
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
-                eventRegistry: new LiteEventRegistry(),
                 modelsFactory: sideBarSectionViewModelsFactory,
-                mainThreadDispatcher: dispatcherMock.Object);
+                messenger: mvxMessenger);
 
             sidebarViewModel.Init("", new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), navigationState);
 
