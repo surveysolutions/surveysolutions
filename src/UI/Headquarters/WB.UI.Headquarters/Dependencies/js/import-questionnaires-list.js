@@ -62,6 +62,7 @@ $(function () {
             rowId: 'id',
             pagingType: "full_numbers",
             lengthChange: false, // do not show page size selector
-            pageLength: 50 // page size
+            pageLength: 50, // page size
+            "order": [[1, 'desc']]
         });
 });
