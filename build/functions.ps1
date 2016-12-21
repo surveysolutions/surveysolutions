@@ -45,9 +45,9 @@ function BuildStatiContent($targetLocation){
     Push-Location -Path $targetLocation
     Write-Host $installCommand
 	#install node js dependencies
-    &npm install
+    &npm install | Write-Host
 	#install bower packages
-	&bower install
+	&bower install | Write-Host
 	#will execute script gulpfile.js in target folder
     &gulp --production | Write-Host 
     Pop-Location
