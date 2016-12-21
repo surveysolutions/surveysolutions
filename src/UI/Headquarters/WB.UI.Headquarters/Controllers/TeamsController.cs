@@ -36,8 +36,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public UsersView Supervisors(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
         {
-            throw new Exception("This is test");
-            //return this.teamViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
+            return this.teamViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
         }
 
         [HttpGet]
