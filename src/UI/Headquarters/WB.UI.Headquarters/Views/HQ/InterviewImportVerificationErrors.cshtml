@@ -62,7 +62,7 @@
                     </div>
                 }
                 <div class="action-buttons">
-                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })
+                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { @class = "back-link" })
                 </div>
             </div>
         </div>
