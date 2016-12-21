@@ -59,20 +59,21 @@
 
         $('#umbrella').hide();
     </script>
-
-    <script type="text/javascript">
+    
+    <script>
         $(document).ready(function ()
         {
             $("#hide-filters").click(function () {
                 $(".filters").toggleClass("hidden-filters");
                 $(this).parents('.row').toggleClass("fullscreen");
+                $("footer").toggleClass("footer-adaptive");
             });
-            $("body").removeClass("hold-transition");
+            $("main").removeClass("hold-transition");
         });
     </script>
 }
 
-<main class="export">
+<main class="export hold-transition">
     <div class="container-fluid">
         <div class="row">
             <aside class="filters">
