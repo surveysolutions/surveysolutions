@@ -152,7 +152,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Batch file verification failed.
+        ///   Looks up a localized string similar to Verification of uploaded file failed.
         /// </summary>
         internal static string BatchFileVerificationFailed {
             get {
@@ -242,7 +242,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating multiple interviews by batch upload.
+        ///   Looks up a localized string similar to Creating multiple interviews.
         /// </summary>
         internal static string CreatingMultipleInterviews {
             get {
@@ -305,7 +305,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List of data fields which are required for creating interview assignment you can download.
+        ///   Looks up a localized string similar to List of variables, marked as Prefilled in Designer, required to create an interview. Download a.
         /// </summary>
         internal static string DownloadDescListRequiredPreffiledData {
             get {
@@ -323,7 +323,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .tab template for this questionnaire.
+        ///   Looks up a localized string similar to .tab template..
         /// </summary>
         internal static string DownloadLinkTitleListRequiredPreffiledData {
             get {
@@ -566,7 +566,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews are not created.
+        ///   Looks up a localized string similar to No interviews were created.
         /// </summary>
         internal static string InterviewsAreNotCreated {
             get {
@@ -638,7 +638,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} errors were found.
+        ///   Looks up a localized string similar to {0} errors found.
         /// </summary>
         internal static string MultipleErrorsWereFound {
             get {
@@ -701,7 +701,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefilled data required for this questionnaire.
+        ///   Looks up a localized string similar to Required prefilled data.
         /// </summary>
         internal static string PrefilledRequiredData {
             get {
@@ -818,7 +818,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select supervisor to assign this batch to .
+        ///   Looks up a localized string similar to Select the supervisor for this batch.
         /// </summary>
         internal static string SelectSupervisorToAssign {
             get {
@@ -827,7 +827,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload tab separated file with necessary prefilled data. Optionaly, specify usernames of supervisors or enumerators in _responsible column..
+        ///   Looks up a localized string similar to Upload tab separated file with necessary prefilled data. Optionally, specify usernames of supervisors or enumerators in the _responsible column..
         /// </summary>
         internal static string SimpleDescription {
             get {
@@ -845,7 +845,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 error was found.
+        ///   Looks up a localized string similar to 1 error found.
         /// </summary>
         internal static string SingleErrorFound {
             get {
@@ -1053,7 +1053,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verification completed.
+        ///   Looks up a localized string similar to Verification complete.
         /// </summary>
         internal static string VerificationCompleted {
             get {

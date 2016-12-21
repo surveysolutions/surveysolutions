@@ -124,7 +124,7 @@
     <value>Last modified</value>
   </data>
   <data name="PageHeader" xml:space="preserve">
-    <value>Select questionnaire to import</value>
+    <value>Select a questionnaire to import</value>
   </data>
   <data name="SignedInBlock" xml:space="preserve">
     <value>You are signed in on Designer as {0}.</value>

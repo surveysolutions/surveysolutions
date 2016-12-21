@@ -124,7 +124,7 @@
     <value>User is not authorized. Please check your login and password.</value>
   </data>
   <data name="PageHeader" xml:space="preserve">
-    <value>Use your Survey Solutions Designer credentials to get access to your questionnaires.</value>
+    <value>Use your Survey Solutions Designer credentials to access your questionnaires.</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>

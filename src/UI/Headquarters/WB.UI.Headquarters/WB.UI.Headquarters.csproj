@@ -578,6 +578,7 @@
     <EmbeddedResource Include="Resources\LoginToDesigner.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginToDesigner.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.pt.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx" />
