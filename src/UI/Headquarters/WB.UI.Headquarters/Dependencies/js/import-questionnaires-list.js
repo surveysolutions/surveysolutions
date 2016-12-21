@@ -55,7 +55,7 @@ $(function () {
                 },
                 {
                     data: "createdBy",
-                    name: "CreatedBy",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    name: "CreatorName",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                     "class": "created-by"
                 }
             ],
