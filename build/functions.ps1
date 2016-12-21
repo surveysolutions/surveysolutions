@@ -50,6 +50,13 @@ function BuildStatiContent($targetLocation){
 	&bower install | Write-Host
 	#will execute script gulpfile.js in target folder
     &gulp --production | Write-Host 
+	
+	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
+
+    if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='Failed to run gulp']"        
+    }	
+	
     Pop-Location
 
     Write-Host "##teamcity[progressFinish 'Building static files']"
