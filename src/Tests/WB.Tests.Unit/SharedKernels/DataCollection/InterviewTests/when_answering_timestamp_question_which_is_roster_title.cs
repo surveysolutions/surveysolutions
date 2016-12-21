@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.ShouldContainEvent<DateTimeQuestionAnswered>();
 
         It should_set_answer_on_timestamp_question_in_specified_format_for_RosterInstancesTitleChanged_event = () =>
-            eventContext.GetEvent<RosterInstancesTitleChanged>().ChangedInstances[0].Title.ShouldEqual(AnswerUtils.AnswerToString(answerOnDateTimeQuestion, isTimestamp: true));
+            eventContext.GetEvent<RosterInstancesTitleChanged>().ChangedInstances[0].Title.ShouldEqual(answerOnDateTimeQuestion.ToLocalTime().ToString());
 
         private static EventContext eventContext;
         private static Interview interview;
