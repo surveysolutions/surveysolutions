@@ -125,7 +125,20 @@
                     self.ShowError(input.settings.messages.forbiddenMessage);
                 }
                 else {
-                    self.ShowError(jqXhr.responseText);
+                    var isJson = true;
+                    var json;
+                    try {
+                        json = $.parseJSON(jqXhr.responseText);
+                    }
+                    catch (err) {
+                        isJson = false;
+                    }
+
+                    if (isJson) {
+                        self.ShowError(json.Message);
+                    } else {
+                        self.ShowError(jqXhr.responseText);
+                    }
                 }
             } else {
                 self.ShowError(input.settings.messages.unhandledExceptionMessage);

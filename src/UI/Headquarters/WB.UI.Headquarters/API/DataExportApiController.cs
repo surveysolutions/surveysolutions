@@ -147,12 +147,6 @@ namespace WB.UI.Headquarters.API
                 throw new HttpException(404, @"file is absent");
 
             Stream exportZipStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-
-            if (this.exportSettings.EncryptionEnforced())
-            {
-                exportZipStream = this.SetPasswordToZipFileAndSaveNearOriginalFile(filePath, exportZipStream);
-            }
-
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportZipStream, @"application/zip");
             
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
@@ -161,20 +155,6 @@ namespace WB.UI.Headquarters.API
             };
 
             return result;
-        }
-
-        private Stream SetPasswordToZipFileAndSaveNearOriginalFile(string filePath, Stream exportZipStream)
-        {
-            var originZipFileName = this.fileSystemAccessor.GetFileNameWithoutExtension(filePath);
-            var originZipDirectory = this.fileSystemAccessor.GetDirectory(filePath);
-            var protectedZipFileName = $"{originZipFileName}_protected.zip";
-            var protectedZipFullPath = this.fileSystemAccessor.CombinePath(originZipDirectory, protectedZipFileName);
-
-            var outputZipStream = new FileStream(protectedZipFullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-
-            this.zipArchiveProtectionService.ProtectZipWithPassword(exportZipStream, outputZipStream, this.exportSettings.GetPassword());
-            exportZipStream = outputZipStream;
-            return exportZipStream;
         }
     }
 }

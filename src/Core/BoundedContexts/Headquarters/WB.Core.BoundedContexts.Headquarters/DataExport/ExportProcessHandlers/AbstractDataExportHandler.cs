@@ -9,33 +9,44 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
     abstract class AbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IArchiveUtils archiveUtils;
+        private readonly IZipArchiveProtectionService archiveUtils;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly ILogger logger;
+        private readonly IExportSettings exportSettings;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+
+        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IArchiveUtils archiveUtils, 
+            IZipArchiveProtectionService archiveUtils, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
             IDataExportProcessesService dataExportProcessesService,
-            ILogger logger)
+            ILogger logger,
+            IExportSettings exportSettings,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.dataExportProcessesService = dataExportProcessesService;
             this.logger = logger;
+            this.exportSettings = exportSettings;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
@@ -103,9 +114,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             this.logger.Debug($"Starting creation of {Path.GetFileName(archiveFilePath)} archive");
             Stopwatch watch = Stopwatch.StartNew();
-            this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
+            var password = this.GetPasswordFromSettings();
+            this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath, password);
             watch.Stop();
             this.logger.Info($"Done creation {Path.GetFileName(archiveFilePath)} archive. Spent: {watch.Elapsed:g}");
+        }
+
+        private string GetPasswordFromSettings()
+        {
+            return this.PlainTransactionManager.ExecuteInPlainTransaction(() => 
+                this.exportSettings.EncryptionEnforced()
+                    ? this.exportSettings.GetPassword()
+                    : null);
         }
 
         private void ClearFolder(string folderName)
