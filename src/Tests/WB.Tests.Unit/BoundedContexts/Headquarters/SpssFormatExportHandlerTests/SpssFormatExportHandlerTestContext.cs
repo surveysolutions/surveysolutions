@@ -7,6 +7,8 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Security;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTests
@@ -31,7 +33,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTest
                 Mock.Of<ITabularDataToExternalStatPackageExportService>(),
                 Mock.Of<IDataExportProcessesService>(),
                 Mock.Of<ILogger>(),
-                Mock.Of<IExportSettings>());
+                Mock.Of<IExportSettings>(),
+                Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()));
         }
     }
 }
