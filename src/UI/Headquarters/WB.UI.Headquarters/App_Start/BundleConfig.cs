@@ -42,8 +42,6 @@ namespace WB.UI.Headquarters
                 "~/Content/controlpanel.css"
                 ));
 
-            bundles.Add(new ScriptBundle("~/js/import-questionnaire-list").Include());
-
             bundles.Add(new ScriptBundle("~/js/batch-upload-start-interview-creation").Include(
                 "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
