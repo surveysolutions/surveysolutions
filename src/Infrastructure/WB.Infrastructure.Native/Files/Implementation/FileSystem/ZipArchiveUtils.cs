@@ -155,9 +155,8 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-        public Stream ProtectZipWithPassword(Stream inputZipStream, string password)
+        public void ProtectZipWithPassword(Stream inputZipStream, Stream protectedZipStream, string password)
         {
-            var outputZipStream = new MemoryStream();
             using (var zipFile = ZipFile.Read(inputZipStream))
             {
                 zipFile.Password = password;
@@ -165,11 +164,9 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 {
                     zipEntry.Password = password;
                 }
-                zipFile.Save(outputZipStream);
+                zipFile.Save(protectedZipStream);
             }
-            outputZipStream.Position = 0;
-
-            return outputZipStream;
+            protectedZipStream.Position = 0;
         }
     }
 }
