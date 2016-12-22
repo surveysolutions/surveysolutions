@@ -467,7 +467,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Other interview import process is running. Only one interview import process at a time is allowed. Wait until the process is finished and upload the sample again..
+        ///   Looks up a localized string similar to Other interview import process is running. Only one interview import process at a time is allowed. Wait until the process is finished and upload the sample again. Follow the link if you want to get more detailed progress information about the other import process..
         /// </summary>
         internal static string ImportInProgress {
             get {
