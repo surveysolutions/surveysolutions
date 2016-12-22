@@ -1,4 +1,4 @@
-﻿@model WB.UI.Headquarters.Models.PreloadedDataQuestionnaireModel
+﻿@model WB.UI.Headquarters.Models.PreloadedDataInProgressModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
@@ -13,7 +13,7 @@
             <div class="page-header">
                 <ol class="breadcrumb">
                     <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
-                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "HQ", new { id = Model.Questionnaire.Id, version = Model.Questionnaire.Version }, new { })</li>
                 </ol>
                 <h1>@BatchUpload.ImportInterviews_PageTitle</h1>
             </div>
@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-sm-7">
                 <h3>
-                    @string.Format(BatchUpload.ImportFrom, "", Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Version))
+                    @string.Format(BatchUpload.ImportFrom, "", Html.QuestionnaireName(Model.Questionnaire.Title, Model.Questionnaire.Version))
                 </h3>
             </div>
         </div>
@@ -29,9 +29,10 @@
             <div class="col-sm-7 col-xs-12 action-block">
                 <div class="import-progress">
                     <p class="error-text">@BatchUpload.ImportInProgress</p>
+                    <p>@Html.ActionLink(BatchUpload.RunningInterviewImportProcess, "InterviewImportProgress", "HQ", new { id = Model.CurrentProcessId})</p>
                 </div>
                 <div class="action-buttons">
-                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })
+                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "HQ", new { id = Model.Questionnaire.Id, version = Model.Questionnaire.Version }, new { })
                 </div>
             </div>
         </div>
