@@ -52,8 +52,7 @@ var config = {
         }
     ],
     cssFilesToWatch: './css/*.scss"',
-    //cssSource: './css/markup.scss',
-    cssSource: './css/should_cause_error.scss',
+    cssSource: './css/markup.scss',
     cssAppInject: 'cssApp',
     cssLibsInject: 'cssLibs',
     jsLibsInject: 'jsLibs'
