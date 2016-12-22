@@ -7093,13 +7093,20 @@ h5, .preset-filters-container a {
   .alert div ul li {
     margin: 10px 0; }
 
+body > .ui-pnotify {
+  z-index: 100050; }
+
+.ui-pnotify-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.2); }
+
 .ui-pnotify {
   border-radius: 4px;
   background: #fff;
   box-shadow: 0 0 30px #323232; }
   .ui-pnotify .alert {
     font-family: "RobotoMedium";
-    padding: 15px; }
+    padding: 15px;
+    margin: 0; }
     .ui-pnotify .alert.alert-warning {
       border-top: 10px solid #2a81cb;
       color: #2a81cb; }
@@ -7117,6 +7124,18 @@ h5, .preset-filters-container a {
     .ui-pnotify .alert .ui-pnotify-text {
       font-size: 14px;
       line-height: 16px; }
+  .ui-pnotify.loading-indicator {
+    border-radius: 0; }
+    .ui-pnotify.loading-indicator .ui-pnotify-container {
+      border-radius: 0;
+      box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1); }
+    .ui-pnotify.loading-indicator .ui-pnotify-container.alert {
+      padding: 30px 40px;
+      border-top: none; }
+    .ui-pnotify.loading-indicator .ui-pnotify-title {
+      font: 24px/26px "RobotoLight";
+      padding: 0;
+      margin: 0; }
 
 .error-text {
   color: #e74924; }
