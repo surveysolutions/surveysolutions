@@ -156,4 +156,7 @@
   <data name="StartDate" xml:space="preserve">
     <value>Дата начала</value>
   </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>Вы не можите изменять настройки экспорта пока имеются запущенные экспорт процессы.</value>
+  </data>
 </root>

@@ -31,5 +31,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
              var statusSuffix = status != null && format != DataExportFormat.Binary ? status.ToString() : "All";
             return this.exportFileNameService.GetFileNameForTabByQuestionnaire(questionnaireId, this.pathToExportedData, format, statusSuffix);
         }
+
+        public string GetExportDirectory()
+        {
+            return this.pathToExportedData;
+        }
     }
 }

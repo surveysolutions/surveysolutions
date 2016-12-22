@@ -48,15 +48,24 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             throw new NotImplementedException();
         }
 
-        public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
+        public void ZipFiles(IEnumerable<string> files, string archiveFilePath, string password)
         {
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
                 zip.CompressionLevel = CompressionLevel.Default;
                 zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
+
+                if (password != null)
+                    zip.Password = password;
+
                 zip.AddFiles(files, "");
                 zip.Save(archiveFilePath);
             }
+        }
+
+        public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
+        {
+            ZipFiles(files, archiveFilePath, password: null);
         }
 
         public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
