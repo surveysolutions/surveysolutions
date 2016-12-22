@@ -338,6 +338,7 @@ namespace WB.UI.Designer.Controllers
                     }
 
                     var translationId = Guid.Parse(translationIdString);
+                    this.translationsService.DeleteAllRowsByTranslationId(translationId);
                     this.translationsService.Store(questionnaireId, translationId, excelContent);
 
                     this.Success($"[{zipEntry.Name}].", append: true);

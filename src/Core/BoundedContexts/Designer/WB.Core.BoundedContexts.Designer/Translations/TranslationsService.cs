@@ -203,6 +203,14 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.translations.Remove(storedTranslations);
         }
 
+        public void DeleteAllRowsByTranslationId(Guid translationId)
+        {
+            var storedTranslations = this.translations.Query(_ => _
+                .Where(x => x.TranslationId == translationId)
+                .ToList());
+            this.translations.Remove(storedTranslations);
+        }
+
         public int Count(Guid questionnaireId, Guid translationId)
             => this.translations.Query(_ => _.Count(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId));
 

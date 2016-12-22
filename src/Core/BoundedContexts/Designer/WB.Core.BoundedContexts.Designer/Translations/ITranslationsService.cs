@@ -12,5 +12,6 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         void CloneTranslation(Guid questionnaireId, Guid translationId, Guid newQuestionnaireId, Guid newTranslationId);
         void DeleteAllByQuestionnaireId(Guid questionnaireId);
         int Count(Guid questionnaireId, Guid translationId);
+        void DeleteAllRowsByTranslationId(Guid translationId);
     }
 }
