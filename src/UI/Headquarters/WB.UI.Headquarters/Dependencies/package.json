@@ -22,9 +22,6 @@
     "gulp-util": "^3.0.7",
     "main-bower-files": "^2.13.1"
   },
-  "scripts": {
-    "install": "node_modules\\.bin\\bower install --force"  
-  },
   "dependencies": {
     "gulp-install": "^0.6.0"
   }
