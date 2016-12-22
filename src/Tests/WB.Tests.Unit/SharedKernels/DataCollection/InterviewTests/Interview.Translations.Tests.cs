@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
@@ -122,6 +125,59 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         [Test]
+        public void when_switch_translation_should_translate_substitutes_of_cascaded_values()
+        {
+            //arrange
+            var ruTranslationName = "ru";
+
+            var questionIdentity = Create.Entity.Identity();
+            var cascadingIdentity = Create.Entity.Identity();
+            var substituteIdentity = Create.Entity.Identity();
+
+            var userId = Guid.NewGuid();
+
+            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(
+                new KeyValuePair<string, IComposite[]>(null, new IComposite[]
+                {
+                    Create.Entity.SingleOptionQuestion(questionIdentity.Id, "combobox",
+                        answers: new List<Answer> {Create.Entity.Answer("EnValue1", 1), Create.Entity.Answer("EnvValue2", 2)}),
+                    Create.Entity.SingleOptionQuestion(cascadingIdentity.Id, "cascading", cascadeFromQuestionId: questionIdentity.Id,
+                        answers: new List<Answer> {Create.Entity.Answer("Default language %combobox% 1", 1, 1), Create.Entity.Answer("Default %combobox% value 2", 2, 2)}),
+                    Create.Entity.TextQuestion(substituteIdentity.Id, "subst", text: "Sub me, and then, %combobox% и %cascading%")
+                }),
+
+                new KeyValuePair<string, IComposite[]>(ruTranslationName, new IComposite[]
+                {
+                    Create.Entity.SingleOptionQuestion(questionIdentity.Id, "combobox",
+                        answers: new List<Answer> {Create.Entity.Answer("Значение1", 1), Create.Entity.Answer("Значение2", 2)}),
+                    Create.Entity.SingleOptionQuestion(cascadingIdentity.Id, "cascading", cascadeFromQuestionId: questionIdentity.Id,
+                        answers: new List<Answer> {Create.Entity.Answer("Опция значения %combobox% 1", 1, 1), Create.Entity.Answer("Опция значения %combobox% 2", 2, 2)}),
+                    Create.Entity.TextQuestion(substituteIdentity.Id, "subst", text: "Саб ми, %combobox% и %cascading%")
+                })
+            );
+            
+            var optionsRepo = Moq.Mock.Of<IQuestionOptionsRepository>(x =>
+                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<QuestionnaireIdentity>(), cascadingIdentity.Id, 2, Moq.It.IsAny<Translation>()) == new CategoricalOption
+                {
+                    Value = 2,
+                    ParentValue = 2,
+                    Title = "Опция значения 2"
+                }
+            );
+
+            Moq.Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IQuestionOptionsRepository>()).Returns(optionsRepo);
+            
+            interview.AnswerSingleOptionQuestion(userId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, 2); // значение 2
+            interview.AnswerSingleOptionQuestion(userId, cascadingIdentity.Id, cascadingIdentity.RosterVector, DateTime.UtcNow, 2); // Опция значения 2
+
+            //act
+            interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
+
+            Assert.That(interview.GetTitleText(substituteIdentity), Is.EqualTo("Саб ми, Значение2 и Опция значения 2"));
+        }
+
+
+        [Test]
         public void When_switch_translation_with_static_text_having_substitutions_Then_title_and_validation_messages_should_be_translated()
         {
             //arrange
@@ -209,6 +265,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Assert.That(interview.GetFailedValidationMessages(questionIdentity),
                 Is.EquivalentTo(new[] {$"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]"}));
         }
+
         [Test]
         public void When_switch_translation_with_question_having_substitutions_Then_title_and_validation_messages_should_be_translated()
         {
