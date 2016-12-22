@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.currentLanguage = this.interview.Language;
 
             this.BreadCrumbs.Init(interviewId, this.navigationState);
-            this.Sections.Init(interviewId, interview.QuestionnaireIdentity, this.navigationState);
+            this.Sections.Init(interviewId, this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
