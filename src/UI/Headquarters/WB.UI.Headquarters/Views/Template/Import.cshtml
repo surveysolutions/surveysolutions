@@ -8,6 +8,77 @@
 @section scripts
 {
     @Scripts.Render("~/js/import-questionnaire-list")
+
+    <script type="text/javascript">
+        'use strict';
+
+        $(function () {
+            var questionnaireListUrl = "@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesListNew" })";
+            var questionnaireImportModeUrl = "@Url.Action("ImportMode", "Template")";
+
+            var requestHeaders = {};
+            requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+            var onTableInitComplete = function () {
+                $('#DataTables_Table_0_filter label').on('click', function (e) {
+                    if (e.target !== this)
+                        return;
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    }
+                    else {
+                        $(this).addClass("active");
+                    }
+                    $(".column-questionnaire-title").toggleClass("padding-left-slide");
+                });
+            };
+
+            $.fn.dataTable.ext.errMode = 'none';
+
+            var table = $('table.import-interview')
+                .on('init.dt', onTableInitComplete)
+                .on('error.dt', function (e, settings, techNote, message) {
+                    location.reload();
+                })
+                .DataTable({
+                    processing: true,
+                    language:
+                    {
+                        "url": window.input.settings.config.dataTableTranslationsUrl
+                    },
+                    serverSide: true,
+                    ajax: {
+                        url: questionnaireListUrl,
+                        type: "POST",
+                        headers: requestHeaders
+                    },
+                    columns: [
+                        {
+                            data: "title",
+                            name: "Title", // case-sensitive!
+                            render: function (data, type, row) {
+                                return "<a href=" + questionnaireImportModeUrl + "/" + row.id + "?questionnaireTitle=" + encodeURI(data) + ">" + data + "</a>";
+                            }
+                        },
+                        {
+                            data: "lastModified",
+                            name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                            "class": "changed-recently"
+                        },
+                        {
+                            data: "createdBy",
+                            name: "CreatorName",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "created-by"
+                        }
+                    ],
+                    rowId: 'id',
+                    pagingType: "full_numbers",
+                    lengthChange: false, // do not show page size selector
+                    pageLength: 50, // page size
+                    "order": [[1, 'desc']]
+                });
+        });
+    </script>
 }
 <main class="import-wrapper">
     <div class="container-fluid">
@@ -43,10 +114,5 @@
                 </thead>
             </table>
         </div>
-    </div>
-
-    <div id="hidden-links">
-        <a id="questionnaireListUrl" title="questionnaire list" href="@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DesignerQuestionnairesApi", action = "QuestionnairesListNew" })"></a>
-        <a id="questionnaireImportModeUrl"  title="questionnaire import mode" href="@Url.Action("ImportMode", "Template")"></a>
     </div>
 </main>
