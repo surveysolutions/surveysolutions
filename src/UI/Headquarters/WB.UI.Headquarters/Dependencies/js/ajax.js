@@ -2,7 +2,20 @@
     var self = this;
     var loadingIndicator = null;
     var stack_modal = { "dir1": "down", "dir2": "right", "push": "top", "modal": true, "overlay_close": false };
-
+    var loadingIndicatorOptions = {
+        title: "Loading, please wait",
+        text: false,
+        addclass: "stack-modal loading-indicator",
+        stack: stack_modal,
+        type: "info",
+        hide: false,
+        icon: false,
+        auto_display: false,
+        buttons: {
+            sticker: false,
+            closer: false
+        }
+    };
     PNotify.prototype.options.styling = "bootstrap3";
 
     self.showError = function (title, message) {
@@ -13,26 +26,20 @@
         new PNotify({ title: title, text: message });
     };
 
+    var openPnotifyIfExists = function (pnotify) {
+        if (!_.isNull(loadingIndicator)) {
+            pnotify.open();
+        }
+    };
+
     self.showLoadingIndicator = function () {
         if (_.isNull(loadingIndicator))
         {
-            var opts = {
-                title: "Loading, please wait",
-                text: false,
-                addclass: "stack-modal",
-                stack: stack_modal,
-                type: "info",
-                hide: false,
-                icon: false,
-                buttons: {
-                    sticker: false,
-                    closer: false
-                }
-            };
-           
-            loadingIndicator = new PNotify(opts);
+            loadingIndicator = new PNotify(loadingIndicatorOptions);
+            _.delay(openPnotifyIfExists, 500, loadingIndicator);
         }
     };
+    
 
     self.hideLoadingIndicator = function () {
         if (!_.isNull(loadingIndicator)) {
