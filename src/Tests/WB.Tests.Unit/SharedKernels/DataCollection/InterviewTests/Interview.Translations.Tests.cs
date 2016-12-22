@@ -130,11 +130,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //arrange
             var ruTranslationName = "ru";
 
-            var questionIdentity = Create.Entity.Identity();
-            var cascadingIdentity = Create.Entity.Identity();
-            var substituteIdentity = Create.Entity.Identity();
+            var questionIdentity = Create.Entity.Identity(10);
+            var cascadingIdentity = Create.Entity.Identity(20);
+            var substituteIdentity = Create.Entity.Identity(30);
 
-            var userId = Guid.NewGuid();
+            var userId = Create.Entity.Identity(42).Id;
 
             var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(
                 new KeyValuePair<string, IComposite[]>(null, new IComposite[]

@@ -264,6 +264,17 @@ namespace WB.Tests.Unit.TestFactories
                 id ?? Guid.NewGuid(),
                 rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty);
 
+        public Identity Identity(int id, RosterVector rosterVector = null)
+            => new Identity(
+                Guid.Parse(SpamIntToStringOfLength(id)),
+                rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty);
+
+        private string SpamIntToStringOfLength(int number, int length = 32)
+        {
+            var result = number.ToString();
+            return string.Concat(Enumerable.Repeat(result, (int) Math.Ceiling(length / (double) result.Length))).Substring(0, 32);
+        }
+
         public InterviewTreeIntegerQuestion InterviewTreeIntegerQuestion(int answer = 42)
             => new InterviewTreeIntegerQuestion(answer);
 
