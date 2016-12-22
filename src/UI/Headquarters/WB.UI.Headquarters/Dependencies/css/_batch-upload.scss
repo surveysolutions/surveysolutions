@@ -25,7 +25,7 @@
 .selection-box a{
 	@extend %uppercase-font;
     display: block;
-    margin-top: 40px;
+    margin-bottom: 25px;
 }
 .btn-file input{
 	display: none;
@@ -57,9 +57,6 @@
 		margin: 0;
 	}
 }
-/* .btn-input{
-	margin-bottom: 40px;		
-} */
 .error-block{
 	&:last-of-type{
 		margin-bottom: 30px;

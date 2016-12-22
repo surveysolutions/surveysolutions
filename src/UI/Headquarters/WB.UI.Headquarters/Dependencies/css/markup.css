@@ -6107,7 +6107,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   position: relative; }
   #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
     position: absolute;
-    top: 0;
+    top: 5px;
     left: 0;
     z-index: 2; }
     #DataTables_Table_0_wrapper #DataTables_Table_0_filter label {
@@ -6225,9 +6225,9 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 
 @media (max-width: 1210px) {
   #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
-    width: 250px; }
+    width: 200px; }
   .table-ordered thead th.padding-left-slide:first-child {
-    padding-left: 315px; }
+    padding-left: 265px; }
   .dataTables_paginate {
     margin-bottom: 30px; } }
 
@@ -6243,10 +6243,17 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   .dataTables_wrapper .dataTables_paginate {
     float: none; }
   #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+    position: relative;
+    top: 0;
     left: 0; }
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
-      width: 150px;
-      margin-left: 40px; }
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label:after {
+      top: 40px; }
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active {
+      width: 100%; }
+      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
+        width: 80%; }
+  .table-ordered thead th.padding-left-slide:first-child {
+    padding-left: 45px; }
   .table-ordered thead tr th:after {
     border-width: 4px;
     border-top: 6px solid #dbdfe2; }
@@ -6337,7 +6344,6 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   outline: none; }
 
 .navbar {
-  /* border: none; */
   min-width: 400px;
   min-height: 60px;
   margin-bottom: 0; }
@@ -6345,19 +6351,20 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     padding: 0 45px 0 45px; }
   .navbar .navbar-header .navbar-brand {
     position: relative;
-    padding: 24px 10px 24px 45px;
     margin-left: 0; }
     .navbar .navbar-header .navbar-brand:hover, .navbar .navbar-header .navbar-brand:focus {
       font-family: "RobotoBold"; }
-    .navbar .navbar-header .navbar-brand .brand-name::after {
-      display: block;
-      font-family: "RobotoBold";
-      content: attr(title);
-      height: 1px;
-      color: transparent;
-      overflow: hidden;
-      visibility: hidden;
-      margin-bottom: -1px; }
+    .navbar .navbar-header .navbar-brand .brand-name {
+      padding: 8px 10px 8px 30px; }
+      .navbar .navbar-header .navbar-brand .brand-name::after {
+        display: block;
+        font-family: "RobotoBold";
+        content: attr(title);
+        height: 1px;
+        color: transparent;
+        overflow: hidden;
+        visibility: hidden;
+        margin-bottom: -1px; }
     .navbar .navbar-header .navbar-brand:before {
       display: block;
       content: "";
@@ -6858,63 +6865,54 @@ input.checkbox-filter {
     border-top: none;
     border-bottom: 12px solid #a6a8a9; }
 
-/* .btn-input {
-   display: block;
-   .dropdown-toggle{
-   		background-color: transparent;
-   		box-shadow: none;
-   		border: 1px solid $gray_form;
-   		border-radius: 4px;
-   		width: 295px;
-   		text-align: left;
-   		padding: 7px 12px;
-   		&:hover, &:focus{
-   			box-shadow: none;
-   		}
-   		span:first-child {
-		   left: 10px;
-		   @include text-overflow();
-		   position: absolute;
-		   right: 30px;
-		}
-		.caret-large {
-		    margin-top: -1px;
-		    position: absolute;
-		    right: 10px;
-		    top: 35%;
-		    @include size(0, 0); 
-		    display: block;
-		    border-top: 12px solid $gray-light;
-		    border-right: 7px solid transparent;
-		    border-left: 7px solid transparent;
-		}
-   }
-   .dropdown-menu > li{	
-   		&> a{
-	   		white-space: pre-wrap;
-	   		padding: 7px 10px;
-	   		color: $gray_text;
-			&:hover, &:focus{
-	   			background-color: $gray-super-light;
-   			}
-  		}
-   }
-   	&.open {
-   		.caret-large{
-   			border-top: none;
-   			border-bottom: 12px solid $gray-light;
-   		}
-	   	&> .dropdown-menu {
-		    display: block;
-		    width: 295px;
-		    padding: 5px;
-	   		border: 1px solid $gray_form;
-	   		overflow: auto;
-	    	max-height: 300px;
-	    	border-radius: 4px;
-		} 
-   }
-} */
+.btn-input {
+  display: block; }
+  .btn-input .dropdown-toggle {
+    background-color: transparent;
+    box-shadow: none;
+    border: 1px solid #dbdfe2;
+    border-radius: 4px;
+    width: 295px;
+    text-align: left;
+    padding: 7px 12px; }
+    .btn-input .dropdown-toggle:hover, .btn-input .dropdown-toggle:focus {
+      box-shadow: none; }
+    .btn-input .dropdown-toggle span:first-child {
+      left: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      position: absolute;
+      right: 30px; }
+    .btn-input .dropdown-toggle .caret-large {
+      margin-top: -1px;
+      position: absolute;
+      right: 10px;
+      top: 35%;
+      width: 0;
+      height: 0;
+      display: block;
+      border-top: 12px solid #a6a8a9;
+      border-right: 7px solid transparent;
+      border-left: 7px solid transparent; }
+  .btn-input .dropdown-menu > li > a {
+    white-space: pre-wrap;
+    padding: 7px 10px;
+    color: #3f3f3f; }
+    .btn-input .dropdown-menu > li > a:hover, .btn-input .dropdown-menu > li > a:focus {
+      background-color: #ececec; }
+  .btn-input.open .caret-large {
+    border-top: none;
+    border-bottom: 12px solid #a6a8a9; }
+  .btn-input.open > .dropdown-menu {
+    display: block;
+    width: 295px;
+    padding: 5px;
+    border: 1px solid #dbdfe2;
+    overflow: auto;
+    max-height: 300px;
+    border-radius: 4px; }
+
 @font-face {
   font-family: "RobotoRegular";
   src: url("../fonts/RobotoRegular.woff2") format("woff2"), url("../fonts/RobotoRegular.woff") format("woff"), url("../fonts/RobotoRegular.ttf") format("truetype"), url("../fonts/RobotoRegular.svg#RobotoRegular") format("svg"); }
@@ -7676,7 +7674,7 @@ main .flex-row {
 
 .selection-box a {
   display: block;
-  margin-top: 40px; }
+  margin-bottom: 25px; }
 
 .btn-file input {
   display: none; }
@@ -7703,9 +7701,6 @@ main .flex-row {
   .import-progress p {
     margin: 0; }
 
-/* .btn-input{
-	margin-bottom: 40px;		
-} */
 .error-block:last-of-type {
   margin-bottom: 30px; }
 
