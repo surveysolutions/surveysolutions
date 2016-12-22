@@ -46,15 +46,24 @@ function BuildStatiContent($targetLocation){
     Write-Host $installCommand
 	#install node js dependencies
     &npm install | Write-Host
+	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
+	 if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"        
+    }
+	
 	#install bower packages
 	&bower install | Write-Host
+	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
+	 if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install']"        
+    }
+	
 	#will execute script gulpfile.js in target folder
     &gulp --production | Write-Host 
 	
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
-
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to run gulp']"        
+        Write-Host "##teamcity[message status='ERROR' text='Failed to run gulp --production']"        
     }	
 	
     Pop-Location

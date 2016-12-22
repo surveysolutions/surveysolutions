@@ -79,7 +79,7 @@ gulp.task('watch-styles', function () {
 });
 
 gulp.task('bowerJs', wrapPipe(function (success, error) {
-    return gulp.src(mainBowerFiles('**/*.js'))
+    return gulp.src(mainBowerFiles('**/*.js').on('error', error))
         .pipe(plugins.ngAnnotate().on('error', error))
       	.pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
@@ -90,7 +90,7 @@ gulp.task('bowerJs', wrapPipe(function (success, error) {
 }));
 
 gulp.task('bowerCss', wrapPipe(function (success, error) {
-    return gulp.src(mainBowerFiles('**/*.css'))
+    return gulp.src(mainBowerFiles('**/*.css').on('error', error))
         .pipe(autoprefixer('last 2 version').on('error', error))
         .pipe(concat('libs.css').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
