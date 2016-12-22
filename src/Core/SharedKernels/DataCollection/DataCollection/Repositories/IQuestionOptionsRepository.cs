@@ -12,7 +12,6 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
 
         CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, string optionText, int? parentQuestionValue, Translation translationId);
 
-        CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
-            Guid questionId, decimal optionValue, Translation translationId);
+        CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, decimal optionValue, Translation translationId);
     }
 }

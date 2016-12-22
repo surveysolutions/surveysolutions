@@ -83,8 +83,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview ID: {this.InterviewTree.InterviewId}.");
         }
 
-        public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer,
-            QuestionnaireIdentity questionnaireId, Translation translation) 
+        public void RequireCascadingQuestionAnswerCorrespondsToParentAnswer(Identity cascadingQuestionIdentity, decimal answer, QuestionnaireIdentity questionnaireId, Translation translation) 
         {
             var question = this.InterviewTree.GetQuestion(cascadingQuestionIdentity);
 

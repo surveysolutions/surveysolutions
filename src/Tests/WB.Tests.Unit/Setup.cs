@@ -277,11 +277,13 @@ namespace WB.Tests.Unit
             }
         }
 
-        internal static StatefulInterview StatefulInterviewWithMultilanguageQuestionnaires(params KeyValuePair<string, IComposite[]>[] questionnaires)
+        internal static StatefulInterview StatefulInterviewWithMultilanguageQuestionnaires(
+            params KeyValuePair<string, IComposite[]>[] questionnaires)
         {
             var chapterId = Guid.Parse("33333333333333333333333333333333");
 
             var questionnaireDocuments = new List<KeyValuePair<string, QuestionnaireDocument>>();
+
             foreach (var questionnaire in questionnaires)
             {
                 var questionnaireDocumentWithOneChapterAndLanguages = Create.Entity.QuestionnaireDocumentWithOneChapterAndLanguages(
@@ -289,8 +291,7 @@ namespace WB.Tests.Unit
                         questionnaires.Select(x => x.Key).Where(x => x != null).ToArray(),
                         questionnaire.Value);
 
-                questionnaireDocuments.Add(new KeyValuePair<string, QuestionnaireDocument>(questionnaire.Key,
-                    questionnaireDocumentWithOneChapterAndLanguages));
+                questionnaireDocuments.Add(new KeyValuePair<string, QuestionnaireDocument>(questionnaire.Key, questionnaireDocumentWithOneChapterAndLanguages));
             }
 
             var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
