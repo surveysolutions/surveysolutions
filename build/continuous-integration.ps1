@@ -40,7 +40,7 @@ try {
 		-OutFileName $PackageName | %{ if (-not $_) { Exit } }
 
 
-	RunTests $BuildConfiguration
+	#RunTests $BuildConfiguration
 
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
 	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire"
