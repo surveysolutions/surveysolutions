@@ -1,6 +1,8 @@
 ﻿var Notifier = function () {
     var self = this;
-    
+    var loadingIndicator = null;
+    var stack_modal = { "dir1": "down", "dir2": "right", "push": "top", "modal": true, "overlay_close": false };
+
     PNotify.prototype.options.styling = "bootstrap3";
 
     self.showError = function (title, message) {
@@ -9,6 +11,34 @@
 
     self.showNotification = function (title, message) {
         new PNotify({ title: title, text: message });
+    };
+
+    self.showLoadingIndicator = function () {
+        if (_.isNull(loadingIndicator))
+        {
+            var opts = {
+                title: "Loading, please wait",
+                text: false,
+                addclass: "stack-modal",
+                stack: stack_modal,
+                type: "info",
+                hide: false,
+                icon: false,
+                buttons: {
+                    sticker: false,
+                    closer: false
+                }
+            };
+           
+            loadingIndicator = new PNotify(opts);
+        }
+    };
+
+    self.hideLoadingIndicator = function () {
+        if (!_.isNull(loadingIndicator)) {
+            loadingIndicator.remove();
+            loadingIndicator = null;
+        }
     };
 
     return self;
@@ -32,6 +62,7 @@ var Ajax = function (notifier) {
         }
 
         self.isAjaxComplete(false);
+        notifier.showLoadingIndicator();
 
         var requestHeaders = {};
         requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
@@ -63,6 +94,8 @@ var Ajax = function (notifier) {
             }
         }).always(function () {
             self.isAjaxComplete(true);
+            notifier.hideLoadingIndicator();
+
             if (!_.isUndefined(onDone)) {
                 onDone();
             }
