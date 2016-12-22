@@ -638,7 +638,6 @@
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Dependencies\vendor\bootstrap-sass\assets\stylesheets\_bootstrap.scss" />
     <Content Include="Dependencies\css\_buttons.scss" />
     <Content Include="Dependencies\css\_forms.scss" />
     <Content Include="Dependencies\css\_navbar.scss" />
