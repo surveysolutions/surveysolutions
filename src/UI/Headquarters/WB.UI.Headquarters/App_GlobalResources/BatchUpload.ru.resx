@@ -383,4 +383,7 @@
   <data name="PrefilledRequiredData" xml:space="preserve">
     <value>Обязательные поля для заполнения для опросника</value>
   </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>Необходимо выбрать супервизора</value>
+  </data>
 </root>
