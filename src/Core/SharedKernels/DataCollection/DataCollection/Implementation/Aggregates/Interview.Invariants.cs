@@ -181,8 +181,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (applyStrongChecks)
             {
-                treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(answeredQuestion, selectedValue, 
-                    this.QuestionnaireIdentity, questionnaire.Translation);
+                treeInvariants.RequireCascadingQuestionAnswerCorrespondsToParentAnswer(answeredQuestion, selectedValue, this.QuestionnaireIdentity, questionnaire.Translation);
                 treeInvariants.RequireRosterVectorQuestionInstanceExists(questionId, rosterVector);
                 treeInvariants.RequireQuestionIsEnabled(answeredQuestion);
             }
