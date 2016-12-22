@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [CamelCase]
-        public async Task<DataTableResponse<QuestionnaireToBeImported>> QuestionnairesListNew([FromBody] DataTableRequest request)
+        public async Task<DataTableResponse<QuestionnaireToBeImported>> QuestionnairesList([FromBody] DataTableRequest request)
         {
             var list = await this.restService.GetAsync<PagedQuestionnaireCommunicationPackage>(
                 url: $"{this.apiPrefix}/{this.apiVersion}/questionnaires",
