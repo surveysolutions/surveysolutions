@@ -168,13 +168,22 @@ h5{
 		margin: 10px 0;
 	}
 }
+body > .ui-pnotify
+{
+    z-index: 100050;
+}
+.ui-pnotify-modal-overlay{
+    background-color: rgba(0,0,0,.2);
+}
 .ui-pnotify{
 	border-radius: 4px;
 	background: #fff;
 	box-shadow: 0 0 30px #323232;
+
  	.alert{
  		font-family: "RobotoMedium";
         padding: 15px;
+        margin: 0;
         &.alert-warning{
             border-top: 10px solid $blue;
             color: $blue;
@@ -199,6 +208,24 @@ h5{
 	  		line-height: 16px;
 	  	}
  	}
+
+    &.loading-indicator
+    {
+        border-radius: 0;
+        .ui-pnotify-container{
+            border-radius: 0;
+            box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
+        }
+        .ui-pnotify-container.alert{
+            padding: 30px 40px;
+            border-top: none;
+        }
+        .ui-pnotify-title{
+	  		font: 24px/26px "RobotoLight";
+            padding: 0;
+            margin: 0;
+	  	}
+    }
 }
 .error-text{
 	color: $red_error;
