@@ -70,6 +70,8 @@ function BuildStatiContent($targetLocation){
 
     Write-Host "##teamcity[progressFinish 'Building static files']"
     Write-Host "##teamcity[blockClosed name='Building static files']"
+	
+	return $wasBuildSuccessfull
 }
 function CheckPrerequisites() {
     Write-Host "##teamcity[blockOpened name='Checking prerequisities']"
