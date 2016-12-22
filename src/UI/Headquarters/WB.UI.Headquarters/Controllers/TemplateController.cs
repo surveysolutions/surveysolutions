@@ -62,14 +62,14 @@ namespace WB.UI.Headquarters.Controllers
         }
 
       
-        public async Task<ActionResult> ImportMode(Guid id)
+        public async Task<ActionResult> ImportMode(Guid id, string questionnaireTitle)
         {
             if (this.designerUserCredentials == null)
             {
                 return this.RedirectToAction("LoginToDesigner");
             }
 
-            var model = await this.GetImportModel(id);
+            var model = await this.GetImportModel(id, questionnaireTitle);
             return View(model);
         }
 
@@ -88,12 +88,12 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Index", "HQ");
             }
 
-            var model = await GetImportModel(id);
+            var model = await GetImportModel(id, name);
             model.ErrorMessage = result.ImportError;
             return this.View(model);
         }
 
-        private async Task<ImportModeModel> GetImportModel(Guid id)
+        private async Task<ImportModeModel> GetImportModel(Guid id, string questionnaireTitle)
         {
             ImportModeModel model = new ImportModeModel();
             try
@@ -109,7 +109,12 @@ namespace WB.UI.Headquarters.Controllers
             {
                 if (e.StatusCode == HttpStatusCode.NotFound)
                 {
-                    model.ErrorMessage = ImportQuestionnaire.QuestionnaireCannotBeFound;
+                    model.ErrorMessage = string.Format(ImportQuestionnaire.QuestionnaireCannotBeFound,
+                        string.IsNullOrWhiteSpace(questionnaireTitle) ? string.Empty : $"\"{questionnaireTitle}\"");
+                }
+                else
+                {
+                    model.ErrorMessage = Strings.UnexpectedErrorOccurred;
                 }
             }
 

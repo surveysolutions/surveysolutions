@@ -329,8 +329,6 @@ namespace WB.UI.Headquarters.Controllers
                 };
             }
 
-           
-
             return this.View(model);
         }
 
