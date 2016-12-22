@@ -169,7 +169,7 @@
 #DataTables_Table_0_wrapper{
     position: relative;
     #DataTables_Table_0_filter{
-        @include absolute(0, null, null, 0);
+        @include absolute(5px, null, null, 0);
         z-index: 2;
         label{
             font-size: 0;
@@ -316,10 +316,10 @@
 }
 @media (max-width: $screen-md-min){
     #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input{
-        width: 250px;
+        width: 200px;
     }
     .table-ordered thead th.padding-left-slide:first-child{
-        padding-left: 315px;
+        padding-left: 265px;
     }
     .dataTables_paginate{
         margin-bottom: 30px;
@@ -346,14 +346,26 @@
         }
     }
     #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+        position: relative;
+        top: 0;
         left: 0;
-        label.active input{
-            width: 150px;
-            margin-left: 40px;
+        label{
+            &:after{
+                top: 40px;
+            }
+            &.active {
+                width: 100%;
+                input{
+                    width: 80%;
+                }
+            }
         }
     }
     .table-ordered{
         thead{
+            th.padding-left-slide:first-child{
+                padding-left: 45px;
+            }
             tr th{
                 &:after{
                     border-width: 4px;

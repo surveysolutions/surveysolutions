@@ -3,19 +3,18 @@
 	.container, .container-fluid{
 		padding: 0 ($margin-container/2) 0 ($margin-container/2);
 	}
-	/* border: none; */
 	min-width: 400px;
 	min-height: 60px;
 	margin-bottom: 0;
 	.navbar-header .navbar-brand{
 		position: relative;
-		padding: 24px 10px 24px 45px;
 		margin-left: 0;
 		@extend %font-header;
 		&:hover, &:focus{
 			font-family: "RobotoBold";
 		}
 		.brand-name{
+			padding: 8px 10px 8px 30px;
 			&::after {
 			   	display:block;
 			    font-family: "RobotoBold";
