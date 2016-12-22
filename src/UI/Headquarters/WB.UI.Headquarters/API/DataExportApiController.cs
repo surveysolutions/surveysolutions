@@ -149,7 +149,9 @@ namespace WB.UI.Headquarters.API
             Stream exportZipStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
             if (this.exportSettings.EncryptionEnforced())
-                exportZipStream = this.zipArchiveProtectionService.ProtectZipWithPassword(exportZipStream, this.exportSettings.GetPassword());
+            {
+                exportZipStream = this.SetPasswordToZipFileAndSaveNearOriginalFile(filePath, exportZipStream);
+            }
 
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportZipStream, @"application/zip");
             
@@ -159,6 +161,20 @@ namespace WB.UI.Headquarters.API
             };
 
             return result;
+        }
+
+        private Stream SetPasswordToZipFileAndSaveNearOriginalFile(string filePath, Stream exportZipStream)
+        {
+            var originZipFileName = this.fileSystemAccessor.GetFileNameWithoutExtension(filePath);
+            var originZipDirectory = this.fileSystemAccessor.GetDirectory(filePath);
+            var protectedZipFileName = $"{originZipFileName}_protected.zip";
+            var protectedZipFullPath = this.fileSystemAccessor.CombinePath(originZipDirectory, protectedZipFileName);
+
+            var outputZipStream = new FileStream(protectedZipFullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+            this.zipArchiveProtectionService.ProtectZipWithPassword(exportZipStream, outputZipStream, this.exportSettings.GetPassword());
+            exportZipStream = outputZipStream;
+            return exportZipStream;
         }
     }
 }
