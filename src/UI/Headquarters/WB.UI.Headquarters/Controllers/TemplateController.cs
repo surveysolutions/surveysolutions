@@ -107,14 +107,18 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (RestException e)
             {
-                if (e.StatusCode == HttpStatusCode.NotFound)
+                switch (e.StatusCode)
                 {
-                    model.ErrorMessage = string.Format(ImportQuestionnaire.QuestionnaireCannotBeFound,
-                        string.IsNullOrWhiteSpace(questionnaireTitle) ? string.Empty : $"\"{questionnaireTitle}\"");
-                }
-                else
-                {
-                    model.ErrorMessage = Strings.UnexpectedErrorOccurred;
+                    case HttpStatusCode.NotFound:
+                        model.ErrorMessage = string.Format(ImportQuestionnaire.QuestionnaireCannotBeFound,
+                            string.IsNullOrWhiteSpace(questionnaireTitle) ? string.Empty : $"\"{questionnaireTitle}\"");
+                        break;
+                    case HttpStatusCode.Forbidden:
+                        model.ErrorMessage = e.Message;
+                        break;
+                    default:
+                        model.ErrorMessage = Strings.UnexpectedErrorOccurred;
+                        break;
                 }
             }
 
