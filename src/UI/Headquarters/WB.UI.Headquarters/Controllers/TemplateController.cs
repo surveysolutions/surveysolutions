@@ -95,24 +95,24 @@ namespace WB.UI.Headquarters.Controllers
 
         private async Task<ImportModeModel> GetImportModel(Guid id)
         {
-            QuestionnaireInfo questionnaireInfo = null;
             ImportModeModel model = new ImportModeModel();
             try
             {
-                questionnaireInfo = await this.designerQuestionnaireApiRestService
+                var questionnaireInfo = await this.designerQuestionnaireApiRestService
                     .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}",
                         credentials: this.designerUserCredentials);
+
+                model.QuestionnaireInfo = questionnaireInfo;
+                model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
             }
             catch (RestException e)
             {
                 if (e.StatusCode == HttpStatusCode.NotFound)
                 {
                     model.ErrorMessage = ImportQuestionnaire.QuestionnaireCannotBeFound;
-                    return model;
                 }
             }
-            model.QuestionnaireInfo = questionnaireInfo;
-            model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
+
             return model;
         }
 
