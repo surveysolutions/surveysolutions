@@ -1,10 +1,5 @@
-﻿using System;
-using System.Linq;
-using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+﻿using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
