@@ -4,6 +4,6 @@ namespace WB.Core.Infrastructure.FileSystem
 {
     public interface IZipArchiveProtectionService
     {
-        Stream ProtectZipWithPassword(Stream inputZipStream, string password);
+        void ProtectZipWithPassword(Stream inputZipStream, Stream outputProtectedZipStream, string password);
     }
 }
