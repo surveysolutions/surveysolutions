@@ -51,7 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             ITransactionManagerProvider transactionManagerProvider,
             IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage,
             IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor, 
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, IPlainTransactionManagerProvider plainTransactionManagerProvider,
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, 
+            IPlainTransactionManagerProvider plainTransactionManagerProvider,
             ILogger logger)
         {
             this.eventStore = eventStore;

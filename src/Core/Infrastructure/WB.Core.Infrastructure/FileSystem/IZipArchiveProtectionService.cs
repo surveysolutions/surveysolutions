@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
     public interface IZipArchiveProtectionService
     {
-        Stream ProtectZipWithPassword(Stream inputZipStream, string password);
+        void ZipFiles(IEnumerable<string> files, string archiveFilePath, string password = null);
     }
 }

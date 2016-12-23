@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Security;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
@@ -26,16 +27,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
 
         public TabularFormatDataExportHandler(
-            IFileSystemAccessor fileSystemAccessor, 
-            IArchiveUtils archiveUtils, 
+            IFileSystemAccessor fileSystemAccessor,
+            IZipArchiveProtectionService archiveUtils, 
             InterviewDataExportSettings interviewDataExportSettings, 
             ITransactionManagerProvider transactionManagerProvider, 
             ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IDataExportProcessesService dataExportProcessesService,
-            ILogger logger, IQuestionnaireExportStructureStorage questionnaireExportStructureStorage) : 
-            base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger)
+            ILogger logger, 
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
+            IExportSettings exportSettings,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider) : 
+            base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger, exportSettings, plainTransactionManagerProvider)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.tabularFormatExportService = tabularFormatExportService;
