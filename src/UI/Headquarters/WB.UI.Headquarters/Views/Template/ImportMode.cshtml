@@ -7,6 +7,13 @@
 }
 @section scripts
 {
+    <script type="text/javascript">
+        $(function () {
+            $(".import-questionnaire-form").submit(function () {
+                $(".import-questionnaire-form button:submit").attr("disabled", "disabled");
+            });
+        })
+    </script>
 }
 
 <main>
