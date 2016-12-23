@@ -70,8 +70,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             groupStateViewModel.Init(interviewId, sectionIdentity);
 
-            this.ParentsIdentities =
-                interview.GetGroup(this.SectionIdentity).Parents?.Select(section => section?.Identity)?.ToArray() ??
+            var interviewTreeGroup = interview.GetGroup(this.SectionIdentity);
+
+            this.ParentIdentity = interviewTreeGroup?.Parent?.Identity;
+
+            this.ParentsIdentities = interviewTreeGroup?.Parents?.Select(section => section?.Identity)?.ToArray() ??
                 Enumerable.Empty<Identity>().ToArray();
 
             this.NodeDepth = this.ParentsIdentities.Length;
@@ -101,6 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public Identity SectionIdentity { get; private set; }
         public Identity[] ParentsIdentities { get; private set; }
+        public Identity ParentIdentity { get; private set; }
 
         private bool isSelected;
         public bool IsSelected
