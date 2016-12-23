@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to change protection state? You will need to regenerate exported data in order to open it..
+        /// </summary>
+        internal static string ChangeStateConfirm {
+            get {
+                return ResourceManager.GetString("ChangeStateConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable encryption.
         /// </summary>
         internal static string EnableEncryption {

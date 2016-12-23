@@ -83,6 +83,11 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             Directory.Delete(path, true);
         }
 
+        public string GetDirectory(string path)
+        {
+            return Path.GetDirectoryName(path);
+        }
+
         public bool IsFileExists(string pathToFile)
         {
             return File.Exists(pathToFile);

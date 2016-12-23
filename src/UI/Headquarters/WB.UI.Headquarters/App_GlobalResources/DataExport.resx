@@ -159,6 +159,9 @@
   <data name="BinaryDescription" xml:space="preserve">
     <value>All collected external binary data (e.g. pictures)</value>
   </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>You can't change export settings, because export process is running.</value>
+  </data>
   <data name="Bytes" xml:space="preserve">
     <value>MB</value>
   </data>
