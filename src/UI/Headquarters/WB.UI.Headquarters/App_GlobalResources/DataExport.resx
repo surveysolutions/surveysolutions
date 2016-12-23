@@ -211,7 +211,7 @@
     <value>Status of exported interviews</value>
   </data>
   <data name="SurveyTemplateTitle" xml:space="preserve">
-    <value>Survey template (questionnaire version)</value>
+    <value>(version) Survey template </value>
   </data>
   <data name="ZipArchiveDescription" xml:space="preserve">
     <value>Zip archive with all collected text interview data</value>

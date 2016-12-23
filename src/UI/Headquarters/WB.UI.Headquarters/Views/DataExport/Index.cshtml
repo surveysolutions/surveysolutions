@@ -88,11 +88,8 @@
                     <h4>@DataExport.ExportRange</h4>
                     <div class="block-filter">
                         <h5>@DataExport.SurveyTemplateTitle</h5>
-                        <div class="btn-group btn-input clearfix">
-                            <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="selectpicker"></select>
-                        </div>
-                    </div>
-                    <div class="block-filter checkbox-block">
+                        <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="selectpicker"></select>
+                        
                         <h5>@DataExport.StatusOfExportTitle</h5>
                         <select class="selectpicker" id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title'"></select>
                     </div>
