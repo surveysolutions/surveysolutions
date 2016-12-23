@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using MvvmCross.Platform.Core;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
@@ -51,6 +52,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
+            this.CheckReentrancy();
+
             try
             {
                 this.SuppressEvents = true;
@@ -70,6 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
 
+            this.CheckReentrancy();
+
             try
             {
                 this.SuppressEvents = true;
@@ -88,6 +93,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         public void RemoveRange(IEnumerable<T> collection)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
+
+            this.CheckReentrancy();
 
             try
             {
