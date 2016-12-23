@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
-                    this.UpdateSelfFromModel();
+                    this.Answer = string.Empty;
                 }
             }
         }
