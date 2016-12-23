@@ -33,11 +33,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.WriteToSyncLogAttribu
 
         private static WriteToSyncLogAttribute attribute;
         private static HttpActionExecutedContext actionContext;
-
-        protected static HttpActionExecutedContext CreateActionContext()
-        {
-            return new HttpActionExecutedContext(
-                new HttpActionContext(new HttpControllerContext(), new ReflectedHttpActionDescriptor()), null); 
-        }
     }
 }
