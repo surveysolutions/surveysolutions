@@ -53,7 +53,7 @@ function BuildStatiContent($targetLocation){
     }
 	
 	#install bower packages
-	&bower install | Write-Host
+	&bower install --force --offline | Write-Host
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 	 if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install']"

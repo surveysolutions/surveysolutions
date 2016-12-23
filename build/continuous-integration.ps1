@@ -39,9 +39,6 @@ try {
 		-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
 		-OutFileName $PackageName | %{ if (-not $_) { Exit } }
 
-
-	RunTests $BuildConfiguration
-
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
 	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire" | %{ if (-not $_) { Exit } }
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
@@ -55,6 +52,8 @@ try {
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
+	#RunTests $BuildConfiguration
+	
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
