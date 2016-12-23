@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
@@ -15,6 +16,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class SideBarSectionsViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<GroupsEnabled>,
+        ILiteEventHandler<GroupsDisabled>,
+        ILiteEventHandler<RosterInstancesRemoved>,
         IDisposable
     {
         private class InsertedSubSection
@@ -36,7 +39,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private readonly MvxSubscriptionToken sectionExpandSubscriptionToken;
         private readonly MvxSubscriptionToken sectionCollapseSubscriptionToken;
-        private readonly MvxSubscriptionToken sectionRemoveSubscriptionToken;
         private readonly MvxSubscriptionToken sectionUpdateSubscriptionToken;
 
         private ObservableRangeCollection<ISideBarItem> allVisibleSections;
@@ -62,7 +64,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry = eventRegistry;
             this.sectionExpandSubscriptionToken = this.messenger.Subscribe<SideBarSectionExpandMessage>(OnSideBarSectionExpanded);
             this.sectionCollapseSubscriptionToken = this.messenger.Subscribe<SideBarSectionCollapseMessage>(OnSideBarSectionCollapsed);
-            this.sectionRemoveSubscriptionToken = this.messenger.Subscribe<SideBarSectionRemoveMessage>(OnSideBarSectionRemoved);
             this.sectionUpdateSubscriptionToken = this.messenger.Subscribe<SideBarSectionUpdateMessage>(OnSideBarSectionUpdated);
         }
 
@@ -156,9 +157,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void OnSideBarSectionRemoved(SideBarSectionRemoveMessage e)
-            => this.DisposeAndRemoveSection(e.RemovedGroup);
-
         private void OnSideBarSectionCollapsed(SideBarSectionCollapseMessage e)
             => this.CollapseSection(e.CollapsedGroup);
 
@@ -186,15 +184,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.AllVisibleSections.InsertRange(indexOfExpandedGroup + 1, this.GetSubSections(expandedSection));
         }
 
-        private void DisposeAndRemoveSection(Identity sectionIdentity)
-        {
-            var sectionWithChildrenViewModels = this.sectionViewModels
-                .Where(section =>section.SectionIdentity == sectionIdentity || section.ParentsIdentities.Contains(sectionIdentity))
-                .ToList();
-
-            this.AllVisibleSections.RemoveRange(sectionWithChildrenViewModels);
-        }
-
         private void AddSection(Identity addedSection)
         {
             var enabledSections = this.GetEnabledSectionIdentites().ToList();
@@ -216,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var sectionViewModel = this.modelsFactory.BuildSectionItem(addedSection, this.navigationState,
                 this.interviewId);
 
-            this.AllVisibleSections.Insert(indexOfSection, sectionViewModel);
+            this.AllVisibleSections.InsertRange(indexOfSection, new[] {sectionViewModel});
         }
 
         private IEnumerable<ISideBarItem> GetSubSections(Identity expandedGroup)
@@ -274,13 +263,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.AddSection(addedSection);
         }
 
+        public void Handle(GroupsDisabled @event)
+        {
+            var removedViewModels = this.sectionViewModels.Where(
+                    sectionViewModel => @event.Groups.Contains(sectionViewModel.SectionIdentity)).ToList();
+
+            if(removedViewModels.Any())
+                this.AllVisibleSections.RemoveRange(removedViewModels);
+        }
+
+        public void Handle(RosterInstancesRemoved @event)
+        {
+            var removedViewModels = this.sectionViewModels.Where(sectionViewModel =>
+                    @event.Instances.Select(x => x.GetIdentity()).Contains(sectionViewModel.SectionIdentity)).ToList();
+
+            if (removedViewModels.Any())
+                this.AllVisibleSections.RemoveRange(removedViewModels);
+        }
+
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
 
             this.messenger.Unsubscribe<SideBarSectionCollapseMessage>(this.sectionCollapseSubscriptionToken);
             this.messenger.Unsubscribe<SideBarSectionExpandMessage>(this.sectionExpandSubscriptionToken);
-            this.messenger.Unsubscribe<SideBarSectionRemoveMessage>(this.sectionRemoveSubscriptionToken);
             this.messenger.Unsubscribe<SideBarSectionUpdateMessage>(this.sectionUpdateSubscriptionToken);
 
             this.AllVisibleSections.ForEach(x => x.Dispose());
