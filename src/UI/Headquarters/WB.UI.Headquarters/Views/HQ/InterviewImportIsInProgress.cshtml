@@ -29,7 +29,7 @@
             <div class="col-sm-7 col-xs-12 action-block">
                 <div class="import-progress">
                     <p class="error-text">@BatchUpload.ImportInProgress</p>
-                    <p>@Html.ActionLink(BatchUpload.RunningInterviewImportProcess, "InterviewImportProgress", "HQ", new { id = Model.CurrentProcessId})</p>
+                    <p>@Html.ActionLink(BatchUpload.RunningInterviewImportProcess, "InterviewImportProgress", "HQ", new { id = Model.CurrentProcessId}, new {})</p>
                 </div>
                 <div class="action-buttons">
                     @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "HQ", new { id = Model.Questionnaire.Id, version = Model.Questionnaire.Version }, new { })
