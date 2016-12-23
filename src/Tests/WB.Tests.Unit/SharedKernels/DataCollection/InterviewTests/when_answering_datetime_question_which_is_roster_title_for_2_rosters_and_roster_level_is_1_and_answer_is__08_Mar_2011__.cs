@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_set_title_to__3_slash_8_slash_2011__in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.Title == dateAnswer.ToLocalTime().ToShortDateString()));
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.Title == dateAnswer.ToShortDateString()));
 
         private static EventContext eventContext;
         private static Interview interview;
