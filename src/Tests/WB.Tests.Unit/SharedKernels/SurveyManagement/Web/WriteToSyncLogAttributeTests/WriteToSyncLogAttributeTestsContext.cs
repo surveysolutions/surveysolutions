@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
+using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
@@ -17,5 +19,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.WriteToSyncLogAttribu
             return new WriteToSyncLogAttribute(logType);
         }
 
+        protected static HttpActionExecutedContext CreateActionContext()
+        {
+            return new HttpActionExecutedContext(
+                new HttpActionContext(new HttpControllerContext(), new ReflectedHttpActionDescriptor()), null);
+        }
     }
 }

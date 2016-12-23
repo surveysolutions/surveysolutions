@@ -136,6 +136,6 @@
     <value>название</value>
   </data>
   <data name="QuestionnaireCannotBeFound" xml:space="preserve">
-    <value>Опросник не найден</value>
+    <value>Опросник '{0}' не найден</value>
   </data>
 </root>

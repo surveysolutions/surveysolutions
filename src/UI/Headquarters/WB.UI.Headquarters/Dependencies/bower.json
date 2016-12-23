@@ -26,9 +26,10 @@
     "lodash": "^4.17.2",
     "datatables.net": "^1.10.13",
     "datatables.net-select": "^1.2.1",
-    "pnotify": "^3.0.0"
+    "pnotify": "^3.0.0",
+    "bootstrap-select": "^1.12.1"
   },
-  "devDependencies": { },
+  "devDependencies": {},
   "overrides": {
     "knockout-mapping": {
       "main": "build/output/knockout.mapping-latest.js"
@@ -43,7 +44,6 @@
         "dist/pnotify.buttons.js",
         "dist/pnotify.callbacks.js",
         "dist/pnotify.confirm.js",
-
         "dist/pnotify.desktop.js",
         "dist/pnotify.history.css",
         "dist/pnotify.history.js",

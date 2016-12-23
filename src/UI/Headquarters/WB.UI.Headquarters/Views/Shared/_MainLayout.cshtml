@@ -40,8 +40,7 @@
 </head>
 <body>
     <header>
-        <div class="container-fluid">
-            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
                 <div class="container-fluid ">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
@@ -75,11 +74,10 @@
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
             </nav>
-        </div>
     </header>
     @RenderBody()
     
-    <footer class="footer @(ViewBag.AdaptiveFooter == true ? "footer-adaptive" :"")">
+    <footer class="footer">
         <div class="container-fluid">
             <div class="text-left">
                 &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
