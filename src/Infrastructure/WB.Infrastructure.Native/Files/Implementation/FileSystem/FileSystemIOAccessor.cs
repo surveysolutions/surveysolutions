@@ -134,6 +134,10 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         {
             ZlpIOHelper.DeleteDirectory(path, true);
         }
+        public string GetDirectory(string path)
+        {
+            return ZlpPathHelper.GetDirectory(path);
+        }
 
         public bool IsFileExists(string pathToFile)
         {

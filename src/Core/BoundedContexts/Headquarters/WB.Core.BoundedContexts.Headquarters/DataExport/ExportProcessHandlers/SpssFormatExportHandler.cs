@@ -7,8 +7,10 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
@@ -17,14 +19,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
         public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-            IArchiveUtils archiveUtils,
+            IZipArchiveProtectionService archiveUtils,
             InterviewDataExportSettings interviewDataExportSettings, 
             ITabularFormatExportService tabularFormatExportService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService, 
             IDataExportProcessesService dataExportProcessesService,
-            ILogger logger)
-            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger)
+            ILogger logger,
+            IExportSettings exportSettings,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger, exportSettings, plainTransactionManagerProvider)
         {
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }

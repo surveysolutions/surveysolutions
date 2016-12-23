@@ -147,10 +147,6 @@ namespace WB.UI.Headquarters.API
                 throw new HttpException(404, @"file is absent");
 
             Stream exportZipStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-
-            if (this.exportSettings.EncryptionEnforced())
-                exportZipStream = this.zipArchiveProtectionService.ProtectZipWithPassword(exportZipStream, this.exportSettings.GetPassword());
-
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportZipStream, @"application/zip");
             
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")

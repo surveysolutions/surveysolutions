@@ -144,4 +144,7 @@
   <data name="LogoNotUpdated" xml:space="preserve">
     <value>Логотип не был обновлён. Предоставьте правильное изображение</value>
   </data>
+  <data name="ChangeStateConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите изменить настройки шифрования? Экспортные данные необходимо будет обновить перед тем как скачать.</value>
+  </data>
 </root>
