@@ -211,7 +211,7 @@
     <value>Статус  экспортируемых интервью</value>
   </data>
   <data name="SurveyTemplateTitle" xml:space="preserve">
-    <value>Шаблон обследования (версия опросника)</value>
+    <value>(версия) Шаблон обследования</value>
   </data>
   <data name="ZipArchiveDescription" xml:space="preserve">
     <value>Зип архив с собранными данными</value>

@@ -151,20 +151,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can&apos;t change export settings, because export process is running..
-        /// </summary>
-        internal static string ErrorThereAreRunningProcesses {
-            get {
-                return ResourceManager.GetString("ErrorThereAreRunningProcesses", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         internal static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t change export settings, because export process is running..
+        /// </summary>
+        internal static string ErrorThereAreRunningProcesses {
+            get {
+                return ResourceManager.GetString("ErrorThereAreRunningProcesses", resourceCulture);
             }
         }
         
@@ -340,7 +340,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey template (questionnaire version).
+        ///   Looks up a localized string similar to (version) Survey template .
         /// </summary>
         internal static string SurveyTemplateTitle {
             get {
