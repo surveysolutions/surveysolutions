@@ -232,6 +232,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Items in export queue:.
+        /// </summary>
+        internal static string ItemsInQueue {
+            get {
+                return ResourceManager.GetString("ItemsInQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last generated.
         /// </summary>
         internal static string LastGeneratedTitle {
