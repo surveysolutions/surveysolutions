@@ -219,4 +219,7 @@
   <data name="XMLFileDescription" xml:space="preserve">
     <value>XML формат</value>
   </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>В очереди на экспорт: </value>
+  </data>
 </root>
