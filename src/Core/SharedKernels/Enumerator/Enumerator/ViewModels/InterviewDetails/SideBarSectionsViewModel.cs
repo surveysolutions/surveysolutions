@@ -17,6 +17,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<GroupsEnabled>,
         IDisposable
     {
+        private class InsertedSubSection
+        {
+            public Guid Id { get; set; }
+            public int Index { get; set; }
+            public ISideBarSectionItem Section { get; set; }
+        }
+
         private readonly IMvxMessenger messenger;
         private readonly ILiteEventRegistry eventRegistry;
         private NavigationState navigationState;
@@ -84,20 +91,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs e)
         {
-            var enabledSectionIdentites = this.GetEnabledSectionIdentites().ToList();
             var expandedSectionIdentities = this.GetExpandedSectionsIdentities(e.TargetGroup).ToList();
 
-            var removedSubsections = this.sectionViewModels.Where(
-                sectionViewModel =>
-                    !enabledSectionIdentites.Contains(sectionViewModel.SectionIdentity) &&
-                    !expandedSectionIdentities.Contains(sectionViewModel.SectionIdentity)).ToList();
-
-            this.AllVisibleSections.RemoveRange(removedSubsections);
+            this.AllVisibleSections.RemoveRange(this.GetSectionsToRemove(expandedSectionIdentities).ToList());
 
             foreach (var expandedGroup in expandedSectionIdentities)
                 this.ExpandSection(expandedGroup, false);
         }
-        
+
+        private IEnumerable<ISideBarItem> GetSectionsToRemove(List<Identity> expandedSectionIdentities)
+        {
+            var enabledSectionIdentites = this.GetEnabledSectionIdentites().ToList();
+
+            foreach (var sectionViewModel in this.sectionViewModels)
+            {
+                if (enabledSectionIdentites.Contains(sectionViewModel.SectionIdentity))
+                    continue;
+
+                if (expandedSectionIdentities.Contains(sectionViewModel.SectionIdentity))
+                    continue;
+                
+                if(expandedSectionIdentities.Contains(sectionViewModel.ParentIdentity))
+                    continue;
+
+                yield return sectionViewModel;
+            }
+        }
+
         private void OnSideBarSectionUpdated(SideBarSectionUpdateMessage e)
         {
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
@@ -109,6 +129,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var enabledSubSections = interview.GetEnabledSubgroups(e.UpdatedGroup).ToList();
 
+            var insertedSubSections = new List<InsertedSubSection>();
+
             foreach (var sectionIdentity in enabledSubSections)
             {
                 if (this.sectionViewModels.Any(section => section.SectionIdentity == sectionIdentity))
@@ -118,7 +140,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.navigationState, this.interviewId);
 
                 var indexOfSubsection = indexOfUpdatedGroup + enabledSubSections.IndexOf(sectionIdentity) + 1;
-                this.AllVisibleSections.Insert(indexOfSubsection, sectionViewModel);
+
+                insertedSubSections.Add(new InsertedSubSection
+                {
+                    Id = sectionIdentity.Id,
+                    Index = indexOfSubsection,
+                    Section = sectionViewModel
+                });
+            }
+
+            foreach (var subSectionsBySectionId in insertedSubSections.GroupBy(x => x.Id))
+            {
+                this.AllVisibleSections.InsertRange(subSectionsBySectionId.First().Index,
+                    subSectionsBySectionId.Select(x => x.Section));
             }
         }
 
@@ -134,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void CollapseSection(Identity collapsedSection)
         {
             var collapsedViewModels = this.sectionViewModels.Where(
-                sectionViewModel => sectionViewModel.ParentsIdentities.Contains(collapsedSection));
+                sectionViewModel => sectionViewModel.ParentsIdentities.Contains(collapsedSection)).ToList();
 
             this.AllVisibleSections.RemoveRange(collapsedViewModels);
         }
@@ -155,8 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void DisposeAndRemoveSection(Identity sectionIdentity)
         {
             var sectionWithChildrenViewModels = this.sectionViewModels
-                .Where(section =>
-                    section.SectionIdentity == sectionIdentity || section.ParentsIdentities.Contains(sectionIdentity))
+                .Where(section =>section.SectionIdentity == sectionIdentity || section.ParentsIdentities.Contains(sectionIdentity))
                 .ToList();
 
             this.AllVisibleSections.RemoveRange(sectionWithChildrenViewModels);
@@ -164,7 +197,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void AddSection(Identity addedSection)
         {
-            throw new NotImplementedException();
+            var enabledSections = this.GetEnabledSectionIdentites().ToList();
+
+            var indexOfSection = enabledSections.IndexOf(addedSection);
+
+            var prevSectionIdentity = enabledSections.ElementAt(indexOfSection - 1);
+            var prevSectionViewModel = this.sectionViewModels.FirstOrDefault(viewModel => viewModel.SectionIdentity == prevSectionIdentity);
+
+            if (prevSectionViewModel != null)
+            {
+                var indexOfPrevSection = this.AllVisibleSections.IndexOf(prevSectionViewModel);
+                var numberOfPrevSectionChildren = this.sectionViewModels.Count(
+                    viewModel => viewModel.ParentsIdentities.Contains(prevSectionIdentity));
+
+                indexOfSection = indexOfPrevSection + numberOfPrevSectionChildren + 1;
+            }
+
+            var sectionViewModel = this.modelsFactory.BuildSectionItem(addedSection, this.navigationState,
+                this.interviewId);
+
+            this.AllVisibleSections.Insert(indexOfSection, sectionViewModel);
         }
 
         private IEnumerable<ISideBarItem> GetSubSections(Identity expandedGroup)

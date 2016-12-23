@@ -114,9 +114,9 @@ namespace WB.Tests.Integration
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
                 messenger: mvxMessenger,
-                mainThreadDispatcher: Mock.Of<IMvxMainThreadDispatcher>());
+                eventRegistry: liteEventRegistry);
 
-            sidebarViewModel.Init("", new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), navigationState);
+            sidebarViewModel.Init("", navigationState);
 
             return sidebarViewModel;
         }
