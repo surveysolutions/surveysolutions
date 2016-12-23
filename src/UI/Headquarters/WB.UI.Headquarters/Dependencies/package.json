@@ -13,6 +13,7 @@
     "gulp-debug": "^3.0.0",
     "gulp-inject": "^4.1.0",
     "gulp-load-plugins": "^1.4.0",
+    "gulp-main-bower-files": "^1.6.0",
     "gulp-ng-annotate": "^2.0.0",
     "gulp-notify": "^2.2.0",
     "gulp-rename": "^1.2.2",
@@ -21,9 +22,6 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "main-bower-files": "^2.13.1"
-  },
-  "scripts": {
-    "install": "node_modules\\.bin\\bower install --force"  
   },
   "dependencies": {
     "gulp-install": "^0.6.0"

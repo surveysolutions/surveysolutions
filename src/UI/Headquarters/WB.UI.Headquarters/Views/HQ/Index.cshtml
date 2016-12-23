@@ -121,9 +121,9 @@
                         @if (User.IsInRole("Administrator"))
                         {
                             <div class="btn-group pull-right">
-                                <a class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
+                                <button type="button" class="btn btn-danger" data-bind="click : $parent.deleteQuestionnaire">
                                     <i class="glyphicon glyphicon-remove"></i>
-                                </a>
+                                </button>
                             </div>
                         }
                     </td>

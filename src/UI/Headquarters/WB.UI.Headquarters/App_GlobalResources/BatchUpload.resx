@@ -298,7 +298,7 @@
     <value>Verify data</value>
   </data>
   <data name="ImportInProgress" xml:space="preserve">
-    <value>Other interview import process is running. Only one interview import process at a time is allowed. Wait until the process is finished and upload the sample again.</value>
+    <value>Other interview import process is running. Only one interview import process at a time is allowed. Wait until the process is finished and upload the sample again. Follow the link if you want to get more detailed progress information about the other import process.</value>
   </data>
   <data name="CreateSample" xml:space="preserve">
     <value>Create interviews from this data</value>

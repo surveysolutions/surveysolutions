@@ -291,11 +291,14 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
-            return this.View(new PreloadedDataQuestionnaireModel
-            {
-                QuestionnaireId = questionnaireId,
-                Version = version,
-                QuestionnaireTitle = questionnaireInfo?.Title
+            return this.View(new PreloadedDataInProgressModel {
+                Questionnaire = new PreloadedDataQuestionnaireModel
+                {
+                    Id = questionnaireId,
+                    Version = version,
+                    Title = questionnaireInfo?.Title
+                },
+                CurrentProcessId = this.interviewImportService.Status.InterviewImportProcessId
             });
         }
 
@@ -325,8 +328,6 @@ namespace WB.UI.Headquarters.Controllers
                     QuestionnaireTitle = questionnaireInfo?.Title
                 };
             }
-
-           
 
             return this.View(model);
         }

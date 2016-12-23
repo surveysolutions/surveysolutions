@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire cannot be found.
+        ///   Looks up a localized string similar to Requested questionnaire {0} cannot be found. Please refresh the list of questionnaires.
         /// </summary>
         public static string QuestionnaireCannotBeFound {
             get {

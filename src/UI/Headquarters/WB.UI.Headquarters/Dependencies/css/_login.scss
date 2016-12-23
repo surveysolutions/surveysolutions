@@ -5,6 +5,14 @@
         text-align: left;
     }
 }
+#import-log-in{
+    .form-group:first-of-type::before{
+        display: block;
+        content: "";
+        width: 100%;
+        height: 1px;
+    }
+}
 img#placeholder {
     max-width: 365px;
     font-size: 0;

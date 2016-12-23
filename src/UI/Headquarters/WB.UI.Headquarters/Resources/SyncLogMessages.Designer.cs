@@ -214,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download translations for questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}].
+        /// </summary>
+        public static string GetTranslations {
+            get {
+                return ResourceManager.GetString("GetTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewer has device already.
         /// </summary>
         public static string InterviewerHasDevice {

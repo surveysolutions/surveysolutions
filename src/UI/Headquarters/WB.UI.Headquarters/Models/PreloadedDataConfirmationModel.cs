@@ -8,13 +8,18 @@ namespace WB.UI.Headquarters.Models
 {
     public class PreloadedDataQuestionnaireModel
     {
-        public Guid QuestionnaireId { get; set; }
+        public Guid Id { get; set; }
 
         public long Version { get; set; }
 
-        public string QuestionnaireTitle { get; set; }
+        public string Title { get; set; }
     }
 
+    public class PreloadedDataInProgressModel
+    {
+        public PreloadedDataQuestionnaireModel Questionnaire { get; set; }
+        public string CurrentProcessId { get; set; }
+    }
     public class PreloadedDataConfirmationModel : IValidatableObject
     {
         public string Id { get; set; }
