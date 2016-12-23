@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -132,9 +133,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                 }
             }
-            catch (MissingPermissionsException)
+            catch (MissingPermissionsException e)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
+                switch (e.Permission)
+                {
+                    case Permission.Camera:
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
+                        break;
+                    case Permission.Storage:
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
+                        break;
+                    default:
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
+                        break;
+                }
             }
         }
 
