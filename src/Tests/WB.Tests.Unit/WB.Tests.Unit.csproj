@@ -609,6 +609,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_for_GetInterviewPackage_and__called_without_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\when_on_action_executed_called_for_GetInterview_and_param_of_unexpected_type.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\WriteToSyncLogAttributeTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\WriteToSyncLogAttributeTests\WriteToSyncLogTests.cs" />
     <Compile Include="SyncAsyncRunner.cs" />
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
