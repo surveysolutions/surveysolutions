@@ -63,6 +63,8 @@
     <script>
         $(document).ready(function ()
         {
+            $("footer").addClass("footer-adaptive");
+
             $("#hide-filters").click(function () {
                 $(".filters").toggleClass("hidden-filters");
                 $(this).parents('.row').toggleClass("fullscreen");

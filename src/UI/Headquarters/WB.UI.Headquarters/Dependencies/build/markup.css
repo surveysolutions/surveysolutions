@@ -5988,7 +5988,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
         height: 35px; }
         .table tbody tr td span {
           color: #a6a8a9; }
-        .table tbody tr td .caret {
+        .table tbody tr td .pull-right .glyphicon-remove, .table tbody tr td .caret {
           color: #fff; }
         .table tbody tr td a {
           transition: all 0.3s linear 0s;
@@ -6945,13 +6945,20 @@ h5, .preset-filters-container a {
   .alert div ul li {
     margin: 10px 0; }
 
+body > .ui-pnotify {
+  z-index: 100050; }
+
+.ui-pnotify-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.2); }
+
 .ui-pnotify {
   border-radius: 4px;
   background: #fff;
   box-shadow: 0 0 30px #323232; }
   .ui-pnotify .alert {
     font-family: "RobotoMedium";
-    padding: 15px; }
+    padding: 15px;
+    margin: 0; }
     .ui-pnotify .alert.alert-warning {
       border-top: 10px solid #2a81cb;
       color: #2a81cb; }
@@ -6969,6 +6976,18 @@ h5, .preset-filters-container a {
     .ui-pnotify .alert .ui-pnotify-text {
       font-size: 14px;
       line-height: 16px; }
+  .ui-pnotify.loading-indicator {
+    border-radius: 0; }
+    .ui-pnotify.loading-indicator .ui-pnotify-container {
+      border-radius: 0;
+      box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1); }
+    .ui-pnotify.loading-indicator .ui-pnotify-container.alert {
+      padding: 30px 40px;
+      border-top: none; }
+    .ui-pnotify.loading-indicator .ui-pnotify-title {
+      font: 24px/26px "RobotoLight";
+      padding: 0;
+      margin: 0; }
 
 .error-text {
   color: #e74924; }
@@ -7357,6 +7376,12 @@ main .flex-row {
 
 .left-column #log-in {
   text-align: left; }
+
+#import-log-in .form-group:first-of-type::before {
+  display: block;
+  content: "";
+  width: 100%;
+  height: 1px; }
 
 img#placeholder {
   max-width: 365px;
@@ -7904,7 +7929,7 @@ input.checkbox-filter {
   padding-left: 12px; }
 
 .footer {
-  transition: padding 0.2s linear 0s; }
+  transition: padding 0.3s linear 0s; }
   .footer.footer-adaptive {
     padding-left: 312px; }
 

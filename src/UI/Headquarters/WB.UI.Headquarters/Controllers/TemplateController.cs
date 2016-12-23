@@ -62,14 +62,14 @@ namespace WB.UI.Headquarters.Controllers
         }
 
       
-        public async Task<ActionResult> ImportMode(Guid id)
+        public async Task<ActionResult> ImportMode(Guid id, string questionnaireTitle)
         {
             if (this.designerUserCredentials == null)
             {
                 return this.RedirectToAction("LoginToDesigner");
             }
 
-            var model = await this.GetImportModel(id);
+            var model = await this.GetImportModel(id, questionnaireTitle);
             return View(model);
         }
 
@@ -88,31 +88,40 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Index", "HQ");
             }
 
-            var model = await GetImportModel(id);
+            var model = await GetImportModel(id, name);
             model.ErrorMessage = result.ImportError;
             return this.View(model);
         }
 
-        private async Task<ImportModeModel> GetImportModel(Guid id)
+        private async Task<ImportModeModel> GetImportModel(Guid id, string questionnaireTitle)
         {
-            QuestionnaireInfo questionnaireInfo = null;
             ImportModeModel model = new ImportModeModel();
             try
             {
-                questionnaireInfo = await this.designerQuestionnaireApiRestService
+                var questionnaireInfo = await this.designerQuestionnaireApiRestService
                     .GetAsync<QuestionnaireInfo>(url: $"/api/hq/v3/questionnaires/info/{id}",
                         credentials: this.designerUserCredentials);
+
+                model.QuestionnaireInfo = questionnaireInfo;
+                model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
             }
             catch (RestException e)
             {
-                if (e.StatusCode == HttpStatusCode.NotFound)
+                switch (e.StatusCode)
                 {
-                    model.ErrorMessage = ImportQuestionnaire.QuestionnaireCannotBeFound;
-                    return model;
+                    case HttpStatusCode.NotFound:
+                        model.ErrorMessage = string.Format(ImportQuestionnaire.QuestionnaireCannotBeFound,
+                            string.IsNullOrWhiteSpace(questionnaireTitle) ? string.Empty : $"\"{questionnaireTitle}\"");
+                        break;
+                    case HttpStatusCode.Forbidden:
+                        model.ErrorMessage = e.Message;
+                        break;
+                    default:
+                        model.ErrorMessage = Strings.UnexpectedErrorOccurred;
+                        break;
                 }
             }
-            model.QuestionnaireInfo = questionnaireInfo;
-            model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
+
             return model;
         }
 

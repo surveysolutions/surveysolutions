@@ -33,7 +33,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.DataExport;
             this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
-            ViewBag.AdaptiveFooter = true;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());

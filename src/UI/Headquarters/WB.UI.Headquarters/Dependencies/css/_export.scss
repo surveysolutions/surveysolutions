@@ -142,7 +142,7 @@
 	padding-left: 12px;
 }
 .footer{
-	@include transition(padding, 0.2s);
+	@include transition(padding, 0.3s);
 	&.footer-adaptive{
 		padding-left: $filter-width - $margin-container + 12px +30px;
 	}

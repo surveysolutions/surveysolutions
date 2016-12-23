@@ -25,10 +25,10 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         }
 
         public string GetTitle(Guid entityId)
-            => this.GetTranslationByType(entityId, TranslationType.Title);
+            => this.GetUniqueTranslationByType(entityId, TranslationType.Title);
 
         public string GetInstruction(Guid questionId)
-            => this.GetTranslationByType(questionId, TranslationType.Instruction);
+            => this.GetUniqueTranslationByType(questionId, TranslationType.Instruction);
 
         public string GetAnswerOption(Guid questionId, string answerOptionValue)
             => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.OptionTitle);
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             return null;
         }
 
-        private string GetTranslationByType(Guid entityId, TranslationType translationType)
+        private string GetUniqueTranslationByType(Guid entityId, TranslationType translationType)
         {
             if (this.translations.ContainsKey(entityId))
             {

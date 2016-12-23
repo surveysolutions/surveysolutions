@@ -273,6 +273,8 @@ namespace WB.UI.Designer.Controllers
                     var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument);
                     this.commandService.Execute(command);
 
+                    this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+
                     this.Success($"[{zipEntry.Name}]", append: true);
                     this.Success($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.", append: true);
                     state.RestoredEntitiesCount++;

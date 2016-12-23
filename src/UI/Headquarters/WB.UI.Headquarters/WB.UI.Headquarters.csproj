@@ -508,7 +508,6 @@
     <Content Include="Dependencies\img\wb-logo.png" />
     <Content Include="Dependencies\img\WBG_Horizontal-Grayscale-high.png" />
     <Content Include="Dependencies\js\ajax.js" />
-    <Content Include="Dependencies\js\import-questionnaires-list.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Configuration\TLK.Headquarters.Web.config">
@@ -639,7 +638,6 @@
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Dependencies\vendor\bootstrap-sass\assets\stylesheets\_bootstrap.scss" />
     <Content Include="Dependencies\css\_buttons.scss" />
     <Content Include="Dependencies\css\_forms.scss" />
     <Content Include="Dependencies\css\_navbar.scss" />
