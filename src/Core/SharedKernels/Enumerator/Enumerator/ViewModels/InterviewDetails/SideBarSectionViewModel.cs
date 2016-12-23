@@ -192,9 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            if (this.isRoster && @event.Instances.Contains(this.sectionIdentityAsRosterInstance))
-                this.messenger.Publish(new SideBarSectionRemoveMessage(this, this.SectionIdentity));
-            else if (@event.Instances.Select(rosterInstance => rosterInstance.GroupId).Any(rosterId => this.rostersInGroup.Contains(rosterId)))
+            if (@event.Instances.Select(rosterInstance => rosterInstance.GroupId).Any(rosterId => this.rostersInGroup.Contains(rosterId)))
                 this.UpdateHasChildren();
         }
 
@@ -207,9 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(GroupsDisabled @event)
         {
-            if (@event.Groups.Contains(this.SectionIdentity))
-                this.messenger.Publish(new SideBarSectionRemoveMessage(this, this.SectionIdentity));
-            else if (@event.Groups.Select(group => group.Id).Any(groupId => this.rostersInGroup.Contains(groupId)))
+            if (@event.Groups.Select(group => group.Id).Any(groupId => this.rostersInGroup.Contains(groupId)))
                 this.UpdateHasChildren();
         }
 

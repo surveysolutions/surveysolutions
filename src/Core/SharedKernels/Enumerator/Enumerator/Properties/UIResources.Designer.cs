@@ -865,6 +865,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don&apos;t see permissions popup than go to Settings and allow application to use storage..
+        /// </summary>
+        public static string MissingPermissions_Storage {
+            get {
+                return ResourceManager.GetString("MissingPermissions_Storage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {

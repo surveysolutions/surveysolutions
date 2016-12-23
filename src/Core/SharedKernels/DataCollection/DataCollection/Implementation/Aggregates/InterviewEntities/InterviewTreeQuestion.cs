@@ -383,7 +383,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsDouble) return AnswerUtils.AnswerToString(this.AsDouble.GetAnswer()?.Value);
             if (this.IsDateTime)
             {
-                var dateTime = this.AsDateTime.GetAnswer()?.Value.ToLocalTime();
+                DateTime? dateTime = this.AsDateTime.GetAnswer()?.Value;
+                if (this.AsDateTime.IsTimestamp)
+                {
+                    dateTime = dateTime?.ToLocalTime();
+                }
                 return AnswerUtils.AnswerToString(dateTime, cultureInfo: cultureInfo, isTimestamp: this.AsDateTime.IsTimestamp);
             }
             if (this.IsGps) return AnswerUtils.AnswerToString(this.AsGps.GetAnswer()?.Value);

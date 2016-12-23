@@ -25,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
             {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},
             {typeof (GpsCoordinatesQuestionViewModel), Resource.Layout.interview_question_gps},
-            {typeof (MultimedaQuestionViewModel), Resource.Layout.interview_question_multimedia},
+            {typeof (MultimediaQuestionViewModel), Resource.Layout.interview_question_multimedia},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedToListQuestionViewModel), Resource.Layout.interview_question_single_option},
