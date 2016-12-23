@@ -147,4 +147,7 @@
   <data name="LogoNotUpdated" xml:space="preserve">
     <value>Company logo was not updated. Please provide a valid image</value>
   </data>
+  <data name="ChangeStateConfirm" xml:space="preserve">
+    <value>Are you sure you want to change protection state? You will need to regenerate exported data in order to open it.</value>
+  </data>
 </root>
