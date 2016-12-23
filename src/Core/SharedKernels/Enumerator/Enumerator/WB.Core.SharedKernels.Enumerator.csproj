@@ -230,7 +230,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\FilteredSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\GpsCoordinatesQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\IntegerQuestionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\MultimedaQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultimediaQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionOptionViewModel.cs" />
