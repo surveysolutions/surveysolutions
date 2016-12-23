@@ -57,7 +57,7 @@ try {
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-	#RunTests $BuildConfiguration
+	RunTests $BuildConfiguration
 	
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
