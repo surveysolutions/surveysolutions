@@ -45,15 +45,36 @@ function BuildStatiContent($targetLocation){
     Push-Location -Path $targetLocation
     Write-Host $installCommand
 	#install node js dependencies
-    &npm install
+    &npm install | Write-Host
+	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
+	 if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
+		return $wasBuildSuccessfull
+    }
+	
 	#install bower packages
-	&bower install
+	&bower install | Write-Host
+	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
+	 if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install']"
+		return $wasBuildSuccessfull
+    }
+	
 	#will execute script gulpfile.js in target folder
     &gulp --production | Write-Host 
+	
+	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
+    if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='Failed to run gulp --production']"
+		return $wasBuildSuccessfull
+    }	
+	
     Pop-Location
 
     Write-Host "##teamcity[progressFinish 'Building static files']"
     Write-Host "##teamcity[blockClosed name='Building static files']"
+	
+	return $wasBuildSuccessfull
 }
 function CheckPrerequisites() {
     Write-Host "##teamcity[blockOpened name='Checking prerequisities']"

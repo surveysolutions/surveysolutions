@@ -43,11 +43,15 @@ try {
 	RunTests $BuildConfiguration
 
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
-	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire"
+	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire" | %{ if (-not $_) { Exit } }
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-	BuildStatiContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies"
+	BuildStatiContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" | %{ if (-not $_) {
+		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStatiContent']"
+		Write-Host "##teamcity[buildProblem description='Failed to build static content']"
+		Exit 
+	}}
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
