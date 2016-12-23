@@ -94,6 +94,11 @@
                         <select class="selectpicker" id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title'"></select>
                     </div>
                 </div>
+                
+                <div class="preset-filters-container">
+                    <span data-bind="text:'@DataExport.ItemsInQueue' + RunningDataExportProcesses().length"></span>
+                </div>
+
             </aside>
             <div class="export-types">
                 <h2 data-bind="text: selectedTemplate().title"></h2>
