@@ -21,20 +21,29 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public void ZipDirectory(string directory, string archiveFile)
         {
+            ZipDirectory(directory, archiveFile, password: null);
+        }
+
+        public void ZipDirectory(string directory, string archiveFile, string password)
+        {
             if (this.fileSystemAccessor.IsFileExists(archiveFile))
                 throw new InvalidOperationException("zip file exists");
 
             using (var zipFile = new ZipFile()
-                {
-                    ParallelDeflateThreshold = -1,
-                    AlternateEncoding = System.Text.Encoding.UTF8,
-                    AlternateEncodingUsage = ZipOption.Always
-                })
             {
+                ParallelDeflateThreshold = -1,
+                AlternateEncoding = System.Text.Encoding.UTF8,
+                AlternateEncodingUsage = ZipOption.Always
+            })
+            {
+                if (password != null)
+                    zipFile.Password = password;
+
                 zipFile.AddDirectory(directory, this.fileSystemAccessor.GetFileName(directory));
                 zipFile.Save(archiveFile);
             }
         }
+
 
         public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
             string fileFilter = null)
