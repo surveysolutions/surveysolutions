@@ -15,7 +15,7 @@ namespace WB.Infrastructure.Shared.Enumerator
 
             var permissionsRequest = await permissions.RequestPermissionsAsync(permission).ConfigureAwait(false);
             if (permissionsRequest[permission] != PermissionStatus.Granted)
-                throw new MissingPermissionsException(UIResources.MissingPermission);
+                throw new MissingPermissionsException(UIResources.MissingPermission, permission);
         }
     }
 }

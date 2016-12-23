@@ -20,6 +20,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
 
         public async Task<Stream> TakePicture()
         {
+            await this.permissions.AssureHasPermission(Permission.Storage);
             await this.permissions.AssureHasPermission(Permission.Camera);
             await this.media.Initialize().ConfigureAwait(false);
             var storeCameraMediaOptions = new StoreCameraMediaOptions

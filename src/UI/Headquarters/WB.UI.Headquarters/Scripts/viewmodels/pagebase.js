@@ -125,18 +125,11 @@
                     self.ShowError(input.settings.messages.forbiddenMessage);
                 }
                 else {
-                    var isJson = true;
-                    var json;
                     try {
-                        json = $.parseJSON(jqXhr.responseText);
+                        var json = $.parseJSON(jqXhr.responseText);
+                        self.ShowError(json.Message);
                     }
                     catch (err) {
-                        isJson = false;
-                    }
-
-                    if (isJson) {
-                        self.ShowError(json.Message);
-                    } else {
                         self.ShowError(jqXhr.responseText);
                     }
                 }

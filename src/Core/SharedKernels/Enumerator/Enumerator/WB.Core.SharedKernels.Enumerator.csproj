@@ -201,7 +201,6 @@
     <Compile Include="ViewModels\InterviewDetails\SideBarCoverSectionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionCollapseMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionExpandMessage.cs" />
-    <Compile Include="ViewModels\InterviewDetails\SideBarSectionRemoveMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionUpdateMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\SingleInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextStateViewModel.cs" />
@@ -230,7 +229,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\FilteredSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\GpsCoordinatesQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\IntegerQuestionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\MultimedaQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultimediaQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionOptionViewModel.cs" />
@@ -313,6 +312,14 @@
     </Reference>
     <Reference Include="Nito.AsyncEx.Concurrent, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\portable-net45+netcore45+wpa81\Nito.AsyncEx.Concurrent.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Permissions, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Plugin.Permissions.1.2.1\lib\portable-net45+wp80+win+wpa81\Plugin.Permissions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Permissions.Abstractions, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Plugin.Permissions.1.2.1\lib\portable-net45+wp80+win+wpa81\Plugin.Permissions.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLite-net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
