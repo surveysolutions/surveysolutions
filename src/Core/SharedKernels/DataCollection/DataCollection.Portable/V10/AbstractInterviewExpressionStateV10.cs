@@ -24,22 +24,22 @@ namespace WB.Core.SharedKernels.DataCollection.V10
                 siblingRosters,
                 interviewProperties)
         {
-            this.SetRosterRemoverForAllScopes();
-            this.SetAnswerAndStructureChangeNotifierForAllScopes();
+            this.RostersRemover = this.RemoveRosterAndItsDependencies;
+            this.SetRosterRemoverAndChangesCollectorForAllScopes();
         }
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
            int? sortIndex)
         {
             base.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex);
-            this.SetRosterRemoverForAllScopes();
-            this.SetAnswerAndStructureChangeNotifierForAllScopes();
+            this.SetRosterRemoverAndChangesCollectorForAllScopes();
         }
 
         public StructuralChanges StructuralChanges { get; set; } = new StructuralChanges();
       
 
         private IDictionary<string, IExpressionExecutableV10> interviewScopes;
+        private Action<Identity[], Guid, decimal> RostersRemover;
 
         public new virtual IDictionary<string, IExpressionExecutableV10> InterviewScopes
             => this.interviewScopes ?? (this.interviewScopes = this.InitializeInterviewScopes());
@@ -175,18 +175,11 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             }
         }
 
-        private void SetRosterRemoverForAllScopes()
+        private void SetRosterRemoverAndChangesCollectorForAllScopes()
         {
             foreach (var interviewScope in this.InterviewScopes.Values)
             {
-                interviewScope.SetRostersRemover(this.RemoveRosterAndItsDependencies);
-            }
-        }
-
-        private void SetAnswerAndStructureChangeNotifierForAllScopes()
-        {
-            foreach (var interviewScope in this.InterviewScopes.Values)
-            {
+                interviewScope.SetRostersRemover(this.RostersRemover);
                 interviewScope.SetStructuralChangesCollector(this.StructuralChanges);
             }
         }
