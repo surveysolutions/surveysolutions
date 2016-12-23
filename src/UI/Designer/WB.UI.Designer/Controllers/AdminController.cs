@@ -273,6 +273,8 @@ namespace WB.UI.Designer.Controllers
                     var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument);
                     this.commandService.Execute(command);
 
+                    this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
+
                     this.Success($"[{zipEntry.Name}]", append: true);
                     this.Success($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.", append: true);
                     state.RestoredEntitiesCount++;
@@ -338,7 +340,6 @@ namespace WB.UI.Designer.Controllers
                     }
 
                     var translationId = Guid.Parse(translationIdString);
-                    this.translationsService.DeleteAllRowsByTranslationId(translationId);
                     this.translationsService.Store(questionnaireId, translationId, excelContent);
 
                     this.Success($"[{zipEntry.Name}].", append: true);
