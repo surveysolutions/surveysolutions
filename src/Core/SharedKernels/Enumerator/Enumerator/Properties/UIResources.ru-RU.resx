@@ -455,4 +455,7 @@
   <data name="Ok" xml:space="preserve">
     <value>Да</value>
   </data>
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>Приложению необходимо разрешение на использование хранилища для ответа на данный вопрос</value>
+  </data>
 </root>

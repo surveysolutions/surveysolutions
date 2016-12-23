@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using MvvmCross.Platform;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.PictureChooser;
+using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -20,7 +19,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, 
+    public class MultimediaQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
         ICompositeQuestion,
@@ -37,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string variableName;
         private byte[] answer;
 
-        public MultimedaQuestionViewModel(
+        public MultimediaQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IPlainInterviewFileStorage plainInterviewFileStorage,
@@ -134,9 +133,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                 }
             }
-            catch (MissingPermissionsException)
+            catch (MissingPermissionsException e)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
+                switch (e.Permission)
+                {
+                    case Permission.Camera:
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
+                        break;
+                    case Permission.Storage:
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
+                        break;
+                    default:
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
+                        break;
+                }
             }
         }
 
