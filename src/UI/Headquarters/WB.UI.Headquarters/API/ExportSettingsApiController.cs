@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -22,18 +23,24 @@ namespace WB.UI.Headquarters.API
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
+        private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+        private readonly IParaDataAccessor paraDataAccessor;
 
         public ExportSettingsApiController(ILogger logger, 
             IExportSettings exportSettings,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
-            IDataExportProcessesService dataExportProcessesService)
+            IDataExportProcessesService dataExportProcessesService,
+            IDdiMetadataAccessor ddiMetadataAccessor,
+            IParaDataAccessor paraDataAccessor)
 
         {
             this.exportSettings = exportSettings;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportProcessesService = dataExportProcessesService;
+            this.ddiMetadataAccessor = ddiMetadataAccessor;
+            this.paraDataAccessor = paraDataAccessor;
             this.logger = logger;
         }
 
@@ -92,6 +99,10 @@ namespace WB.UI.Headquarters.API
 
             this.fileSystemAccessor.DeleteDirectory(exportedDataDirectoryPath);
             this.fileSystemAccessor.CreateDirectory(exportedDataDirectoryPath);
+
+            this.ddiMetadataAccessor.ClearFiles();
+
+            this.paraDataAccessor.ClearParaDataFile();
         }
 
         private bool IsExistsDataExportInProgress()

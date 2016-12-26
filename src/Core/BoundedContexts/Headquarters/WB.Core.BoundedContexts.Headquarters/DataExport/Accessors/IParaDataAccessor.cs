@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
     public interface IParaDataAccessor
     {
         void ClearParaDataFolder();
+        void ClearParaDataFile();
         void ArchiveParaDataFolder();
         void StoreInterviewParadata(InterviewHistoryView view);
         string GetPathToParaDataArchiveByQuestionnaire(Guid questionnaireId, long version);
