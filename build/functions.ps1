@@ -37,7 +37,7 @@ function CleanBinAndObjFolders() {
 
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
-function BuildStatiContent($targetLocation){
+function BuildStatiContent($targetLocation, $forceInstall){
     Write-Host "##teamcity[blockOpened name='Building static files']"
     Write-Host "##teamcity[progressStart 'Building static files']"
 
@@ -53,7 +53,12 @@ function BuildStatiContent($targetLocation){
     }
 	
 	#install bower packages
-	&bower install | Write-Host
+	if ($forceInstall)
+	{
+		&bower install --force | Write-Host
+	}else{
+		&bower install | Write-Host
+	}
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 	 if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install']"
