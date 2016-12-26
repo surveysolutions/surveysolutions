@@ -24,13 +24,15 @@ namespace WB.UI.Headquarters.API
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+        private readonly IParaDataAccessor paraDataAccessor;
 
         public ExportSettingsApiController(ILogger logger, 
             IExportSettings exportSettings,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
             IDataExportProcessesService dataExportProcessesService,
-            IDdiMetadataAccessor ddiMetadataAccessor)
+            IDdiMetadataAccessor ddiMetadataAccessor,
+            IParaDataAccessor paraDataAccessor)
 
         {
             this.exportSettings = exportSettings;
@@ -38,6 +40,7 @@ namespace WB.UI.Headquarters.API
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportProcessesService = dataExportProcessesService;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
+            this.paraDataAccessor = paraDataAccessor;
             this.logger = logger;
         }
 
@@ -98,6 +101,8 @@ namespace WB.UI.Headquarters.API
             this.fileSystemAccessor.CreateDirectory(exportedDataDirectoryPath);
 
             this.ddiMetadataAccessor.ClearFiles();
+
+            this.paraDataAccessor.ClearParaDataFile();
         }
 
         private bool IsExistsDataExportInProgress()
