@@ -8,5 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
     public interface IFilebasedExportedDataAccessor
     {
         string GetArchiveFilePathForExportedData(QuestionnaireIdentity questionnaireId, DataExportFormat format, InterviewStatus? status = null);
+
+        string GetExportDirectory();
     }
 }

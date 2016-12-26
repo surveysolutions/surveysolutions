@@ -156,4 +156,7 @@
   <data name="Metadata" xml:space="preserve">
     <value>Metadata</value>
   </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>You can't change export settings, because export process is running.</value>
+  </data>
 </root>

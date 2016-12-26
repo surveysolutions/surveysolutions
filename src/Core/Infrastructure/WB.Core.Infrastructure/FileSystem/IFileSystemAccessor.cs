@@ -17,6 +17,7 @@ namespace WB.Core.Infrastructure.FileSystem
         bool IsDirectoryExists(string pathToDirectory);
         void CreateDirectory(string path);
         void DeleteDirectory(string path);
+        string GetDirectory(string path);
 
         bool IsFileExists(string pathToFile);
         Stream OpenOrCreateFile(string pathToFile, bool append);
