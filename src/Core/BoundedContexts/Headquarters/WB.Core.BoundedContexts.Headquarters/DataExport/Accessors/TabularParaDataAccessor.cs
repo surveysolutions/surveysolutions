@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
                     }
                     foreach (var value in interviewHistoricalRecordView.Parameters.Values)
                     {
-                        writer.WriteField(value);
+                        writer.WriteField(value ?? string.Empty);
                     }
                     writer.NextRecord();
                 }
