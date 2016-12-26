@@ -17,6 +17,7 @@ using WB.UI.Headquarters.Models;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -75,6 +76,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [PreventDoubleSubmit]
         public async Task<ActionResult> ImportMode(Guid id, string name, string importMode)
         {
             if (this.designerUserCredentials == null)
