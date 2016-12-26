@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Security;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandlerTests
 {
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IPlainInterviewFileStorage plainFileRepository = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries = null,
-            IArchiveUtils archiveUtils = null,
+            IZipArchiveProtectionService archiveUtils = null,
             IReadSideKeyValueStorage<InterviewData> interviewDatas = null,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null,
             IDataExportProcessesService dataExportProcessesService = null)
@@ -34,10 +35,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 new InterviewDataExportSettings(),
                 Mock.Of<ITransactionManager>(),
                 interviewSummaries ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                archiveUtils ?? Mock.Of<IArchiveUtils>(),
+                archiveUtils ?? Mock.Of<IZipArchiveProtectionService>(),
                 interviewDatas ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
-                questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>());
+                questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>(),
+                exportSettings: Mock.Of<IExportSettings>(),
+                plainTransactionManagerProvider: Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()));
         }
     }
 }
