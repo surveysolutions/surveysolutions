@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var changedVariableValueDto in @event.ChangedVariables)
             {
-                this.Tree.GetVariable(changedVariableValueDto.Identity).SetValue(changedVariableValueDto.NewValue);
+                this.Tree.GetVariable(changedVariableValueDto.Identity)?.SetValue(changedVariableValueDto.NewValue);
                 this.ExpressionProcessorStatePrototype.UpdateVariableValue(changedVariableValueDto.Identity, changedVariableValueDto.NewValue);
             }
         }
