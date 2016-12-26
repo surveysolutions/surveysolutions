@@ -7,27 +7,40 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
     internal class TabularParaDataAccessor : IParaDataAccessor
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IArchiveUtils archiveUtils;
+        private readonly IZipArchiveProtectionService archiveUtils;
         private readonly ICsvWriter csvWriter;
+        private readonly IExportSettings exportSettings;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly IExportFileNameService exportFileNameService;
         private readonly string pathToHistoryFiles;
 
+        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
+
+
         public TabularParaDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
-            InterviewDataExportSettings interviewDataExportSettings, 
-            IArchiveUtils archiveUtils, ICsvWriter csvWriter, 
+            InterviewDataExportSettings interviewDataExportSettings,
+            IZipArchiveProtectionService archiveUtils, 
+            ICsvWriter csvWriter,
+            IExportSettings exportSettings,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IExportFileNameService exportFileNameService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.csvWriter = csvWriter;
+            this.exportSettings = exportSettings;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.exportFileNameService = exportFileNameService;
 
             this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath,
@@ -46,6 +59,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             }
         }
 
+        public void ClearParaDataFile()
+        {
+            if (this.fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
+            {
+                Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.pathToHistoryFiles, "*.zip"), (s) => this.fileSystemAccessor.DeleteFile(s));
+            }
+        }
+
         public void ArchiveParaDataFolder()
         {
             var createdFolders = this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToHistoryFiles);
@@ -60,9 +81,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 
                 filesToArchive.AddRange(this.fileSystemAccessor.GetFilesInDirectory(createdFolder));
 
-                this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
+                var password = this.GetPasswordFromSettings();
+                this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath, password);
             }
         }
+
+        private string GetPasswordFromSettings()
+        {
+            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
+                this.exportSettings.EncryptionEnforced()
+                    ? this.exportSettings.GetPassword()
+                    : null);
+        }
+
 
         public void StoreInterviewParadata(InterviewHistoryView view)
         {
