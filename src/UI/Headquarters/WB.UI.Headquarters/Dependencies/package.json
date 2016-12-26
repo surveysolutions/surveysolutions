@@ -24,6 +24,7 @@
     "main-bower-files": "^2.13.1"
   },
   "dependencies": {
-    "gulp-install": "^0.6.0"
+    "gulp-install": "^0.6.0",
+    "gulp-main-bower-files": "^1.6.0"
   }
 }
