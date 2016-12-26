@@ -119,7 +119,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        new AlertDialog.Builder(this.CurrentActivity)
+                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
                             .SetMessage(isHtml ? message.ToAndroidSpanned(): new SpannedString(message))
                             .SetTitle(isHtml ? title.ToAndroidSpanned() : new SpannedString(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(true)); })
@@ -159,7 +159,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         {
                             editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         }
-                        new AlertDialog.Builder(this.CurrentActivity)
+                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
                             .SetPositiveButton(okButton,
@@ -211,7 +211,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        new AlertDialog.Builder(this.CurrentActivity)
+                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned())
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () =>
