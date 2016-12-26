@@ -26,12 +26,28 @@
     };
 
     self.changeState = function () {
-        self.SendRequest(self.changeStateUrl,
-            { EnableState: self.isEnabled() },
-            function (data) {
-                self.isEnabled(data.IsEnabled);
-                self.password(data.Password);
-            });
+        var confirmChangeSstateHtml = self.getBindedHtmlTemplate("#confirm-change-state-password");
+        var newCheckState = self.isEnabled();
+        bootbox.dialog({
+            message: confirmChangeSstateHtml,
+            buttons: {
+                cancel: {
+                    label: "No"
+                },
+                success: {
+                    label: "Yes",
+                    callback: function () {
+                        self.SendRequest(self.changeStateUrl,
+                            { EnableState: newCheckState },
+                            function (data) {
+                                self.isEnabled(data.IsEnabled);
+                                self.password(data.Password);
+                            });
+                    }
+                }
+            }
+        });
+
         return true;
     };
 

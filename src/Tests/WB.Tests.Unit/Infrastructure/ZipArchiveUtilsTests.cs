@@ -24,8 +24,9 @@ namespace WB.Tests.Unit.Infrastructure
             inputZipStream.Position = 0;
 
             var zipArchiveUtils = CreateZipArchiveUtils();
+            MemoryStream protectedZipStream = new MemoryStream();
             //when
-            var protectedZipStream = zipArchiveUtils.ProtectZipWithPassword(inputZipStream, password);
+            zipArchiveUtils.ProtectZipWithPassword(inputZipStream, protectedZipStream, password);
             //then
             var protectedZipFile = ZipFile.Read(protectedZipStream);
             var unZippedStream = new MemoryStream();

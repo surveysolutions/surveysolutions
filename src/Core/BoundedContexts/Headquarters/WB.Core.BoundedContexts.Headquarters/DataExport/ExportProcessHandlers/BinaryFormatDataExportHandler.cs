@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
@@ -26,12 +27,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
-        private readonly IArchiveUtils archiveUtils;
+        private readonly IZipArchiveProtectionService archiveUtils;
         private readonly ITransactionManager transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
+        private readonly IExportSettings exportSettings;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly IDataExportProcessesService dataExportProcessesService;
+
+        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
         private readonly string pathToExportedData;
@@ -42,11 +47,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
             ITransactionManager transactionManager, 
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
-            IArchiveUtils archiveUtils, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
+            IZipArchiveProtectionService archiveUtils, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IDataExportProcessesService dataExportProcessesService, 
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
+            IExportSettings exportSettings,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.plainFileRepository = plainFileRepository;
@@ -57,6 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.interviewDatas = interviewDatas;
             this.dataExportProcessesService = dataExportProcessesService;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.exportSettings = exportSettings;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
 
             this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
 
@@ -167,7 +176,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             {
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
             }
-            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath);
+
+            var password = this.GetPasswordFromSettings();
+            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath, password);
+        }
+
+        private string GetPasswordFromSettings()
+        {
+            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
+                this.exportSettings.EncryptionEnforced()
+                    ? this.exportSettings.GetPassword()
+                    : null);
         }
     }
 }

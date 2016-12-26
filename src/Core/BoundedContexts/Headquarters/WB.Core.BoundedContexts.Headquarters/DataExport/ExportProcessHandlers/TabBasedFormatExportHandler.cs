@@ -6,8 +6,10 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
@@ -15,14 +17,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
     {
         private readonly ITabularFormatExportService tabularFormatExportService;
 
-        protected TabBasedFormatExportHandler(IFileSystemAccessor fileSystemAccessor, 
-            IArchiveUtils archiveUtils, 
+        protected TabBasedFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
+            IZipArchiveProtectionService archiveUtils, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             InterviewDataExportSettings interviewDataExportSettings, 
             IDataExportProcessesService dataExportProcessesService, 
             ITabularFormatExportService tabularFormatExportService,
-            ILogger logger)
-            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger)
+            ILogger logger,
+            IExportSettings exportSettings,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger, exportSettings, plainTransactionManagerProvider)
         {
             this.tabularFormatExportService = tabularFormatExportService;
         }
