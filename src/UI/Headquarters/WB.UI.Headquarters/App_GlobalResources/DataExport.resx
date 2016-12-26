@@ -222,4 +222,7 @@
   <data name="ItemsInQueue" xml:space="preserve">
     <value>Items in export queue:</value>
   </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>Tabular Format</value>
+  </data>
 </root>
