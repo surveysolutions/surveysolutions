@@ -40,9 +40,12 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             Identity[] rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
             string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
 
-            var interviewScope = this.InterviewScopes[rosterStringKey];
-            interviewScope.SetRostersRemover(this.RostersRemover);
-            interviewScope.SetStructuralChangesCollector(this.StructuralChanges);
+            if (this.InterviewScopes.ContainsKey(rosterStringKey))
+            {
+                var interviewScope = this.InterviewScopes[rosterStringKey];
+                interviewScope.SetRostersRemover(this.RostersRemover);
+                interviewScope.SetStructuralChangesCollector(this.StructuralChanges);
+            }
         }
 
         public StructuralChanges StructuralChanges { get; set; } = new StructuralChanges();
