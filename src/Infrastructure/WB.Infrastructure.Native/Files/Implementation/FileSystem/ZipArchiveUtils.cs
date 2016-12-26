@@ -21,20 +21,29 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public void ZipDirectory(string directory, string archiveFile)
         {
+            ZipDirectory(directory, archiveFile, password: null);
+        }
+
+        public void ZipDirectory(string directory, string archiveFile, string password)
+        {
             if (this.fileSystemAccessor.IsFileExists(archiveFile))
                 throw new InvalidOperationException("zip file exists");
 
             using (var zipFile = new ZipFile()
-                {
-                    ParallelDeflateThreshold = -1,
-                    AlternateEncoding = System.Text.Encoding.UTF8,
-                    AlternateEncodingUsage = ZipOption.Always
-                })
             {
+                ParallelDeflateThreshold = -1,
+                AlternateEncoding = System.Text.Encoding.UTF8,
+                AlternateEncodingUsage = ZipOption.Always
+            })
+            {
+                if (password != null)
+                    zipFile.Password = password;
+
                 zipFile.AddDirectory(directory, this.fileSystemAccessor.GetFileName(directory));
                 zipFile.Save(archiveFile);
             }
         }
+
 
         public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
             string fileFilter = null)
@@ -48,15 +57,24 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             throw new NotImplementedException();
         }
 
-        public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
+        public void ZipFiles(IEnumerable<string> files, string archiveFilePath, string password)
         {
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
                 zip.CompressionLevel = CompressionLevel.Default;
                 zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
+
+                if (password != null)
+                    zip.Password = password;
+
                 zip.AddFiles(files, "");
                 zip.Save(archiveFilePath);
             }
+        }
+
+        public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
+        {
+            ZipFiles(files, archiveFilePath, password: null);
         }
 
         public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
@@ -155,9 +173,8 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-        public Stream ProtectZipWithPassword(Stream inputZipStream, string password)
+        public void ProtectZipWithPassword(Stream inputZipStream, Stream protectedZipStream, string password)
         {
-            var outputZipStream = new MemoryStream();
             using (var zipFile = ZipFile.Read(inputZipStream))
             {
                 zipFile.Password = password;
@@ -165,11 +182,9 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 {
                     zipEntry.Password = password;
                 }
-                zipFile.Save(outputZipStream);
+                zipFile.Save(protectedZipStream);
             }
-            outputZipStream.Position = 0;
-
-            return outputZipStream;
+            protectedZipStream.Position = 0;
         }
     }
 }

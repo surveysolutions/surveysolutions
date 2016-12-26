@@ -39,18 +39,26 @@ try {
 		-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
 		-OutFileName $PackageName | %{ if (-not $_) { Exit } }
 
-
-	RunTests $BuildConfiguration
-
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
-	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire"
+	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire" $false | %{ if (-not $_) { 
+		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStatiContent']"
+		Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
+		Exit 
+	}}
+	
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-	BuildStatiContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies"
+	BuildStatiContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $true | %{ if (-not $_) {
+		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStatiContent']"
+		Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
+		Exit 
+	}}
 	CopyCapi -Project $ProjectHeadquarters -source $PackageName
 	BuildWebPackage $ProjectHeadquarters $BuildConfiguration | %{ if (-not $_) { Exit } }
 
+	RunTests $BuildConfiguration
+	
 	$artifactsFolder = (Get-Location).Path + "\Artifacts"
 	If (Test-Path "$artifactsFolder"){
 		Remove-Item "$artifactsFolder" -Force -Recurse
