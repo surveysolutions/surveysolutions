@@ -173,7 +173,21 @@
 var exportParameters = "'" + (int)type + "','" + (int)format + "'";
 
     <div data-bind="css: {'table-data': true, 'generated-data': (showRefreshButton(@exportParameters) && showDownloadButton(@exportParameters)), 'generation-in-progress' : (!showRefreshButton(@exportParameters)), 'not-generated-data': (showRefreshButton(@exportParameters) && !showDownloadButton(@exportParameters))}">
-        <div class="cell-data format-data @styleName">@format @DataExport.FormatTitle</div>
+        <div class="cell-data format-data @styleName">
+            @{
+                string formatTitle;
+                switch (format)
+                {
+                    case DataExportFormat.Tabular:
+                        formatTitle = DataExport.TabularFormat;
+                        break;
+                    default:
+                        formatTitle = format + " " + DataExport.FormatTitle;
+                        break;
+                }
+            } 
+            @formatTitle
+        </div>
         <div class="cell-data  download-block">
             <button type="button" class="btn btn-success btn-lg generate" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
             <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">@DataExport.Download</a>

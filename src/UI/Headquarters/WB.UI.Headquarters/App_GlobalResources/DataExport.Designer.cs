@@ -358,6 +358,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tabular Format.
+        /// </summary>
+        internal static string TabularFormat {
+            get {
+                return ResourceManager.GetString("TabularFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XML format.
         /// </summary>
         internal static string XMLFileDescription {
