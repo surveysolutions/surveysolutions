@@ -2,7 +2,9 @@
 <resources>
   <color name="applicationBackground">#FFFAFAFA</color>
   <color name="colorBlueThemePrimary">#FF2A81CB</color>
-  
+  <color name="colorAccent">@android:color/holo_blue_bright</color>
+  <color name="colorPrimary">@android:color/darker_gray</color>
+
   <color name="errorTextColor">#FFE32102</color>
   <color name="disabledTextColor">#afafaf</color>
   
