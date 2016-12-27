@@ -183,7 +183,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this);
-            this.Items.Dispose();
+
+            this.InterviewEntities.ToArray().ForEach(ie => ie.DisposeIfDisposable());
+            this.Items.ToArray().ForEach(ie => ie.DisposeIfDisposable());
+
             this.Name.Dispose();
         }
     }
