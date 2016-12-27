@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.rosterInstances = new DisposableCovariantObservableCollection<GroupViewModel>(this);
+            this.rosterInstances = new CovariantObservableCollection<GroupViewModel>();
         }
 
         public void Init(string interviewId, Identity entityId, NavigationState navigationState)
