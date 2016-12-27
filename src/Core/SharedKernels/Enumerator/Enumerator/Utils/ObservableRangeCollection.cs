@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using MvvmCross.Platform.Core;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
@@ -14,32 +13,8 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     /// <typeparam name="T"></typeparam> 
     public class ObservableRangeCollection<T> : ObservableCollection<T> where T : IDisposable
     {
-        private bool _suppressEvents;
-
-        public bool SuppressEvents
-        {
-            get { return this._suppressEvents; }
-            set
-            {
-                if (this._suppressEvents == value)
-                    return;
-                this._suppressEvents = value;
-                this.OnPropertyChanged(new PropertyChangedEventArgs("SuppressEvents"));
-            }
-        }
-
         protected void InvokeOnMainThread(Action action)
             => MvxSingleton<IMvxMainThreadDispatcher>.Instance?.RequestMainThreadAction(action);
-
-        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-            => this.InvokeOnMainThread(() =>
-            {
-                if (!this.SuppressEvents)
-                    base.OnCollectionChanged(e);
-            });
-
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-            => this.InvokeOnMainThread(() => base.OnPropertyChanged(e));
 
         /// <summary> 
         /// Initializes a new instance of the System.Collections.ObjectModel.ObservableCollection(Of T) class. 
@@ -69,26 +44,22 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             CheckReentrancy();
 
-            int startIndex = Count;
-            var changedItems = collection is List<T> ? (List<T>) collection : new List<T>(collection);
-            try
+            this.InvokeOnMainThread(() =>
             {
-                this.SuppressEvents = true;
-                foreach (var i in changedItems)
+                var startIndex = this.Count;
+
+                foreach (var i in collection)
                 {
                     Items.Add(i);
                 }
-            }
-            finally
-            {
-                this.SuppressEvents = false;
+
                 this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
-                    changedItems, startIndex));
-            }
+                    collection, startIndex));
+            });
         }
 
         /// <summary> 
-        /// Adds the elements of the specified collection to the end of the ObservableCollection(Of T). 
+        /// Insert the elements of the specified collection to specified position of the ObservableCollection(Of T). 
         /// </summary> 
         public void InsertRange(int index, IEnumerable<T> collection)
         {
@@ -97,21 +68,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             CheckReentrancy();
 
-            var changedItems = collection is List<T> ? (List<T>) collection : new List<T>(collection);
-            try
+            this.InvokeOnMainThread(() =>
             {
-                this.SuppressEvents = true;
-                foreach (var i in changedItems)
+                foreach (var i in collection)
                 {
                     Items.Insert(index++, i);
                 }
-            }
-            finally
-            {
-                this.SuppressEvents = false;
+
                 this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
-                    changedItems, index));
-            }
+                    collection, index));
+            });
         }
 
         /// <summary> 
@@ -124,29 +90,17 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
             CheckReentrancy();
 
-            var changedItems = collection is List<T> ? (List<T>) collection : new List<T>(collection);
-            try
+            this.InvokeOnMainThread(() =>
             {
-                this.SuppressEvents = true;
-                for (int i = 0; i < changedItems.Count; i++)
+                foreach (var changedItem in collection)
                 {
-                    var changedItem = changedItems[i];
-
                     changedItem.Dispose();
-                    if (!Items.Remove(changedItem))
-                    {
-                        changedItems.RemoveAt(i);
-                        //Can't use a foreach because changedItems is intended to be (carefully) modified
-                        i--;
-                    }
+                    this.Items.Remove(changedItem);
                 }
-            }
-            finally
-            {
-                this.SuppressEvents = false;
+
                 this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-                    changedItems, -1));
-            }
+                    collection, -1));
+            });
         }
     }
 }

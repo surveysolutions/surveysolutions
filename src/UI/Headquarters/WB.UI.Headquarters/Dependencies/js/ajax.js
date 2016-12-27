@@ -69,7 +69,9 @@ var Ajax = function (notifier) {
         }
 
         self.isAjaxComplete(false);
-        notifier.showLoadingIndicator();
+        if (!skipInProgressCheck) {
+            notifier.showLoadingIndicator();
+        }
 
         var requestHeaders = {};
         requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
