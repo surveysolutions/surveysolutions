@@ -7,13 +7,6 @@
 }
 @section scripts
 {
-    <script type="text/javascript">
-        $(function () {
-            $(".import-questionnaire-form").submit(function () {
-                $(".import-questionnaire-form button:submit").attr("disabled", "disabled");
-            });
-        })
-    </script>
 }
 
 <main>
@@ -108,7 +101,7 @@
                                 <p>@QuestionnaireImport.CensusImportSubTitle</p>
                             </div>
                             <div>
-                                <button type="submit" name="importMode" class="btn btn-primary" id="importCensus" value="Census">@QuestionnaireImport.ImportInCensus</button>
+                                <button type="submit" name="importMode" class="btn btn-primary" value="Census">@QuestionnaireImport.ImportInCensus</button>
                             </div>
                         </div>
                     </div>

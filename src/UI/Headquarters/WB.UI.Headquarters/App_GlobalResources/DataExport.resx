@@ -211,12 +211,18 @@
     <value>Status of exported interviews</value>
   </data>
   <data name="SurveyTemplateTitle" xml:space="preserve">
-    <value>Survey template (questionnaire version)</value>
+    <value>(version) Survey template </value>
   </data>
   <data name="ZipArchiveDescription" xml:space="preserve">
     <value>Zip archive with all collected text interview data</value>
   </data>
   <data name="XMLFileDescription" xml:space="preserve">
     <value>XML format</value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>Items in export queue:</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>Tabular Format</value>
   </data>
 </root>
