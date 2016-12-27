@@ -1324,5 +1324,8 @@ namespace WB.Tests.Unit.TestFactories
 
         public NavigationIdentity NavigationIdentity(Identity navigateTo)
             => new NavigationIdentity() {TargetScreen = ScreenType.Group, TargetGroup = navigateTo};
+
+        public ChangedVariable ChangedVariable(Identity changedVariable, object newValue)
+            => new ChangedVariable(changedVariable, newValue);
     }
 }
