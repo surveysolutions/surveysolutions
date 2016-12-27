@@ -88,15 +88,17 @@
                     <h4>@DataExport.ExportRange</h4>
                     <div class="block-filter">
                         <h5>@DataExport.SurveyTemplateTitle</h5>
-                        <div class="btn-group btn-input clearfix">
-                            <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="selectpicker"></select>
-                        </div>
-                    </div>
-                    <div class="block-filter checkbox-block">
+                        <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title'" class="selectpicker"></select>
+                        
                         <h5>@DataExport.StatusOfExportTitle</h5>
                         <select class="selectpicker" id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title'"></select>
                     </div>
                 </div>
+                
+                <div class="preset-filters-container">
+                    <span data-bind="text:'@DataExport.ItemsInQueue' + RunningDataExportProcesses().length"></span>
+                </div>
+
             </aside>
             <div class="export-types">
                 <h2 data-bind="text: selectedTemplate().title"></h2>
@@ -171,7 +173,21 @@
 var exportParameters = "'" + (int)type + "','" + (int)format + "'";
 
     <div data-bind="css: {'table-data': true, 'generated-data': (showRefreshButton(@exportParameters) && showDownloadButton(@exportParameters)), 'generation-in-progress' : (!showRefreshButton(@exportParameters)), 'not-generated-data': (showRefreshButton(@exportParameters) && !showDownloadButton(@exportParameters))}">
-        <div class="cell-data format-data @styleName">@format @DataExport.FormatTitle</div>
+        <div class="cell-data format-data @styleName">
+            @{
+                string formatTitle;
+                switch (format)
+                {
+                    case DataExportFormat.Tabular:
+                        formatTitle = DataExport.TabularFormat;
+                        break;
+                    default:
+                        formatTitle = format + " " + DataExport.FormatTitle;
+                        break;
+                }
+            } 
+            @formatTitle
+        </div>
         <div class="cell-data  download-block">
             <button type="button" class="btn btn-success btn-lg generate" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
             <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">@DataExport.Download</a>

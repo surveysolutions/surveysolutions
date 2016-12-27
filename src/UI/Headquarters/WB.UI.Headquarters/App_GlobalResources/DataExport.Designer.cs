@@ -151,20 +151,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can&apos;t change export settings, because export process is running..
-        /// </summary>
-        internal static string ErrorThereAreRunningProcesses {
-            get {
-                return ResourceManager.GetString("ErrorThereAreRunningProcesses", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         internal static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t change export settings, because export process is running..
+        /// </summary>
+        internal static string ErrorThereAreRunningProcesses {
+            get {
+                return ResourceManager.GetString("ErrorThereAreRunningProcesses", resourceCulture);
             }
         }
         
@@ -228,6 +228,15 @@ namespace Resources {
         internal static string Generating {
             get {
                 return ResourceManager.GetString("Generating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items in export queue:.
+        /// </summary>
+        internal static string ItemsInQueue {
+            get {
+                return ResourceManager.GetString("ItemsInQueue", resourceCulture);
             }
         }
         
@@ -340,11 +349,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey template (questionnaire version).
+        ///   Looks up a localized string similar to (version) Survey template .
         /// </summary>
         internal static string SurveyTemplateTitle {
             get {
                 return ResourceManager.GetString("SurveyTemplateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tabular Format.
+        /// </summary>
+        internal static string TabularFormat {
+            get {
+                return ResourceManager.GetString("TabularFormat", resourceCulture);
             }
         }
         

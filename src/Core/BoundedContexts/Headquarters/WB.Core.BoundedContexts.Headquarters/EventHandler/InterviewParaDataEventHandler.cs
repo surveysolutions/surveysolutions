@@ -419,9 +419,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             if (action == InterviewHistoricalAction.InterviewerAssigned)
             {
-                if (parameters.ContainsKey("responsible"))
+                if (parameters.ContainsKey("responsible") && parameters["responsible"] != null)
                 {
-                    var responsibleId = Guid.Parse(parameters["responsible"]);
+                    Guid responsibleId = Guid.Parse(parameters["responsible"]);
                     return new InterviewHistoricalRecordView(0, action, userName, userRole,
                         new Dictionary<string, string> { { "responsible", this.GetUserName(this.GetUserDocument(responsibleId)) } },
                         timestamp);

@@ -28,16 +28,28 @@ namespace WB.Core.SharedKernels.DataCollection.V10
             this.SetRosterRemoverAndChangesCollectorForAllScopes();
         }
 
-        public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
-           int? sortIndex)
+        public override void AddRoster(Guid rosterId, 
+            decimal[] outerRosterVector, 
+            decimal rosterInstanceId,
+            int? sortIndex)
         {
             base.AddRoster(rosterId, outerRosterVector, rosterInstanceId, sortIndex);
-            this.SetRosterRemoverAndChangesCollectorForAllScopes();
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            Guid[] rosterScopeIds = GetParentRosterScopeIds(rosterId);
+            Identity[] rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
+            string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+
+            if (this.InterviewScopes.ContainsKey(rosterStringKey))
+            {
+                var interviewScope = this.InterviewScopes[rosterStringKey];
+                interviewScope.SetRostersRemover(this.RostersRemover);
+                interviewScope.SetStructuralChangesCollector(this.StructuralChanges);
+            }
         }
 
         public StructuralChanges StructuralChanges { get; set; } = new StructuralChanges();
       
-
         private IDictionary<string, IExpressionExecutableV10> interviewScopes;
         private Action<Identity[], Guid, decimal> RostersRemover;
 
