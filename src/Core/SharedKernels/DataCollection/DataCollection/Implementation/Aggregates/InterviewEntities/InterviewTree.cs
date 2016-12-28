@@ -12,6 +12,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTree
     {
+        private class HealthCheckException : Exception
+        {
+            public HealthCheckException(string message)
+                : base(message) {}
+
+            public HealthCheckException(string message, IEnumerable<IInterviewTreeNode> affectedNodes)
+                : base(GetMessageWithNodes(message, affectedNodes)) {}
+
+            private static string GetMessageWithNodes(string message, IEnumerable<IInterviewTreeNode> nodes)
+                => $"{message}{Environment.NewLine}{string.Join(Environment.NewLine, nodes)}";
+        }
+
         private IQuestionnaire questionnaire;
         private readonly ISubstitionTextFactory textFactory;
 
@@ -202,11 +214,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTree Clone()
         {
-            var clonedInterviewTree = (InterviewTree)this.MemberwiseClone();
-            clonedInterviewTree.Sections = new List<InterviewTreeSection>();
+            this.DebugHealthCheck();
+
+            var clone = (InterviewTree)this.MemberwiseClone();
+            clone.Sections = new List<InterviewTreeSection>();
             var sections = this.Sections.Select(s => (InterviewTreeSection)s.Clone()).ToList();
-            clonedInterviewTree.SetSections(sections);
-            return clonedInterviewTree;
+            clone.SetSections(sections);
+
+            clone.DebugHealthCheck();
+
+            return clone;
+        }
+
+        private void DebugHealthCheck()
+        {
+#if DEBUG
+            this.CheckIdentitiesUniqueness();
+#endif
+        }
+
+        private void CheckIdentitiesUniqueness()
+        {
+            var nodesWithSameIdentities = this
+                .GetAllNodesInEnumeratorOrder()
+                .GroupBy(node => node.Identity)
+                .Where(grouping => grouping.Count() > 1)
+                .ToList();
+
+            if (nodesWithSameIdentities.Any())
+                throw new HealthCheckException("Nodes have same identities.", nodesWithSameIdentities.SelectMany(x => x));
         }
 
         public IInterviewTreeNode CreateNode(QuestionnaireReferenceType type, Identity identity)
