@@ -44,7 +44,7 @@ namespace WB.UI.Interviewer.Implementations.Services
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
             var applicationFileName = "interviewer.apk";
-            var pathToRootDirectory = AndroidPathUtils.GetPathToInternalDirectory();
+            var pathToRootDirectory = Build.VERSION.SdkInt < BuildVersionCodes.N ? AndroidPathUtils.GetPathToExternalDirectory() : AndroidPathUtils.GetPathToInternalDirectory();
             var downloadFolder = this.fileSystemAccessor.CombinePath(pathToRootDirectory, "download");
             string pathTofile = this.fileSystemAccessor.CombinePath(downloadFolder, applicationFileName);
 
@@ -72,18 +72,29 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.fileSystemAccessor.WriteAllBytes(pathTofile, responseBytes);
             cancellationToken.ThrowIfCancellationRequested();
 
-            var topActivity = this.CurrentActivity;
-            var uriForFile = FileProvider.GetUriForFile(topActivity.BaseContext, topActivity.ApplicationContext.PackageName + ".fileprovider", new Java.IO.File(pathTofile));
+            Intent promptInstall;
+            if (Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.N)
+            {
+                promptInstall =
+                    new Intent(Intent.ActionView)
+                        .SetDataAndType(global::Android.Net.Uri.FromFile(new Java.IO.File(pathTofile)), "application/vnd.android.package-archive")
+                        .AddFlags(ActivityFlags.NewTask)
+                        .AddFlags(ActivityFlags.GrantReadUriPermission);
+            }
+            else
+            {
+                var topActivity = this.CurrentActivity;
+                var uriForFile = FileProvider.GetUriForFile(topActivity.BaseContext, topActivity.ApplicationContext.PackageName + ".fileprovider", new Java.IO.File(pathTofile));
 
-            var intent = ShareCompat.IntentBuilder.From(topActivity)
-                .SetStream(uriForFile)
-                .Intent
-                .SetAction(Intent.ActionView)
-                .SetDataAndType(uriForFile, "application/vnd.android.package-archive")
-                .AddFlags(ActivityFlags.GrantReadUriPermission)
-                .AddFlags(ActivityFlags.NewTask);
+                promptInstall = ShareCompat.IntentBuilder.From(topActivity)
+                    .SetStream(uriForFile)
+                    .Intent
+                    .SetAction(Intent.ActionView)
+                    .SetDataAndType(uriForFile, "application/vnd.android.package-archive")
+                    .AddFlags(ActivityFlags.GrantReadUriPermission);
+            }
 
-            Application.Context.StartActivity(intent);
+            Application.Context.StartActivity(promptInstall);
         }
 
         public void RestartTheApp()
