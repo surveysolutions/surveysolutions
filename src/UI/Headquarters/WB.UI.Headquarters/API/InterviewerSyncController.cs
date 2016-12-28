@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Hosting;
 using System.Web.Http;
+using Flurl.Http.Content;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -117,13 +119,10 @@ namespace WB.UI.Headquarters.API
 
             if (this.fileSystemAccessor.IsFileExists(pathToFile))
             {
-                var fileContents = this.fileSystemAccessor.ReadAllBytes(pathToFile);
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    Content = new ByteArrayContent(fileContents)
+                    Content = new StreamContent(this.fileSystemAccessor.ReadFile(pathToFile))
                 };
-
-                response.Content.Headers.ContentLength = fileContents.Length;
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
                 response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
