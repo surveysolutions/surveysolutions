@@ -80,7 +80,8 @@ namespace WB.UI.Interviewer.Implementations.Services
                 .Intent
                 .SetAction(Intent.ActionView)
                 .SetDataAndType(uriForFile, "application/vnd.android.package-archive")
-                .AddFlags(ActivityFlags.GrantReadUriPermission);
+                .AddFlags(ActivityFlags.GrantReadUriPermission)
+                .AddFlags(ActivityFlags.NewTask);
 
             Application.Context.StartActivity(intent);
         }
