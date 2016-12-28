@@ -30,11 +30,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 parsedDate = DateTime.Now;
             }
 
-            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
-            var activity = topActivity.Activity;
-
             var dialog = new DatePickerDialogFragment(parsedDate, this.OnDateSet);
-            dialog.Show(activity.FragmentManager, "date");
+            dialog.Show(Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity.FragmentManager, "date");
         }
 
         private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
