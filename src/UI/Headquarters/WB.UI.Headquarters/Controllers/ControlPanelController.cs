@@ -14,19 +14,16 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Infrastructure.Native.Storage.EventStore;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [LocalOrDevelopmentAccessOnly]
+    [Authorize(Roles = "Administrator")]
     public class ControlPanelController : BaseController
     {
         private readonly IUserViewFactory userViewFactory;
@@ -34,7 +31,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
-        private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IEventStoreApiService eventStoreApiService;
 
         public ControlPanelController(
@@ -55,7 +51,6 @@ namespace WB.UI.Headquarters.Controllers
             this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
-            this.transactionManagerProvider = transactionManagerProvider;
             this.eventStoreApiService = eventStoreApiService;
         }
 
