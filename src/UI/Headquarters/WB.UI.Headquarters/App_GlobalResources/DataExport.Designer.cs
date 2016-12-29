@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All collected external binary data (e.g. pictures).
+        ///   Looks up a localized string similar to Archive with binary data (e.g., pictures).
         /// </summary>
         internal static string BinaryDescription {
             get {
@@ -174,6 +174,15 @@ namespace Resources {
         internal static string export {
             get {
                 return ResourceManager.GetString("export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pressing Generate button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size is shown in a table. The latest generated data archive can be downloaded by pressing Download button. Press Generate button again to produce a new archive..
+        /// </summary>
+        internal static string ExportExplanation {
+            get {
+                return ResourceManager.GetString("ExportExplanation", resourceCulture);
             }
         }
         
@@ -304,7 +313,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available data about the process by which the survey was conducted.
+        ///   Looks up a localized string similar to Metadata on the interview process (events and timing).
         /// </summary>
         internal static string ParadataDescription {
             get {
@@ -376,7 +385,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zip archive with all collected text interview data.
+        ///   Looks up a localized string similar to Zip archive with main interview data.
         /// </summary>
         internal static string ZipArchiveDescription {
             get {
