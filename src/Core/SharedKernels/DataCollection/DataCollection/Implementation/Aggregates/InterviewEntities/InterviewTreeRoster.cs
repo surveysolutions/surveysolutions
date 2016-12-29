@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return "no type";
         }
         public override string ToString()
-           => $"{this.GetTypeAsText()} Roster ({this.Identity}) [{this.RosterTitle}]" + Environment.NewLine
+           => $"{this.GetTypeAsText()} Roster ({this.Identity}) [{this.RosterTitle}] " + (this.IsDisabled() ? "Disabled" : "Enabled") + Environment.NewLine
               + string.Join(Environment.NewLine, this.Children.Select(child => StringExtensions.PrefixEachLine(child.ToString(), "  ")));
 
         //public override string ToString()
