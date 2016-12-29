@@ -14,11 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
     [TestFixture]
     internal class when_answering_question_that_enables_section_with_nested_rosters_inside_it : InterviewTestsContext
     {
-        [OneTimeSetUp]
-        public void context()
+        Establish context = () =>
         {
             appDomainContext = AppDomainContext.Create();
+        };
 
+        Because of = () =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -26,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 Guid userId = Guid.NewGuid();
 
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
-                    Create.Chapter(id: Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"),children: new IComposite[]
+                    Create.Chapter(id: Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), children: new IComposite[]
                     {
                         Create.NumericIntegerQuestion(numId, variable: "x1")
                     }),
@@ -45,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var interview = SetupStatefullInterview(questionnaireDocument);
                 interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(numId, answer: 1));
-                interview.AnswerTextListQuestion(userId, list1Id, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "Hello") } );
+                interview.AnswerTextListQuestion(userId, list1Id, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "Hello") });
                 interview.AnswerTextListQuestion(userId, list2Id, Create.RosterVector(1), DateTime.Now, new[] { Tuple.Create(1m, "World") });
 
                 var invokeResults = new InvokeResults();
@@ -64,38 +65,29 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                     return invokeResults;
                 }
             });
-        }
 
-        [Test]
-        public void should_not_raise_enablement_events_for_subgroups()
-        {
-            Assert.That(results.SubGroupGotEnablementEvents, Is.False);
-        }
+        It should_not_raise_enablement_events_for_subgroups = () => results.SubGroupGotEnablementEvents.ShouldBeTrue();
 
-        [Test]
-        public void should_mark_nested_roster_as_enabled() =>
-            Assert.That(results.NestedRosterIsEnabled, Is.True);
+        It should_mark_nested_roster_as_enabled = () => results.NestedRosterIsEnabled.ShouldBeTrue();
 
-        [Test]
-        public void should_mark_top_level_roster_as_enabled() =>
-            results.TopRosterIsEnabled.ShouldBeTrue();
+        It should_mark_top_level_roster_as_enabled = () => results.TopRosterIsEnabled.ShouldBeTrue();
 
-        [OneTimeTearDown]
-        public void stuff()
+
+        private Cleanup stuff = () =>
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        }
+        };
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static Guid questionnaireId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         private static Guid roster1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid roster2Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-        private static Guid numId =   Guid.Parse("11111111111111111111111111111111");
+        private static Guid numId = Guid.Parse("11111111111111111111111111111111");
         private static Guid list1Id = Guid.Parse("22222222222222222222222222222222");
         private static Guid list2Id = Guid.Parse("33333333333333333333333333333333");
-        private static Guid textId =  Guid.Parse("44444444444444444444444444444444");
+        private static Guid textId = Guid.Parse("44444444444444444444444444444444");
 
         [Serializable]
         internal class InvokeResults
