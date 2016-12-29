@@ -5783,43 +5783,20 @@ input.checkbox-filter ~ label .tick {
   opacity: 0;
   display: none; }
 
-.question .dropdown button, .question-editor h5 .button-flag, .question-editor .preset-filters-container a .button-flag, .preset-filters-container .question-editor a .button-flag {
-  border: none;
-  background-color: transparent;
-  padding: 0;
-  margin: 0; }
-  .question .dropdown button:hover, .question-editor h5 .button-flag:hover, .question-editor .preset-filters-container a .button-flag:hover, .preset-filters-container .question-editor a .button-flag:hover, .question .dropdown button:focus, .question-editor h5 .button-flag:focus, .question-editor .preset-filters-container a .button-flag:focus, .preset-filters-container .question-editor a .button-flag:focus {
-    border: none;
-    background-color: transparent; }
-
 .filters, .content {
-  top: 70px;
+  height: 100%;
+  top: 0;
   left: 0;
   bottom: 0;
+  padding-top: 70px;
+  padding-bottom: 50px;
   overflow: auto;
   position: fixed;
   background-color: #fff;
   z-index: 4;
   transition: left 0.3s linear 0s; }
 
-.flag:before, .question-editor h5 .button-flag, .question-editor .preset-filters-container a .button-flag, .preset-filters-container .question-editor a .button-flag {
-  position: absolute;
-  top: 0;
-  left: 5px;
-  display: block;
-  content: "";
-  width: 20px;
-  height: 22px;
-  background: transparent url("../img/flags.png") no-repeat;
-  background-size: 75px 22px;
-  background-position: -37px 0; }
-  @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-    .flag:before, .question-editor h5 .button-flag, .question-editor .preset-filters-container a .button-flag, .preset-filters-container .question-editor a .button-flag {
-      /* on retina, use image that's scaled by 2 */
-      background-image: url("../img/flags2k.png");
-      background-size: 75px 22px; } }
-
-.question .information-block.comments-block .comment .form-inline .form-control, .question-editor .question-unit .options-group .radio, .question-editor .question-unit .options-group .form-group, .question-editor .question-unit .options-group .form-input {
+.comments-block .comment .form-inline .form-control, .question-unit .options-group .radio, .question-unit .options-group .form-group, .question-unit .options-group .form-input {
   border: 1px solid #dbdfe2;
   background-color: #fff;
   border-radius: 5px; }
@@ -5839,41 +5816,27 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 629px 18px; } }
 
-#DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input, .question-editor .question-unit .options-group .field.answered .close, .question-editor .question-unit .options-group .field.contains-error .close, .question-editor .question-unit .options-group .field input:checked ~ .close {
+#DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input, .question-unit .options-group .field.answered .btn-clear, .question-unit .options-group .field.contains-error .btn-clear, .question-unit .options-group .field input:checked ~ .btn-clear {
   visibility: visible;
   opacity: 1; }
 
-#DataTables_Table_0_wrapper #DataTables_Table_0_filter label input, .question-editor .question-unit .options-group .field .close {
+#DataTables_Table_0_wrapper #DataTables_Table_0_filter label input, .btn-clear {
   opacity: 0;
   visibility: hidden; }
 
-.gps-question.answered .question-unit .options-group .action-btn-holder .action-btn, .gps-question.contains-error .question-unit .options-group .action-btn-holder .action-btn, .multimedia-question.answered .question-unit .options-group .action-btn-holder .action-btn, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .action-btn, .qr-question.answered .question-unit .options-group .action-btn-holder .action-btn, .qr-question.contains-error .question-unit .options-group .action-btn-holder .action-btn, .current-time-question.answered .question-unit .options-group .action-btn-holder .action-btn, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .action-btn {
+.gps-question.answered .question-unit .options-group .action-btn-holder .btn-default, .gps-question.contains-error .question-unit .options-group .action-btn-holder .btn-default, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default, .qr-question.contains-error .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .btn-default {
   border-color: #dbdfe2; }
-  .gps-question.answered .question-unit .options-group .action-btn-holder .action-btn:hover, .gps-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:hover, .multimedia-question.answered .question-unit .options-group .action-btn-holder .action-btn:hover, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:hover, .qr-question.answered .question-unit .options-group .action-btn-holder .action-btn:hover, .qr-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:hover, .current-time-question.answered .question-unit .options-group .action-btn-holder .action-btn:hover, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:hover, .gps-question.answered .question-unit .options-group .action-btn-holder .action-btn:focus, .gps-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:focus, .multimedia-question.answered .question-unit .options-group .action-btn-holder .action-btn:focus, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:focus, .qr-question.answered .question-unit .options-group .action-btn-holder .action-btn:focus, .qr-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:focus, .current-time-question.answered .question-unit .options-group .action-btn-holder .action-btn:focus, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:focus, .gps-question.answered .question-unit .options-group .action-btn-holder .action-btn:active, .gps-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:active, .multimedia-question.answered .question-unit .options-group .action-btn-holder .action-btn:active, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:active, .qr-question.answered .question-unit .options-group .action-btn-holder .action-btn:active, .qr-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:active, .current-time-question.answered .question-unit .options-group .action-btn-holder .action-btn:active, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .action-btn:active {
+  .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .gps-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:active {
     border-color: #8c8f90; }
 
-.gps-question.answered .question-unit .options-group .field .close, .gps-question.contains-error .question-unit .options-group .field .close, .multimedia-question.answered .question-unit .options-group .field .close, .multimedia-question.contains-error .question-unit .options-group .field .close, .qr-question.answered .question-unit .options-group .field .close, .qr-question.contains-error .question-unit .options-group .field .close, .current-time-question.answered .question-unit .options-group .field .close, .current-time-question.contains-error .question-unit .options-group .field .close {
-  top: -15px; }
+.gps-question.answered .question-unit .options-group .field .btn-clear, .gps-question.contains-error .question-unit .options-group .field .btn-clear, .qr-question.answered .question-unit .options-group .field .btn-clear, .qr-question.contains-error .question-unit .options-group .field .btn-clear, .current-time-question.answered .question-unit .options-group .field .btn-clear, .current-time-question.contains-error .question-unit .options-group .field .btn-clear, .multimedia-question.answered .question-unit .options-group .field .btn-clear, .multimedia-question.contains-error .question-unit .options-group .field .btn-clear {
+  top: -13px; }
 
-.gps-question.answered .block-with-data, .gps-question.contains-error .block-with-data, .multimedia-question.answered .block-with-data, .multimedia-question.contains-error .block-with-data, .qr-question.answered .block-with-data, .qr-question.contains-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.contains-error .block-with-data {
+.gps-question.answered .block-with-data, .gps-question.contains-error .block-with-data, .qr-question.answered .block-with-data, .qr-question.contains-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.contains-error .block-with-data, .multimedia-question.answered .block-with-data, .multimedia-question.contains-error .block-with-data {
   font-size: 14px;
   line-height: 16px;
   font-weight: bold;
   margin-bottom: 20px; }
-
-.filters.hidden-filters .foldback-button, .fullscreen-hidden-content .content .foldback-button {
-  right: -50px;
-  background-color: #dbdfe2;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px; }
-  .filters.hidden-filters .foldback-button span.arrow, .fullscreen-hidden-content .content .foldback-button span.arrow {
-    margin-left: 13px;
-    margin-right: 2px;
-    transform: rotate(45deg); }
-    .filters.hidden-filters .foldback-button span.arrow:first-of-type, .fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
-      transform: rotate(-45deg); }
-  .filters.hidden-filters .foldback-button .glyphicon, .fullscreen-hidden-content .content .foldback-button .glyphicon {
-    display: inline-block; }
 
 .table-striped tbody tr {
   background-color: #f8f9f9; }
@@ -6182,11 +6145,11 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   height: 46px;
   cursor: pointer;
   position: absolute;
-  top: 5px;
+  top: 75px;
   right: 0;
   border-radius: 4px;
   z-index: 2;
-  transition: all 0.5s linear 0s; }
+  transition: all 0.2s linear 0s; }
   .foldback-button:hover span.arrow, .foldback-button:focus span.arrow {
     background-color: black; }
   .foldback-button:hover .glyphicon, .foldback-button:focus .glyphicon {
@@ -6211,6 +6174,16 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     top: 14px;
     left: 10px; }
 
+.btn-default.btn-gray {
+  color: #fff;
+  padding: 12px;
+  background-color: #bfc6cb;
+  border: none; }
+  .btn-default.btn-gray:hover, .btn-default.btn-gray:focus {
+    outline: none;
+    border: none;
+    background-color: #a3adb4; }
+
 .back-link {
   text-transform: uppercase;
   font: 12.5px/14px "TrebuchetMSBold";
@@ -6223,6 +6196,86 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 .cancel {
   border: none;
   outline: none; }
+
+.button-flag, .flag:before {
+  display: inline-block;
+  width: 19px;
+  height: 22px;
+  background: transparent url("../img/flags.png") no-repeat;
+  background-size: 75px 22px;
+  background-position: -38px 0;
+  border: none; }
+  @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+    .button-flag, .flag:before {
+      /* on retina, use image that's scaled by 2 */
+      background-image: url("../img/flags2k.png");
+      background-size: 75px 22px; } }
+  .button-flag:hover, .flag:hover:before, .button-flag:focus, .flag:focus:before {
+    background-position: -57px 0;
+    outline: none; }
+  .button-flag.flagged, .flagged.flag:before, .question.with-flag .question-editor h5 .button-flag, .question.with-flag .question-editor .preset-filters-container a .button-flag, .preset-filters-container .question.with-flag .question-editor a .button-flag, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before, .button-flag:active, .flag:active:before {
+    background-position: 0 0;
+    outline: none; }
+    .button-flag.flagged:hover, .flagged.flag:hover:before, .question.with-flag .question-editor h5 .button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .button-flag:hover, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .button-flag.flagged:focus, .flagged.flag:focus:before, .question.with-flag .question-editor h5 .button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .button-flag:focus, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before, .button-flag:active:hover, .flag:active:hover:before, .button-flag:active:focus, .flag:active:focus:before {
+      background-position: -19px 0; }
+
+.reject {
+  border-width: 1px;
+  box-shadow: inset 2px 2px 0 #ed2c39, inset -2px -2px 0 #ed2c39;
+  border-color: #ed2c39;
+  background-color: transparent;
+  color: #ed2c39; }
+  .reject:focus, .reject.focus, .reject:hover {
+    color: #d4121f;
+    border-color: #d4121f; }
+
+.btn-clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: all 0.2s linear 0s; }
+  .btn-clear:hover, .btn-clear:active:focus, .btn-clear:focus, .btn-clear:active {
+    outline: none; }
+  .btn-clear span {
+    outline: none;
+    background-color: transparent;
+    width: 18px;
+    height: 18px;
+    position: relative;
+    margin: 0;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    display: block;
+    box-sizing: content-box; }
+    .btn-clear span:before, .btn-clear span:after {
+      display: block;
+      content: "";
+      width: 18px;
+      height: 2px;
+      background-color: #a6a8a9;
+      transform: rotate(45deg);
+      position: relative;
+      top: 8px; }
+    .btn-clear span:after {
+      transform: rotate(-45deg);
+      top: 6px; }
+    .btn-clear span:hover:before, .btn-clear span:hover:after, .btn-clear span:focus:before, .btn-clear span:focus:after, .btn-clear span:active:before, .btn-clear span:active:after {
+      background-color: #595c5d; }
+
+.btn-action-questionnaire {
+  background-color: #fff;
+  border-color: transparent;
+  color: #a6a8a9;
+  border-radius: 5px;
+  outline: none;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  font: 14px/18px Arial;
+  font-style: italic; }
+  .btn-action-questionnaire:hover, .btn-action-questionnaire:focus, .btn-action-questionnaire:active {
+    background-color: #ececec;
+    border-color: #8c8f90;
+    color: #737576; }
 
 .navbar {
   min-width: 400px;
@@ -6699,7 +6752,8 @@ input.checkbox-filter {
       display: block;
       border-top: 12px solid #a6a8a9;
       border-right: 7px solid transparent;
-      border-left: 7px solid transparent; }
+      border-left: 7px solid transparent;
+      border-bottom: none; }
     .bootstrap-select.btn-group .dropdown-toggle:hover, .bootstrap-select.btn-group .dropdown-toggle:focus, .bootstrap-select.btn-group .dropdown-toggle:active {
       box-shadow: none;
       background-color: transparent;
@@ -6725,7 +6779,10 @@ input.checkbox-filter {
     border-radius: 4px;
     width: 295px;
     text-align: left;
-    padding: 7px 12px; }
+    padding: 7px 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
     .btn-input .dropdown-toggle:hover, .btn-input .dropdown-toggle:focus {
       box-shadow: none; }
     .btn-input .dropdown-toggle span:first-child {
@@ -6763,6 +6820,276 @@ input.checkbox-filter {
     overflow: auto;
     max-height: 300px;
     border-radius: 4px; }
+
+.structured-content {
+  margin: 0; }
+  .structured-content .panel + .panel {
+    margin-top: -1px; }
+  .structured-content .panel-default {
+    background-color: transparent;
+    margin: 0 0 -1px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+    padding: 0; }
+    .structured-content .panel-default > .panel-heading h3 a {
+      margin-left: 30px; }
+    .structured-content .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 60px; }
+    .structured-content .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 90px; }
+    .structured-content .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 120px; }
+    .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 150px; }
+    .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 180px; }
+    .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 210px; }
+    .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+      margin-left: 240px; }
+    .structured-content .panel-default:first-of-type {
+      border-top: none; }
+    .structured-content .panel-default > .panel-heading {
+      background-color: transparent;
+      border: none;
+      padding: 0; }
+      .structured-content .panel-default > .panel-heading h3 {
+        transition: all 0.3s linear 0s; }
+        .structured-content .panel-default > .panel-heading h3.group a {
+          padding-left: 0; }
+          .structured-content .panel-default > .panel-heading h3.group a:before, .structured-content .panel-default > .panel-heading h3.group a:after {
+            display: none; }
+        .structured-content .panel-default > .panel-heading h3 a {
+          display: block;
+          font: 16px/18px "RobotoMedium";
+          font-weight: normal;
+          color: #2a81cb;
+          padding: 15px 20px 15px 25px;
+          position: relative; }
+          .structured-content .panel-default > .panel-heading h3 a:hover, .structured-content .panel-default > .panel-heading h3 a:focus {
+            text-decoration: none; }
+          .structured-content .panel-default > .panel-heading h3 a:before, .structured-content .panel-default > .panel-heading h3 a:after {
+            position: absolute;
+            top: 23px;
+            left: 0;
+            content: "";
+            width: 12px;
+            height: 2px;
+            display: block;
+            background-color: #2a81cb; }
+          .structured-content .panel-default > .panel-heading h3 a:after {
+            transform: rotate(0);
+            transition: all 0.3s linear 0s; }
+          .structured-content .panel-default > .panel-heading h3 a.collapsed:after {
+            transform: rotate(270deg);
+            transition: all 0.3s linear 0s; }
+        .structured-content .panel-default > .panel-heading h3.contains-error a {
+          color: #ed2c39; }
+          .structured-content .panel-default > .panel-heading h3.contains-error a:before, .structured-content .panel-default > .panel-heading h3.contains-error a:after {
+            background-color: #ed2c39; }
+        .structured-content .panel-default > .panel-heading h3.complete a {
+          color: #3ca21a; }
+          .structured-content .panel-default > .panel-heading h3.complete a:before, .structured-content .panel-default > .panel-heading h3.complete a:after {
+            background-color: #3ca21a; }
+      .structured-content .panel-default > .panel-heading .active, .structured-content .panel-default > .panel-heading:hover, .structured-content .panel-default > .panel-heading:focus {
+        background-color: #ebebeb; }
+    .structured-content .panel-default .in {
+      background-color: #f3f3f3; }
+  .structured-content .panel-body {
+    padding: 0; }
+    .structured-content .panel-body .panel-group {
+      margin-bottom: -1px; }
+
+@media only screen and (max-width: 1525px) {
+  .structured-content .panel-default > .panel-heading h3 a {
+    margin-left: 10px; }
+  .structured-content .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 20px; }
+  .structured-content .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 30px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 40px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 50px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 60px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 70px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 80px; }
+  .structured-content .panel-default > .panel-heading h3 a {
+    font-size: 14px;
+    line-height: 16px; } }
+
+@media (max-width: 880px) {
+  .structured-content .panel-default > .panel-heading h3 a {
+    margin-left: 20px; }
+  .structured-content .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 40px; }
+  .structured-content .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 60px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 80px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 100px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 120px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 140px; }
+  .structured-content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
+    margin-left: 160px; } }
+
+.aside-menu {
+  outline: none;
+  position: absolute;
+  top: 10px;
+  right: 10px; }
+  .aside-menu button {
+    display: block;
+    position: relative;
+    text-align: center;
+    width: 40px;
+    height: 45px; }
+    .aside-menu button:focus, .aside-menu button:hover, .aside-menu button:active, .aside-menu button:active:focus {
+      outline: none; }
+      .aside-menu button:focus span, .aside-menu button:hover span, .aside-menu button:active span, .aside-menu button:active:focus span {
+        background-color: #bfc6cb; }
+        .aside-menu button:focus span:before, .aside-menu button:focus span:after, .aside-menu button:hover span:before, .aside-menu button:hover span:after, .aside-menu button:active span:before, .aside-menu button:active span:after, .aside-menu button:active:focus span:before, .aside-menu button:active:focus span:after {
+          background-color: #bfc6cb; }
+    .aside-menu button span {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 100%;
+      background-color: #dbdfe2;
+      transition: background 0.3s linear 0s; }
+      .aside-menu button span:before, .aside-menu button span:after {
+        content: "";
+        display: block;
+        position: relative;
+        top: -8px;
+        width: 5px;
+        height: 5px;
+        border-radius: 100%;
+        background-color: #dbdfe2;
+        transition: background 0.3s linear 0s; }
+      .aside-menu button span:after {
+        top: 3px; }
+  .aside-menu.open button span {
+    border-radius: 0;
+    outline: none;
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    margin: 0;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    display: block;
+    box-sizing: content-box;
+    background-color: transparent; }
+    .aside-menu.open button span:before, .aside-menu.open button span:after {
+      display: block;
+      content: "";
+      width: 20px;
+      height: 2px;
+      background-color: #a6a8a9;
+      transform: rotate(45deg);
+      position: relative;
+      top: 9px; }
+    .aside-menu.open button span:after {
+      transform: rotate(-45deg);
+      top: 7px; }
+    .aside-menu.open button span:hover:before, .aside-menu.open button span:hover:after, .aside-menu.open button span:focus:before, .aside-menu.open button span:focus:after, .aside-menu.open button span:active:before, .aside-menu.open button span:active:after {
+      background-color: #595c5d; }
+    .aside-menu.open button span:before, .aside-menu.open button span:after {
+      border-radius: 0; }
+  .aside-menu.open button:focus span:before, .aside-menu.open button:focus span:after, .aside-menu.open button:hover span:before, .aside-menu.open button:hover span:after, .aside-menu.open button:active span:before, .aside-menu.open button:active span:after {
+    background-color: #a3adb4; }
+  .aside-menu .dropdown-menu {
+    left: auto;
+    right: 35px;
+    top: 10px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    transform-origin: top;
+    animation-fill-mode: forwards;
+    transform: scale(1, 0);
+    transition: all 0.2s linear 0s;
+    display: block; }
+  .aside-menu.open > .dropdown-menu {
+    transform: scale(1, 1);
+    opacity: 1;
+    filter: alpha(opacity=100); }
+
+.zoomImg {
+  cursor: pointer;
+  transition: all 0.3s linear 0s; }
+
+.zoomImg:hover, .zoomImg:focus {
+  transform: scale(1.1); }
+
+.modal-img {
+  position: fixed;
+  z-index: 50;
+  padding-top: 50px;
+  left: 0;
+  top: 70px;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  text-align: center;
+  display: none; }
+  .modal-img .modal-img-content {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 70% !important;
+    max-height: 80%; }
+  .modal-img .caption {
+    width: 75%;
+    text-align: center;
+    color: #ececec;
+    padding: 15px 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; }
+    .modal-img .caption:first-letter {
+      text-transform: capitalize; }
+  .modal-img .close-zoomming-img {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    color: #ececec;
+    font-size: 40px;
+    transition: all 0.2s linear 0s; }
+    .modal-img .close-zoomming-img:hover, .modal-img .close-zoomming-img:focus {
+      color: #a6a8a9;
+      cursor: pointer; }
+
+.modal-img-content, .caption {
+  animation-name: zoom;
+  animation-duration: 0.5s; }
+
+@keyframes zoom {
+  0% {
+    transform: scale(0); }
+  100% {
+    transform: scale(1); } }
+
+.image-zoom-box, .image-option {
+  overflow: hidden;
+  margin-bottom: 10px; }
+  .image-zoom-box img, .image-option img {
+    display: block;
+    max-width: 100%;
+    height: auto; }
+
+span.image-zoom-box, span.image-option {
+  display: block; }
 
 @font-face {
   font-family: "RobotoRegular";
@@ -7610,7 +7937,7 @@ main .flex-row {
 .filters {
   width: 360px;
   border-right: 3px solid #ececec;
-  padding: 45px 15px 0 33px;
+  padding: 115px 12px 50px 33px;
   margin-left: 12px; }
 
 input.checkbox-filter {
@@ -7713,76 +8040,84 @@ input.checkbox-filter {
 .filters.hidden-filters {
   left: -372px;
   overflow: visible; }
+  .filters.hidden-filters .foldback-button {
+    right: -50px;
+    background-color: #dbdfe2;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px; }
+    .filters.hidden-filters .foldback-button span.arrow {
+      margin-left: 13px;
+      margin-right: 2px;
+      transform: rotate(45deg); }
+      .filters.hidden-filters .foldback-button span.arrow:first-of-type {
+        transform: rotate(-45deg); }
+    .filters.hidden-filters .foldback-button .glyphicon {
+      display: inline-block; }
 
 @media (max-width: 1210px) {
   .filters {
-    top: 60px;
+    padding-top: 105px;
     width: 270px;
-    padding-top: 45px;
-    padding-left: 15px; }
+    padding-left: 12px; }
     .filters .bootstrap-select.btn-group {
       width: 100% !important; }
     .filters .open > .dropdown-menu {
       width: 100%; }
+    .filters .foldback-button {
+      top: 65px; }
     .filters.hidden-filters {
-      left: -282px;
-      position: absolute; }
+      left: -282px; }
       .filters.hidden-filters .foldback-button {
         right: -50px; } }
 
 @media (max-width: 880px) {
   .filters {
-    position: absolute;
-    top: 60px;
+    padding-top: 60px;
     left: -282px;
-    border: none;
-    padding: 30px 0 0;
-    overflow: visible;
-    transition: background-color 0.5s linear 0s; }
-    .filters .filters-container, .filters .preset-filters-container {
-      display: none;
-      border-color: transparent;
-      opacity: 0;
-      filter: alpha(opacity=0);
-      visibility: hidden;
-      transition: opacity 0.5s linear 0s; }
-    .filters .dropdown-toggle, .filters .input-group-addon {
-      background-color: #fff !important; }
+    overflow: visible; }
     .filters .foldback-button {
       right: -50px;
       background-color: #dbdfe2;
-      transition: none 0.5s linear 0s; }
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px; }
       .filters .foldback-button span.arrow {
-        transform: rotate(45deg);
         margin-left: 13px;
-        margin-right: 2px; }
+        margin-right: 2px;
+        transform: rotate(45deg); }
         .filters .foldback-button span.arrow:first-of-type {
           transform: rotate(-45deg); }
       .filters .foldback-button .glyphicon {
         display: inline-block; }
-    .filters.hidden-filters {
-      left: 0;
-      width: 100%;
-      background-color: #ececec;
-      z-index: 1;
-      margin: 0; }
-      .filters.hidden-filters .foldback-button {
-        left: auto;
-        right: 5px; }
-        .filters.hidden-filters .foldback-button span.arrow {
-          top: 6px;
-          right: 12px; }
-        .filters.hidden-filters .foldback-button .glyphicon {
-          display: none; }
-      .filters.hidden-filters .filters-container, .filters.hidden-filters .preset-filters-container {
-        display: block;
-        width: 300px;
-        margin: 0 auto;
-        border-color: #dbdfe2;
-        opacity: 1;
-        filter: alpha(opacity=100);
-        visibility: visible; }
-  .fullscreen .export-types {
+  .fullscreen-hidden-filters .filters {
+    border: none;
+    margin: 0;
+    position: absolute;
+    top: 0px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%; }
+    .fullscreen-hidden-filters .filters .foldback-button {
+      right: 5px;
+      background-color: transparent; }
+      .fullscreen-hidden-filters .filters .foldback-button span.arrow {
+        margin: 15px 10px;
+        transform: rotate(-45deg); }
+        .fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
+          transform: rotate(45deg); }
+      .fullscreen-hidden-filters .filters .foldback-button .glyphicon {
+        display: none; }
+    .fullscreen-hidden-filters .filters .foldback-button {
+      right: 10px; }
+    .fullscreen-hidden-filters .filters .filters-container, .fullscreen-hidden-filters .filters .preset-filters-container {
+      display: block;
+      width: 300px;
+      margin: 0 auto;
+      border-color: #dbdfe2;
+      opacity: 1;
+      filter: alpha(opacity=100);
+      visibility: visible; }
+  .fullscreen-hidden-filters .export-types {
     display: none; } }
 
 @media (max-width: 481px) {
@@ -7877,10 +8212,7 @@ input.checkbox-filter {
         .export-types .data .table-data .format-data span {
           color: #2a81cb; }
       .export-types .data .table-data .btn {
-        margin: 5px;
-        width: 100px;
-        padding-left: 0;
-        padding-right: 0; }
+        margin: 5px; }
       .export-types .data .table-data .not-generated {
         color: #a6a8a9;
         padding: 0 20px; }
@@ -7924,7 +8256,7 @@ input.checkbox-filter {
   .cancel:hover:before, .cancel:hover:after, .cancel:focus:before, .cancel:focus:after, .cancel:active:before, .cancel:active:after {
     background-color: #595c5d; }
 
-.fullscreen .export-types {
+.fullscreen-hidden-filters .export-types {
   margin-left: 0;
   padding-left: 12px; }
 
@@ -7962,27 +8294,27 @@ input.checkbox-filter {
       margin-bottom: 15px; }
     .export-types .data.metadata .container-data {
       padding-top: 0; }
-  .fullscreen .export-types {
+  .fullscreen-hidden-filters .export-types {
     padding: 55px 20px 0;
     width: 100%; }
-    .fullscreen .export-types .size, .fullscreen .export-types .last-generated {
+    .fullscreen-hidden-filters .export-types .size, .fullscreen-hidden-filters .export-types .last-generated {
       display: table-cell; }
-    .fullscreen .export-types .data .table-data .min-view {
+    .fullscreen-hidden-filters .export-types .data .table-data .min-view {
       display: none;
       width: 40%;
       padding: 0 5px; }
-      .fullscreen .export-types .data .table-data .min-view div {
+      .fullscreen-hidden-filters .export-types .data .table-data .min-view div {
         padding: 8px 0; }
-    .fullscreen .export-types .data .table-data .size, .fullscreen .export-types .data .table-data .last-generated {
+    .fullscreen-hidden-filters .export-types .data .table-data .size, .fullscreen-hidden-filters .export-types .data .table-data .last-generated {
       display: table-cell; }
-    .fullscreen .export-types .data .table-data .format-data {
+    .fullscreen-hidden-filters .export-types .data .table-data .format-data {
       width: 34%;
       padding-left: 75px; }
-    .fullscreen .export-types .data .table-data .last-generated {
+    .fullscreen-hidden-filters .export-types .data .table-data .last-generated {
       width: 19%; }
-    .fullscreen .export-types .data .table-data .not-generated {
+    .fullscreen-hidden-filters .export-types .data .table-data .not-generated {
       padding: 0 10px; }
-    .fullscreen .export-types .data p {
+    .fullscreen-hidden-filters .export-types .data p {
       margin-bottom: 15px; }
   .footer.footer-adaptive {
     padding-left: 277px; } }
@@ -8030,7 +8362,22 @@ input.checkbox-filter {
         .export-types .data .table-data .cell-data.format-data.stata:before {
           left: 45%; } }
 
-.filters-container .separate-filters-group {
+.details-interview .container, .details-interview .container-fluid {
+  padding-left: 15px;
+  padding-right: 15px; }
+
+.filters-container .flagged-questions, .filters-container .reset-filters {
+  padding-top: 0; }
+
+.filters-container .block-filter {
+  margin: 0; }
+
+.filters-container .reset-filters {
+  margin: 15px 5px; }
+  .filters-container .reset-filters a {
+    color: #3f3f3f; }
+
+.separate-filters-group {
   background-color: #dbdfe2;
   -webkit-background: linear-gradient(0deg, #dbdfe2, #dbdfe2) no-repeat 0 0;
   -moz-background: linear-gradient(0deg, #dbdfe2, #dbdfe2) no-repeat 0 0;
@@ -8039,42 +8386,39 @@ input.checkbox-filter {
   background: linear-gradient(0deg, #dbdfe2, #dbdfe2) no-repeat 0 0;
   background-size: 65px 1px;
   background-position: 0 100%;
-  padding: 15px 0;
-  margin-bottom: 0; }
-
-.filters-container .flagged-questions, .filters-container .reset-filters {
-  padding-top: 0;
-  font-size: 14px;
-  line-height: 24px; }
-
-.filters-container .reset-filters {
-  margin: 15px 5px; }
-  .filters-container .reset-filters a {
-    color: #3f3f3f; }
+  padding: 15px 0; }
 
 .flag {
+  font-size: 14px;
+  line-height: 24px;
   color: #dbdfe2;
   display: block;
+  font-weight: bold;
   padding-left: 35px;
   position: relative; }
-  .flag.flagged, .question.with-flag .question-editor h5 .flag.button-flag, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag {
+  .flag:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0; }
+  .flag.flagged, .question.with-flag .question-editor h5 .flag.button-flag, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before {
     color: #3f3f3f; }
-    .flag.flagged:before, .question.with-flag .question-editor h5 .flag.button-flag:before, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:before, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:before {
+    .flag.flagged:before, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before {
       background-position: 1px 0; }
   .flag:hover, .flag:focus {
     color: #a6a8a9;
     text-decoration: none; }
     .flag:hover:before, .flag:focus:before {
       background-position: -56px 0; }
-  .flag.flagged:hover, .question.with-flag .question-editor h5 .flag.button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:hover, .flag.flagged:focus, .question.with-flag .question-editor h5 .flag.button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:focus {
+  .flag.flagged:hover, .question.with-flag .question-editor h5 .flag.button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:hover, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .flag.flagged:focus, .question.with-flag .question-editor h5 .flag.button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:focus, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before {
     color: #3f3f3f;
     text-decoration: none; }
-    .flag.flagged:hover:before, .question.with-flag .question-editor h5 .flag.button-flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:hover:before, .flag.flagged:focus:before, .question.with-flag .question-editor h5 .flag.button-flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:focus:before {
+    .flag.flagged:hover:before, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .flag.flagged:focus:before, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before {
       background-position: -18px 0; }
 
-.btn-input .dropdown-menu > li > a.flagged, .btn-input .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor h5 .btn-input .dropdown-menu > li > a.button-flag, .btn-input .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .preset-filters-container a .btn-input .dropdown-menu > li > a.button-flag, .btn-input .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag, .preset-filters-container .question.with-flag .question-editor a .btn-input .dropdown-menu > li > a.button-flag {
+.bootstrap-select .dropdown-menu > li > a.flagged, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.flag:before {
   padding-left: 35px; }
-  .btn-input .dropdown-menu > li > a.flagged:before, .btn-input .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor h5 .btn-input .dropdown-menu > li > a.button-flag:before, .btn-input .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .preset-filters-container a .btn-input .dropdown-menu > li > a.button-flag:before, .btn-input .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag:before, .preset-filters-container .question.with-flag .question-editor a .btn-input .dropdown-menu > li > a.button-flag:before {
+  .bootstrap-select .dropdown-menu > li > a.flagged:before, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.flag:before {
     top: 5px;
     left: 7px; }
 
@@ -8100,16 +8444,10 @@ label.inactive {
   .preset-filters-container .block-filter .dropdown-menu li a {
     margin: 0; }
 
-html body .details-interview {
-  padding: 0; }
-  html body .details-interview article {
-    margin-left: 285px; }
-
 .content {
   border-right: 3px solid #ececec;
   left: 372px;
   width: 570px;
-  padding-bottom: 40px;
   box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
   z-index: 3; }
   .content .questionnaire-content {
@@ -8125,135 +8463,7 @@ html body .details-interview {
         float: left; }
       .content .questionnaire-content div button {
         float: right;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        margin-right: 10px; }
-        .content .questionnaire-content div button.btn.approve {
-          color: #fff;
-          background-color: #3ca21a;
-          border-color: #3ca21a; }
-          .content .questionnaire-content div button.btn.approve:focus, .content .questionnaire-content div button.btn.approve.focus {
-            color: #fff;
-            background-color: #2c7613;
-            border-color: #133408; }
-          .content .questionnaire-content div button.btn.approve:hover {
-            color: #fff;
-            background-color: #2c7613;
-            border-color: #286d12; }
-          .content .questionnaire-content div button.btn.approve:active, .content .questionnaire-content div button.btn.approve.active,
-          .open > .content .questionnaire-content div button.btn.approve.dropdown-toggle {
-            color: #fff;
-            background-color: #2c7613;
-            border-color: #286d12; }
-            .content .questionnaire-content div button.btn.approve:active:hover, .content .questionnaire-content div button.btn.approve:active:focus, .content .questionnaire-content div button.btn.approve:active.focus, .content .questionnaire-content div button.btn.approve.active:hover, .content .questionnaire-content div button.btn.approve.active:focus, .content .questionnaire-content div button.btn.approve.active.focus,
-            .open > .content .questionnaire-content div button.btn.approve.dropdown-toggle:hover,
-            .open > .content .questionnaire-content div button.btn.approve.dropdown-toggle:focus,
-            .open > .content .questionnaire-content div button.btn.approve.dropdown-toggle.focus {
-              color: #fff;
-              background-color: #20570e;
-              border-color: #133408; }
-          .content .questionnaire-content div button.btn.approve:active, .content .questionnaire-content div button.btn.approve.active,
-          .open > .content .questionnaire-content div button.btn.approve.dropdown-toggle {
-            background-image: none; }
-          .content .questionnaire-content div button.btn.approve.disabled:hover, .content .questionnaire-content div button.btn.approve.disabled:focus, .content .questionnaire-content div button.btn.approve.disabled.focus, .content .questionnaire-content div button.btn.approve[disabled]:hover, .content .questionnaire-content div button.btn.approve[disabled]:focus, .content .questionnaire-content div button.btn.approve[disabled].focus,
-          fieldset[disabled] .content .questionnaire-content div button.btn.approve:hover,
-          fieldset[disabled] .content .questionnaire-content div button.btn.approve:focus,
-          fieldset[disabled] .content .questionnaire-content div button.btn.approve.focus {
-            background-color: #3ca21a;
-            border-color: #3ca21a; }
-          .content .questionnaire-content div button.btn.approve .badge {
-            color: #3ca21a;
-            background-color: #fff; }
-        .content .questionnaire-content div button.btn-danger {
-          border-width: 3px;
-          border-color: #ed2c39;
-          background-color: transparent;
-          color: #ed2c39;
-          padding-top: 9px;
-          padding-bottom: 9px; }
-          .content .questionnaire-content div button.btn-danger:focus, .content .questionnaire-content div button.btn-danger.focus, .content .questionnaire-content div button.btn-danger:hover {
-            color: #d4121f;
-            border-color: #d4121f; }
-  .content .panel-group {
-    margin: 0; }
-    .content .panel-group .panel + .panel {
-      margin-top: -1px; }
-  .content .panel-default {
-    background-color: transparent;
-    margin: 0 0 -1px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    box-shadow: none;
-    padding: 0; }
-    .content .panel-default > .panel-heading h3 a {
-      margin-left: 30px; }
-    .content .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 60px; }
-    .content .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 90px; }
-    .content .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 120px; }
-    .content .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 150px; }
-    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 180px; }
-    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 210px; }
-    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 240px; }
-    .content .panel-default:first-of-type {
-      border-top: none; }
-    .content .panel-default > .panel-heading {
-      background-color: transparent;
-      border: none;
-      padding: 0; }
-      .content .panel-default > .panel-heading h3 {
-        transition: all 0.3s linear 0s; }
-        .content .panel-default > .panel-heading h3.group a {
-          padding-left: 0; }
-          .content .panel-default > .panel-heading h3.group a:before, .content .panel-default > .panel-heading h3.group a:after {
-            display: none; }
-        .content .panel-default > .panel-heading h3 a {
-          display: block;
-          font: 16px/18px "RobotoMedium";
-          font-weight: normal;
-          color: #2a81cb;
-          padding: 15px 20px 15px 25px;
-          position: relative; }
-          .content .panel-default > .panel-heading h3 a:hover, .content .panel-default > .panel-heading h3 a:focus {
-            text-decoration: none; }
-          .content .panel-default > .panel-heading h3 a:before, .content .panel-default > .panel-heading h3 a:after {
-            position: absolute;
-            top: 23px;
-            left: 0;
-            content: "";
-            width: 12px;
-            height: 2px;
-            display: block;
-            background-color: #2a81cb; }
-          .content .panel-default > .panel-heading h3 a:after {
-            transform: rotate(0);
-            transition: all 0.3s linear 0s; }
-          .content .panel-default > .panel-heading h3 a.collapsed:after {
-            transform: rotate(270deg);
-            transition: all 0.3s linear 0s; }
-        .content .panel-default > .panel-heading h3.contains-error a {
-          color: #ed2c39; }
-          .content .panel-default > .panel-heading h3.contains-error a:before, .content .panel-default > .panel-heading h3.contains-error a:after {
-            background-color: #ed2c39; }
-        .content .panel-default > .panel-heading h3.complete a {
-          color: #3ca21a; }
-          .content .panel-default > .panel-heading h3.complete a:before, .content .panel-default > .panel-heading h3.complete a:after {
-            background-color: #3ca21a; }
-      .content .panel-default > .panel-heading .active, .content .panel-default > .panel-heading:hover, .content .panel-default > .panel-heading:focus {
-        background-color: #e6e6e6; }
-    .content .panel-default .in {
-      background-color: #f3f3f3; }
-  .content .panel-body {
-    padding: 0; }
-    .content .panel-body .panel-group {
-      margin-bottom: -1px; }
+        margin-right: 30px; }
 
 .unit-section {
   position: relative; }
@@ -8262,15 +8472,15 @@ html body .details-interview {
 
 .questionnaire {
   transition: margin 0.3s linear 0s;
-  min-width: 555px;
   margin-left: 942px; }
   .questionnaire .unit-title {
     position: relative;
-    z-index: 2;
     background-color: #2a81cb;
     padding: 15px 20px 10px 80px;
     color: #fff;
     box-shadow: 0 3px 5px 0px rgba(0, 0, 0, 0.3); }
+    .questionnaire .unit-title.is_stuck {
+      z-index: 2; }
     .questionnaire .unit-title .breadcrumb {
       margin-bottom: 10px; }
       .questionnaire .unit-title .breadcrumb li a {
@@ -8278,15 +8488,19 @@ html body .details-interview {
         font: 10px/12px "TrebuchetMS"; }
     .questionnaire .unit-title h3 {
       font: 16px/18px "RobotoMedium"; }
-  .questionnaire .contains-error > .unit-title {
+  .questionnaire .section-with-error > .unit-title {
     background-color: #e74924; }
-  .questionnaire .filled > .unit-title {
+  .questionnaire .complete-section > .unit-title {
     background-color: #3ca21a; }
 
 .question {
   position: relative;
   padding: 18px 20px 15px 70px;
   border-bottom: 2px solid #dbdfe2; }
+  .question h5 .button-flag, .question .preset-filters-container a .button-flag, .preset-filters-container .question a .button-flag, .question h5 .flag:before, .question .preset-filters-container a .flag:before, .preset-filters-container .question a .flag:before {
+    position: absolute;
+    top: 0;
+    left: -30px; }
   .question.with-flag {
     display: block;
     background-color: #ececec;
@@ -8296,126 +8510,68 @@ html body .details-interview {
     -o-background: linear-gradient(0deg, #ececec, #ececec) no-repeat 0 0;
     background: linear-gradient(0deg, #ececec, #ececec) no-repeat 0 0;
     background-size: 12px 100%; }
-  .question .dropdown {
-    position: absolute;
-    top: 4px;
-    right: 10px;
-    width: 25px;
-    height: 45px; }
-    .question .dropdown button {
-      display: block;
-      position: relative;
-      width: 100%;
-      height: 100%; }
-      .question .dropdown button span {
-        position: absolute;
-        top: 20px;
-        right: 10px;
-        display: block;
-        width: 5px;
-        height: 5px;
-        border-radius: 100%;
-        background-color: #dbdfe2;
-        transition: all 0.3s linear 0s; }
-        .question .dropdown button span:first-of-type {
-          top: 13px; }
-        .question .dropdown button span:last-of-type {
-          top: 27px; }
-      .question .dropdown button:hover, .question .dropdown button:focus, .question .dropdown button:active {
-        outline: none; }
-        .question .dropdown button:hover span, .question .dropdown button:focus span, .question .dropdown button:active span {
-          background-color: #a6a8a9; }
-    .question .dropdown.open button span {
-      display: none;
-      right: 10px;
-      top: 20px;
-      border-radius: 0;
-      width: 20px;
-      height: 2px; }
-      .question .dropdown.open button span:first-of-type {
-        display: block;
-        transform: rotate(45deg); }
-      .question .dropdown.open button span:last-of-type {
-        display: block;
-        transform: rotate(-45deg); }
-    .question .dropdown .dropdown-menu {
-      left: auto;
-      right: 35px;
-      top: 10px;
-      opacity: 0;
-      filter: alpha(opacity=0);
-      transform-origin: top;
-      animation-fill-mode: forwards;
-      transform: scale(1, 0);
-      transition: all 0.2s linear 0s;
-      display: block; }
-    .question .dropdown.open > .dropdown-menu {
-      transform: scale(1, 1);
-      opacity: 1;
-      filter: alpha(opacity=100); }
-  .question .information-block {
-    padding: 0 10px;
+
+.information-block {
+  padding: 0 10px;
+  color: #a6a8a9; }
+  .information-block h6 {
+    margin-top: 20px;
+    font: 10px/12px "TrebuchetMSBold";
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: block; }
+  .information-block p {
+    width: 90%;
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: bold;
+    font-style: italic; }
+    .information-block p p:last-of-type {
+      margin-bottom: 10px; }
+  .information-block.enumerators {
+    color: #ed45aa; }
+  .information-block.instruction {
+    color: #2a81cb; }
+  .information-block.errors {
+    color: #e74924; }
+
+.comments-block p {
+  color: #3f3f3f; }
+
+.comments-block .comment {
+  display: none; }
+  .comments-block .comment.active {
+    display: block; }
+  .comments-block .comment .form-inline .form-control {
+    width: 360px;
+    height: 40px;
+    z-index: 0;
     color: #a6a8a9; }
-    .question .information-block h6 {
-      margin-top: 20px;
-      font: 10px/12px "TrebuchetMSBold";
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      display: block; }
-    .question .information-block p {
-      width: 90%;
-      font-size: 12px;
-      line-height: 14px;
-      font-weight: bold;
-      font-style: italic; }
-      .question .information-block p p:last-of-type {
-        margin-bottom: 10px; }
-    .question .information-block.comments-block p {
-      color: #3f3f3f; }
-    .question .information-block.comments-block .comment {
-      display: none; }
-      .question .information-block.comments-block .comment.active {
-        display: block; }
-      .question .information-block.comments-block .comment .form-inline .form-control {
-        height: 40px;
-        width: 365px;
-        z-index: 0;
-        color: #a6a8a9; }
-      .question .information-block.comments-block .comment .form-inline button {
-        color: #fff;
-        padding: 12px;
-        background-color: #bfc6cb;
-        border: none; }
-        .question .information-block.comments-block .comment .form-inline button:hover, .question .information-block.comments-block .comment .form-inline button:focus {
-          outline: none;
-          border: none;
-          background-color: #a3adb4; }
-    .question .information-block.enumerators {
-      color: #ed45aa; }
-    .question .information-block.instruction {
-      color: #2a81cb; }
-    .question .information-block.errors {
-      color: #e74924; }
 
 .question.hidden-question {
+  min-height: 65px;
   background: repeating-linear-gradient(-45deg, #dbdfe2, #dbdfe2 2px, transparent 2px, transparent 6px); }
   .question.hidden-question h5, .question.hidden-question .preset-filters-container a, .preset-filters-container .question.hidden-question a {
     margin: 0;
     color: #a6a8a9; }
-    .question.hidden-question h5 .button-flag, .question.hidden-question .preset-filters-container a .button-flag, .preset-filters-container .question.hidden-question a .button-flag {
+    .question.hidden-question h5 .button-flag, .question.hidden-question .preset-filters-container a .button-flag, .preset-filters-container .question.hidden-question a .button-flag, .question.hidden-question h5 .flag:before, .question.hidden-question .preset-filters-container a .flag:before, .preset-filters-container .question.hidden-question a .flag:before {
       z-index: 0; }
   .question.hidden-question .question-unit, .question.hidden-question .information-block {
     display: none; }
 
 .question.hidden-by-filter {
   background: #fff;
-  padding: 2px;
-  /* @include transition(padding, 0.2s); */ }
+  padding: 2px; }
   .question.hidden-by-filter > .question-editor,
   .question.hidden-by-filter > h5, .preset-filters-container
   .question.hidden-by-filter > a,
   .question.hidden-by-filter > .dropdown {
     display: none; }
+
+.hidden-by-filter {
+  min-height: auto; }
+  .hidden-by-filter .question.hidden-question, .hidden-by-filter.question.hidden-question {
+    min-height: auto; }
 
 .unit-section.hidden-by-filter .unit-title .breadcrumb, .unit-section.hidden-by-filter .unit-title h3 {
   display: none; }
@@ -8435,12 +8591,12 @@ html body .details-interview {
 .unit-section.hidden-by-filter .unit-title {
   background-color: #cce2f5; }
 
-.unit-section.hidden-by-filter.contains-error > .unit-title,
+.unit-section.hidden-by-filter.section-with-error > .unit-title,
 .unit-section.hidden-by-filter .contains-error > .unit-title {
   background-color: #fbe2dc; }
 
-.unit-section.hidden-by-filter.filled > .unit-title,
-.unit-section.hidden-by-filter .filled > .unit-title {
+.unit-section.hidden-by-filter.complete-section > .unit-title,
+.unit-section.hidden-by-filter .complete-section > .unit-title {
   background-color: #d1f6c5; }
 
 .questionnaire .open-hidden-by-filter:before {
@@ -8458,12 +8614,12 @@ html body .details-interview {
 .questionnaire .open-hidden-by-filter .unit-title {
   background-color: #78b2e3; }
 
-.questionnaire .open-hidden-by-filter.contains-error > .unit-title,
+.questionnaire .open-hidden-by-filter.section-with-error > .unit-title,
 .questionnaire .open-hidden-by-filter .contains-error > .unit-title {
   background-color: #f19580; }
 
-.questionnaire .open-hidden-by-filter.filled > .unit-title,
-.questionnaire .open-hidden-by-filter .filled > .unit-title {
+.questionnaire .open-hidden-by-filter.complete-section > .unit-title,
+.questionnaire .open-hidden-by-filter .complete-section > .unit-title {
   background-color: #69e141; }
 
 .question-editor {
@@ -8472,16 +8628,6 @@ html body .details-interview {
     padding-left: 10px;
     margin: 0 0 10px;
     position: relative; }
-    .question-editor h5 .button-flag, .question-editor .preset-filters-container a .button-flag, .preset-filters-container .question-editor a .button-flag {
-      left: -30px; }
-      .question-editor h5 .button-flag:hover, .question-editor .preset-filters-container a .button-flag:hover, .preset-filters-container .question-editor a .button-flag:hover, .question-editor h5 .button-flag:focus, .question-editor .preset-filters-container a .button-flag:focus, .preset-filters-container .question-editor a .button-flag:focus {
-        background-position: -56px 0;
-        outline: none; }
-      .question-editor h5 .button-flag.flagged, .question-editor .preset-filters-container a .button-flag.flagged, .preset-filters-container .question-editor a .button-flag.flagged, .question.with-flag .question-editor h5 .button-flag, .question.with-flag .question-editor .preset-filters-container a .button-flag, .question.with-flag .preset-filters-container .question-editor .preset-filters-container a .button-flag, .question-editor .preset-filters-container .question.with-flag .question-editor a .button-flag, .preset-filters-container .question.with-flag .question-editor a .button-flag, .question-editor h5 .button-flag:active, .question-editor .preset-filters-container a .button-flag:active, .preset-filters-container .question-editor a .button-flag:active {
-        background-position: 1px 0;
-        outline: none; }
-        .question-editor h5 .button-flag.flagged:hover, .question-editor .preset-filters-container a .button-flag.flagged:hover, .preset-filters-container .question-editor a .button-flag.flagged:hover, .question.with-flag .question-editor h5 .button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .button-flag:hover, .question.with-flag .preset-filters-container .question-editor .preset-filters-container a .button-flag:hover, .question-editor .preset-filters-container .question.with-flag .question-editor a .button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .button-flag:hover, .question-editor h5 .button-flag.flagged:focus, .question-editor .preset-filters-container a .button-flag.flagged:focus, .preset-filters-container .question-editor a .button-flag.flagged:focus, .question.with-flag .question-editor h5 .button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .button-flag:focus, .question.with-flag .preset-filters-container .question-editor .preset-filters-container a .button-flag:focus, .question-editor .preset-filters-container .question.with-flag .question-editor a .button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .button-flag:focus, .question-editor h5 .button-flag:active:hover, .question-editor .preset-filters-container a .button-flag:active:hover, .preset-filters-container .question-editor a .button-flag:active:hover, .question-editor h5 .button-flag:active:focus, .question-editor .preset-filters-container a .button-flag:active:focus, .preset-filters-container .question-editor a .button-flag:active:focus {
-          background-position: -18px 0; }
     .question-editor h5:before, .question-editor .preset-filters-container a:before, .preset-filters-container .question-editor a:before {
       left: -25px; }
   .question-editor.answered .question-unit .options-group {
@@ -8490,102 +8636,65 @@ html body .details-interview {
     background-color: #f6d6d0; }
     .question-editor.contains-error .question-unit .options-group .form-group {
       border-color: #f6d6d0; }
-  .question-editor .question-unit .options-group {
-    padding: 10px;
-    border-radius: 7px;
-    margin-bottom: 0px;
-    background-color: #eeeff0; }
-    .question-editor .question-unit .options-group .radio, .question-editor .question-unit .options-group .form-group, .question-editor .question-unit .options-group .form-input {
-      padding: 0;
-      margin: 0 0 5px;
-      max-width: 425px;
-      position: relative; }
-      .question-editor .question-unit .options-group .radio:last-of-type, .question-editor .question-unit .options-group .form-group:last-of-type, .question-editor .question-unit .options-group .form-input:last-of-type {
-        margin-bottom: 0; }
-      .question-editor .question-unit .options-group .radio label, .question-editor .question-unit .options-group .form-group label, .question-editor .question-unit .options-group .form-input label {
-        display: block;
-        font-size: 14px;
-        line-height: 18px;
-        padding: 11px 15px;
-        margin: 0; }
-    .question-editor .question-unit .options-group .form-group label {
-      cursor: pointer; }
-      .question-editor .question-unit .options-group .form-group label .tick {
-        position: relative; }
-    .question-editor .question-unit .options-group .field {
-      position: relative; }
-      .question-editor .question-unit .options-group .field .field-to-fill, .question-editor .question-unit .options-group .field .dropdown-toggle {
-        width: 100%;
-        padding: 11px 15px;
-        border: none;
-        font-size: 14px;
-        line-height: 18px;
-        font-weight: bold;
-        padding-right: 30px;
-        border-radius: 5px; }
-      .question-editor .question-unit .options-group .field .close {
-        outline: none;
-        background-color: transparent;
-        width: 10px;
-        height: 10px;
-        position: absolute;
-        top: -2px;
-        right: -5px;
-        padding: 20px;
-        margin: 0;
-        opacity: 0.5;
-        filter: alpha(opacity=50);
-        transition: all 0.2s linear 0s; }
-        .question-editor .question-unit .options-group .field .close:hover:before, .question-editor .question-unit .options-group .field .close:hover:after, .question-editor .question-unit .options-group .field .close:focus:before, .question-editor .question-unit .options-group .field .close:focus:after, .question-editor .question-unit .options-group .field .close:active:before, .question-editor .question-unit .options-group .field .close:active:after {
-          background-color: #595c5d; }
-        .question-editor .question-unit .options-group .field .close:before, .question-editor .question-unit .options-group .field .close:after {
-          display: block;
-          content: "";
-          width: 14px;
-          height: 2px;
-          background-color: #a6a8a9;
-          transform: rotate(45deg);
-          position: relative;
-          left: -12px; }
-        .question-editor .question-unit .options-group .field .close:after {
-          transform: rotate(-45deg);
-          top: -2px; }
-      .question-editor .question-unit .options-group .field .dropdown-toggle {
-        padding: 11px 15px; }
-        .question-editor .question-unit .options-group .field .dropdown-toggle span {
-          position: static; }
-        .question-editor .question-unit .options-group .field .dropdown-toggle:hover, .question-editor .question-unit .options-group .field .dropdown-toggle:focus, .question-editor .question-unit .options-group .field .dropdown-toggle:active {
-          z-index: 0; }
-      .question-editor .question-unit .options-group .field .dropdown-menu {
-        z-index: 1;
-        max-width: 425px;
-        width: 420px;
-        padding: 5px 10px; }
-        .question-editor .question-unit .options-group .field .dropdown-menu li {
-          border-bottom: 1px solid #dbdfe2; }
-          .question-editor .question-unit .options-group .field .dropdown-menu li:last-child {
-            border: none; }
-    .question-editor .question-unit .options-group .action-btn-holder .action-btn {
-      padding: 12px 15px;
+
+.question-unit .options-group {
+  padding: 10px;
+  border-radius: 7px;
+  margin-bottom: 0px;
+  background-color: #eeeff0; }
+  .question-unit .options-group .radio, .question-unit .options-group .form-group, .question-unit .options-group .form-input {
+    padding: 0;
+    margin: 0 0 5px;
+    position: relative; }
+    .question-unit .options-group .radio:last-of-type, .question-unit .options-group .form-group:last-of-type, .question-unit .options-group .form-input:last-of-type {
+      margin-bottom: 0; }
+    .question-unit .options-group .radio label, .question-unit .options-group .form-group label, .question-unit .options-group .form-input label {
+      display: block;
       font-size: 14px;
-      line-height: 16px;
-      background-color: #fff;
-      border-color: transparent;
-      color: #a6a8a9;
-      font-style: italic;
-      border-radius: 5px;
-      outline: none; }
-      .question-editor .question-unit .options-group .action-btn-holder .action-btn:hover, .question-editor .question-unit .options-group .action-btn-holder .action-btn:focus, .question-editor .question-unit .options-group .action-btn-holder .action-btn:active {
-        background-color: #ececec;
-        border-color: #8c8f90;
-        color: #737576; }
+      line-height: 18px;
+      padding: 11px 38px 11px 45px;
+      margin: 0; }
+      .question-unit .options-group .radio label .tick, .question-unit .options-group .form-group label .tick, .question-unit .options-group .form-input label .tick {
+        position: absolute;
+        left: 15px; }
+  .question-unit .options-group .form-group label {
+    cursor: pointer; }
+  .question-unit .options-group .field {
+    position: relative; }
+    .question-unit .options-group .field .field-to-fill, .question-unit .options-group .field .dropdown-toggle {
+      width: 100%;
+      padding: 11px 15px;
+      border: none;
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: bold;
+      padding-right: 38px;
+      border-radius: 5px; }
+    .question-unit .options-group .field .dropdown-toggle {
+      padding: 11px 38px 11px 15px; }
+      .question-unit .options-group .field .dropdown-toggle span {
+        position: static;
+        font: 14px/18px Arial;
+        letter-spacing: normal;
+        text-transform: none; }
+      .question-unit .options-group .field .dropdown-toggle:hover, .question-unit .options-group .field .dropdown-toggle:focus, .question-unit .options-group .field .dropdown-toggle:active {
+        z-index: 0; }
+    .question-unit .options-group .field .dropdown-menu {
+      z-index: 1;
+      width: 100%;
+      padding: 5px 10px; }
+      .question-unit .options-group .field .dropdown-menu li {
+        border-bottom: 1px solid #dbdfe2; }
+        .question-unit .options-group .field .dropdown-menu li:last-child {
+          border: none; }
 
 .static-text h5, .variable h5, .static-text .preset-filters-container a, .preset-filters-container .static-text a, .variable .preset-filters-container a, .preset-filters-container .variable a {
   margin: 0; }
   .static-text h5 .static-text-image, .variable h5 .static-text-image, .static-text .preset-filters-container a .static-text-image, .preset-filters-container .static-text a .static-text-image, .variable .preset-filters-container a .static-text-image, .preset-filters-container .variable a .static-text-image {
     margin-top: 10px;
-    width: 445px;
-    height: auto; }
+    max-width: 445px;
+    height: auto;
+    /* @include size($width-question-editor, auto); */ }
 
 .static-text.invalid h5, .invalid.variable h5, .static-text.invalid .preset-filters-container a, .preset-filters-container .static-text.invalid a, .invalid.variable .preset-filters-container a, .preset-filters-container .invalid.variable a {
   color: #e74924; }
@@ -8612,124 +8721,80 @@ html body .details-interview {
   left: -40px;
   line-height: 42px;
   text-align: right;
+  font-size: 14px;
+  font-weight: bold;
   width: 25px;
   color: #2a81cb !important; }
 
 .yes-no-question .question-unit .yes-no-mark {
   color: #2a81cb;
   margin: 15px 0 0 17px; }
-  .yes-no-question .question-unit .yes-no-mark span {
+  .yes-no-question .question-unit .yes-no-mark b {
     color: #a6a8a9;
     font-size: 18px;
     line-height: 20px;
-    padding: 0 5px; }
+    padding: 0 5px;
+    font-weight: normal; }
 
-.yes-no-question .question-unit .options-group .radio label {
+.yes-no-question .question-unit .options-group .radio .field:before, .yes-no-question .question-unit .options-group .radio .field:after {
+  content: " ";
+  display: table; }
+
+.yes-no-question .question-unit .options-group .radio .field:after {
+  clear: both; }
+
+.yes-no-question .question-unit .options-group .radio .field label {
   padding-left: 0;
   padding-right: 5px;
-  display: inline-block; }
-  .yes-no-question .question-unit .options-group .radio label:first-of-type {
+  display: inline-block;
+  float: left; }
+  .yes-no-question .question-unit .options-group .radio .field label:first-of-type {
     padding-left: 15px; }
+  .yes-no-question .question-unit .options-group .radio .field label .tick {
+    position: relative;
+    left: 0;
+    margin-right: 0; }
 
-.yes-no-question .question-unit .options-group .radio span {
+.yes-no-question .question-unit .options-group .radio .field b {
+  float: left;
+  color: #a6a8a9;
+  font-size: 18px;
+  line-height: 20px;
+  padding: 11px 5px;
+  font-weight: normal; }
+
+.yes-no-question .question-unit .options-group .radio .field > span {
+  padding: 11px 38px 11px 5px;
   color: #a6a8a9;
   font-weight: normal;
-  padding: 11px 0;
   font-size: 14px;
   line-height: 18px;
-  margin: 0; }
-  .yes-no-question .question-unit .options-group .radio span:first-of-type {
-    font-size: 18px;
-    line-height: 20px;
-    padding: 10px 0; }
+  margin: 0;
+  float: left;
+  width: 75%; }
 
-.yes-no-question .question-unit .options-group .radio input.wb-radio:checked ~ span {
+.yes-no-question .question-unit .options-group .radio .field input.wb-radio:checked ~ span {
   color: #3f3f3f;
   font-weight: bold; }
-  .yes-no-question .question-unit .options-group .radio input.wb-radio:checked ~ span:first-of-type {
-    color: #a6a8a9;
-    font-weight: normal; }
 
 .gps-question.answered .map, .gps-question.contains-error .map {
   height: 200px;
   width: 385px;
   margin-bottom: 10px; }
 
-.image-zoom-box, .image-option {
-  overflow: hidden;
-  margin-bottom: 10px; }
-  .image-zoom-box img, .image-option img {
-    display: block;
-    max-width: 100%;
-    height: auto; }
-
-span.image-zoom-box, span.image-option {
-  display: block; }
-
 .multimedia-question .image-wrapper {
-  width: 385px;
-  height: 200px; }
+  max-width: 90%;
+  max-height: 200px;
+  /* @include size(385px, 200px); */ }
 
 .qr-question.answered .block-with-data, .qr-question.contains-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.contains-error .block-with-data {
   font-size: 12px;
   line-height: 14px;
-  margin-bottom: 10px; }
-
-.zoomImg {
-  cursor: pointer;
-  transition: all 0.3s linear 0s; }
-
-.zoomImg:hover, .zoomImg:focus {
-  transform: scale(1.1); }
-
-.modal-img {
-  position: fixed;
-  z-index: 50;
-  padding-top: 50px;
-  left: 0;
-  top: 70px;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  text-align: center;
-  display: none; }
-  .modal-img .modal-img-content {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 70% !important;
-    max-height: 80%; }
-  .modal-img .caption {
-    width: 75%;
-    text-align: center;
-    color: #ececec;
-    padding: 15px 0;
-    display: block;
-    margin-left: auto;
-    margin-right: auto; }
-    .modal-img .caption:first-letter {
-      text-transform: capitalize; }
-  .modal-img .close-zoomming-img {
-    position: absolute;
-    top: 40px;
-    right: 40px;
-    color: #ececec;
-    font-size: 40px;
-    transition: all 0.2s linear 0s; }
-    .modal-img .close-zoomming-img:hover, .modal-img .close-zoomming-img:focus {
-      color: #a6a8a9;
-      cursor: pointer; }
-
-.modal-img-content, .caption {
-  animation-name: zoom;
-  animation-duration: 0.5s; }
-
-@keyframes zoom {
-  0% {
-    transform: scale(0); }
-  100% {
-    transform: scale(1); } }
+  margin-bottom: 10px;
+  padding-right: 38px;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow-wrap: break-word; }
 
 .img-single-select-question label {
   overflow: hidden; }
@@ -8743,7 +8808,7 @@ span.image-zoom-box, span.image-option {
 .fullscreen-hidden-filters .questionnaire {
   margin-left: 582px; }
   .fullscreen-hidden-filters .questionnaire .unit-title.is_stuck {
-    width: 100% !important; }
+    width: auto !important; }
 
 .fullscreen-hidden-filters .content {
   left: 12px; }
@@ -8751,8 +8816,22 @@ span.image-zoom-box, span.image-option {
     padding-left: 55px; }
 
 .fullscreen-hidden-content .content {
-  left: -597px;
-  overflow: inherit; }
+  left: -570px;
+  overflow: inherit;
+  box-shadow: none; }
+  .fullscreen-hidden-content .content .foldback-button {
+    right: -50px;
+    background-color: #dbdfe2;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px; }
+    .fullscreen-hidden-content .content .foldback-button span.arrow {
+      margin-left: 13px;
+      margin-right: 2px;
+      transform: rotate(45deg); }
+      .fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
+        transform: rotate(-45deg); }
+    .fullscreen-hidden-content .content .foldback-button .glyphicon {
+      display: inline-block; }
 
 .fullscreen-hidden-content .filters {
   box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
@@ -8761,57 +8840,47 @@ span.image-zoom-box, span.image-option {
 .fullscreen-hidden-content .questionnaire {
   margin-left: 372px; }
   .fullscreen-hidden-content .questionnaire .unit-title.is_stuck {
-    width: 100% !important; }
+    width: auto !important; }
 
 .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
-  top: 60px; }
+  top: 130px; }
 
 .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire {
   margin-left: 12px; }
   .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
     padding-left: 85px; }
 
+.footer.footer-adaptive-content.footer-adaptive-filters {
+  padding-left: 930px; }
+
+.footer.footer-adaptive-content {
+  padding-left: 570px; }
+
+.footer.footer-adaptive-filters {
+  padding-left: 360px; }
+
 @media only screen and (max-width: 1525px) {
   .details-interview .filters {
-    top: 60px;
+    padding-top: 105px;
     width: 270px;
-    padding-top: 45px;
-    padding-left: 15px; }
+    padding-left: 12px; }
     .details-interview .filters .bootstrap-select.btn-group {
       width: 100% !important; }
     .details-interview .filters .open > .dropdown-menu {
       width: 100%; }
+    .details-interview .filters .foldback-button {
+      top: 65px; }
     .details-interview .filters.hidden-filters {
-      left: -282px;
-      position: absolute; }
+      left: -282px; }
       .details-interview .filters.hidden-filters .foldback-button {
         right: -50px; }
   .details-interview .filters {
-    top: 70px; }
-    .details-interview .filters.hidden-filters {
-      position: fixed; }
+    padding-top: 115px; }
+    .details-interview .filters .foldback-button {
+      top: 75px; }
   .content {
     width: 330px;
     left: 282px; }
-    .content .panel-default > .panel-heading h3 a {
-      margin-left: 10px; }
-    .content .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 20px; }
-    .content .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 30px; }
-    .content .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 40px; }
-    .content .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 50px; }
-    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 60px; }
-    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 70px; }
-    .content .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default .panel-default > .panel-heading h3 a {
-      margin-left: 80px; }
-    .content .panel-default > .panel-heading h3 a {
-      font-size: 14px;
-      line-height: 16px; }
     .content .questionnaire-content div h2, .content .questionnaire-content div button {
       float: none; }
   .questionnaire {
@@ -8820,46 +8889,220 @@ span.image-zoom-box, span.image-option {
       width: auto; }
   .fullscreen-hidden-filters .questionnaire {
     margin-left: 342px; }
+  .fullscreen-hidden-filters .questionnaire {
+    margin-left: 342px; }
   .fullscreen-hidden-content .questionnaire {
     margin-left: 282px; }
   .fullscreen-hidden-content .content {
-    left: -357px; }
+    left: -330px; }
   .questionnaire {
-    margin-left: 612px; } }
-
-@media (max-width: 1210px) {
-  /* 	.details-interview{
-		.filters{
-			overflow: visible;
-			.foldback-button{
-        right: -80px;
-        top: 5px;
-        background-color: $gray_form;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-        span.arrow{
-            margin-left: 13px;
-            margin-right: 2px;
-            @include rotate(45deg);
-            &:first-of-type{
-                @include rotate(-45deg);
-            }
-        }
-        .glyphicon{
-            display: inline-block;
-        }
-    }
-			top: 60px;
-			left: $hidden-filter-small-indent;
-		}
-	} */ }
-
-@media only screen and (max-width: 700px) {
-  .modal-img-content {
-    width: 100%; } }
+    margin-left: 612px; }
+  .footer.footer-adaptive-content.footer-adaptive-filters {
+    padding-left: 600px; }
+  .footer.footer-adaptive-content {
+    padding-left: 330px; }
+  .footer.footer-adaptive-filters {
+    padding-left: 270px; } }
 
 @media (max-width: 1210px) {
   .content {
-    top: 60px; }
+    padding-top: 60px; }
   .unit-title.is_stuck {
-    top: 60px !important; } }
+    top: 60px !important; }
+  .details-interview .filters {
+    padding-top: 105px;
+    left: -282px;
+    overflow: visible;
+    box-shadow: none; }
+    .details-interview .filters .foldback-button {
+      right: -50px;
+      background-color: #dbdfe2;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px; }
+      .details-interview .filters .foldback-button span.arrow {
+        margin-left: 13px;
+        margin-right: 2px;
+        transform: rotate(45deg); }
+        .details-interview .filters .foldback-button span.arrow:first-of-type {
+          transform: rotate(-45deg); }
+      .details-interview .filters .foldback-button .glyphicon {
+        display: inline-block; }
+    .details-interview .filters .foldback-button {
+      top: 65px; }
+  .details-interview .content {
+    box-shadow: none;
+    left: -330px;
+    overflow: visible; }
+    .details-interview .content .foldback-button {
+      right: -50px;
+      background-color: #dbdfe2;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px; }
+      .details-interview .content .foldback-button span.arrow {
+        margin-left: 13px;
+        margin-right: 2px;
+        transform: rotate(45deg); }
+        .details-interview .content .foldback-button span.arrow:first-of-type {
+          transform: rotate(-45deg); }
+      .details-interview .content .foldback-button .glyphicon {
+        display: inline-block; }
+    .details-interview .content .foldback-button {
+      top: 120px; }
+  .details-interview .questionnaire {
+    margin-left: 12px; }
+    .details-interview .questionnaire .question {
+      padding-left: 75px; }
+  .details-interview .fullscreen-hidden-content .content {
+    left: 12px;
+    overflow: auto;
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+    .details-interview .fullscreen-hidden-content .content .foldback-button {
+      right: 5px;
+      background-color: transparent; }
+      .details-interview .fullscreen-hidden-content .content .foldback-button span.arrow {
+        margin: 15px 10px;
+        transform: rotate(-45deg); }
+        .details-interview .fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
+          transform: rotate(45deg); }
+      .details-interview .fullscreen-hidden-content .content .foldback-button .glyphicon {
+        display: none; }
+    .details-interview .fullscreen-hidden-content .content .foldback-button {
+      top: 65px; }
+    .details-interview .fullscreen-hidden-content .content .questionnaire-content {
+      padding-left: 50px; }
+  .details-interview .fullscreen-hidden-content .questionnaire {
+    margin-left: 342px; }
+    .details-interview .fullscreen-hidden-content .questionnaire .question {
+      padding-left: 40px; }
+    .details-interview .fullscreen-hidden-content .questionnaire .unit-title.is_stuck {
+      padding-left: 50px;
+      width: auto !important; }
+    .details-interview .fullscreen-hidden-content .questionnaire .button-flag, .details-interview .fullscreen-hidden-content .questionnaire .flag:before {
+      left: -20px; }
+  .details-interview .fullscreen-hidden-content .filters .foldback-button {
+    display: none; }
+  .details-interview .fullscreen-hidden-filters .filters {
+    overflow: auto;
+    left: 0;
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+    .details-interview .fullscreen-hidden-filters .filters .foldback-button {
+      right: 5px;
+      background-color: transparent; }
+      .details-interview .fullscreen-hidden-filters .filters .foldback-button span.arrow {
+        margin: 15px 10px;
+        transform: rotate(-45deg); }
+        .details-interview .fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
+          transform: rotate(45deg); }
+      .details-interview .fullscreen-hidden-filters .filters .foldback-button .glyphicon {
+        display: none; }
+  .details-interview .fullscreen-hidden-filters .questionnaire {
+    margin-left: 282px; }
+    .details-interview .fullscreen-hidden-filters .questionnaire .question {
+      padding-left: 40px; }
+    .details-interview .fullscreen-hidden-filters .questionnaire .unit-title.is_stuck {
+      padding-left: 50px;
+      width: auto !important; }
+    .details-interview .fullscreen-hidden-filters .questionnaire .button-flag, .details-interview .fullscreen-hidden-filters .questionnaire .flag:before {
+      left: -20px; }
+  .details-interview .fullscreen-hidden-filters .content {
+    z-index: 4;
+    box-shadow: none; }
+    .details-interview .fullscreen-hidden-filters .content .foldback-button {
+      top: 65px; }
+  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content {
+    left: 12px;
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
+      right: 5px;
+      background-color: transparent; }
+      .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow {
+        margin: 15px 10px;
+        transform: rotate(-45deg); }
+        .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
+          transform: rotate(45deg); }
+      .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button .glyphicon {
+        display: none; }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .questionnaire-content {
+      padding-left: 50px; }
+  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire {
+    margin-left: 342px; }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
+      padding-left: 40px; }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .unit-title.is_stuck {
+      padding-left: 50px;
+      width: auto !important; }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .button-flag, .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .flag:before {
+      left: -20px; }
+  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .filters {
+    box-shadow: none;
+    left: -282px; }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .filters .foldback-button {
+      display: none; }
+  .modal-img {
+    top: 60px; }
+  .footer.footer-adaptive-content.footer-adaptive-filters {
+    padding-left: 0; }
+  .footer.footer-adaptive-content {
+    padding-left: 270px; }
+  .footer.footer-adaptive-filters {
+    padding-left: 330px; } }
+
+@media (max-width: 880px) {
+  .details-interview .questionnaire .unit-title.is_stuck {
+    width: 100% !important;
+    bottom: auto !important; }
+  .details-interview .questionnaire .comment .form-inline .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle; }
+  .details-interview .fullscreen-hidden-filters .content, .details-interview .fullscreen-hidden-filters .questionnaire {
+    display: none; }
+  .details-interview .fullscreen-hidden-filters .filters {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%; }
+  .details-interview .fullscreen-hidden-content .filter, .details-interview .fullscreen-hidden-content .questionnaire {
+    display: none; }
+  .details-interview .fullscreen-hidden-content .content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border: none; }
+    .details-interview .fullscreen-hidden-content .content .foldback-button {
+      right: 10px; } }
+
+@media only screen and (max-width: 615px) {
+  .details-interview .questionnaire .comment .form-inline .form-group {
+    margin-bottom: 15px; }
+  .details-interview .questionnaire .question {
+    padding-left: 40px; }
+  .details-interview .questionnaire .unit-title {
+    padding-left: 45px; }
+  .details-interview .questionnaire .button-flag, .details-interview .questionnaire .flag:before {
+    left: -20px; }
+  .details-interview .questionnaire .question-editor {
+    max-width: 285px; }
+  .details-interview .questionnaire .comments-block .comment .form-inline .form-control {
+    width: 265px; }
+  .details-interview .questionnaire .yes-no-question .question-unit .options-group .radio .field > span {
+    width: 71%; }
+  .details-interview .questionnaire .gps-question.answered .map, .details-interview .questionnaire .gps-question.contains-error .map {
+    width: 225px; }
+  .details-interview .questionnaire .multimedia-question .image-wrapper {
+    width: 225px; }
+  .details-interview .questionnaire .modal-img .modal-img-content {
+    max-width: 60% !important; }
+  .details-interview .aside-menu {
+    right: 20px; }
+  .footer.footer-adaptive-content.footer-adaptive-filters {
+    padding-left: 0; }
+  .footer.footer-adaptive-content {
+    display: none; }
+  .footer.footer-adaptive-filters {
+    display: none; } }

@@ -646,6 +646,9 @@
     <Content Include="Dependencies\fonts\RobotoMedium.ttf" />
     <Content Include="Dependencies\fonts\RobotoMedium.woff" />
     <Content Include="Dependencies\fonts\RobotoMedium.woff2" />
+    <Content Include="Dependencies\css\_dropdown.scss" />
+    <Content Include="Dependencies\css\_accordion.scss" />
+    <Content Include="Dependencies\css\_zoomimg.scss" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
