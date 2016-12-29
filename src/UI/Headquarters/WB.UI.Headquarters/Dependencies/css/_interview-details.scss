@@ -1,15 +1,15 @@
-.filters-container {
-	.separate-filters-group{
-		@include gradient($gray_form, $gray_form, null, null);
-		background-size: 65px 1px;
-		background-position: 0 100%; 
-		padding: 15px 0;
-		margin-bottom: 0;
+.details-interview{
+	.container, .container-fluid{
+		padding-left: 15px;
+		padding-right: 15px;
 	}
+}
+.filters-container {
 	.flagged-questions{
 		padding-top: 0;
-		font-size: 14px;
-		line-height: 24px;
+	}
+	.block-filter{
+		margin: 0;
 	}
 	.reset-filters{
 		@extend .flagged-questions;
@@ -19,13 +19,24 @@
 		}
 	}
 }
+.separate-filters-group{
+	@include gradient($gray_form, $gray_form, null, null);
+	background-size: 65px 1px;
+	background-position: 0 100%; 
+	padding: 15px 0;
+}
 .flag{
+	font-size: 14px;
+	line-height: 24px;
   	color: $gray_form;
   	display: block;
+  	font-weight: bold;
   	padding-left: 35px;
   	position: relative;
   	&:before{
-  		@extend %flag;
+  		@extend .button-flag;
+  		content: "";
+  		@include absolute(0, null, null, 0);
   	}
 	&.flagged{
 		color: $gray-text;
@@ -48,7 +59,7 @@
 		}
 	}	
 }
-.btn-input .dropdown-menu > li > a.flagged{
+.bootstrap-select .dropdown-menu > li > a.flagged{
 	padding-left: 35px;
 	&:before{
 		top: 5px;
@@ -81,18 +92,11 @@ label.inactive{
 		}
 	}	
 }
-html body .details-interview{
-	padding: 0;
-	article{
-		margin-left: 285px;
-	}
-}
 .content{
 	@extend %aside;
 	border-right: 3px solid $gray-super-light;
 	left: $filter-width + 12px;
 	width: $content-width;
-	padding-bottom: 40px;
 	@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
 	z-index: 3;
 	.questionnaire-content{
@@ -110,114 +114,10 @@ html body .details-interview{
 			}
 			button{
 				float: right;
-				padding-bottom: 10px;
-				padding-top: 10px;
-				margin-right: 10px;
-				&.btn.approve{
-					@include button-variant(#fff, $green, $green);
-				}
-				&.btn-danger{
-					border-width: 3px;
-					border-color: $red;
-					background-color: transparent;
-					color: $red;
-					padding-top: 9px;
-					padding-bottom: 9px;
-					&:focus,
-					&.focus,
-					&:hover {
-					    color: darken($red, 10%);
-					    border-color: darken($red, 10%);
-					}
-				}
+				margin-right: 30px;
 			}
 		}
-	}
-	.panel-group{
-		margin: 0;
-		.panel + .panel{
-			margin-top: -1px;
-		}
-	}
-	.panel-default{
-		background-color: transparent;
-		margin: 0 0 -1px;
-		border-radius: 0;
-		border-left: none;
-		border-right: none;
-		box-shadow: none;
-		padding: 0;
-		@include accordion(30px);
-		&:first-of-type{
-			border-top: none;
-		}
-		& > .panel-heading{
-			background-color: transparent;
-			border: none;
-			padding: 0;
-			h3{
-				@include transition(all, 0.3s);
-				&.group a{
-					padding-left: 0;
-					&:before, &:after{
-						display: none;
-					}
-				}
-				a{
-					display: block;
-					font: 16px/18px "RobotoMedium";
-					font-weight: normal;
-					color: $blue;
-					padding: 15px 20px 15px 25px;
-					position: relative;
-
-					&:hover, &:focus{
-						text-decoration: none;
-					}
-					&:before, &:after{
-						@include absolute(23px, null, null, 0);
-						content: "";
-						width: 12px;
-						height: 2px;
-						display: block;
-						background-color: $blue;
-					}
-					&:after{
-						@include rotate(0);
-						@include transition(all, 0.3s);
-					}
-					&.collapsed:after{
-						@include rotate(270deg);
-						@include transition(all, 0.3s);
-					}
-				}
-				&.contains-error a{
-					color: $red;
-					&:before, &:after{
-						background-color: $red;
-					}
-				}
-				&.complete a{
-					color: $green;
-					&:before, &:after{
-						background-color: $green;
-					}
-				}
-			} 
-			.active, &:hover, &:focus{ 
-				background-color: darken($gray-highlighting, 5%);
-			}			
-		} 
-		.in{
-			background-color: $gray-highlighting;
-		}
-	}
-	.panel-body{
-		padding: 0;
-		.panel-group{
-			margin-bottom: -1px;
-		}
-	}
+	}	
 }
 .unit-section{
 	position: relative;
@@ -227,11 +127,12 @@ html body .details-interview{
 }
 .questionnaire{
 	@include transition(margin, 0.3s);
-	min-width: $questionnaire-min-width;
 	margin-left: $filter-width + $content-width + 12px;
 	.unit-title{
+		&.is_stuck{
+			z-index: 2;
+		}
 		position: relative;
-		z-index: 2;
 		background-color: $blue;
 		padding: 15px 20px 10px 80px;
 		color: $white;
@@ -247,10 +148,10 @@ html body .details-interview{
 			font: 16px/18px "RobotoMedium";
 		}
 	}
-	.contains-error>.unit-title{
+	.section-with-error>.unit-title{
 		background-color: $red_error;
 	}
-	.filled>.unit-title{
+	.complete-section>.unit-title{
 		background-color: $green;
 	}
 }
@@ -258,6 +159,9 @@ html body .details-interview{
 	position: relative;
 	padding: 18px 20px 15px 70px;
 	border-bottom: 2px solid $gray-form;
+	h5 .button-flag{
+		@include absolute(0, null, null, -30px);
+	}
 	&.with-flag{
 		display: block;
 		@include gradient($gray-super-light, $gray-super-light, null, null);
@@ -266,132 +170,61 @@ html body .details-interview{
 			@extend .flagged;
 		}
 	}
-	.dropdown{
-		@include absolute(4px, 10px, null, null);
-		@include size(25px, 45px);
-		button{
-			@extend %clean-btn;
-			display: block;
-			position: relative;
-			@include square(100%);
-			span{
-				@include absolute(20px, 10px, null, null);
-				display: block;
-				@include square(5px);
-				border-radius: 100%;
-				background-color: $gray-form;
-				@include transition(all, 0.3s);
-				&:first-of-type{
-					top: 13px;
-				}
-				&:last-of-type{
-					top: 27px;
-				}
-			}
-			&:hover, &:focus, &:active{
-				outline: none;
-				span{
-					background-color: $gray_light;
-				}
-			}
-		}
-		&.open button{
-			span{
-				display: none;
-				right: 10px;
-				top: 20px;
-				border-radius: 0;
-				@include size(20px, 2px);
-				&:first-of-type{
-					display: block;
-					@include rotate(45deg);
-				}
-				&:last-of-type{
-					display: block;
-					@include rotate(-45deg);
-				}
-			}
-		}
-		.dropdown-menu{
-			left: auto;
-			right: 35px;
-			top: 10px;
-			@include opacity(0);
-			@include transform-origin(top);
-			@include animation-fill-mode(forwards);
-			@include scale(1, 0);
-			@include transition(all, 0.2s, linear);
-			display: block;
-		}
-		&.open > .dropdown-menu {
-		  	@include scale(1, 1);
-		  	@include opacity(1);
+}
+.information-block{
+	padding: 0 10px;
+	
+	color: $gray_light;
+	h6{
+		margin-top: 20px;
+		font: 10px/12px "TrebuchetMSBold";
+		letter-spacing: 0.5px;
+    	text-transform: uppercase;
+    	display: block;
+	}
+	p{
+		width: 90%;
+		font-size: 12px;
+		line-height: 14px;
+		font-weight: bold;
+		font-style: italic;
+		p:last-of-type{
+			margin-bottom: 10px;
 		}
 	}
-	.information-block{
-		padding: 0 10px;
-		
-		color: $gray_light;
-		h6{
-			margin-top: 20px;
-			font: 10px/12px "TrebuchetMSBold";
-			letter-spacing: 0.5px;
-	    	text-transform: uppercase;
-	    	display: block;
+
+	&.enumerators{
+		color: $pink;
+	}
+	&.instruction{
+		color: $blue;
+	}
+	&.errors{
+		color: $red_error;
+	}
+}
+.comments-block{
+	p{
+		color: $gray_text;
+	}
+	.comment {
+		display: none;
+		&.active{
+			display: block;
 		}
-		p{
-			width: 90%;
-			font-size: 12px;
-			line-height: 14px;
-			font-weight: bold;
-			font-style: italic;
-			p:last-of-type{
-				margin-bottom: 10px;
+		.form-inline{
+			.form-control{
+				@extend %form;
+				width: 360px;
+				height: 40px;
+				z-index: 0;
+				color: $gray_light;
 			}
-		}
-		&.comments-block{
-			p{
-				color: $gray_text;
-			}
-			.comment {
-				display: none;
-				&.active{
-					display: block;
-				}
-				.form-inline{
-					.form-control{
-						@extend %form;
-						height: 40px;
-						width: 365px;
-						z-index: 0;
-						color: $gray_light;
-					}
-					button{
-						color: $white;
-						padding: 12px;
-						background-color: darken($gray_form, 10%);
-						border: none;
-						&:hover, &:focus{
-							outline: none;
-							border: none;
-							background-color: darken($gray_form, 20%);
-						}
-					}
-				}
-			}
-		}
-		&.enumerators{
-			color: $pink;
-		}
-		&.instruction{
-			color: $blue;
-		}
-		&.errors{
-			color: $red_error;
 		}
 	}
 }
 .question.hidden-question{
+	min-height: 65px;
 	background: repeating-linear-gradient(-45deg, $gray-form, $gray-form 2px, transparent 2px, transparent 6px);
 	h5{
 		margin: 0;
@@ -407,12 +240,17 @@ html body .details-interview{
 .question.hidden-by-filter {
 	background: $white;
 	padding: 2px;
-	/* @include transition(padding, 0.2s); */
 	& > .question-editor, 
 	& > h5, 
 	& > .dropdown{
 		display: none;
-	}	
+	}
+}
+.hidden-by-filter{
+	min-height: auto;
+	.question.hidden-question, &.question.hidden-question{
+		min-height: auto;
+	}
 }
 .unit-section.hidden-by-filter {	
 	.unit-title .breadcrumb, .unit-title h3{
@@ -451,22 +289,6 @@ html body .details-interview{
 		margin: 0 0 10px;
 
 		position: relative;
-		.button-flag{
-			@extend %clean-btn;
-			@extend %flag;
-			left: -30px;
-			&:hover, &:focus{
-					background-position: -56px 0;
-					outline: none;
-			}
-			&.flagged, &:active{
-            	background-position: 1px 0;
-            	outline: none;
-            	&:hover, &:focus{
-            		background-position: -18px 0;
-            	}
-			}
-		}
 		&:before{left: -25px;}
 	}
 	&.answered .question-unit{
@@ -479,115 +301,93 @@ html body .details-interview{
 		.form-group{
 			border-color: $red-super-light;
 		}
-	}
-	.question-unit{
-		.options-group{
-			padding: 10px;
-			border-radius: 7px;
-			margin-bottom: 0px;
-			background-color: #eeeff0;
-			.radio, .form-group, .form-input{
-				padding: 0;
-				margin: 0 0 5px;
-				max-width: 425px;
-				@extend %form;
-				position: relative;
-				&:last-of-type{
-					margin-bottom: 0;
-				}
-				label{
-					display: block;
-					font-size: 14px;
-					line-height: 18px;
-					padding: 11px 15px;
-					margin: 0;
-				}
+	}  
+}
+.question-unit{
+	.options-group{
+		padding: 10px;
+		border-radius: 7px;
+		margin-bottom: 0px;
+		background-color: #eeeff0;
+		.radio, .form-group, .form-input{
+			padding: 0;
+			margin: 0 0 5px;
+			@extend %form;
+			position: relative;
+			&:last-of-type{
+				margin-bottom: 0;
 			}
-			.form-group{
-				label {
-					cursor: pointer;
-					.tick{
-						position: relative;
-					}
-				}
-			}
-			.field{
-				position: relative;
-				.field-to-fill{
-					width: 100%;
-					padding: 11px 15px;
-					border: none;
-					font-size: 14px;
-					line-height: 18px;
-					font-weight: bold;
-					padding-right: 30px;
-					border-radius: 5px;
-				}
-				.close{
-					@include close(10px, -2px, -5px);
-					@include transition(all, 0.2s);
-					@extend %visibility-hidden;
-				}	
-				.dropdown-toggle {
-					@extend .field-to-fill;
-					padding: 11px 15px;
-					span{
-						position: static;
-					}
-					&:hover, &:focus, &:active {
-						z-index: 0;
-					}
-				}
-				.dropdown-menu{
-					z-index: 1;
-					max-width: 425px;
-					width: 420px;
-					padding:  5px 10px;
-					li{
-						border-bottom: 1px solid $gray_form;
-						&:last-child{
-							border: none;
-						}
-					}
-				}
-			}
-			.action-btn-holder{
-				.action-btn{
-					padding: 12px 15px;
-					font-size: 14px;
-					line-height: 16px;
-					background-color: $white;
-					border-color: transparent;
-					color: $gray_light;
-					font-style: italic;
-					border-radius: 5px;
-					outline: none;
-					&:hover, &:focus, &:active{
-						background-color: $gray-super-light;
-						border-color: darken($gray_light, 10%);
-						color: darken($gray_light, 20%);
-					}
+			label{
+				display: block;
+				font-size: 14px;
+				line-height: 18px;
+				padding: 11px 38px 11px 45px;
+				margin: 0;
+				.tick{
+					@include absolute(null, null, null, 15px);
 				}
 			}
 		}
-	}
-	.question-unit .options-group .field{
-		&.answered, &.contains-error{
-		 .close{
+		.form-group{
+			label {
+				cursor: pointer;
+			}
+		}
+		.field{
+			position: relative;
+			.field-to-fill{
+				width: 100%;
+				padding: 11px 15px;
+				border: none;
+				font-size: 14px;
+				line-height: 18px;
+				font-weight: bold;
+				padding-right: 38px;
+				border-radius: 5px;
+			}
+			.dropdown-toggle {
+				@extend .field-to-fill;
+				padding: 11px 38px 11px 15px;
+				span{
+					position: static;
+					font: 14px/18px Arial;
+					letter-spacing: normal;
+					text-transform: none;
+				}
+				&:hover, &:focus, &:active {
+					z-index: 0;
+				}
+			}
+			.dropdown-menu{
+				z-index: 1;
+				width: 100%;
+				padding:  5px 10px;
+				li{
+					border-bottom: 1px solid $gray_form;
+					&:last-child{
+						border: none;
+					}
+				}
+			}
+			&.answered, &.contains-error{
+				.btn-clear{
+					@extend %visibility-visible;
+				}
+			}
+			input:checked ~ .btn-clear{
 				@extend %visibility-visible;
 			}
 		}
-		input:checked ~ .close{
-			@extend %visibility-visible;
-		}
-	}  
+	}
 }
 .static-text{
 	h5{
 		margin: 0;
 		.static-text-image{
 			margin-top: 10px;
-			@include size($width-question-editor, auto);
+			max-width: $width-question-editor;
+			height: auto;
+			/* @include size($width-question-editor, auto); */
 		}
 	}
 	&.invalid{
@@ -628,6 +428,8 @@ html body .details-interview{
 	@include absolute(0, null, null, -40px);
 	line-height: 42px;
 	text-align: right;
+	font-size: 14px;
+	font-weight: bold;
 	width: 25px;
 	color: $blue !important;
 }
@@ -635,48 +437,62 @@ html body .details-interview{
 	.yes-no-mark{
 		color: $blue;
 		margin: 15px 0 0 17px;
-		span{
+		b{
 			color: $gray_light;
 			font-size: 18px;
 			line-height: 20px;
 			padding: 0 5px;
+			font-weight: normal;
 		}
 	}
-	.options-group .radio{
+	.options-group .radio .field{
+		@include clearfix();
 		label{
 			padding-left: 0;
 			padding-right: 5px;
 			display: inline-block;
+			float: left;
+
 			&:first-of-type{
 				padding-left: 15px;
 			}
+			.tick{
+				position: relative;
+				left: 0;
+				margin-right: 0;
+			}
 		}
-		span{
+		b{
+			float: left;
+			color: $gray_light;
+			font-size: 18px;
+			line-height: 20px;
+			padding: 11px 5px;
+			font-weight: normal;
+		}
+		&>span{
+			padding: 11px 38px 11px 5px;
 			color: $gray_light;
 			font-weight: normal;
-			padding: 11px 0;
 			font-size: 14px;
 			line-height: 18px;
 			margin: 0;
-			&:first-of-type{
-				font-size: 18px;
-				line-height: 20px;
-				padding: 10px 0;
-			}
+			float: left;
+			width: 75%;
 		}
 		input.wb-radio:checked ~ span{
 		    color:  $gray_text;
 		    font-weight: bold;
-		    &:first-of-type{
-				color: $gray_light;
-			    font-weight: normal;
-		    }
 		}
 	}
 }
-.gps-question{
+.gps-question, .qr-question, .current-time-question, .multimedia-question{
 	&.answered, &.contains-error{
 		@extend %action-btn;
+	}
+}
+.gps-question {
+	&.answered, &.contains-error{
 		.map {
 	        height: 200px;
 	        width: 385px;
@@ -684,99 +500,26 @@ html body .details-interview{
 	    }
 	}
 }
-.image-zoom-box{
-	overflow: hidden;
-	margin-bottom: 10px;
-	img{
-		@include img-responsive();
-	}
-}
-span.image-zoom-box{
-	display: block;
-}
 .multimedia-question{
-	&.answered, &.contains-error{
-		@extend %action-btn;
-	}
 	.image-wrapper{
-		@include size(385px, 200px);
+		max-width: 90%;
+		max-height: 200px;
+		/* @include size(385px, 200px); */
 	}
 }
 .qr-question, .current-time-question{
 		&.answered, &.contains-error{
-		@extend %action-btn;
 		.block-with-data{
 			font-size: 12px;
 			line-height: 14px;
 			margin-bottom: 10px;
+			padding-right: 38px;
+			word-break: break-all;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
 		}
 	}
 }
-.zoomImg {
-    cursor: pointer;
-    @include transition(all, 0.3s);
-}
-
-.zoomImg {
-	&:hover, &:focus{
-		@include scale(1.1);
-	}
-}
-
-
-.modal-img {
-	position: fixed; 
-    z-index: 50; 
-    padding-top: 50px; 
-    left: 0;
-    top: 70px;
-    bottom: 0;
-    right: 0;
-    width: 100%; 
-    background-color: rgba(0,0,0,0.9); 
-    text-align: center;
-    display: none; 
-    .modal-img-content {
-		@include center-block();
-	    max-width: 70% !important;
-	    max-height: 80%;
-	}
-	.caption {
-	    width: 75%;
-	    text-align: center;
-	    color: $gray-super-light;
-	    padding: 15px 0;
-		@include center-block();
-		&:first-letter{
-			text-transform: capitalize;
-		}
-	}
-	.close-zoomming-img {
-		@include absolute(40px, 40px);
-	    color: $gray-super-light;
-	    font-size: 40px;
-	    @include transition(all, 0.2s);
-	    &:hover,
-		&:focus {
-		    color: $gray_light;
-		    cursor: pointer;
-		}
-	}
-}
-
-.modal-img-content, .caption {    
-    @include animation-name(zoom);
-    @include animation-duration(0.5s);
-}
-
-@include keyframes(zoom) {
-    0% {
-    	@include scale(0);
-    } 
-    100% {
-    	@include scale(1);
-    }
-} 
 .img-single-select-question{
 	label{
 		overflow: hidden;
@@ -794,7 +537,7 @@ span.image-zoom-box{
 	.questionnaire{
 		margin-left: $content-width + 12px;
 		.unit-title.is_stuck{
-			width: 100% !important;
+			width: auto !important;
 		}
 	}
 	.content{
@@ -806,9 +549,10 @@ span.image-zoom-box{
 }
 .fullscreen-hidden-content{
 	.content{
-		left: ((-$content-width)-27px);
-		@extend %hidden-foldback-button;
-		overflow: inherit;
+		left: (-$content-width);
+		@include hidden-foldback-button();
+        overflow: inherit;
+        box-shadow: none;
 	}
 	.filters{
 		box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
@@ -817,42 +561,43 @@ span.image-zoom-box{
 	.questionnaire{
 		margin-left: $filter-width + 12px;
 		.unit-title.is_stuck{
-			width: 100% !important;
+			width: auto !important;
 		}
 	}
 }
 .fullscreen-hidden-filters.fullscreen-hidden-content{
 	.content .foldback-button{
-		top: 60px;
+		top: 130px;
 	}
 	.questionnaire{
 		margin-left: 12px;
-		
 		.question{
 			padding-left: 85px;
 		}
 	}
 }
+.footer.footer-adaptive-content.footer-adaptive-filters{
+	padding-left: $filter-width + $content-width;
+}
+.footer.footer-adaptive-content{
+	padding-left: $content-width;
+}
+.footer.footer-adaptive-filters{
+	padding-left: $filter-width;
+}
 @media only screen and (max-width: 1525px){
 	.details-interview{
 		@include tight-filters-aside();
 		.filters{
-			top: 70px;
-			&.hidden-filters{
-				position: fixed;
-			}
+			padding-top: 115px;
+			.foldback-button{
+	            top: 75px;
+	        }
 		}
 	}
 	.content{
-		width: 330px;
-		left: 282px;
-		.panel-default{
-			@include accordion(10px);
-			& > .panel-heading h3 a{
-				font-size: 14px;
-				line-height: 16px;
-			}
-		}
+		width: $content-width-small;
+		left: $filter-small-width +12px;
 		.questionnaire-content{
 			div{
 				h2, button{
@@ -867,6 +612,11 @@ span.image-zoom-box{
 			width: auto;
 		} 
 	}
+	.fullscreen-hidden-filters {
+		.questionnaire{
+			margin-left: $content-width-small + 12px;
+		}
+	}
     .fullscreen-hidden-filters {
 		.questionnaire{
 			margin-left: 12px + $content-width-small;
@@ -877,51 +627,241 @@ span.image-zoom-box{
 			margin-left: 12px + $filter-small-width;
 		}
 		.content{
-			left: -357px
+			left: -$content-width-small;
 		}
 	}
 	.questionnaire{
 		margin-left: $filter-small-width + 12px + $content-width-small;
 	}
+	.footer.footer-adaptive-content.footer-adaptive-filters{
+	padding-left: $filter-small-width + $content-width-small;
+	}
+	.footer.footer-adaptive-content{
+		padding-left: $content-width-small;
+	}
+	.footer.footer-adaptive-filters{
+		padding-left: $filter-small-width;
+	}
 }
 @media (max-width: $screen-md-min){
-/* 	.details-interview{
-		.filters{
-			overflow: visible;
-			.foldback-button{
-        right: -80px;
-        top: 5px;
-        background-color: $gray_form;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-        span.arrow{
-            margin-left: 13px;
-            margin-right: 2px;
-            @include rotate(45deg);
-            &:first-of-type{
-                @include rotate(-45deg);
-            }
-        }
-        .glyphicon{
-            display: inline-block;
-        }
-    }
-			top: 60px;
-			left: $hidden-filter-small-indent;
-		}
-	} */
-}
-@media only screen and (max-width: 700px){
-    .modal-img-content {
-        width: 100%;
-    }
-}
-@media (max-width: $screen-md-min){
-    .content{
-        top: 60px;
+	.content{
+        padding-top: 60px;
     }
     .unit-title.is_stuck{
         top: 60px !important;
     }
-
+	.details-interview{ 
+		.filters{
+			padding-top: 105px;
+			left: ((-$filter-small-width)-12px);
+			@include hidden-foldback-button();
+			overflow: visible;
+			box-shadow: none;
+			.foldback-button{
+				top: 65px;
+			}
+		}
+		.content{
+			box-shadow: none;
+			left: -$content-width-small;
+			@include hidden-foldback-button();
+			overflow: visible;
+			.foldback-button{
+				top: 120px;
+			}
+		}
+		.questionnaire{
+			margin-left: 12px;
+			.question{
+				padding-left: 75px;
+			}
+		}
+		.fullscreen-hidden-content{	
+			.content{
+				left: 12px;
+				overflow: auto;
+				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				@include visible-foldback-button();
+				.foldback-button{
+					top: 65px;
+				}
+				.questionnaire-content{
+					padding-left: 50px;
+				}
+			}
+			.questionnaire{
+				margin-left: $content-width-small +12px;
+				.question{
+					padding-left: 40px;
+				}
+				.unit-title.is_stuck{
+					padding-left: 50px;
+					width: auto !important;
+				}
+				.button-flag{
+					left: -20px;
+				}
+			}
+			.filters{
+				.foldback-button{
+					display: none;
+				}
+			}
+		}
+		.fullscreen-hidden-filters{
+			.filters{
+				overflow: auto;
+				left: 0;
+				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				@include visible-foldback-button();
+			}
+			.questionnaire{
+				margin-left: $filter-small-width +12px;
+				.question{
+					padding-left: 40px;
+				}
+				.unit-title.is_stuck{
+					padding-left: 50px;
+					width: auto !important;
+				}
+				.button-flag{
+					left: -20px;
+				}
+			}
+			.content{
+				.foldback-button{
+					top: 65px;
+				}
+				z-index: 4;
+				box-shadow: none;
+			}
+		} 
+		.fullscreen-hidden-filters.fullscreen-hidden-content{
+			.content{
+				left: 12px;
+				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				@include visible-foldback-button();
+				.questionnaire-content{
+					padding-left: 50px;
+				}
+			}
+			.questionnaire{
+				margin-left: $content-width-small +12px;
+				.question{
+					padding-left: 40px;
+				}
+				.unit-title.is_stuck{
+					padding-left: 50px;
+					width: auto !important;
+				}
+				.button-flag{
+					left: -20px;
+				}
+			}
+			.filters{
+				box-shadow: none;
+				left: ((-$filter-small-width)-12px);
+				.foldback-button{
+					display: none;
+				}
+			}
+		}
+	}
+	.modal-img{
+		top: 60px;
+	}
+	.footer.footer-adaptive-content.footer-adaptive-filters{
+	padding-left: 0;
+	}
+	.footer.footer-adaptive-content{
+		padding-left: $filter-small-width;
+	}
+	.footer.footer-adaptive-filters{
+		padding-left: $content-width-small;
+	}
+}
+@media (max-width: $screen-sm-min){
+	.details-interview{
+		.questionnaire {
+			.unit-title.is_stuck{
+				width: 100% !important;
+				bottom: auto !important;
+			}
+			.comment .form-inline .form-group{
+				display: inline-block;
+				margin-bottom: 0;
+				vertical-align: middle;
+			}
+		}
+		.fullscreen-hidden-filters{
+			.content, .questionnaire{
+				display: none;
+			}
+			.filters{
+				@include absolute(0, 0, 0, 0);
+				width: 100%;
+			}
+		}
+		.fullscreen-hidden-content{
+			.filter, .questionnaire{
+				display: none;
+			}
+			.content{
+				@include absolute(0, 0, 0, 0);
+				width: 100%;
+				border: none;
+				.foldback-button{
+			   		right: 10px;
+			   	}
+			}
+		}
+	}
+}
+@media only screen and (max-width: 615px){
+	.details-interview{
+		.questionnaire {
+			.comment .form-inline .form-group{
+				margin-bottom: 15px;
+			}
+			.question{
+				padding-left: 40px;
+			}
+			.unit-title{
+				padding-left: 45px;
+			}
+			.button-flag{
+				left: -20px;
+			}
+			.question-editor{
+				max-width: 285px;
+			}
+			.comments-block .comment .form-inline .form-control{
+				width: (285px-20px);
+			}
+			.yes-no-question .question-unit .options-group .radio .field > span{
+				width: 71%;
+			}
+			.gps-question.answered .map, .gps-question.contains-error .map{
+				width: 225px;
+			}
+			.multimedia-question .image-wrapper{
+				width: 225px;
+			}
+			.modal-img .modal-img-content{
+				max-width: 60% !important;
+			}
+		}
+		.aside-menu{
+			right: 20px;
+		}
+	}
+	.footer.footer-adaptive-content.footer-adaptive-filters{
+	padding-left: 0;
+	}
+	.footer.footer-adaptive-content{
+		display: none;
+	}
+	.footer.footer-adaptive-filters{
+		display: none;
+	}
 }

@@ -1,0 +1,71 @@
+.aside-menu{
+	outline: none;
+	@include absolute(10px, 10px, null, null);
+	button{
+		display: block;
+		position: relative;
+		text-align: center;
+		@include size(40px, 45px);
+		&:focus, &:hover, &:active, &:active:focus{
+			outline: none;
+			span{
+				background-color: darken($gray-form, 10%);
+				&:before, &:after{
+					background-color: darken($gray-form, 10%);
+				}
+			}
+		}
+		span{
+			display: inline-block;
+			@include square(5px);
+			border-radius: 100%;
+			background-color: $gray-form;
+			@include transition(background, 0.3s);
+			&:before, &:after{
+				content: "";
+				display: block;
+				position: relative;
+				top: -8px;
+				@include square(5px);
+				border-radius: 100%;
+				background-color: $gray-form;
+				@include transition(background, 0.3s);
+			}
+			&:after{
+				top: 3px;
+			}
+		}
+	}
+	&.open button{
+		span{
+			border-radius: 0;
+			@include cancel(20px);
+			background-color: transparent;
+			&:before, &:after{
+				border-radius: 0;
+			}
+		}
+		&:focus, &:hover, &:active{
+			span{
+				&:before, &:after{
+					background-color: darken($gray-form, 20%);
+				}
+			}
+		}
+	}
+	.dropdown-menu{
+		left: auto;
+		right: 35px;
+		top: 10px;
+		@include opacity(0);
+		@include transform-origin(top);
+		@include animation-fill-mode(forwards);
+		@include scale(1, 0);
+		@include transition(all, 0.2s, linear);
+		display: block;
+	}
+	&.open > .dropdown-menu {
+	  	@include scale(1, 1);
+	  	@include opacity(1);
+	}
+}

@@ -103,9 +103,6 @@
 			}
 			.btn{
 				margin: 5px;
-				width: 100px;
-				padding-left: 0;
-				padding-right: 0;
 			}
 			.not-generated{
 				@extend %uppercase-font;
@@ -137,7 +134,7 @@
 	$cross-height: 24px;
 	@include cancel($cross-height);
 }
-.fullscreen .export-types{
+.fullscreen-hidden-filters .export-types{
 	margin-left: 0;
 	padding-left: 12px;
 }
@@ -190,7 +187,7 @@
 			padding-top: 0;
 		}
   	}
-  	.fullscreen .export-types{
+  	.fullscreen-hidden-filters .export-types{
   		padding: 55px 20px 0;
   		width: 100%;
   		.size, .last-generated{

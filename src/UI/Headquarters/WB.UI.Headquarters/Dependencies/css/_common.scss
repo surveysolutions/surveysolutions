@@ -176,12 +176,11 @@ body > .ui-pnotify
     background-color: rgba(0,0,0,.2);
 }
 .ui-pnotify{
-	border-radius: 4px;
-	background: #fff;
-	box-shadow: 0 0 30px #323232;
-
- 	.alert{
- 		font-family: "RobotoMedium";
+ 	border-radius: 4px;
+ 	background: #fff;
+ 	box-shadow: 0 0 30px #323232;
+  	.alert{
+   		font-family: "RobotoMedium";
         padding: 15px;
         margin: 0;
         &.alert-warning{
@@ -200,17 +199,15 @@ body > .ui-pnotify
             border-top: 10px solid $red;
             color: $red;
         }
-	  	.ui-pnotify-title{
-	  		font: 16px/18px "RobotoMedium";
-	  	}
-	  	.ui-pnotify-text{
-	  		font-size: 14px;
-	  		line-height: 16px;
-	  	}
- 	}
-
-    &.loading-indicator
-    {
+    	.ui-pnotify-title{
+     		font: 16px/18px "RobotoMedium";
+    	}
+    	.ui-pnotify-text{
+     		font-size: 14px;
+     		line-height: 16px;
+    	}
+  	}
+    &.loading-indicator{
         border-radius: 0;
         .ui-pnotify-container{
             border-radius: 0;
@@ -221,10 +218,10 @@ body > .ui-pnotify
             border-top: none;
         }
         .ui-pnotify-title{
-	  		font: 24px/26px "RobotoLight";
+     		font: 24px/26px "RobotoLight";
             padding: 0;
             margin: 0;
-	  	}
+    	}
     }
 }
 .error-text{

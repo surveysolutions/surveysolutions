@@ -104,33 +104,7 @@
   ::-moz-placeholder          {@content}
   :-ms-input-placeholder      {@content}  
 }
-@mixin close($width, $top: null, $right: null, $bottom: null, $left: null){
-    outline: none;
-    background-color: transparent;
-    @include square($width);
-    @include absolute($top, $right, $bottom, $left);
-    padding: 20px;
-    margin: 0;
-    @include opacity(0.5);
-    &:hover, &:focus, &:active{
-        &:before, &:after{
-            background-color: darken($gray_light, 30%);
-        }
-    }
-    &:before, &:after{
-        display: block;
-        content: "";
-        @include size((1.4*$width), 2px);
-        background-color: $gray_light;
-        @include rotate(45deg);
-        position: relative;
-        left: -12px;
-    }
-    &:after{
-        @include rotate(-45deg);
-        top: -2px;
-    }
-}
+
 @mixin cancel($width: 14px){
     $height: 2px; 
     outline: none;
@@ -165,12 +139,12 @@
     .unit-title{
         background-color: lighten($blue, $default);
     }
-    &.contains-error>.unit-title,
+    &.section-with-error>.unit-title,
     .contains-error>.unit-title{
         background-color: lighten($red_error, $with_error) ;
     }
-    &.filled>.unit-title,
-    .filled>.unit-title{
+    &.complete-section>.unit-title,
+    .complete-section>.unit-title{
         background-color: lighten($green, $filled);
     }
 }
@@ -233,35 +207,18 @@
     opacity: 0; 
     display: none;
 }
-%clean-btn{
-    border: none;
-    background-color: transparent;
-    padding: 0;
-    margin: 0;
-    &:hover, &:focus{
-        border: none;
-        background-color: transparent;
-    }
-}
 %aside{
-    top: 70px;
+    height: 100%;
+    top: 0;
     left: 0;
     bottom: 0;
+    padding-top: 70px;
+    padding-bottom: 50px;
     overflow: auto;
     position: fixed;
     background-color: #fff;
     z-index: 4;
     @include transition(left, 0.3s);
-}
-%flag{
-    @include absolute(0, null, null, 5px);
-    display: block;
-    content: "";
-    @include size(20px, 22px); 
-    @include image-2x("../img/flags2k.png", 75px, 22px);
-    background: transparent url("../img/flags.png") no-repeat;
-    background-size: 75px 22px;
-    background-position: -37px 0;  
 }
 %form{
     border: 1px solid $gray-form;
@@ -289,14 +246,14 @@
     visibility: hidden;
 }
 %action-btn{
-    .question-unit .options-group .action-btn-holder .action-btn{
+    .question-unit .options-group .action-btn-holder .btn-default{
         border-color: $gray_form;
         &:hover, &:focus, &:active{
             border-color: darken($gray_light, 10%);
         }
     }
-    .question-unit .options-group .field .close{
-        top: -15px;
+    .question-unit .options-group .field .btn-clear{
+        top: -13px;
     }
     .block-with-data{
         font-size: 14px;
@@ -305,7 +262,7 @@
         margin-bottom: 20px;
     }
 }
-%hidden-foldback-button{
+@mixin hidden-foldback-button(){
     .foldback-button{
         right: - $width-foldback-button;
         background-color: $gray_form;
@@ -326,22 +283,39 @@
 }
 @mixin tight-filters-aside(){
     .filters{
-        top: 60px;
+        padding-top: 105px;
         width: $filter-small-width;
-        padding-top: 45px;
-        padding-left: 15px;
+        padding-left: 12px;
         .bootstrap-select.btn-group{
             width: 100% !important;   
         } 
         .open > .dropdown-menu{
             width: 100%;    
         }
+        .foldback-button{
+            top: 65px;
+        }
         &.hidden-filters{
             left: - $filter-small-width - 12px;
-            position: absolute;
             .foldback-button{
                 right: - $width-foldback-button;
             }
+        }
+    }
+}
+@mixin visible-foldback-button(){
+    .foldback-button{
+        right: 5px;
+        background-color: transparent;
+        span.arrow{
+            margin: 15px 10px;
+            @include rotate(-45deg);
+            &:first-of-type{
+                @include rotate(45deg);
+            }
+        }
+        .glyphicon{
+            display: none;
         }
     }
 }

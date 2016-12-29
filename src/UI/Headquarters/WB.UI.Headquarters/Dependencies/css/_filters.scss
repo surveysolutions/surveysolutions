@@ -2,7 +2,7 @@
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
-	padding: 45px 15px 0 33px;
+	padding: 115px 12px 50px 33px;
 	margin-left: 12px;
 }
 input.checkbox-filter{
@@ -117,62 +117,28 @@ input.checkbox-filter{
 .filters.hidden-filters{
 	left: - $filter-width - 12px;
 	overflow: visible;
-	@extend %hidden-foldback-button;
+	@include hidden-foldback-button();
 }
 @media (max-width: $screen-md-min){
 	@include tight-filters-aside();
 }
 @media (max-width: $screen-sm-min){
 	.filters{
-		@include absolute(60px, null, null, (-$filter-small-width - 12px));
-	   	border: none;
-	   	padding: 30px 0 0;
-	   	overflow: visible;
-	   	@include transition(background-color);
-	   	.filters-container, .preset-filters-container{
-	   		display: none;
-	   		border-color: transparent;
-	   		@include opacity(0);
-	   		visibility: hidden;
-	   		@include transition(opacity);
-
-	   	}
-    	.dropdown-toggle, .input-group-addon{
-	   		background-color: #fff !important;
-	   	}
-	   	.foldback-button{
-    		right: -$width-foldback-button;
-	    	background-color: $gray_form;
-	    	@include transition(none);
-	    	span.arrow{
-	   			@include rotate(45deg);
-	   			margin-left: 13px;
-	    		margin-right: 2px;
-	   			&:first-of-type{
-	   				@include rotate(-45deg);
-    			}
-	    	}
-	    	.glyphicon{
-	    		display: inline-block;
-	    	}
-	    }
-	   	&.hidden-filters{
-	   		left: 0;
-		    width: 100%;
-		    background-color: $gray-super-light;
-		    z-index: 1;
-		    margin: 0;
-		    .foldback-button{
-			    left: auto;
-			   	right: 5px;
-			   	span.arrow{
-			   		top: 6px;
-			   		right: 12px;
-		    	}
-		    	.glyphicon{
-		    		display: none;
-		    	}
-		    }
+		padding-top: 60px;
+		left: ((-$filter-small-width)-12px);
+		@include hidden-foldback-button();
+		overflow: visible;
+	}
+	.fullscreen-hidden-filters{
+		.filters{
+			border: none;
+			margin: 0;
+			@include absolute(0px, 0, 0, 0);
+			width: 100%;
+		   	@include visible-foldback-button();
+		   	.foldback-button{
+		   		right: 10px;
+		   	}
 	    	.filters-container, .preset-filters-container{
 		   		display: block;
 		   		width: 300px;
@@ -181,11 +147,12 @@ input.checkbox-filter{
 		   		@include opacity(1);
 		    	visibility: visible;
 		    }
-	    }
+		}
+		.export-types{
+			display: none;
+		}
 	}
-	.fullscreen .export-types{
-		display: none;
-	}
+	
 }
 @media (max-width: $screen-xs-min){
 	.filters.hidden-filters{
