@@ -32,7 +32,7 @@
             <div class="page-header">
                 <ol class="breadcrumb">
                     <li>
-                        @Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")
+                        @Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")
                     </li>
                 </ol>
                 <h1>@BatchUpload.CreatingMultipleInterviews</h1>
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-6 col-xs-10 prefilled-data-info">
+            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
                 <p>@BatchUpload.UploadDescription</p>
                 <p>@BatchUpload.EmptySupervisorDescription</p>
             </div>
@@ -54,14 +54,14 @@
 @if (Model != null && Model.FeaturedQuestions != null)
 {
         <div class="row">
-            <div class="col-sm-6 col-xs-10 prefilled-data-info short-prefilled-data-info">
+            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block short-prefilled-data-info">
                 <a href="#" class="list-required-prefilled-data">@BatchUpload.ViewListPrefilledData</a>
             </div>
-            <div class="col-sm-6 col-xs-10 prefilled-data-info full-prefilled-data-info" style="display: none;">
+            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info" style="display: none;">
                 <h3>@BatchUpload.PrefilledRequiredData</h3>
                 <p>
                     @BatchUpload.DownloadDescListRequiredPreffiledData
-                    <a href="@Url.Action("SimpleTemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadLinkTitleListRequiredPreffiledData</a>
+                    <a href="@Url.Action("SimpleTemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadLinkTitleListRequiredPreffiledData</a>
                 </p>
                 <ul class="list-unstyled prefilled-data">
                     @foreach (var item in Model.FeaturedQuestions)
@@ -95,8 +95,8 @@
                         <p>@BatchUpload.SimpleDescription</p>
                     </div>
                     <div>
-                        <a href="@Url.Action("SimpleTemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTabTemplate</a>
-                        @using (Html.BeginForm("SampleBatchUploadAndVerify", "HQ", new {questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, FormMethod.Post, new {enctype = "multipart/form-data"}))
+                        <a href="@Url.Action("SimpleTemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTabTemplate</a>
+                        @using (Html.BeginForm("SampleBatchUploadAndVerify", "SurveySetup", new {questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, FormMethod.Post, new {enctype = "multipart/form-data"}))
                         {
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)
@@ -118,8 +118,8 @@
                         <p>@BatchUpload.BatchDescription</p>
                     </div>
                     <div>
-                        <a href="@Url.Action("TemplateDownload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTemplateArchive</a>
-                        @using (Html.BeginForm("PanelBatchUploadAndVerify", "HQ", routeValues: new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, method: FormMethod.Post, htmlAttributes: new {enctype = "multipart/form-data"}))
+                        <a href="@Url.Action("TemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTemplateArchive</a>
+                        @using (Html.BeginForm("PanelBatchUploadAndVerify", "SurveySetup", routeValues: new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, method: FormMethod.Post, htmlAttributes: new {enctype = "multipart/form-data"}))
                         {
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)

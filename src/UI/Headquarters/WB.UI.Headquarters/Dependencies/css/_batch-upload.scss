@@ -3,12 +3,7 @@
 	font: 14px/16px "RobotoRegular";
 }
 .prefilled-data-info{
-	@extend .text-page;
-	margin-bottom: 20px;
-	p{
-		margin-bottom: 20px;
 
-	}
 	&>a{
 		display: block;
 		margin-bottom: 30px;

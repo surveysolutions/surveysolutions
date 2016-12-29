@@ -834,7 +834,7 @@
     <Content Include="Views\Shared\AdminMenu.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
-    <Content Include="Views\HQ\BatchUpload.cshtml" />
+    <Content Include="Views\SurveySetup\BatchUpload.cshtml" />
     <Content Include="Views\HQ\ImportResult.cshtml" />
     <Content Include="Views\HQ\ImportSample.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
@@ -943,12 +943,13 @@
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Template\Import.cshtml" />
     <Content Include="Views\Template\ImportMode.cshtml" />
-    <Content Include="Views\HQ\InterviewImportVerificationErrors.cshtml" />
-    <Content Include="Views\HQ\InterviewImportConfirmation.cshtml" />
+    <Content Include="Views\SurveySetup\InterviewImportVerificationErrors.cshtml" />
+    <Content Include="Views\SurveySetup\InterviewImportConfirmation.cshtml" />
     <Content Include="Views\HQ\ImportInterviews.cshtml" />
-    <Content Include="Views\HQ\InterviewImportProgress.cshtml" />
+    <Content Include="Views\SurveySetup\InterviewImportProgress.cshtml" />
     <Content Include="Views\DataExport\Index.cshtml" />
-    <Content Include="Views\HQ\InterviewImportIsInProgress.cshtml" />
+    <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
+    <Content Include="Views\SurveySetup\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1399,6 +1400,7 @@
     <Compile Include="Controllers\PeriodicStatusReportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Controllers\SurveySetupController.cs" />
     <Compile Include="Controllers\TabletReportApiController.cs" />
     <Compile Include="Controllers\TabletReportController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
