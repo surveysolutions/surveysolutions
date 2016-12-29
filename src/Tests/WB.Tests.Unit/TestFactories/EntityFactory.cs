@@ -851,6 +851,30 @@ namespace WB.Tests.Unit.TestFactories
             return group;
         }
 
+        public Group NumericRoster(
+            Guid? rosterId = null,
+            string title = "Numeric roster",
+            string variable = "_numeric_roster_var",
+            Guid? rosterSizeQuestionId = null,
+            Guid? rosterTitleQuestionId = null,
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group group = Create.Entity.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+            group.RosterTitleQuestionId = rosterTitleQuestionId;
+
+            return group;
+        }
+
         public Group Roster(
             Guid? rosterId = null,
             string title = "Roster X",
