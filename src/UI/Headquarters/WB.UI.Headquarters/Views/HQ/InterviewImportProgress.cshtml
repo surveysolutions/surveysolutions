@@ -30,20 +30,24 @@
             };
             self.isStatusLoaded = ko.observable(false);
 
+            var countOfRequestsToStopImport = 0;
+
             var shouldStopRequestUpdates = function(data) {
                 if (_.isNull(data.interviewImportProcessId))
-                    return true;
+                    countOfRequestsToStopImport++;
+                else if (data.totalInterviewsCount === 0)
+                    countOfRequestsToStopImport++;
+                else if (data.isInProgress === false)
+                    countOfRequestsToStopImport++;
+                else if (data.interviewImportProcessId !== self.interviewImportProcessId)
+                    countOfRequestsToStopImport++;
+                else {
+                    countOfRequestsToStopImport = 0;
+                }
 
-                if (data.totalInterviewsCount === 0)
-                    return true;
-
-                if (data.isInProgress === false)
-                    return true;
-
-                if (data.interviewImportProcessId !== self.interviewImportProcessId)
-                    return true;
-
-                return false;
+                // this will prevent requests being sent if tab was left open
+                // and if takes some time to start preloading
+                return countOfRequestsToStopImport >= 10;
             }
 
             self.updateStatusByInterviewsImport = function() {
