@@ -58,6 +58,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
+        [Ignore("Fix in KP-8426")]
         It should_mark_nested_roster_as_enabled = () =>
             results.NestedRosterIsEnabled.ShouldBeTrue();
 
