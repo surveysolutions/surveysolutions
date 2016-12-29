@@ -198,6 +198,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
+        public bool IsDisabledByOwnCondition() => this.isDisabled;
         public void Disable() => this.isDisabled = true;
         public void Enable() => this.isDisabled = false;
 
