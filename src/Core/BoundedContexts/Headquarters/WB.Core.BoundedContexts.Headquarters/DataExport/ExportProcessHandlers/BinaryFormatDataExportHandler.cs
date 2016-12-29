@@ -27,16 +27,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
-        private readonly IZipArchiveProtectionService archiveUtils;
         private readonly ITransactionManager transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IExportSettings exportSettings;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+        private readonly IDataExportFileAccessor dataExportFileAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
-
-        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
         private readonly string pathToExportedData;
@@ -48,24 +44,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             InterviewDataExportSettings interviewDataExportSettings, 
             ITransactionManager transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
-            IZipArchiveProtectionService archiveUtils, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IDataExportProcessesService dataExportProcessesService, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IExportSettings exportSettings,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IDataExportFileAccessor dataExportFileAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.plainFileRepository = plainFileRepository;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
-            this.archiveUtils = archiveUtils;
             this.interviewDatas = interviewDatas;
             this.dataExportProcessesService = dataExportProcessesService;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.exportSettings = exportSettings;
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.dataExportFileAccessor = dataExportFileAccessor;
 
             this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
 
@@ -154,7 +146,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var archiveFilePath =
                 this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessDetails.Questionnaire,
                     DataExportFormat.Binary);
-            RecreateExportArchive(folderForDataExport, archiveFilePath);
+
+            dataExportFileAccessor.RecreateExportArchive(folderForDataExport, archiveFilePath);
         }
 
         private string GetFolderPathOfDataByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
@@ -169,24 +162,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.fileSystemAccessor.DeleteDirectory(folderName);
 
             this.fileSystemAccessor.CreateDirectory(folderName);
-        }
-        private void RecreateExportArchive(string folderForDataExport, string archiveFilePath)
-        {
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-            {
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-            }
-
-            var password = this.GetPasswordFromSettings();
-            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath, password);
-        }
-
-        private string GetPasswordFromSettings()
-        {
-            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
-                this.exportSettings.EncryptionEnforced()
-                    ? this.exportSettings.GetPassword()
-                    : null);
         }
     }
 }

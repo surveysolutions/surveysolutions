@@ -18,15 +18,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITabularFormatExportService tabularFormatExportService;
 
         protected TabBasedFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-            IZipArchiveProtectionService archiveUtils, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             InterviewDataExportSettings interviewDataExportSettings, 
             IDataExportProcessesService dataExportProcessesService, 
             ITabularFormatExportService tabularFormatExportService,
             ILogger logger,
-            IExportSettings exportSettings,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider)
-            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger, exportSettings, plainTransactionManagerProvider)
+            IDataExportFileAccessor dataExportFileAccessor)
+            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor, logger)
         {
             this.tabularFormatExportService = tabularFormatExportService;
         }

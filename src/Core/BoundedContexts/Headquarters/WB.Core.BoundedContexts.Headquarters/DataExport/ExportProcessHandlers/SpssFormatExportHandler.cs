@@ -19,16 +19,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
         public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-            IZipArchiveProtectionService archiveUtils,
             InterviewDataExportSettings interviewDataExportSettings, 
             ITabularFormatExportService tabularFormatExportService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService, 
             IDataExportProcessesService dataExportProcessesService,
             ILogger logger,
-            IExportSettings exportSettings,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider)
-            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger, exportSettings, plainTransactionManagerProvider)
+            IDataExportFileAccessor dataExportFileAccessor)
+            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger, dataExportFileAccessor)
         {
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }

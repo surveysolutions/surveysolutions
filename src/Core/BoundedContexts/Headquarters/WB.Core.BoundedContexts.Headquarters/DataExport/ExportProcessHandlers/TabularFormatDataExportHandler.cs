@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public TabularFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IZipArchiveProtectionService archiveUtils, 
             InterviewDataExportSettings interviewDataExportSettings, 
             ITransactionManagerProvider transactionManagerProvider, 
             ITabularFormatExportService tabularFormatExportService,
@@ -37,9 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IDataExportProcessesService dataExportProcessesService,
             ILogger logger, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IExportSettings exportSettings,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider) : 
-            base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger, exportSettings, plainTransactionManagerProvider)
+            IDataExportFileAccessor dataExportFileAccessor) : 
+            base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor, logger)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.tabularFormatExportService = tabularFormatExportService;

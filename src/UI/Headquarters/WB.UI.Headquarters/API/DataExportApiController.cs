@@ -31,8 +31,6 @@ namespace WB.UI.Headquarters.API
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
-        private readonly IZipArchiveProtectionService zipArchiveProtectionService;
-        private readonly IExportSettings exportSettings;
 
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -40,9 +38,7 @@ namespace WB.UI.Headquarters.API
             IDataExportProcessesService dataExportProcessesService, 
             IParaDataAccessor paraDataAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            IDdiMetadataAccessor ddiMetadataAccessor,
-            IZipArchiveProtectionService zipArchiveProtectionService,
-            IExportSettings exportSettings)
+            IDdiMetadataAccessor ddiMetadataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -50,8 +46,6 @@ namespace WB.UI.Headquarters.API
             this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
-            this.zipArchiveProtectionService = zipArchiveProtectionService;
-            this.exportSettings = exportSettings;
         }
 
         [HttpGet]
