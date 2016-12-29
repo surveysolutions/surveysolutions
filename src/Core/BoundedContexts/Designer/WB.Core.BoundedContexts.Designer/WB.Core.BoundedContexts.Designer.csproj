@@ -299,6 +299,8 @@
     <Compile Include="Commands\Questionnaire\Variable\UpdateVariable.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Implementation\Repositories\UserRepository.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\LazyHashSetVariableModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\VariableModel.cs" />
     <Compile Include="Implementation\Services\FindReplaceService.cs" />
     <Compile Include="Implementation\Services\QuestionnireHistotyVersionsService.cs" />
     <Compile Include="ValueObjects\RosterScope.cs" />

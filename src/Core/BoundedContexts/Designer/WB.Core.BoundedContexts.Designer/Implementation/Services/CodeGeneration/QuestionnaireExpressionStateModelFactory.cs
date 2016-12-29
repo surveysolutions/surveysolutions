@@ -137,7 +137,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         codeGenerationSettings.Namespaces,
                         question.Condition,
                         false,
-                        question.VariableName));
+                        question.VariableName)
+                    {
+                        AdditionalVariables = question.AdditionalVariables
+                    });
                 }
                 foreach (var validation in question.ValidationExpressions)
                 {
@@ -712,11 +715,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? question.StataExportCaption
                 : "__" + question.PublicKey.FormatGuid();
 
-            var condition = question.CascadeFromQuestionId.HasValue
-                ? this.GetConditionForCascadingQuestion(questionnaireDoc, question.PublicKey)
-                : this.macrosSubstitutionService.InlineMacros(question.ConditionExpression, questionnaireDoc.Macros.Values);
+            var questionModel = new QuestionTemplateModel
+            {
+                Id = question.PublicKey,
+                VariableName = varName,
+                TypeName = GenerateQuestionTypeName(question, questionnaireDoc),
+                RosterScopeName = rosterScopeName,
+                ParentScopeTypeName = parentScopeTypeName
+            };
 
-            var validationExpressions = question
+            if (question.CascadeFromQuestionId.HasValue)
+            {
+                this.FillConditionForCascadingQuestion(questionModel, questionnaireDoc, question.PublicKey);
+            }
+            else
+            {
+                questionModel.Condition = this.macrosSubstitutionService.InlineMacros(question.ConditionExpression, questionnaireDoc.Macros.Values);
+            }
+            
+            questionModel.ValidationExpressions = question
                 .ValidationConditions
                 .Select((validationCondition, index)
                     => new ValidationExpressionModel(
@@ -725,19 +742,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         index))
                 .ToList();
 
-            var optionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaireDoc.Macros.Values);
-
-            var questionModel = new QuestionTemplateModel
-            {
-                Id = question.PublicKey,
-                VariableName = varName,
-                Condition = condition,
-                TypeName = GenerateQuestionTypeName(question, questionnaireDoc),
-                RosterScopeName = rosterScopeName,
-                ParentScopeTypeName = parentScopeTypeName,
-                ValidationExpressions = validationExpressions,
-                OptionsFilterExpression = optionsFilterExpression
-            };
+            questionModel.OptionsFilterExpression = this.macrosSubstitutionService.InlineMacros(question.Properties.OptionsFilterExpression, questionnaireDoc.Macros.Values);
 
             if (IsMultiQuestion(question))
             {
@@ -848,7 +853,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private string GetConditionForCascadingQuestion(QuestionnaireDocument questionnaireDocument, Guid cascadingQuestionId)
+        private void FillConditionForCascadingQuestion(QuestionTemplateModel questionModel, QuestionnaireDocument questionnaireDocument, Guid cascadingQuestionId)
         {
             var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
             var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
@@ -857,19 +862,48 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             if (parentQuestion == null)
             {
-                return conditionForChildCascadingQuestion;
+                questionModel.Condition = conditionForChildCascadingQuestion;
+                return;
             }
 
-            string childQuestionCondition = (string.IsNullOrWhiteSpace(conditionForChildCascadingQuestion) ? string.Empty : $" && {conditionForChildCascadingQuestion}");
+            var conditions = new List<string>
+            {
+                $"!IsAnswerEmpty({parentQuestion.StataExportCaption})"
+            };
 
-            var valuesOfParentCascadingThatHaveChildOptions = childQuestion.Answers.Select(x => x.ParentValue).Distinct();
+            AddExpressionToDisableChildThatHasNoOptionsForChosenParent(questionModel, childQuestion, parentQuestion, conditions);
+
+            if (!string.IsNullOrWhiteSpace(conditionForChildCascadingQuestion))
+            {
+                conditions.Add(conditionForChildCascadingQuestion);
+            }
+
+            questionModel.Condition = string.Join(" && ", conditions);
+        }
+
+        private static void AddExpressionToDisableChildThatHasNoOptionsForChosenParent(QuestionTemplateModel questionModel, SingleQuestion childQuestion, SingleQuestion parentQuestion, List<string> conditions)
+        {
+            var valuesOfParentCascadingThatHaveChildOptions = childQuestion.Answers
+                .Select(x => x.ParentValue)
+                .Distinct();
+
             var allValuesOfParentCascadingQuestion = parentQuestion.Answers.Select(x => x.AnswerValue);
 
-            var parentOptionsThatHaveNoChildOptions = allValuesOfParentCascadingQuestion.Where(x => !valuesOfParentCascadingThatHaveChildOptions.Contains(x));
+            var parentOptionsThatHaveNoChildOptions = allValuesOfParentCascadingQuestion
+                .Where(x => !valuesOfParentCascadingThatHaveChildOptions.Contains(x))
+                .ToArray();
 
-            var expressionToDisableChildThatHasNoOptionsForChosenParent = !parentOptionsThatHaveNoChildOptions.Any() ? string.Empty : GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(parentOptionsThatHaveNoChildOptions, parentQuestion.StataExportCaption);
+            if (!parentOptionsThatHaveNoChildOptions.Any())
+            {
+                return;
+            }
 
-            return $"!IsAnswerEmpty({parentQuestion.StataExportCaption})" + expressionToDisableChildThatHasNoOptionsForChosenParent + childQuestionCondition;
+            var lazyhashVariable = new LazyHashSetVariableModel(parentQuestion.StataExportCaption, "int", parentOptionsThatHaveNoChildOptions);
+            questionModel.AdditionalVariables.Add(lazyhashVariable);
+
+            var condition = $"!({parentQuestion.StataExportCaption} != null && {lazyhashVariable.Name}.Value.Contains((int){parentQuestion.StataExportCaption}))";
+
+            conditions.Add(condition);
         }
 
         private Dictionary<Guid, List<Guid>> BuildRosterDependencies(QuestionnaireDocument questionnaire)
@@ -879,7 +913,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .GroupBy(x => x.RosterSizeQuestionId.Value)
                 .ToDictionary(x => x.Key, x => x.Select(r => r.PublicKey).ToList());
         }
-
+        
         public Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
         {
             var dependencies = new Dictionary<Guid, List<Guid>>();
@@ -943,12 +977,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 if (!dependencies[entityId].Contains(dependentEntityId))
                     dependencies[entityId].Add(dependentEntityId);
             }
-        }
-
-        static string GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(IEnumerable<string> parentOptionsThatHaveNoChildOptions, string stataExportCaption)
-        {
-            var joinedParentOptions = string.Join(",", parentOptionsThatHaveNoChildOptions.Select(x => $"{x}"));
-            return $@" && !(new List<decimal?>(){{ {joinedParentOptions} }}.Contains({stataExportCaption}))";
         }
 
         private static string GenerateQuestionTypeName(IQuestion question, QuestionnaireDocument questionnaire)
