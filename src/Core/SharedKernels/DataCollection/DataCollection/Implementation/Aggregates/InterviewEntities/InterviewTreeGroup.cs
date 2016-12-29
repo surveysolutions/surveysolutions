@@ -259,9 +259,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public override string ToString() => $"SubSection ({this.Identity})" + Environment.NewLine + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
-        //public override string ToString() => $"SubSection {this.Identity} '{this.Title}'. " +
-        //                                     $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
+        public override string ToString() => $"SubSection ({this.Identity}) " + (this.IsDisabled() ? "Disabled" : "Enabled") + Environment.NewLine + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -271,10 +269,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public override string ToString() => $"Section ({this.Identity})" + Environment.NewLine + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
-
-
-        //public override string ToString() => $"Section {this.Identity} '{this.Title}'. " +
-        //                                     $" {(this.IsDisabled() ? "Disabled" : "Enabled")}. ";
+        public override string ToString() => $"Section ({this.Identity}) "+ (this.IsDisabled() ? "Disabled" : "Enabled") + Environment.NewLine + string.Join(Environment.NewLine, this.Children.Select(child => child.ToString().PrefixEachLine("  ")));
     }
 }
