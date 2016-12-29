@@ -1,0 +1,72 @@
+.zoomImg {
+    cursor: pointer;
+    @include transition(all, 0.3s);
+}
+
+.zoomImg {
+	&:hover, &:focus{
+		@include scale(1.1);
+	}
+}
+.modal-img {
+	position: fixed; 
+    z-index: 50; 
+    padding-top: 50px; 
+    left: 0;
+    top: 70px;
+    bottom: 0;
+    right: 0;
+    width: 100%; 
+    background-color: rgba(0,0,0,0.9); 
+    text-align: center;
+    display: none; 
+    .modal-img-content {
+		@include center-block();
+	    max-width: 70% !important;
+	    max-height: 80%;
+	}
+	.caption {
+	    width: 75%;
+	    text-align: center;
+	    color: $gray-super-light;
+	    padding: 15px 0;
+		@include center-block();
+		&:first-letter{
+			text-transform: capitalize;
+		}
+	}
+	.close-zoomming-img {
+		@include absolute(40px, 40px);
+	    color: $gray-super-light;
+	    font-size: 40px;
+	    @include transition(all, 0.2s);
+	    &:hover,
+		&:focus {
+		    color: $gray_light;
+		    cursor: pointer;
+		}
+	}
+}
+.modal-img-content, .caption {    
+    @include animation-name(zoom);
+    @include animation-duration(0.5s);
+}
+
+@include keyframes(zoom) {
+    0% {
+    	@include scale(0);
+    } 
+    100% {
+    	@include scale(1);
+    }
+} 
+.image-zoom-box{
+	overflow: hidden;
+	margin-bottom: 10px;
+	img{
+		@include img-responsive();
+	}
+}
+span.image-zoom-box{
+	display: block;
+}

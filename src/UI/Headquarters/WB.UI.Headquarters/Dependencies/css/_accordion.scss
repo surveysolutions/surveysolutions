@@ -1,0 +1,103 @@
+.structured-content{
+	margin: 0;
+	.panel + .panel{
+		margin-top: -1px;
+	}
+	.panel-default{
+		background-color: transparent;
+		margin: 0 0 -1px;
+		border-radius: 0;
+		border-left: none;
+		border-right: none;
+		box-shadow: none;
+		padding: 0;
+		@include accordion(30px);
+		&:first-of-type{
+			border-top: none;
+		}
+		& > .panel-heading{
+			background-color: transparent;
+			border: none;
+			padding: 0;
+			h3{
+				@include transition(all, 0.3s);
+				&.group a{
+					padding-left: 0;
+					&:before, &:after{
+						display: none;
+					}
+				}
+				a{
+					display: block;
+					font: 16px/18px "RobotoMedium";
+					font-weight: normal;
+					color: $blue;
+					padding: 15px 20px 15px 25px;
+					position: relative;
+
+					&:hover, &:focus{
+						text-decoration: none;
+					}
+					&:before, &:after{
+						@include absolute(23px, null, null, 0);
+						content: "";
+						width: 12px;
+						height: 2px;
+						display: block;
+						background-color: $blue;
+					}
+					&:after{
+						@include rotate(0);
+						@include transition(all, 0.3s);
+					}
+					&.collapsed:after{
+						@include rotate(270deg);
+						@include transition(all, 0.3s);
+					}
+				}
+				&.contains-error a{
+					color: $red;
+					&:before, &:after{
+						background-color: $red;
+					}
+				}
+				&.complete a{
+					color: $green;
+					&:before, &:after{
+						background-color: $green;
+					}
+				}
+			} 
+			.active, &:hover, &:focus{ 
+				background-color: darken($gray-highlighting, 3%);
+			}			
+		} 
+		.in{
+			background-color: $gray-highlighting;
+		}
+	}
+	.panel-body{
+		padding: 0;
+		.panel-group{
+			margin-bottom: -1px;
+		}
+	}
+}
+@media only screen and (max-width: 1525px){
+	.structured-content{
+		.panel-default{
+			@include accordion(10px);
+			& > .panel-heading h3 a{
+				font-size: 14px;
+				line-height: 16px;
+			}
+		}
+	}
+}
+@media (max-width: $screen-sm-min){
+	.structured-content{
+		.panel-default{
+			@include accordion(20px);
+		}
+	}
+}

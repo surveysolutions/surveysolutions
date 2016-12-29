@@ -169,6 +169,7 @@ input.checkbox-filter{
 		    border-top: 12px solid $gray-light;
 		    border-right: 7px solid transparent;
 		    border-left: 7px solid transparent;
+		    border-bottom: none;
 		}
 		&:hover, &:focus, &:active{
 			box-shadow: none;
@@ -204,6 +205,9 @@ input.checkbox-filter{
    		width: 295px;
    		text-align: left;
    		padding: 7px 12px;
+   		overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
    		&:hover, &:focus{
    			box-shadow: none;
    		}
