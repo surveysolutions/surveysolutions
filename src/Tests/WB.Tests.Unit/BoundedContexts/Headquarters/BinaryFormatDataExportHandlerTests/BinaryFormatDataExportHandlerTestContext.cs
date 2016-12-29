@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -23,10 +24,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IPlainInterviewFileStorage plainFileRepository = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries = null,
-            IZipArchiveProtectionService archiveUtils = null,
+            IProtectedArchiveUtils archiveUtils = null,
             IReadSideKeyValueStorage<InterviewData> interviewDatas = null,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null,
-            IDataExportProcessesService dataExportProcessesService = null)
+            IDataExportProcessesService dataExportProcessesService = null,
+            IDataExportFileAccessor dataExportFileAccessor = null)
         {
             return new BinaryFormatDataExportHandler(
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
@@ -35,12 +37,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 new InterviewDataExportSettings(),
                 Mock.Of<ITransactionManager>(),
                 interviewSummaries ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                archiveUtils ?? Mock.Of<IZipArchiveProtectionService>(),
                 interviewDatas ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>(),
-                exportSettings: Mock.Of<IExportSettings>(),
-                plainTransactionManagerProvider: Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()));
+                dataExportFileAccessor: dataExportFileAccessor ?? Mock.Of<IDataExportFileAccessor>());
+        }
+
+        public static IDataExportFileAccessor CrerateDataExportFileAccessor(IFileSystemAccessor fileSystemAccessor = null,
+            IProtectedArchiveUtils archiveUtils = null)
+        {
+            return new DataExportFileAccessor(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<IExportSettings>(),
+                Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
+                archiveUtils ?? Mock.Of<IProtectedArchiveUtils>(),
+                Mock.Of<ILogger>());
         }
     }
 }
