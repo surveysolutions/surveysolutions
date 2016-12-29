@@ -8,6 +8,9 @@ $icon-font-path: '../fonts/';
 @import "navbar";
 @import "progress-bars";
 @import "forms";
+@import "accordion";
+@import "dropdown";
+@import "zoomimg";
 
 @import "common";
 @import "import-questionnaires";
@@ -15,3 +18,4 @@ $icon-font-path: '../fonts/';
 @import "batch-upload";
 @import "export";
 @import "interview-details";
+
