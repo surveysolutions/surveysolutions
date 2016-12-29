@@ -67,35 +67,35 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                                 where.Instances.Count(
                                     instance =>
                                         instance.GroupId == nestedRosterId && instance.RosterInstanceId == 0 &&
-                                        instance.OuterRosterVector.SequenceEqual(new decimal[] {0})) == 1),
+                                        instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })) == 1),
                         FirstRowOfNestedRosterDisabled =
                             HasEvent<GroupsDisabled>(eventContext.Events,
                                 where =>
                                     where.Groups.Count(
                                         instance =>
                                             instance.Id == nestedRosterId &&
-                                            instance.RosterVector.SequenceEqual(new decimal[] {0, 0})) == 1),
+                                            instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1),
                         FirstRowOfRosterDisabled =
                             HasEvent<GroupsDisabled>(eventContext.Events,
                                 where =>
                                     where.Groups.Count(
                                         instance =>
                                             instance.Id == rosterId &&
-                                            instance.RosterVector.SequenceEqual(new decimal[] {0})) == 1),
+                                            instance.RosterVector.SequenceEqual(new decimal[] { 0 })) == 1),
                         FirstQuestionFromFirstRowOfNestedRosterDisabled =
                             HasEvent<QuestionsDisabled>(eventContext.Events,
                                 where =>
                                     where.Questions.Count(
                                         instance =>
                                             instance.Id == nestedRosterQuestionId &&
-                                            instance.RosterVector.SequenceEqual(new decimal[] {0, 0})) == 1),
+                                            instance.RosterVector.SequenceEqual(new decimal[] { 0, 0 })) == 1),
                         FirstQuestionFromFirstRowOfRosterDisabled =
                             HasEvent<QuestionsDisabled>(eventContext.Events,
                                 where =>
                                     where.Questions.Count(
                                         instance =>
                                             instance.Id == rosterQuestionId &&
-                                            instance.RosterVector.SequenceEqual(new decimal[] {0})) == 1)
+                                            instance.RosterVector.SequenceEqual(new decimal[] { 0 })) == 1)
                     };
                 }
             });

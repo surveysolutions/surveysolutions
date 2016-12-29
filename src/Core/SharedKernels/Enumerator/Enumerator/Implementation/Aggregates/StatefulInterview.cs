@@ -80,6 +80,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.ActualizeRostersIfQuestionIsRosterSize(answerDto.Id);
             }
 
+            // titles for numeric questions should be recalculated afterward because answers for roster title questions
+            // could be not processed by the time roster instance was created.
+            this.Tree.FindRosters().Where(x => x.IsNumeric).ForEach(x => x.UpdateRosterTitle());
+
             foreach (var disabledGroup in @event.InterviewData.DisabledGroups)
                 this.Tree.GetGroup(Identity.Create(disabledGroup.Id, disabledGroup.InterviewItemRosterVector)).Disable();
 
@@ -111,8 +115,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.UpdateExpressionState(this.sourceInterview, this.Tree, this.ExpressionProcessorStatePrototype);
 
             this.UpdateLinkedQuestions(this.Tree, this.ExpressionProcessorStatePrototype, false);
-
-
 
             this.CreatedOnClient = @event.InterviewData.CreatedOnClient;
             this.properties.SupervisorId = @event.InterviewData.SupervisorId;

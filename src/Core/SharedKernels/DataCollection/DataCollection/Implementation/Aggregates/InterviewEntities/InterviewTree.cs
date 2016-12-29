@@ -425,11 +425,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             nodesCache[node.Identity] = node;
         }
 
-        public IEnumerable<IInterviewTreeNode> GetEntitiesWithSubstitution()
-        {
-            return new IInterviewTreeNode[0] {};
-        }
-
         public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
         {
             for (int shorterRosterVectorLength = questionIdentity.RosterVector.Length; shorterRosterVectorLength >= 0; shorterRosterVectorLength--)
