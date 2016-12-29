@@ -22,10 +22,10 @@
 .foldback-button{
 	@include size($width-foldback-button, 46px);
 	cursor: pointer;
-	@include absolute(5px, 0, null, null);
+	@include absolute(75px, 0, null, null);
 	border-radius: 4px;
 	z-index: 2;
-	@include transition();
+	@include transition(all, 0.2s);
 	&:hover, &:focus{
 	    span.arrow{
 	    	background-color: rgba(0, 0, 0, 1);
@@ -54,6 +54,17 @@
 		left: 10px;
 	}
 }
+.btn-default.btn-gray{
+	color: $white;
+	padding: 12px;
+	background-color: darken($gray_form, 10%);
+	border: none;
+	&:hover, &:focus{
+		outline: none;
+		border: none;
+		background-color: darken($gray_form, 20%);
+	}
+}
 .back-link{
     text-transform: uppercase;
     font: 12.5px/14px "TrebuchetMSBold";
@@ -66,4 +77,64 @@
 .cancel{
 	border: none;
 	outline: none;
+}
+.button-flag{
+	display: inline-block;
+    @include size(19px, 22px); 
+    @include image-2x("../img/flags2k.png", 75px, 22px);
+    background: transparent url("../img/flags.png") no-repeat;
+    background-size: 75px 22px;
+    background-position: -38px 0;  
+	border: none;
+	&:hover, &:focus{
+		background-position: -57px 0;
+		outline: none;
+	}
+	&.flagged, &:active{
+    	background-position: 0 0;
+    	outline: none;
+    	&:hover, &:focus{
+    		background-position: -19px 0;
+    	}
+	}
+}
+.reject{
+	border-width: 1px;
+	box-shadow: inset 2px 2px 0 $red, inset -2px -2px 0 $red;
+	border-color: $red;
+	background-color: transparent;
+	color: $red;
+	&:focus,
+	&.focus,
+	&:hover {
+	    color: darken($red, 10%);
+	    border-color: darken($red, 10%);
+	}
+}
+.btn-clear{
+	&:hover, &:active:focus, &:focus, &:active{
+		outline: none;
+	}
+	span{
+		@include cancel(18px);
+	}
+	@include absolute(0, 0);
+	@include transition(all, 0.2s);
+	@extend %visibility-hidden;
+}
+.btn-action-questionnaire{
+	background-color: $white;
+	border-color: transparent;
+	color: $gray_light;
+	border-radius: 5px;
+	outline: none;
+	text-transform: none;
+	letter-spacing: 0.5px;
+	font: 14px/18px Arial;
+	font-style: italic;
+	&:hover, &:focus, &:active{
+		background-color: $gray-super-light;
+		border-color: darken($gray_light, 10%);
+		color: darken($gray_light, 20%);
+	}
 }
