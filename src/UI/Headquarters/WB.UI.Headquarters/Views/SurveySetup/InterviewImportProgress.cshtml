@@ -30,20 +30,24 @@
             };
             self.isStatusLoaded = ko.observable(false);
 
+            var countOfRequestsToStopImport = 0;
+
             var shouldStopRequestUpdates = function(data) {
                 if (_.isNull(data.interviewImportProcessId))
-                    return true;
+                    countOfRequestsToStopImport++;
+                else if (data.totalInterviewsCount === 0)
+                    countOfRequestsToStopImport++;
+                else if (data.isInProgress === false)
+                    countOfRequestsToStopImport++;
+                else if (data.interviewImportProcessId !== self.interviewImportProcessId)
+                    countOfRequestsToStopImport++;
+                else {
+                    countOfRequestsToStopImport = 0;
+                }
 
-                if (data.totalInterviewsCount === 0)
-                    return true;
-
-                if (data.isInProgress === false)
-                    return true;
-
-                if (data.interviewImportProcessId !== self.interviewImportProcessId)
-                    return true;
-
-                return false;
+                // this will prevent requests being sent if tab was left open
+                // and if takes some time to start preloading
+                return countOfRequestsToStopImport >= 10;
             }
 
             self.updateStatusByInterviewsImport = function() {
@@ -78,8 +82,8 @@
         <div class="row">
             <div class="page-header">
                 <ol class="breadcrumb">
-                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
-                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
                 </ol>
                 <h1>@BatchUpload.CreatingMultipleInterviews</h1>
             </div>
@@ -129,8 +133,8 @@
                 </div>
                 <div class="action-buttons" data-bind="ifnot: status.isInProgress">
                     <a class="btn btn-primary" href="@Url.Action("Interviews", "HQ", new { templateId = Model.QuestionnaireId, templateVersion = Model.Version})">@MainMenu.Interviews</a>
-                    <a class="btn btn-primary" href="@Url.Action("Index", "HQ")">@MainMenu.Questionnaires</a>
-                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { @class = "back-link" })
+                    <a class="btn btn-primary" href="@Url.Action("Index", "SurveySetup")">@MainMenu.Questionnaires</a>
+                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { @class = "back-link" })
                 </div>
             </div>
         </div>

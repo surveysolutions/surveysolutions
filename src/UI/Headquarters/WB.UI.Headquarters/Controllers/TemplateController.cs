@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers
             var result = await this.importService.Import(id, name, importMode == "Census");
             if (result.IsSuccess)
             {
-                return this.RedirectToAction("Index", "HQ");
+                return this.RedirectToAction("Index", "SurveySetup");
             }
 
             var model = await GetImportModel(id, name);

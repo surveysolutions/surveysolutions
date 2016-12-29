@@ -108,7 +108,7 @@ input.checkbox-filter{
 }
 .preset-filters-container{
 	padding-top: 30px;
-	a{
+	a, .export-queue{
 		@extend h5;
 		color: $blue;
 		display: block;

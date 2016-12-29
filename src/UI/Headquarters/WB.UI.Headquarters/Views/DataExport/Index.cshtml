@@ -88,20 +88,25 @@
                     <h4>@DataExport.ExportRange</h4>
                     <div class="block-filter">
                         <h5>@DataExport.SurveyTemplateTitle</h5>
-                        <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title', selectPicker: {}" ></select>
-                        
+                        <select id="templateSelector" data-bind="options: Templates, value: selectedTemplate, optionsText: 'title', selectPicker: {}"></select>
+                    </div>
+                    <div class="block-filter">
                         <h5>@DataExport.StatusOfExportTitle</h5>
                         <select id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title', selectPicker: {}"></select>
                     </div>
                 </div>
                 
-                <div class="preset-filters-container">
-                    <span data-bind="text:'@DataExport.ItemsInQueue ' + RunningDataExportProcesses().length"></span>
+                <div class="preset-filters-container" data-bind="visible: RunningDataExportProcesses().length > 0">
+                    <span class="export-queue" data-bind="text:'@DataExport.ItemsInQueue ' + RunningDataExportProcesses().length"></span>
                 </div>
-
             </aside>
             <div class="export-types">
                 <h2 data-bind="text: selectedTemplate().title"></h2>
+                <div class="row">
+                    <div class="col-sm-7 col-xs-10 info-block">
+                        <p>@DataExport.ExportExplanation</p>
+                    </div>
+                </div>
                 <!-- ko if:selectedTemplateTitle() != null -->
                 <div class="main  data">
                     <h3>@DataExport.MainSurveyDataTitle</h3>

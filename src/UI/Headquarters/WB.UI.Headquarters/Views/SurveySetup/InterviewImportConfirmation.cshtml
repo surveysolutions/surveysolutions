@@ -51,8 +51,8 @@
         <div class="row">
             <div class="page-header">
                 <ol class="breadcrumb">
-                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "HQ")</li>
-                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                    <li>@Html.ActionLink(MainMenu.Questionnaires, "Index", "SurveySetup")</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
                 </ol>
                 <h1>@BatchUpload.CreatingMultipleInterviews</h1>
             </div>
@@ -81,7 +81,7 @@
                         </p>
                     }
                 </div>
-                @using (Html.BeginForm("InterviewImportConfirmation", "HQ", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
+                @using (Html.BeginForm("InterviewImportConfirmation", "SurveySetup", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(x => x.InterviewsCount)
@@ -114,7 +114,7 @@
                     }
                     <div class="action-buttons">
                         <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasSupervsorProvided) { <text>enable: isSupervisorSelected</text> }">@BatchUpload.CreateInterviews</button>
-                        <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
+                        <a href="@Url.Action("BatchUpload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
                             @BatchUpload.BackToImport
                         </a>
                     </div>
