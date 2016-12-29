@@ -21,19 +21,18 @@ using <#=namespaceToInclude#>;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-   internal partial class <#=Model.ClassName#>
-   {   
-      private <#=Model.ReturnType#> <#=Model.MethodName#>()
-      {
-<# 
-	if(Model.GenerateSelf) 
-	{
-#>
-          var self = <#=Model.VariableName#>;
-<# 
-	}
-#>
-          return <#=Model.Expression#>;
-      }      
-   }
+		internal partial class <#=Model.ClassName#>
+		{  
+	  <# foreach(var variable in Model.AdditionalVariables) {  #>
+			<#=variable.Visibility #> <#=variable.IsStatic ? "static" : "" #> <#=variable.IsReadonly ? "readonly" : "" #> <#=variable.Type #> <#=variable.Name #> <#= variable.Initialization #>;
+	  <# } #>
+	  		
+			private <#=Model.ReturnType#> <#=Model.MethodName#>()
+			{
+				<# if(Model.GenerateSelf) { #>
+				var self = <#=Model.VariableName#>;
+				<# } #>
+				return <#=Model.Expression#>;
+			}
+		}
 }

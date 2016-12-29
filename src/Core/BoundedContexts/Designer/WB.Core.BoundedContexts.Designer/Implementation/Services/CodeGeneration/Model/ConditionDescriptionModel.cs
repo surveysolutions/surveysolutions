@@ -1,4 +1,8 @@
-﻿namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
+﻿using System.Collections.Generic;
+using NHibernate.Util;
+using System.Linq;
+
+namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
     public class ConditionDescriptionModel
     {
@@ -27,6 +31,7 @@
         public string VariableName { set; get; }
         public bool GenerateSelf { set; get; }
         public string ReturnType { get; set; }
+        public List<VariableModel> AdditionalVariables { get; set; }
     }
 
     public class OptionsFilterConditionDescriptionModel : ConditionDescriptionModel
