@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
 {
     internal class when_export_all_binary_data: BinaryFormatDataExportHandlerTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var questionnaireExportStructure =
                 Create.Entity.QuestionnaireExportStructure(questionnaireId: questionnaireIdentity.QuestionnaireId,
@@ -59,13 +59,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>((p1, p2) => p2);
 
+            var dataExportFileAccessor = CrerateDataExportFileAccessor(fileSystemAccessor.Object);
+
             binaryFormatDataExportHandler =
                 CreateBinaryFormatDataExportHandler(
                     interviewSummaries: interviewSummarytorage,
                     interviewDatas: interviewDataStorage,
                     questionnaireExportStructureStorage: questionnaireStorage.Object,
                     plainFileRepository: plainInterviewFileStorageMock.Object,
-                    fileSystemAccessor: fileSystemAccessor.Object);
+                    fileSystemAccessor: fileSystemAccessor.Object,
+                    dataExportFileAccessor: dataExportFileAccessor);
         };
 
         Because of = () => binaryFormatDataExportHandler.ExportData(Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity));

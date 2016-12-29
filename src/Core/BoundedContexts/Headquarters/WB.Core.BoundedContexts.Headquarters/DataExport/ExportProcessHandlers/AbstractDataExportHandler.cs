@@ -20,33 +20,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
     abstract class AbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IZipArchiveProtectionService archiveUtils;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly ILogger logger;
-        private readonly IExportSettings exportSettings;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+        private readonly IDataExportFileAccessor dataExportFileAccessor;
 
-        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IZipArchiveProtectionService archiveUtils, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
             IDataExportProcessesService dataExportProcessesService,
-            ILogger logger,
-            IExportSettings exportSettings,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IDataExportFileAccessor dataExportFileAccessor,
+            ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.archiveUtils = archiveUtils;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.dataExportProcessesService = dataExportProcessesService;
             this.logger = logger;
-            this.exportSettings = exportSettings;
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.dataExportFileAccessor = dataExportFileAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
@@ -74,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
-            RecreateExportArchive(filesToArchive, this.GetArchiveNameForData(dataExportProcessDetails.Questionnaire, dataExportProcessDetails.InterviewStatus));
+            dataExportFileAccessor.RecreateExportArchive(filesToArchive, this.GetArchiveNameForData(dataExportProcessDetails.Questionnaire, dataExportProcessDetails.InterviewStatus));
         }
 
         protected abstract DataExportFormat Format { get; }
@@ -102,30 +95,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             return this.fileSystemAccessor.CombinePath(pathToExportedData,
                 $"{questionnaireIdentity.QuestionnaireId}_{questionnaireIdentity.Version}");
-        }
-
-        private void RecreateExportArchive(string[] filesToArchive, string archiveFilePath)
-        {
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-            {
-                this.logger.Info($"{archiveFilePath} existed, deleting");
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-            }
-
-            this.logger.Debug($"Starting creation of {Path.GetFileName(archiveFilePath)} archive");
-            Stopwatch watch = Stopwatch.StartNew();
-            var password = this.GetPasswordFromSettings();
-            this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath, password);
-            watch.Stop();
-            this.logger.Info($"Done creation {Path.GetFileName(archiveFilePath)} archive. Spent: {watch.Elapsed:g}");
-        }
-
-        private string GetPasswordFromSettings()
-        {
-            return this.PlainTransactionManager.ExecuteInPlainTransaction(() => 
-                this.exportSettings.EncryptionEnforced()
-                    ? this.exportSettings.GetPassword()
-                    : null);
         }
 
         private void ClearFolder(string folderName)
