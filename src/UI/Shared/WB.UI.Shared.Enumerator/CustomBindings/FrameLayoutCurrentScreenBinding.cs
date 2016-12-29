@@ -6,6 +6,7 @@ using MvvmCross.Core.Views;
 using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -16,6 +17,21 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             : base(frameLayout) {}
 
         protected override void SetValueToView(FrameLayout frameLayout, InterviewStageViewModel stageViewModel)
+        {
+            var userInterfaceStateService = Mvx.Resolve<IUserInterfaceStateService>();
+
+            userInterfaceStateService.NotifyRefreshStarted();
+            try
+            {
+                SetValueToViewImpl(frameLayout, stageViewModel);
+            }
+            finally
+            {
+                userInterfaceStateService.NotifyRefreshFinished();
+            }
+        }
+
+        private static void SetValueToViewImpl(FrameLayout frameLayout, InterviewStageViewModel stageViewModel)
         {
             if (stageViewModel == null)
                 return;
@@ -39,6 +55,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             SetCustomAnimations(transaction, stageViewModel.Direction);
             transaction.Replace(frameLayout.Id, mvxFragment);
             transaction.Commit();
+
+            activity.SupportFragmentManager.ExecutePendingTransactions();
         }
 
         private static FragmentTransaction SetCustomAnimations(FragmentTransaction transaction, NavigationDirection direction)
