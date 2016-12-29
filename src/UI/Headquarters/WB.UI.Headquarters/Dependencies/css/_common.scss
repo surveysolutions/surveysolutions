@@ -237,4 +237,17 @@ body > .ui-pnotify
 	color: $gray_form;
 }
 
+.info-block{
+    @extend .text-page;
+	margin-bottom: 20px;
 
+    p{
+		margin-bottom: 20px;
+        &:last-of-type{
+            margin-bottom: 0px;
+        }
+        &:only-of-type{
+            margin-bottom: 20px;
+        }
+	}
+}
