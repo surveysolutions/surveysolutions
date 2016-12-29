@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        It should_not_raise_enablement_events_for_subgroups = () => results.SubGroupGotEnablementEvents.ShouldBeTrue();
+        It should_not_raise_enablement_events_for_subgroups = () => results.SubGroupGotEnablementEvents.ShouldBeFalse();
 
         It should_mark_nested_roster_as_enabled = () => results.NestedRosterIsEnabled.ShouldBeTrue();
 
