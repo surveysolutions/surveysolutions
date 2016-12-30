@@ -324,8 +324,11 @@ namespace WB.Tests.Integration
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
             };
 
-        public static Group Chapter(string title = "Chapter X", string enablementCondition = null, IEnumerable<IComposite> children = null)
-            => Create.Group(title: title, children: children, enablementCondition: enablementCondition);
+        public static Group Chapter(string title = "Chapter X", 
+            Guid? id = null,
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+            => Create.Group(title: title, children: children, enablementCondition: enablementCondition, id: id);
 
         public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {
@@ -1007,6 +1010,30 @@ namespace WB.Tests.Integration
         public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
             => new PlainQuestionnaire(document, version);
 
+
+        public static StatefulInterview PreloadedInterview(
+            PreloadedDataDto preloadedData,
+            Guid? questionnaireId = null,
+            IQuestionnaireStorage questionnaireRepository = null,
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+        {
+            var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                Create.SubstitionTextFactory());
+
+            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
+                interviewId: Guid.NewGuid(),
+                userId: Guid.NewGuid(),
+                questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                version: 1,
+                preloadedDataDto: preloadedData,
+                answersTime: new DateTime(2012, 12, 20),
+                supervisorId: Guid.NewGuid(),
+                interviewerId: Guid.NewGuid()));
+
+            return interview;
+        }
+
         public static PreloadedDataDto PreloadedDataDto(params PreloadedLevelDto[] levels)
         {
             return new PreloadedDataDto(levels);
@@ -1016,6 +1043,5 @@ namespace WB.Tests.Integration
         {
             return new PreloadedLevelDto(rosterVector, answers);
         }
-
     }
 }
