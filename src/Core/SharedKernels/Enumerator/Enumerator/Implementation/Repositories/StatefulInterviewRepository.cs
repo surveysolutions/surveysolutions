@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -13,15 +12,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
     internal class StatefulInterviewRepository : IStatefulInterviewRepository
     {
         private readonly IEventSourcedAggregateRootRepository aggregateRootRepository;
-        private readonly ILiteEventBus eventBus;
 
-        public StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus eventBus)
+        public StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository)
         {
             if (aggregateRootRepository == null) throw new ArgumentNullException(nameof(aggregateRootRepository));
-            if (eventBus == null) throw new ArgumentNullException(nameof(eventBus));
 
             this.aggregateRootRepository = aggregateRootRepository;
-            this.eventBus = eventBus;
         }
 
         public IStatefulInterview Get(string interviewId)
@@ -33,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return await Task.Run(() => this.GetImpl(interviewId, progress, cancellationToken), cancellationToken);
         }
 
-        public IStatefulInterview GetImpl(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+        private IStatefulInterview GetImpl(string interviewId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(interviewId)) throw new ArgumentNullException(nameof(interviewId));
 

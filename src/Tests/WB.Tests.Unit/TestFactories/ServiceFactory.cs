@@ -240,8 +240,7 @@ namespace WB.Tests.Unit.TestFactories
 
         public IStatefulInterviewRepository StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
             => new StatefulInterviewRepository(
-                aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
-                eventBus: liteEventBus ?? Mock.Of<ILiteEventBus>());
+                aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>());
 
         public ISubstitutionService SubstitutionService()
             => new SubstitutionService();
