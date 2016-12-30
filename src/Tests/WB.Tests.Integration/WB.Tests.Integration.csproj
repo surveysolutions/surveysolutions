@@ -355,6 +355,7 @@
     <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_third_level_nested_roster.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_generating_models_with_variable_usage_in_nested_roster.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_that_enables_section_with_nested_rosters_inside_it_after_preloading.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_that_enables_section_with_nested_rosters_inside_it.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_using_IsAnswered_with_yes_no_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />

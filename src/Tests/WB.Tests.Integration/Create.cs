@@ -46,6 +46,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -955,5 +956,39 @@ namespace WB.Tests.Integration
 
         public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
             => new PlainQuestionnaire(document, version);
+
+
+        public static StatefulInterview PreloadedInterview(
+            PreloadedDataDto preloadedData,
+            Guid? questionnaireId = null,
+            IQuestionnaireStorage questionnaireRepository = null,
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+        {
+            var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+                Create.SubstitionTextFactory());
+
+            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
+                interviewId: Guid.NewGuid(),
+                userId: Guid.NewGuid(),
+                questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                version: 1,
+                preloadedDataDto: preloadedData,
+                answersTime: new DateTime(2012, 12, 20),
+                supervisorId: Guid.NewGuid(),
+                interviewerId: Guid.NewGuid()));
+
+            return interview;
+        }
+
+        public static PreloadedDataDto PreloadedDataDto(params PreloadedLevelDto[] levels)
+        {
+            return new PreloadedDataDto(levels);
+        }
+
+        public static PreloadedLevelDto PreloadedLevelDto(RosterVector rosterVector, Dictionary<Guid, AbstractAnswer> answers)
+        {
+            return new PreloadedLevelDto(rosterVector, answers);
+        }
     }
 }
