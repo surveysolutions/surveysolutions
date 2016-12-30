@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -57,6 +58,37 @@ namespace WB.Tests.Integration.InterviewTests
                 questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
+        }
+
+
+        protected static StatefulInterview SetupPreloadedInterview(
+            PreloadedDataDto preloadedData,
+            QuestionnaireDocument questionnaireDocument,
+            IEnumerable<object> events = null,
+            ILatestInterviewExpressionState precompiledState = null)
+        {
+            Guid questionnaireId = questionnaireDocument.PublicKey;
+
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
+                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == new PlainQuestionnaire(questionnaireDocument, 1, null));
+
+
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(questionnaireRepository);
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+
+            var state = GetLatestInterviewExpressionState(questionnaireDocument, precompiledState);
+
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
+
+            var interview = Create.PreloadedInterview(
+                preloadedData,
+                questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider);
+
+            ApplyAllEvents(interview, events);
+
+            return interview;
         }
 
         protected static PlainQuestionnaire CreateQuestionnaire(QuestionnaireDocument questionnaireDocument, Guid? userId = null)

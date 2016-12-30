@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             get
             {
-                var newNodeIsDisabled = this.SourceNode == null && this.ChangedNode !=null && this.ChangedNode.IsDisabled();
+                var newNodeIsDisabled = this.SourceNode == null && this.ChangedNode !=null && this.ChangedNode.IsDisabledByOwnCondition();
                 var existingNodeWasEnadledAndWasDisabled = this.SourceNode != null && this.ChangedNode != null && 
                                                            !this.SourceNode.IsDisabledByOwnCondition() && this.ChangedNode.IsDisabledByOwnCondition();
                 return newNodeIsDisabled || existingNodeWasEnadledAndWasDisabled;
@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             get
             {
-                var nodeIsRemovedAndWasDisabled = this.ChangedNode == null && this.SourceNode != null && this.SourceNode.IsDisabled();
+                var nodeIsRemovedAndWasDisabled = this.ChangedNode == null && this.SourceNode != null && this.SourceNode.IsDisabledByOwnCondition();
                 var existingNodeWasEnabledAndNowIsDisabled = this.SourceNode != null && this.ChangedNode != null && 
                                                              this.SourceNode.IsDisabledByOwnCondition() && !this.ChangedNode.IsDisabledByOwnCondition();
                 return existingNodeWasEnabledAndNowIsDisabled || nodeIsRemovedAndWasDisabled;
