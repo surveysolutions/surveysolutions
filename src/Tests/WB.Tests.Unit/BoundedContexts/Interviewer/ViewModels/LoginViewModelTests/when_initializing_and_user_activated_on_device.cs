@@ -7,7 +7,7 @@ using Moq;
 
 using NSubstitute;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 

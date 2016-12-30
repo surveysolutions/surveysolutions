@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests

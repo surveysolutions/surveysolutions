@@ -1,7 +1,7 @@
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
