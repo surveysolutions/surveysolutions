@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 
-namespace WB.Core.SharedKernels.Enumerator.Repositories
+namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
     public interface IStatefulInterviewRepository
     {
