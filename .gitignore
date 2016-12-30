@@ -40,6 +40,7 @@ lib/Debug
 App_Data/LocalStorage/*
 
 node_modules/
+npm-debug.log
 .vs/
 
 scaffolding.config
@@ -64,6 +65,8 @@ src/UI/Headquarters/WB.UI.Headquarters/Dependencies/build/libs-*.min.js
 src/UI/Headquarters/WB.UI.Headquarters/Dependencies/build/libs-*.min.css
 
 src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/*
+src/UI/Headquarters/WB.UI.Headquarters/InterviewApp/*
+src/UI/Headquarters/WB.UI.Headquarters/Views/WebInterview/*
 
 # It is not possible to re-include a file if a parent directory of that file is excluded
 !src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/
@@ -74,3 +77,4 @@ src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets
 src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets/stylesheets/*
 
 !src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss
+src/UI/Headquarters/WB.UI.Headquarters.Interview/test/unit/coverage/

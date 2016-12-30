@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "experimentalDecorators": true
+    },
+    "include": [
+        "node_modules/vue/types/*.d.ts",
+        "node_modules/vuex/types/*.d.ts"
+    ]
+}
