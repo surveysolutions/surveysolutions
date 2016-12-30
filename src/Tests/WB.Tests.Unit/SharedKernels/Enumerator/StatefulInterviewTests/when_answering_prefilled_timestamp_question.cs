@@ -4,8 +4,8 @@ using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests;
 using It = Machine.Specifications.It;
 

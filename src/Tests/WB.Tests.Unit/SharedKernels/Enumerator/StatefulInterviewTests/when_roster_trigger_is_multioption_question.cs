@@ -3,9 +3,9 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Rosters

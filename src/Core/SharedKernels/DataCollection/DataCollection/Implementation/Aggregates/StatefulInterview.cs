@@ -2,26 +2,20 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Events;
 
-using Identity = WB.Core.SharedKernels.DataCollection.Identity;
-
-namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class StatefulInterview : Interview, IStatefulInterview
     {
@@ -326,7 +320,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public int CountActiveAnsweredQuestionsInInterview()
             => this.Tree.FindQuestions().Count(question => !question.IsDisabled() 
                     && question.IsAnswered()
-                    && (!question.IsPrefilled || (question.IsPrefilled && CreatedOnClient))
+                    && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient))
                     && question.IsInterviewer);
 
         public int CountActiveQuestionsInInterview()
@@ -353,7 +347,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             => this.Tree.FindQuestions()
                 .Where(question => !question.IsDisabled() 
                                 && !question.IsValid
-                                && (!question.IsPrefilled || (question.IsPrefilled && CreatedOnClient))
+                                && (!question.IsPrefilled || (question.IsPrefilled && this.CreatedOnClient))
                                 && question.IsInterviewer)
                 .Select(question => question.Identity);
 

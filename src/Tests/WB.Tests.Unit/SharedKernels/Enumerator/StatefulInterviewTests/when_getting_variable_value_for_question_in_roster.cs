@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests

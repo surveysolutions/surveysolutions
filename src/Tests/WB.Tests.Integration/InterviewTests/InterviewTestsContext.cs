@@ -26,7 +26,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Moq.It;
 using WB.Infrastructure.Native.Storage;
