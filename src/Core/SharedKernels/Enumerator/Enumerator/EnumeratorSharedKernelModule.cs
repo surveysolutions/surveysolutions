@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator
         {
             this.Bind<IInterviewViewModelFactory>().To<InterviewViewModelFactory>().InSingletonScope();
             this.Bind<IEntitiesListViewModelFactory>().To<EntitiesListViewModelFactory>().InSingletonScope();
-            this.Bind<IStatefulInterviewRepository>().To<StatefulInterviewRepository>().InSingletonScope();
             this.Bind<ISideBarSectionViewModelsFactory>().To<SideBarSectionViewModelFactory>();
             this.Bind<IDynamicTextViewModelFactory>().To<DynamicTextViewModelFactory>();
 

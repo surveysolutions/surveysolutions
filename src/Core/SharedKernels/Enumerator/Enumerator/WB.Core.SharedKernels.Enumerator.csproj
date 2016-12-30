@@ -70,7 +70,6 @@
     <Compile Include="Implementation\Services\CompositeCollectionInflationService.cs" />
     <Compile Include="Implementation\Repositories\TranslationsStorage.cs" />
     <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
-    <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\AsyncRunner.cs" />
     <Compile Include="Implementation\Services\BaseViewModelNavigationService.cs" />
     <Compile Include="Implementation\Services\EntitiesListViewModelFactory.cs" />
@@ -177,7 +176,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="Services\IUserInteractionService.cs" />
     <Compile Include="Services\IUserInterfaceStateService.cs" />

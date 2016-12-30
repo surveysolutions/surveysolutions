@@ -35,6 +35,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Infrastructure.Native.Files;
@@ -192,6 +193,7 @@ namespace WB.UI.Headquarters
 
             kernel.Load(
                 eventStoreModule,
+                new DataCollectionSharedKernelModule().AsNinject(),
                 new HeadquartersBoundedContextModule(basePath, 
                     interviewDetailsDataLoaderSettings,
                     readSideSettings,
