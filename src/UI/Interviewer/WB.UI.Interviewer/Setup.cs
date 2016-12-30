@@ -139,6 +139,7 @@ namespace WB.UI.Interviewer
                 new InfrastructureModuleMobile().AsNinject(),
                 new InterviewerInfrastructureModule(),
 
+                new DataCollectionSharedKernelModule().AsNinject(),
                 new EnumeratorSharedKernelModule(),
                 new EnumeratorInfrastructureModule(),
                 new EnumeratorUIModule(),
