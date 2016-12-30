@@ -85,6 +85,7 @@
     <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
     <Compile Include="DataCollectionInfrastructureModule.cs" />
     <Compile Include="DataCollectionSharedKernelAssemblyMarker.cs" />
+    <Compile Include="DataCollectionSharedKernelModule.cs" />
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Base\StaticTextsPassiveEvent.cs" />
@@ -153,6 +154,8 @@
     <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitutionVariables.cs" />
     <Compile Include="Implementation\Aggregates\Invariants\InterviewQuestionInvariants.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
+    <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
+    <Compile Include="Repositories\IStatefulInterviewRepository.cs" />
     <Compile Include="Services\ISubstitionTextFactory.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\RosterManager.cs" />
     <Compile Include="Implementation\Aggregates\InterviewEntities\SubstitionText.cs" />
@@ -393,7 +396,6 @@
   <ItemGroup>
     <Folder Include="Accessors\" />
     <Folder Include="Commands\Questionnaire\" />
-    <Folder Include="Implementation\ReadSide\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>
