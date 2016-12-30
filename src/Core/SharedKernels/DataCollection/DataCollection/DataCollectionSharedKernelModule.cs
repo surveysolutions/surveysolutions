@@ -1,6 +1,6 @@
 using WB.Core.Infrastructure.Modularity;
-using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
