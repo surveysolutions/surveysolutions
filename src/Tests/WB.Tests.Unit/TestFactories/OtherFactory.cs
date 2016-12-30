@@ -4,6 +4,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using NSubstitute;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
