@@ -64,12 +64,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\IStatefulInterview.cs" />
     <Compile Include="DataTransferObjects\InterviewSnapshotDto.cs" />
-    <Compile Include="Events\InterviewAnswersFromSyncPackageRestored.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
-    <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
     <Compile Include="Implementation\Services\CompositeCollectionInflationService.cs" />
     <Compile Include="Implementation\Repositories\TranslationsStorage.cs" />
     <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />

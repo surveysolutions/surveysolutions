@@ -23,7 +23,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 {
-    internal class StatefulInterview : Interview, IStatefulInterview
+    public class StatefulInterview : Interview, IStatefulInterview
     {
         public StatefulInterview(IQuestionnaireStorage questionnaireRepository,
                                  IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
