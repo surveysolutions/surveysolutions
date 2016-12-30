@@ -1371,6 +1371,9 @@ namespace WB.Tests.Unit.TestFactories
         public NavigationIdentity NavigationIdentity(Identity navigateTo)
             => new NavigationIdentity() {TargetScreen = ScreenType.Group, TargetGroup = navigateTo};
 
+        public ChangedVariable ChangedVariable(Identity changedVariable, object newValue)
+            => new ChangedVariable(changedVariable, newValue);
+            
         public ScreenChangedEventArgs ScreenChangedEventArgs(ScreenType targetStage = ScreenType.Group, Identity targetGroup = null)
             => new ScreenChangedEventArgs(targetStage, targetGroup, null, ScreenType.Group, null);
         
