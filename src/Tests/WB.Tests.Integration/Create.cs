@@ -1011,29 +1011,6 @@ namespace WB.Tests.Integration
             => new PlainQuestionnaire(document, version);
 
 
-        public static StatefulInterview PreloadedInterview(
-            PreloadedDataDto preloadedData,
-            Guid? questionnaireId = null,
-            IQuestionnaireStorage questionnaireRepository = null,
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
-        {
-            var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
-                Create.SubstitionTextFactory());
-
-            interview.CreateInterviewWithPreloadedData(new CreateInterviewWithPreloadedData(
-                interviewId: Guid.NewGuid(),
-                userId: Guid.NewGuid(),
-                questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
-                version: 1,
-                preloadedDataDto: preloadedData,
-                answersTime: new DateTime(2012, 12, 20),
-                supervisorId: Guid.NewGuid(),
-                interviewerId: Guid.NewGuid()));
-
-            return interview;
-        }
-
         public static PreloadedDataDto PreloadedDataDto(params PreloadedLevelDto[] levels)
         {
             return new PreloadedDataDto(levels);

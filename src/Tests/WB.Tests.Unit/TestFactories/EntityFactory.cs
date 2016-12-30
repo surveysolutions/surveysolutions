@@ -1385,8 +1385,5 @@ namespace WB.Tests.Unit.TestFactories
 
         public AnswerNotifier AnswerNotifier(LiteEventRegistry liteEventRegistry)
             => new AnswerNotifier(liteEventRegistry);
-
-        public ChangedVariable ChangedVariable(Identity changedVariable, object newValue)
-            => new ChangedVariable(changedVariable, newValue);
     }
 }
