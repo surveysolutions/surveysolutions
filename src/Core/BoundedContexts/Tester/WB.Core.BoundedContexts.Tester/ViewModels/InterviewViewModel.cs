@@ -42,12 +42,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.NavigateToDashboard);
 
-        private void NavigateToDashboard()
-        {
-            this.viewModelNavigationService.NavigateToDashboard();
-            this.Dispose();
-        }
-
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 
@@ -59,9 +53,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             else
             {
-                this.viewModelNavigationService.NavigateToDashboard();
-                this.Dispose();
+                this.NavigateToDashboard();
             }
+        }
+
+        private void NavigateToDashboard()
+        {
+            this.viewModelNavigationService.NavigateToDashboard();
+            this.Dispose();
         }
 
         protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
