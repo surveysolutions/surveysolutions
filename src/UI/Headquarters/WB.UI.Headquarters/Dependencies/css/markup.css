@@ -7703,8 +7703,8 @@ body > .ui-pnotify {
       margin-bottom: 20px; }
 
 table.dataTable span.highlight {
-  background-color: #FFFF88;
-  color: #000;
+  background-color: #ff8;
+  color: #3f3f3f;
   border-radius: 0.28571429rem; }
 
 .two-columns-form, .flex-row {
