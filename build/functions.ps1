@@ -92,9 +92,9 @@ function BuildStaticContent($targetLocation, $forceInstall){
 	#install bower packages
 	if ($forceInstall)
 	{
-		&npm run bower-force | Write-Host
+		&bower install --force | Write-Host
 	}else{
-		&npm run bower | Write-Host
+		&bower install | Write-Host
 	}
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 	 if (-not $wasBuildSuccessfull) {
@@ -103,7 +103,7 @@ function BuildStaticContent($targetLocation, $forceInstall){
     }
 	
 	#will execute script gulpfile.js in target folder
-    &npm run gulp | Write-Host 
+    &gulp --production | Write-Host 
 	
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
     if (-not $wasBuildSuccessfull) {
