@@ -34,16 +34,53 @@ function CleanBinAndObjFolders() {
     CleanFolders 'bin'
     CleanFolders 'obj'
     CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
+    CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\InterviewApp'
 
     Write-Host "##teamcity[blockClosed name='Cleaning folders']"
 }
-function BuildStatiContent($targetLocation, $forceInstall){
+
+function BuildNodeApp($targetLocation, $command){
+    $action = 'Building node app'
+    Write-Host "##teamcity[blockOpened name='$action']"
+    Write-Host "##teamcity[progressStart '$action']"
+
+    Write-Host "Pushing location to $targetLocation"
+    Push-Location -Path $targetLocation
+
+    try{
+        Write-Host $installCommand
+        #install node js dependencies
+        &npm install | Write-Host
+        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+        if (-not $wasBuildSuccessfull) {
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
+            return $wasBuildSuccessfull
+        }
+        
+        &npm run $command
+
+        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+        if (-not $wasBuildSuccessfull) {
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run npm build']"
+            return $wasBuildSuccessfull
+        }
+    } finally {
+        Pop-Location
+
+        Write-Host "##teamcity[progressFinish '$action']"
+        Write-Host "##teamcity[blockClosed name='$action']"
+    }
+	return $wasBuildSuccessfull
+}
+
+function BuildStaticContent($targetLocation, $forceInstall){
     Write-Host "##teamcity[blockOpened name='Building static files']"
     Write-Host "##teamcity[progressStart 'Building static files']"
 
     Write-Host "Pushing location to $targetLocation"
     Push-Location -Path $targetLocation
     Write-Host $installCommand
+
 	#install node js dependencies
     &npm install | Write-Host
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
@@ -55,9 +92,9 @@ function BuildStatiContent($targetLocation, $forceInstall){
 	#install bower packages
 	if ($forceInstall)
 	{
-		&bower install --force | Write-Host
+		&npm run bower-force | Write-Host
 	}else{
-		&bower install | Write-Host
+		&npm run bower | Write-Host
 	}
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
 	 if (-not $wasBuildSuccessfull) {
@@ -66,7 +103,7 @@ function BuildStatiContent($targetLocation, $forceInstall){
     }
 	
 	#will execute script gulpfile.js in target folder
-    &gulp --production | Write-Host 
+    &npm run gulp | Write-Host 
 	
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
     if (-not $wasBuildSuccessfull) {

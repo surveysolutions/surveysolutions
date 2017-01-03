@@ -40,8 +40,8 @@ try {
 		-OutFileName $PackageName | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
-	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire" $false | %{ if (-not $_) { 
-		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStatiContent']"
+	BuildStaticContent "src\UI\Designer\WB.UI.Designer\questionnaire" $false | %{ if (-not $_) { 
+		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
 		Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
 		Exit 
 	}}
@@ -49,8 +49,8 @@ try {
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-	BuildStatiContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $true | %{ if (-not $_) {
-		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStatiContent']"
+	BuildStaticContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $true | %{ if (-not $_) {
+		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
 		Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
 		Exit 
 	}}
