@@ -69,6 +69,13 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.Finish();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            this.ViewModel?.Dispose();
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -76,8 +83,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             if (IsFinishing)
             {
                 this.Dispose();
-
-                ViewModel.Dispose();
             }
         }
 
