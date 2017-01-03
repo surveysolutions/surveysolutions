@@ -128,11 +128,21 @@
         }  
     }
 }
+.import-wrapper{
+    .dataTables_wrapper .dataTables_paginate  > .paginate_button{
+        color: $green;
+         &.disabled, &.disabled:hover, &.disabled:active{
+            color: $gray_light;
+            text-decoration: none;
+            cursor: not-allowed;
+        }
+    }
+}
 @media (max-width: $screen-md-min){
     .parameters{
         display: none;
     }
-    .table{
+    .import-interview{
         tr{
             @include transition(all, 0.1s);
             height: 35px;
@@ -174,17 +184,6 @@
         .questionnaire-versioning, .flex-row{
             margin-bottom: 0;
         }
-    }
-}
-@media (max-width: $screen-xs-min){   
-    .import-interview{
-        thead{
-            tr th{
-                &:first-child, &.padding-left-lide:first-child{
-                    padding-left: 45px;
-                }
-            }
-        } 
     }
 }
 

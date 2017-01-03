@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -10,11 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Shared.Web.Filters;
@@ -46,8 +40,9 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
-                Orders = new List<OrderRequestItem>(),
-                Filter = request.Search.Value
+                Orders = request.GetSortOrderRequestItems(),
+                Filter = request.Search.Value,
+                IsAdminMode = true
             };
 
             var items = this.questionnaireBrowseViewFactory.Load(input);

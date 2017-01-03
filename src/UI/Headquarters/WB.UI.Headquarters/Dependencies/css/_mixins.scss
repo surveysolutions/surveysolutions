@@ -140,7 +140,7 @@
         background-color: lighten($blue, $default);
     }
     &.section-with-error>.unit-title,
-    .contains-error>.unit-title{
+    .has-error>.unit-title{
         background-color: lighten($red_error, $with_error) ;
     }
     &.complete-section>.unit-title,
@@ -217,7 +217,7 @@
     overflow: auto;
     position: fixed;
     background-color: #fff;
-    z-index: 4;
+    z-index: 5;
     @include transition(left, 0.3s);
 }
 %form{
@@ -289,18 +289,21 @@
         .bootstrap-select.btn-group{
             width: 100% !important;   
         } 
+        .input-group{
+            width: 100%;
+        }
         .open > .dropdown-menu{
             width: 100%;    
         }
         .foldback-button{
             top: 65px;
         }
-        &.hidden-filters{
+/*         &.hidden-filters{
             left: - $filter-small-width - 12px;
             .foldback-button{
                 right: - $width-foldback-button;
             }
-        }
+        } */
     }
 }
 @mixin visible-foldback-button(){
@@ -318,4 +321,8 @@
             display: none;
         }
     }
+}
+@mixin width-questionnaire($margin-left){
+    margin-left: $margin-left;
+    width: calc(100% - #{$margin-left});
 }

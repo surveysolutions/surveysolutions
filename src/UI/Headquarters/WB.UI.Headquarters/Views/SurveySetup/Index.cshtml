@@ -8,51 +8,86 @@
 
 @section scripts
 {
-    @Scripts.Render("~/js/main-no-libs")
-    @Scripts.Render("~/js/list")
-    @Scripts.Render("~/js/questionnaires")
+    @Scripts.Render("~/js/common")
     <script type="text/javascript">
         'use strict';
 
-        $(function () {
-            var questionnaireListUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "Questionnaires" })';
-           
+        var QuestionnairesListModel = function(ajax) {
+            var self = this;
+
+            self.table = null;
+
+            var questionnaireListUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "Questionnaires"})';
+
             var requestHeaders = {};
             requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
 
             $.fn.dataTable.ext.errMode = 'none';
 
-            var onTableInitComplete = function () {
-                $('#DataTables_Table_0_filter label').on('click', function (e) {
+            var selectRowAndGetData = function(selectedItem) {
+                //var rowIndex = selectedItem.parent().children().index(selectedItem);
+                self.table.rows('.context-menu-active').select();
+                var selectedRows = self.table.rows({ selected: true });
+                return selectedRows;
+            }
+            var addNewInterview = function(key, opt) {
+                var selectedRow = selectRowAndGetData(opt.$trigger);
+                console.log(selectedRow);
+            };
+
+            var interviewsBatchUpload = function (key, opt) {
+                var selectedRow = selectRowAndGetData(opt.$trigger);
+            };
+
+            var cloneQuestionnaire = function (key, opt) {
+                var selectedRow = selectRowAndGetData(opt.$trigger);
+            };
+
+            var deleteQuestionnaire = function (key, opt) {
+                var selectedRow = selectRowAndGetData(opt.$trigger);
+            };
+
+            var onTableInitComplete = function() {
+                $('#DataTables_Table_0_filter label').on('click', function(e) {
                     if (e.target !== this)
                         return;
                     if ($(this).hasClass("active")) {
                         $(this).removeClass("active");
-                    }
-                    else {
+                    } else {
                         $(this).addClass("active");
                     }
                     $(".column-questionnaire-title").toggleClass("padding-left-slide");
                 });
 
                 $.contextMenu({
-                    // define which elements trigger this menu
                     selector: "table#questionnaires .with-context-menu",
-                    // define the elements of the menu
+                    autoHide: true,
                     items: {
-                        foo: { name: "Foo", callback: function (key, opt) { alert("Foo!"); } },
-                        bar: { name: "Bar", callback: function (key, opt) { alert("Bar!") } }
+                        addNew: {
+                            name: "Add interview assignment",
+                            callback: addNewInterview
+                        },
+                        batchUpload: {
+                            name: "Batch upload interviews",
+                            callback: interviewsBatchUpload
+                        },
+                        "sep1": "---------",
+                        clone: {
+                            name: "Clone questionnaire",
+                            callback: cloneQuestionnaire
+                        },
+                        delete: {
+                            name: "Delete questionnaire",
+                            callback: deleteQuestionnaire
+                        }
                     }
                 });
             };
 
-            var table = $('table#questionnaires')
+            self.table = $('table#questionnaires')
                 .on('init.dt', onTableInitComplete)
-                .on('error.dt', function (e, settings, techNote, message) {
+                .on('error.dt', function(e, settings, techNote, message) {
                     //location.reload();
-                })
-                .on('init.dt', function () {
-                    
                 })
                 .DataTable({
                     processing: true,
@@ -66,47 +101,50 @@
                         type: "POST",
                         headers: requestHeaders
                     },
-                    "createdRow": function( row, data, dataIndex ) {
+                    "createdRow": function(row, data, dataIndex) {
                         $(row).addClass('with-context-menu');
                     },
                     columns: [
-                       {
-                           data: "title",
-                           name: "Title", // case-sensitive!
-                           //"class": "with-context-menu"
-                           //render: function (data, type, row) {
-                           //    return "<a href=" + questionnaireImportModeUrl + "/" + row.id + "?questionnaireTitle=" + encodeURI(data) + ">" + data + "</a>";
-                           //}
-                       },
-                       {
-                           data: "version",
-                           name: "Version"  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                       },
-                       {
-                           data: "importDate",
-                           name: "ImportDate"  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                       },
-                       {
-                           data: "creationDate",
-                           name: "CreationDate"  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                       },
-                       {
-                           data: "lastEntryDate",
-                           name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
-                           "class": "changed-recently"
-                       },
-                       {
-                           data: "createdBy",
-                           name: "CreatorName",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                           "class": "created-by"
-                       }
+                        {
+                            data: "title",
+                            name: "Title", // case-sensitive!
+                            //render: function (data, type, row) {
+                            //    return "<a href=" + questionnaireImportModeUrl + "/" + row.id + "?questionnaireTitle=" + encodeURI(data) + ">" + data + "</a>";
+                            //}
+                        },
+                        {
+                            data: "version",
+                            name: "Version" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        },
+                        {
+                            data: "importDate",
+                            name: "ImportDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        },
+                        {
+                            data: "creationDate",
+                            name: "CreationDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        },
+                        {
+                            data: "lastEntryDate",
+                            name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                        }
                     ],
+                    select: {
+                        style: 'single'
+                    },
+                    searchHighlight: true,
                     rowId: 'id',
                     pagingType: "full_numbers",
                     lengthChange: false, // do not show page size selector
                     pageLength: 50, // page size
                     "order": [[1, 'desc']]
                 });
+
+            return self;
+        };
+
+        $(function() {
+            var model = new QuestionnairesListModel(new Ajax(new Notifier()));
         });
     </script>
 }
@@ -122,7 +160,7 @@
                 @if (!(User.Identity.IsObserver()))
                 {
                     <div class="form-inline">
-                        <a class="btn btn-default" data-bind="attr: { href: $importTemplateUrl }">
+                        <a class="btn btn-default" href="@Url.Action("Import", "Template")">
                             <i class="glyphicon glyphicon-import">
                             </i> @Dashboard.ImportTemplate
                         </a>
@@ -132,7 +170,7 @@
         </div>
 
         <div id="list">
-            <table id="questionnaires" class="table table-striped table-bordered table-condensed table-hover">
+            <table id="questionnaires" class="table table-striped table-bordered table-ordered">
                 <thead>
                 <tr>
                     <th>@Dashboard.Title</th>
@@ -140,7 +178,6 @@
                     <th>@Dashboard.ImportDate</th>
                     <th>@Dashboard.CreationDate</th>
                     <th>@Dashboard.LastEntryDate</th>
-                    <th>Created By</th>
                 </tr>
                 </thead>
             </table>

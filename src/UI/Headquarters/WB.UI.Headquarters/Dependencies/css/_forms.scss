@@ -74,6 +74,62 @@ input.checkbox-filter{
     	background-position: 0px -180px;
   	}
 }
+input.double-checkbox{
+  	display: none;
+  	& ~ label{
+  		position: relative;
+  		cursor: pointer;
+  		margin: 0;
+  	}
+  	& ~ label .tick {
+	    display: inline-block;
+	    @include size(25px, 20px);
+	    vertical-align: middle;
+	    background: transparent url("../img/chekboxes.png") no-repeat;
+	    background-size: 68px 350px;
+	    background-position: 0 -216px;
+		@include image-2x("../img/chekboxes2k.png", 68px, 350px);
+  	}
+  	& ~ label:hover .tick,
+  	& ~ label:focus .tick{
+    	background-position: 0px -254px;
+  	}
+  	&:checked ~ label .tick {
+    	background-position: 0px -292px;
+  	}
+  	&:checked ~ label:hover .tick,
+  	&:checked ~ label:focus .tick {
+    	background-position: 0px -330px;
+  	}
+}
+input.double-checkbox-white{
+  	display: none;
+  	& ~ label{
+  		position: relative;
+  		cursor: pointer;
+  		margin: 0;
+  	}
+  	& ~ label .tick {
+	    display: inline-block;
+	    @include size(25px, 20px);
+	    vertical-align: middle;
+	    background: transparent url("../img/chekboxes.png") no-repeat;
+	    background-size: 68px 350px;
+	    background-position: -44px -216px;
+		@include image-2x("../img/chekboxes2k.png", 68px, 350px);
+  	}
+  	& ~ label:hover .tick,
+  	& ~ label:focus .tick{
+    	background-position: -44px -254px;
+  	}
+  	&:checked ~ label .tick {
+    	background-position: -44px -292px;
+  	}
+  	&:checked ~ label:hover .tick,
+  	&:checked ~ label:focus .tick {
+    	background-position: -44px -330px;
+  	}
+}
 .radio{
 	margin: 0;
 	label{
@@ -144,6 +200,11 @@ input.checkbox-filter{
 			@include cancel($cross-height);
 			padding: ($input-height-base - 2*1px /*border*/ - 2*$padding-base-vertical - $cross-height)/2 0;
 		}
+	}
+}
+.filters{
+	.input-group{
+		width: 295px;
 	}
 }
 .bootstrap-select.btn-group{
