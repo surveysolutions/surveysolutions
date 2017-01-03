@@ -1133,7 +1133,7 @@ hr {
 [role="button"] {
   cursor: pointer; }
 
-h1, h2, h3, h4, .import-progress, h5, .preset-filters-container a, h6,
+h1, h2, h3, h4, .import-progress, h5, .preset-filters-container a, .preset-filters-container .export-queue, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: inherit;
   font-weight: 500;
@@ -1143,8 +1143,8 @@ h1, h2, h3, h4, .import-progress, h5, .preset-filters-container a, h6,
   h1 .small, h2 small,
   h2 .small, h3 small,
   h3 .small, h4 small, .import-progress small,
-  h4 .small, .import-progress .small, h5 small, .preset-filters-container a small,
-  h5 .small, .preset-filters-container a .small, h6 small,
+  h4 .small, .import-progress .small, h5 small, .preset-filters-container a small, .preset-filters-container .export-queue small,
+  h5 .small, .preset-filters-container a .small, .preset-filters-container .export-queue .small, h6 small,
   h6 .small,
   .h1 small,
   .h1 .small, .h2 small,
@@ -1175,15 +1175,16 @@ h3, .h3 {
 
 h4, .import-progress, .h4,
 h5,
-.preset-filters-container a, .h5,
+.preset-filters-container a,
+.preset-filters-container .export-queue, .h5,
 h6, .h6 {
   margin-top: 10px;
   margin-bottom: 10px; }
   h4 small, .import-progress small,
   h4 .small, .import-progress .small, .h4 small,
   .h4 .small,
-  h5 small, .preset-filters-container a small,
-  h5 .small, .preset-filters-container a .small, .h5 small,
+  h5 small, .preset-filters-container a small, .preset-filters-container .export-queue small,
+  h5 .small, .preset-filters-container a .small, .preset-filters-container .export-queue .small, .h5 small,
   .h5 .small,
   h6 small,
   h6 .small, .h6 small,
@@ -1202,7 +1203,7 @@ h3, .h3 {
 h4, .import-progress, .h4 {
   font-size: 18px; }
 
-h5, .preset-filters-container a, .h5 {
+h5, .preset-filters-container a, .preset-filters-container .export-queue, .h5 {
   font-size: 14px; }
 
 h6, .h6 {
@@ -6213,10 +6214,10 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   .button-flag:hover, .flag:hover:before, .button-flag:focus, .flag:focus:before {
     background-position: -57px 0;
     outline: none; }
-  .button-flag.flagged, .flagged.flag:before, .question.with-flag .question-editor h5 .button-flag, .question.with-flag .question-editor .preset-filters-container a .button-flag, .preset-filters-container .question.with-flag .question-editor a .button-flag, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before, .button-flag:active, .flag:active:before {
+  .button-flag.flagged, .flagged.flag:before, .question.with-flag .question-editor h5 .button-flag, .question.with-flag .question-editor .preset-filters-container a .button-flag, .preset-filters-container .question.with-flag .question-editor a .button-flag, .question.with-flag .question-editor .preset-filters-container .export-queue .button-flag, .preset-filters-container .question.with-flag .question-editor .export-queue .button-flag, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:before, .button-flag:active, .flag:active:before {
     background-position: 0 0;
     outline: none; }
-    .button-flag.flagged:hover, .flagged.flag:hover:before, .question.with-flag .question-editor h5 .button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .button-flag:hover, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .button-flag.flagged:focus, .flagged.flag:focus:before, .question.with-flag .question-editor h5 .button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .button-flag:focus, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before, .button-flag:active:hover, .flag:active:hover:before, .button-flag:active:focus, .flag:active:focus:before {
+    .button-flag.flagged:hover, .flagged.flag:hover:before, .question.with-flag .question-editor h5 .button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .button-flag:hover, .question.with-flag .question-editor .preset-filters-container .export-queue .button-flag:hover, .preset-filters-container .question.with-flag .question-editor .export-queue .button-flag:hover, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:hover:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:hover:before, .button-flag.flagged:focus, .flagged.flag:focus:before, .question.with-flag .question-editor h5 .button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .button-flag:focus, .question.with-flag .question-editor .preset-filters-container .export-queue .button-flag:focus, .preset-filters-container .question.with-flag .question-editor .export-queue .button-flag:focus, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:focus:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:focus:before, .button-flag:active:hover, .flag:active:hover:before, .button-flag:active:focus, .flag:active:focus:before {
       background-position: -19px 0; }
 
 .reject {
@@ -7216,7 +7217,7 @@ h4, .import-progress {
   font: 22px/24px "RobotoLight";
   margin-bottom: 20px; }
 
-h5, .preset-filters-container a {
+h5, .preset-filters-container a, .preset-filters-container .export-queue {
   font-size: 14px;
   line-height: 16px;
   font-family: inherit;
@@ -7324,6 +7325,15 @@ body > .ui-pnotify {
 
 .default-text {
   color: #dbdfe2; }
+
+.info-block {
+  margin-bottom: 20px; }
+  .info-block p {
+    margin-bottom: 20px; }
+    .info-block p:last-of-type {
+      margin-bottom: 0px; }
+    .info-block p:only-of-type {
+      margin-bottom: 20px; }
 
 .two-columns-form, .flex-row {
   display: -ms-flexbox;
@@ -7840,22 +7850,19 @@ main .flex-row {
     margin-right: 0;
     margin-bottom: 15px; } }
 
-.text-page, .prefilled-data-info {
+.text-page, .info-block {
   font: 14px/16px "RobotoRegular"; }
 
-.prefilled-data-info {
-  margin-bottom: 20px; }
-  .prefilled-data-info p {
-    margin-bottom: 20px; }
-  .prefilled-data-info > a {
-    display: block;
-    margin-bottom: 30px; }
-  .prefilled-data-info ul {
-    margin-left: 30px;
-    margin-bottom: 20px;
-    font-family: "RobotoBold"; }
-    .prefilled-data-info ul li {
-      margin: 5px 0; }
+.prefilled-data-info > a {
+  display: block;
+  margin-bottom: 30px; }
+
+.prefilled-data-info ul {
+  margin-left: 30px;
+  margin-bottom: 20px;
+  font-family: "RobotoBold"; }
+  .prefilled-data-info ul li {
+    margin: 5px 0; }
 
 .selection-box a {
   display: block;
@@ -7889,7 +7896,7 @@ main .flex-row {
 .error-block:last-of-type {
   margin-bottom: 30px; }
 
-.error-block h5, .error-block .preset-filters-container a, .preset-filters-container .error-block a {
+.error-block h5, .error-block .preset-filters-container a, .preset-filters-container .error-block a, .error-block .preset-filters-container .export-queue, .preset-filters-container .error-block .export-queue {
   margin: 20px 0 5px; }
 
 .error-block p {
@@ -8033,7 +8040,7 @@ input.checkbox-filter {
 
 .preset-filters-container {
   padding-top: 30px; }
-  .preset-filters-container a {
+  .preset-filters-container a, .preset-filters-container .export-queue {
     color: #2a81cb;
     display: block; }
 
@@ -8131,8 +8138,6 @@ input.checkbox-filter {
   max-width: 900px;
   transition: margin 0.3s linear 0s;
   background-color: #fff; }
-  .export-types h2 {
-    margin-bottom: 45px; }
   .export-types .data {
     width: 100%;
     margin-bottom: 30px; }
@@ -8401,24 +8406,24 @@ input.checkbox-filter {
     position: absolute;
     top: 0;
     left: 0; }
-  .flag.flagged, .question.with-flag .question-editor h5 .flag.button-flag, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before {
+  .flag.flagged, .question.with-flag .question-editor h5 .flag.button-flag, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag, .question.with-flag .question-editor .preset-filters-container .export-queue .flag.button-flag, .preset-filters-container .question.with-flag .question-editor .export-queue .flag.button-flag, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:before {
     color: #3f3f3f; }
-    .flag.flagged:before, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before {
+    .flag.flagged:before, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:before {
       background-position: 1px 0; }
   .flag:hover, .flag:focus {
     color: #a6a8a9;
     text-decoration: none; }
     .flag:hover:before, .flag:focus:before {
       background-position: -56px 0; }
-  .flag.flagged:hover, .question.with-flag .question-editor h5 .flag.button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:hover, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .flag.flagged:focus, .question.with-flag .question-editor h5 .flag.button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:focus, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before {
+  .flag.flagged:hover, .question.with-flag .question-editor h5 .flag.button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:hover, .question.with-flag .question-editor .preset-filters-container .export-queue .flag.button-flag:hover, .preset-filters-container .question.with-flag .question-editor .export-queue .flag.button-flag:hover, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:hover:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:hover:before, .flag.flagged:focus, .question.with-flag .question-editor h5 .flag.button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:focus, .question.with-flag .question-editor .preset-filters-container .export-queue .flag.button-flag:focus, .preset-filters-container .question.with-flag .question-editor .export-queue .flag.button-flag:focus, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:focus:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:focus:before {
     color: #3f3f3f;
     text-decoration: none; }
-    .flag.flagged:hover:before, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .flag.flagged:focus:before, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before {
+    .flag.flagged:hover:before, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:hover:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:hover:before, .flag.flagged:focus:before, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:focus:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:focus:before {
       background-position: -18px 0; }
 
-.bootstrap-select .dropdown-menu > li > a.flagged, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.flag:before {
+.bootstrap-select .dropdown-menu > li > a.flagged, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .preset-filters-container .export-queue .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .preset-filters-container .export-queue .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .preset-filters-container .question.with-flag .question-editor .export-queue .dropdown-menu > li > a.button-flag, .preset-filters-container .question.with-flag .question-editor .export-queue .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container .export-queue .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor .export-queue .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .bootstrap-select .dropdown-menu > li > a.flag:before {
   padding-left: 35px; }
-  .bootstrap-select .dropdown-menu > li > a.flagged:before, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.flag:before {
+  .bootstrap-select .dropdown-menu > li > a.flagged:before, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container .export-queue .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor .export-queue .dropdown-menu > li > a.button-flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container .export-queue .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor .export-queue .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .bootstrap-select .dropdown-menu > li > a.flag:before {
     top: 5px;
     left: 7px; }
 
@@ -8497,7 +8502,7 @@ label.inactive {
   position: relative;
   padding: 18px 20px 15px 70px;
   border-bottom: 2px solid #dbdfe2; }
-  .question h5 .button-flag, .question .preset-filters-container a .button-flag, .preset-filters-container .question a .button-flag, .question h5 .flag:before, .question .preset-filters-container a .flag:before, .preset-filters-container .question a .flag:before {
+  .question h5 .button-flag, .question .preset-filters-container a .button-flag, .preset-filters-container .question a .button-flag, .question .preset-filters-container .export-queue .button-flag, .preset-filters-container .question .export-queue .button-flag, .question h5 .flag:before, .question .preset-filters-container a .flag:before, .preset-filters-container .question a .flag:before, .question .preset-filters-container .export-queue .flag:before, .preset-filters-container .question .export-queue .flag:before {
     position: absolute;
     top: 0;
     left: -30px; }
@@ -8551,10 +8556,10 @@ label.inactive {
 .question.hidden-question {
   min-height: 65px;
   background: repeating-linear-gradient(-45deg, #dbdfe2, #dbdfe2 2px, transparent 2px, transparent 6px); }
-  .question.hidden-question h5, .question.hidden-question .preset-filters-container a, .preset-filters-container .question.hidden-question a {
+  .question.hidden-question h5, .question.hidden-question .preset-filters-container a, .preset-filters-container .question.hidden-question a, .question.hidden-question .preset-filters-container .export-queue, .preset-filters-container .question.hidden-question .export-queue {
     margin: 0;
     color: #a6a8a9; }
-    .question.hidden-question h5 .button-flag, .question.hidden-question .preset-filters-container a .button-flag, .preset-filters-container .question.hidden-question a .button-flag, .question.hidden-question h5 .flag:before, .question.hidden-question .preset-filters-container a .flag:before, .preset-filters-container .question.hidden-question a .flag:before {
+    .question.hidden-question h5 .button-flag, .question.hidden-question .preset-filters-container a .button-flag, .preset-filters-container .question.hidden-question a .button-flag, .question.hidden-question .preset-filters-container .export-queue .button-flag, .preset-filters-container .question.hidden-question .export-queue .button-flag, .question.hidden-question h5 .flag:before, .question.hidden-question .preset-filters-container a .flag:before, .preset-filters-container .question.hidden-question a .flag:before, .question.hidden-question .preset-filters-container .export-queue .flag:before, .preset-filters-container .question.hidden-question .export-queue .flag:before {
       z-index: 0; }
   .question.hidden-question .question-unit, .question.hidden-question .information-block {
     display: none; }
@@ -8564,7 +8569,8 @@ label.inactive {
   padding: 2px; }
   .question.hidden-by-filter > .question-editor,
   .question.hidden-by-filter > h5, .preset-filters-container
-  .question.hidden-by-filter > a,
+  .question.hidden-by-filter > a, .preset-filters-container
+  .question.hidden-by-filter > .export-queue,
   .question.hidden-by-filter > .dropdown {
     display: none; }
 
@@ -8624,11 +8630,11 @@ label.inactive {
 
 .question-editor {
   max-width: 445px; }
-  .question-editor h5, .question-editor .preset-filters-container a, .preset-filters-container .question-editor a {
+  .question-editor h5, .question-editor .preset-filters-container a, .preset-filters-container .question-editor a, .question-editor .preset-filters-container .export-queue, .preset-filters-container .question-editor .export-queue {
     padding-left: 10px;
     margin: 0 0 10px;
     position: relative; }
-    .question-editor h5:before, .question-editor .preset-filters-container a:before, .preset-filters-container .question-editor a:before {
+    .question-editor h5:before, .question-editor .preset-filters-container a:before, .preset-filters-container .question-editor a:before, .question-editor .preset-filters-container .export-queue:before, .preset-filters-container .question-editor .export-queue:before {
       left: -25px; }
   .question-editor.answered .question-unit .options-group {
     background-color: transparent; }
@@ -8688,15 +8694,15 @@ label.inactive {
         .question-unit .options-group .field .dropdown-menu li:last-child {
           border: none; }
 
-.static-text h5, .variable h5, .static-text .preset-filters-container a, .preset-filters-container .static-text a, .variable .preset-filters-container a, .preset-filters-container .variable a {
+.static-text h5, .variable h5, .static-text .preset-filters-container a, .preset-filters-container .static-text a, .variable .preset-filters-container a, .preset-filters-container .variable a, .static-text .preset-filters-container .export-queue, .preset-filters-container .static-text .export-queue, .variable .preset-filters-container .export-queue, .preset-filters-container .variable .export-queue {
   margin: 0; }
-  .static-text h5 .static-text-image, .variable h5 .static-text-image, .static-text .preset-filters-container a .static-text-image, .preset-filters-container .static-text a .static-text-image, .variable .preset-filters-container a .static-text-image, .preset-filters-container .variable a .static-text-image {
+  .static-text h5 .static-text-image, .variable h5 .static-text-image, .static-text .preset-filters-container a .static-text-image, .preset-filters-container .static-text a .static-text-image, .variable .preset-filters-container a .static-text-image, .preset-filters-container .variable a .static-text-image, .static-text .preset-filters-container .export-queue .static-text-image, .preset-filters-container .static-text .export-queue .static-text-image, .variable .preset-filters-container .export-queue .static-text-image, .preset-filters-container .variable .export-queue .static-text-image {
     margin-top: 10px;
     max-width: 445px;
     height: auto;
     /* @include size($width-question-editor, auto); */ }
 
-.static-text.invalid h5, .invalid.variable h5, .static-text.invalid .preset-filters-container a, .preset-filters-container .static-text.invalid a, .invalid.variable .preset-filters-container a, .preset-filters-container .invalid.variable a {
+.static-text.invalid h5, .invalid.variable h5, .static-text.invalid .preset-filters-container a, .preset-filters-container .static-text.invalid a, .invalid.variable .preset-filters-container a, .preset-filters-container .invalid.variable a, .static-text.invalid .preset-filters-container .export-queue, .preset-filters-container .static-text.invalid .export-queue, .invalid.variable .preset-filters-container .export-queue, .preset-filters-container .invalid.variable .export-queue {
   color: #e74924; }
 
 .question-editor .question-unit .options-group .field .gray-text {
