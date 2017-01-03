@@ -48,6 +48,8 @@ namespace WB.Core.Infrastructure
 
             public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
             {
+                this.OnEventsPublished?.Invoke(new PublishedEventsArgs(committedEvents));
+
                 throw new NotImplementedException("This application is event free.");
             }
 
