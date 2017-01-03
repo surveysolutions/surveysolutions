@@ -38,10 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (this.HasPendingOperations)
                 this.ShowWaitMessage();
             else
-            {
                 this.ShowViewModel<TViewModel>(parameters);
-                this.DisposeViewModel();
-            }
         }
 
         public void SignOutAndNavigateToLogin()
