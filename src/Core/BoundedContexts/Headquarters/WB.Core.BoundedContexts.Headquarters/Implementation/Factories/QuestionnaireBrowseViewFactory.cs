@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using NHibernate.Criterion;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -42,7 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
                     if (!string.IsNullOrEmpty(input.Filter))
                     {
-                        query = query.Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
+                        var filterLowerCase = input.Filter.ToLower();
+                        query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
                     }
 
                 }

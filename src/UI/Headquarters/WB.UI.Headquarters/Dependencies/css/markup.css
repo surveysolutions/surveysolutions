@@ -1139,7 +1139,7 @@ hr {
 [role="button"] {
   cursor: pointer; }
 
-h1, h2, h3, h4, .import-progress, h5, .preset-filters-container a, .preset-filters-container .export-queue, h6,
+h1, h2, h3, h4, .import-progress, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: inherit;
   font-weight: 500;
@@ -1149,8 +1149,8 @@ h1, h2, h3, h4, .import-progress, h5, .preset-filters-container a, .preset-filte
   h1 .small, h2 small,
   h2 .small, h3 small,
   h3 .small, h4 small, .import-progress small,
-  h4 .small, .import-progress .small, h5 small, .preset-filters-container a small, .preset-filters-container .export-queue small,
-  h5 .small, .preset-filters-container a .small, .preset-filters-container .export-queue .small, h6 small,
+  h4 .small, .import-progress .small, h5 small,
+  h5 .small, h6 small,
   h6 .small,
   .h1 small,
   .h1 .small, .h2 small,
@@ -1180,17 +1180,15 @@ h3, .h3 {
     font-size: 65%; }
 
 h4, .import-progress, .h4,
-h5,
-.preset-filters-container a,
-.preset-filters-container .export-queue, .h5,
+h5, .h5,
 h6, .h6 {
   margin-top: 10px;
   margin-bottom: 10px; }
   h4 small, .import-progress small,
   h4 .small, .import-progress .small, .h4 small,
   .h4 .small,
-  h5 small, .preset-filters-container a small, .preset-filters-container .export-queue small,
-  h5 .small, .preset-filters-container a .small, .preset-filters-container .export-queue .small, .h5 small,
+  h5 small,
+  h5 .small, .h5 small,
   .h5 .small,
   h6 small,
   h6 .small, .h6 small,
@@ -1209,7 +1207,7 @@ h3, .h3 {
 h4, .import-progress, .h4 {
   font-size: 18px; }
 
-h5, .preset-filters-container a, .preset-filters-container .export-queue, .h5 {
+h5, .h5 {
   font-size: 14px; }
 
 h6, .h6 {
@@ -5867,7 +5865,7 @@ input.checkbox-filter ~ label .tick {
   opacity: 0;
   display: none; }
 
-.filters, .content {
+.content {
   height: 100%;
   top: 0;
   left: 0;
@@ -5877,7 +5875,7 @@ input.checkbox-filter ~ label .tick {
   overflow: auto;
   position: fixed;
   background-color: #fff;
-  z-index: 4;
+  z-index: 5;
   -webkit-transition: left 0.3s linear 0s;
   -moz-transition: left 0.3s linear 0s;
   -ms-transition: left 0.3s linear 0s;
@@ -5904,7 +5902,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 629px 18px; } }
 
-#DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input, .question-unit .options-group .field.answered .btn-clear, .question-unit .options-group .field.contains-error .btn-clear, .question-unit .options-group .field input:checked ~ .btn-clear {
+#DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input, .question-unit .options-group .field.answered .btn-clear, .question-unit .options-group .field.has-error .btn-clear, .question-unit .options-group .field input:checked ~ .btn-clear {
   visibility: visible;
   opacity: 1; }
 
@@ -5912,15 +5910,15 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   opacity: 0;
   visibility: hidden; }
 
-.gps-question.answered .question-unit .options-group .action-btn-holder .btn-default, .gps-question.contains-error .question-unit .options-group .action-btn-holder .btn-default, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default, .qr-question.contains-error .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .btn-default {
+.gps-question.answered .question-unit .options-group .action-btn-holder .btn-default, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default {
   border-color: #dbdfe2; }
-  .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .gps-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.contains-error .question-unit .options-group .action-btn-holder .btn-default:active {
+  .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active {
     border-color: #8c8f90; }
 
-.gps-question.answered .question-unit .options-group .field .btn-clear, .gps-question.contains-error .question-unit .options-group .field .btn-clear, .qr-question.answered .question-unit .options-group .field .btn-clear, .qr-question.contains-error .question-unit .options-group .field .btn-clear, .current-time-question.answered .question-unit .options-group .field .btn-clear, .current-time-question.contains-error .question-unit .options-group .field .btn-clear, .multimedia-question.answered .question-unit .options-group .field .btn-clear, .multimedia-question.contains-error .question-unit .options-group .field .btn-clear {
+.gps-question.answered .question-unit .options-group .field .btn-clear, .gps-question.has-error .question-unit .options-group .field .btn-clear, .qr-question.answered .question-unit .options-group .field .btn-clear, .qr-question.has-error .question-unit .options-group .field .btn-clear, .current-time-question.answered .question-unit .options-group .field .btn-clear, .current-time-question.has-error .question-unit .options-group .field .btn-clear, .multimedia-question.answered .question-unit .options-group .field .btn-clear, .multimedia-question.has-error .question-unit .options-group .field .btn-clear {
   top: -13px; }
 
-.gps-question.answered .block-with-data, .gps-question.contains-error .block-with-data, .qr-question.answered .block-with-data, .qr-question.contains-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.contains-error .block-with-data, .multimedia-question.answered .block-with-data, .multimedia-question.contains-error .block-with-data {
+.gps-question.answered .block-with-data, .gps-question.has-error .block-with-data, .qr-question.answered .block-with-data, .qr-question.has-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.has-error .block-with-data, .multimedia-question.answered .block-with-data, .multimedia-question.has-error .block-with-data {
   font-size: 14px;
   line-height: 16px;
   font-weight: bold;
@@ -5957,7 +5955,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   position: relative;
   cursor: pointer; }
   .table-ordered thead tr th.sorting_disabled:after {
-    display: none; }
+    display: none !important; }
   .table-ordered thead tr th:after {
     display: inline-block;
     content: "";
@@ -6020,7 +6018,8 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 
 .table {
   color: #3f3f3f;
-  width: 100% !important; }
+  width: 100% !important;
+  font: 16px/18px "RobotoRegular"; }
   .table tr {
     -webkit-transition: all 0.1s linear 0s;
     -moz-transition: all 0.1s linear 0s;
@@ -6028,6 +6027,8 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     -o-transition: all 0.1s linear 0s;
     transition: all 0.1s linear 0s;
     height: 35px; }
+    .table tr.selected {
+      background-color: #cad1d7 !important; }
     .table tr td {
       word-break: break-all;
       word-wrap: break-word;
@@ -6038,12 +6039,14 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   .table thead {
     color: #a6a8a9; }
     .table thead tr th {
-      font-weight: normal; }
+      font-weight: normal;
+      vertical-align: middle; }
   .table tbody {
     border-bottom: 2px solid #ddd; }
     .table tbody tr {
       border-bottom: 1px solid #ddd; }
       .table tbody tr td {
+        vertical-align: middle;
         height: 35px; }
         .table tbody tr td span {
           color: #a6a8a9; }
@@ -6060,6 +6063,26 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
           .table tbody tr td a:hover, .table tbody tr td a:focus {
             color: #2a81cb !important;
             text-decoration: none; }
+
+.table-with-checkboxes thead tr th:first-child {
+  width: 40px !important;
+  max-width: 40px !important;
+  text-align: center;
+  padding: 10px 0; }
+  .table-with-checkboxes thead tr th:first-child + th {
+    width: 25%;
+    padding-left: 45px; }
+
+.table-with-checkboxes tbody tr td:first-child {
+  text-align: center;
+  padding: 10px 0; }
+
+.table-with-checkboxes tbody tr td label {
+  padding: 0;
+  margin: 0; }
+  .table-with-checkboxes tbody tr td label .tick {
+    position: relative;
+    margin: 0; }
 
 #DataTables_Table_0_wrapper {
   position: relative; }
@@ -6126,7 +6149,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   text-align: right; }
 
 .dataTables_wrapper .dataTables_paginate {
-  float: left;
+  /* float: left; */
   position: relative;
   padding: 40px 0 0 10px;
   overflow: hidden;
@@ -6148,7 +6171,6 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       color: #a6a8a9 !important; }
   .dataTables_wrapper .dataTables_paginate > .paginate_button {
     float: left;
-    color: #3ca21a;
     padding: 5px 12px; }
 
 .dataTables_processing {
@@ -6172,14 +6194,17 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     border-top: 8px solid #dbdfe2; }
   .table-ordered thead tr th.sorting_desc:after {
     border-bottom: 8px solid #2a81cb; }
-  .table thead tr th {
-    font-size: 10px;
-    line-height: 12px; }
-    .table thead tr th.sorting:after {
-      right: -4px;
-      border-top: 8px solid #dbdfe2; }
-    .table thead tr th.sorting.sorting-down:after {
-      border-bottom: 8px solid #2a81cb; } }
+  .table {
+    font-size: 14px;
+    line-height: 16px; }
+    .table thead tr th {
+      font-size: 10px;
+      line-height: 12px; }
+      .table thead tr th.sorting:after {
+        right: -4px;
+        border-top: 8px solid #dbdfe2; }
+      .table thead tr th.sorting.sorting-down:after {
+        border-bottom: 8px solid #2a81cb; } }
 
 @media (max-width: 1210px) {
   #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
@@ -6192,7 +6217,29 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 @media (max-width: 880px) {
   .table tr td, .table tr th {
     font-size: 10px;
-    line-height: 12px; } }
+    line-height: 12px; }
+    .table tr td.for-tablets, .table tr th.for-tablets {
+      display: none; }
+  #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+    position: relative;
+    top: 0;
+    left: 0; }
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label:after {
+      top: 0;
+      left: 10px; }
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active {
+      width: 100%; }
+      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
+        width: 50%; }
+  .table-ordered thead th.padding-left-slide:first-child {
+    padding-left: 10px; }
+  .table-ordered thead tr th.column-questionnaire-title {
+    padding-left: 10px; }
+  .table-ordered thead tr th:after {
+    border-width: 4px;
+    border-top: 6px solid #dbdfe2; }
+  .table-ordered thead tr th.sorting_desc:after {
+    border-bottom: 6px solid #2a81cb; } }
 
 @media (max-width: 481px) {
   .dataTables_wrapper .dataTables_info {
@@ -6200,23 +6247,12 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     margin-bottom: 15px; }
   .dataTables_wrapper .dataTables_paginate {
     float: none; }
-  #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
-    position: relative;
-    top: 0;
-    left: 0; }
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label:after {
-      top: 40px; }
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active {
-      width: 100%; }
-      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
-        width: 80%; }
-  .table-ordered thead th.padding-left-slide:first-child {
-    padding-left: 45px; }
-  .table-ordered thead tr th:after {
-    border-width: 4px;
-    border-top: 6px solid #dbdfe2; }
-  .table-ordered thead tr th.sorting_desc:after {
-    border-bottom: 6px solid #2a81cb; }
+  #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active {
+    width: 100%; }
+    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
+      width: 80%; }
+  .table tr td.for-mobile-devices, .table tr th.for-mobile-devices {
+    display: none; }
   .table tbody tr td:first-child {
     padding-left: 10px; }
   .table thead tr th {
@@ -6245,6 +6281,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   color: #66686a; }
 
 .foldback-button {
+  display: none;
   width: 50px;
   height: 46px;
   cursor: pointer;
@@ -6252,7 +6289,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   top: 75px;
   right: 0;
   border-radius: 4px;
-  z-index: 2;
+  z-index: 3;
   -webkit-transition: all 0.2s linear 0s;
   -moz-transition: all 0.2s linear 0s;
   -ms-transition: all 0.2s linear 0s;
@@ -6327,10 +6364,10 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   .button-flag:hover, .flag:hover:before, .button-flag:focus, .flag:focus:before {
     background-position: -57px 0;
     outline: none; }
-  .button-flag.flagged, .flagged.flag:before, .question.with-flag .question-editor h5 .button-flag, .question.with-flag .question-editor .preset-filters-container a .button-flag, .preset-filters-container .question.with-flag .question-editor a .button-flag, .question.with-flag .question-editor .preset-filters-container .export-queue .button-flag, .preset-filters-container .question.with-flag .question-editor .export-queue .button-flag, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:before, .button-flag:active, .flag:active:before {
+  .button-flag.flagged, .flagged.flag:before, .question.with-flag .question-editor .button-flag, .question.with-flag .question-editor .flag:before, .button-flag:active, .flag:active:before {
     background-position: 0 0;
     outline: none; }
-    .button-flag.flagged:hover, .flagged.flag:hover:before, .question.with-flag .question-editor h5 .button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .button-flag:hover, .question.with-flag .question-editor .preset-filters-container .export-queue .button-flag:hover, .preset-filters-container .question.with-flag .question-editor .export-queue .button-flag:hover, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:hover:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:hover:before, .button-flag.flagged:focus, .flagged.flag:focus:before, .question.with-flag .question-editor h5 .button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .button-flag:focus, .question.with-flag .question-editor .preset-filters-container .export-queue .button-flag:focus, .preset-filters-container .question.with-flag .question-editor .export-queue .button-flag:focus, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:focus:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:focus:before, .button-flag:active:hover, .flag:active:hover:before, .button-flag:active:focus, .flag:active:focus:before {
+    .button-flag.flagged:hover, .flagged.flag:hover:before, .question.with-flag .question-editor .button-flag:hover, .question.with-flag .question-editor .flag:hover:before, .button-flag.flagged:focus, .flagged.flag:focus:before, .question.with-flag .question-editor .button-flag:focus, .question.with-flag .question-editor .flag:focus:before, .button-flag:active:hover, .flag:active:hover:before, .button-flag:active:focus, .flag:active:focus:before {
       background-position: -19px 0; }
 
 .reject {
@@ -6677,6 +6714,16 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px; }
 
+.progress.question-progress {
+  height: 3px;
+  background-color: transparent;
+  box-shadow: none;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0; }
+
 .progress .progress-bar-info {
   background-color: #a6a8a9; }
 
@@ -6799,6 +6846,62 @@ input.checkbox-filter {
   input.checkbox-filter:checked:disabled ~ label:focus .tick {
     background-position: 0px -180px; }
 
+input.double-checkbox {
+  display: none; }
+  input.double-checkbox ~ label {
+    position: relative;
+    cursor: pointer;
+    margin: 0; }
+  input.double-checkbox ~ label .tick {
+    display: inline-block;
+    width: 25px;
+    height: 20px;
+    vertical-align: middle;
+    background: transparent url("../img/chekboxes.png") no-repeat;
+    background-size: 68px 350px;
+    background-position: 0 -216px; }
+    @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+      input.double-checkbox ~ label .tick {
+        /* on retina, use image that's scaled by 2 */
+        background-image: url("../img/chekboxes2k.png");
+        background-size: 68px 350px; } }
+  input.double-checkbox ~ label:hover .tick,
+  input.double-checkbox ~ label:focus .tick {
+    background-position: 0px -254px; }
+  input.double-checkbox:checked ~ label .tick {
+    background-position: 0px -292px; }
+  input.double-checkbox:checked ~ label:hover .tick,
+  input.double-checkbox:checked ~ label:focus .tick {
+    background-position: 0px -330px; }
+
+input.double-checkbox-white {
+  display: none; }
+  input.double-checkbox-white ~ label {
+    position: relative;
+    cursor: pointer;
+    margin: 0; }
+  input.double-checkbox-white ~ label .tick {
+    display: inline-block;
+    width: 25px;
+    height: 20px;
+    vertical-align: middle;
+    background: transparent url("../img/chekboxes.png") no-repeat;
+    background-size: 68px 350px;
+    background-position: -44px -216px; }
+    @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+      input.double-checkbox-white ~ label .tick {
+        /* on retina, use image that's scaled by 2 */
+        background-image: url("../img/chekboxes2k.png");
+        background-size: 68px 350px; } }
+  input.double-checkbox-white ~ label:hover .tick,
+  input.double-checkbox-white ~ label:focus .tick {
+    background-position: -44px -254px; }
+  input.double-checkbox-white:checked ~ label .tick {
+    background-position: -44px -292px; }
+  input.double-checkbox-white:checked ~ label:hover .tick,
+  input.double-checkbox-white:checked ~ label:focus .tick {
+    background-position: -44px -330px; }
+
 .radio {
   margin: 0; }
   .radio label {
@@ -6883,6 +6986,9 @@ input.checkbox-filter {
         top: 5px; }
       .input-group .input-group-btn .btn span:hover:before, .input-group .input-group-btn .btn span:hover:after, .input-group .input-group-btn .btn span:focus:before, .input-group .input-group-btn .btn span:focus:after, .input-group .input-group-btn .btn span:active:before, .input-group .input-group-btn .btn span:active:after {
         background-color: #595c5d; }
+
+.filters .input-group {
+  width: 295px; }
 
 .bootstrap-select.btn-group {
   width: 295px !important; }
@@ -7059,9 +7165,9 @@ input.checkbox-filter {
             -ms-transition: all 0.3s linear 0s;
             -o-transition: all 0.3s linear 0s;
             transition: all 0.3s linear 0s; }
-        .structured-content .panel-default > .panel-heading h3.contains-error a {
+        .structured-content .panel-default > .panel-heading h3.has-error a {
           color: #ed2c39; }
-          .structured-content .panel-default > .panel-heading h3.contains-error a:before, .structured-content .panel-default > .panel-heading h3.contains-error a:after {
+          .structured-content .panel-default > .panel-heading h3.has-error a:before, .structured-content .panel-default > .panel-heading h3.has-error a:after {
             background-color: #ed2c39; }
         .structured-content .panel-default > .panel-heading h3.complete a {
           color: #3ca21a; }
@@ -7341,7 +7447,8 @@ input.checkbox-filter {
 
 .image-zoom-box, .image-option {
   overflow: hidden;
-  margin-bottom: 10px; }
+  margin: 10px;
+  margin-left: 0; }
   .image-zoom-box img, .image-option img {
     display: block;
     max-width: 100%;
@@ -7474,7 +7581,7 @@ h4, .import-progress {
   font: 22px/24px "RobotoLight";
   margin-bottom: 20px; }
 
-h5, .preset-filters-container a, .preset-filters-container .export-queue {
+h5 {
   font-size: 14px;
   line-height: 16px;
   font-family: inherit;
@@ -7510,8 +7617,10 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
   padding-bottom: 0;
   margin: 0;
   border: none;
-  padding-left: 15px;
   padding-top: 40px; }
+
+.row .page-header {
+  padding-left: 15px; }
 
 .alert {
   margin-bottom: 20px;
@@ -7584,6 +7693,7 @@ body > .ui-pnotify {
   color: #dbdfe2; }
 
 .info-block {
+  font: 14px/16px "RobotoRegular";
   margin-bottom: 20px; }
   .info-block p {
     margin-bottom: 20px; }
@@ -7591,6 +7701,11 @@ body > .ui-pnotify {
       margin-bottom: 0px; }
     .info-block p:only-of-type {
       margin-bottom: 20px; }
+
+table.dataTable span.highlight {
+  background-color: #FFFF88;
+  color: #000;
+  border-radius: 0.28571429rem; }
 
 .two-columns-form, .flex-row {
   display: flex; }
@@ -7826,17 +7941,24 @@ main .flex-row {
     .import-interview tbody .parameters span {
       text-transform: none; }
 
+.import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button {
+  color: #3ca21a; }
+  .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled, .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled:hover, .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled:active {
+    color: #a6a8a9;
+    text-decoration: none;
+    cursor: not-allowed; }
+
 @media (max-width: 1210px) {
   .parameters {
     display: none; }
-  .table tr {
+  .import-interview tr {
     -webkit-transition: all 0.1s linear 0s;
     -moz-transition: all 0.1s linear 0s;
     -ms-transition: all 0.1s linear 0s;
     -o-transition: all 0.1s linear 0s;
     transition: all 0.1s linear 0s;
     height: 35px; }
-    .table tr td, .table tr th {
+    .import-interview tr td, .import-interview tr th {
       width: 13%; } }
 
 @media (max-width: 880px) {
@@ -7859,10 +7981,6 @@ main .flex-row {
     width: 30%; }
   .import-questionnaire-form .questionnaire-versioning, .import-questionnaire-form .flex-row {
     margin-bottom: 0; } }
-
-@media (max-width: 481px) {
-  .import-interview thead tr th:first-child, .import-interview thead tr th.padding-left-lide:first-child {
-    padding-left: 45px; } }
 
 .two-columns-form, .flex-row {
   display: flex; }
@@ -8126,7 +8244,7 @@ main .flex-row {
     margin-right: 0;
     margin-bottom: 15px; } }
 
-.text-page, .info-block {
+.text-page {
   font: 14px/16px "RobotoRegular"; }
 
 .prefilled-data-info > a {
@@ -8172,7 +8290,7 @@ main .flex-row {
 .error-block:last-of-type {
   margin-bottom: 30px; }
 
-.error-block h5, .error-block .preset-filters-container a, .preset-filters-container .error-block a, .error-block .preset-filters-container .export-queue, .preset-filters-container .error-block .export-queue {
+.error-block h5 {
   margin: 20px 0 5px; }
 
 .error-block p {
@@ -8216,214 +8334,6 @@ main .flex-row {
 @media (max-width: 400px) {
   .action-block .action-buttons .btn:last-of-type {
     margin-right: 5px; } }
-
-.filters {
-  width: 360px;
-  border-right: 3px solid #ececec;
-  padding: 115px 12px 50px 33px;
-  margin-left: 12px; }
-
-input.checkbox-filter {
-  display: none; }
-  input.checkbox-filter ~ label {
-    position: relative;
-    padding-left: 35px;
-    cursor: pointer; }
-  input.checkbox-filter ~ label .tick {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 20px;
-    background: transparent url("../img/chekboxes.png") no-repeat;
-    background-size: 68px 350px;
-    background-position: 0 0;
-    margin-right: 10px; }
-    @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-      input.checkbox-filter ~ label .tick {
-        /* on retina, use image that's scaled by 2 */
-        background-image: url("../img/chekboxes2k.png");
-        background-size: 68px 350px; } }
-  input.checkbox-filter ~ label:hover .tick,
-  input.checkbox-filter ~ label:focus .tick {
-    background-position: 0px -36px; }
-  input.checkbox-filter:checked ~ label .tick {
-    background-position: 0px -72px; }
-  input.checkbox-filter:checked ~ label:hover .tick,
-  input.checkbox-filter:checked ~ label:focus .tick {
-    background-position: 0px -108px; }
-  input.checkbox-filter:disabled ~ label .tick,
-  input.checkbox-filter:checked:disabled ~ label .tick {
-    background-position: 0px -144px; }
-  input.checkbox-filter:disabled ~ label:hover .tick,
-  input.checkbox-filter:checked:disabled ~ label:hover .tick,
-  input.checkbox-filter:disabled ~ label:focus .tick,
-  input.checkbox-filter:checked:disabled ~ label:focus .tick {
-    background-position: 0px -180px; }
-
-.filters-container {
-  color: #3f3f3f;
-  border-bottom: 3px solid #ececec;
-  padding-bottom: 20px; }
-  .filters-container .block-filter {
-    margin-bottom: 30px; }
-    .filters-container .block-filter select {
-      border-color: #dbdfe2;
-      max-width: 90%; }
-      .filters-container .block-filter select option {
-        width: 200px; }
-    .filters-container .block-filter .form-group {
-      margin-bottom: 10px; }
-      .filters-container .block-filter .form-group label {
-        font-size: 14px;
-        line-height: 20px;
-        font-family: inherit;
-        font-weight: normal;
-        margin: 0; }
-      .filters-container .block-filter .form-group:last-of-type {
-        margin-bottom: 0; }
-    .filters-container .block-filter .form-date {
-      margin-bottom: 15px;
-      max-width: 275px; }
-      .filters-container .block-filter .form-date .input-group.date {
-        width: 100%; }
-        .filters-container .block-filter .form-date .input-group.date label {
-          display: table-cell;
-          vertical-align: middle;
-          font-size: 14px;
-          line-height: 16px;
-          width: 50px;
-          font-weight: normal; }
-        .filters-container .block-filter .form-date .input-group.date .form-control {
-          border-right: none;
-          border-color: #dbdfe2;
-          border-bottom-left-radius: 4px;
-          border-top-left-radius: 4px; }
-        .filters-container .block-filter .form-date .input-group.date .input-group-addon {
-          background-color: transparent;
-          border-left: none;
-          border-color: #dbdfe2;
-          padding: 3px 10px; }
-          .filters-container .block-filter .form-date .input-group.date .input-group-addon .calendar {
-            width: 21px;
-            height: 20px;
-            display: inline-block;
-            background: url("../img/calendar.png") no-repeat; }
-            @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-              .filters-container .block-filter .form-date .input-group.date .input-group-addon .calendar {
-                /* on retina, use image that's scaled by 2 */
-                background-image: url("../img/calendar2k.png");
-                background-size: 21px 20px; } }
-
-.preset-filters-container {
-  padding-top: 30px; }
-  .preset-filters-container a, .preset-filters-container .export-queue {
-    color: #2a81cb;
-    display: block; }
-
-.filters.hidden-filters {
-  left: -372px;
-  overflow: visible; }
-  .filters.hidden-filters .foldback-button {
-    right: -50px;
-    background-color: #dbdfe2;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px; }
-    .filters.hidden-filters .foldback-button span.arrow {
-      margin-left: 13px;
-      margin-right: 2px;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      -o-transform: rotate(45deg);
-      transform: rotate(45deg); }
-      .filters.hidden-filters .foldback-button span.arrow:first-of-type {
-        -webkit-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        -o-transform: rotate(-45deg);
-        transform: rotate(-45deg); }
-    .filters.hidden-filters .foldback-button .glyphicon {
-      display: inline-block; }
-
-@media (max-width: 1210px) {
-  .filters {
-    padding-top: 105px;
-    width: 270px;
-    padding-left: 12px; }
-    .filters .bootstrap-select.btn-group {
-      width: 100% !important; }
-    .filters .open > .dropdown-menu {
-      width: 100%; }
-    .filters .foldback-button {
-      top: 65px; }
-    .filters.hidden-filters {
-      left: -282px; }
-      .filters.hidden-filters .foldback-button {
-        right: -50px; } }
-
-@media (max-width: 880px) {
-  .filters {
-    padding-top: 60px;
-    left: -282px;
-    overflow: visible; }
-    .filters .foldback-button {
-      right: -50px;
-      background-color: #dbdfe2;
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px; }
-      .filters .foldback-button span.arrow {
-        margin-left: 13px;
-        margin-right: 2px;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        transform: rotate(45deg); }
-        .filters .foldback-button span.arrow:first-of-type {
-          -webkit-transform: rotate(-45deg);
-          -ms-transform: rotate(-45deg);
-          -o-transform: rotate(-45deg);
-          transform: rotate(-45deg); }
-      .filters .foldback-button .glyphicon {
-        display: inline-block; }
-  .fullscreen-hidden-filters .filters {
-    border: none;
-    margin: 0;
-    position: absolute;
-    top: 0px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%; }
-    .fullscreen-hidden-filters .filters .foldback-button {
-      right: 5px;
-      background-color: transparent; }
-      .fullscreen-hidden-filters .filters .foldback-button span.arrow {
-        margin: 15px 10px;
-        -webkit-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        -o-transform: rotate(-45deg);
-        transform: rotate(-45deg); }
-        .fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
-          -webkit-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-          -o-transform: rotate(45deg);
-          transform: rotate(45deg); }
-      .fullscreen-hidden-filters .filters .foldback-button .glyphicon {
-        display: none; }
-    .fullscreen-hidden-filters .filters .foldback-button {
-      right: 10px; }
-    .fullscreen-hidden-filters .filters .filters-container, .fullscreen-hidden-filters .filters .preset-filters-container {
-      display: block;
-      width: 300px;
-      margin: 0 auto;
-      border-color: #dbdfe2;
-      opacity: 1;
-      filter: alpha(opacity=100);
-      visibility: visible; }
-  .fullscreen-hidden-filters .export-types {
-    display: none; } }
-
-@media (max-width: 481px) {
-  .filters.hidden-filters .filters-container, .filters.hidden-filters .preset-filters-container {
-    width: 250px; } }
 
 .export-types {
   padding: 50px 30px 0;
@@ -8567,10 +8477,10 @@ input.checkbox-filter {
   .cancel:hover:before, .cancel:hover:after, .cancel:focus:before, .cancel:focus:after, .cancel:active:before, .cancel:active:after {
     background-color: #595c5d; }
 
-.fullscreen-hidden-filters .export-types {
-  margin-left: 0;
-  padding-left: 12px; }
-
+/* .fullscreen-hidden-filters .export-types{
+	margin-left: 0;
+	padding-left: 12px;
+} */
 .footer {
   -webkit-transition: padding 0.3s linear 0s;
   -moz-transition: padding 0.3s linear 0s;
@@ -8581,6 +8491,9 @@ input.checkbox-filter {
     padding-left: 312px; }
 
 @media (max-width: 1210px) {
+  .fullscreen-hidden-filters .export-types {
+    margin-left: 0;
+    padding-left: 12px; }
   .export-types {
     padding: 50px 20px 0 30px;
     margin-left: 262px; }
@@ -8684,7 +8597,7 @@ input.checkbox-filter {
 .filters-container .flagged-questions, .filters-container .reset-filters {
   padding-top: 0; }
 
-.filters-container .block-filter {
+.filters-container .separate-filters-group {
   margin: 0; }
 
 .filters-container .reset-filters {
@@ -8716,24 +8629,24 @@ input.checkbox-filter {
     position: absolute;
     top: 0;
     left: 0; }
-  .flag.flagged, .question.with-flag .question-editor h5 .flag.button-flag, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag, .question.with-flag .question-editor .preset-filters-container .export-queue .flag.button-flag, .preset-filters-container .question.with-flag .question-editor .export-queue .flag.button-flag, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:before {
+  .flag.flagged, .question.with-flag .question-editor .flag.button-flag, .question.with-flag .question-editor .flag:before {
     color: #3f3f3f; }
-    .flag.flagged:before, .question.with-flag .question-editor h5 .flag:before, .question.with-flag .question-editor .preset-filters-container a .flag:before, .preset-filters-container .question.with-flag .question-editor a .flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:before {
+    .flag.flagged:before, .question.with-flag .question-editor .flag:before {
       background-position: 1px 0; }
   .flag:hover, .flag:focus {
     color: #a6a8a9;
     text-decoration: none; }
     .flag:hover:before, .flag:focus:before {
       background-position: -56px 0; }
-  .flag.flagged:hover, .question.with-flag .question-editor h5 .flag.button-flag:hover, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:hover, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:hover, .question.with-flag .question-editor .preset-filters-container .export-queue .flag.button-flag:hover, .preset-filters-container .question.with-flag .question-editor .export-queue .flag.button-flag:hover, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:hover:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:hover:before, .flag.flagged:focus, .question.with-flag .question-editor h5 .flag.button-flag:focus, .question.with-flag .question-editor .preset-filters-container a .flag.button-flag:focus, .preset-filters-container .question.with-flag .question-editor a .flag.button-flag:focus, .question.with-flag .question-editor .preset-filters-container .export-queue .flag.button-flag:focus, .preset-filters-container .question.with-flag .question-editor .export-queue .flag.button-flag:focus, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:focus:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:focus:before {
+  .flag.flagged:hover, .question.with-flag .question-editor .flag.button-flag:hover, .question.with-flag .question-editor .flag:hover:before, .flag.flagged:focus, .question.with-flag .question-editor .flag.button-flag:focus, .question.with-flag .question-editor .flag:focus:before {
     color: #3f3f3f;
     text-decoration: none; }
-    .flag.flagged:hover:before, .question.with-flag .question-editor h5 .flag:hover:before, .question.with-flag .question-editor .preset-filters-container a .flag:hover:before, .preset-filters-container .question.with-flag .question-editor a .flag:hover:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:hover:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:hover:before, .flag.flagged:focus:before, .question.with-flag .question-editor h5 .flag:focus:before, .question.with-flag .question-editor .preset-filters-container a .flag:focus:before, .preset-filters-container .question.with-flag .question-editor a .flag:focus:before, .question.with-flag .question-editor .preset-filters-container .export-queue .flag:focus:before, .preset-filters-container .question.with-flag .question-editor .export-queue .flag:focus:before {
+    .flag.flagged:hover:before, .question.with-flag .question-editor .flag:hover:before, .flag.flagged:focus:before, .question.with-flag .question-editor .flag:focus:before {
       background-position: -18px 0; }
 
-.bootstrap-select .dropdown-menu > li > a.flagged, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .preset-filters-container .export-queue .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .preset-filters-container .export-queue .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .preset-filters-container .question.with-flag .question-editor .export-queue .dropdown-menu > li > a.button-flag, .preset-filters-container .question.with-flag .question-editor .export-queue .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container .export-queue .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor .export-queue .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .bootstrap-select .dropdown-menu > li > a.flag:before {
+.bootstrap-select .dropdown-menu > li > a.flagged, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.flag:before {
   padding-left: 35px; }
-  .bootstrap-select .dropdown-menu > li > a.flagged:before, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.button-flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container .export-queue .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor .export-queue .dropdown-menu > li > a.button-flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor h5 .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor h5 .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container a .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor a .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor a .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .question.with-flag .question-editor .preset-filters-container .export-queue .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .preset-filters-container .export-queue .bootstrap-select .dropdown-menu > li > a.flag:before, .bootstrap-select .preset-filters-container .question.with-flag .question-editor .export-queue .dropdown-menu > li > a.flag:before, .preset-filters-container .question.with-flag .question-editor .export-queue .bootstrap-select .dropdown-menu > li > a.flag:before {
+  .bootstrap-select .dropdown-menu > li > a.flagged:before, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.button-flag:before, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.flag:before {
     top: 5px;
     left: 7px; }
 
@@ -8765,7 +8678,7 @@ label.inactive {
   width: 570px;
   -webkit-box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
-  z-index: 3; }
+  z-index: 4; }
   .content .questionnaire-content {
     padding: 25px 0 5px 30px;
     border-bottom: 3px solid #ececec; }
@@ -8792,8 +8705,10 @@ label.inactive {
   -ms-transition: margin 0.3s linear 0s;
   -o-transition: margin 0.3s linear 0s;
   transition: margin 0.3s linear 0s;
-  margin-left: 942px; }
+  margin-left: 942px;
+  width: calc(100% - 942px); }
   .questionnaire .unit-title {
+    z-index: 1;
     position: relative;
     background-color: #2a81cb;
     padding: 15px 20px 10px 80px;
@@ -8801,7 +8716,8 @@ label.inactive {
     -webkit-box-shadow: 0 3px 5px 0px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px 0px rgba(0, 0, 0, 0.3); }
     .questionnaire .unit-title.is_stuck {
-      z-index: 2; }
+      z-index: 3;
+      top: 70px !important; }
     .questionnaire .unit-title .breadcrumb {
       margin-bottom: 10px; }
       .questionnaire .unit-title .breadcrumb li a {
@@ -8816,9 +8732,9 @@ label.inactive {
 
 .question {
   position: relative;
-  padding: 18px 20px 15px 70px;
+  padding: 18px 30px 20px 70px;
   border-bottom: 2px solid #dbdfe2; }
-  .question h5 .button-flag, .question .preset-filters-container a .button-flag, .preset-filters-container .question a .button-flag, .question .preset-filters-container .export-queue .button-flag, .preset-filters-container .question .export-queue .button-flag, .question h5 .flag:before, .question .preset-filters-container a .flag:before, .preset-filters-container .question a .flag:before, .question .preset-filters-container .export-queue .flag:before, .preset-filters-container .question .export-queue .flag:before {
+  .question .question-editor .button-flag, .question .question-editor .flag:before {
     position: absolute;
     top: 0;
     left: -30px; }
@@ -8835,7 +8751,7 @@ label.inactive {
 .information-block {
   padding: 0 10px;
   color: #a6a8a9; }
-  .information-block h6 {
+  .information-block h6, .information-block .comment label {
     margin-top: 20px;
     font: 10px/12px "TrebuchetMSBold";
     letter-spacing: 0.5px;
@@ -8853,7 +8769,7 @@ label.inactive {
     color: #ed45aa; }
   .information-block.instruction {
     color: #2a81cb; }
-  .information-block.errors {
+  .information-block.text-danger {
     color: #e74924; }
 
 .comments-block p {
@@ -8872,11 +8788,11 @@ label.inactive {
 .question.hidden-question {
   min-height: 65px;
   background: repeating-linear-gradient(-45deg, #dbdfe2, #dbdfe2 2px, transparent 2px, transparent 6px); }
-  .question.hidden-question h5, .question.hidden-question .preset-filters-container a, .preset-filters-container .question.hidden-question a, .question.hidden-question .preset-filters-container .export-queue, .preset-filters-container .question.hidden-question .export-queue {
+  .question.hidden-question h5 {
     margin: 0;
     color: #a6a8a9; }
-    .question.hidden-question h5 .button-flag, .question.hidden-question .preset-filters-container a .button-flag, .preset-filters-container .question.hidden-question a .button-flag, .question.hidden-question .preset-filters-container .export-queue .button-flag, .preset-filters-container .question.hidden-question .export-queue .button-flag, .question.hidden-question h5 .flag:before, .question.hidden-question .preset-filters-container a .flag:before, .preset-filters-container .question.hidden-question a .flag:before, .question.hidden-question .preset-filters-container .export-queue .flag:before, .preset-filters-container .question.hidden-question .export-queue .flag:before {
-      z-index: 0; }
+  .question.hidden-question .question-editor .button-flag, .question.hidden-question .question-editor .flag:before {
+    z-index: 0; }
   .question.hidden-question .question-unit, .question.hidden-question .information-block {
     display: none; }
 
@@ -8884,9 +8800,7 @@ label.inactive {
   background: #fff;
   padding: 2px; }
   .question.hidden-by-filter > .question-editor,
-  .question.hidden-by-filter > h5, .preset-filters-container
-  .question.hidden-by-filter > a, .preset-filters-container
-  .question.hidden-by-filter > .export-queue,
+  .question.hidden-by-filter > h5,
   .question.hidden-by-filter > .dropdown {
     display: none; }
 
@@ -8914,7 +8828,7 @@ label.inactive {
   background-color: #cce2f5; }
 
 .unit-section.hidden-by-filter.section-with-error > .unit-title,
-.unit-section.hidden-by-filter .contains-error > .unit-title {
+.unit-section.hidden-by-filter .has-error > .unit-title {
   background-color: #fbe2dc; }
 
 .unit-section.hidden-by-filter.complete-section > .unit-title,
@@ -8937,7 +8851,7 @@ label.inactive {
   background-color: #78b2e3; }
 
 .questionnaire .open-hidden-by-filter.section-with-error > .unit-title,
-.questionnaire .open-hidden-by-filter .contains-error > .unit-title {
+.questionnaire .open-hidden-by-filter .has-error > .unit-title {
   background-color: #f19580; }
 
 .questionnaire .open-hidden-by-filter.complete-section > .unit-title,
@@ -8945,18 +8859,20 @@ label.inactive {
   background-color: #69e141; }
 
 .question-editor {
+  margin: 0 auto;
+  position: relative;
   max-width: 445px; }
-  .question-editor h5, .question-editor .preset-filters-container a, .preset-filters-container .question-editor a, .question-editor .preset-filters-container .export-queue, .preset-filters-container .question-editor .export-queue {
-    padding-left: 10px;
+  .question-editor h5 {
+    padding: 0 10px;
     margin: 0 0 10px;
     position: relative; }
-    .question-editor h5:before, .question-editor .preset-filters-container a:before, .preset-filters-container .question-editor a:before, .question-editor .preset-filters-container .export-queue:before, .preset-filters-container .question-editor .export-queue:before {
+    .question-editor h5:before {
       left: -25px; }
   .question-editor.answered .question-unit .options-group {
     background-color: transparent; }
-  .question-editor.contains-error .question-unit .options-group {
+  .question-editor.has-error .question-unit .options-group {
     background-color: #f6d6d0; }
-    .question-editor.contains-error .question-unit .options-group .form-group {
+    .question-editor.has-error .question-unit .options-group .form-group {
       border-color: #f6d6d0; }
 
 .question-unit .options-group {
@@ -9002,7 +8918,7 @@ label.inactive {
       .question-unit .options-group .field .dropdown-toggle:hover, .question-unit .options-group .field .dropdown-toggle:focus, .question-unit .options-group .field .dropdown-toggle:active {
         z-index: 0; }
     .question-unit .options-group .field .dropdown-menu {
-      z-index: 1;
+      z-index: 2;
       width: 100%;
       padding: 5px 10px; }
       .question-unit .options-group .field .dropdown-menu li {
@@ -9010,15 +8926,14 @@ label.inactive {
         .question-unit .options-group .field .dropdown-menu li:last-child {
           border: none; }
 
-.static-text h5, .variable h5, .static-text .preset-filters-container a, .preset-filters-container .static-text a, .variable .preset-filters-container a, .preset-filters-container .variable a, .static-text .preset-filters-container .export-queue, .preset-filters-container .static-text .export-queue, .variable .preset-filters-container .export-queue, .preset-filters-container .variable .export-queue {
+.static-text h5, .variable h5 {
   margin: 0; }
-  .static-text h5 .static-text-image, .variable h5 .static-text-image, .static-text .preset-filters-container a .static-text-image, .preset-filters-container .static-text a .static-text-image, .variable .preset-filters-container a .static-text-image, .preset-filters-container .variable a .static-text-image, .static-text .preset-filters-container .export-queue .static-text-image, .preset-filters-container .static-text .export-queue .static-text-image, .variable .preset-filters-container .export-queue .static-text-image, .preset-filters-container .variable .export-queue .static-text-image {
+  .static-text h5 .static-text-image, .variable h5 .static-text-image {
     margin-top: 10px;
     max-width: 445px;
-    height: auto;
-    /* @include size($width-question-editor, auto); */ }
+    height: auto; }
 
-.static-text.invalid h5, .invalid.variable h5, .static-text.invalid .preset-filters-container a, .preset-filters-container .static-text.invalid a, .invalid.variable .preset-filters-container a, .preset-filters-container .invalid.variable a, .static-text.invalid .preset-filters-container .export-queue, .preset-filters-container .static-text.invalid .export-queue, .invalid.variable .preset-filters-container .export-queue, .preset-filters-container .invalid.variable .export-queue {
+.static-text.invalid h5, .invalid.variable h5 {
   color: #e74924; }
 
 .question-editor .question-unit .options-group .field .gray-text {
@@ -9028,15 +8943,17 @@ label.inactive {
 
 .ordered-question .form-group {
   position: relative; }
-  .ordered-question .form-group input.wb-checkbox:checked ~ label .index-number {
+  .ordered-question .form-group input.wb-checkbox:checked ~ label + .badge {
     display: block; }
 
 .yes-no-question.ordered .radio {
   position: relative; }
-  .yes-no-question.ordered .radio input.wb-radio:first-of-type:checked ~ .index-number {
+  .yes-no-question.ordered .radio input.wb-radio:first-of-type:checked ~ .badge {
     display: block; }
 
-.index-number {
+.options-group .badge {
+  padding: 0;
+  background-color: transparent;
   display: none;
   position: absolute;
   top: 0;
@@ -9099,17 +9016,16 @@ label.inactive {
   color: #3f3f3f;
   font-weight: bold; }
 
-.gps-question.answered .map, .gps-question.contains-error .map {
+.gps-question.answered .map, .gps-question.has-error .map {
   height: 200px;
   width: 385px;
   margin-bottom: 10px; }
 
 .multimedia-question .image-wrapper {
   max-width: 90%;
-  max-height: 200px;
-  /* @include size(385px, 200px); */ }
+  max-height: 200px; }
 
-.qr-question.answered .block-with-data, .qr-question.contains-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.contains-error .block-with-data {
+.qr-question.answered .block-with-data, .qr-question.has-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.has-error .block-with-data {
   font-size: 12px;
   line-height: 14px;
   margin-bottom: 10px;
@@ -9124,60 +9040,48 @@ label.inactive {
     float: left; }
 
 .image-option {
+  display: block;
   margin-left: 10px;
   max-width: 70%; }
 
-.fullscreen-hidden-filters .questionnaire {
-  margin-left: 582px; }
-  .fullscreen-hidden-filters .questionnaire .unit-title.is_stuck {
-    width: auto !important; }
+/* .fullscreen-hidden-filters {
+	.questionnaire{
+		@include width-questionnaire($content-width + 12px);	
+	}
+	.content{
+		left: 12px;
+		.questionnaire-content{
+			padding-left: 55px;
+		}
+	}
+}
+.fullscreen-hidden-content{
+	.content{
+		left: (-$content-width);
+		@include hidden-foldback-button();
+        overflow: inherit;
+        box-shadow: none;
+	}
+	.filters{
+		box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+		z-index: 4;
+	}
+	.questionnaire{
+		@include width-questionnaire($filter-width + 12px);
+	}
+}
+.fullscreen-hidden-filters.fullscreen-hidden-content{
+	.content .foldback-button{
+		top: 130px;
+	}
+	.questionnaire{
+		@include width-questionnaire(12px);
 
-.fullscreen-hidden-filters .content {
-  left: 12px; }
-  .fullscreen-hidden-filters .content .questionnaire-content {
-    padding-left: 55px; }
-
-.fullscreen-hidden-content .content {
-  left: -570px;
-  overflow: inherit;
-  box-shadow: none; }
-  .fullscreen-hidden-content .content .foldback-button {
-    right: -50px;
-    background-color: #dbdfe2;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px; }
-    .fullscreen-hidden-content .content .foldback-button span.arrow {
-      margin-left: 13px;
-      margin-right: 2px;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      -o-transform: rotate(45deg);
-      transform: rotate(45deg); }
-      .fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
-        -webkit-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        -o-transform: rotate(-45deg);
-        transform: rotate(-45deg); }
-    .fullscreen-hidden-content .content .foldback-button .glyphicon {
-      display: inline-block; }
-
-.fullscreen-hidden-content .filters {
-  box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
-  z-index: 3; }
-
-.fullscreen-hidden-content .questionnaire {
-  margin-left: 372px; }
-  .fullscreen-hidden-content .questionnaire .unit-title.is_stuck {
-    width: auto !important; }
-
-.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
-  top: 130px; }
-
-.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire {
-  margin-left: 12px; }
-  .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
-    padding-left: 85px; }
-
+		.question{
+			padding-left: 85px;
+		}
+	}
+}*/
 .footer.footer-adaptive-content.footer-adaptive-filters {
   padding-left: 930px; }
 
@@ -9191,17 +9095,21 @@ label.inactive {
   .details-interview .filters {
     padding-top: 105px;
     width: 270px;
-    padding-left: 12px; }
+    padding-left: 12px;
+    /*         &.hidden-filters{
+            left: - $filter-small-width - 12px;
+            .foldback-button{
+                right: - $width-foldback-button;
+            }
+        } */ }
     .details-interview .filters .bootstrap-select.btn-group {
       width: 100% !important; }
+    .details-interview .filters .input-group {
+      width: 100%; }
     .details-interview .filters .open > .dropdown-menu {
       width: 100%; }
     .details-interview .filters .foldback-button {
       top: 65px; }
-    .details-interview .filters.hidden-filters {
-      left: -282px; }
-      .details-interview .filters.hidden-filters .foldback-button {
-        right: -50px; }
   .details-interview .filters {
     padding-top: 115px; }
     .details-interview .filters .foldback-button {
@@ -9212,19 +9120,26 @@ label.inactive {
     .content .questionnaire-content div h2, .content .questionnaire-content div button {
       float: none; }
   .questionnaire {
-    margin-left: 612px; }
+    margin-left: 612px;
+    width: calc(100% - 612px); }
     .questionnaire .unit-title {
       width: auto; }
-  .fullscreen-hidden-filters .questionnaire {
-    margin-left: 342px; }
-  .fullscreen-hidden-filters .questionnaire {
-    margin-left: 342px; }
-  .fullscreen-hidden-content .questionnaire {
-    margin-left: 282px; }
-  .fullscreen-hidden-content .content {
-    left: -330px; }
-  .questionnaire {
-    margin-left: 612px; }
+  /* 	.fullscreen-hidden-filters {
+		.questionnaire{
+			@include width-questionnaire($content-width-small + 12px);
+		}
+	}
+	.fullscreen-hidden-content{
+		.questionnaire{
+			@include width-questionnaire(12px + $filter-small-width);
+		}
+		.content{
+			left: -$content-width-small;
+		}
+	}
+	.questionnaire{
+		@include width-questionnaire($filter-small-width + 12px + $content-width-small);
+	}*/
   .footer.footer-adaptive-content.footer-adaptive-filters {
     padding-left: 600px; }
   .footer.footer-adaptive-content {
@@ -9235,34 +9150,158 @@ label.inactive {
 @media (max-width: 1210px) {
   .content {
     padding-top: 60px; }
-  .unit-title.is_stuck {
-    top: 60px !important; }
+  .aside-menu {
+    right: 0; }
   .details-interview .filters {
     padding-top: 105px;
     left: -282px;
-    overflow: visible;
-    box-shadow: none; }
-    .details-interview .filters .foldback-button {
-      right: -50px;
-      background-color: #dbdfe2;
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px; }
-      .details-interview .filters .foldback-button span.arrow {
-        margin-left: 13px;
-        margin-right: 2px;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        transform: rotate(45deg); }
-        .details-interview .filters .foldback-button span.arrow:first-of-type {
-          -webkit-transform: rotate(-45deg);
-          -ms-transform: rotate(-45deg);
-          -o-transform: rotate(-45deg);
-          transform: rotate(-45deg); }
-      .details-interview .filters .foldback-button .glyphicon {
-        display: inline-block; }
-    .details-interview .filters .foldback-button {
+    /* @include hidden-foldback-button();
+			overflow: visible; */
+    box-shadow: none;
+    /* .foldback-button{
+				top: 65px;
+			} */ }
+  .details-interview .content {
+    left: 12px;
+    /* box-shadow: none;
+			left: -$content-width-small;
+			@include hidden-foldback-button();
+			overflow: visible;
+			.foldback-button{
+				top: 120px;
+			} */ }
+    .details-interview .content .foldback-button {
       top: 65px; }
+  .details-interview .questionnaire {
+    margin-left: 342px;
+    width: calc(100% - 342px);
+    /* @include width-questionnaire(12px); */
+    /* 			.question{
+				padding-left: 75px;
+			} */ }
+    .details-interview .questionnaire .unit-title {
+      padding-left: 50px; }
+    .details-interview .questionnaire .unit-title.is_stuck {
+      top: 60px !important; }
+  .details-interview .fullscreen-hidden-content .content {
+    left: -330px;
+    box-shadow: none;
+    /* left: 12px;
+				overflow: auto;
+				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				@include visible-foldback-button();
+				.foldback-button{
+					top: 65px;
+				}
+				.questionnaire-content{
+					padding-left: 50px;
+				} */ }
+  .details-interview .fullscreen-hidden-content .questionnaire {
+    margin-left: 282px;
+    width: calc(100% - 282px);
+    /* @include width-questionnaire($content-width-small +12px);
+				.question{
+					padding-left: 40px;
+				}
+				.button-flag{
+					left: -20px;
+				} */ }
+  .details-interview .fullscreen-hidden-content .filters {
+    left: 0;
+    overflow: auto;
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+    /* .foldback-button{
+					display: none;
+				} */ }
+  .details-interview .fullscreen-hidden-filters .filters {
+    overflow: auto;
+    left: 0;
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+    .details-interview .fullscreen-hidden-filters .filters .foldback-button {
+      right: 5px;
+      background-color: transparent; }
+      .details-interview .fullscreen-hidden-filters .filters .foldback-button span.arrow {
+        margin: 15px 10px;
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg); }
+        .details-interview .fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          -o-transform: rotate(45deg);
+          transform: rotate(45deg); }
+      .details-interview .fullscreen-hidden-filters .filters .foldback-button .glyphicon {
+        display: none; }
+  .details-interview .fullscreen-hidden-filters .questionnaire {
+    margin-left: 282px;
+    width: calc(100% - 282px); }
+    .details-interview .fullscreen-hidden-filters .questionnaire .question {
+      padding-left: 40px; }
+    .details-interview .fullscreen-hidden-filters .questionnaire .unit-title {
+      padding-left: 50px; }
+    .details-interview .fullscreen-hidden-filters .questionnaire .button-flag, .details-interview .fullscreen-hidden-filters .questionnaire .flag:before {
+      left: -20px; }
+  .details-interview .fullscreen-hidden-filters .content {
+    left: -330px;
+    box-shadow: none;
+    /* 				.foldback-button{
+					top: 65px;
+				}
+				z-index: 5;
+				box-shadow: none; */ }
+  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content {
+    left: 12px;
+    overflow: auto;
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
+      right: 5px;
+      background-color: transparent; }
+      .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow {
+        margin: 15px 10px;
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg); }
+        .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          -o-transform: rotate(45deg);
+          transform: rotate(45deg); }
+      .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button .glyphicon {
+        display: none; }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .questionnaire-content {
+      padding-left: 50px; }
+  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire {
+    margin-left: 342px;
+    width: calc(100% - 342px); }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
+      padding-left: 40px; }
+    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .button-flag, .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .flag:before {
+      left: -20px; }
+  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .filters {
+    box-shadow: none;
+    left: -282px;
+    /* 				.foldback-button{
+					display: none;
+				} */ }
+  .modal-img {
+    top: 60px; }
+  .footer.footer-adaptive-content.footer-adaptive-filters {
+    padding-left: 0; }
+  .footer.footer-adaptive-content {
+    padding-left: 270px; }
+  .footer.footer-adaptive-filters {
+    padding-left: 330px; } }
+
+@media (max-width: 880px) {
+  .details-interview .questionnaire {
+    margin-left: 12px;
+    width: calc(100% - 12px); }
+    .details-interview .questionnaire .comment .form-inline .form-group {
+      display: inline-block;
+      margin-bottom: 0;
+      vertical-align: middle; }
   .details-interview .content {
     box-shadow: none;
     left: -330px;
@@ -9288,14 +9327,28 @@ label.inactive {
         display: inline-block; }
     .details-interview .content .foldback-button {
       top: 120px; }
-  .details-interview .questionnaire {
-    margin-left: 12px; }
-    .details-interview .questionnaire .question {
-      padding-left: 75px; }
+  .details-interview .filters .foldback-button {
+    top: 65px; }
+  .details-interview .fullscreen-hidden-filters .content, .details-interview .fullscreen-hidden-filters .questionnaire {
+    display: none; }
+  .details-interview .fullscreen-hidden-filters .filters {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%; }
+  .details-interview .fullscreen-hidden-content .filters, .details-interview .fullscreen-hidden-content .questionnaire {
+    display: none; }
   .details-interview .fullscreen-hidden-content .content {
-    left: 12px;
     overflow: auto;
-    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border: none; }
     .details-interview .fullscreen-hidden-content .content .foldback-button {
       right: 5px;
       background-color: transparent; }
@@ -9313,127 +9366,8 @@ label.inactive {
       .details-interview .fullscreen-hidden-content .content .foldback-button .glyphicon {
         display: none; }
     .details-interview .fullscreen-hidden-content .content .foldback-button {
-      top: 65px; }
-    .details-interview .fullscreen-hidden-content .content .questionnaire-content {
-      padding-left: 50px; }
-  .details-interview .fullscreen-hidden-content .questionnaire {
-    margin-left: 342px; }
-    .details-interview .fullscreen-hidden-content .questionnaire .question {
-      padding-left: 40px; }
-    .details-interview .fullscreen-hidden-content .questionnaire .unit-title.is_stuck {
-      padding-left: 50px;
-      width: auto !important; }
-    .details-interview .fullscreen-hidden-content .questionnaire .button-flag, .details-interview .fullscreen-hidden-content .questionnaire .flag:before {
-      left: -20px; }
-  .details-interview .fullscreen-hidden-content .filters .foldback-button {
-    display: none; }
-  .details-interview .fullscreen-hidden-filters .filters {
-    overflow: auto;
-    left: 0;
-    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
-    .details-interview .fullscreen-hidden-filters .filters .foldback-button {
       right: 5px;
-      background-color: transparent; }
-      .details-interview .fullscreen-hidden-filters .filters .foldback-button span.arrow {
-        margin: 15px 10px;
-        -webkit-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        -o-transform: rotate(-45deg);
-        transform: rotate(-45deg); }
-        .details-interview .fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
-          -webkit-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-          -o-transform: rotate(45deg);
-          transform: rotate(45deg); }
-      .details-interview .fullscreen-hidden-filters .filters .foldback-button .glyphicon {
-        display: none; }
-  .details-interview .fullscreen-hidden-filters .questionnaire {
-    margin-left: 282px; }
-    .details-interview .fullscreen-hidden-filters .questionnaire .question {
-      padding-left: 40px; }
-    .details-interview .fullscreen-hidden-filters .questionnaire .unit-title.is_stuck {
-      padding-left: 50px;
-      width: auto !important; }
-    .details-interview .fullscreen-hidden-filters .questionnaire .button-flag, .details-interview .fullscreen-hidden-filters .questionnaire .flag:before {
-      left: -20px; }
-  .details-interview .fullscreen-hidden-filters .content {
-    z-index: 4;
-    box-shadow: none; }
-    .details-interview .fullscreen-hidden-filters .content .foldback-button {
-      top: 65px; }
-  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content {
-    left: 12px;
-    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
-    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
-      right: 5px;
-      background-color: transparent; }
-      .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow {
-        margin: 15px 10px;
-        -webkit-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        -o-transform: rotate(-45deg);
-        transform: rotate(-45deg); }
-        .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
-          -webkit-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-          -o-transform: rotate(45deg);
-          transform: rotate(45deg); }
-      .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button .glyphicon {
-        display: none; }
-    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .content .questionnaire-content {
-      padding-left: 50px; }
-  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire {
-    margin-left: 342px; }
-    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .question {
-      padding-left: 40px; }
-    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .unit-title.is_stuck {
-      padding-left: 50px;
-      width: auto !important; }
-    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .button-flag, .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .flag:before {
-      left: -20px; }
-  .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .filters {
-    box-shadow: none;
-    left: -282px; }
-    .details-interview .fullscreen-hidden-filters.fullscreen-hidden-content .filters .foldback-button {
-      display: none; }
-  .modal-img {
-    top: 60px; }
-  .footer.footer-adaptive-content.footer-adaptive-filters {
-    padding-left: 0; }
-  .footer.footer-adaptive-content {
-    padding-left: 270px; }
-  .footer.footer-adaptive-filters {
-    padding-left: 330px; } }
-
-@media (max-width: 880px) {
-  .details-interview .questionnaire .unit-title.is_stuck {
-    width: 100% !important;
-    bottom: auto !important; }
-  .details-interview .questionnaire .comment .form-inline .form-group {
-    display: inline-block;
-    margin-bottom: 0;
-    vertical-align: middle; }
-  .details-interview .fullscreen-hidden-filters .content, .details-interview .fullscreen-hidden-filters .questionnaire {
-    display: none; }
-  .details-interview .fullscreen-hidden-filters .filters {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%; }
-  .details-interview .fullscreen-hidden-content .filter, .details-interview .fullscreen-hidden-content .questionnaire {
-    display: none; }
-  .details-interview .fullscreen-hidden-content .content {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    border: none; }
-    .details-interview .fullscreen-hidden-content .content .foldback-button {
-      right: 10px; } }
+      top: 65px; } }
 
 @media only screen and (max-width: 615px) {
   .details-interview .questionnaire .comment .form-inline .form-group {
@@ -9450,7 +9384,7 @@ label.inactive {
     width: 265px; }
   .details-interview .questionnaire .yes-no-question .question-unit .options-group .radio .field > span {
     width: 71%; }
-  .details-interview .questionnaire .gps-question.answered .map, .details-interview .questionnaire .gps-question.contains-error .map {
+  .details-interview .questionnaire .gps-question.answered .map, .details-interview .questionnaire .gps-question.has-error .map {
     width: 225px; }
   .details-interview .questionnaire .multimedia-question .image-wrapper {
     width: 225px; }

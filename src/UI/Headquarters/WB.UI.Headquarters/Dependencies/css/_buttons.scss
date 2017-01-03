@@ -20,11 +20,12 @@
 	}
 }
 .foldback-button{
+	display: none;
 	@include size($width-foldback-button, 46px);
 	cursor: pointer;
 	@include absolute(75px, 0, null, null);
 	border-radius: 4px;
-	z-index: 2;
+	z-index: 3;
 	@include transition(all, 0.2s);
 	&:hover, &:focus{
 	    span.arrow{

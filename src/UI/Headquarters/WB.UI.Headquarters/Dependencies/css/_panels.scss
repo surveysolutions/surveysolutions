@@ -1,0 +1,21 @@
+.panel-table{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin-bottom: 0;
+	background-color: $table-selected;
+	z-index: 5;
+	label{
+		font-size: 16px;
+		line-height: 18px;
+		color: #fff;
+		padding-right: 40px;
+		.tick{
+			margin-right: 15px;
+		}
+	}
+	.panel-body{
+		padding: 10px;
+	}
+}

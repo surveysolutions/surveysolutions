@@ -1,0 +1,64 @@
+.teams-and-roles{
+	margin-left: $filter-width - $margin-container + 12px +15px;
+	padding: 0 15px;
+	@include transition(margin, 0.3s);
+	
+	.page-header{
+		h1{
+			float: left;
+			margin-right: 30px;
+		}
+		.btn{
+			float: left;
+		}
+	}
+	#DataTables_Table_0_wrapper #DataTables_Table_0_filter{
+        left: 40px;
+    }
+    .panel-table{
+		left: $filter-width + 12px;
+		@include transition(left, 0.3s);
+	}
+}
+@media (max-width: $screen-md-min){
+	.teams-and-roles{
+		margin-left: $filter-small-width - $margin-container-md-screen + 15px + 12px;
+		.panel-table{
+			left: $filter-small-width+ 12px;
+		}
+	}
+	.fullscreen-hidden-filters{
+		.teams-and-roles{
+			margin-left: 12px;
+			.panel-table{
+				left: 12px;
+			}
+		}
+	}
+}
+@media (max-width: $screen-sm-min){
+	.teams-and-roles{
+		margin-left: 15px;
+		.panel-table{
+			left:  12px;
+		}
+	}
+	.fullscreen-hidden-filters{
+		.teams-and-roles{
+			.panel-table{
+				z-index: 0;
+			}
+		}
+	}
+	.teams-and-roles #DataTables_Table_0_wrapper #DataTables_Table_0_filter{
+		left: 0;
+	}
+	.table-with-checkboxes thead tr th:first-child + th{
+		padding-left: 10px;
+	}
+}
+@media (max-width: $screen-xs-min){
+	.teams-and-roles{
+		margin-left: 0px;
+	}
+}

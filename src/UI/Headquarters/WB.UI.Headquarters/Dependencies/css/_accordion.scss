@@ -55,7 +55,7 @@
 						@include transition(all, 0.3s);
 					}
 				}
-				&.contains-error a{
+				&.has-error a{
 					color: $red;
 					&:before, &:after{
 						background-color: $red;
