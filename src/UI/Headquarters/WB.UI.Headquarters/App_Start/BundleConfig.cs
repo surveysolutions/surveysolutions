@@ -42,6 +42,13 @@ namespace WB.UI.Headquarters
                 "~/Content/controlpanel.css"
                 ));
 
+            bundles.Add(new ScriptBundle("~/js/common").Include(
+                "~/Scripts/bootstrap3-typeahead.js",
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Dependencies/js/ajax.js",
+                "~/Dependencies/js/searchHighlight.js"
+                ));
+
             bundles.Add(new ScriptBundle("~/js/batch-upload-start-interview-creation").Include(
                 "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
@@ -110,8 +117,8 @@ namespace WB.UI.Headquarters
                 ));
             bundles.Add(new ScriptBundle("~/js/details").Include(
                 "~/Scripts/bloodhound.js",
-                "~/Scripts/bootstrap3-typeahead.js", 
-                "~/Scripts/components/typeahead-extended.js", 
+                "~/Scripts/bootstrap3-typeahead.js",
+                "~/Scripts/components/typeahead-extended.js",
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/components/bindings.js",
                 "~/Scripts/director.js",
@@ -179,31 +186,31 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interviews-sv").Include(
-                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/knockout/ko.typeahead.js", 
+                "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/viewmodels/pages/interviews.base.js",
                 "~/Scripts/viewmodels/pages/interview/sv.interviews.js",
                 "~/Scripts/knockout/ko.numericformatter.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/surveysandstatuses").Include(
-                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/knockout/ko.typeahead.js", 
+                "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/viewmodels/pages/surveysandstatuses.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interviewer").Include(
-                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/knockout/ko.typeahead.js", 
+                "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/viewmodels/pages/create-interviewer.js"
                 ));
             bundles.Add(new ScriptBundle("~/js/interviewers").Include(
-                "~/Scripts/bootstrap3-typeahead.js", 
+                "~/Scripts/bootstrap3-typeahead.js",
                 "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/knockout/ko.typeahead.js", 
+                "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/viewmodels/pages/interviewers.js"
                 ));
 
@@ -230,11 +237,11 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/chart").Include(
-                "~/Scripts/query-string.js", 
-                "~/Scripts/jqPlot/jquery.jqplot.js", 
-                "~/Scripts/jqPlot/plugins/jqplot.dateAxisRenderer.js", 
-                "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js", 
-                "~/Scripts/jqPlot/plugins/jqplot.cursor.js", 
+                "~/Scripts/query-string.js",
+                "~/Scripts/jqPlot/jquery.jqplot.js",
+                "~/Scripts/jqPlot/plugins/jqplot.dateAxisRenderer.js",
+                "~/Scripts/jqPlot/plugins/jqplot.highlighter.min.js",
+                "~/Scripts/jqPlot/plugins/jqplot.cursor.js",
                 "~/Scripts/jqPlot/plugins/jqplot.enhancedLegendRenderer.js",
                 "~/Scripts/bootstrap-datepicker.js",
                 "~/Scripts/ko.datepicker.js",
@@ -244,7 +251,7 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/preloading").Include(
-                "~/Scripts/components/bindings.js", 
+                "~/Scripts/components/bindings.js",
                 "~/Scripts/pages/userpreloading.js"
                 ));
 

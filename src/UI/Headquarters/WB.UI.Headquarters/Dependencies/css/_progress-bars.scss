@@ -6,6 +6,13 @@
 		@include border-right-radius(4px);
 	}
 }
+.progress.question-progress{
+	height: 3px;
+	background-color: transparent;
+	box-shadow: none;
+	@include absolute(null, 0, 0, 0);
+	margin: 0;
+}
 .progress .progress-bar-info{
 	background-color: $gray_light;
 }

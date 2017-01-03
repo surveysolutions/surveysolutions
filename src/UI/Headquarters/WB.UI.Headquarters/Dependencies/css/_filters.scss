@@ -114,17 +114,29 @@ input.checkbox-filter{
 		display: block;
 	}
 }
-.filters.hidden-filters{
+/* .filters.hidden-filters{
 	left: - $filter-width - 12px;
 	overflow: visible;
 	@include hidden-foldback-button();
-}
+} */
 @media (max-width: $screen-md-min){
 	@include tight-filters-aside();
+	.foldback-button{
+		display: block;
+	}
+	.fullscreen-hidden-filters{
+		.filters{
+			left: - $filter-small-width - 12px;
+			overflow: visible;
+			@include hidden-foldback-button();
+			 .foldback-button{
+                right: - $width-foldback-button;
+            }
+		}
+	}
 }
 @media (max-width: $screen-sm-min){
 	.filters{
-		padding-top: 60px;
 		left: ((-$filter-small-width)-12px);
 		@include hidden-foldback-button();
 		overflow: visible;
@@ -135,6 +147,7 @@ input.checkbox-filter{
 			margin: 0;
 			@include absolute(0px, 0, 0, 0);
 			width: 100%;
+			overflow: auto;
 		   	@include visible-foldback-button();
 		   	.foldback-button{
 		   		right: 10px;
@@ -155,9 +168,11 @@ input.checkbox-filter{
 	
 }
 @media (max-width: $screen-xs-min){
-	.filters.hidden-filters{
-		.filters-container, .preset-filters-container{
-			width: 250px;
+	.fullscreen-hidden-filters{
+		.filters{
+			.filters-container, .preset-filters-container{
+				width: 250px;
+			}
 		}
 	}
 }

@@ -37,7 +37,7 @@
         position: relative;
         cursor: pointer;
         &.sorting_disabled:after{
-            display: none;
+            display: none !important;
         }
         &:after{
             display: inline-block;
@@ -121,7 +121,11 @@
 .table{
     color: $gray-text;
     width: 100% !important;
+    font: 16px/18px "RobotoRegular";
     tr{
+        &.selected{
+            background-color: $table-selected !important;
+        }
         @include transition(all, 0.1s);
         height: 35px;
         td{
@@ -139,6 +143,7 @@
         color: $gray_light;
         tr th{
             font-weight: normal;  
+            vertical-align: middle;
         }
     }
     tbody{
@@ -146,6 +151,7 @@
         tr{
             border-bottom: 1px solid #ddd;
             td{
+                vertical-align: middle;
                 height: 35px;
                 span{
                     color: $gray_light;
@@ -165,6 +171,45 @@
             }
         }
     }
+}
+.table-with-checkboxes{
+    thead{
+        tr{
+            th{
+                &:first-child{
+                    width: 40px !important;
+                    max-width: 40px !important;
+                    text-align: center;
+                    padding: 10px 0;
+                    & + th{
+                        width: 25%;
+                        padding-left: 45px;
+                    }
+                }
+            }
+        }
+    }
+    tbody{
+        tr{
+           td{
+                &:first-child{
+                    text-align: center;
+                    padding: 10px 0;
+
+                }
+                label{
+                    padding: 0;
+                    margin: 0;
+                    .tick{
+                        position: relative;
+                        margin: 0;
+                    }
+                }
+            } 
+        }
+        
+    }
+
 }
 #DataTables_Table_0_wrapper{
     position: relative;
@@ -234,7 +279,7 @@
         text-align: right;
     }
     .dataTables_paginate{
-        float: left;
+        /* float: left; */
         position: relative;
         padding: 40px 0 0 10px;
         overflow: hidden;
@@ -261,7 +306,6 @@
         }
         &>.paginate_button{
             float: left;
-            color: $green;
             padding: 5px 12px;
         }
     }
@@ -297,6 +341,8 @@
         }
     }
     .table{
+        font-size: 14px;
+        line-height: 16px;
         thead tr th{
             font-size: 10px;
             line-height: 12px;
@@ -331,6 +377,45 @@
             td, th{
                 font-size: 10px;
                 line-height: 12px;
+                &.for-tablets{
+                    display: none;
+                }
+            }
+        }
+    }
+     #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+        position: relative;
+        top: 0;
+        left: 0;
+        label{
+            &:after{
+                top: 0;
+                left: 10px;
+            }
+            &.active {
+                width: 100%;
+                input{
+                    width: 50%;
+                }
+            }
+        }
+    }
+    .table-ordered{
+        thead{
+            th.padding-left-slide:first-child{
+                padding-left: 10px;
+            }
+             tr th.column-questionnaire-title{
+                padding-left: 10px;
+            }
+            tr th{
+                &:after{
+                    border-width: 4px;
+                    border-top: 6px solid $gray_form;
+                }
+                &.sorting_desc:after{
+                    border-bottom: 6px solid $blue;
+                } 
             }
         }
     }
@@ -345,14 +430,8 @@
             float: none;
         }
     }
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
-        position: relative;
-        top: 0;
-        left: 0;
+   #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
         label{
-            &:after{
-                top: 40px;
-            }
             &.active {
                 width: 100%;
                 input{
@@ -361,23 +440,14 @@
             }
         }
     }
-    .table-ordered{
-        thead{
-            th.padding-left-slide:first-child{
-                padding-left: 45px;
-            }
-            tr th{
-                &:after{
-                    border-width: 4px;
-                    border-top: 6px solid $gray_form;
+    .table{
+        tr{
+            td, th{
+                &.for-mobile-devices{
+                    display: none;
                 }
-                &.sorting_desc:after{
-                    border-bottom: 6px solid $blue;
-                } 
             }
         }
-    }
-    .table{
         tbody tr td:first-child{
             padding-left: 10px;
         }

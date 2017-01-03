@@ -47,5 +47,16 @@ namespace WB.UI.Headquarters.Models.Api
 
             return $"{columnName} {stringifiedOrder}";
         }
+
+        public IEnumerable<OrderRequestItem> GetSortOrderRequestItems()
+        {
+            var order = this.Order.FirstOrDefault();
+            if (order == null)
+                return Enumerable.Empty<OrderRequestItem>();
+
+            var columnName = this.Columns[order.Column].Name;
+
+            return new[] { new OrderRequestItem { Direction = order.Dir, Field = columnName } };
+        }
     }
 }

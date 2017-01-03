@@ -140,11 +140,15 @@ h5{
     padding-bottom: 0;
     margin: 0;
     border: none;
-    padding-left: 15px;
     padding-top: 40px;
     .maintenance-mode{
         @extend %instructions;
     }
+}
+.row{
+	.page-header{
+		padding-left: 15px;
+	}
 }
 .alert{
 	margin-bottom: 20px;
@@ -233,18 +237,22 @@ body > .ui-pnotify
 .default-text{
 	color: $gray_form;
 }
-
 .info-block{
-    @extend .text-page;
-	margin-bottom: 20px;
+    font: 14px/16px "RobotoRegular";
+ 	margin-bottom: 20px;
 
     p{
-		margin-bottom: 20px;
+  	margin-bottom: 20px;
         &:last-of-type{
             margin-bottom: 0px;
         }
         &:only-of-type{
             margin-bottom: 20px;
         }
-	}
+ 	}
+}
+table.dataTable span.highlight {
+  background-color: $highlight-color;
+  color: $gray_text;
+  border-radius: 0.28571429rem;
 }
