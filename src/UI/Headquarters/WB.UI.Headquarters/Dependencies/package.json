@@ -2,6 +2,7 @@
   "name": "headquarters",
   "version": "1.0.0",
   "description": "Survey Solutions Headquarters js module",
+  "private": true,
   "devDependencies": {
     "bower": "^1.8.0",
     "del": "^2.2.2",
@@ -22,6 +23,11 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "main-bower-files": "^2.13.1"
+  },
+  "scripts": {
+    "bower": "bower install",
+    "bower-force": "bower install --force",
+    "gulp" : "gulp --production"
   },
   "dependencies": {
     "gulp-install": "^0.6.0",
