@@ -1,13 +1,9 @@
-﻿using System.Linq.Expressions;
-using System.Web.Http;
-using System.Web.Mvc.Routing.Constraints;
+﻿using System.Web.Mvc;
+using System.Web.Routing;
+using WB.UI.Designer.Code.Helpers.Routes;
 
-namespace WB.UI.Designer.App_Start
+namespace WB.UI.Designer
 {
-    using System.Web.Mvc;
-    using System.Web.Routing;
-    using Code.Helpers.Routes;
-
     public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
