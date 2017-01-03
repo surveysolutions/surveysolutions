@@ -50,6 +50,8 @@ namespace WB.Core.Infrastructure
             {
                 throw new NotImplementedException("This application is event free.");
             }
+
+            public event EventsPublished OnEventsPublished;
         }
 
         public class DummyAggregateSnapshotter : IAggregateSnapshotter

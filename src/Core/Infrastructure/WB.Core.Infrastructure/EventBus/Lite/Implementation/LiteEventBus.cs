@@ -56,6 +56,10 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                     throw new AggregateException(message, exceptions);
                 }
             }
+
+            this.OnEventsPublished?.Invoke(new PublishedEventsArgs(committedEvents));
         }
+
+        public event EventsPublished OnEventsPublished;
     }
 }
