@@ -79,7 +79,7 @@ function BuildStaticContent($targetLocation, $forceInstall){
 
     Write-Host "Pushing location to $targetLocation"
     Push-Location -Path $targetLocation
-    Write-Host $installCommand
+    Write-Host "Running npm install"
 
 	#install node js dependencies
     &npm install | Write-Host
