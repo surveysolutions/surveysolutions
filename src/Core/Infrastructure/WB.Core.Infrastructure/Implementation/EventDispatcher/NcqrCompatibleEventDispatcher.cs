@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Transactions;
 
@@ -177,7 +178,13 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);
+        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
+        {
+            this.Publish(committedEvents);
+            this.OnEventsPublished?.Invoke(new PublishedEventsArgs(committedEvents));
+        }
+
+        public event EventsPublished OnEventsPublished;
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage,
             IReadOnlyDictionary<IEventHandler, Stopwatch> handlersWithStopwatch)
