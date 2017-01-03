@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -9,10 +10,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Models.Api;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -32,6 +36,29 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
+        }
+
+        [HttpPost]
+        [CamelCase]
+        public DataTableResponse<QuestionnaireBrowseItem> Questionnaires([FromBody] DataTableRequest request)
+        {
+            var input = new QuestionnaireBrowseInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = new List<OrderRequestItem>(),
+                Filter = request.Search.Value
+            };
+
+            var items = this.questionnaireBrowseViewFactory.Load(input);
+
+            return new DataTableResponse<QuestionnaireBrowseItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = items.TotalCount,
+                RecordsFiltered = items.TotalCount,
+                Data = items.Items
+            };
         }
 
         [HttpPost]
