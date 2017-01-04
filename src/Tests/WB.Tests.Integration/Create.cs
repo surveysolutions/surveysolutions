@@ -324,8 +324,11 @@ namespace WB.Tests.Integration
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
             };
 
-        public static Group Chapter(string title = "Chapter X", string enablementCondition = null, IEnumerable<IComposite> children = null)
-            => Create.Group(title: title, children: children, enablementCondition: enablementCondition);
+        public static Group Chapter(string title = "Chapter X", 
+            Guid? id = null,
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null)
+            => Create.Group(title: title, children: children, enablementCondition: enablementCondition, id: id);
 
         public static IQuestion Question(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
         {
@@ -1016,6 +1019,5 @@ namespace WB.Tests.Integration
         {
             return new PreloadedLevelDto(rosterVector, answers);
         }
-
     }
 }
