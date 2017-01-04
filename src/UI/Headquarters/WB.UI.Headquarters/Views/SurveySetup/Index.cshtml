@@ -38,8 +38,8 @@
             var sendDeleteQuestionnaireCommand = function(item) {
                 ajax.sendRequest($deleteQuestionnaireUrl, "post", { questionnaireId: item.questionnaireId, version: item.version }, false,
                     // onSuccess
-                    function () {
-                        setTimeout(function () { self.table.ajax.reload(); }, 100);
+                    function() {
+                        setTimeout(function() { self.table.ajax.reload(); }, 100);
                     });
             }
 
@@ -74,16 +74,17 @@
             var buildMenuItem = function(selectedRow) {
                 var items = {}
 
-                items["addNew"] = {
-                    name: "@Dashboard.NewInterview",
-                    callback: addNewInterview,
-                    disabled: selectedRow.disabled || selectedRow.allowCensusMode
-                };
-                items["batchUpload"] = {
-                    name: "@Dashboard.BatchUpload",
-                    callback: interviewsBatchUpload,
-                    disabled: selectedRow.disabled || selectedRow.allowCensusMode
-                };
+                if (!(selectedRow.disabled || selectedRow.allowCensusMode))
+                {
+                    items["addNew"] = {
+                        name: "@Dashboard.NewInterview",
+                        callback: addNewInterview
+                    };
+                    items["batchUpload"] = {
+                        name: "@Dashboard.BatchUpload",
+                        callback: interviewsBatchUpload
+                    };
+                }
                 @if (User.IsInRole("Administrator"))
                 {
                     <text>
@@ -107,12 +108,13 @@
 
             self.contextMenuOptions = {
                 selector: "table#questionnaires .with-context-menu",
-                autoHide: true,
+                autoHide: false,
                 build: function($trigger, e) {
                     var selectedRow = selectRowAndGetData($trigger);
                     var items = buildMenuItem(selectedRow);
                     return { items: items };
-                }
+                },
+                trigger: 'left'
             };
 
             var onTableInitComplete = function() {
