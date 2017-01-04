@@ -18,6 +18,9 @@
             self.table = null;
 
             var questionnaireListUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "Questionnaires"})';
+            var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
+            var $batchUploadUrl = '@Url.Action("BatchUpload", "SurveySetup")';
+            var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
 
             var requestHeaders = {};
             requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
@@ -25,26 +28,30 @@
             $.fn.dataTable.ext.errMode = 'none';
 
             var selectRowAndGetData = function(selectedItem) {
-                //var rowIndex = selectedItem.parent().children().index(selectedItem);
-                self.table.rows('.context-menu-active').select();
-                var selectedRows = self.table.rows({ selected: true });
+                var rowIndex = selectedItem.parent().children().index(selectedItem);
+                self.table.row(rowIndex).select();
+                var selectedRows = self.table.rows({ selected: true }).data()[0];
                 return selectedRows;
             }
             var addNewInterview = function(key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
+                window.location.href = $newInterviewUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
                 console.log(selectedRow);
             };
 
-            var interviewsBatchUpload = function (key, opt) {
+            var interviewsBatchUpload = function(key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
+                window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
             };
 
-            var cloneQuestionnaire = function (key, opt) {
+            var cloneQuestionnaire = function(key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
+                window.location.href = $cloneQuestionnaireUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
             };
 
-            var deleteQuestionnaire = function (key, opt) {
+            var deleteQuestionnaire = function(key, opt) {
                 var selectedRow = selectRowAndGetData(opt.$trigger);
+                //window.location.href = $cloneQuestionnaireUrl + '/' + selectedRow.questionnaireId + '?version=' + version;
             };
 
             var onTableInitComplete = function() {
@@ -62,86 +69,103 @@
                 $.contextMenu({
                     selector: "table#questionnaires .with-context-menu",
                     autoHide: true,
-                    items: {
-                        addNew: {
+                    build: function($trigger, e) {
+                        var selectedRow = selectRowAndGetData($trigger);
+
+                        var items = {}
+
+                        items["addNew"] = {
                             name: "Add interview assignment",
-                            callback: addNewInterview
-                        },
-                        batchUpload: {
+                            callback: addNewInterview,
+                            disabled: selectedRow.disabled || selectedRow.isDeleted || selectedRow.allowCensusMode
+                        };
+                        items["batchUpload"] = {
                             name: "Batch upload interviews",
-                            callback: interviewsBatchUpload
-                        },
-                        "sep1": "---------",
-                        clone: {
+                            callback: interviewsBatchUpload,
+                            disabled: selectedRow.disabled || selectedRow.isDeleted || selectedRow.allowCensusMode
+                        };
+                        items["sep1"] = "---------";
+                        items["clone"] =
+                        {
                             name: "Clone questionnaire",
-                            callback: cloneQuestionnaire
-                        },
-                        delete: {
-                            name: "Delete questionnaire",
-                            callback: deleteQuestionnaire
+                            callback: cloneQuestionnaire,
+                            disabled: selectedRow.disabled || selectedRow.isDeleted
+                        };
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <text>items["delete"] =
+                            {
+                                    name: "Delete questionnaire",
+                                    callback: deleteQuestionnaire,
+                                    disabled: selectedRow.disabled || selectedRow.isDeleted
+                            };</text>
                         }
-                    }
-                });
-            };
+                    return { items: items
+                };
+            }
 
-            self.table = $('table#questionnaires')
-                .on('init.dt', onTableInitComplete)
-                .on('error.dt', function(e, settings, techNote, message) {
-                    //location.reload();
-                })
-                .DataTable({
-                    processing: true,
-                    language:
-                    {
-                        "url": window.input.settings.config.dataTableTranslationsUrl
-                    },
-                    serverSide: true,
-                    ajax: {
-                        url: questionnaireListUrl,
-                        type: "POST",
-                        headers: requestHeaders
-                    },
-                    "createdRow": function(row, data, dataIndex) {
-                        $(row).addClass('with-context-menu');
-                    },
-                    columns: [
-                        {
-                            data: "title",
-                            name: "Title", // case-sensitive!
-                            //render: function (data, type, row) {
-                            //    return "<a href=" + questionnaireImportModeUrl + "/" + row.id + "?questionnaireTitle=" + encodeURI(data) + ">" + data + "</a>";
-                            //}
-                        },
-                        {
-                            data: "version",
-                            name: "Version" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                        },
-                        {
-                            data: "importDate",
-                            name: "ImportDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                        },
-                        {
-                            data: "creationDate",
-                            name: "CreationDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                        },
-                        {
-                            data: "lastEntryDate",
-                            name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
-                        }
-                    ],
-                    select: {
-                        style: 'single'
-                    },
-                    searchHighlight: true,
-                    rowId: 'id',
-                    pagingType: "full_numbers",
-                    lengthChange: false, // do not show page size selector
-                    pageLength: 50, // page size
-                    "order": [[1, 'desc']]
-                });
 
-            return self;
+        });
         };
+
+        self.table = $('table#questionnaires')
+            .on('init.dt', onTableInitComplete)
+            .on('error.dt', function(e, settings, techNote, message) {
+                //location.reload();
+            })
+            .DataTable({
+                processing: true,
+                language:
+                {
+                    "url": window.input.settings.config.dataTableTranslationsUrl
+                },
+                serverSide: true,
+                ajax: {
+                    url: questionnaireListUrl,
+                    type: "POST",
+                    headers: requestHeaders
+                },
+                "createdRow": function(row, data, dataIndex) {
+                    $(row).addClass('with-context-menu');
+                },
+                columns: [
+                    {
+                        data: "title",
+                        name: "Title", // case-sensitive!
+                        //render: function (data, type, row) {
+                        //    return "<a href=" + questionnaireImportModeUrl + "/" + row.id + "?questionnaireTitle=" + encodeURI(data) + ">" + data + "</a>";
+                        //}
+                    },
+                    {
+                        data: "version",
+                        name: "Version" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    },
+                    {
+                        data: "importDate",
+                        name: "ImportDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    },
+                    {
+                        data: "creationDate",
+                        name: "CreationDate" // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                    },
+                    {
+                        data: "lastEntryDate",
+                        name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                    }
+                ],
+                select: {
+                    style: 'single'
+                },
+                searchHighlight: true,
+                rowId: 'id',
+                pagingType: "full_numbers",
+                lengthChange: false, // do not show page size selector
+                pageLength: 50, // page size
+                "order": [[1, 'desc']]
+            });
+
+        return self;
+    };
 
         $(function() {
             var model = new QuestionnairesListModel(new Ajax(new Notifier()));
@@ -172,13 +196,13 @@
         <div id="list">
             <table id="questionnaires" class="table table-striped table-bordered table-ordered">
                 <thead>
-                <tr>
-                    <th>@Dashboard.Title</th>
-                    <th>@Dashboard.Version</th>
-                    <th>@Dashboard.ImportDate</th>
-                    <th>@Dashboard.CreationDate</th>
-                    <th>@Dashboard.LastEntryDate</th>
-                </tr>
+                    <tr>
+                        <th>@Dashboard.Title</th>
+                        <th>@Dashboard.Version</th>
+                        <th>@Dashboard.ImportDate</th>
+                        <th>@Dashboard.CreationDate</th>
+                        <th>@Dashboard.LastEntryDate</th>
+                    </tr>
                 </thead>
             </table>
         </div>
