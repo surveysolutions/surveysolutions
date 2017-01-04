@@ -241,7 +241,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a questionnaire from the list to create interview assignments..
+        ///   Looks up a localized string similar to Click on a questionnaire from the list to create interview assignments..
         /// </summary>
         internal static string SurveySetupIntroMessage {
             get {
