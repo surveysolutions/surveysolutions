@@ -84,7 +84,7 @@ h1{
 	font: 26px/28px "RobotoLight";
 	margin: 0;
     color: $gray_text;
-    padding: 0 0 30px;
+    padding: 0 0 15px;
 }
 h2{
 	font: 26px/28px "RobotoLight";
@@ -141,8 +141,12 @@ h5{
     margin: 0;
     border: none;
     padding-top: 40px;
+    padding-bottom: 15px;
     .maintenance-mode{
         @extend %instructions;
+    }
+    h1 + .maintenance-mode{
+    	margin-top: 15px;
     }
     &>div{
 		h1{
@@ -281,6 +285,7 @@ table{
 	}
 }
 .census-icon{
+	content: "C";
 	display: inline-block;
     padding: 4px 6px 2px 5px;
     border-radius: 100%;
