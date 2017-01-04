@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("\r\n\t\t{  \r\n\t  ");
             
             #line 26 "D:\src\wb\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
- foreach(var variable in Model.AdditionalVariables) {  
+ foreach(var variable in Model.GeneratedVariables) {  
             
             #line default
             #line hidden

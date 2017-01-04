@@ -1,13 +1,13 @@
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
-    public class VariableModel
+    public class GeneratedVariable
     {
-        public VariableModel()
+        public GeneratedVariable()
         {
             
         }
 
-        public VariableModel(string name, string type, string initialization = null, string visibility = "private", bool isStatic = true, bool isReadonly = true)
+        public GeneratedVariable(string name, string type, string initialization = null, string visibility = "private", bool isStatic = true, bool isReadonly = true)
         {
             this.Type = type;
             this.Name = name;
@@ -19,9 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string Name { get; set; }
         public string Type { get; set; }
-
-        public bool isStatic { get; set; }
-        public bool isReadonly { get; set; }
         public string Visibility { get; set; }
         public bool IsStatic { get; set; }
         public bool IsReadonly { get; set; }
