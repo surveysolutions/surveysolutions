@@ -610,8 +610,8 @@
     <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx" />
-    <Content Include="..\WB.UI.Headquarters.Interview\_Index.cshtml">
-      <Link>Views\WebInterview\_Index.cshtml</Link>
+    <Content Include="..\WB.UI.Headquarters.Interview\_IndexTemplate.cshtml">
+      <Link>Views\WebInterview\_IndexTemplate.cshtml</Link>
     </Content>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
