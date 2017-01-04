@@ -1546,6 +1546,7 @@
     <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
+    <Compile Include="Models\Template\QuestionnaireListItemModel.cs" />
     <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />

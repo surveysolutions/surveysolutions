@@ -13,6 +13,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Models.Template;
+using WB.UI.Headquarters.Utils;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -36,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [CamelCase]
-        public DataTableResponse<QuestionnaireBrowseItem> Questionnaires([FromBody] DataTableRequest request)
+        public DataTableResponse<QuestionnaireListItemModel> Questionnaires([FromBody] DataTableRequest request)
         {
             var input = new QuestionnaireBrowseInputModel
             {
@@ -49,12 +51,21 @@ namespace WB.UI.Headquarters.Controllers
 
             var items = this.questionnaireBrowseViewFactory.Load(input);
 
-            return new DataTableResponse<QuestionnaireBrowseItem>
+            return new DataTableResponse<QuestionnaireListItemModel>
             {
                 Draw = request.Draw + 1,
                 RecordsTotal = items.TotalCount,
                 RecordsFiltered = items.TotalCount,
-                Data = items.Items
+                Data = items.Items.Select(x => new QuestionnaireListItemModel
+                {
+                    QuestionnaireId = x.QuestionnaireId,
+                    Version = x.Version,
+                    Title = x.Title,
+                    AllowCensusMode = x.AllowCensusMode,
+                    CreationDate = x.CreationDate.FormatDateWithTime(),
+                    LastEntryDate = x.LastEntryDate.FormatDateWithTime(),
+                    ImportDate = x.ImportDate?.FormatDateWithTime()
+                })
             };
         }
 
