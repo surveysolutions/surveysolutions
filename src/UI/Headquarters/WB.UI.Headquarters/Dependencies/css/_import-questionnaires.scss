@@ -73,14 +73,20 @@
         }
     }
     thead{
+        tr{
+            border-bottom: 2px solid #ddd;
+        }
         th.column-questionnaire-title{
             width: 44%;
+
         }
     }
     tbody{
+        border-bottom: 2px solid #ddd;
         font: 13px/15px Georgia, Times, "Times New Roman", serif;
         font-style: italic;
         tr{
+            border-bottom: 1px solid #ddd;
             border-bottom: 1px solid #ddd;
             &:hover, &:focus{
                 td {
