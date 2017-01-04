@@ -177,4 +177,10 @@
   <data name="ImportDate" xml:space="preserve">
     <value>Дата загрузки</value>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Опросник</value>
+  </data>
+  <data name="SurveySetupIntroMessage" xml:space="preserve">
+    <value>Выберите опросник из списка для создания интервью</value>
+  </data>
 </root>
