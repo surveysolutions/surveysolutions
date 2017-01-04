@@ -972,6 +972,7 @@
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
     <Content Include="Views\SurveySetup\Index.cshtml" />
     <Content Include="Views\SurveySetup\IndexOld.cshtml" />
+    <Content Include="Views\Interviewers\IndexN.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1468,6 +1469,7 @@
     <Compile Include="Models\Api\Interview\RosterApiItem.cs" />
     <Compile Include="Models\Api\QuestionnaireApiItem.cs" />
     <Compile Include="Models\Api\QuestionnaireApiView.cs" />
+    <Compile Include="Models\Api\QuestionnaireToBeImported.cs" />
     <Compile Include="Models\Api\StatusChangeApiModel.cs" />
     <Compile Include="Models\Api\UserApiDetails.cs" />
     <Compile Include="Models\Api\UserApiItem.cs" />

@@ -1,9 +1,19 @@
 .table-striped {
     tbody tr{
         background-color: #f8f9f9;
+        td.without-break{
+            &:before{
+                @include gradient-horizontal(transparent, #f8f9f9, 0%, 70%);
+            }
+        }
     }
     &> tbody > tr:nth-of-type(odd){
         background-color: #edeff0;
+        td.without-break{
+            &:before{
+                @include gradient-horizontal(transparent, #edeff0, 0%, 70%);
+            }
+        }
     }
     
     &>thead, &>tbody, &>tfoot{
@@ -33,7 +43,7 @@
 }
 .table-ordered{
     thead tr th{
-        padding-right: 0;
+        /* padding-right: 0; */
         position: relative;
         cursor: pointer;
         &.sorting_disabled:after{
@@ -75,7 +85,7 @@
 .table{
     thead tr th{
         &.sorting{
-            padding-right: 0;
+            /* padding-right: 0; */
             position: relative;
             cursor: pointer;
             &:after{
@@ -114,6 +124,11 @@
                 a{
                     color: #000;
                 }
+                td.without-break{
+                    &:before{
+                        @include gradient-horizontal(transparent, $blue-super-light, 0%, 70%);
+                    }
+                }
             }
         }
     }
@@ -123,8 +138,28 @@
     width: 100% !important;
     font: 16px/18px "RobotoRegular";
     tr{
+        .without-break{
+            white-space: nowrap;
+            max-width: 300px;
+            text-overflow: clip;
+            overflow: hidden;
+            position: relative;
+            &:before{
+                display: block;
+                @include absolute(0, 0);
+                content: "";
+                height: 100%;
+                width: 30px;
+                @include gradient-horizontal(transparent, #fff, 0%, 70%);
+            }
+        }
         &.selected{
             background-color: $table-selected !important;
+            td.without-break{
+                &:before{
+                    @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
+                }
+            }
         }
         @include transition(all, 0.1s);
         height: 35px;
@@ -173,30 +208,15 @@
     }
 }
 .table-with-checkboxes{
-    thead{
-        tr{
-            th{
-                &:first-child{
-                    width: 40px !important;
-                    max-width: 40px !important;
-                    text-align: center;
-                    padding: 10px 0;
-                    & + th{
-                        width: 25%;
-                        padding-left: 45px;
-                    }
-                }
-            }
-        }
+    .checkbox-cell{
+        width: 40px !important;
+        max-width: 40px !important;
+        text-align: center;
+        padding: 10px 0;
     }
     tbody{
         tr{
            td{
-                &:first-child{
-                    text-align: center;
-                    padding: 10px 0;
-
-                }
                 label{
                     padding: 0;
                     margin: 0;
@@ -206,15 +226,13 @@
                     }
                 }
             } 
-        }
-        
+        }  
     }
-
 }
 #DataTables_Table_0_wrapper{
     position: relative;
     #DataTables_Table_0_filter{
-        @include absolute(5px, null, null, 0);
+        @include absolute(-55px, 0, null, null);
         z-index: 2;
         label{
             font-size: 0;
@@ -222,7 +240,7 @@
             margin-bottom: 0;
             min-height: 30px; 
             &:after{
-                @include absolute(5px, null, null, 10px);
+                @include absolute(10px,  10px, null, null);
                 display: block;
                 content: "";
                 @include square(20px);
@@ -248,16 +266,16 @@
                     border: 1px solid $gray_form;
                     @extend %visibility-visible;
                     width: $width-search-input;
-                    background-color: #f7fbff;
                     padding: 5px 10px;
 
                 }
             }
             input{
+                height: 40px;
                 @include transition(all, 0.2s);
                 @extend %visibility-hidden;
                 width: 0;
-                margin-left: 40px;
+                margin-right: 40px;
                 font-size: 13px;
                 line-height: 15px;
                 color: $gray_text;
@@ -279,16 +297,15 @@
         text-align: right;
     }
     .dataTables_paginate{
-        /* float: left; */
         position: relative;
-        padding: 40px 0 0 10px;
+        padding: 40px 0 0 0;
         overflow: hidden;
         @extend %uppercase-font;
         font-size: 14px;
         line-height: 16px;
         &>span{
             display: block;
-            @include absolute(10px, null, null, 8px);
+            @include absolute(10px, null, null, 0);
         }
         .paginate_button{
             padding: 6px 12px;
@@ -385,17 +402,21 @@
     }
      #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
         position: relative;
-        top: 0;
+        top: -5px;
         left: 0;
         label{
             &:after{
-                top: 0;
+                top: 10px;
                 left: 10px;
+            }
+            input{
+                margin-left: 40px;
             }
             &.active {
                 width: 100%;
                 input{
                     width: 50%;
+                    margin-right: 0;
                 }
             }
         }

@@ -1,0 +1,383 @@
+﻿@using Main.Core.Entities.SubEntities
+@using WB.UI.Headquarters.Resources
+@using WB.UI.Shared.Web.Extensions
+
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewersModel
+    
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = Pages.Interviewers_Title;
+}
+
+
+@section scripts
+{
+    
+    @Scripts.Render("~/js/main-no-libs")
+    @Scripts.Render("~/js/list")
+    
+    @Scripts.Render("~/js/interviewers")
+
+
+    @*<script type="text/javascript">
+        var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new { }, Request.Url.Scheme))';
+        var $interviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})';
+        var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+        var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
+        var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
+
+        $(function () {
+            var model = new Supervisor.VM.Interviewers($interviewersApiUrl, $commandExecutionUrl, $interviewersPageUrl, $supervisorsUrl);
+            ko.applyBindings(model);
+            model.load();
+
+            @if (TempData.ContainsKey(Alerts.SUCCESS))
+            {
+                <text> setTimeout(function () { $('.alert-success').hide(); }, 5000);</text>
+            }
+        });
+
+    </script>*@
+    
+    <script>
+        $(document).ready(function ()
+        {
+            $("footer").addClass("footer-adaptive");
+
+            $("#hide-filters").click(function () {
+                $(".filters").toggleClass("hidden-filters");
+                $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
+                $("footer").toggleClass("footer-adaptive");
+            });
+            $("main").removeClass("hold-transition");
+        });
+    </script>
+    
+    <script type="text/javascript">
+        'use strict';
+
+        $(function () {
+
+            @if (TempData.ContainsKey(Alerts.SUCCESS))
+            {
+                <text> setTimeout(function () { $('.alert-success').hide(); }, 5000);</text>
+            }
+
+            var interviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})';
+
+            var editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
+
+            var requestHeaders = {};
+            requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+            var onTableInitComplete = function () {
+                $('#DataTables_Table_0_filter label').on('click', function (e) {
+                    if (e.target !== this)
+                        return;
+                    if ($(this).hasClass("active")) {
+                        $(this).removeClass("active");
+                    }
+                    else {
+                        $(this).addClass("active");
+                    }
+                    $(".column-questionnaire-title").toggleClass("padding-left-slide");
+                });
+            };
+
+            $.fn.dataTable.ext.errMode = 'none';
+
+            var table = $('table.interviewers')
+                .on('init.dt', onTableInitComplete)
+                .on('error.dt', function (e, settings, techNote, message) {
+                    location.reload();
+                })
+                .DataTable({
+                    processing: true,
+                    language:
+                    {
+                        "url": window.input.settings.config.dataTableTranslationsUrl
+                    },
+                    serverSide: true,
+                    ajax: {
+                        url: interviewersApiUrl,
+                        type: "POST",
+                        headers: requestHeaders
+                    },
+                    columns: [
+                        {
+                            data: "title",
+                            name: "Title", // case-sensitive!
+                            render: function (data, type, row) {
+                                return "<a href=" + editUrl + "/" + row.id + "</a>";
+                            }
+                        },
+                        {
+                            data: "lastModified",
+                            name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                            "class": "changed-recently"
+                        },
+                        {
+                            data: "createdBy",
+                            name: "CreatorName",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                            "class": "created-by"
+                        }
+                    ],
+                    rowId: 'id',
+                    pagingType: "full_numbers",
+                    lengthChange: false, // do not show page size selector
+                    pageLength: 50, // page size
+                    "order": [[1, 'desc']]
+                });
+        });
+</script>
+   
+}
+
+@{ bool isVisibleSupervisorColumn = User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()); }
+
+<main class="hold-transition">
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="filters">
+                <div class="foldback-button" id="hide-filters">
+                    <span class="arrow"></span>
+                    <span class="arrow"></span>
+                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                </div>
+
+                <div class="filters-container">
+                    <h4>Filters:</h4> 
+                    @if (isVisibleSupervisorColumn)
+                    {
+                        <div class="block-filter">
+                            <h5 >@Pages.Interviewers_SupervisorTitle</h5>
+                            <div class="input-group">
+                                <input class="form-control" placeholder="@Pages.AnyOption" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                                <div class="input-group-btn" data-bind="click: function(){ SelectedSupervisor(undefined); }">
+                                    <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="block-filter">
+                        <h5>@Pages.Interviewers_ConnectedToDeviceTitle</h5>
+                        <select data-bind="value: ConnectedToDevice" class="selectpicker">
+                            <option value="">@Pages.AnyOption</option>
+                            <option value="true">@Pages.Interviewers_Connected</option>
+                            <option value="false">@Pages.Interviewers_NotConnected</option>
+                        </select>
+                    </div>
+
+                    <div class="list-group-item-text">
+                        <h5 >@Pages.Interviewers_ArchiveStatusTitle</h5>
+                        <select data-bind="value: Archived" class="selectpicker">
+                            <option value="false">@Pages.Interviewers_ActiveUsers</option>
+                            <option value="true">@Pages.Interviewers_ArchivedUsers</option>
+                        </select>
+                    </div>
+                </div>
+            </aside>
+            
+            
+            <div class="teams-and-roles">
+                <div class="page-header clearfix">
+                    <h1>@Pages.Interviewers_Header</h1>
+                    @if (isVisibleSupervisorColumn)
+                    {
+                        <a class="btn btn-success" href="@Url.Action("Create", "Interviewer", new { area = string.Empty})">
+                            @Pages.Create
+                        </a>
+                    }
+
+
+                    <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
+                        <thead>
+                        <tr>
+                            <th class="sorting_disabled">
+                            <input class="double-checkbox" id="check-all" type="checkbox">
+                            <label for="check-all">
+                                <span class="tick"></span>
+                            </label>
+                        </th>
+                        <th>@Pages.Interviewers_UserNameTitle</th>
+                        <th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
+                        <th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
+                        @if (isVisibleSupervisorColumn)
+                        {
+                            <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
+                        } 
+                        <th title="@Pages.Interviewers_ConnectedToDeviceTooltip">@Pages.Interviewers_ConnectedToDeviceTitle</th>
+                    </tr>
+                    </thead>
+                    </table>
+
+
+                        @* <div class="panel panel-table">
+              <div class="panel-body">
+                  <input class="double-checkbox-white" id="q1az" type="checkbox" checked>
+                  <label for="q1az">
+                      <span class="tick"></span> 2 interviews selected
+                  </label>
+                  <button class="btn btn-default btn-danger">archive</button>
+              </div>
+            </div>*@
+
+</div>
+
+            </div>
+        
+        </div>
+    
+    </div>
+</main>
+
+@*
+
+
+@section actionbar
+{
+    <div class="btn-group">
+        <div class="form-inline">
+            @if (User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()))
+            {
+                <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new { area = string.Empty})">
+                    <i class="glyphicon glyphicon-user"></i> @Pages.Create
+                </a>
+
+                if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <button type="button" class="btn btn-default" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">@Pages.Interviewers_Archive</button>
+                    <button type="button" class="btn btn-default" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Pages.Interviewers_Unarchive</button>
+                }
+            }
+
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="@Pages.Search" data-bind="value: SearchBy, enterKey: filter">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-bind="click: filter">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+*@
+
+@*
+
+@section grid
+{
+    @{ bool isVisibleSupervisorColumn = User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()); }
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <th>
+                        <input type="checkbox" data-bind="click: $root.selectAll($element)"/>
+                    </th>
+                }
+                <th data-bind='sortby : "UserName"'>@Pages.Interviewers_UserNameTitle</th>
+                <th data-bind='sortby : "CreationDate"' title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
+                <th data-bind='sortby : "Email"'>@Pages.Interviewers_EmailTitle</th>
+                @if (isVisibleSupervisorColumn)
+                {
+                    <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
+                } 
+                <th title="@Pages.Interviewers_ConnectedToDeviceTooltip">@Pages.Interviewers_ConnectedToDeviceTitle</th>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach:Items -->
+            <tr>
+                @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                {
+                    <td>
+                        <input type="checkbox" data-bind="checked: IsSelected" />
+                    </td>
+                }
+                <td>
+                    <a data-bind="attr: { href: $editUrl + '/' + UserId() }, text: UserName, visible: $parent.Archived() != 'true'"></a>
+                    <span data-bind="text: UserName, visible: $parent.Archived() == 'true'"></span>
+                </td>
+                <td data-bind="text: CreationDate"></td>
+                <td>
+                    <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
+                </td>
+                @if (isVisibleSupervisorColumn)
+                {
+                    <td data-bind="text: SupervisorName()"></td>
+                }
+                <td data-bind="text: DeviceId() == null ? 'No': 'Yes'"></td>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <td class="interviewers-list-actions-column">
+                        <a class="btn btn-danger" data-bind="click : $parent.archiveUser, visible: $parent.Archived() != 'true'">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </a>
+                        <a class="btn btn-success" data-bind="click : $parent.unarchiveUser, visible: $parent.Archived() == 'true'">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </a>
+                    </td>
+                }
+            </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
+
+    <script type="text/html" id="confirm-archive-template">
+        <h3>
+            <b>
+                <!-- ko if: $data.length>5 -->
+
+                <span class='text-normal' data-bind='text: length'></span>
+
+                <!-- /ko -->
+                <!-- ko if: $data.length<=5 -->
+                <!-- ko foreach:$data -->
+                <!-- ko if: $index() > 0 -->,<!-- /ko -->
+                '<span class='text-normal' data-bind='text: UserName'></span>'
+                <!-- /ko --> <!-- /ko -->
+            </b>
+            @Pages.Interviewers_ArchiveInterviewers
+        </h3>
+    </script>
+    <script type="text/html" id="confirm-archive-continue-message-template">
+        <br/>
+        <b>
+            <span style="color: red;">
+                @Pages.Interviewers_ArchiveInterviewersConfirmMessage
+            </span>
+        </b>
+        <br/>
+        <br/>@Pages.Interviewers_ArchiveInterviewersConfirm
+    </script>
+
+    <script type="text/html" id="confirm-unarchive-template">
+        <h3>
+            <b>
+                <!-- ko if: $data.length>5 -->
+
+                <span class='text-normal' data-bind='text: length'></span>
+
+                <!-- /ko -->
+                <!-- ko if: $data.length<=5 -->
+                <!-- ko foreach:$data -->
+                <!-- ko if: $index() > 0 -->,<!-- /ko -->
+                '<span class='text-normal' data-bind='text: UserName'></span>'
+                <!-- /ko --> <!-- /ko -->
+            </b>
+            @Archived.UnarchiveInterviewerWarning
+        </h3>
+    </script>
+    <script type="text/html" id="confirm-unarchive-continue-message-template">
+        <br />@Archived.DoYouWantToContinue
+    </script>
+}*@
