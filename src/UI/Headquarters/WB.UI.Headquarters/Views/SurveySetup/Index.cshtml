@@ -74,8 +74,7 @@
             var buildMenuItem = function(selectedRow) {
                 var items = {}
 
-                if (!(selectedRow.disabled || selectedRow.allowCensusMode))
-                {
+                if (!(selectedRow.disabled || selectedRow.allowCensusMode)) {
                     items["addNew"] = {
                         name: "@Dashboard.NewInterview",
                         callback: addNewInterview
@@ -84,11 +83,16 @@
                         name: "@Dashboard.BatchUpload",
                         callback: interviewsBatchUpload
                     };
+                    @if (User.IsInRole("Administrator"))
+                    {
+                    <text>
+                    items["sep1"] = "---------";
+                    </text>
+                    }
                 }
                 @if (User.IsInRole("Administrator"))
                 {
-                    <text>
-                items["sep1"] = "---------";
+                <text>
                 items["clone"] =
                 {
                     name: "@Dashboard.CloneQuestionnaire",
