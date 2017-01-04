@@ -36,9 +36,9 @@
     "run-sequence": "^1.2.2"
   },  
   "scripts": {
-    "bower": "bower install",
-    "bower-force": "bower install --force",
-    "gulp" : "gulp --production"
+    "bower": "node_modules\\.bin\\bower install",
+    "bower-force": "node_modules\\.bin\\bower install --force",
+    "gulp" : "node_modules\\.bin\\gulp --production"
   },
   "author": "",
   "license": "ISC"

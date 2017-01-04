@@ -10,11 +10,11 @@ const store: any = new Vuex.Store({
   },
   actions: {
     InterviewMount ({commit}, {id}) {
-      commit('setInterview', id)
+      commit('SET_INTERVIEW', id)
     }
   },
   mutations: {
-    setInterview (state, id) {
+    SET_INTERVIEW (state, id) {
       state.interview.id = id;
     }
   }
