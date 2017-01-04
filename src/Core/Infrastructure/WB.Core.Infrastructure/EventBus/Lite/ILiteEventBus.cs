@@ -20,6 +20,5 @@ namespace WB.Core.Infrastructure.EventBus.Lite
     {
         IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin);
         void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents);
-        event EventsPublished OnEventsPublished;
     }
 }

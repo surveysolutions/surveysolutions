@@ -178,13 +178,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
-        {
-            this.Publish(committedEvents);
-            this.OnEventsPublished?.Invoke(new PublishedEventsArgs(committedEvents));
-        }
-
-        public event EventsPublished OnEventsPublished;
+        public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage,
             IReadOnlyDictionary<IEventHandler, Stopwatch> handlersWithStopwatch)
