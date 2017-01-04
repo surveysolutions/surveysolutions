@@ -241,8 +241,8 @@ th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../fonts/glyphicons-halflings-regular.eot");
-  src: url("../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
+  src: url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot");
+  src: url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../vendor/bootstrap-sass/assets/fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg"); }
 
 .glyphicon {
   position: relative;
@@ -5902,11 +5902,11 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 629px 18px; } }
 
-#DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input, .question-unit .options-group .field.answered .btn-clear, .question-unit .options-group .field.has-error .btn-clear, .question-unit .options-group .field input:checked ~ .btn-clear {
+.dataTables_wrapper .dataTables_filter label.active input, .question-unit .options-group .field.answered .btn-clear, .question-unit .options-group .field.has-error .btn-clear, .question-unit .options-group .field input:checked ~ .btn-clear {
   visibility: visible;
   opacity: 1; }
 
-#DataTables_Table_0_wrapper #DataTables_Table_0_filter label input, .btn-clear {
+.dataTables_wrapper .dataTables_filter label input, .btn-clear {
   opacity: 0;
   visibility: hidden; }
 
@@ -5926,9 +5926,21 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
 
 .table-striped tbody tr {
   background-color: #f8f9f9; }
+  .table-striped tbody tr td.without-break:before {
+    background-image: -webkit-linear-gradient(left, transparent 0%, #f8f9f9 70%);
+    background-image: -o-linear-gradient(left, transparent 0%, #f8f9f9 70%);
+    background-image: linear-gradient(to right, transparent 0%, #f8f9f9 70%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFF8F9F9', GradientType=1); }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
   background-color: #edeff0; }
+  .table-striped > tbody > tr:nth-of-type(odd) td.without-break:before {
+    background-image: -webkit-linear-gradient(left, transparent 0%, #edeff0 70%);
+    background-image: -o-linear-gradient(left, transparent 0%, #edeff0 70%);
+    background-image: linear-gradient(to right, transparent 0%, #edeff0 70%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFEDEFF0', GradientType=1); }
 
 .table-striped > thead > tr > th, .table-striped > thead > tr > td, .table-striped > tbody > tr > th, .table-striped > tbody > tr > td, .table-striped > tfoot > tr > th, .table-striped > tfoot > tr > td {
   padding-left: 10px;
@@ -5951,7 +5963,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       border-left: none; }
 
 .table-ordered thead tr th {
-  padding-right: 0;
+  /* padding-right: 0; */
   position: relative;
   cursor: pointer; }
   .table-ordered thead tr th.sorting_disabled:after {
@@ -5987,7 +5999,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   padding-left: 365px; }
 
 .table thead tr th.sorting {
-  padding-right: 0;
+  /* padding-right: 0; */
   position: relative;
   cursor: pointer; }
   .table thead tr th.sorting:after {
@@ -6015,6 +6027,12 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   color: #000; }
   .table-hover tbody tr:hover a, .table-hover tbody tr:focus a {
     color: #000; }
+  .table-hover tbody tr:hover td.without-break:before, .table-hover tbody tr:focus td.without-break:before {
+    background-image: -webkit-linear-gradient(left, transparent 0%, #eff4f8 70%);
+    background-image: -o-linear-gradient(left, transparent 0%, #eff4f8 70%);
+    background-image: linear-gradient(to right, transparent 0%, #eff4f8 70%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFEFF4F8', GradientType=1); }
 
 .table {
   color: #3f3f3f;
@@ -6027,8 +6045,33 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     -o-transition: all 0.1s linear 0s;
     transition: all 0.1s linear 0s;
     height: 35px; }
+    .table tr .without-break {
+      white-space: nowrap;
+      max-width: 300px;
+      text-overflow: clip;
+      overflow: hidden;
+      position: relative; }
+      .table tr .without-break:before {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        content: "";
+        height: 100%;
+        width: 30px;
+        background-image: -webkit-linear-gradient(left, transparent 0%, #fff 70%);
+        background-image: -o-linear-gradient(left, transparent 0%, #fff 70%);
+        background-image: linear-gradient(to right, transparent 0%, #fff 70%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFFFFFFF', GradientType=1); }
     .table tr.selected {
       background-color: #cad1d7 !important; }
+      .table tr.selected td.without-break:before {
+        background-image: -webkit-linear-gradient(left, transparent 0%, #cad1d7 70%);
+        background-image: -o-linear-gradient(left, transparent 0%, #cad1d7 70%);
+        background-image: linear-gradient(to right, transparent 0%, #cad1d7 70%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFCAD1D7', GradientType=1); }
     .table tr td {
       word-break: break-all;
       word-wrap: break-word;
@@ -6064,16 +6107,9 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
             color: #2a81cb !important;
             text-decoration: none; }
 
-.table-with-checkboxes thead tr th:first-child {
+.table-with-checkboxes .checkbox-cell {
   width: 40px !important;
   max-width: 40px !important;
-  text-align: center;
-  padding: 10px 0; }
-  .table-with-checkboxes thead tr th:first-child + th {
-    width: 25%;
-    padding-left: 45px; }
-
-.table-with-checkboxes tbody tr td:first-child {
   text-align: center;
   padding: 10px 0; }
 
@@ -6084,22 +6120,22 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     position: relative;
     margin: 0; }
 
-#DataTables_Table_0_wrapper {
+.dataTables_wrapper {
   position: relative; }
-  #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+  .dataTables_wrapper .dataTables_filter {
     position: absolute;
-    top: 5px;
-    left: 0;
+    top: -55px;
+    right: 0;
     z-index: 2; }
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label {
+    .dataTables_wrapper .dataTables_filter label {
       font-size: 0;
       color: transparent;
       margin-bottom: 0;
       min-height: 30px; }
-      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label:after {
+      .dataTables_wrapper .dataTables_filter label:after {
         position: absolute;
-        top: 5px;
-        left: 10px;
+        top: 10px;
+        right: 10px;
         display: block;
         content: "";
         width: 20px;
@@ -6109,29 +6145,29 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
         background-size: 80px 20px;
         cursor: pointer; }
         @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-          #DataTables_Table_0_wrapper #DataTables_Table_0_filter label:after {
+          .dataTables_wrapper .dataTables_filter label:after {
             /* on retina, use image that's scaled by 2 */
             background-image: url("../img/search2k.png");
             background-size: 80px 20px; } }
-      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label:hover:after {
+      .dataTables_wrapper .dataTables_filter label:hover:after {
         background-position: -20px 0; }
-      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active:after {
+      .dataTables_wrapper .dataTables_filter label.active:after {
         background-position: -40px 0; }
-      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active:hover:after {
+      .dataTables_wrapper .dataTables_filter label.active:hover:after {
         background-position: -60px 0; }
-      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
+      .dataTables_wrapper .dataTables_filter label.active input {
         border: 1px solid #dbdfe2;
         width: 300px;
-        background-color: #f7fbff;
         padding: 5px 10px; }
-      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label input {
+      .dataTables_wrapper .dataTables_filter label input {
+        height: 40px;
         -webkit-transition: all 0.2s linear 0s;
         -moz-transition: all 0.2s linear 0s;
         -ms-transition: all 0.2s linear 0s;
         -o-transition: all 0.2s linear 0s;
         transition: all 0.2s linear 0s;
         width: 0;
-        margin-left: 40px;
+        margin-right: 40px;
         font-size: 13px;
         line-height: 15px;
         color: #3f3f3f;
@@ -6149,9 +6185,8 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   text-align: right; }
 
 .dataTables_wrapper .dataTables_paginate {
-  /* float: left; */
   position: relative;
-  padding: 40px 0 0 10px;
+  padding: 40px 0 0 0;
   overflow: hidden;
   font-size: 14px;
   line-height: 16px; }
@@ -6159,7 +6194,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     display: block;
     position: absolute;
     top: 10px;
-    left: 8px; }
+    left: 0; }
   .dataTables_wrapper .dataTables_paginate .paginate_button {
     padding: 6px 12px;
     cursor: pointer; }
@@ -6207,7 +6242,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
         border-bottom: 8px solid #2a81cb; } }
 
 @media (max-width: 1210px) {
-  #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
+  .dataTables_wrapper .dataTables_filter label.active input {
     width: 200px; }
   .table-ordered thead th.padding-left-slide:first-child {
     padding-left: 265px; }
@@ -6220,17 +6255,20 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     line-height: 12px; }
     .table tr td.for-tablets, .table tr th.for-tablets {
       display: none; }
-  #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+  .dataTables_wrapper .dataTables_filter {
     position: relative;
-    top: 0;
+    top: -5px;
     left: 0; }
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label:after {
-      top: 0;
+    .dataTables_wrapper .dataTables_filter label:after {
+      top: 10px;
       left: 10px; }
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active {
+    .dataTables_wrapper .dataTables_filter label input {
+      margin-left: 40px; }
+    .dataTables_wrapper .dataTables_filter label.active {
       width: 100%; }
-      #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
-        width: 50%; }
+      .dataTables_wrapper .dataTables_filter label.active input {
+        width: 50%;
+        margin-right: 0; }
   .table-ordered thead th.padding-left-slide:first-child {
     padding-left: 10px; }
   .table-ordered thead tr th.column-questionnaire-title {
@@ -6247,9 +6285,9 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
     margin-bottom: 15px; }
   .dataTables_wrapper .dataTables_paginate {
     float: none; }
-  #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active {
+  .dataTables_wrapper .dataTables_filter label.active {
     width: 100%; }
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input {
+    .dataTables_wrapper .dataTables_filter label.active input {
       width: 80%; }
   .table tr td.for-mobile-devices, .table tr th.for-mobile-devices {
     display: none; }
@@ -6263,6 +6301,25 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       border-top: 6px solid #dbdfe2; }
     .table thead tr th.sorting.sorting-down:after {
       border-bottom: 6px solid #2a81cb; } }
+
+@media screen and (max-width: 880px) {
+  table {
+    width: 100%; }
+  thead {
+    display: none; }
+  tr:nth-of-type(2n) {
+    background-color: inherit; }
+  tr td:first-child {
+    background: #f0f0f0;
+    font-weight: bold;
+    font-size: 1.3em; }
+  tbody td {
+    display: block;
+    text-align: center; }
+  tbody td:before {
+    content: attr(data-th);
+    display: block;
+    text-align: center; } }
 
 .btn {
   font: 12px/14px "TrebuchetMSBold";
@@ -7457,6 +7514,25 @@ input.double-checkbox-white {
 span.image-zoom-box, span.image-option {
   display: block; }
 
+.panel-table {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: 0;
+  background-color: #cad1d7;
+  z-index: 5;
+  border-radius: 0; }
+  .panel-table label {
+    font-size: 16px;
+    line-height: 18px;
+    color: #fff;
+    padding-right: 40px; }
+    .panel-table label .tick {
+      margin-right: 15px; }
+  .panel-table .panel-body {
+    padding: 10px; }
+
 @font-face {
   font-family: "RobotoRegular";
   src: url("../fonts/RobotoRegular.woff2") format("woff2"), url("../fonts/RobotoRegular.woff") format("woff"), url("../fonts/RobotoRegular.ttf") format("truetype"), url("../fonts/RobotoRegular.svg#RobotoRegular") format("svg"); }
@@ -7618,6 +7694,11 @@ h5 {
   margin: 0;
   border: none;
   padding-top: 40px; }
+  .page-header > div h1 {
+    float: left;
+    margin-right: 30px; }
+  .page-header > div .btn {
+    float: left; }
 
 .row .page-header {
   padding-left: 15px; }
@@ -7706,6 +7787,23 @@ table.dataTable span.highlight {
   background-color: #ff8;
   color: #3f3f3f;
   border-radius: 0.28571429rem; }
+
+table tr th:first-child .census-icon, table tr td:first-child .census-icon {
+  margin-right: 5px;
+  margin-left: 0; }
+
+table tr th .census-icon, table tr td .census-icon {
+  margin-left: 5px; }
+
+.census-icon {
+  display: inline-block;
+  padding: 4px 6px 2px 5px;
+  border-radius: 100%;
+  background-color: #2a81cb;
+  color: #fff !important;
+  font: 16px/16px Arial, sans-serif;
+  font-style: italic;
+  font-weight: bold; }
 
 .two-columns-form, .flex-row {
   display: flex; }
@@ -7948,6 +8046,27 @@ main .flex-row {
     text-decoration: none;
     cursor: not-allowed; }
 
+.import-wrapper .dataTables_wrapper .dataTables_paginate {
+  padding-left: 10px; }
+  .import-wrapper .dataTables_wrapper .dataTables_paginate > span {
+    left: 8px; }
+
+.import-wrapper .dataTables_wrapper {
+  position: relative; }
+  .import-wrapper .dataTables_wrapper .dataTables_filter {
+    position: absolute;
+    top: -10px;
+    right: auto;
+    left: 0; }
+    .import-wrapper .dataTables_wrapper .dataTables_filter label:after {
+      position: absolute;
+      top: 15px;
+      right: auto;
+      left: 10px; }
+    .import-wrapper .dataTables_wrapper .dataTables_filter label input {
+      margin-right: 0;
+      margin-left: 40px; }
+
 @media (max-width: 1210px) {
   .parameters {
     display: none; }
@@ -7962,6 +8081,11 @@ main .flex-row {
       width: 13%; } }
 
 @media (max-width: 880px) {
+  .import-wrapper .dataTables_wrapper .dataTables_filter {
+    position: relative;
+    top: -5px; }
+    .import-wrapper .dataTables_wrapper .dataTables_filter label:after {
+      top: 10px; }
   .shared-with {
     display: none; }
   .signed-name {
@@ -9398,4 +9522,54 @@ label.inactive {
     display: none; }
   .footer.footer-adaptive-filters {
     display: none; } }
+
+.main-information {
+  margin-left: 297px;
+  padding: 0 15px;
+  -webkit-transition: margin 0.3s linear 0s;
+  -moz-transition: margin 0.3s linear 0s;
+  -ms-transition: margin 0.3s linear 0s;
+  -o-transition: margin 0.3s linear 0s;
+  transition: margin 0.3s linear 0s; }
+  .main-information table thead .column-questionnaire-title {
+    width: 25% !important; }
+  .main-information .page-header {
+    padding-right: 365px; }
+  .main-information .panel-table {
+    left: 372px;
+    -webkit-transition: left 0.3s linear 0s;
+    -moz-transition: left 0.3s linear 0s;
+    -ms-transition: left 0.3s linear 0s;
+    -o-transition: left 0.3s linear 0s;
+    transition: left 0.3s linear 0s; }
+
+@media (max-width: 1210px) {
+  .main-information {
+    margin-left: 262px; }
+    .main-information .page-header {
+      padding-right: 255px; }
+    .main-information .panel-table {
+      left: 282px; }
+  .fullscreen-hidden-filters .main-information {
+    margin-left: 12px; }
+    .fullscreen-hidden-filters .main-information .panel-table {
+      left: 12px; } }
+
+@media (max-width: 880px) {
+  .main-information {
+    margin-left: 15px; }
+    .main-information .page-header {
+      padding-right: 0; }
+    .main-information .panel-table {
+      left: 12px; }
+  .fullscreen-hidden-filters .main-information .panel-table {
+    z-index: 0; }
+  .main-information #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+    left: 0; }
+  .table-with-checkboxes thead tr th:first-child + th {
+    padding-left: 10px; } }
+
+@media (max-width: 481px) {
+  .main-information {
+    margin-left: 0px; } }
 

@@ -229,9 +229,9 @@
         }  
     }
 }
-#DataTables_Table_0_wrapper{
+.dataTables_wrapper{
     position: relative;
-    #DataTables_Table_0_filter{
+    .dataTables_filter{
         @include absolute(-55px, 0, null, null);
         z-index: 2;
         label{
@@ -378,7 +378,7 @@
     }
 }
 @media (max-width: $screen-md-min){
-    #DataTables_Table_0_wrapper #DataTables_Table_0_filter label.active input{
+    .dataTables_wrapper .dataTables_filter label.active input{
         width: 200px;
     }
     .table-ordered thead th.padding-left-slide:first-child{
@@ -400,7 +400,7 @@
             }
         }
     }
-     #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+    .dataTables_wrapper .dataTables_filter {
         position: relative;
         top: -5px;
         left: 0;
@@ -451,7 +451,7 @@
             float: none;
         }
     }
-   #DataTables_Table_0_wrapper #DataTables_Table_0_filter {
+   .dataTables_wrapper .dataTables_filter {
         label{
             &.active {
                 width: 100%;
@@ -487,5 +487,17 @@
                 }
             }
         }
+    }
+}
+@media screen and (max-width: 880px) {
+    table {width:100%;}
+    thead {display: none;}
+    tr:nth-of-type(2n) {background-color: inherit;}
+    tr td:first-child {background: #f0f0f0; font-weight:bold;font-size:1.3em;}
+    tbody td {display: block;  text-align:center;}
+    tbody td:before { 
+        content: attr(data-th); 
+        display: block;
+        text-align:center;  
     }
 }

@@ -11,16 +11,6 @@
 	}
 	.page-header{
 		padding-right: 365px; 
-		&>div{
-			h1{
-				float: left;
-				margin-right: 30px;
-			}
-			.btn{
-				float: left;
-			}	
-		}
-		
 	}
     .panel-table{
 		left: $filter-width + 12px;

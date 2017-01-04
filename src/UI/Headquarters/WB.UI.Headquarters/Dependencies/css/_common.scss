@@ -144,6 +144,15 @@ h5{
     .maintenance-mode{
         @extend %instructions;
     }
+    &>div{
+		h1{
+			float: left;
+			margin-right: 30px;
+		}
+		.btn{
+			float: left;
+		}	
+	}
 }
 .row{
 	.page-header{
@@ -255,4 +264,29 @@ table.dataTable span.highlight {
   background-color: $highlight-color;
   color: $gray_text;
   border-radius: 0.28571429rem;
+}
+table{
+	tr{
+		th, td{
+			&:first-child{
+				.census-icon{
+					margin-right: 5px;
+					margin-left: 0;
+				}
+			}
+			.census-icon{
+				margin-left: 5px;
+			}
+		}
+	}
+}
+.census-icon{
+	display: inline-block;
+    padding: 4px 6px 2px 5px;
+    border-radius: 100%;
+    background-color: $blue;
+    color: #fff !important;
+    font: 16px/16px Arial, sans-serif;
+    font-style: italic;
+    font-weight: bold;
 }

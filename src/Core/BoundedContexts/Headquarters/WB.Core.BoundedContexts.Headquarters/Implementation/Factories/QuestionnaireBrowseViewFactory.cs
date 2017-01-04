@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         {
             return this.reader.Query(queryable =>
             {
-                IQueryable<QuestionnaireBrowseItem> query = queryable;
+                IQueryable<QuestionnaireBrowseItem> query = queryable.Where(x => !x.IsDeleted);
 
                 if (input.IsAdminMode.HasValue)
                 {
@@ -46,11 +46,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                         var filterLowerCase = input.Filter.ToLower();
                         query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
                     }
-
-                }
-                else
-                {
-                    query = query.Where(x => !x.IsDeleted);
                 }
 
                 if (input.OnlyCensus.HasValue)
