@@ -169,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete questionnaire.
+        /// </summary>
+        internal static string DeleteQuestionnaire {
+            get {
+                return ResourceManager.GetString("DeleteQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to History.
         /// </summary>
         internal static string History {
@@ -210,6 +219,15 @@ namespace Resources {
         internal static string NewInterview {
             get {
                 return ResourceManager.GetString("NewInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire.
+        /// </summary>
+        internal static string Questionnaire {
+            get {
+                return ResourceManager.GetString("Questionnaire", resourceCulture);
             }
         }
         

@@ -670,6 +670,9 @@
     <Content Include="Dependencies\css\_dropdown.scss" />
     <Content Include="Dependencies\css\_accordion.scss" />
     <Content Include="Dependencies\css\_zoomimg.scss" />
+    <Content Include="Dependencies\css\_panels.scss" />
+    <Content Include="Dependencies\css\common-markup.scss" />
+    <Content Include="Dependencies\css\_team-and-roles.scss" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
