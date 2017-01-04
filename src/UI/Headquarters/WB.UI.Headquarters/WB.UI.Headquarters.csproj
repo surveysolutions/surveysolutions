@@ -610,6 +610,9 @@
     <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx" />
+    <Content Include="..\WB.UI.Headquarters.Interview\_Index.cshtml">
+      <Link>Views\WebInterview\_Index.cshtml</Link>
+    </Content>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1679,7 +1682,6 @@
     <Folder Include="API\Attributes\" />
     <Folder Include="App_Data\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />
-    <Folder Include="Views\WebInterview\" />
     <Folder Include="WebInterviewApp\" />
   </ItemGroup>
   <ItemGroup>

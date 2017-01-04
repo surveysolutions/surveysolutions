@@ -1,4 +1,4 @@
-@{
+﻿@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -8,6 +8,11 @@
     <title>Web interview</title>
   </head>
   <body>
+    <script>
+        global:INTERVIEW_APP_CONFIG = {
+            "virtualPath": '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})'
+        }
+    </script>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
