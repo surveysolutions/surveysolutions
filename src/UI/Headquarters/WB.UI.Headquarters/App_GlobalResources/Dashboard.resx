@@ -183,4 +183,7 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
+  <data name="SurveySetupIntroMessage" xml:space="preserve">
+    <value>Select a questionnaire from the list to create interview assignments.</value>
+  </data>
 </root>
