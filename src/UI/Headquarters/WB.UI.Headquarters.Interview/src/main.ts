@@ -1,5 +1,6 @@
 declare var require: any
 
+const JQuery = require('JQuery')
 const  Vue = require('vue')
 const Vuex = require('vuex')
 
