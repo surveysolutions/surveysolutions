@@ -2,7 +2,7 @@
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
-	padding: 115px 12px 50px 33px;
+	padding: 115px 30px 50px 32px;
 	margin-left: 12px;
 }
 input.checkbox-filter{
@@ -48,7 +48,6 @@ input.checkbox-filter{
 	color: $gray_text;
 	border-bottom: 3px solid $gray-super-light;
 	padding-bottom: 20px;
-	   
 	.block-filter{
 		margin-bottom: 30px;
 		select{
@@ -114,11 +113,6 @@ input.checkbox-filter{
 		display: block;
 	}
 }
-/* .filters.hidden-filters{
-	left: - $filter-width - 12px;
-	overflow: visible;
-	@include hidden-foldback-button();
-} */
 @media (max-width: $screen-md-min){
 	@include tight-filters-aside();
 	.foldback-button{

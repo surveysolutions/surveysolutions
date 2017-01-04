@@ -181,40 +181,41 @@
             </aside>
             
             
-            <div class="teams-and-roles">
+            <div class="main-information">
                 <div class="page-header clearfix">
-                    <h1>@Pages.Interviewers_Header</h1>
-                    @if (isVisibleSupervisorColumn)
-                    {
-                        <a class="btn btn-success" href="@Url.Action("Create", "Interviewer", new { area = string.Empty})">
-                            @Pages.Create
-                        </a>
-                    }
-
-
+                    <div>
+                        <h1>@Pages.Interviewers_Header</h1>
+                        @if (isVisibleSupervisorColumn)
+                        {
+                            <a class="btn btn-success" href="@Url.Action("Create", "Interviewer", new {area = string.Empty})">
+                                @Pages.Create
+                            </a>
+                        }
+                    </div>
+                </div>
                     <table class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes">
                         <thead>
                         <tr>
-                            <th class="sorting_disabled">
-                            <input class="double-checkbox" id="check-all" type="checkbox">
-                            <label for="check-all">
-                                <span class="tick"></span>
-                            </label>
-                        </th>
-                        <th>@Pages.Interviewers_UserNameTitle</th>
-                        <th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
-                        <th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
-                        @if (isVisibleSupervisorColumn)
-                        {
-                            <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
-                        } 
-                        <th title="@Pages.Interviewers_ConnectedToDeviceTooltip">@Pages.Interviewers_ConnectedToDeviceTitle</th>
-                    </tr>
-                    </thead>
+                            <th class="sorting_disabled checkbox-cell">
+                                <input class="double-checkbox" id="check-all" type="checkbox">
+                                <label for="check-all">
+                                    <span class="tick"></span>
+                                </label>
+                            </th>
+                            <th>@Pages.Interviewers_UserNameTitle</th>
+                            <th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
+                            <th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
+                            @if (isVisibleSupervisorColumn)
+                            {
+                                <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
+                            }
+                            <th title="@Pages.Interviewers_ConnectedToDeviceTooltip">@Pages.Interviewers_ConnectedToDeviceTitle</th>
+                        </tr>
+                        </thead>
                     </table>
 
 
-                        @* <div class="panel panel-table">
+                    @* <div class="panel panel-table">
               <div class="panel-body">
                   <input class="double-checkbox-white" id="q1az" type="checkbox" checked>
                   <label for="q1az">
@@ -224,7 +225,7 @@
               </div>
             </div>*@
 
-</div>
+                
 
             </div>
         
