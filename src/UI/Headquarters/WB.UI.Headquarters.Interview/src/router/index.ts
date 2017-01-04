@@ -1,17 +1,15 @@
 declare var require: any
-declare var INTERVIEW_APP_CONFIG:any
 
 import Vue = require('vue')
 import VueRouter = require('vue-router')
+import { virtualPath } from './../config'
 
 Vue.use(VueRouter)
 
-const Interview = require('../components/Interview')
-
-debugger
+import Interview from '../components/Interview'
 
 export default new VueRouter({
-    base: INTERVIEW_APP_CONFIG.virtualPath + '/',
+    base: virtualPath + '/',
     mode: 'history',
     routes: [
         { path: '/start/:id', component: Interview } // questionier

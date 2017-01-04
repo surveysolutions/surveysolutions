@@ -1,6 +1,5 @@
 declare var require: any
 
-const JQuery = require('JQuery')
 const  Vue = require('vue')
 const Vuex = require('vuex')
 
@@ -8,8 +7,9 @@ Vue.use(Vuex)
 
 import router from './router'
 import store from './store'
+import './services'
 
-var App = require('./app.vue')
+import App from './App'
 
 const vueApp = new Vue({
   el: '#app',

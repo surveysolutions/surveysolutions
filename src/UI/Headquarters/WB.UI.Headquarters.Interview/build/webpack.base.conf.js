@@ -29,47 +29,19 @@ module.exports = {
       'components': path.resolve(__dirname, '../src/components')
     }
   },
-  resolveLoader: {
+    resolveLoader: {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
-    preLoaders: [
-      {
-        test: /\.vue$/,
-        loader: 'eslint',
-        include: [
-          path.join(projectRoot, 'src')
-        ],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.js$/,
-        loader: 'eslint',
-        include: [
-          path.join(projectRoot, 'src')
-        ],
-        exclude: /node_modules/
-      }
-    ],
     loaders: [
       {
         test: /\.vue$/,
         loader: 'vue'
       },
-      { 
-        test: /\.ts$/,
-        loader: 'vue-ts',
-        include: [
-          path.join(projectRoot, 'src')
-        ],
-        exclude: /node_modules/
-      },
       {
-        test: /\.js$/,
-        loader: 'babel',
-        include: [
-          path.join(projectRoot, 'src')
-        ],
+        test: /\.ts$/,
+        loader: 'ts',
+        include: projectRoot,
         exclude: /node_modules/
       },
       {
@@ -99,10 +71,14 @@ module.exports = {
   },
   vue: {
     loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
+    esModule: true,
     postcss: [
       require('autoprefixer')({
         browsers: ['last 2 versions']
       })
     ]
+  },
+  ts: {
+    appendTsSuffixTo: [/\.vue$/]
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <h1>{{ interviewId }}</h1>
 </template>
-<script>
+<script lang="ts">
   export default {
     name: 'interview-view',
     computed: {
