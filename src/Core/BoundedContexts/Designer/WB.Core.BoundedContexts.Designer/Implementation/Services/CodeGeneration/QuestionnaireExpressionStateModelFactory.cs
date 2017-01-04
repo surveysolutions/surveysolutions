@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         false,
                         question.VariableName)
                     {
-                        AdditionalVariables = question.AdditionalVariables
+                        GeneratedVariables = question.GeneratedVariables
                     });
                 }
                 foreach (var validation in question.ValidationExpressions)
@@ -898,8 +898,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 return;
             }
 
-            var lazyhashVariable = new LazyHashSetVariableModel(parentQuestion.StataExportCaption, "int", parentOptionsThatHaveNoChildOptions);
-            questionModel.AdditionalVariables.Add(lazyhashVariable);
+            var lazyhashVariable = new LazyHashSetGeneratedVariable(parentQuestion.StataExportCaption, "int", parentOptionsThatHaveNoChildOptions);
+            questionModel.GeneratedVariables.Add(lazyhashVariable);
 
             var condition = $"!({parentQuestion.StataExportCaption} != null && {lazyhashVariable.Name}.Value.Contains((int){parentQuestion.StataExportCaption}))";
 

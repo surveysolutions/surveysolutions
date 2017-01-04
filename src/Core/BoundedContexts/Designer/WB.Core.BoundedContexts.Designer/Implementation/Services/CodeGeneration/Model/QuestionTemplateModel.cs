@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Guid Id { set; get; }
         public string VariableName { set; get; }
 
-        public List<VariableModel> AdditionalVariables { get; set; } = new List<VariableModel>();
+        public List<GeneratedVariable> GeneratedVariables { get; set; } = new List<GeneratedVariable>();
 
         public string Condition { set; get; }
 
