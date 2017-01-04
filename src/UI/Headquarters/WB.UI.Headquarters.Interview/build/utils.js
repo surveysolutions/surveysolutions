@@ -38,8 +38,11 @@ exports.cssLoaders = function (options) {
   return {
     css: generateLoaders(['css']),
     postcss: generateLoaders(['css']),
+    less: generateLoaders(['css', 'less']),
     sass: generateLoaders(['css', 'sass?indentedSyntax']),
-    scss: generateLoaders(['css', 'sass', 'scss'])
+    scss: generateLoaders(['css', 'sass']),
+    stylus: generateLoaders(['css', 'stylus']),
+    styl: generateLoaders(['css', 'stylus'])
   }
 }
 

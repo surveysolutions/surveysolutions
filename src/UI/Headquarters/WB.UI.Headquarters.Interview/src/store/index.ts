@@ -1,6 +1,6 @@
 declare var require: any
 
-const Vuex = require('vuex')
+const Vuex = require("vuex")
 
 const store: any = new Vuex.Store({
   state: {
@@ -10,7 +10,7 @@ const store: any = new Vuex.Store({
   },
   actions: {
     InterviewMount ({commit}, {id}) {
-      commit('SET_INTERVIEW', id)
+      commit("SET_INTERVIEW", id)
     }
   },
   mutations: {
