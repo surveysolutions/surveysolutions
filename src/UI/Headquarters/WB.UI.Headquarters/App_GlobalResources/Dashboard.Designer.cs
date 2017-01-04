@@ -241,6 +241,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a questionnaire from the list to create interview assignments..
+        /// </summary>
+        internal static string SurveySetupIntroMessage {
+            get {
+                return ResourceManager.GetString("SurveySetupIntroMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         internal static string Title {
