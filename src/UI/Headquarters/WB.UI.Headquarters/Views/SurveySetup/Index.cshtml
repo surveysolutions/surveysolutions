@@ -55,7 +55,7 @@
             };
 
             var onTableInitComplete = function() {
-                $('#DataTables_Table_0_filter label').on('click', function(e) {
+                $('.dataTables_filter label').on('click', function (e) {
                     if (e.target !== this)
                         return;
                     if ($(this).hasClass("active")) {
@@ -185,6 +185,12 @@
                         </a>
                     }
                 </div>
+            </div>
+            <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
+                <p>
+                    Upload a file with prefilled data to create new interviews.
+                    Specify usernames for supervisors or enumerators to make batch interview assignments.
+                </p>
             </div>
         </div>
         <div id="list">

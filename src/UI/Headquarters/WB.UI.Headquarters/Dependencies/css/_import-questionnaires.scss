@@ -145,9 +145,9 @@
              }
         }
     }
-    #DataTables_Table_0_wrapper{
+    .dataTables_wrapper{
     position: relative;
-        #DataTables_Table_0_filter{
+        .dataTables_filter{
             @include absolute(-10px, auto, null, 0);
 
             label{
@@ -178,8 +178,8 @@
 }
 @media (max-width: $screen-sm-min){
     .import-wrapper{
-        #DataTables_Table_0_wrapper{
-            #DataTables_Table_0_filter{
+        .dataTables_wrapper{
+            .dataTables_filter{
                 position: relative;
                 top: -5px;
                 label:after{
