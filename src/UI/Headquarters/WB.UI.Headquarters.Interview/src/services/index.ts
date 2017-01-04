@@ -2,11 +2,13 @@ declare var require: any
 
 import { signalrPath } from "./../config"
 
-(window as any).$ = (window as any).jQuery = require("jquery");
+import * as jQuery from "jquery"
+(window as any).$ = (window as any).jQuery = jQuery
 
-require('ms-signalr-client');
+import "ms-signalr-client";
 
-var $script = require("scriptjs");
+import * as $script from "scriptjs"
+
 $script(signalrPath, function() {
   // ... HERE is SignalR available to configuration
   // $.signalr.hub

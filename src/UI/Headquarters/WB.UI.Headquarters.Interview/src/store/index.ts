@@ -1,6 +1,4 @@
-declare var require: any
-
-const Vuex = require("vuex")
+import * as Vuex from "vuex"
 
 const store: any = new Vuex.Store({
   state: {
