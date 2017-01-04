@@ -11,13 +11,13 @@ using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    internal abstract class EventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository
+    internal class EventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository
     {
         private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;
         private readonly IDomainRepository repository;
 
-        protected EventSourcedAggregateRootRepository(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
+        public EventSourcedAggregateRootRepository(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
         {
             this.eventStore = eventStore;
             this.snapshotStore = snapshotStore;
