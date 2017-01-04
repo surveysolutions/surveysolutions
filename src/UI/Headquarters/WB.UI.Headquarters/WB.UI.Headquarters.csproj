@@ -1645,6 +1645,7 @@
     <Compile Include="Services\InterviewImportState.cs" />
     <Compile Include="Services\InterviewImportStatus.cs" />
     <Compile Include="Services\IRestoreDeletedQuestionnaireProjectionsService.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
