@@ -10,7 +10,8 @@
   <body>
     <script>
         global:INTERVIEW_APP_CONFIG = {
-            "virtualPath": '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})'
+            "virtualPath": '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})',
+            "signalrPath": '@Url.Content("~/signalr/hub")'
         }
     </script>
     <div id="app"></div>

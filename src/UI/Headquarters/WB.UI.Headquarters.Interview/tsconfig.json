@@ -2,8 +2,11 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
-        "experimentalDecorators": true
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "lib": ["es5", "es2015.promise", "dom"]
     },
+    
     "include": [
         "node_modules/vue/types/*.d.ts",
         "node_modules/vuex/types/*.d.ts"
