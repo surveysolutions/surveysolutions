@@ -13,8 +13,6 @@ namespace WB.UI.Headquarters
 
             routes.MapRoute(@"Default", @"{controller}/{action}/{id}",
                 new { controller = @"Account", action = @"Index", id = UrlParameter.Optional });
-
-            
         }
     }
 }
