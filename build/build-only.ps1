@@ -9,7 +9,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
-$ProjectWebInterview = 'src\UI\Headquarters\WB.UI.Headquarters.Interview'
 $ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
 
@@ -28,17 +27,17 @@ try {
 			-OutFileName $PackageName | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
-	BuildStaticContent "src\UI\Designer\WB.UI.Designer\questionnaire" $false | %{ if (-not $_) { 
-		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
+	BuildStatiContent "src\UI\Designer\WB.UI.Designer\questionnaire" $false | %{ if (-not $_) { 
+		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStatiContent']"
 		Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
 		Exit 
 	}}
-	BuildNodeApp $ProjectWebInterview 'build'
+	
 	BuildWebPackage $ProjectDesigner $BuildConfiguration | %{ if (-not $_) { Exit } }
 
 	RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-	BuildStaticContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $true | %{ if (-not $_) {
-		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
+	BuildStatiContent "src\UI\Headquarters\WB.UI.Headquarters\Dependencies" $true | %{ if (-not $_) {
+		Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStatiContent']"
 		Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
 		Exit 
 	}}
