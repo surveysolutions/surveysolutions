@@ -423,7 +423,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         IReadOnlyCollection<IInterviewTreeNode> Children { get; }
 
         bool IsDisabled();
-        bool IsDisabledByOwnCondition();
 
         void Disable();
         void Enable();
@@ -481,7 +480,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public bool IsDisabled() => this.isDisabled || (this.Parent?.IsDisabled() ?? false);
-        public bool IsDisabledByOwnCondition() => this.isDisabled;
 
         public void Disable() => this.isDisabled = true;
         public void Enable() => this.isDisabled = false;
